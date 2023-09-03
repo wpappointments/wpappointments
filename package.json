@@ -23,7 +23,7 @@
 		"readme": "vendor/bin/wp2md -i readme.txt -o README.md",
 		"lint": "npm run phpcs && npm run lint:js && npm run lint:css",
 		"lint-fix": "npm run phpcs-fix -p && npm run format",
-		"lint-staged": "npm run readme && lint-staged",
+		"lint-staged": "npm run readme && git add README.md && lint-staged",
 		"prepare": "husky install && composer install"
 	},
 	"devDependencies": {
