@@ -23,5 +23,6 @@ class Api extends Core\WPIntegrator implements Core\Hookable {
 	 */
 	public function init() {
 		Endpoints\Ping::init();
+		Endpoints\Appointment::init();
 	}
 }

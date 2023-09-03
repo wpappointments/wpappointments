@@ -13,6 +13,7 @@
 		}
 	],
 	"require-dev": {
-		"wp-coding-standards/wpcs": "^3.0"
+		"wp-coding-standards/wpcs": "^3.0",
+		"wpreadme2markdown/wp2md": "^4.0"
 	}
 }

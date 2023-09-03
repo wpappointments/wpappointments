@@ -16,6 +16,24 @@ export default function Dashboard() {
 		<Table />
 	);
 
+	const onAddAppointmentClick = () => {
+		console.log( 'Add appointment clicked!' );
+		// fetch post to https://wpappointments.local/wp-json/wpappointments/v1/appointment
+		fetch(
+			'https://wpappointments.local/wp-json/wpappointments/v1/appointment',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify( {
+					date: '2021-08-20',
+					time: '10:00',
+				} ),
+			}
+		);
+	};
+
 	return (
 		<LayoutDefault title="Dashboard">
 			<Card className="wpappointments-card">
@@ -34,7 +52,9 @@ export default function Dashboard() {
 			<Card className="wpappointments-card">
 				<CardHeader>
 					<Text size="title">Upcoming Appointments</Text>
-					<Button variant="primary">Create New Appointment</Button>
+					<Button variant="primary" onClick={ onAddAppointmentClick }>
+						Create New Appointment
+					</Button>
 				</CardHeader>
 				<CardBody>{ UpcommingAppointmentsTable }</CardBody>
 			</Card>

@@ -1,16 +1,30 @@
 {
+	"name": "wpappointments",
+	"description": "WordPress Appointments",
+	"version": "0.0.1",
+	"author": "Appsy sp. z o.o.",
+	"files": [
+		"src",
+		"build",
+		"assets",
+		"vendor",
+		"wpappointments.php",
+		"readme.txt"
+	],
 	"scripts": {
 		"build": "wp-scripts build assets/scripts/react/admin.tsx",
 		"start": "wp-scripts start assets/scripts/react/admin.tsx",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"plugin-zip": "wp-scripts plugin-zip",
+		"plugin-zip": "npm run build && composer install --no-dev && wp-scripts plugin-zip && composer install",
 		"phpcs": "vendor/bin/phpcs src wpappointments.php",
 		"phpcs-fix": "vendor/bin/phpcbf src wpappointments.php",
-		"prepare": "husky install",
-		"fix": "npm run phpcs-fix -p && npm run format",
-		"lint": "lint-staged"
+		"readme": "vendor/bin/wp2md -i readme.txt -o README.md",
+		"lint": "npm run phpcs && npm run lint:js && npm run lint:css",
+		"lint-fix": "npm run phpcs-fix -p && npm run format",
+		"lint-staged": "lint-staged",
+		"prepare": "husky install && composer install"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.21",
