@@ -4,3 +4,4 @@ node_modules
 *-lock.json
 *-lock.yaml
 npm-debug.log
+.husky

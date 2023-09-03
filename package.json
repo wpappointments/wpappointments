@@ -9,14 +9,15 @@
 		"phpcs": "vendor/bin/phpcs src wpappointments.php",
 		"phpcs-fix": "vendor/bin/phpcbf src wpappointments.php",
 		"prepare": "husky install",
-		"fix": "npm run phpcs-fix && npm run format"
+		"fix": "npm run phpcs-fix -p && npm run format",
+		"lint": "lint-staged"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",
 		"@wordpress/prettier-config": "^2.24.0",
 		"@wordpress/scripts": "^26.11.0",
-		"husky": "^8.0.3",
+		"lint-staged": "^14.0.1",
 		"prettier": "npm:wp-prettier@2.8.5"
 	},
 	"dependencies": {

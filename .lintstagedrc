@@ -1,0 +1,8 @@
+{
+	"*.js": "format",
+	"*.json": "format",
+	"*.ts": "format",
+	"*.tsx": "format",
+	"*.css": "format",
+	"*.php": "phpcs-fix"
+}
