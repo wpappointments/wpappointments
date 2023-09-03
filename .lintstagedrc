@@ -1,8 +1,8 @@
 {
-	"*.js": "format",
-	"*.json": "format",
-	"*.ts": "format",
-	"*.tsx": "format",
-	"*.css": "format",
-	"*.php": "phpcs-fix"
+	"*.js": "npm run format",
+	"*.json": "npm run format",
+	"*.ts": "npm run format",
+	"*.tsx": "npm run format",
+	"*.css": "npm run format",
+	"*.php": "npm run phpcs-fix"
 }
