@@ -3,3 +3,4 @@ build
 vendor
 wpappointments
 wpappointments.zip
+.DS_Store
