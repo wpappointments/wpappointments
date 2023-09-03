@@ -6,9 +6,10 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"phpcs": "vendor/bin/phpcs src",
-		"phpcs-fix": "vendor/bin/phpcbf src",
-		"prepare": "husky install"
+		"phpcs": "vendor/bin/phpcs src wpappointments.php",
+		"phpcs-fix": "vendor/bin/phpcbf src wpappointments.php",
+		"prepare": "husky install",
+		"fix": "npm run phpcs-fix && npm run format"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.21",
