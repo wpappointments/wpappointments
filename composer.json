@@ -1,0 +1,18 @@
+{
+	"name": "wpappointments/wpappointments",
+	"type": "wordpress-plugin",
+	"autoload": {
+		"psr-4": {
+			"WPAppointments\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Appsy sp. z o.o.",
+			"email": "contact@wpappointments.com"
+		}
+	],
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^3.0"
+	}
+}

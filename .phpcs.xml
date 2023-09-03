@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="Test Config">
+	<file>.</file>
+	<arg name="extensions" value="php"/>
+	<rule ref="WordPress"/>
+
+	<!--
+	We deliberately exclude the src folder from the WordPress.Files.FileName rule
+	because we use PSR-4 autoloading and the class names do not match the file names
+	required by the WordPress coding standards.
+	-->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/src/*\.php</exclude-pattern>
+	</rule>
+</ruleset>

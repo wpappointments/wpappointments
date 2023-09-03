@@ -1,0 +1,83 @@
+:root {
+	--wpappointments-large-gap: 16px;
+	--wpappointments-main-gap: 16px;
+	--wpappointments-layout-header-height: 60px;
+}
+
+@media screen and (min-width: 782px) {
+	:root {
+		--wpappointments-large-gap: 40px;
+		--wpappointments-main-gap: 24px;
+	}
+}
+
+.wpappointments-admin #wpcontent {
+	padding-left: 0;
+}
+
+.wpappointments-admin #wpbody-content {
+	padding-top: var(--wpappointments-layout-header-height);
+}
+
+.wpappointments-admin #wpbody-content > .notice {
+	margin-left: var(--wpappointments-large-gap);
+}
+
+.wpappointments-layout p:first-child {
+	margin-top: 0;
+}
+
+.wpappointments-layout__header {
+	background: #fff;
+	box-sizing: border-box;
+	padding: 0;
+	position: fixed;
+	width: 100%;
+	top: 46px;
+	z-index: 1001;
+}
+
+@media screen and (min-width: 782px) {
+	.wpappointments-layout__header {
+		top: 32px;
+	}
+}
+
+@media screen and (min-width: 962px) {
+	.wpappointments-layout__header {
+		width: calc(100% - 160px);
+	}
+}
+
+.wpappointments-layout__header > h1 {
+	display: flex;
+	align-items: center;
+	padding: 0 0 0 var(--wpappointments-large-gap);
+	flex: 1 auto;
+	height: var(--wpappointments-layout-header-height);
+	background: #fff;
+	font-weight: 600;
+	font-size: 14px;
+	margin: 0;
+}
+
+.wpappointments-layout__content {
+	margin: var(--wpappointments-large-gap) var(--wpappointments-large-gap)
+		128px var(--wpappointments-large-gap);
+}
+
+.wpappointments-card {
+	margin-bottom: var(--wpappointments-main-gap);
+}
+
+.wpappointments-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.wpappointments-table th,
+.wpappointments-table td {
+	padding: 8px 16px;
+	border: 1px solid #e5e5e5;
+	text-align: left;
+}
