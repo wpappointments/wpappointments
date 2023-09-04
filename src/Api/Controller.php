@@ -15,7 +15,7 @@ use WP_Error;
  * Endpoint controller
  */
 class Controller {
-	const ROUTE_NAMESPACE = 'wpappointments/v1';
+	const ROUTE_NAMESPACE = WPAPPOINTMENTS_API_NAMESPACE;
 
 	/**
 	 * Init method stub

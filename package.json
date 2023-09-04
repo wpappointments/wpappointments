@@ -21,7 +21,7 @@
 		"phpcs": "vendor/bin/phpcs src wpappointments.php",
 		"phpcs-fix": "vendor/bin/phpcbf src wpappointments.php",
 		"readme": "vendor/bin/wp2md -i readme.txt -o README.md",
-		"lint": "npm run phpcs && npm run lint:js && npm run lint:css",
+		"lint": "npm run lint:js && npm run lint:css && npm run phpcs",
 		"lint-fix": "npm run phpcs-fix -p && npm run format",
 		"lint-staged": "lint-staged",
 		"prepare": "husky install && composer install"
@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@wordpress/components": "^25.6.0",
 		"@wordpress/hooks": "^3.40.0",
+		"obj-str": "^1.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	}

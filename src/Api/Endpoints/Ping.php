@@ -17,7 +17,7 @@ use WPAppointments\Api\Controller;
  */
 class Ping extends Controller {
 	/**
-	 * Override controller init method and register the route
+	 * Register all routes
 	 *
 	 * @return void
 	 */

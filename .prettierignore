@@ -5,3 +5,4 @@ node_modules
 *-lock.yaml
 npm-debug.log
 .husky
+assets/scripts/react/utils/experimental.ts

@@ -1,30 +1,47 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import Table from '../components/Table/Table';
 import LayoutDefault from '../layouts/LayoutDefault';
-import {
-	__experimentalText as Text,
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-} from '@wordpress/components';
 import { applyFilters } from '../../utils/hooks';
+import { Text } from '../../utils/experimental';
 
 export default function Dashboard() {
+	const [ appointments, setAppointments ] = useState< any[] >( [] );
+
+	useEffect( () => {
+		const getAppointments = async () => {
+			const response = await fetch(
+				`${ window.wpappointments.api.url }/appointment`,
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-WP-Nonce': window.wpappointments.api.nonce,
+					},
+				}
+			);
+
+			const { data } = await response.json();
+			const { appointments: results } = data;
+
+			setAppointments( results );
+		};
+
+		getAppointments();
+	}, [] );
+
 	const UpcommingAppointmentsTable = applyFilters< ReactNode >(
 		'upcoming-appointments-table',
-		<Table />
+		<Table items={ appointments } />
 	);
 
-	const onAddAppointmentClick = () => {
-		console.log( 'Add appointment clicked!' );
-		// fetch post to https://wpappointments.local/wp-json/wpappointments/v1/appointment
-		fetch(
-			'https://wpappointments.local/wp-json/wpappointments/v1/appointment',
+	const onAddAppointmentClick = async () => {
+		const response = await fetch(
+			`${ window.wpappointments.api.url }/appointment`,
 			{
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'X-WP-Nonce': window.wpappointments.api.nonce,
 				},
 				body: JSON.stringify( {
 					date: '2021-08-20',
@@ -32,6 +49,15 @@ export default function Dashboard() {
 				} ),
 			}
 		);
+
+		const { data } = await response.json();
+		const { appointment } = data;
+
+		setAppointments( [ ...appointments, appointment ] );
+
+		console.log( data );
+
+		// return data;
 	};
 
 	return (

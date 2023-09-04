@@ -38,5 +38,18 @@ class Assets extends Core\WPIntegrator implements Core\Hookable {
 			$admin_deps['version'],
 			true
 		);
+
+		wp_localize_script(
+			'wpappointments-admin-js',
+			'wpappointments',
+			array(
+				'api' => array(
+					'root'      => esc_url_raw( rest_url() ),
+					'namespace' => WPAPPOINTMENTS_API_NAMESPACE,
+					'url'       => esc_url_raw( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ),
+					'nonce'     => wp_create_nonce( 'wp_rest' ),
+				),
+			)
+		);
 	}
 }

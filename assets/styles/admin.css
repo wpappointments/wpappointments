@@ -81,3 +81,8 @@
 	border: 1px solid #e5e5e5;
 	text-align: left;
 }
+
+.wpappointments-table__action--delete {
+	--wp-components-color-accent: red;
+	--wp-components-color-accent-darker-10: #a0310d;
+}

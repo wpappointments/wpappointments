@@ -9,6 +9,12 @@ declare global {
 		};
 		wpappointments: {
 			hooks: Hooks;
+			api: {
+				root: string;
+				namespace: string;
+				url: string;
+				nonce: string;
+			};
 		};
 	}
 }
