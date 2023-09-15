@@ -2,8 +2,9 @@ import { createHooks } from '@wordpress/hooks';
 import { render } from './utils/dom';
 import Dashboard from './admin/pages/Dashboard';
 import Schedules from './admin/pages/Schedules';
-import Settings from './admin/pages/Settings';
+import Settings from './admin/pages/Settings/Settings';
 import Calendar from './admin/pages/Calendar';
+import '../redux/store';
 
 window.wpappointments.hooks = createHooks();
 

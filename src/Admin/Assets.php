@@ -29,6 +29,13 @@ class Assets extends Core\WPIntegrator implements Core\Hookable {
 			WPAPPOINTMENTS_VERSION
 		);
 
+		wp_enqueue_style(
+			'wpappointments-admin-css-modules',
+			WPAPPOINTMENTS_PLUGIN_DIR_URL . '/build/admin.tsx.css',
+			array( 'wp-edit-blocks' ),
+			WPAPPOINTMENTS_VERSION
+		);
+
 		$admin_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/admin.tsx.asset.php';
 
 		wp_enqueue_script(
@@ -45,9 +52,8 @@ class Assets extends Core\WPIntegrator implements Core\Hookable {
 			array(
 				'api' => array(
 					'root'      => esc_url_raw( rest_url() ),
-					'namespace' => WPAPPOINTMENTS_API_NAMESPACE,
-					'url'       => esc_url_raw( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ),
-					'nonce'     => wp_create_nonce( 'wp_rest' ),
+					'namespace' => trailingslashit( WPAPPOINTMENTS_API_NAMESPACE ),
+					'url'       => esc_url_raw( trailingslashit( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ) ),
 				),
 			)
 		);

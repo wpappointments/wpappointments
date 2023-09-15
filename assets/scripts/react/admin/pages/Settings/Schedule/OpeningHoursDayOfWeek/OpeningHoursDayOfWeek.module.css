@@ -1,0 +1,14 @@
+.day_label {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 160px;
+	height: 40px;
+	text-transform: capitalize;
+}
+
+.copy_to_all_days {
+	width: 100%;
+	display: block;
+	margin-bottom: 20px;
+}

@@ -24,21 +24,28 @@
 		"lint": "npm run lint:js && npm run lint:css && npm run phpcs",
 		"lint-fix": "npm run phpcs-fix -p && npm run format",
 		"lint-staged": "lint-staged",
-		"prepare": "husky install && composer install"
+		"prepare": "husky install && composer install",
+		"init": "NODE_ENV=development pnpm install"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",
 		"@wordpress/prettier-config": "^2.24.0",
 		"@wordpress/scripts": "^26.11.0",
+		"husky": "^8.0.3",
 		"lint-staged": "^14.0.1",
 		"prettier": "npm:wp-prettier@2.8.5"
 	},
 	"dependencies": {
+		"@wordpress/api-fetch": "^6.38.0",
 		"@wordpress/components": "^25.6.0",
+		"@wordpress/data": "^9.11.0",
 		"@wordpress/hooks": "^3.40.0",
+		"@wordpress/i18n": "^4.41.0",
+		"immer": "^10.0.2",
 		"obj-str": "^1.1.0",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"react-hook-form": "^7.46.1"
 	}
 }

@@ -29,6 +29,7 @@ class Plugin extends Core\WPIntegrator implements Core\Hookable {
 
 		// General.
 		Model\AppointmentPost::get_instance()->register_hooks();
+		Model\SchedulePost::get_instance()->register_hooks();
 
 		// Admin.
 		Admin\Bootstrap::get_instance()->register_hooks();

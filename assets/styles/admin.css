@@ -66,6 +66,21 @@
 		128px var(--wpappointments-large-gap);
 }
 
+.wpappointments-layout--with-tabs .wpappointments-layout__content {
+	margin-top: 0;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.wpappointments-layout--with-tabs .components-tab-panel__tab-content {
+	margin: var(--wpappointments-large-gap) var(--wpappointments-large-gap)
+		128px var(--wpappointments-large-gap);
+}
+
+.wpappointments-layout--with-tabs .components-tab-panel__tabs {
+	padding-left: calc(var(--wpappointments-large-gap) - 16px);
+}
+
 .wpappointments-card {
 	margin-bottom: var(--wpappointments-main-gap);
 }
@@ -85,4 +100,96 @@
 .wpappointments-table__action--delete {
 	--wp-components-color-accent: red;
 	--wp-components-color-accent-darker-10: #a0310d;
+}
+
+.settings-page-content {
+	max-width: 800px;
+}
+
+.wpappointments-form-field {
+	margin-bottom: 16px;
+}
+
+.wpappointments-form-actions {
+	margin-top: 24px;
+}
+
+.wpappointments-tabs .components-tab-panel__tabs {
+	background-color: #fff;
+	border: 1px solid #bbb;
+	margin-bottom: 30px;
+}
+
+.wpappointments-tabs .components-tab-panel__tabs-item {
+	border-bottom: 2px solid transparent;
+}
+
+.wpappointments-tabs .components-tab-panel__tabs-item.active-tab {
+	border-bottom-color: var(
+		--wp-components-color-accent,
+		var(--wp-admin-theme-color, #3858e9)
+	);
+}
+
+.wpappointments-form-field-group--row {
+	display: flex;
+	/* align-items: center; */
+	gap: 16px;
+	margin-bottom: 10px;
+}
+
+.wpappointments-form-field-group--row .wpappointments-form-field {
+	margin-bottom: 0;
+}
+
+.wpappointments-form-field-group--row .components-toggle-control {
+	margin-bottom: 0;
+}
+
+.wpappointments-time-picker {
+	display: flex;
+	align-items: center;
+}
+
+.wpappointments-time-picker .components-number-control {
+	width: 36px;
+}
+
+.wpappointments-time-picker .components-number-control__input {
+	padding-right: 0px;
+	padding-left: 8px;
+	text-align: center;
+}
+
+.wpappointments-time-picker .wpappointments-form-field {
+	margin-bottom: 0;
+}
+
+.wpappointments-time-picker__label {
+	margin-right: 8px;
+}
+
+.wpappointments-time-picker__separator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-self: stretch;
+	width: 5px;
+	background-color: #d0d0d0;
+}
+
+.wpappointments-time-picker
+	> .wpappointments-form-field:nth-child(2)
+	.components-input-control__input {
+	padding-left: 4px;
+	padding-right: 0;
+	text-align: center;
+}
+
+.wpappointments-time-picker
+	> .wpappointments-form-field:nth-child(4)
+	.components-input-control__input {
+	padding-left: 0;
+	padding-right: 4px;
+	text-align: center;
 }

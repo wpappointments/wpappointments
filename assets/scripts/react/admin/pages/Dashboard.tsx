@@ -1,63 +1,59 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import Table from '../components/Table/Table';
 import LayoutDefault from '../layouts/LayoutDefault';
 import { applyFilters } from '../../utils/hooks';
 import { Text } from '../../utils/experimental';
+import apiFetch, { APIResponse } from '../../utils/fetch';
+import { store } from '../../../redux/store';
+
+type Action = {
+	name: string;
+	label: string;
+	method: string;
+	uri: string;
+	isDangerous: boolean;
+};
+
+type Appointment = {
+	id: number;
+	title: string;
+	date: string;
+	time: string;
+	actions: {
+		[ key: string ]: Action;
+	};
+};
 
 export default function Dashboard() {
-	const [ appointments, setAppointments ] = useState< any[] >( [] );
-
-	useEffect( () => {
-		const getAppointments = async () => {
-			const response = await fetch(
-				`${ window.wpappointments.api.url }/appointment`,
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						'X-WP-Nonce': window.wpappointments.api.nonce,
-					},
-				}
-			);
-
-			const { data } = await response.json();
-			const { appointments: results } = data;
-
-			setAppointments( results );
-		};
-
-		getAppointments();
+	const dispatch = useDispatch( store );
+	const appointments = useSelect( () => {
+		const appStore = select( store );
+		return appStore.getUpcomingAppointments();
 	}, [] );
 
 	const UpcommingAppointmentsTable = applyFilters< ReactNode >(
 		'upcoming-appointments-table',
-		<Table items={ appointments } />
+		<Table items={ appointments } dispatch={ dispatch } />
 	);
 
 	const onAddAppointmentClick = async () => {
-		const response = await fetch(
-			`${ window.wpappointments.api.url }/appointment`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-WP-Nonce': window.wpappointments.api.nonce,
-				},
-				body: JSON.stringify( {
-					date: '2021-08-20',
-					time: '10:00',
-				} ),
-			}
-		);
+		const response = await apiFetch<
+			APIResponse< { appointment: Appointment; message: string } >
+		>( {
+			path: 'appointment',
+			method: 'POST',
+			data: {
+				date: '2021-08-20',
+				time: '10:00',
+			},
+		} );
 
-		const { data } = await response.json();
+		const { data } = response;
 		const { appointment } = data;
 
-		setAppointments( [ ...appointments, appointment ] );
-
-		console.log( data );
-
-		// return data;
+		dispatch.addAppointment( appointment );
 	};
 
 	return (

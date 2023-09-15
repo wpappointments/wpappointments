@@ -56,6 +56,8 @@ class AppointmentPost extends Core\WPIntegrator implements Core\Hookable {
 
 	/**
 	 * Get all appointments
+	 *
+	 * @return array
 	 */
 	public function get_all() {
 		$posts = get_posts(
@@ -76,14 +78,18 @@ class AppointmentPost extends Core\WPIntegrator implements Core\Hookable {
 				'time'    => get_post_meta( $post->ID, 'time', true ),
 				'actions' => (object) array(
 					'delete' => (object) array(
-						'name'   => 'DeleteAppointment',
-						'method' => 'DELETE',
-						'uri'    => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
+						'name'        => 'DeleteAppointment',
+						'label'       => 'Delete',
+						'method'      => 'DELETE',
+						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
+						'isDangerous' => true,
 					),
 					'edit'   => array(
-						'name'   => 'EditAppointment',
-						'method' => 'PUT',
-						'uri'    => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
+						'name'        => 'EditAppointment',
+						'label'       => 'Edit',
+						'method'      => 'PUT',
+						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
+						'isDangerous' => false,
 					),
 				),
 			);
@@ -94,6 +100,10 @@ class AppointmentPost extends Core\WPIntegrator implements Core\Hookable {
 
 	/**
 	 * Create appointment
+	 *
+	 * @param array $meta Appointment post meta.
+	 *
+	 * @return array
 	 */
 	public function create( $meta = array() ) {
 		$post_id = wp_insert_post(
@@ -132,6 +142,10 @@ class AppointmentPost extends Core\WPIntegrator implements Core\Hookable {
 
 	/**
 	 * Delete appointment
+	 *
+	 * @param int $id Appointment ID.
+	 *
+	 * @return int|\WP_Error
 	 */
 	public function delete( $id ) {
 		$deleted = wp_delete_post( $id, true );

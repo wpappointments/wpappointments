@@ -1,28 +1,12 @@
+import { Appointment } from '../../../../types';
 import ActionButton from '../ActionButton/ActionButton';
-
-type Action = {
-	name: string;
-	label: string;
-	method: string;
-	uri: string;
-	isDangerous: boolean;
-};
-
-type Appointment = {
-	id: number;
-	title: string;
-	date: string;
-	time: string;
-	actions: {
-		[ key: string ]: Action;
-	};
-};
 
 type Props = {
 	items: Appointment[];
+	dispatch: any;
 };
 
-export default function Table( { items }: Props ) {
+export default function Table( { items, dispatch }: Props ) {
 	return (
 		<table className="wpappointments-table">
 			<thead>
@@ -34,14 +18,30 @@ export default function Table( { items }: Props ) {
 				</tr>
 			</thead>
 			<tbody>
-				{ items.map( ( { time, date, title, actions } ) => (
-					<tr key={ title }>
+				{ items.map( ( { id, time, date, title, actions } ) => (
+					<tr key={ id }>
 						<td>{ title }</td>
 						<td>{ date } </td>
 						<td>{ time }</td>
 						<td>
 							{ Object.values( actions ).map( ( action ) => (
-								<ActionButton action={ action } />
+								<ActionButton
+									key={ action.name }
+									action={ action }
+									onSuccess={ ( data: {
+										id: number;
+										message: string;
+									} ) => {
+										console.log( 'success', data );
+										dispatch.deleteAppointment( data.id );
+									} }
+									onError={ ( data: {
+										id: number;
+										message: string;
+									} ) => {
+										console.log( 'error', data );
+									} }
+								/>
 							) ) }
 						</td>
 					</tr>

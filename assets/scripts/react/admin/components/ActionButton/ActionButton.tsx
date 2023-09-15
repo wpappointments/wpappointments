@@ -1,5 +1,6 @@
 import { Button } from '@wordpress/components';
 import cn from '../../../utils/cn';
+import apiFetch, { APIResponse } from '../../../utils/fetch';
 
 type Action = {
 	name: string;
@@ -9,11 +10,17 @@ type Action = {
 	isDangerous: boolean;
 };
 
-type Props = {
+type Props< T > = {
 	action: Action;
+	onSuccess?: ( response: T ) => void;
+	onError?: ( response: T ) => void;
 };
 
-export default function ActionButton( { action }: Props ) {
+export default function ActionButton< T >( {
+	action,
+	onSuccess,
+	onError,
+}: Props< T > ) {
 	const { label, isDangerous } = action;
 
 	return (
@@ -24,7 +31,7 @@ export default function ActionButton( { action }: Props ) {
 				'wpappointments-table__action': true,
 				'wpappointments-table__action--dangerous': isDangerous,
 			} ) }
-			onClick={ handleAction( action ) }
+			onClick={ handleAction< T >( action, onSuccess, onError ) }
 			key={ action.name }
 		>
 			{ label }
@@ -32,20 +39,27 @@ export default function ActionButton( { action }: Props ) {
 	);
 }
 
-function handleAction( action: Action ) {
+function handleAction< T >(
+	action: Action,
+	onSuccess?: ( response: T ) => void,
+	onError?: ( response: T ) => void
+) {
 	const { uri, method } = action;
 
 	return async () => {
-		const response = await fetch( uri, {
+		const response = await apiFetch< APIResponse< T > >( {
+			url: uri,
 			method: method,
-			headers: {
-				'Content-Type': 'application/json',
-				'X-WP-Nonce': window.wpappointments.api.nonce,
-			},
 		} );
 
-		const { data: responseData } = await response.json();
+		const { data } = response;
 
-		console.log( responseData );
+		if ( response.type === 'success' ) {
+			onSuccess?.( data );
+		}
+
+		if ( response.type === 'error' ) {
+			onError?.( data );
+		}
 	};
 }
