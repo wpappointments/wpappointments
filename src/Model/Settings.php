@@ -91,7 +91,7 @@ class Settings extends Core\WPIntegrator implements Core\Hookable {
 		if ( $schedule_post_id ) {
 			$hours = array();
 
-			foreach ( array( 'monday' ) as $day ) {
+			foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
 				$meta = get_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, true );
 
 				if ( $meta ) {
