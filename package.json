@@ -12,8 +12,9 @@
 		"readme.txt"
 	],
 	"scripts": {
-		"build": "wp-scripts build assets/scripts/react/admin.tsx",
-		"start": "wp-env start && wp-scripts start assets/scripts/react/admin.tsx",
+		"init-project": "NODE_ENV=development pnpm install",
+		"build": "pnpm init-project && wp-scripts build assets/scripts/react/admin.tsx",
+		"start": "pnpm init-project && wp-env start && wp-scripts start assets/scripts/react/admin.tsx",
 		"format": "wp-scripts format",
 		"lint": "pnpm lint:js && pnpm lint:css",
 		"lint:css": "wp-scripts lint-style",
@@ -24,8 +25,7 @@
 		"phpcs": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/phpcs src wpappointments.php",
 		"phpcs-fix": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/phpcbf src wpappointments.php",
 		"readme": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/wp2md -i readme.txt -o README.md",
-		"prepare": "husky install && composer install",
-		"init": "NODE_ENV=development pnpm install",
+		"prepare": "husky install",
 		"wp-env": "wp-env",
 		"stop": "wp-env stop",
 		"clean": "wp-env clean all",

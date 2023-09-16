@@ -4,16 +4,15 @@
 		"wp-content/plugins/wpappointments": "."
 	},
 	"lifecycleScripts": {
-		"afterStart": "pnpm run after-start"
+		"afterStart": "pnpm after-start"
 	},
 	"env": {
 		"development": {
-			"phpVersion": "7.4"
+			"phpVersion": "8.1"
 		},
 		"tests": {
 			"port": 8086,
 			"plugins": [
-				".",
 				"https://downloads.wordpress.org/plugin/akismet.zip",
 				"https://github.com/WP-API/Basic-Auth/archive/master.zip",
 				"https://downloads.wordpress.org/plugin/wp-mail-logging.zip"
