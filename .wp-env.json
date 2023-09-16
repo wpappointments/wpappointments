@@ -1,0 +1,28 @@
+{
+	"phpVersion": "8.2",
+	"mappings": {
+		"wp-content/plugins/wpappointments": "."
+	},
+	"lifecycleScripts": {
+		"afterStart": "pnpm run after-start"
+	},
+	"env": {
+		"development": {
+			"phpVersion": "7.4"
+		},
+		"tests": {
+			"port": 8086,
+			"plugins": [
+				".",
+				"https://downloads.wordpress.org/plugin/akismet.zip",
+				"https://github.com/WP-API/Basic-Auth/archive/master.zip",
+				"https://downloads.wordpress.org/plugin/wp-mail-logging.zip"
+			],
+			"config": {
+				"WP_TESTS_DOMAIN": "localhost",
+				"ALTERNATE_WP_CRON": false,
+				"WP_DEBUG": true
+			}
+		}
+	}
+}

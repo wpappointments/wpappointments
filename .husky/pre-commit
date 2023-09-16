@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run readme && git add README.md && npm run lint-staged
+# TODO: commented out until running this in wp-env is sorted out
+# pnpm readme && git add README.md && pnpm lint-staged
+
+pnpm lint-staged

@@ -49,7 +49,7 @@ function handleAction< T >(
 	return async () => {
 		const response = await apiFetch< APIResponse< T > >( {
 			url: uri,
-			method: method,
+			method,
 		} );
 
 		const { data } = response;

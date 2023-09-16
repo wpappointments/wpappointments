@@ -21,6 +21,13 @@ namespace WPAppointments\Core;
  */
 class HooksActivator {
 	/**
+	 * Array of classes that have called add_doc_hooks
+	 *
+	 * @var array
+	 */
+	private $called_doc_hooks = array();
+
+	/**
 	 * Pattern for doc hooks
 	 */
 	const PATTERN = '#\* @(?P<type>filter|action|shortcode)\s+(?P<name>[^\s]+)(\s+(?P<priority>\d+))?#';
@@ -37,10 +44,9 @@ class HooksActivator {
 			$obj = $this;
 		}
 
-		$class_name = get_class( $obj );
-
-		$this->_called_doc_hooks[ $class_name ] = true;
-		$reflector                              = new \ReflectionObject( $obj );
+		$class_name                            = get_class( $obj );
+		$this->called_doc_hooks[ $class_name ] = true;
+		$reflector                             = new \ReflectionObject( $obj );
 
 		foreach ( $reflector->getMethods() as $method ) {
 			$doc       = $method->getDocComment();
