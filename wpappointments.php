@@ -20,6 +20,8 @@ define( 'WPAPPOINTMENTS_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAPPOINTMENTS_VERSION', '0.0.1' );
 define( 'WPAPPOINTMENTS_API_NAMESPACE', 'wpappointments/v1' );
 
+define( 'WPAPPOINTMENTS_REQUIRED_PHP', '7.4' );
+
 /**
  * Autoload classes
  */

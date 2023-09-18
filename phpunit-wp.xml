@@ -9,4 +9,12 @@
             <directory suffix="Test.php">./tests/wordpress</directory>
         </testsuite>
     </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
+    <php>
+        <const name="RUNNING_UNIT_TESTS" value="true"/>
+    </php>
 </phpunit>

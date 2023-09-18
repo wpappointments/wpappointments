@@ -13,8 +13,6 @@ namespace WPAppointments;
  * Handle all plugin initialization, activation and deactivation.
  */
 class Plugin extends Core\WPIntegrator implements Core\Hookable {
-	const REQUIRED_PHP = '7.1';
-
 	/**
 	 * Init plugin
 	 *
@@ -22,9 +20,11 @@ class Plugin extends Core\WPIntegrator implements Core\Hookable {
 	 *
 	 * @return void
 	 */
-	public function plugin_init() {
-		if ( version_compare( phpversion(), self::REQUIRED_PHP, '<' ) ) {
-			return;
+	public function plugin_init( $required_php = "" ) {
+		$php = "" === $required_php ? WPAPPOINTMENTS_REQUIRED_PHP : $required_php;
+
+		if ( version_compare( phpversion(), $php, '<' ) ) {
+			return false;
 		}
 
 		// General.

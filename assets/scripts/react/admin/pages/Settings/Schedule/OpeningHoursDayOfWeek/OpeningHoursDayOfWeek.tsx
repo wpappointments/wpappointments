@@ -5,7 +5,7 @@ import { useDispatch } from '@wordpress/data';
 import Toggle from '../../../../components/FormField/Toggle/Toggle';
 import Number from '../../../../components/FormField/Number/Number';
 import { DayOpeningHours, store } from '../../../../../../redux/store';
-import styles from './OpeningHoursDayOfWeek.module.css';
+import styles from './OpeningHoursDayOfWeek.module.scss';
 
 export default function OpeningHoursDayOfWeek( {
 	values,
@@ -165,7 +165,7 @@ export default function OpeningHoursDayOfWeek( {
 
 	return (
 		<div className="wpappointments-form-field-group wpappointments-form-field-group--row">
-			<div className={ styles.day_label }>
+			<div className={ styles.dayLabel }>
 				<span>{ day }:</span>
 				<Toggle
 					control={ control }
@@ -186,7 +186,7 @@ export default function OpeningHoursDayOfWeek( {
 						type="submit"
 						size="small"
 						variant="tertiary"
-						className={ styles.copy_to_all_days }
+						className={ styles.copyToAllDays }
 						onClick={ () => {
 							copyWorkingHoursToAllDays( values );
 						} }

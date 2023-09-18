@@ -14,7 +14,7 @@
 	"scripts": {
 		"init-project": "NODE_ENV=development pnpm install",
 		"build": "pnpm init-project && wp-scripts build assets/scripts/react/admin.tsx",
-		"start": "pnpm init-project && wp-env start && wp-scripts start assets/scripts/react/admin.tsx",
+		"start": "pnpm init-project && wp-env start --xdebug=develop,coverage && wp-scripts start assets/scripts/react/admin.tsx",
 		"format": "wp-scripts format",
 		"lint": "pnpm lint:js && pnpm lint:css",
 		"lint:css": "wp-scripts lint-style",
@@ -33,8 +33,8 @@
 		"activate-plugin": "wp-env run cli --env-cwd=wp-content/plugins/wpappointments wp plugin activate wpappointments",
 		"after-start": "pnpm composer install && pnpm activate-plugin",
 		"test": "pnpm test-php && pnpm test-wp",
-		"test-php": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest --configuration phpunit-php.xml",
-		"test-wp": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest --configuration phpunit-wp.xml"
+		"test-php": "wp-env run tests-wordpress --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest -- --configuration phpunit-php.xml --coverage --coverage-html coverage",
+		"test-wp": "wp-env run tests-wordpress --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest -- --configuration phpunit-wp.xml --coverage --coverage-html coverage"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.21",

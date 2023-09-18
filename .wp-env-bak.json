@@ -1,0 +1,24 @@
+{
+	"phpVersion": "8.2",
+	"mappings": {
+		"wp-content/plugins/wpappointments": ".",
+		".htaccess": "./.htaccess"
+	},
+	"lifecycleScripts": {
+		"afterStart": "pnpm after-start"
+	},
+	"env": {
+		"development": {
+			"config": {
+				"WP_DEBUG": true
+			}
+		},
+		"tests": {
+			"config": {
+				"WP_TESTS_DOMAIN": "localhost",
+				"ALTERNATE_WP_CRON": false,
+				"WP_DEBUG": true
+			}
+		}
+	}
+}

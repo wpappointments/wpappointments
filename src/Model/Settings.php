@@ -68,7 +68,11 @@ class Settings extends Core\WPIntegrator implements Core\Hookable {
 
 		foreach ( $this->settings as $category => $keys ) {
 			foreach ( $keys as $key ) {
-				$settings[ $category ][ $key ] = get_option( 'wpappointments_' . $category . '_' . $key );
+				$option = get_option( 'wpappointments_' . $category . '_' . $key );
+
+				if ( $option ) {
+					$settings[ $category ][ $key ] = $option;
+				}
 			}
 		}
 

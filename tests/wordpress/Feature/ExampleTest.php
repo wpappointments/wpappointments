@@ -6,8 +6,6 @@ use WPAppointments\Example;
 
 uses(\TestsWP\TestCase::class);
 
-$post = null;
-
 beforeEach(function () {
     $args = array(
         'post_type'    => 'post',
@@ -15,8 +13,8 @@ beforeEach(function () {
         'post_title'   => 'Hello World!'
     );
 
-    $post = self::factory()->post->create_and_get($args);
-    update_option( 'default_post_id', $post->ID );
+    $this->post = self::factory()->post->create_and_get($args);
+    update_option( 'default_post_id', $this->post->ID );
 });
 
 test('example', function () {

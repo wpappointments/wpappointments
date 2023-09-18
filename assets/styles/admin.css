@@ -41,11 +41,9 @@
 	.wpappointments-layout__header {
 		top: 32px;
 	}
-}
 
-@media screen and (min-width: 962px) {
-	.wpappointments-layout__header {
-		width: calc(100% - 160px);
+	.folded .wpappointments-layout__header {
+		width: calc(100% - 36px);
 	}
 }
 

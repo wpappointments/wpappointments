@@ -1,4 +1,4 @@
-.day_label {
+.dayLabel {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -7,8 +7,13 @@
 	text-transform: capitalize;
 }
 
-.copy_to_all_days {
+.copyToAllDays {
 	width: 100%;
 	display: block;
 	margin-bottom: 20px;
+	text-align: left;
+
+	&.components-button {
+		padding: 0;
+	}
 }

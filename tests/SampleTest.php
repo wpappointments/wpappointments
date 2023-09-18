@@ -5,32 +5,35 @@
  * @package Plugin
  */
 
-use WPAppointments\Example;
-
 /**
  * Sample test case.
  */
 class SampleTest extends \WP_UnitTestCase {
-	private $post;
+	public function test_plugin_init() {
+		$plugin = \WPAppointments\Plugin::get_instance();
+		$initialized = $plugin->plugin_init();
 
-	public function set_up() {
-		$args       = array(
-			'post_type'    => 'post',
-			'post_name'    => 'hello-world',
-			'post_title'   => 'Hello World!'
-		);
-
-		$this->post = $this->factory()->post->create_and_get($args);
-		update_option( 'default_post_id', $this->post->ID );
+		// everything is ok.
+		expect($initialized)->toBeNull();
 	}
 
-	public function test_sample() {
-		$example = new Example();
-		$this->assertEquals( 5, $example->add( $this->post->ID, 1 ) );
+	public function test_init_plugin_when_php_requrement_not_met() {
+		$plugin = \WPAppointments\Plugin::get_instance();
+		// set very high php version requirement,
+		// to trigger early return.
+		$initialized = $plugin->plugin_init('999.0.0');
+
+		// returned early.
+		expect($initialized)->toBeFalse();
 	}
 
-	public function test_wp() {
-		$example = new Example();
-		$this->assertEquals( 'Hello World!', $example->testwp() );
+	public function test_plugin_hooks_added() {
+		global $wp_filter;
+
+		$plugin = \WPAppointments\Plugin::get_instance();
+		$plugin_init_priority = $wp_filter['plugins_loaded']->has_filter('plugins_loaded', [$plugin, 'plugin_init']);
+
+  	expect($plugin_init_priority)->toBe(10);
+  	expect(post_type_exists('appointment'))->toBe(true);
 	}
 }
