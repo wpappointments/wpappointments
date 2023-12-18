@@ -12,6 +12,6 @@ export type Appointment = {
 	date: string;
 	time: string;
 	actions: {
-		[ key: string ]: ApiAction;
+		[key: string]: ApiAction;
 	};
 };

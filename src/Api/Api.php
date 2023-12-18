@@ -13,11 +13,9 @@ use WPAppointments\Core;
 /**
  * REST Api class
  */
-class Api extends Core\WPIntegrator implements Core\Hookable {
+class Api extends Core\Singleton {
 	/**
 	 * Initialise plugin REST API endpoints
-	 *
-	 * @action rest_api_init
 	 *
 	 * @return void
 	 */

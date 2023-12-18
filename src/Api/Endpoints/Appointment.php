@@ -74,7 +74,7 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_appointments( WP_REST_Request $request ) {
-		$appointment  = AppointmentPost::get_instance();
+		$appointment  = new AppointmentPost();
 		$appointments = $appointment->get_all();
 
 		return self::response(
@@ -95,7 +95,7 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$appointment_post = AppointmentPost::get_instance();
+		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create( $request->get_params() );
 
 		return self::response(
@@ -117,7 +117,7 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function delete_appointment( WP_REST_Request $request ) {
-		$appointment_post = AppointmentPost::get_instance();
+		$appointment_post = new AppointmentPost();
 		$id               = $appointment_post->delete( $request->get_param( 'id' ) );
 
 		return self::response(

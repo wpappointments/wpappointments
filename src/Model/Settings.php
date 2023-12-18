@@ -25,7 +25,7 @@ const DAY_OPENING_OPTIONS = array(
 /**
  * Plugin settings model class
  */
-class Settings extends Core\WPIntegrator implements Core\Hookable {
+class Settings {
 	/**
 	 * Settings
 	 *
@@ -76,7 +76,7 @@ class Settings extends Core\WPIntegrator implements Core\Hookable {
 			}
 		}
 
-		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_schedule_defaultPostId' ) );
+		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 		$settings['schedule'] = $schedule['schedule'];
 
 		return $settings;
@@ -117,7 +117,7 @@ class Settings extends Core\WPIntegrator implements Core\Hookable {
 	 * @return array
 	 */
 	public function get_by_category( $category ) {
-		return false;  // TODO: Implement.
+		return $category;  // TODO: Implement.
 	}
 
 	/**

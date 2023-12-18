@@ -88,7 +88,7 @@ class Settings extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_settings( WP_REST_Request $request ) {
-		$settings = SettingsModel::get_instance();
+		$settings = new SettingsModel();
 		$settings = $settings->get_all();
 
 		return self::response(
@@ -124,13 +124,23 @@ class Settings extends Controller {
 		$category = $params['category'];
 		$settings = json_decode( $request->get_body() );
 
+		$schedule = array();
+
 		if ( 'schedule' !== $category ) {
-			$settings_model = SettingsModel::get_instance();
+			$settings_model = new SettingsModel();
 			$settings_model->update( $category, $settings );
-			// TODO: Update settings.
 		} else {
-			$default_schedule_post_id = get_option( 'wpappointments_schedule_defaultPostId' );
-			// TODO: Update default schedule.
+			$schedule_post_id = get_option( 'wpappointments_default_schedule_id' );
+
+			if ( $schedule_post_id ) {
+				$hours = array();
+
+				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					$test = json_encode( $settings->$day );
+					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
+					array_push( $schedule, $test );
+				}
+			}
 		}
 
 		return self::response(

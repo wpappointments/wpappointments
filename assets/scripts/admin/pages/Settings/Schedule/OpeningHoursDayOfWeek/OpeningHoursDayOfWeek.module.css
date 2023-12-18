@@ -1,0 +1,46 @@
+.day-label {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 160px;
+	height: 40px;
+	text-transform: capitalize;
+}
+
+.copy-to-all-days-wrapper {
+	display: flex;
+	align-items: flex-start;
+	align-self: stretch;
+}
+
+.copy-to-all-days {
+	display: block;
+	margin-bottom: 20px;
+	padding: 4px;
+}
+
+.copy-to-all-days.components-button {
+	padding: 0;
+}
+
+.field-group {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.field-group-row {
+	display: flex;
+	gap: 16px;
+}
+
+.field-group-space-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 10px 0;
+}
+
+.field-group-row :global .FormField-module__field,
+.field-group-row :global .components-toggle-control {
+	margin-bottom: 0;
+}

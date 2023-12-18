@@ -1,0 +1,16 @@
+.tabsConainer :global .components-tab-panel__tabs {
+	background-color: #fff;
+	border: 1px solid #bbb;
+	margin-bottom: 30px;
+}
+
+.tabsConainer :global .components-tab-panel__tabs-item {
+	border-bottom: 2px solid transparent;
+}
+
+.tabsConainer :global .components-tab-panel__tabs-item.active-tab {
+	border-bottom-color: var(
+		--wp-components-color-accent,
+		var( --wp-admin-theme-color, #3858e9 )
+	);
+}

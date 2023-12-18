@@ -1,8 +1,11 @@
 vendor
 build
+dist
+coverage
+tests
 node_modules
 *-lock.json
 *-lock.yaml
 npm-debug.log
 .husky
-assets/scripts/react/utils/experimental.ts
+assets/scripts/utils/experimental.ts

@@ -15,7 +15,11 @@
 		"noImplicitAny": true,
 		"importHelpers": false,
 		"strictNullChecks": true,
-		"noUnusedLocals": true
+		"noUnusedLocals": true,
+		"paths": {
+			"~/*": [ "./assets/scripts/*" ],
+			"global.module.css": [ "./assets/styles/global.module.css" ]
+		}
 	},
 	"exclude": [ "node_modules", "build", "vendor" ]
 }

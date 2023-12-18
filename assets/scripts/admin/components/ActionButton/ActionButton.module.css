@@ -1,0 +1,7 @@
+.action-button {
+	font-weight: 600;
+}
+
+.action-button.dangerous-action-button {
+	color: red;
+}

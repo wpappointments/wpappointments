@@ -22,10 +22,16 @@ define( 'WPAPPOINTMENTS_API_NAMESPACE', 'wpappointments/v1' );
 
 define( 'WPAPPOINTMENTS_REQUIRED_PHP', '7.4' );
 
+if ( version_compare( phpversion(), WPAPPOINTMENTS_REQUIRED_PHP, '<' ) ) {
+	return false;
+}
+
+global $wpappointments;
+
 /**
  * Autoload classes
  */
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * Initialize plugin
@@ -48,4 +54,7 @@ register_deactivation_hook(
 	)
 );
 
-$wpappointments->register_hooks();
+/**
+ * Include admin files
+ */
+require_once __DIR__ . '/includes/admin.php';

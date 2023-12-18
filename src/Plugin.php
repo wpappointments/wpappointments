@@ -12,30 +12,20 @@ namespace WPAppointments;
  * Main plugin class.
  * Handle all plugin initialization, activation and deactivation.
  */
-class Plugin extends Core\WPIntegrator implements Core\Hookable {
+class Plugin extends Core\Singleton {
 	/**
-	 * Init plugin
+	 * Get instance of a class by key
 	 *
-	 * @action plugins_loaded
+	 * @param string $key Class key.
 	 *
-	 * @return void
+	 * @return object Singleton instance
 	 */
-	public function plugin_init( $required_php = "" ) {
-		$php = "" === $required_php ? WPAPPOINTMENTS_REQUIRED_PHP : $required_php;
+	public static function get( $key ) {
+		$instances = array(
+			'api' => Api\Api::get_instance(),
+		);
 
-		if ( version_compare( phpversion(), $php, '<' ) ) {
-			return false;
-		}
-
-		// General.
-		Model\AppointmentPost::get_instance()->register_hooks();
-		Model\SchedulePost::get_instance()->register_hooks();
-
-		// Admin.
-		Admin\Bootstrap::get_instance()->register_hooks();
-
-		// API.
-		Api\Api::get_instance()->register_hooks();
+		return $instances[ $key ];
 	}
 
 	/**
@@ -43,7 +33,21 @@ class Plugin extends Core\WPIntegrator implements Core\Hookable {
 	 *
 	 * @return void
 	 */
-	public function on_plugin_activation() {}
+	public function on_plugin_activation() {
+		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
+
+		if ( $default_schedule ) {
+			return;
+		}
+
+		$post_id = wp_insert_post([
+			'post_title'   => 'Default Schedule',
+			'post_status'  => 'publish',
+			'post_type'    => 'wpa-schedule',
+		]);
+
+		update_option( 'wpappointments_default_schedule_id', $post_id );
+	}
 
 	/**
 	 * Fires on plugin deactivation

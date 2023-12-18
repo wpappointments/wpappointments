@@ -1,6 +1,6 @@
 <?php
 /**
- * Appointment model file
+ * Schedule model file
  *
  * @package WPAppointments
  * @since 0.0.1
@@ -8,41 +8,10 @@
 
 namespace WPAppointments\Model;
 
-use WPAppointments\Core;
-
 /**
  * Appointment model class
  */
-class SchedulePost extends Core\WPIntegrator implements Core\Hookable {
-	/**
-	 * Register appointment post type
-	 *
-	 * @action init
-	 *
-	 * @return void
-	 */
-	public function register_post_type() {
-		register_post_type(
-			'schedule',
-			array(
-				'labels'                => array(
-					'name' => __( 'Schedules', 'wpappointments' ),
-				),
-				'public'                => false,
-				'show_ui'               => true,
-				'show_in_menu'          => true,
-				'capability_type'       => 'post',
-				'hierarchical'          => false,
-				'rewrite'               => false,
-				'query_var'             => false,
-				'supports'              => array( 'title', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields' ),
-				'show_in_rest'          => true,
-				'rest_base'             => 'schedules',
-				'rest_controller_class' => 'WP_REST_Posts_Controller',
-			)
-		);
-	}
-
+class SchedulePost {
 	/**
 	 * Get all appointments
 	 *

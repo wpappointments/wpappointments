@@ -1,0 +1,54 @@
+.time-picker {
+	display: flex;
+	align-items: center;
+}
+
+.time-picker-control {
+	display: flex;
+	align-items: center;
+	padding: 4px;
+	background-color: #eee;
+}
+
+.time-picker :global .components-number-control {
+	width: 36px;
+}
+
+.time-picker :global .components-number-control__input {
+	padding-right: 0px;
+	padding-left: 8px;
+	text-align: center;
+}
+
+.time-picker__label {
+	margin-right: 8px;
+}
+
+.time-picker-separator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-self: stretch;
+	width: 5px;
+	background-color: #eee;
+}
+
+.time-picker-control
+	> :global( .FormField-module__field:nth-child( 1 ) )
+	:global( .components-input-control__input ) {
+	padding-left: 4px;
+	padding-right: 0;
+	text-align: center;
+}
+
+.time-picker-control
+	> :global( .FormField-module__field:nth-child( 3 ) )
+	:global( .components-input-control__input ) {
+	padding-left: 0;
+	padding-right: 4px;
+	text-align: center;
+}
+
+.time-picker :global( .components-input-control__backdrop ) {
+	border: none !important;
+}
