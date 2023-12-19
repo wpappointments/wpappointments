@@ -9,3 +9,5 @@ node_modules
 npm-debug.log
 .husky
 assets/scripts/utils/experimental.ts
+*.svg
+*.module.css.d.ts
