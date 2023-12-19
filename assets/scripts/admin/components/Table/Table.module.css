@@ -10,3 +10,18 @@
 	border: 1px solid #e5e5e5;
 	text-align: left;
 }
+
+.empty {
+	text-align: center;
+	padding: 50px 16px;
+}
+
+.empty-icon {
+	font-size: 24px;
+	color: #bcbcbc;
+	width: min( 80px, 50vw );
+	height: min( 80px, 50vw );
+	vertical-align: middle;
+	fill: currentColor;
+	overflow: hidden;
+}
