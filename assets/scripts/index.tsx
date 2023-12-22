@@ -1,3 +1,3 @@
-// import { createHooks } from '@wordpress/hooks';
+import { createHooks } from '@wordpress/hooks';
 
-// window.wpappointments.hooks = createHooks();
+window.wpappointments.hooks = createHooks();
