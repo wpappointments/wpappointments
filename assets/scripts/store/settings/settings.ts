@@ -132,7 +132,6 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 
 		case 'COPY_WORKING_HOURS_TO_ALL_DAYS':
 			return produce(state, (draft) => {
-				console.log(action.data);
 				const createCopyFor = (day = action.data.day) => ({
 					...draft.schedule[day],
 					...{
