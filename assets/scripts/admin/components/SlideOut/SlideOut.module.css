@@ -1,0 +1,69 @@
+.slide-out {
+	position: absolute;
+	background-color: #fff;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	transform: translateX( 100px );
+	transition: transform 0.2s ease-in-out;
+	width: min( 1200px, calc( 100% - 80px ) );
+	z-index: 1002;
+	cursor: auto;
+	pointer-events: unset;
+}
+
+.slide-out--is-open {
+	transform: translateX( 0 );
+}
+
+.slide-out-overlay {
+	position: fixed;
+	top: 32px;
+	left: 160px;
+	right: 0;
+	bottom: 0;
+	z-index: 1001;
+	background-color: rgba( 0, 0, 0, 0.5 );
+	overflow-x: hidden;
+	transition: 0.1s;
+	opacity: var( --is-open );
+	cursor: pointer;
+}
+
+:global( .folded ) .slide-out-overlay {
+	left: 36px;
+}
+
+@media only screen and ( max-width: 960px ) {
+	:global( .auto-fold ) .slide-out-overlay {
+		left: 36px;
+	}
+}
+
+@media screen and ( max-width: 782px ) {
+	.slide-out-overlay,
+	:global( .folded ) .slide-out-overlay,
+	:global( .auto-fold ) .slide-out-overlay {
+		top: 46px;
+		left: 0;
+	}
+}
+
+.header {
+	width: 100%;
+	border-bottom: 1px solid #e5e5e5;
+	display: flex;
+	align-items: center;
+	padding-left: var( --wpappointments-large-gap );
+	height: var( --wpappointments-layout-header-height );
+}
+
+.header > h2 {
+	font-weight: 600;
+	font-size: 14px;
+	margin: 0;
+}
+
+.content {
+	padding: var( --wpappointments-large-gap );
+}

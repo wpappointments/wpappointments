@@ -39,6 +39,20 @@ class Appointment extends Controller {
 
 		register_rest_route(
 			static::ROUTE_NAMESPACE,
+			'/appointment/upcoming',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( __CLASS__, 'get_upcoming_appointments' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
 			'/appointment',
 			array(
 				array(
@@ -88,6 +102,27 @@ class Appointment extends Controller {
 	}
 
 	/**
+	 * Get upcoming appointments
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function get_upcoming_appointments( WP_REST_Request $request ) {
+		$appointment  = new AppointmentPost();
+		$appointments = $appointment->get_upcoming();
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'appointments' => $appointments,
+				),
+			)
+		);
+	}
+
+	/**
 	 * Create appointment post
 	 *
 	 * @param WP_REST_Request $request Request object.
@@ -95,8 +130,12 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
+		$params = $request->get_params();
+		$title  = $request->get_param( 'title' );
+		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
+
 		$appointment_post = new AppointmentPost();
-		$appointment      = $appointment_post->create( $request->get_params() );
+		$appointment      = $appointment_post->create( $title, array( 'datetime' => $date ) );
 
 		return self::response(
 			array(

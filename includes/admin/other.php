@@ -29,3 +29,22 @@ function body_class( $classes ) {
 
 	return $classes;
 }
+
+add_action( 'admin_footer', __NAMESPACE__ . '\\render_globals_component' );
+
+/**
+ * Render the globals component
+ *
+ * @return void
+ */
+function render_globals_component() {
+	if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
+		return;
+	}
+
+	if ( str_contains( get_current_screen()->id, 'wpappointments' ) ) {
+		return;
+	}
+
+	echo '<div id="wpappointments-globals"></div>';
+}
