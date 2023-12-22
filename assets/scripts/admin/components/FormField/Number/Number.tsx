@@ -14,6 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { NumberControl } from '~/utils/experimental';
 import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
+import { fieldLabel } from '../FormField.module.css';
 
 type Props<T extends FieldValues> = {
 	control: Control<T, any>;
@@ -55,7 +56,7 @@ export default function Number<T extends FieldValues>({
 	return (
 		<FormField>
 			{label && (
-				<label htmlFor={name}>
+				<label className={fieldLabel} htmlFor={name}>
 					{label}
 					{rules?.required && '*'}
 				</label>

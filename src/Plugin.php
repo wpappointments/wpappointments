@@ -40,11 +40,13 @@ class Plugin extends Core\Singleton {
 			return;
 		}
 
-		$post_id = wp_insert_post([
-			'post_title'   => 'Default Schedule',
-			'post_status'  => 'publish',
-			'post_type'    => 'wpa-schedule',
-		]);
+		$post_id = wp_insert_post(
+			array(
+				'post_title'  => 'Default Schedule',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa_schedule',
+			)
+		);
 
 		update_option( 'wpappointments_default_schedule_id', $post_id );
 	}
@@ -54,5 +56,13 @@ class Plugin extends Core\Singleton {
 	 *
 	 * @return void
 	 */
-	public function on_plugin_deactivation() {}
+	public function on_plugin_deactivation() {
+		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
+
+		if ( ! $default_schedule ) {
+			return;
+		}
+
+		wp_delete_post( $default_schedule, true );
+	}
 }
