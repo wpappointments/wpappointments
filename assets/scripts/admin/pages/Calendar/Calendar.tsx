@@ -3,6 +3,8 @@ import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
+import SlideOut from '~/admin/components/SlideOut/SlideOut';
+import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -118,6 +120,16 @@ export default function Calendar() {
 		appointments
 	);
 
+	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
+
+	const openSlideOut = () => {
+		setSlideOutIsOpen(true);
+	};
+
+	const closeSlideOut = () => {
+		setSlideOutIsOpen(false);
+	};
+
 	const daysOfWeek = [
 		__('Mon', 'wpappointments'),
 		__('Tue', 'wpappointments'),
@@ -201,8 +213,8 @@ export default function Calendar() {
 					&rsaquo;
 				</Button>
 			</div>,
-			<Button variant="primary">
-				{__('Create new appointment', 'wpappointments')}
+			<Button variant="primary" onClick={openSlideOut}>
+				{__('Create New Appointment', 'wpappointments')}
 			</Button>,
 		]
 	);
@@ -249,7 +261,10 @@ export default function Calendar() {
 								</div>
 								<div className={events}>
 									{day.appointments.map((appointment) => (
-										<div className={event}>
+										<div
+											key={appointment.id}
+											className={event}
+										>
 											{appointment.title || 'Untitled'}
 										</div>
 									))}
@@ -259,6 +274,13 @@ export default function Calendar() {
 					))}
 				</div>
 			</div>
+			<SlideOut
+				isOpen={slideOutIsOpen}
+				onOverlayClick={closeSlideOut}
+				title="Create new appointment"
+			>
+				<NewAppointmentForm onSubmitComplete={closeSlideOut} />
+			</SlideOut>
 		</LayoutDefault>
 	);
 }

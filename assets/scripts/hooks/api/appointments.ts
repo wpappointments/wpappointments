@@ -20,6 +20,11 @@ export function useAppointments() {
 			method: 'GET',
 		});
 
+		const { data: responseData } = response;
+		const { appointments } = responseData;
+
+		dispatch.setAppointments(appointments);
+
 		return response;
 	}
 
