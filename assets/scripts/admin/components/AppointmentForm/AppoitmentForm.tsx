@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useAppointments } from '~/hooks/api/appointments';
 import { Appointment } from '~/types';
 import { APIResponse } from '~/utils/fetch';
@@ -20,13 +21,15 @@ type FormProps = {
 		}>
 	) => void;
 	defaultDate?: Date;
+	selectedAppointment?: Appointment;
 };
 
-export default function NewAppointmentForm({
+export default function AppointmentForm({
 	onSubmitComplete,
 	defaultDate,
+	selectedAppointment,
 }: FormProps) {
-	const { createAppointment } = useAppointments();
+	const { createAppointment, updateAppointment } = useAppointments();
 	const {
 		control,
 		handleSubmit,
@@ -36,14 +39,30 @@ export default function NewAppointmentForm({
 	} = useForm<Fields>();
 
 	useEffect(() => {
-		setValue(
-			'datetime',
-			defaultDate ? defaultDate.toISOString() : new Date().toISOString()
-		);
-	}, [defaultDate]);
+		reset();
+
+		if (selectedAppointment) {
+			setValue('title', selectedAppointment.title);
+			setValue(
+				'datetime',
+				new Date(
+					parseInt(selectedAppointment.timestamp) * 1000
+				).toISOString()
+			);
+		} else {
+			setValue(
+				'datetime',
+				defaultDate
+					? defaultDate.toISOString()
+					: new Date().toISOString()
+			);
+		}
+	}, [defaultDate, selectedAppointment]);
 
 	const onSubmit = async (formData: Fields) => {
-		const data = await createAppointment(formData);
+		const data = selectedAppointment
+			? await updateAppointment(selectedAppointment.id, formData)
+			: await createAppointment(formData);
 
 		if (onSubmitComplete) {
 			onSubmitComplete(data);
@@ -75,7 +94,9 @@ export default function NewAppointmentForm({
 			</div>
 
 			<Button type="submit" variant="primary">
-				Create Appointment
+				{selectedAppointment
+					? __('Update Appointment')
+					: __('Create Appointment')}
 			</Button>
 		</form>
 	);

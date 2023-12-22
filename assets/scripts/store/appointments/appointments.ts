@@ -30,6 +30,12 @@ export const actions = {
 			appointment,
 		} as const;
 	},
+	updateAppointment(appointment: Appointment) {
+		return {
+			type: 'UPDATE_APPOINTMENT',
+			appointment,
+		} as const;
+	},
 	deleteAppointment(appointmentId: number) {
 		return {
 			type: 'DELETE_APPOINTMENT',
@@ -61,6 +67,21 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 					)
 					.slice(0, 10),
 				all: [...state.all, action.appointment],
+			};
+
+		case 'UPDATE_APPOINTMENT':
+			return {
+				...state,
+				upcoming: state.upcoming.map((appointment: Appointment) =>
+					appointment.id === action.appointment.id
+						? action.appointment
+						: appointment
+				),
+				all: state.all.map((appointment: Appointment) =>
+					appointment.id === action.appointment.id
+						? action.appointment
+						: appointment
+				),
 			};
 
 		case 'DELETE_APPOINTMENT':

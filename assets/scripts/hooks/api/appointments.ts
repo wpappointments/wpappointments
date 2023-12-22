@@ -61,6 +61,23 @@ export function useAppointments() {
 		return response;
 	}
 
+	async function updateAppointment(id: number, data: AppointmentData) {
+		const response = await apiFetch<
+			APIResponse<{ appointment: Appointment; message: string }>
+		>({
+			path: `appointment/${id}`,
+			method: 'PUT',
+			data,
+		});
+
+		const { data: responseData } = response;
+		const { appointment } = responseData;
+
+		dispatch.updateAppointment(appointment);
+
+		return response;
+	}
+
 	async function deleteAppointment(id: number) {
 		const response = await apiFetch<
 			APIResponse<{ appointment: Appointment; message: string }>
@@ -78,12 +95,14 @@ export function useAppointments() {
 		getAppointments,
 		getUpcomingAppointments,
 		createAppointment,
+		updateAppointment,
 		deleteAppointment,
 	} as const;
 
 	window.wpappointments.api.getAppointments = getAppointments;
 	window.wpappointments.api.getUpcomingAppointments = getUpcomingAppointments;
 	window.wpappointments.api.createAppointment = createAppointment;
+	window.wpappointments.api.updateAppointment = updateAppointment;
 	window.wpappointments.api.deleteAppointment = deleteAppointment;
 
 	return functions;

@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
+import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -108,6 +108,10 @@ function applyAppointmentsToCalendar(
 	});
 }
 
+function isAppointments(obj: unknown): obj is Appointment {
+	return typeof obj === 'object' && obj !== null && 'timestamp' in obj;
+}
+
 export default function Calendar() {
 	const appointments = useSelect(() => {
 		return select(store).getAppointments();
@@ -122,11 +126,22 @@ export default function Calendar() {
 
 	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+	const [selectedAppointment, setSelectedAppointment] = useState<
+		Appointment | undefined
+	>();
 
-	const openSlideOut = (date?: Date) => {
-		date?.setHours(10);
-		date?.setMinutes(0);
-		setSelectedDate(date);
+	const openSlideOut = (data?: Appointment | Date) => {
+		if (data instanceof Date) {
+			data?.setHours(10);
+			data?.setMinutes(0);
+			setSelectedDate(data);
+			setSelectedAppointment(undefined);
+		}
+
+		if (isAppointments(data)) {
+			setSelectedAppointment(data);
+		}
+
 		setSlideOutIsOpen(true);
 	};
 
@@ -268,6 +283,9 @@ export default function Calendar() {
 										<div
 											key={appointment.id}
 											className={event}
+											onClick={() =>
+												openSlideOut(appointment)
+											}
 										>
 											{appointment.title || 'Untitled'}
 										</div>
@@ -286,11 +304,16 @@ export default function Calendar() {
 			<SlideOut
 				isOpen={slideOutIsOpen}
 				onOverlayClick={closeSlideOut}
-				title="Create new appointment"
+				title={
+					selectedAppointment
+						? __('Edit Appointment')
+						: __('Create New Appointment')
+				}
 			>
-				<NewAppointmentForm
+				<AppointmentForm
 					onSubmitComplete={closeSlideOut}
 					defaultDate={selectedDate}
+					selectedAppointment={selectedAppointment}
 				/>
 			</SlideOut>
 		</LayoutDefault>

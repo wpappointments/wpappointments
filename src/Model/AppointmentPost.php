@@ -179,6 +179,55 @@ class AppointmentPost {
 	}
 
 	/**
+	 * Update appointment
+	 *
+	 * @param int   $id   Appointment ID.
+	 * @param array $meta Appointment post meta.
+	 *
+	 * @return array
+	 */
+	public function update( $id, $title, $meta = array() ) {
+		$post_id = wp_update_post(
+			array(
+				'ID'          => $id,
+				'post_type'   => 'appointment',
+				'post_status' => 'publish',
+				'post_title'  => $title,
+				'meta_input'  => $meta,
+			)
+		);
+
+		$timestamp = $meta['datetime'];
+		$parsed = $this->parse_datetime( $timestamp );
+		$date	 = $parsed['date'];
+		$time	 = $parsed['time'];
+
+		return array(
+			'id'      => $post_id,
+			'title'   => get_the_title( $post_id ),
+			'date'    => $date,
+			'time'    => $time,
+			'timestamp' => $timestamp,
+			'actions' => (object) array(
+				'delete' => (object) array(
+					'name'        => 'DeleteAppointment',
+					'label'       => 'Delete',
+					'method'      => 'DELETE',
+					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post_id ),
+					'isDangerous' => true,
+				),
+				'edit'   => array(
+					'name'        => 'EditAppointment',
+					'label'       => 'Edit',
+					'method'      => 'PUT',
+					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post_id ),
+					'isDangerous' => false,
+				),
+			),
+		);
+	}
+
+	/**
 	 * Parse datetime
 	 *
 	 * @param int $timestamp Timestamp.
