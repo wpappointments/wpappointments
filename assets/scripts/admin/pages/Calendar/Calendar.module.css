@@ -57,6 +57,7 @@
 .day-tile {
 	aspect-ratio: 1;
 	outline: 1px solid #ebebeb;
+	overflow: hidden;
 }
 
 .day-tile-label {
@@ -87,6 +88,9 @@
 	padding: 4px;
 	margin-bottom: 4px;
 	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .pagination {
