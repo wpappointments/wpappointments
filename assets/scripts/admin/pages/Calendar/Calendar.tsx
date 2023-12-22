@@ -210,25 +210,13 @@ export default function Calendar() {
 		'calendar.actions',
 		[
 			<div className={pagination}>
-				<Button
-					size="small"
-					variant="secondary"
-					onClick={switchToPreviousMonth}
-				>
+				<Button variant="secondary" onClick={switchToPreviousMonth}>
 					&lsaquo;
 				</Button>
-				<Button
-					size="small"
-					variant="secondary"
-					onClick={switchToToday}
-				>
+				<Button variant="secondary" onClick={switchToToday}>
 					{__('today', 'wpappointments')}
 				</Button>
-				<Button
-					size="small"
-					variant="secondary"
-					onClick={switchToNextMonth}
-				>
+				<Button variant="secondary" onClick={switchToNextMonth}>
 					&rsaquo;
 				</Button>
 			</div>,

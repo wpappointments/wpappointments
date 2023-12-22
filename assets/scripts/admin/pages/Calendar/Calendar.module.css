@@ -98,8 +98,6 @@
 	justify-content: flex-end;
 	align-items: center;
 	gap: 5px;
-	border: 1px solid #c9c9c9;
-	background-color: #e3e3e3;
 	padding: 7px 10px;
 	border-radius: 2px;
 }
