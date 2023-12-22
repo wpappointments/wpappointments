@@ -8,6 +8,7 @@ import {
 	FieldValues,
 	Merge,
 	Path,
+	PathValue,
 	RegisterOptions,
 } from 'react-hook-form';
 import { __ } from '@wordpress/i18n';
@@ -24,6 +25,7 @@ type Props<T extends FieldValues> = {
 		RegisterOptions<T, Path<T>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
+	defaultValue?: PathValue<T, Path<T>>;
 };
 
 export type FormFieldError<T extends FieldValues> =
@@ -37,6 +39,7 @@ export default function DateTimePicker<T extends FieldValues>({
 	label,
 	name,
 	rules,
+	defaultValue,
 }: Props<T>) {
 	const error: FormFieldError<T> = errors[name];
 
@@ -46,6 +49,7 @@ export default function DateTimePicker<T extends FieldValues>({
 				name={name}
 				control={control}
 				rules={rules}
+				defaultValue={defaultValue}
 				render={({ field: { value, onChange } }) => (
 					<WPDateTimePicker onChange={onChange} currentDate={value} />
 				)}
