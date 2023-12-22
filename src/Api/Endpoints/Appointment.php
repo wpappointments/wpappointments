@@ -171,7 +171,7 @@ class Appointment extends Controller {
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
 		$params = $request->get_params();
-		$id  = $request->get_param( 'id' );
+		$id     = $request->get_param( 'id' );
 		$title  = $request->get_param( 'title' );
 		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 

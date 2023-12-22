@@ -33,17 +33,17 @@ class AppointmentPost {
 
 		foreach ( $posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-			$parsed = $this->parse_datetime( $timestamp );
-			$date	 = $parsed['date'];
-			$time	 = $parsed['time'];
+			$parsed    = $this->parse_datetime( $timestamp );
+			$date      = $parsed['date'];
+			$time      = $parsed['time'];
 
 			$appointments[] = array(
-				'id'      => $post->ID,
-				'title'   => $post->post_title,
-				'date'    => $date,
-				'time'    => $time,
+				'id'        => $post->ID,
+				'title'     => $post->post_title,
+				'date'      => $date,
+				'time'      => $time,
 				'timestamp' => $timestamp,
-				'actions' => (object) array(
+				'actions'   => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',
 						'label'       => 'Delete',
@@ -99,17 +99,17 @@ class AppointmentPost {
 
 		foreach ( $query->posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-			$parsed = $this->parse_datetime( $timestamp );
-			$date	 = $parsed['date'];
-			$time	 = $parsed['time'];
+			$parsed    = $this->parse_datetime( $timestamp );
+			$date      = $parsed['date'];
+			$time      = $parsed['time'];
 
 			$appointments[] = array(
-				'id'      => $post->ID,
-				'title'   => $post->post_title,
-				'date'    => $date,
-				'time'    => $time,
+				'id'        => $post->ID,
+				'title'     => $post->post_title,
+				'date'      => $date,
+				'time'      => $time,
 				'timestamp' => $timestamp,
-				'actions' => (object) array(
+				'actions'   => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',
 						'label'       => 'Delete',
@@ -134,7 +134,8 @@ class AppointmentPost {
 	/**
 	 * Create appointment
 	 *
-	 * @param array $meta Appointment post meta.
+	 * @param string $title Appointment title.
+	 * @param array  $meta Appointment post meta.
 	 *
 	 * @return array
 	 */
@@ -149,17 +150,17 @@ class AppointmentPost {
 		);
 
 		$timestamp = $meta['datetime'];
-		$parsed = $this->parse_datetime( $timestamp );
-		$date	 = $parsed['date'];
-		$time	 = $parsed['time'];
+		$parsed    = $this->parse_datetime( $timestamp );
+		$date      = $parsed['date'];
+		$time      = $parsed['time'];
 
 		return array(
-			'id'      => $post_id,
-			'title'   => $title,
-			'date'    => $date,
-			'time'    => $time,
+			'id'        => $post_id,
+			'title'     => $title,
+			'date'      => $date,
+			'time'      => $time,
 			'timestamp' => $timestamp,
-			'actions' => (object) array(
+			'actions'   => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',
@@ -181,8 +182,9 @@ class AppointmentPost {
 	/**
 	 * Update appointment
 	 *
-	 * @param int   $id   Appointment ID.
-	 * @param array $meta Appointment post meta.
+	 * @param int    $id   Appointment ID.
+	 * @param string $title Appointment title.
+	 * @param array  $meta Appointment post meta.
 	 *
 	 * @return array
 	 */
@@ -198,17 +200,17 @@ class AppointmentPost {
 		);
 
 		$timestamp = $meta['datetime'];
-		$parsed = $this->parse_datetime( $timestamp );
-		$date	 = $parsed['date'];
-		$time	 = $parsed['time'];
+		$parsed    = $this->parse_datetime( $timestamp );
+		$date      = $parsed['date'];
+		$time      = $parsed['time'];
 
 		return array(
-			'id'      => $post_id,
-			'title'   => get_the_title( $post_id ),
-			'date'    => $date,
-			'time'    => $time,
+			'id'        => $post_id,
+			'title'     => get_the_title( $post_id ),
+			'date'      => $date,
+			'time'      => $time,
 			'timestamp' => $timestamp,
-			'actions' => (object) array(
+			'actions'   => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',
@@ -248,8 +250,8 @@ class AppointmentPost {
 		}
 
 		return array(
-			'date'    => $date,
-			'time'    => $time,
+			'date' => $date,
+			'time' => $time,
 		);
 	}
 
