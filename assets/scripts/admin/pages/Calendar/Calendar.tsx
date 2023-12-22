@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
+import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -310,7 +310,7 @@ export default function Calendar() {
 						: __('Create New Appointment')
 				}
 			>
-				<NewAppointmentForm
+				<AppointmentForm
 					onSubmitComplete={closeSlideOut}
 					defaultDate={selectedDate}
 					selectedAppointment={selectedAppointment}
