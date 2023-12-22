@@ -60,6 +60,7 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 						(a, b) => parseInt(a.timestamp) - parseInt(b.timestamp)
 					)
 					.slice(0, 10),
+				all: [...state.all, action.appointment],
 			};
 
 		case 'DELETE_APPOINTMENT':
