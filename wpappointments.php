@@ -54,8 +54,6 @@ register_deactivation_hook(
 	)
 );
 
-add_filter('wpappointments_globals_api_enabled', '__return_true');
-
 /**
  * Include admin files
  */
