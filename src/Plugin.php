@@ -40,11 +40,13 @@ class Plugin extends Core\Singleton {
 			return;
 		}
 
-		$post_id = wp_insert_post([
-			'post_title'   => 'Default Schedule',
-			'post_status'  => 'publish',
-			'post_type'    => 'wpa-schedule',
-		]);
+		$post_id = wp_insert_post(
+			array(
+				'post_title'  => 'Default Schedule',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-schedule',
+			)
+		);
 
 		update_option( 'wpappointments_default_schedule_id', $post_id );
 	}

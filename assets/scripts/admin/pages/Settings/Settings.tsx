@@ -4,6 +4,7 @@ import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import { tabsConainer } from './Settings.module.css';
+import { useAppointments } from '~/hooks/api/appointments';
 
 type Tab = {
 	name: string;
@@ -34,6 +35,8 @@ const tabs = new Map<string, Tab>([
 ]);
 
 export default function Settings() {
+	useAppointments();
+
 	return (
 		<LayoutDefault title="Settings">
 			<TabPanel

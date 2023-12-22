@@ -17,7 +17,7 @@ export const actions = {
 			appointments,
 		} as const;
 	},
-	addAppointment(appointment: Appointment) {
+	createAppointment(appointment: Appointment) {
 		return {
 			type: 'ADD_APPOINTMENT',
 			appointment,
@@ -42,7 +42,9 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 		case 'ADD_APPOINTMENT':
 			return {
 				...state,
-				upcoming: [...state.upcoming, action.appointment],
+				upcoming: [...state.upcoming, action.appointment]
+					.sort((a, b) => a.timestamp - b.timestamp)
+					.slice(0, 10),
 			};
 
 		case 'DELETE_APPOINTMENT':
@@ -77,7 +79,7 @@ export const resolvers = {
 		{ type: string; appointments: Appointment[] },
 		APIResponse<{ appointments: Appointment[] }>
 	> {
-		const response = yield baseActions.fetchFromAPI('appointment');
+		const response = yield baseActions.fetchFromAPI('appointment/upcoming');
 		const { data } = response;
 		const { appointments } = data;
 		return actions.setUpcomingAppointments(appointments);

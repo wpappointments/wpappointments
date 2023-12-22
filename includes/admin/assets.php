@@ -19,9 +19,33 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\scripts' );
  * @return void
  */
 function scripts() {
+	$api = array(
+		'api' => array(
+			'root'      => esc_url_raw( rest_url() ),
+			'namespace' => trailingslashit( WPAPPOINTMENTS_API_NAMESPACE ),
+			'url'       => esc_url_raw( trailingslashit( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ) ),
+		),
+	);
+
 	$screen = get_current_screen();
 
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
+		$globals_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/globals.tsx.asset.php';
+
+		wp_enqueue_script(
+			'wpappointments-globals-js',
+			WPAPPOINTMENTS_PLUGIN_DIR_URL . 'build/globals.tsx.js',
+			$globals_deps['dependencies'] + apply_filters( 'wpappointments_globals_js_dependencies', array() ),
+			$globals_deps['version'],
+			true
+		);
+
+		wp_localize_script(
+			'wpappointments-globals-js',
+			'wpappointments',
+			$api
+		);
+
 		return;
 	}
 
@@ -43,7 +67,7 @@ function scripts() {
 
 	wp_enqueue_script(
 		'wpappointments-admin-js',
-		WPAPPOINTMENTS_PLUGIN_DIR_URL . '/build/admin.tsx.js',
+		WPAPPOINTMENTS_PLUGIN_DIR_URL . 'build/admin.tsx.js',
 		$admin_deps['dependencies'] + apply_filters( 'wpappointments_admin_js_dependencies', array() ),
 		$admin_deps['version'],
 		true
@@ -52,12 +76,6 @@ function scripts() {
 	wp_localize_script(
 		'wpappointments-admin-js',
 		'wpappointments',
-		array(
-			'api' => array(
-				'root'      => esc_url_raw( rest_url() ),
-				'namespace' => trailingslashit( WPAPPOINTMENTS_API_NAMESPACE ),
-				'url'       => esc_url_raw( trailingslashit( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ) ),
-			),
-		)
+		$api
 	);
 }
