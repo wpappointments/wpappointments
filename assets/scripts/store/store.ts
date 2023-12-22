@@ -1,4 +1,4 @@
-import { combineReducers, createReduxStore, register } from '@wordpress/data';
+import { combineReducers, createReduxStore } from '@wordpress/data';
 import { SettingsState } from './settings/settings.types';
 import { AppointmentsState } from './appointments/appointments.types';
 import actions from './actions';
@@ -19,5 +19,3 @@ export const store = createReduxStore('wpappointments', {
 	actions,
 	controls,
 });
-
-register(store);

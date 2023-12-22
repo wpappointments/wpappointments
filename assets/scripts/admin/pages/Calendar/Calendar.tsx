@@ -1,8 +1,11 @@
 import { Button, ButtonGroup } from '@wordpress/components';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import { applyFilters } from '~/utils/hooks';
+import { store } from '~/store/store';
+import { Appointment } from '~/types';
 import {
 	header,
 	calendar,
@@ -19,19 +22,8 @@ import {
 	pagination,
 	actions,
 	topBar,
+	dayTileLabelText,
 } from './Calendar.module.css';
-
-function getDaysInMonth(month: number, year: number) {
-	return new Date(year, month, 0).getDate();
-}
-
-function getWeekDayNumber(day: number) {
-	if (day === 0) {
-		return 7;
-	}
-
-	return day;
-}
 
 function getMonthName(month: number) {
 	const months = [
@@ -64,11 +56,68 @@ function isCurrentYear(date: Date) {
 	return date.getFullYear() === new Date().getFullYear();
 }
 
+function getCalendarMonth(month: number = 0, year: number = 0) {
+	const monthIndex = month;
+	const nextMonthIndex = month + 1;
+	const firstDayOfCurrentMonthDate = new Date(year, monthIndex, 1);
+	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
+	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
+
+	let days = [];
+
+	for (
+		let i = 2 - firstDayOfCurrentMonth;
+		i < 44 - firstDayOfCurrentMonth;
+		i++
+	) {
+		days.push({
+			index: i,
+			start: new Date(year, monthIndex, i),
+			end: new Date(
+				new Date(year, monthIndex, i).setHours(23, 59, 59, 999)
+			),
+			isPreviousMonth: i < 1,
+			isNextMonth: i > daysInCurrentMonth,
+			isToday:
+				i === getTodayDayInMonth() &&
+				isCurrentMonth(new Date(year, monthIndex, i)) &&
+				isCurrentYear(new Date(year, monthIndex, i)),
+		});
+	}
+
+	return days;
+}
+
+function applyAppointmentsToCalendar(
+	calendar: ReturnType<typeof getCalendarMonth>,
+	appointments: Appointment[]
+) {
+	return calendar.map((day) => {
+		return {
+			...day,
+			appointments: appointments.filter((appointment) => {
+				return (
+					parseInt(appointment.timestamp) >=
+						day.start.getTime() / 1000 &&
+					parseInt(appointment.timestamp) <= day.end.getTime() / 1000
+				);
+			}),
+		};
+	});
+}
+
 export default function Calendar() {
+	const appointments = useSelect(() => {
+		return select(store).getAppointments();
+	}, []);
+
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
+	const currentMonth = applyAppointmentsToCalendar(
+		getCalendarMonth(month, year),
+		appointments
+	);
 
-	const days = [...Array(42)];
 	const daysOfWeek = [
 		__('Mon', 'wpappointments'),
 		__('Tue', 'wpappointments'),
@@ -78,8 +127,6 @@ export default function Calendar() {
 		__('Sat', 'wpappointments'),
 		__('Sun', 'wpappointments'),
 	];
-	const dayToday = new Date(year, month, 1).getDay();
-	const weekDay = getWeekDayNumber(dayToday);
 
 	const switchToPreviousMonth = () => {
 		setMonth((current) => {
@@ -108,22 +155,16 @@ export default function Calendar() {
 		setYear(new Date().getFullYear());
 	};
 
-	const dayClasses = (day: number) => {
-		if (day - weekDay + 2 <= 0) {
+	const dayClasses = (day: ReturnType<typeof getCalendarMonth>[0]) => {
+		if (day.isPreviousMonth) {
 			return previousMonthDay + ' ' + dayTileContent;
 		}
 
-		if (day - weekDay + 2 > getDaysInMonth(month + 1, year)) {
+		if (day.isNextMonth) {
 			return nextMonthDay + ' ' + dayTileContent;
 		}
 
-		const today = new Date(year, month, day - weekDay + 2);
-
-		if (
-			day - weekDay + 2 === getTodayDayInMonth() &&
-			isCurrentMonth(today) &&
-			isCurrentYear(today)
-		) {
+		if (day.isToday) {
 			return isToday + ' ' + dayTileContent;
 		}
 
@@ -131,7 +172,7 @@ export default function Calendar() {
 	};
 
 	const dayLabel = (day: number) => {
-		return new Date(year, month, day - weekDay + 2).getDate();
+		return new Date(year, month, day).getDate();
 	};
 
 	const calendarActions = applyFilters<React.JSX.Element[]>(
@@ -198,16 +239,20 @@ export default function Calendar() {
 					))}
 				</div>
 				<div className={calendar}>
-					{days.map((_, i) => (
-						<div key={i} className={dayTile}>
-							<div className={dayClasses(i)}>
+					{currentMonth.map((day) => (
+						<div key={day.index} className={dayTile}>
+							<div className={dayClasses(day)}>
 								<div className={dayTileLabel}>
-									{dayLabel(i)}
+									<div className={dayTileLabelText}>
+										{dayLabel(day.index)}
+									</div>
 								</div>
 								<div className={events}>
-									<div className={event}>Hello 1</div>
-									<div className={event}>Hello 2</div>
-									<div className={event}>Hello 2</div>
+									{day.appointments.map((appointment) => (
+										<div className={event}>
+											{appointment.title || 'Untitled'}
+										</div>
+									))}
 								</div>
 							</div>
 						</div>

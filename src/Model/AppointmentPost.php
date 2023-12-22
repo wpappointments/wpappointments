@@ -42,6 +42,7 @@ class AppointmentPost {
 				'title'   => $post->post_title,
 				'date'    => $date,
 				'time'    => $time,
+				'timestamp' => $timestamp,
 				'actions' => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',
