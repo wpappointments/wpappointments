@@ -30,6 +30,10 @@ function scripts() {
 	$screen = get_current_screen();
 
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
+		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
+			return;
+		}
+
 		$globals_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/globals.tsx.asset.php';
 
 		wp_enqueue_script(
