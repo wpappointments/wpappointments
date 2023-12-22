@@ -39,12 +39,19 @@
 	flex-direction: column;
 }
 
-.is-today {
-	background-color: #e4feb7;
+.day-tile-label-text {
+	display: inline-block;
+	border-radius: 100px;
+	padding: 3px;
+	width: 18px;
+	height: 18px;
+	text-align: center;
 }
 
-.is-today .day-tile-label {
-	background-color: #67fa71;
+.is-today .day-tile-label-text {
+	font-weight: bold;
+	background: #ff0000;
+	color: #fff;
 }
 
 .day-tile {
@@ -53,7 +60,7 @@
 }
 
 .day-tile-label {
-	padding: 4px;
+	padding: 2px 8px;
 	text-align: right;
 	background-color: #f0f0f0;
 }
@@ -65,7 +72,7 @@
 }
 
 .event {
-	background-color: #007e35;
+	background-color: #076485;
 	color: #fff;
 	border-radius: 4px;
 	padding: 4px;
