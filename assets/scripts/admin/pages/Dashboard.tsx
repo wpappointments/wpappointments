@@ -4,7 +4,7 @@ import { useState } from '@wordpress/element';
 import Table from '~/admin/components/Table/Table';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
+import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { Text } from '~/utils/experimental';
 import { store } from '~/store/store';
 import { card } from 'global.module.css';
@@ -65,7 +65,7 @@ export default function Dashboard() {
 				onOverlayClick={closeSlideOut}
 				title="Create new appointment"
 			>
-				<NewAppointmentForm onSubmitComplete={closeSlideOut} />
+				<AppointmentForm onSubmitComplete={closeSlideOut} />
 			</SlideOut>
 		</LayoutDefault>
 	);

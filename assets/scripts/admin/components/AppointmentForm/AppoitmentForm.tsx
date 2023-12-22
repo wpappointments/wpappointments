@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { useAppointments } from '~/hooks/api/appointments';
 import { Appointment } from '~/types';
 import { APIResponse } from '~/utils/fetch';
 import Input from '../FormField/Input/Input';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
-import { __ } from '@wordpress/i18n';
 
 type Fields = {
 	title: string;
@@ -24,7 +24,7 @@ type FormProps = {
 	selectedAppointment?: Appointment;
 };
 
-export default function NewAppointmentForm({
+export default function AppointmentForm({
 	onSubmitComplete,
 	defaultDate,
 	selectedAppointment,
