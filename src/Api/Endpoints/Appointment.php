@@ -70,6 +70,20 @@ class Appointment extends Controller {
 			'/appointment/(?P<id>\d+)',
 			array(
 				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'update_appointment' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/appointment/(?P<id>\d+)',
+			array(
+				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete_appointment' ),
 					'permission_callback' => function () {
@@ -142,6 +156,33 @@ class Appointment extends Controller {
 				'type' => 'success',
 				'data' => array(
 					'message'     => __( 'Appointment created successfully', 'wpappointments' ),
+					'appointment' => $appointment,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Update appointment post
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function update_appointment( WP_REST_Request $request ) {
+		$params = $request->get_params();
+		$id  = $request->get_param( 'id' );
+		$title  = $request->get_param( 'title' );
+		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
+
+		$appointment_post = new AppointmentPost();
+		$appointment      = $appointment_post->update( $id, $title, array( 'datetime' => $date ) );
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'     => __( 'Appointment updated successfully', 'wpappointments' ),
 					'appointment' => $appointment,
 				),
 			)
