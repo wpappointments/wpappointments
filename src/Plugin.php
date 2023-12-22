@@ -44,7 +44,7 @@ class Plugin extends Core\Singleton {
 			array(
 				'post_title'  => 'Default Schedule',
 				'post_status' => 'publish',
-				'post_type'   => 'wpa-schedule',
+				'post_type'   => 'wpa_schedule',
 			)
 		);
 
@@ -56,5 +56,13 @@ class Plugin extends Core\Singleton {
 	 *
 	 * @return void
 	 */
-	public function on_plugin_deactivation() {}
+	public function on_plugin_deactivation() {
+		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
+
+		if ( ! $default_schedule ) {
+			return;
+		}
+
+		wp_delete_post( $default_schedule, true );
+	}
 }
