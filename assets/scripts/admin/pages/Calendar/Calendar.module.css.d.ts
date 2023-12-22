@@ -6,6 +6,7 @@ export const day: string;
 export const dayTile: string;
 export const dayTileContent: string;
 export const dayTileLabel: string;
+export const dayTileLabelText: string;
 export const event: string;
 export const events: string;
 export const header: string;
