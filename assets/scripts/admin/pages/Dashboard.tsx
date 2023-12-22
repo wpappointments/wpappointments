@@ -7,6 +7,7 @@ import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { Text } from '~/utils/experimental';
 import { store } from '~/store/store';
+import { Appointment } from '~/types';
 import { card } from 'global.module.css';
 
 export default function Dashboard() {
@@ -21,6 +22,9 @@ export default function Dashboard() {
 	}, []);
 
 	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
+	const [selectedAppointment, setSelectedAppointment] = useState<
+		Appointment | undefined
+	>();
 
 	const openSlideOut = () => {
 		setSlideOutIsOpen(true);
@@ -57,6 +61,10 @@ export default function Dashboard() {
 						items={appointments}
 						dispatch={dispatch}
 						onEmptyStateButtonClick={openSlideOut}
+						onEdit={(data: Appointment) => {
+							setSelectedAppointment(data);
+							openSlideOut();
+						}}
 					/>
 				</CardBody>
 			</Card>
@@ -65,7 +73,10 @@ export default function Dashboard() {
 				onOverlayClick={closeSlideOut}
 				title="Create new appointment"
 			>
-				<AppointmentForm onSubmitComplete={closeSlideOut} />
+				<AppointmentForm
+					onSubmitComplete={closeSlideOut}
+					selectedAppointment={selectedAppointment}
+				/>
 			</SlideOut>
 		</LayoutDefault>
 	);
