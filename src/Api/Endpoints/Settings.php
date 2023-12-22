@@ -122,7 +122,7 @@ class Settings extends Controller {
 	public static function update_settings( WP_REST_Request $request ) {
 		$params   = $request->get_url_params();
 		$category = $params['category'];
-		$settings = json_decode( $request->get_body() );
+		$settings = wp_json_decode( $request->get_body() );
 
 		$schedule = array();
 
@@ -136,7 +136,7 @@ class Settings extends Controller {
 				$hours = array();
 
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					$test = json_encode( $settings->$day );
+					$test = wp_json_encode( $settings->$day );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
 					array_push( $schedule, $test );
 				}
