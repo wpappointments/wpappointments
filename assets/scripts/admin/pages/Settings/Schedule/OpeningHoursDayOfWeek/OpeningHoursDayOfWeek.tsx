@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react';
 import { produce } from 'immer';
+import { useCallback, useMemo } from '@wordpress/element';
 import { Button, Dashicon } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import Toggle from '~/admin/components/FormField/Toggle/Toggle';

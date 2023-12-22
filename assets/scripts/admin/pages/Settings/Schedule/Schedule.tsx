@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo } from '@wordpress/element';
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { Text } from '~/utils/experimental';

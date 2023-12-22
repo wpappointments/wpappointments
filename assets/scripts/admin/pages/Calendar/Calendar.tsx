@@ -121,8 +121,14 @@ export default function Calendar() {
 	);
 
 	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
+	const [selectedDate, setSelectedDate] = useState<Date | null | undefined>(
+		null
+	);
 
-	const openSlideOut = () => {
+	const openSlideOut = (date?: Date) => {
+		date?.setHours(10);
+		date?.setMinutes(0);
+		setSelectedDate(date);
 		setSlideOutIsOpen(true);
 	};
 
@@ -213,7 +219,7 @@ export default function Calendar() {
 					&rsaquo;
 				</Button>
 			</div>,
-			<Button variant="primary" onClick={openSlideOut}>
+			<Button variant="primary" onClick={() => openSlideOut()}>
 				{__('Create New Appointment', 'wpappointments')}
 			</Button>,
 		]
@@ -268,6 +274,11 @@ export default function Calendar() {
 											{appointment.title || 'Untitled'}
 										</div>
 									))}
+									<Button
+										onClick={() => openSlideOut(day.start)}
+									>
+										+ {__('Add', 'wpappointments')}
+									</Button>
 								</div>
 							</div>
 						</div>
@@ -279,7 +290,12 @@ export default function Calendar() {
 				onOverlayClick={closeSlideOut}
 				title="Create new appointment"
 			>
-				<NewAppointmentForm onSubmitComplete={closeSlideOut} />
+				{selectedDate && (
+					<NewAppointmentForm
+						onSubmitComplete={closeSlideOut}
+						defaultDate={selectedDate}
+					/>
+				)}
 			</SlideOut>
 		</LayoutDefault>
 	);

@@ -71,6 +71,15 @@
 	padding: 10px;
 }
 
+.events > button {
+	display: none;
+}
+
+.events:hover > button {
+	display: block;
+	width: 100%;
+}
+
 .event {
 	background-color: #076485;
 	color: #fff;
