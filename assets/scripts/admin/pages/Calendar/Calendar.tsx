@@ -121,9 +121,7 @@ export default function Calendar() {
 	);
 
 	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
-	const [selectedDate, setSelectedDate] = useState<Date | null | undefined>(
-		null
-	);
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
 	const openSlideOut = (date?: Date) => {
 		date?.setHours(10);
@@ -290,12 +288,10 @@ export default function Calendar() {
 				onOverlayClick={closeSlideOut}
 				title="Create new appointment"
 			>
-				{selectedDate && (
-					<NewAppointmentForm
-						onSubmitComplete={closeSlideOut}
-						defaultDate={selectedDate}
-					/>
-				)}
+				<NewAppointmentForm
+					onSubmitComplete={closeSlideOut}
+					defaultDate={selectedDate}
+				/>
 			</SlideOut>
 		</LayoutDefault>
 	);

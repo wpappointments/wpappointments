@@ -36,8 +36,10 @@ export default function NewAppointmentForm({
 	} = useForm<Fields>();
 
 	useEffect(() => {
-		if (!defaultDate) return;
-		setValue('datetime', defaultDate.toISOString());
+		setValue(
+			'datetime',
+			defaultDate ? defaultDate.toISOString() : new Date().toISOString()
+		);
 	}, [defaultDate]);
 
 	const onSubmit = async (formData: Fields) => {
