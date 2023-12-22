@@ -7,12 +7,14 @@ type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	dispatch: any;
+	onEdit: (appointment: Appointment) => void;
 };
 
 export default function Table({
 	items,
 	onEmptyStateButtonClick,
 	dispatch,
+	onEdit,
 }: Props) {
 	if (!items || items.length === 0) {
 		return (
@@ -44,31 +46,52 @@ export default function Table({
 				</tr>
 			</thead>
 			<tbody>
-				{items.map(({ id, time, date, title, actions }) => (
+				{items.map(({ id, time, date, title, timestamp, actions }) => (
 					<tr key={id}>
 						<td>{title}</td>
 						<td>{date} </td>
 						<td>{time}</td>
 						<td>
-							{Object.values(actions).map((action) => (
-								<ActionButton
-									key={action.name}
-									action={action}
-									onSuccess={(data: {
-										id: number;
-										message: string;
-									}) => {
-										console.log('success', data);
-										dispatch.deleteAppointment(data.id);
-									}}
-									onError={(data: {
-										id: number;
-										message: string;
-									}) => {
-										console.log('error', data);
-									}}
-								/>
-							))}
+							{Object.values(actions).map(
+								(action) =>
+									action.name !== 'EditAppointment' && (
+										<ActionButton
+											key={action.name}
+											action={action}
+											onSuccess={(data: {
+												id: number;
+												message: string;
+											}) => {
+												console.log('success', data);
+												dispatch.deleteAppointment(
+													data.id
+												);
+											}}
+											onError={(data: {
+												id: number;
+												message: string;
+											}) => {
+												console.log('error', data);
+											}}
+										/>
+									)
+							)}
+							<Button
+								variant="tertiary"
+								size="small"
+								onClick={() => {
+									onEdit({
+										id,
+										time,
+										date,
+										title,
+										timestamp,
+										actions,
+									});
+								}}
+							>
+								Edit
+							</Button>
 						</td>
 					</tr>
 				))}
