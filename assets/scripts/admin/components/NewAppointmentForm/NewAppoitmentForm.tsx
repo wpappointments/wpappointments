@@ -1,5 +1,6 @@
-import { Button } from '@wordpress/components';
 import { useForm } from 'react-hook-form';
+import { Button } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 import { useAppointments } from '~/hooks/api/appointments';
 import { Appointment } from '~/types';
 import { APIResponse } from '~/utils/fetch';
@@ -18,16 +19,26 @@ type FormProps = {
 			message: string;
 		}>
 	) => void;
+	defaultDate?: Date;
 };
 
-export default function NewAppointmentForm({ onSubmitComplete }: FormProps) {
+export default function NewAppointmentForm({
+	onSubmitComplete,
+	defaultDate,
+}: FormProps) {
 	const { createAppointment } = useAppointments();
 	const {
 		control,
 		handleSubmit,
 		reset,
+		setValue,
 		formState: { errors },
 	} = useForm<Fields>();
+
+	useEffect(() => {
+		if (!defaultDate) return;
+		setValue('datetime', defaultDate.toISOString());
+	}, [defaultDate]);
 
 	const onSubmit = async (formData: Fields) => {
 		const data = await createAppointment(formData);
