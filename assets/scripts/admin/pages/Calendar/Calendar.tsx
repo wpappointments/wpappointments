@@ -3,6 +3,8 @@ import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
+import SlideOut from '~/admin/components/SlideOut/SlideOut';
+import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -24,8 +26,6 @@ import {
 	topBar,
 	dayTileLabelText,
 } from './Calendar.module.css';
-import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import NewAppointmentForm from '~/admin/components/NewAppointmentForm/NewAppoitmentForm';
 
 function getMonthName(month: number) {
 	const months = [
