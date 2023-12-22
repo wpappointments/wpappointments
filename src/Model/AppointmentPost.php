@@ -33,8 +33,9 @@ class AppointmentPost {
 
 		foreach ( $posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-			$date      = wp_date( 'D, F jS, Y', $timestamp );
-			$time      = wp_date( 'H:i', $timestamp );
+			$parsed = $this->parse_datetime( $timestamp );
+			$date	 = $parsed['date'];
+			$time	 = $parsed['time'];
 
 			$appointments[] = array(
 				'id'      => $post->ID,
@@ -97,19 +98,9 @@ class AppointmentPost {
 
 		foreach ( $query->posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-
-			$is_today    = gmdate( 'Ymd' ) === gmdate( 'Ymd', $timestamp );
-			$is_tomorrow = gmdate( 'Ymd', strtotime( 'tomorrow' ) ) === gmdate( 'Ymd', $timestamp );
-
-			if ( $is_today ) {
-				$date = __( 'Today', 'wpappointments' );
-			} elseif ( $is_tomorrow ) {
-				$date = __( 'Tomorrow', 'wpappointments' );
-			} else {
-				$date = wp_date( 'D, F jS, Y', $timestamp );
-			}
-
-			$time = wp_date( 'H:i', $timestamp );
+			$parsed = $this->parse_datetime( $timestamp );
+			$date	 = $parsed['date'];
+			$time	 = $parsed['time'];
 
 			$appointments[] = array(
 				'id'      => $post->ID,
@@ -156,19 +147,9 @@ class AppointmentPost {
 			)
 		);
 
-		$timestamp = $meta['datetime'];
-		$is_today    = gmdate( 'Ymd' ) === gmdate( 'Ymd', $timestamp );
-		$is_tomorrow = gmdate( 'Ymd', strtotime( 'tomorrow' ) ) === gmdate( 'Ymd', $timestamp );
-
-		if ( $is_today ) {
-			$date = __( 'Today', 'wpappointments' );
-		} elseif ( $is_tomorrow ) {
-			$date = __( 'Tomorrow', 'wpappointments' );
-		} else {
-			$date = wp_date( 'D, F jS, Y', $timestamp );
-		}
-
-		$time = wp_date( 'H:i', $timestamp );
+		$parsed = $this->parse_datetime( $meta['datetime'] );
+		$date	 = $parsed['date'];
+		$time	 = $parsed['time'];
 
 		return array(
 			'id'      => $post_id,
@@ -192,6 +173,32 @@ class AppointmentPost {
 					'isDangerous' => false,
 				),
 			),
+		);
+	}
+
+	/**
+	 * Parse datetime
+	 *
+	 * @param int $timestamp Timestamp.
+	 *
+	 * @return array
+	 */
+	protected function parse_datetime( $timestamp ) {
+		$is_today    = gmdate( 'Ymd' ) === gmdate( 'Ymd', $timestamp );
+		$is_tomorrow = gmdate( 'Ymd', strtotime( 'tomorrow' ) ) === gmdate( 'Ymd', $timestamp );
+
+		$time = wp_date( 'H:i', $timestamp );
+		$date = wp_date( 'D, F jS, Y', $timestamp );
+
+		if ( $is_today ) {
+			$date = __( 'Today', 'wpappointments' );
+		} elseif ( $is_tomorrow ) {
+			$date = __( 'Tomorrow', 'wpappointments' );
+		}
+
+		return array(
+			'date'    => $date,
+			'time'    => $time,
 		);
 	}
 
