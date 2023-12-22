@@ -148,7 +148,8 @@ class AppointmentPost {
 			)
 		);
 
-		$parsed = $this->parse_datetime( $meta['datetime'] );
+		$timestamp = $meta['datetime'];
+		$parsed = $this->parse_datetime( $timestamp );
 		$date	 = $parsed['date'];
 		$time	 = $parsed['time'];
 
