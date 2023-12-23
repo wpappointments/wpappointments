@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
@@ -7,6 +8,8 @@ import { Appointment } from '~/types';
 import { APIResponse } from '~/utils/fetch';
 import Input from '../FormField/Input/Input';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
+import { formActions } from './AppointmentForm.module.css';
+import { getSubmitButtonLabel } from './utils';
 
 type Fields = {
 	title: string;
@@ -22,12 +25,16 @@ type FormProps = {
 	) => void;
 	defaultDate?: Date;
 	selectedAppointment?: Appointment;
+	mode: 'view' | 'edit' | 'create';
+	setMode: Dispatch<SetStateAction<'view' | 'edit' | 'create'>>;
 };
 
 export default function AppointmentForm({
 	onSubmitComplete,
 	defaultDate,
 	selectedAppointment,
+	mode = 'create',
+	setMode,
 }: FormProps) {
 	const { createAppointment, updateAppointment } = useAppointments();
 	const {
@@ -39,9 +46,27 @@ export default function AppointmentForm({
 	} = useForm<Fields>();
 
 	useEffect(() => {
-		reset();
+		if (mode === 'view') {
+			reset();
+			return;
+		}
 
-		if (selectedAppointment) {
+		if (mode === 'create') {
+			reset();
+
+			setValue(
+				'datetime',
+				defaultDate
+					? defaultDate.toISOString()
+					: new Date().toISOString()
+			);
+
+			return;
+		}
+
+		if (mode === 'edit' && selectedAppointment) {
+			reset();
+
 			setValue('title', selectedAppointment.title);
 			setValue(
 				'datetime',
@@ -49,15 +74,8 @@ export default function AppointmentForm({
 					parseInt(selectedAppointment.timestamp) * 1000
 				).toISOString()
 			);
-		} else {
-			setValue(
-				'datetime',
-				defaultDate
-					? defaultDate.toISOString()
-					: new Date().toISOString()
-			);
 		}
-	}, [defaultDate, selectedAppointment]);
+	}, [defaultDate, selectedAppointment, mode]);
 
 	const onSubmit = async (formData: Fields) => {
 		const data = selectedAppointment
@@ -70,6 +88,36 @@ export default function AppointmentForm({
 
 		reset();
 	};
+
+	if (selectedAppointment && mode === 'view') {
+		return (
+			<>
+				<h2>{selectedAppointment?.title}</h2>
+				<p>{selectedAppointment?.date}</p>
+				<p>{selectedAppointment?.timeFromTo}</p>
+				<div className={formActions}>
+					<Button
+						variant="primary"
+						onClick={() => {
+							console.log('edit');
+							setMode('edit');
+						}}
+					>
+						{getSubmitButtonLabel(mode)}
+					</Button>
+					<Button
+						variant="link"
+						isDestructive={true}
+						onClick={() => {
+							console.log('delete');
+						}}
+					>
+						{__('Delete Appointment')}
+					</Button>
+				</div>
+			</>
+		);
+	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -93,11 +141,11 @@ export default function AppointmentForm({
 				/>
 			</div>
 
-			<Button type="submit" variant="primary">
-				{selectedAppointment
-					? __('Update Appointment')
-					: __('Create Appointment')}
-			</Button>
+			<div className={formActions}>
+				<Button type="submit" variant="primary">
+					{getSubmitButtonLabel(mode)}
+				</Button>
+			</div>
 		</form>
 	);
 }

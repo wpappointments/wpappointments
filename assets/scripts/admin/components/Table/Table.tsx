@@ -7,7 +7,8 @@ type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	dispatch: any;
-	onEdit: (appointment: Appointment) => void;
+	onEdit?: (appointment: Appointment) => void;
+	onView?: (appointment: Appointment) => void;
 };
 
 export default function Table({
@@ -15,6 +16,7 @@ export default function Table({
 	onEmptyStateButtonClick,
 	dispatch,
 	onEdit,
+	onView,
 }: Props) {
 	if (!items || items.length === 0) {
 		return (
@@ -57,10 +59,64 @@ export default function Table({
 						actions,
 					}) => (
 						<tr key={id}>
-							<td>{title}</td>
-							<td>{date} </td>
+							<td>
+								<Button
+									variant="link"
+									onClick={() => {
+										onView &&
+											onView({
+												id,
+												time,
+												date,
+												timeFromTo,
+												title,
+												timestamp,
+												actions,
+											});
+									}}
+								>
+									{title}
+								</Button>
+							</td>
+							<td>{date}</td>
 							<td>{timeFromTo}</td>
 							<td>
+								<Button
+									variant="tertiary"
+									size="small"
+									onClick={() => {
+										onView &&
+											onView({
+												id,
+												time,
+												date,
+												timeFromTo,
+												title,
+												timestamp,
+												actions,
+											});
+									}}
+								>
+									View
+								</Button>
+								<Button
+									variant="tertiary"
+									size="small"
+									onClick={() => {
+										onEdit &&
+											onEdit({
+												id,
+												time,
+												date,
+												timeFromTo,
+												title,
+												timestamp,
+												actions,
+											});
+									}}
+								>
+									Edit
+								</Button>
 								{Object.values(actions).map(
 									(action) =>
 										action.name !== 'EditAppointment' && (
@@ -88,23 +144,6 @@ export default function Table({
 											/>
 										)
 								)}
-								<Button
-									variant="tertiary"
-									size="small"
-									onClick={() => {
-										onEdit({
-											id,
-											time,
-											date,
-											timeFromTo,
-											title,
-											timestamp,
-											actions,
-										});
-									}}
-								>
-									Edit
-								</Button>
 							</td>
 						</tr>
 					)
