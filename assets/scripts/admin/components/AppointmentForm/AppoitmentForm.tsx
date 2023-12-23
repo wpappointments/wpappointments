@@ -27,6 +27,7 @@ type FormProps = {
 	selectedAppointment?: Appointment;
 	mode: 'view' | 'edit' | 'create';
 	setMode: Dispatch<SetStateAction<'view' | 'edit' | 'create'>>;
+	closeSlideOut: () => void;
 };
 
 export default function AppointmentForm({
@@ -35,8 +36,10 @@ export default function AppointmentForm({
 	selectedAppointment,
 	mode = 'create',
 	setMode,
+	closeSlideOut,
 }: FormProps) {
-	const { createAppointment, updateAppointment } = useAppointments();
+	const { createAppointment, updateAppointment, deleteAppointment } =
+		useAppointments();
 	const {
 		control,
 		handleSubmit,
@@ -99,17 +102,16 @@ export default function AppointmentForm({
 					<Button
 						variant="primary"
 						onClick={() => {
-							console.log('edit');
 							setMode('edit');
 						}}
 					>
 						{getSubmitButtonLabel(mode)}
 					</Button>
 					<Button
-						variant="link"
-						isDestructive={true}
-						onClick={() => {
-							console.log('delete');
+						isDestructive
+						onClick={async () => {
+							await deleteAppointment(selectedAppointment.id);
+							closeSlideOut();
 						}}
 					>
 						{__('Delete Appointment')}

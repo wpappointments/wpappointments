@@ -297,6 +297,7 @@ export default function Calendar() {
 							selectedAppointment={selectedAppointment}
 							mode={mode}
 							setMode={setMode}
+							closeSlideOut={closeSlideOut}
 						/>
 					</SlideOutBody>
 				</LayoutDefault>

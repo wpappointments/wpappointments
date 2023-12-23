@@ -92,6 +92,7 @@ export default function Dashboard() {
 							selectedAppointment={selectedAppointment}
 							mode={mode}
 							setMode={setMode}
+							closeSlideOut={closeSlideOut}
 						/>
 					</SlideOutBody>
 				</LayoutDefault>

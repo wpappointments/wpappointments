@@ -15,18 +15,23 @@ type Props<T> = {
 	action: Action;
 	onSuccess?: (response: T) => void;
 	onError?: (response: T) => void;
+	variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+	isDestructive?: boolean;
 };
 
 export default function ActionButton<T>({
 	action,
 	onSuccess,
 	onError,
+	variant = 'tertiary',
+	isDestructive = false,
 }: Props<T>) {
 	const { label, isDangerous } = action;
 
 	return (
 		<Button
-			variant="tertiary"
+			variant={variant}
+			isDestructive={isDestructive}
 			size="small"
 			className={cn({
 				[actionButton]: true,
