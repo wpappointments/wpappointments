@@ -91,6 +91,10 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 					(appointment: Appointment) =>
 						appointment.id !== action.appointmentId
 				),
+				all: state.all.filter(
+					(appointment: Appointment) =>
+						appointment.id !== action.appointmentId
+				),
 			};
 
 		default:
