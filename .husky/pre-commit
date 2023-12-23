@@ -4,4 +4,4 @@
 # TODO: commented out until running this in wp-env is sorted out
 # pnpm readme && git add README.md && pnpm lint-staged
 
-pnpm lint:staged
+pnpm lint-staged

@@ -201,7 +201,7 @@ class AppointmentPost {
 				'ID'          => $id,
 				'post_type'   => 'appointment',
 				'post_status' => 'publish',
-				'post_title'              => $title,
+				'post_title'                 => $title,
 				'meta_input'  => $meta,
 			)
 		);
