@@ -12,7 +12,7 @@
 	pointer-events: unset;
 }
 
-.slide-out--is-open {
+.slide-out-open {
 	transform: translateX( 0 );
 }
 

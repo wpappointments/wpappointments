@@ -6,6 +6,7 @@ import apiFetch from '~/utils/fetch';
 import { store } from '~/store/store';
 import Input from '~/admin/components/FormField/Input/Input';
 import { card } from 'global.module.css';
+import { formActions } from '../Settings.module.css';
 
 type Fields = {
 	defaultLength: number;
@@ -60,7 +61,7 @@ export default function AppointmentsSettings() {
 						}}
 					/>
 
-					<div>
+					<div className={formActions}>
 						<Button type="submit" variant="primary">
 							Save changes
 						</Button>
