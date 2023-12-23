@@ -1,10 +1,7 @@
 import { Button, ButtonGroup } from '@wordpress/components';
+import { useSelect, select } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { useSelect, select } from '@wordpress/data';
-import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
-import SlideOut, { SlideOutBody } from '~/admin/components/SlideOut/SlideOut';
-import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
 import { getAppointmentSlideOutTitle } from '~/utils/slideout';
 import { store } from '~/store/store';
@@ -27,6 +24,9 @@ import {
 	topBar,
 	dayTileLabelText,
 } from './Calendar.module.css';
+import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
+import SlideOut, { SlideOutBody } from '~/admin/components/SlideOut/SlideOut';
+import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 
 function getMonthName(month: number) {
 	const months = [

@@ -1,7 +1,7 @@
 import apiFetch from '~/utils/fetch';
-import { controls as settings } from './settings/settings';
-import { controls as appointments } from './appointments/appointments';
 import { FetchFromApiActionReturn } from './actions';
+import { controls as appointments } from './appointments/appointments';
+import { controls as settings } from './settings/settings';
 
 function isAction(action: unknown): action is FetchFromApiActionReturn {
 	return (

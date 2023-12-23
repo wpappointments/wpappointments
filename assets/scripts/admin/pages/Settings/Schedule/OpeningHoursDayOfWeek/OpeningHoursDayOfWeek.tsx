@@ -1,10 +1,11 @@
-import { produce } from 'immer';
-import { useCallback, useMemo } from '@wordpress/element';
 import { Button, Dashicon } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
-import Toggle from '~/admin/components/FormField/Toggle/Toggle';
-import { store } from '~/store/store';
+import { useCallback, useMemo } from '@wordpress/element';
+import { produce } from 'immer';
+import cn from '~/utils/cn';
 import type { DayOpeningHours } from '~/store/settings/settings.types';
+import { store } from '~/store/store';
+import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import {
 	copyToAllDays,
 	copyToAllDaysWrapper,
@@ -13,8 +14,7 @@ import {
 	fieldGroupRow,
 	fieldGroupSpaceBetween,
 } from './OpeningHoursDayOfWeek.module.css';
-import cn from '~/utils/cn';
-import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
+import Toggle from '~/admin/components/FormField/Toggle/Toggle';
 
 export default function OpeningHoursDayOfWeek({
 	values,

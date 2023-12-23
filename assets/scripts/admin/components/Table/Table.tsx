@@ -1,19 +1,17 @@
-import { Button, Modal, ToggleControl } from '@wordpress/components';
-import { Appointment } from '~/types';
-import { empty, emptyIcon, table } from './Table.module.css';
 import { useState } from 'react';
-import {
-	modal,
-	modalActions,
-} from '../AppointmentForm/AppointmentForm.module.css';
+import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { UseAppointments } from 'global';
+import { Appointment } from '~/types';
+import DeleteAppointmentModal from '../Modals/DeleteAppointment/DeleteAppointment';
+import { empty, emptyIcon, table } from './Table.module.css';
 
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	onEdit?: (appointment: Appointment) => void;
 	onView?: (appointment: Appointment) => void;
-	deleteAppointment: (id: number) => void;
+	deleteAppointment: UseAppointments['deleteAppointment'];
 };
 
 export default function Table({
@@ -25,7 +23,6 @@ export default function Table({
 }: Props) {
 	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
 		useState(false);
-	const [deleteModalNotify, setDeleteModalNotify] = useState(true);
 
 	if (!items || items.length === 0) {
 		return (
@@ -137,56 +134,19 @@ export default function Table({
 									Delete
 								</Button>
 								{deleteConfirmationModalOpen && (
-									<Modal
-										title="Delete appointment?"
-										onRequestClose={() => {
+									<DeleteAppointmentModal
+										confirmDeleteAppointment={async () => {
+											await deleteAppointment(id);
 											setDeleteConfirmationModalOpen(
 												false
 											);
 										}}
-										className={modal}
-									>
-										<p>
-											{__(
-												'This will permanently delete the appointment.',
-												'wpappointments'
-											)}
-										</p>
-										<ToggleControl
-											onChange={(e) => {
-												setDeleteModalNotify(e);
-											}}
-											checked={deleteModalNotify}
-											label={__(
-												'Notify customer about the cancellation',
-												'wpappointments'
-											)}
-										/>
-										<div className={modalActions}>
-											<Button
-												variant="secondary"
-												onClick={() => {
-													setDeleteConfirmationModalOpen(
-														false
-													);
-												}}
-											>
-												{__('Cancel', 'wpappointments')}
-											</Button>
-											<Button
-												variant="primary"
-												isDestructive
-												onClick={async () => {
-													deleteAppointment(id);
-													setDeleteConfirmationModalOpen(
-														false
-													);
-												}}
-											>
-												{__('Delete', 'wpappointments')}
-											</Button>
-										</div>
-									</Modal>
+										closeModal={() => {
+											setDeleteConfirmationModalOpen(
+												false
+											);
+										}}
+									/>
 								)}
 							</td>
 						</tr>

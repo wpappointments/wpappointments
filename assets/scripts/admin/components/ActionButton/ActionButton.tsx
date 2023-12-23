@@ -1,7 +1,7 @@
 import { Button } from '@wordpress/components';
-import { actionButton, dangerousActionButton } from './ActionButton.module.css';
 import cn from '~/utils/cn';
 import apiFetch, { APIResponse } from '~/utils/fetch';
+import { actionButton, dangerousActionButton } from './ActionButton.module.css';
 
 type Action = {
 	name: string;
