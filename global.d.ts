@@ -1,6 +1,6 @@
-import { Hooks } from '@wordpress/hooks';
 import { ReactDOM } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Hooks } from '@wordpress/hooks';
 import { useAppointments } from '~/hooks/api/appointments';
 
 type UseAppointments = ReturnType< typeof useAppointments >;

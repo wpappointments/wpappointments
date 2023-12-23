@@ -10,8 +10,8 @@ import {
 	Path,
 	RegisterOptions,
 } from 'react-hook-form';
-import { __ } from '@wordpress/i18n';
 import { ToggleControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 

@@ -4,9 +4,9 @@ import { useDispatch, useSelect, select } from '@wordpress/data';
 import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import { store } from '~/store/store';
+import { formActions } from '../Settings.module.css';
 import Input from '~/admin/components/FormField/Input/Input';
 import { card } from 'global.module.css';
-import { formActions } from '../Settings.module.css';
 
 type Fields = {
 	defaultLength: number;

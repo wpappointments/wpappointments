@@ -1,6 +1,5 @@
 import { useDispatch } from '@wordpress/data';
 import apiFetch, { APIResponse } from '~/utils/fetch';
-
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
 

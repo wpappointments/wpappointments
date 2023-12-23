@@ -278,6 +278,6 @@ class AppointmentPost {
 			return $deleted->ID;
 		}
 
-		return \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
 	}
 }

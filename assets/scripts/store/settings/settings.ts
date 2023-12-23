@@ -1,8 +1,8 @@
 import { produce } from 'immer';
-import type { Day, DayOpeningHours, SettingsState } from './settings.types';
-import { type State } from '../store';
 import apiFetch, { APIResponse } from '~/utils/fetch';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
+import { type State } from '../store';
+import type { Day, DayOpeningHours, SettingsState } from './settings.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 

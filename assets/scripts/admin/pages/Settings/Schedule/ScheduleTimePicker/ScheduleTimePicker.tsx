@@ -1,9 +1,9 @@
-import Number from '~/admin/components/FormField/Number/Number';
 import {
 	timePicker,
 	timePickerControl,
 	timePickerSeparator,
 } from './ScheduleTimePicker.module.css';
+import Number from '~/admin/components/FormField/Number/Number';
 
 type Props = {
 	control: any;
