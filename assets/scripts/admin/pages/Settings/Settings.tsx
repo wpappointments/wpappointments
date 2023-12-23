@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
+import AppointmentsSettings from './Appointments/Appointments';
 import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
-import AppointmentsSettings from './Appointments/Appointments';
-import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import { tabsConainer } from './Settings.module.css';
+import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 
 type Tab = {
 	name: string;

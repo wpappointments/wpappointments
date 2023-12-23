@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { APIResponse } from '~/utils/fetch';
 import { useAppointments } from '~/hooks/api/appointments';
 import { Appointment } from '~/types';
-import { APIResponse } from '~/utils/fetch';
-import Input from '../FormField/Input/Input';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
+import Input from '../FormField/Input/Input';
+import DeleteAppointmentModal from '../Modals/DeleteAppointment/DeleteAppointment';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 
@@ -27,6 +28,7 @@ type FormProps = {
 	selectedAppointment?: Appointment;
 	mode: 'view' | 'edit' | 'create';
 	setMode: Dispatch<SetStateAction<'view' | 'edit' | 'create'>>;
+	closeSlideOut: () => void;
 };
 
 export default function AppointmentForm({
@@ -35,8 +37,11 @@ export default function AppointmentForm({
 	selectedAppointment,
 	mode = 'create',
 	setMode,
+	closeSlideOut,
 }: FormProps) {
-	const { createAppointment, updateAppointment } = useAppointments();
+	const { createAppointment, updateAppointment, deleteAppointment } =
+		useAppointments();
+
 	const {
 		control,
 		handleSubmit,
@@ -44,6 +49,9 @@ export default function AppointmentForm({
 		setValue,
 		formState: { errors },
 	} = useForm<Fields>();
+
+	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+		useState(false);
 
 	useEffect(() => {
 		if (mode === 'view') {
@@ -99,21 +107,31 @@ export default function AppointmentForm({
 					<Button
 						variant="primary"
 						onClick={() => {
-							console.log('edit');
 							setMode('edit');
 						}}
 					>
 						{getSubmitButtonLabel(mode)}
 					</Button>
 					<Button
-						variant="link"
-						isDestructive={true}
+						isDestructive
 						onClick={() => {
-							console.log('delete');
+							setDeleteConfirmationModalOpen(true);
 						}}
 					>
 						{__('Delete Appointment')}
 					</Button>
+					{deleteConfirmationModalOpen && (
+						<DeleteAppointmentModal
+							confirmDeleteAppointment={async () => {
+								await deleteAppointment(selectedAppointment.id);
+								setDeleteConfirmationModalOpen(false);
+								closeSlideOut();
+							}}
+							closeModal={() => {
+								setDeleteConfirmationModalOpen(false);
+							}}
+						/>
+					)}
 				</div>
 			</>
 		);

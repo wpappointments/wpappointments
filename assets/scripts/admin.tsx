@@ -1,10 +1,10 @@
-import { createHooks } from '@wordpress/hooks';
 import { register } from '@wordpress/data';
+import { createHooks } from '@wordpress/hooks';
 import { render } from '~/utils/dom';
+import { store } from '~/store/store';
+import Calendar from '~/admin/pages/Calendar/Calendar';
 import Dashboard from '~/admin/pages/Dashboard';
 import Settings from '~/admin/pages/Settings/Settings';
-import Calendar from '~/admin/pages/Calendar/Calendar';
-import { store } from '~/store/store';
 
 window.wpappointments.hooks = createHooks();
 
