@@ -7,8 +7,8 @@ type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	dispatch: any;
-	onEdit?: (appointment: Appointment & { mode: 'edit' | 'view' }) => void;
-	onView?: (appointment: Appointment & { mode: 'edit' | 'view' }) => void;
+	onEdit?: (appointment: Appointment) => void;
+	onView?: (appointment: Appointment) => void;
 };
 
 export default function Table({
@@ -72,7 +72,6 @@ export default function Table({
 												title,
 												timestamp,
 												actions,
-												mode: 'view',
 											});
 									}}
 								>
@@ -95,7 +94,6 @@ export default function Table({
 												title,
 												timestamp,
 												actions,
-												mode: 'view',
 											});
 									}}
 								>
@@ -114,7 +112,6 @@ export default function Table({
 												title,
 												timestamp,
 												actions,
-												mode: 'edit',
 											});
 									}}
 								>
