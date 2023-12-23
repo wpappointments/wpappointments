@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import Table from '~/admin/components/Table/Table';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
@@ -10,9 +10,10 @@ import { getAppointmentSlideOutTitle } from '~/utils/slideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import { card } from 'global.module.css';
+import { useAppointments } from '~/hooks/api/appointments';
 
 export default function Dashboard() {
-	const dispatch = useDispatch(store);
+	const { deleteAppointment } = useAppointments();
 
 	const appointments = useSelect(() => {
 		return select(store).getUpcomingAppointments();
@@ -64,7 +65,6 @@ export default function Dashboard() {
 						<CardBody style={{ backgroundColor: '#ececec' }}>
 							<Table
 								items={appointments}
-								dispatch={dispatch}
 								onEmptyStateButtonClick={() => {
 									openSlideOut();
 									setMode('create');
@@ -79,6 +79,7 @@ export default function Dashboard() {
 									setMode('view');
 									openSlideOut();
 								}}
+								deleteAppointment={deleteAppointment}
 							/>
 						</CardBody>
 					</Card>

@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { Button, Modal, ToggleControl } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useAppointments } from '~/hooks/api/appointments';
 import { Appointment } from '~/types';
 import { APIResponse } from '~/utils/fetch';
 import Input from '../FormField/Input/Input';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
-import { formActions } from './AppointmentForm.module.css';
+import { formActions, modal, modalActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 
 type Fields = {
@@ -40,6 +40,7 @@ export default function AppointmentForm({
 }: FormProps) {
 	const { createAppointment, updateAppointment, deleteAppointment } =
 		useAppointments();
+
 	const {
 		control,
 		handleSubmit,
@@ -47,6 +48,10 @@ export default function AppointmentForm({
 		setValue,
 		formState: { errors },
 	} = useForm<Fields>();
+
+	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+		useState(false);
+	const [deleteModalNotify, setDeleteModalNotify] = useState(true);
 
 	useEffect(() => {
 		if (mode === 'view') {
@@ -109,13 +114,61 @@ export default function AppointmentForm({
 					</Button>
 					<Button
 						isDestructive
-						onClick={async () => {
-							await deleteAppointment(selectedAppointment.id);
-							closeSlideOut();
+						onClick={() => {
+							setDeleteConfirmationModalOpen(true);
 						}}
 					>
 						{__('Delete Appointment')}
 					</Button>
+					{deleteConfirmationModalOpen && (
+						<Modal
+							title="Delete appointment?"
+							onRequestClose={() => {
+								setDeleteConfirmationModalOpen(false);
+							}}
+							className={modal}
+						>
+							<p>
+								{__(
+									'This will permanently delete the appointment.',
+									'wpappointments'
+								)}
+							</p>
+							<ToggleControl
+								onChange={(e) => {
+									setDeleteModalNotify(e);
+								}}
+								checked={deleteModalNotify}
+								label={__(
+									'Notify customer about the cancellation',
+									'wpappointments'
+								)}
+							/>
+							<div className={modalActions}>
+								<Button
+									variant="secondary"
+									onClick={() => {
+										setDeleteConfirmationModalOpen(false);
+									}}
+								>
+									{__('Cancel', 'wpappointments')}
+								</Button>
+								<Button
+									variant="primary"
+									isDestructive
+									onClick={async () => {
+										await deleteAppointment(
+											selectedAppointment.id
+										);
+										setDeleteConfirmationModalOpen(false);
+										closeSlideOut();
+									}}
+								>
+									{__('Delete', 'wpappointments')}
+								</Button>
+							</div>
+						</Modal>
+					)}
 				</div>
 			</>
 		);
