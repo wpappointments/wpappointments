@@ -3,9 +3,10 @@ import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect, select } from '@wordpress/data';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
-import SlideOut from '~/admin/components/SlideOut/SlideOut';
+import SlideOut, { SlideOutBody } from '~/admin/components/SlideOut/SlideOut';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import { applyFilters } from '~/utils/hooks';
+import { getAppointmentSlideOutTitle } from '~/utils/slideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import {
@@ -108,10 +109,6 @@ function applyAppointmentsToCalendar(
 	});
 }
 
-function isAppointments(obj: unknown): obj is Appointment {
-	return typeof obj === 'object' && obj !== null && 'timestamp' in obj;
-}
-
 export default function Calendar() {
 	const appointments = useSelect(() => {
 		return select(store).getAppointments();
@@ -123,31 +120,6 @@ export default function Calendar() {
 		getCalendarMonth(month, year),
 		appointments
 	);
-
-	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
-	const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-	const [selectedAppointment, setSelectedAppointment] = useState<
-		Appointment | undefined
-	>();
-
-	const openSlideOut = (data?: Appointment | Date) => {
-		if (data instanceof Date) {
-			data?.setHours(10);
-			data?.setMinutes(0);
-			setSelectedDate(data);
-			setSelectedAppointment(undefined);
-		}
-
-		if (isAppointments(data)) {
-			setSelectedAppointment(data);
-		}
-
-		setSlideOutIsOpen(true);
-	};
-
-	const closeSlideOut = () => {
-		setSlideOutIsOpen(false);
-	};
 
 	const daysOfWeek = [
 		__('Mon', 'wpappointments'),
@@ -220,90 +192,115 @@ export default function Calendar() {
 					&rsaquo;
 				</Button>
 			</div>,
-			<Button variant="primary" onClick={() => openSlideOut()}>
-				{__('Create New Appointment', 'wpappointments')}
-			</Button>,
 		]
 	);
 
 	return (
-		<LayoutDefault title="Calendar">
-			<h1>
-				<strong>{getMonthName(month)}</strong> {year}
-			</h1>
-			<div className={topBar}>
-				<ButtonGroup>
-					<Button variant="secondary" size="compact">
-						{__('Day', 'wpappointments')}
-					</Button>
-					<Button variant="secondary" size="compact">
-						{__('Week', 'wpappointments')}
-					</Button>
-					<Button variant="primary" size="compact">
-						{__('Month', 'wpappointments')}
-					</Button>
-				</ButtonGroup>
-				<div className={actions}>
-					{calendarActions.map((action, i) => (
-						<Fragment key={i}>{action}</Fragment>
-					))}
-				</div>
-			</div>
-			<div className={calendarContainer}>
-				<div className={header}>
-					{daysOfWeek.map((dayName) => (
-						<div key={dayName} className={day}>
-							{dayName}
+		<SlideOut>
+			{({
+				slideOutIsOpen,
+				selectedAppointment,
+				setSelectedAppointment,
+				openSlideOut,
+				closeSlideOut,
+				mode,
+				setMode,
+			}) => (
+				<LayoutDefault title="Calendar">
+					<h1>
+						<strong>{getMonthName(month)}</strong> {year}
+					</h1>
+					<div className={topBar}>
+						<ButtonGroup>
+							<Button variant="secondary" size="compact">
+								{__('Day', 'wpappointments')}
+							</Button>
+							<Button variant="secondary" size="compact">
+								{__('Week', 'wpappointments')}
+							</Button>
+							<Button variant="primary" size="compact">
+								{__('Month', 'wpappointments')}
+							</Button>
+						</ButtonGroup>
+						<div className={actions}>
+							{calendarActions.map((action, i) => (
+								<Fragment key={i}>{action}</Fragment>
+							))}
+							<Button
+								variant="primary"
+								onClick={() => {
+									setMode('create');
+									openSlideOut();
+								}}
+							>
+								{__('Create New Appointment', 'wpappointments')}
+							</Button>
 						</div>
-					))}
-				</div>
-				<div className={calendar}>
-					{currentMonth.map((day) => (
-						<div key={day.index} className={dayTile}>
-							<div className={dayClasses(day)}>
-								<div className={dayTileLabel}>
-									<div className={dayTileLabelText}>
-										{dayLabel(day.index)}
+					</div>
+					<div className={calendarContainer}>
+						<div className={header}>
+							{daysOfWeek.map((dayName) => (
+								<div key={dayName} className={day}>
+									{dayName}
+								</div>
+							))}
+						</div>
+						<div className={calendar}>
+							{currentMonth.map((day) => (
+								<div key={day.index} className={dayTile}>
+									<div className={dayClasses(day)}>
+										<div className={dayTileLabel}>
+											<div className={dayTileLabelText}>
+												{dayLabel(day.index)}
+											</div>
+										</div>
+										<div className={events}>
+											{day.appointments.map(
+												(appointment) => (
+													<div
+														key={appointment.id}
+														className={event}
+														onClick={() => {
+															setSelectedAppointment(
+																appointment
+															);
+															setMode('view');
+															openSlideOut();
+														}}
+													>
+														{appointment.title ||
+															'Untitled'}
+													</div>
+												)
+											)}
+											<Button
+												onClick={() => {
+													setMode('create');
+													openSlideOut();
+												}}
+											>
+												+ {__('Add', 'wpappointments')}
+											</Button>
+										</div>
 									</div>
 								</div>
-								<div className={events}>
-									{day.appointments.map((appointment) => (
-										<div
-											key={appointment.id}
-											className={event}
-											onClick={() =>
-												openSlideOut(appointment)
-											}
-										>
-											{appointment.title || 'Untitled'}
-										</div>
-									))}
-									<Button
-										onClick={() => openSlideOut(day.start)}
-									>
-										+ {__('Add', 'wpappointments')}
-									</Button>
-								</div>
-							</div>
+							))}
 						</div>
-					))}
-				</div>
-			</div>
-			<SlideOut
-				isOpen={slideOutIsOpen}
-				onOverlayClick={closeSlideOut}
-				title={
-					selectedAppointment
-						? __('Edit Appointment')
-						: __('Create New Appointment')
-				}
-			>
-				<AppointmentForm
-					onSubmitComplete={closeSlideOut}
-					defaultDate={selectedDate}
-					selectedAppointment={selectedAppointment}
-				/>
-			</SlideOut>
-		</LayoutDefault>
+					</div>
+					<SlideOutBody
+						title={getAppointmentSlideOutTitle(mode)}
+						isOpen={slideOutIsOpen}
+						onOverlayClick={closeSlideOut}
+					>
+						<AppointmentForm
+							onSubmitComplete={closeSlideOut}
+							selectedAppointment={selectedAppointment}
+							mode={mode}
+							setMode={setMode}
+						/>
+					</SlideOutBody>
+				</LayoutDefault>
+			)}
+		</SlideOut>
 	);
 }
