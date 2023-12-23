@@ -6,7 +6,7 @@ import {
 	content,
 	header,
 	slideOut,
-	slideOutIsOpen2,
+	slideOutOpen,
 	slideOutOverlay,
 } from './SlideOut.module.css';
 
@@ -83,7 +83,7 @@ export function SlideOutBody({
 			<div
 				className={cn({
 					[slideOut]: true,
-					[slideOutIsOpen2]: isOpen,
+					[slideOutOpen]: isOpen,
 				})}
 				onClick={(e) => e.stopPropagation()}
 			>
