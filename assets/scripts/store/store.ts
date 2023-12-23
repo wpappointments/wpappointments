@@ -1,11 +1,11 @@
 import { combineReducers, createReduxStore } from '@wordpress/data';
-import { SettingsState } from './settings/settings.types';
-import { AppointmentsState } from './appointments/appointments.types';
 import actions from './actions';
-import selectors from './selectors';
+import { AppointmentsState } from './appointments/appointments.types';
 import controls from './controls';
 import reducers from './reducers';
 import resolvers from './resolvers';
+import selectors from './selectors';
+import { SettingsState } from './settings/settings.types';
 
 export type State = {
 	appointments: AppointmentsState;

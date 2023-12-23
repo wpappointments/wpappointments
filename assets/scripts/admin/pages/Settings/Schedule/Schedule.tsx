@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { useMemo } from '@wordpress/element';
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
+import { useMemo } from '@wordpress/element';
 import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
-import { store } from '~/store/store';
-import type { DayOpeningHours } from '~/store/settings/settings.types';
-import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import { DEFAULT_SETTINGS_STATE } from '~/store/settings/settings';
-import { card } from 'global.module.css';
+import type { DayOpeningHours } from '~/store/settings/settings.types';
+import { store } from '~/store/store';
 import { formActions } from '../Settings.module.css';
+import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
+import { card } from 'global.module.css';
 
 type Fields = {
 	monday: DayOpeningHours;

@@ -1,5 +1,5 @@
-import { actions as settings } from './settings/settings';
 import { actions as appointments } from './appointments/appointments';
+import { actions as settings } from './settings/settings';
 
 export type BaseActions = typeof baseActions;
 export type FetchFromApiAction = BaseActions['fetchFromAPI'];

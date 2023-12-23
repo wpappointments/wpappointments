@@ -11,8 +11,8 @@ import {
 	PathValue,
 	RegisterOptions,
 } from 'react-hook-form';
-import { __ } from '@wordpress/i18n';
 import { DateTimePicker as WPDateTimePicker } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 

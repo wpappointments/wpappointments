@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
-import { useAppointments } from './hooks/api/appointments';
 import { createHooks } from '@wordpress/hooks';
+import { useAppointments } from './hooks/api/appointments';
 
 window.wpappointments.hooks = createHooks();
 
