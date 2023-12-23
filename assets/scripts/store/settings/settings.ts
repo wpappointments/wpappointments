@@ -43,6 +43,9 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 		saturday: getDefaultOpeningHours('saturday'),
 		sunday: getDefaultOpeningHours('sunday'),
 	},
+	appointments: {
+		defaultLength: 30,
+	},
 };
 
 export const actions = {
@@ -93,6 +96,10 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 				draft.schedule = {
 					...draft.schedule,
 					...action.settings.schedule,
+				};
+				draft.appointments = {
+					...draft.appointments,
+					...action.settings.appointments,
 				};
 			});
 
@@ -163,6 +170,9 @@ export const selectors = {
 	getScheduleSettings(state: State) {
 		return state.settings.schedule;
 	},
+	getAppointmentsSettings(state: State) {
+		return state.settings.appointments;
+	},
 };
 
 export const controls = {
@@ -185,4 +195,5 @@ function* getSettings(): Generator<
 export const resolvers = {
 	getGeneralSettings: getSettings,
 	getScheduleSettings: getSettings,
+	getAppointmentsSettings: getSettings,
 };

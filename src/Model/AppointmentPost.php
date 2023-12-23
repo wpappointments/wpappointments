@@ -103,12 +103,16 @@ class AppointmentPost {
 			$date      = $parsed['date'];
 			$time      = $parsed['time'];
 
+			$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+
 			$appointments[] = array(
 				'id'        => $post->ID,
 				'title'     => $post->post_title,
 				'date'      => $date,
 				'time'      => $time,
+				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
 				'timestamp' => $timestamp,
+				'parsed' => $parsed,
 				'actions'   => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',

@@ -1,6 +1,7 @@
 export type SettingsState = {
 	general: SettingsGeneral;
 	schedule: SettingsSchedule;
+	appointments: SettingsAppointments;
 };
 
 export type SettingsSchedule = {
@@ -18,6 +19,10 @@ export type SettingsGeneral = {
 	lastName: string;
 	phoneNumber: string;
 	companyName: string;
+};
+
+export type SettingsAppointments = {
+	defaultLength: number;
 };
 
 export type Day = keyof SettingsState['schedule'];

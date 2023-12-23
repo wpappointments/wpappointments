@@ -38,6 +38,9 @@ class Settings {
 			'phoneNumber',
 			'companyName',
 		),
+		'appointments' => array(
+			'defaultLength',
+		)
 	);
 
 	/**
