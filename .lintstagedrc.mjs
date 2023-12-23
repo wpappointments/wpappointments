@@ -12,7 +12,7 @@ export default {
   '*.ts': format,
   '*.tsx': format,
   '*.css': format,
-  '*.css': (absolutePaths) => {
+  '*.php': (absolutePaths) => {
 		const cwd = process.cwd()
 		const relativePaths = absolutePaths.map((file) => path.relative(cwd, file))
 		return `pnpm phpcs-fix ${relativePaths.join(' ')}`
