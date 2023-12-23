@@ -3,5 +3,6 @@
 	"*.json": "pnpm format",
 	"*.ts": "pnpm format",
 	"*.tsx": "pnpm format",
-	"*.css": "pnpm format"
+	"*.css": "pnpm format",
+	"*.php": "pnpm phpcs-fix"
 }
