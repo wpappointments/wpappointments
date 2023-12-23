@@ -30,7 +30,7 @@ class AppointmentPost {
 		);
 
 		$appointments = array();
-		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
@@ -39,13 +39,13 @@ class AppointmentPost {
 			$time      = $parsed['time'];
 
 			$appointments[] = array(
-				'id'        => $post->ID,
-				'title'     => $post->post_title,
-				'date'      => $date,
-				'time'      => $time,
+				'id'         => $post->ID,
+				'title'      => $post->post_title,
+				'date'       => $date,
+				'time'       => $time,
 				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-				'timestamp' => $timestamp,
-				'actions'   => (object) array(
+				'timestamp'  => $timestamp,
+				'actions'    => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',
 						'label'       => 'Delete',
@@ -98,7 +98,7 @@ class AppointmentPost {
 		);
 
 		$appointments = array();
-		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $query->posts as $post ) {
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
@@ -154,20 +154,20 @@ class AppointmentPost {
 			)
 		);
 
-		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$timestamp = $meta['datetime'];
 		$parsed    = $this->parse_datetime( $timestamp );
 		$date      = $parsed['date'];
 		$time      = $parsed['time'];
 
 		return array(
-			'id'        => $post_id,
-			'title'     => $title,
-			'date'      => $date,
-			'time'      => $time,
+			'id'         => $post_id,
+			'title'      => $title,
+			'date'       => $date,
+			'time'       => $time,
 			'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-			'timestamp' => $timestamp,
-			'actions'   => (object) array(
+			'timestamp'  => $timestamp,
+			'actions'    => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',
@@ -206,20 +206,20 @@ class AppointmentPost {
 			)
 		);
 
-		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$timestamp = $meta['datetime'];
 		$parsed    = $this->parse_datetime( $timestamp );
 		$date      = $parsed['date'];
 		$time      = $parsed['time'];
 
 		return array(
-			'id'        => $post_id,
-			'title'     => get_the_title( $post_id ),
-			'date'      => $date,
-			'time'      => $time,
+			'id'         => $post_id,
+			'title'      => get_the_title( $post_id ),
+			'date'       => $date,
+			'time'       => $time,
 			'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-			'timestamp' => $timestamp,
-			'actions'   => (object) array(
+			'timestamp'  => $timestamp,
+			'actions'    => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',
