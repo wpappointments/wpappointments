@@ -46,55 +46,69 @@ export default function Table({
 				</tr>
 			</thead>
 			<tbody>
-				{items.map(({ id, time, date, title, timestamp, actions }) => (
-					<tr key={id}>
-						<td>{title}</td>
-						<td>{date} </td>
-						<td>{time}</td>
-						<td>
-							{Object.values(actions).map(
-								(action) =>
-									action.name !== 'EditAppointment' && (
-										<ActionButton
-											key={action.name}
-											action={action}
-											onSuccess={(data: {
-												id: number;
-												message: string;
-											}) => {
-												console.log('success', data);
-												dispatch.deleteAppointment(
-													data.id
-												);
-											}}
-											onError={(data: {
-												id: number;
-												message: string;
-											}) => {
-												console.log('error', data);
-											}}
-										/>
-									)
-							)}
-							<Button
-								variant="tertiary"
-								size="small"
-								onClick={() => {
-									onEdit({
-										id,
-										time,
-										date,
-										title,
-										timestamp,
-										actions,
-									});
-								}}
-							>
-								Edit
-							</Button>
-						</td>
-					</tr>
-				))}
+				{items.map(
+					({
+						id,
+						time,
+						date,
+						timeFromTo,
+						title,
+						timestamp,
+						actions,
+					}) => (
+						<tr key={id}>
+							<td>{title}</td>
+							<td>{date} </td>
+							<td>{timeFromTo}</td>
+							<td>
+								{Object.values(actions).map(
+									(action) =>
+										action.name !== 'EditAppointment' && (
+											<ActionButton
+												key={action.name}
+												action={action}
+												onSuccess={(data: {
+													id: number;
+													message: string;
+												}) => {
+													console.log(
+														'success',
+														data
+													);
+													dispatch.deleteAppointment(
+														data.id
+													);
+												}}
+												onError={(data: {
+													id: number;
+													message: string;
+												}) => {
+													console.log('error', data);
+												}}
+											/>
+										)
+								)}
+								<Button
+									variant="tertiary"
+									size="small"
+									onClick={() => {
+										onEdit({
+											id,
+											time,
+											date,
+											timeFromTo,
+											title,
+											timestamp,
+											actions,
+										});
+									}}
+								>
+									Edit
+								</Button>
+							</td>
+						</tr>
+					)
+				)}
 			</tbody>
 		</table>
 	);

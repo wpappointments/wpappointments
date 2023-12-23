@@ -32,11 +32,14 @@ class Settings {
 	 * @var array
 	 */
 	public $settings = array(
-		'general' => array(
+		'general'      => array(
 			'firstName',
 			'lastName',
 			'phoneNumber',
 			'companyName',
+		),
+		'appointments' => array(
+			'defaultLength',
 		),
 	);
 

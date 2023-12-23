@@ -122,7 +122,7 @@ class Settings extends Controller {
 	public static function update_settings( WP_REST_Request $request ) {
 		$params   = $request->get_url_params();
 		$category = $params['category'];
-		$settings = wp_json_decode( $request->get_body() );
+		$settings = json_decode( $request->get_body() );
 
 		$schedule = array();
 
