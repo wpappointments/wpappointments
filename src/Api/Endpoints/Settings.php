@@ -136,7 +136,7 @@ class Settings extends Controller {
 				$hours = array();
 
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					$test = json_encode( $settings->$day );
+					$test = wp_json_encode( $settings->$day );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
 					array_push( $schedule, $test );
 				}
