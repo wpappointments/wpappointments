@@ -9,6 +9,7 @@ import type { DayOpeningHours } from '~/store/settings/settings.types';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import { DEFAULT_SETTINGS_STATE } from '~/store/settings/settings';
 import { card } from 'global.module.css';
+import { formActions } from '../Settings.module.css';
 
 type Fields = {
 	monday: DayOpeningHours;
@@ -85,7 +86,7 @@ export default function ScheduleSettings() {
 			<CardBody>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{fields}
-					<div className="wpappointments-form-actions">
+					<div className={formActions}>
 						<Button type="submit" variant="primary">
 							Save changes
 						</Button>
