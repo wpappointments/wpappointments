@@ -1,7 +1,7 @@
-import { Dispatch, MouseEventHandler, ReactNode, SetStateAction } from 'react';
-import { useState } from '@wordpress/element';
+import { MouseEventHandler, ReactNode } from 'react';
+import { select, useSelect } from '@wordpress/data';
 import cn from '~/utils/cn';
-import { Appointment } from '~/types';
+import { store } from '~/store/store';
 import {
 	content,
 	header,
@@ -11,71 +11,44 @@ import {
 } from './SlideOut.module.css';
 
 type Props = {
+	id: string;
 	children: ReactNode;
-	isOpen: boolean;
 	onOverlayClick?: MouseEventHandler<HTMLDivElement>;
 	title?: string;
 };
 
-export default function SlideOut({
-	children,
-}: {
-	children: ({
-		slideOutIsOpen,
-		openSlideOut,
-		closeSlideOut,
-		selectedAppointment,
-		setSelectedAppointment,
-		mode,
-		setMode,
-	}: {
-		slideOutIsOpen: boolean;
-		openSlideOut: () => void;
-		closeSlideOut: () => void;
-		selectedAppointment?: Appointment;
-		setSelectedAppointment: Dispatch<
-			SetStateAction<Appointment | undefined>
-		>;
-		mode: 'view' | 'edit' | 'create';
-		setMode: Dispatch<SetStateAction<'view' | 'edit' | 'create'>>;
-	}) => React.ReactNode;
-}) {
-	const [slideOutIsOpen, setSlideOutIsOpen] = useState(false);
-	const [mode, setMode] = useState<'view' | 'edit' | 'create'>('create');
-	const [selectedAppointment, setSelectedAppointment] = useState<
-		Appointment | undefined
-	>();
+export function SlideOutBody({ id, children, title, onOverlayClick }: Props) {
+	const { slideouts, current } = useSelect(() => {
+		return {
+			slideouts: select(store).getSlideouts(),
+			current: select(store).getCurrentSlideout(),
+		};
+	}, []);
 
-	const openSlideOut = () => {
-		setSlideOutIsOpen(true);
+	const shouldRenderSlideOut = () => {
+		if (!current) {
+			return false;
+		}
+
+		if (current.parentId === null) {
+			return current.id === id;
+		}
+
+		return (
+			slideouts.find((slideout) => slideout.parentId === id) !==
+				undefined || current.id === id
+		);
 	};
 
-	const closeSlideOut = () => {
-		setSlideOutIsOpen(false);
-	};
+	const nestingLevel = slideouts.findIndex((slideout) => slideout.id === id);
+	const isOpen = shouldRenderSlideOut();
 
-	return children({
-		slideOutIsOpen,
-		openSlideOut,
-		closeSlideOut,
-		selectedAppointment,
-		setSelectedAppointment,
-		mode,
-		setMode,
-	});
-}
-
-export function SlideOutBody({
-	children,
-	title,
-	isOpen = false,
-	onOverlayClick,
-}: Props) {
 	return (
 		<div
 			className={slideOutOverlay}
 			style={{
 				'--is-open': isOpen ? 1 : 0,
+				'--nesting-level': nestingLevel,
 				pointerEvents: isOpen ? 'auto' : 'none',
 			}}
 			onClick={onOverlayClick}

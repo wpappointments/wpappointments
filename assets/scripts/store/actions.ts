@@ -1,5 +1,6 @@
 import { actions as appointments } from './appointments/appointments';
 import { actions as settings } from './settings/settings';
+import { actions as slideouts } from './slideout/slideout';
 
 export type BaseActions = typeof baseActions;
 export type FetchFromApiAction = BaseActions['fetchFromAPI'];
@@ -18,4 +19,5 @@ export default {
 	...baseActions,
 	...settings,
 	...appointments,
+	...slideouts,
 };
