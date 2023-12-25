@@ -22,7 +22,7 @@ export default function DeleteAppointmentModal({
 		>
 			<p>
 				{__(
-					'This appo will permanently delete the appointment.',
+					'This will permanently delete the appointment.',
 					'wpappointments'
 				)}
 			</p>

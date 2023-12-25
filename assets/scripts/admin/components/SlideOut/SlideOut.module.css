@@ -25,14 +25,18 @@
 	z-index: 1001;
 	background-color: rgba( 0, 0, 0, 0.5 );
 	overflow-x: hidden;
-	transition: 0.1s;
+	transition: opacity 0.1s ease-in-out;
 	opacity: var( --is-open );
 	cursor: pointer;
 }
 
 .slide-out .slide-out-overlay {
 	top: 0;
-	left: 0 !important;
+	left: calc( -80px * var( --nesting-level ) ) !important;
+}
+
+.slide-out .slide-out-overlay .slide-out {
+	width: calc( 100% - calc( calc( 80px * var( --nesting-level ) ) + 80px ) );
 }
 
 :global( .folded ) .slide-out-overlay {
@@ -51,6 +55,11 @@
 	:global( .auto-fold ) .slide-out-overlay {
 		top: 46px;
 		left: 0;
+	}
+
+	:global( .folded ) .slide-out .slide-out-overlay,
+	:global( .auto-fold ) .slide-out .slide-out-overlay {
+		top: 0;
 	}
 }
 
