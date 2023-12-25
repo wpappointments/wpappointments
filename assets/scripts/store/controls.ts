@@ -2,6 +2,7 @@ import apiFetch from '~/utils/fetch';
 import { FetchFromApiActionReturn } from './actions';
 import { controls as appointments } from './appointments/appointments';
 import { controls as settings } from './settings/settings';
+import { controls as slideouts } from './slideout/slideout';
 
 function isAction(action: unknown): action is FetchFromApiActionReturn {
 	return (
@@ -26,4 +27,5 @@ export default {
 	...baseControls,
 	...settings,
 	...appointments,
+	...slideouts,
 };
