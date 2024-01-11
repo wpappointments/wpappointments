@@ -4,9 +4,9 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
+	width: calc( 100% - calc( 80px * var( --nesting-level ) ) );
 	transform: translateX( 100px );
 	transition: transform 0.2s ease-in-out;
-	width: calc( 100% - 80px );
 	z-index: 1002;
 	cursor: auto;
 	pointer-events: unset;
@@ -32,11 +32,6 @@
 
 .slide-out .slide-out-overlay {
 	top: 0;
-	left: calc( -80px * var( --nesting-level ) ) !important;
-}
-
-.slide-out .slide-out-overlay .slide-out {
-	width: calc( 100% - calc( calc( 80px * var( --nesting-level ) ) + 80px ) );
 }
 
 :global( .folded ) .slide-out-overlay {

@@ -21,8 +21,7 @@ export default function Table({
 	onView,
 	deleteAppointment,
 }: Props) {
-	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
-		useState(false);
+	const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(0);
 
 	if (!items || items.length === 0) {
 		return (
@@ -44,115 +43,113 @@ export default function Table({
 	}
 
 	return (
-		<table className={table}>
-			<thead>
-				<tr>
-					<th>Title</th>
-					<th>Date</th>
-					<th>Time</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{items.map(
-					({
-						id,
-						time,
-						date,
-						timeFromTo,
-						title,
-						timestamp,
-						actions,
-					}) => (
-						<tr key={id}>
-							<td>
-								<Button
-									variant="link"
-									onClick={() => {
-										onView &&
-											onView({
-												id,
-												time,
-												date,
-												timeFromTo,
-												title,
-												timestamp,
-												actions,
-											});
-									}}
-								>
-									{title}
-								</Button>
-							</td>
-							<td>{date}</td>
-							<td>{timeFromTo}</td>
-							<td>
-								<Button
-									variant="tertiary"
-									size="small"
-									onClick={() => {
-										onView &&
-											onView({
-												id,
-												time,
-												date,
-												timeFromTo,
-												title,
-												timestamp,
-												actions,
-											});
-									}}
-								>
-									View
-								</Button>
-								<Button
-									variant="tertiary"
-									size="small"
-									onClick={() => {
-										onEdit &&
-											onEdit({
-												id,
-												time,
-												date,
-												timeFromTo,
-												title,
-												timestamp,
-												actions,
-											});
-									}}
-								>
-									Edit
-								</Button>
-								<Button
-									variant="tertiary"
-									size="small"
-									isDestructive
-									onClick={() => {
-										setDeleteConfirmationModalOpen(true);
-									}}
-								>
-									Delete
-								</Button>
-								{deleteConfirmationModalOpen && (
-									<DeleteAppointmentModal
-										confirmDeleteAppointment={async () => {
-											await deleteAppointment(id);
-											setDeleteConfirmationModalOpen(
-												false
-											);
+		<>
+			<table className={table}>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Date</th>
+						<th>Time</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{items.map(
+						({
+							id,
+							time,
+							date,
+							timeFromTo,
+							title,
+							timestamp,
+							actions,
+						}) => (
+							<tr key={id}>
+								<td>
+									<Button
+										variant="link"
+										onClick={() => {
+											onView &&
+												onView({
+													id,
+													time,
+													date,
+													timeFromTo,
+													title,
+													timestamp,
+													actions,
+												});
 										}}
-										closeModal={() => {
-											setDeleteConfirmationModalOpen(
-												false
-											);
+									>
+										{title}
+									</Button>
+								</td>
+								<td>{date}</td>
+								<td>{timeFromTo}</td>
+								<td>
+									<Button
+										variant="tertiary"
+										size="small"
+										onClick={() => {
+											onView &&
+												onView({
+													id,
+													time,
+													date,
+													timeFromTo,
+													title,
+													timestamp,
+													actions,
+												});
 										}}
-									/>
-								)}
-							</td>
-						</tr>
-					)
-				)}
-			</tbody>
-		</table>
+									>
+										View
+									</Button>
+									<Button
+										variant="tertiary"
+										size="small"
+										onClick={() => {
+											onEdit &&
+												onEdit({
+													id,
+													time,
+													date,
+													timeFromTo,
+													title,
+													timestamp,
+													actions,
+												});
+										}}
+									>
+										Edit
+									</Button>
+									<Button
+										variant="tertiary"
+										size="small"
+										isDestructive
+										onClick={() => {
+											setIsConfirmDeleteOpen(id);
+										}}
+									>
+										Delete
+									</Button>
+								</td>
+							</tr>
+						)
+					)}
+				</tbody>
+			</table>
+			{isConfirmDeleteOpen > 0 && (
+				<DeleteAppointmentModal
+					confirmDeleteAppointment={async () => {
+						await deleteAppointment(isConfirmDeleteOpen);
+						setIsConfirmDeleteOpen(0);
+					}}
+					closeModal={() => {
+						setIsConfirmDeleteOpen(0);
+					}}
+				/>
+			)}
+		</>
 	);
 }
