@@ -3,7 +3,6 @@ import { useSelect, select } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '~/utils/hooks';
-import { getAppointmentSlideOutTitle } from '~/utils/slideout';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -26,7 +25,7 @@ import {
 	dayTileLabelText,
 } from './Calendar.module.css';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
-import { SlideOutBody } from '~/admin/components/SlideOut/SlideOut';
+import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 
 function getMonthName(month: number) {
@@ -180,11 +179,6 @@ export default function Calendar() {
 		return new Date(year, month, day).getDate();
 	};
 
-	const [mode, setMode] = useState<'view' | 'edit' | 'create'>('create');
-	const [selectedAppointment, setSelectedAppointment] = useState<
-		Appointment | undefined
-	>();
-
 	const calendarActions = applyFilters<React.JSX.Element[]>(
 		'calendar.actions',
 		[
@@ -226,8 +220,7 @@ export default function Calendar() {
 					<Button
 						variant="primary"
 						onClick={() => {
-							setMode('create');
-							openSlideOut(null, 'add-appointment');
+							openSlideOut({ id: 'add-appointment' });
 						}}
 					>
 						{__('Create New Appointment', 'wpappointments')}
@@ -257,14 +250,10 @@ export default function Calendar() {
 											key={appointment.id}
 											className={event}
 											onClick={() => {
-												setSelectedAppointment(
-													appointment
-												);
-												setMode('view');
-												openSlideOut(
-													null,
-													'add-appointment'
-												);
+												openSlideOut({
+													id: 'edit-appointment',
+													data: appointment.id,
+												});
 											}}
 										>
 											{appointment.title || 'Untitled'}
@@ -272,11 +261,9 @@ export default function Calendar() {
 									))}
 									<Button
 										onClick={() => {
-											setMode('create');
-											openSlideOut(
-												null,
-												'add-appointment'
-											);
+											openSlideOut({
+												id: 'add-appointment',
+											});
 										}}
 									>
 										+ {__('Add', 'wpappointments')}
@@ -287,19 +274,18 @@ export default function Calendar() {
 					))}
 				</div>
 			</div>
-			<SlideOutBody
-				title={getAppointmentSlideOutTitle(mode)}
-				id="add-appointment"
-				onOverlayClick={closeCurrentSlideOut}
-			>
+			<SlideOut title={__('Create Appointment')} id="add-appointment">
 				<AppointmentForm
+					mode="create"
 					onSubmitComplete={closeCurrentSlideOut}
-					selectedAppointment={selectedAppointment}
-					mode={mode}
-					setMode={setMode}
-					closeSlideOut={closeCurrentSlideOut}
 				/>
-			</SlideOutBody>
+			</SlideOut>
+			<SlideOut title={__('Edit Appointment')} id="edit-appointment">
+				<AppointmentForm
+					mode="edit"
+					onSubmitComplete={closeCurrentSlideOut}
+				/>
+			</SlideOut>
 		</LayoutDefault>
 	);
 }

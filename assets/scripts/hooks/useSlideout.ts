@@ -1,22 +1,20 @@
 import { select, useDispatch, useSelect } from '@wordpress/data';
+import { Slideout } from '~/store/slideout/slideout.types';
 import { store } from '~/store/store';
 
-export default function useSlideout() {
+export default function useSlideout(id?: string) {
 	const dispatch = useDispatch(store);
-	const { openSlideouts, currentSlideout } = useSelect(() => {
-		return {
-			openSlideouts: select(store).getSlideouts(),
-			currentSlideout: select(store).getCurrentSlideout(),
-		};
-	}, []);
+	const { openSlideouts, currentSlideout, closingSlideout } =
+		useSelect(() => {
+			return {
+				openSlideouts: select(store).getSlideouts(),
+				currentSlideout: select(store).getCurrentSlideout(),
+				closingSlideout: select(store).getClosingSlideout(id),
+			};
+		}, []);
 
-	const openSlideOut = (parentId: string | null, id: string) => {
-		dispatch.openSlideout({
-			parentId,
-			id,
-			title: 'Test',
-			content: 'Test',
-		});
+	const openSlideOut = (slideout: Slideout) => {
+		dispatch.openSlideout(slideout);
 	};
 
 	const closeSlideOut = (id: string) => {
@@ -29,7 +27,10 @@ export default function useSlideout() {
 
 	return {
 		openSlideouts,
-		currentSlideout,
+		currentSlideout: id
+			? openSlideouts.find((s) => s.id === id)
+			: currentSlideout,
+		closingSlideout,
 		openSlideOut,
 		closeSlideOut,
 		closeCurrentSlideOut,
