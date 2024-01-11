@@ -109,6 +109,11 @@ export const selectors = {
 	getUpcomingAppointments(state: State) {
 		return state.appointments.upcoming;
 	},
+	getAppointment(state: State, id: number) {
+		return state.appointments.all.find(
+			(appointment: Appointment) => appointment.id === id
+		);
+	},
 };
 
 export const controls = {
@@ -121,16 +126,8 @@ export const controls = {
 };
 
 export const resolvers = {
-	*getAppointments(): Generator<
-		FetchFromApiActionReturn,
-		{ type: string; appointments: Appointment[] },
-		APIResponse<{ appointments: Appointment[] }>
-	> {
-		const response = yield baseActions.fetchFromAPI('appointment');
-		const { data } = response;
-		const { appointments } = data;
-		return actions.setAppointments(appointments);
-	},
+	getAppointments,
+	getAppointment: getAppointments,
 	*getUpcomingAppointments(): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; appointments: Appointment[] },
@@ -142,3 +139,14 @@ export const resolvers = {
 		return actions.setUpcomingAppointments(appointments);
 	},
 };
+
+function* getAppointments(): Generator<
+	FetchFromApiActionReturn,
+	{ type: string; appointments: Appointment[] },
+	APIResponse<{ appointments: Appointment[] }>
+> {
+	const response = yield baseActions.fetchFromAPI('appointment');
+	const { data } = response;
+	const { appointments } = data;
+	return actions.setAppointments(appointments);
+}

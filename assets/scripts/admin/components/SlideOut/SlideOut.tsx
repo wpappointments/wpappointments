@@ -1,7 +1,6 @@
 import { MouseEventHandler, ReactNode } from 'react';
-import { select, useSelect } from '@wordpress/data';
 import cn from '~/utils/cn';
-import { store } from '~/store/store';
+import useSlideout from '~/hooks/useSlideout';
 import {
 	content,
 	header,
@@ -15,32 +14,48 @@ type Props = {
 	children: ReactNode;
 	onOverlayClick?: MouseEventHandler<HTMLDivElement>;
 	title?: string;
+	level?: number;
 };
 
-export function SlideOutBody({ id, children, title, onOverlayClick }: Props) {
-	const { slideouts, current } = useSelect(() => {
-		return {
-			slideouts: select(store).getSlideouts(),
-			current: select(store).getCurrentSlideout(),
-		};
-	}, []);
+export default function SlideOut({
+	id,
+	level = 1,
+	children,
+	title,
+	onOverlayClick,
+}: Props) {
+	const {
+		openSlideouts,
+		currentSlideout,
+		closeCurrentSlideOut,
+		closingSlideout,
+	} = useSlideout(id);
+
+	let nestingLevel = level;
+
+	if (currentSlideout) {
+		nestingLevel = currentSlideout.level || level;
+	}
+
+	if (closingSlideout?.id === id) {
+		nestingLevel = closingSlideout.level || level;
+	}
 
 	const shouldRenderSlideOut = () => {
-		if (!current) {
+		if (!currentSlideout) {
 			return false;
 		}
 
-		if (current.parentId === null) {
-			return current.id === id;
+		if (currentSlideout.parentId === null) {
+			return currentSlideout.id === id;
 		}
 
 		return (
-			slideouts.find((slideout) => slideout.parentId === id) !==
-				undefined || current.id === id
+			openSlideouts.find((slideout) => slideout.parentId === id) !==
+				undefined || currentSlideout.id === id
 		);
 	};
 
-	const nestingLevel = slideouts.findIndex((slideout) => slideout.id === id);
 	const isOpen = shouldRenderSlideOut();
 
 	return (
@@ -51,7 +66,7 @@ export function SlideOutBody({ id, children, title, onOverlayClick }: Props) {
 				'--nesting-level': nestingLevel,
 				pointerEvents: isOpen ? 'auto' : 'none',
 			}}
-			onClick={onOverlayClick}
+			onClick={onOverlayClick || closeCurrentSlideOut}
 		>
 			<div
 				className={cn({

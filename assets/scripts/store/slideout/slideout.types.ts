@@ -1,10 +1,11 @@
 export type SlideoutState = {
 	slideouts: Slideout[];
+	slideoutsToClose: Slideout[];
 };
 
 export type Slideout = {
-	parentId: string | null;
 	id: string;
-	title: string;
-	content: string;
+	parentId?: string | null;
+	data?: unknown;
+	level?: number;
 };
