@@ -1,14 +1,15 @@
-import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { select, useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { APIResponse } from '~/utils/fetch';
 import { useAppointments } from '~/hooks/api/appointments';
+import useSlideout from '~/hooks/useSlideout';
+import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
 import Input from '../FormField/Input/Input';
-import DeleteAppointmentModal from '../Modals/DeleteAppointment/DeleteAppointment';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 
@@ -18,6 +19,7 @@ type Fields = {
 };
 
 type FormProps = {
+	mode: 'view' | 'edit' | 'create';
 	onSubmitComplete?: (
 		data: APIResponse<{
 			appointment: Appointment;
@@ -25,22 +27,31 @@ type FormProps = {
 		}>
 	) => void;
 	defaultDate?: Date;
-	selectedAppointment?: Appointment;
-	mode: 'view' | 'edit' | 'create';
-	setMode: Dispatch<SetStateAction<'view' | 'edit' | 'create'>>;
-	closeSlideOut: () => void;
 };
 
+function isSelectedAppointmentValid(data: unknown): data is Appointment {
+	return (
+		typeof data === 'object' &&
+		data !== null &&
+		'title' in data &&
+		'date' in data &&
+		'timeFromTo' in data
+	);
+}
+
 export default function AppointmentForm({
+	mode = 'create',
 	onSubmitComplete,
 	defaultDate,
-	selectedAppointment,
-	mode = 'create',
-	setMode,
-	closeSlideOut,
 }: FormProps) {
-	const { createAppointment, updateAppointment, deleteAppointment } =
-		useAppointments();
+	const { createAppointment, updateAppointment } = useAppointments();
+	const { currentSlideout } = useSlideout();
+
+	const { data: selectedAppointment } = currentSlideout || {};
+
+	const currentAppointment = useSelect(() => {
+		return select(store).getAppointment(selectedAppointment as number);
+	}, [selectedAppointment]);
 
 	const {
 		control,
@@ -50,92 +61,55 @@ export default function AppointmentForm({
 		formState: { errors },
 	} = useForm<Fields>();
 
-	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
-		useState(false);
-
 	useEffect(() => {
-		if (mode === 'view') {
-			reset();
-			return;
-		}
-
 		if (mode === 'create') {
 			reset();
 
-			setValue(
-				'datetime',
-				defaultDate
-					? defaultDate.toISOString()
-					: new Date().toISOString()
-			);
+			let date = new Date().toISOString();
+
+			if (defaultDate) {
+				date = defaultDate.toISOString();
+			}
+
+			setValue('datetime', date);
 
 			return;
 		}
 
-		if (mode === 'edit' && selectedAppointment) {
+		if (mode === 'edit' && currentAppointment) {
+			if (!isSelectedAppointmentValid(currentAppointment)) {
+				return;
+			}
+
 			reset();
 
-			setValue('title', selectedAppointment.title);
-			setValue(
-				'datetime',
-				new Date(
-					parseInt(selectedAppointment.timestamp) * 1000
-				).toISOString()
-			);
+			const title = currentAppointment.title;
+			const timestamp = new Date(
+				parseInt(currentAppointment.timestamp) * 1000
+			).toISOString();
+
+			setValue('title', title);
+			setValue('datetime', timestamp);
 		}
-	}, [defaultDate, selectedAppointment, mode]);
+	}, [defaultDate, currentAppointment, mode]);
 
 	const onSubmit = async (formData: Fields) => {
-		const data = selectedAppointment
-			? await updateAppointment(selectedAppointment.id, formData)
-			: await createAppointment(formData);
+		let data;
+
+		if (isSelectedAppointmentValid(currentAppointment)) {
+			data = await updateAppointment(currentAppointment.id, formData);
+		} else {
+			data = await createAppointment(formData);
+		}
 
 		if (onSubmitComplete) {
 			onSubmitComplete(data);
 		}
 
-		reset();
+		if (mode === 'create') {
+			reset();
+		}
 	};
-
-	if (selectedAppointment && mode === 'view') {
-		return (
-			<>
-				<h2>{selectedAppointment?.title}</h2>
-				<p>{selectedAppointment?.date}</p>
-				<p>{selectedAppointment?.timeFromTo}</p>
-				<div className={formActions}>
-					<Button
-						variant="primary"
-						onClick={() => {
-							setMode('edit');
-						}}
-					>
-						{getSubmitButtonLabel(mode)}
-					</Button>
-					<Button
-						isDestructive
-						onClick={() => {
-							setDeleteConfirmationModalOpen(true);
-						}}
-					>
-						{__('Delete Appointment')}
-					</Button>
-					{deleteConfirmationModalOpen && (
-						<DeleteAppointmentModal
-							confirmDeleteAppointment={async () => {
-								await deleteAppointment(selectedAppointment.id);
-								setDeleteConfirmationModalOpen(false);
-								closeSlideOut();
-							}}
-							closeModal={() => {
-								setDeleteConfirmationModalOpen(false);
-							}}
-						/>
-					)}
-				</div>
-			</>
-		);
-	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
