@@ -71,6 +71,7 @@ export default function Dashboard() {
 						}}
 						onCancel={cancelAppointment}
 						deleteAppointment={deleteAppointment}
+						cancelAppointment={cancelAppointment}
 					/>
 				</CardBody>
 			</Card>

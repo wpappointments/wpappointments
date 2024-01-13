@@ -93,13 +93,9 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 		case 'CANCEL_APPOINTMENT':
 			return {
 				...state,
-				upcoming: state.upcoming.map((appointment: Appointment) =>
-					appointment.id === action.appointmentId
-						? {
-								...appointment,
-								status: 'cancelled',
-						  }
-						: appointment
+				upcoming: state.upcoming.filter(
+					(appointment: Appointment) =>
+						appointment.id !== action.appointmentId
 				),
 				all: state.all.map((appointment: Appointment) =>
 					appointment.id === action.appointmentId
