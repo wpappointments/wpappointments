@@ -21,6 +21,7 @@ declare global {
 				getUpcomingAppointments: UseAppointments[ 'getUpcomingAppointments' ];
 				createAppointment: UseAppointments[ 'createAppointment' ];
 				updateAppointment: UseAppointments[ 'updateAppointment' ];
+				cancelAppointment: UseAppointments[ 'cancelAppointment' ];
 				deleteAppointment: UseAppointments[ 'deleteAppointment' ];
 			};
 		};

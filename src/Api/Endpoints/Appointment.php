@@ -81,6 +81,20 @@ class Appointment extends Controller {
 
 		register_rest_route(
 			static::ROUTE_NAMESPACE,
+			'/appointment/(?P<id>\d+)/cancel',
+			array(
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'cancel_appointment' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
 			'/appointment/(?P<id>\d+)',
 			array(
 				array(
@@ -184,6 +198,41 @@ class Appointment extends Controller {
 				'data' => array(
 					'message'     => __( 'Appointment updated successfully', 'wpappointments' ),
 					'appointment' => $appointment,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Cancel appointment
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function cancel_appointment( WP_REST_Request $request ) {
+		$id = $request->get_param( 'id' );
+
+		$appointment_post = new AppointmentPost();
+		$cancelled        = $appointment_post->cancel( $id );
+
+		if ( ! $cancelled ) {
+			return self::response(
+				array(
+					'type' => 'error',
+					'data' => array(
+						'message' => __( 'Appointment could not be cancelled', 'wpappointments' ),
+					),
+				)
+			);
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'       => __( 'Appointment cancelled successfully', 'wpappointments' ),
+					'appointmentId' => $cancelled,
 				),
 			)
 		);
