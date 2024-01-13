@@ -13,6 +13,7 @@ export type Appointment = {
 	time: string;
 	timeFromTo: string;
 	timestamp: string;
+	status: 'active' | 'cancelled' | 'completed' | 'no-show';
 	actions: {
 		[key: string]: ApiAction;
 	};

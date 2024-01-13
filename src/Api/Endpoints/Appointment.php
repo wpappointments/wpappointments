@@ -163,7 +163,13 @@ class Appointment extends Controller {
 		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 
 		$appointment_post = new AppointmentPost();
-		$appointment      = $appointment_post->create( $title, array( 'datetime' => $date ) );
+		$appointment      = $appointment_post->create(
+			$title,
+			array(
+				'datetime' => $date,
+				'status'   => 'active',
+			)
+		);
 
 		return self::response(
 			array(

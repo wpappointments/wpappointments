@@ -54,6 +54,13 @@ register_deactivation_hook(
 	)
 );
 
+add_action(
+	'init',
+	function () {
+		register_post_type( 'appointment', array( 'public' => true ) );
+	}
+);
+
 /**
  * Include admin files
  */

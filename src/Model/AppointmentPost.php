@@ -33,6 +33,7 @@ class AppointmentPost {
 		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $posts as $post ) {
+			$status    = get_post_meta( $post->ID, 'status', true );
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
 			$parsed    = $this->parse_datetime( $timestamp );
 			$date      = $parsed['date'];
@@ -45,6 +46,7 @@ class AppointmentPost {
 				'time'       => $time,
 				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
 				'timestamp'  => $timestamp,
+				'status'     => $status,
 				'actions'    => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',
@@ -93,6 +95,11 @@ class AppointmentPost {
 						'value'   => time() + 60 * 60 * 24 * 7,
 						'compare' => '<=',
 					),
+					array(
+						'key'     => 'status',
+						'value'   => 'active',
+						'compare' => '=',
+					),
 				),
 			)
 		);
@@ -101,6 +108,7 @@ class AppointmentPost {
 		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $query->posts as $post ) {
+			$status    = get_post_meta( $post->ID, 'status', true );
 			$timestamp = get_post_meta( $post->ID, 'datetime', true );
 			$parsed    = $this->parse_datetime( $timestamp );
 			$date      = $parsed['date'];
@@ -114,6 +122,7 @@ class AppointmentPost {
 				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
 				'timestamp'  => $timestamp,
 				'parsed'     => $parsed,
+				'status'     => $status,
 				'actions'    => (object) array(
 					'delete' => (object) array(
 						'name'        => 'DeleteAppointment',

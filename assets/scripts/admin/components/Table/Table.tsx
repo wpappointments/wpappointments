@@ -3,8 +3,8 @@ import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { UseAppointments } from 'global';
 import { Appointment } from '~/types';
-import DeleteAppointmentModal from '../Modals/DeleteAppointment/DeleteAppointment';
 import { empty, emptyIcon, table } from './Table.module.css';
+import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 
 type Props = {
 	items?: Appointment[];
@@ -13,6 +13,7 @@ type Props = {
 	onView?: (appointment: Appointment) => void;
 	onCancel?: (appointmentId: number) => void;
 	deleteAppointment: UseAppointments['deleteAppointment'];
+	cancelAppointment: UseAppointments['deleteAppointment'];
 };
 
 export default function Table({
@@ -20,10 +21,9 @@ export default function Table({
 	onEmptyStateButtonClick,
 	onEdit,
 	onView,
-	onCancel,
-	deleteAppointment,
+	cancelAppointment,
 }: Props) {
-	const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(0);
+	const [appointmentId, setAppointmentId] = useState(0);
 
 	if (!items || items.length === 0) {
 		return (
@@ -62,20 +62,19 @@ export default function Table({
 							row={row}
 							edit={onEdit}
 							view={onView}
-							cancel={onCancel}
-							setIsConfirmDeleteOpen={setIsConfirmDeleteOpen}
+							setAppointmentId={setAppointmentId}
 						/>
 					))}
 				</tbody>
 			</table>
-			{isConfirmDeleteOpen > 0 && (
-				<DeleteAppointmentModal
-					confirmDeleteAppointment={async () => {
-						await deleteAppointment(isConfirmDeleteOpen);
-						setIsConfirmDeleteOpen(0);
+			{appointmentId > 0 && (
+				<CancelAppointment
+					onConfirmClick={async () => {
+						await cancelAppointment(appointmentId);
+						setAppointmentId(0);
 					}}
 					closeModal={() => {
-						setIsConfirmDeleteOpen(0);
+						setAppointmentId(0);
 					}}
 				/>
 			)}
@@ -87,17 +86,10 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
-	cancel?: (appointmentId: number) => void;
-	setIsConfirmDeleteOpen: Dispatch<SetStateAction<number>>;
+	setAppointmentId: Dispatch<SetStateAction<number>>;
 };
 
-function TableRow({
-	row,
-	edit,
-	view,
-	cancel,
-	setIsConfirmDeleteOpen,
-}: TableRowProps) {
+function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 	const { id, title, date, timeFromTo } = row;
 
 	return (
@@ -133,26 +125,30 @@ function TableRow({
 				>
 					Edit
 				</Button>
-				<Button
-					variant="tertiary"
-					size="small"
-					isDestructive
-					onClick={() => {
-						cancel && cancel(row.id);
-					}}
-				>
-					Cancel
-				</Button>
-				<Button
-					variant="tertiary"
-					size="small"
-					isDestructive
-					onClick={() => {
-						setIsConfirmDeleteOpen(id);
-					}}
-				>
-					Delete
-				</Button>
+				{row.status === 'active' && (
+					<Button
+						variant="tertiary"
+						size="small"
+						isDestructive
+						onClick={() => {
+							setAppointmentId(id);
+						}}
+					>
+						Cancel
+					</Button>
+				)}
+				{row.status === 'cancelled' && (
+					<Button
+						variant="tertiary"
+						size="small"
+						isDestructive
+						onClick={() => {
+							setAppointmentId(id);
+						}}
+					>
+						Delete
+					</Button>
+				)}
 			</td>
 		</tr>
 	);

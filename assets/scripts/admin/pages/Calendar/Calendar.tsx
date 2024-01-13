@@ -24,6 +24,7 @@ import {
 	topBar,
 	dayTileLabelText,
 } from './Calendar.module.css';
+import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
@@ -251,7 +252,7 @@ export default function Calendar() {
 											className={event}
 											onClick={() => {
 												openSlideOut({
-													id: 'edit-appointment',
+													id: 'view-appointment',
 													data: appointment.id,
 												});
 											}}
@@ -274,15 +275,18 @@ export default function Calendar() {
 					))}
 				</div>
 			</div>
-			<SlideOut title={__('Create Appointment')} id="add-appointment">
-				<AppointmentForm
-					mode="create"
-					onSubmitComplete={closeCurrentSlideOut}
-				/>
+			<SlideOut title={__('Appointment')} id="view-appointment">
+				<AppointmentDetails />
 			</SlideOut>
 			<SlideOut title={__('Edit Appointment')} id="edit-appointment">
 				<AppointmentForm
 					mode="edit"
+					onSubmitComplete={closeCurrentSlideOut}
+				/>
+			</SlideOut>
+			<SlideOut title={__('Create Appointment')} id="add-appointment">
+				<AppointmentForm
+					mode="create"
 					onSubmitComplete={closeCurrentSlideOut}
 				/>
 			</SlideOut>
