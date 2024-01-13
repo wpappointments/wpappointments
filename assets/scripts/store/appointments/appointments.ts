@@ -36,6 +36,12 @@ export const actions = {
 			appointment,
 		} as const;
 	},
+	cancelAppointment(appointmentId: number) {
+		return {
+			type: 'CANCEL_APPOINTMENT',
+			appointmentId,
+		} as const;
+	},
 	deleteAppointment(appointmentId: number) {
 		return {
 			type: 'DELETE_APPOINTMENT',
@@ -80,6 +86,27 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 				all: state.all.map((appointment: Appointment) =>
 					appointment.id === action.appointment.id
 						? action.appointment
+						: appointment
+				),
+			};
+
+		case 'CANCEL_APPOINTMENT':
+			return {
+				...state,
+				upcoming: state.upcoming.map((appointment: Appointment) =>
+					appointment.id === action.appointmentId
+						? {
+								...appointment,
+								status: 'cancelled',
+						  }
+						: appointment
+				),
+				all: state.all.map((appointment: Appointment) =>
+					appointment.id === action.appointmentId
+						? {
+								...appointment,
+								status: 'cancelled',
+						  }
 						: appointment
 				),
 			};

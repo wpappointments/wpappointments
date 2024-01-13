@@ -14,7 +14,7 @@ import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import { card } from 'global.module.css';
 
 export default function Dashboard() {
-	const { deleteAppointment } = useAppointments();
+	const { deleteAppointment, cancelAppointment } = useAppointments();
 	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
 
 	const appointments = useSelect(() => {
@@ -69,6 +69,7 @@ export default function Dashboard() {
 								data: data.id,
 							});
 						}}
+						onCancel={cancelAppointment}
 						deleteAppointment={deleteAppointment}
 					/>
 				</CardBody>

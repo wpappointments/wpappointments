@@ -239,6 +239,17 @@ class AppointmentPost {
 	}
 
 	/**
+	 * Cancel appointment
+	 *
+	 * @param int $id   Appointment ID.
+	 *
+	 * @return array
+	 */
+	public function cancel( $id ) {
+		return update_post_meta( $id, 'status', 'cancelled' );
+	}
+
+	/**
 	 * Parse datetime
 	 *
 	 * @param int $timestamp Timestamp.
