@@ -1,10 +1,17 @@
+import { getErrorMessage } from '~/utils/error';
 import apiFetch, { APIResponse } from '~/utils/fetch';
+import resolve from '~/utils/resolve';
 import { Appointment } from '~/types';
 
 type AppointmentData = {
 	title: string;
 	datetime: string;
 };
+
+type Response = APIResponse<{
+	appointment: Appointment;
+	message: string;
+}>;
 
 export function appointmentsApi() {
 	const dispatch = window.wp.data.dispatch('wpappointments');
@@ -19,9 +26,7 @@ export function appointmentsApi() {
 	}
 
 	async function createAppointment(data: AppointmentData) {
-		const response = await apiFetch<
-			APIResponse<{ appointment: Appointment; message: string }>
-		>({
+		const response = await apiFetch<Response>({
 			path: 'appointment',
 			method: 'POST',
 			data,
@@ -36,9 +41,7 @@ export function appointmentsApi() {
 	}
 
 	async function updateAppointment(id: number, data: AppointmentData) {
-		const response = await apiFetch<
-			APIResponse<{ appointment: Appointment; message: string }>
-		>({
+		const response = await apiFetch<Response>({
 			path: `appointment/${id}`,
 			method: 'PUT',
 			data,
@@ -53,9 +56,7 @@ export function appointmentsApi() {
 	}
 
 	async function cancelAppointment(id: number) {
-		const response = await apiFetch<
-			APIResponse<{ appointment: Appointment; message: string }>
-		>({
+		const response = await apiFetch<Response>({
 			path: `appointment/${id}/cancel`,
 			method: 'PUT',
 		});
@@ -66,14 +67,23 @@ export function appointmentsApi() {
 	}
 
 	async function deleteAppointment(id: number) {
-		const response = await apiFetch<
-			APIResponse<{ appointment: Appointment; message: string }>
-		>({
-			path: `appointment/${id}`,
-			method: 'DELETE',
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `appointment/${id}`,
+				method: 'DELETE',
+			});
+
+			dispatch.deleteAppointment(id);
+
+			return response;
 		});
 
-		dispatch.deleteAppointment(id);
+		if (error) {
+			console.error(
+				'Error deleting appointment: ' + getErrorMessage(error)
+			);
+			return;
+		}
 
 		return response;
 	}
