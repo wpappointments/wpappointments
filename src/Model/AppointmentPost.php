@@ -189,6 +189,12 @@ class AppointmentPost {
 	 * @return int|\WP_Error
 	 */
 	public function delete( $id ) {
+		$status = get_post_meta( $id, 'status', true );
+
+		if ( $status !== 'cancelled' ) {
+			return new \WP_Error( 'error', __( 'Appointment must be cancelled before deleting', 'wpappointments' ) );
+		}
+
 		$deleted = wp_delete_post( $id, true );
 
 		if ( $deleted ) {
