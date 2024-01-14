@@ -10,12 +10,14 @@ import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
 import Input from '../FormField/Input/Input';
+import Select from '../FormField/Select/Select';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 
 type Fields = {
 	title: string;
 	datetime: string;
+	status: Appointment['status'];
 };
 
 type FormProps = {
@@ -87,9 +89,11 @@ export default function AppointmentForm({
 			const timestamp = new Date(
 				parseInt(currentAppointment.timestamp) * 1000
 			).toISOString();
+			const status = currentAppointment.status;
 
 			setValue('title', title);
 			setValue('datetime', timestamp);
+			setValue('status', status);
 		}
 	}, [defaultDate, currentAppointment, mode]);
 
@@ -123,6 +127,24 @@ export default function AppointmentForm({
 					required: true,
 				}}
 			/>
+
+			{mode === 'edit' && (
+				<Select
+					control={control}
+					errors={errors}
+					name="status"
+					label="Status"
+					rules={{
+						required: true,
+					}}
+					options={[
+						{ label: 'Active', value: 'active' },
+						{ label: 'Completed', value: 'completed' },
+						{ label: 'Cancelled', value: 'cancelled' },
+						{ label: 'No Show', value: 'no-show' },
+					]}
+				/>
+			)}
 
 			<div style={{ maxWidth: '300px' }}>
 				<DateTimePicker

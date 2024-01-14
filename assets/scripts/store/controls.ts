@@ -16,7 +16,7 @@ function isAction(action: unknown): action is FetchFromApiActionReturn {
 const baseControls = {
 	FETCH_FROM_API(action: unknown) {
 		if (isAction(action)) {
-			return apiFetch({ path: action.path });
+			return apiFetch({ path: action.path, data: action?.data });
 		}
 
 		return null;

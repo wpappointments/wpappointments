@@ -116,14 +116,16 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_appointments( WP_REST_Request $request ) {
+		$query        = $request->get_param( 'query' );
 		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_all();
+		$appointments = $appointment->get_all( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $appointments,
+					'query'        => $query,
 				),
 			)
 		);
@@ -137,14 +139,16 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_upcoming_appointments( WP_REST_Request $request ) {
+		$query        = $request->get_param( 'query' );
 		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_upcoming();
+		$appointments = $appointment->get_upcoming( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $appointments,
+					'query'        => $query,
 				),
 			)
 		);
@@ -193,10 +197,18 @@ class Appointment extends Controller {
 		$params = $request->get_params();
 		$id     = $request->get_param( 'id' );
 		$title  = $request->get_param( 'title' );
+		$status = $request->get_param( 'status' );
 		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 
 		$appointment_post = new AppointmentPost();
-		$appointment      = $appointment_post->update( $id, $title, array( 'datetime' => $date ) );
+		$appointment      = $appointment_post->update(
+			$id,
+			$title,
+			array(
+				'datetime' => $date,
+				'status'   => $status,
+			)
+		);
 
 		return self::response(
 			array(
