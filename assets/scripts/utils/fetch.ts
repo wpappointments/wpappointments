@@ -13,9 +13,5 @@ export default function apiFetch<T>(options: APIFetchOptions): Promise<T> {
 		fetchOptions.path = window.wpappointments.api.namespace + options.path;
 	}
 
-	if (options.url) {
-		fetchOptions.url = options.url;
-	}
-
 	return wpApiFetch<T>(fetchOptions);
 }

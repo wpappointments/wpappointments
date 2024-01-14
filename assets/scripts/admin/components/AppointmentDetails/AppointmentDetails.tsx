@@ -6,6 +6,7 @@ import cn from '~/utils/cn';
 import { useAppointments } from '~/hooks/api/appointments';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
+import { Appointment } from '~/types';
 import {
 	isActive,
 	isCancelled,
@@ -83,32 +84,59 @@ export default function AppointmentDetails() {
 						{__('Delete Appointment')}
 					</Button>
 				)}
-				{appointmentId > 0 &&
-					((currentAppointment.status === 'active' && (
-						<CancelAppointment
-							onConfirmClick={async () => {
-								await cancelAppointment(appointmentId);
-								setAppointmentId(0);
-								closeSlideOut('view-appointment');
-							}}
-							closeModal={() => {
-								setAppointmentId(0);
-							}}
-						/>
-					)) ||
-						(currentAppointment.status === 'cancelled' && (
-							<DeleteAppointmentModal
-								onConfirmClick={async () => {
-									await deleteAppointment(appointmentId);
-									setAppointmentId(0);
-									closeSlideOut('view-appointment');
-								}}
-								closeModal={() => {
-									setAppointmentId(0);
-								}}
-							/>
-						)))}
+				{appointmentId > 0 && (
+					<AppointmentDetailsModals
+						status={currentAppointment.status}
+						cancelAppointment={async () => {
+							await cancelAppointment(appointmentId);
+							setAppointmentId(0);
+							closeSlideOut('view-appointment');
+						}}
+						deleteAppointment={async () => {
+							await deleteAppointment(appointmentId);
+							setAppointmentId(0);
+							closeSlideOut('view-appointment');
+						}}
+						closeModal={() => {
+							setAppointmentId(0);
+						}}
+					/>
+				)}
 			</div>
 		</>
 	);
+}
+
+type AppointmentDetailsModalsProps = {
+	status: Appointment['status'];
+	cancelAppointment: () => Promise<void>;
+	deleteAppointment: () => Promise<void>;
+	closeModal: () => void;
+};
+
+function AppointmentDetailsModals({
+	status,
+	cancelAppointment,
+	deleteAppointment,
+	closeModal,
+}: AppointmentDetailsModalsProps) {
+	if (status === 'active') {
+		return (
+			<CancelAppointment
+				onConfirmClick={cancelAppointment}
+				closeModal={closeModal}
+			/>
+		);
+	}
+
+	if (status === 'cancelled') {
+		return (
+			<DeleteAppointmentModal
+				onConfirmClick={deleteAppointment}
+				closeModal={closeModal}
+			/>
+		);
+	}
+
+	return null;
 }

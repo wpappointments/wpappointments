@@ -1,3 +1,4 @@
+import { addQueryArgs } from '@wordpress/url';
 import apiFetch, { APIResponse } from '~/utils/fetch';
 import { Appointment } from '~/types';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
@@ -78,11 +79,17 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 		case 'UPDATE_APPOINTMENT':
 			return {
 				...state,
-				upcoming: state.upcoming.map((appointment: Appointment) =>
-					appointment.id === action.appointment.id
-						? action.appointment
-						: appointment
-				),
+				upcoming: state.upcoming
+					.map((appointment: Appointment) =>
+						appointment.id === action.appointment.id
+							? action.appointment
+							: appointment
+					)
+					.filter(
+						(appointment: Appointment) =>
+							appointment.status === 'active'
+					)
+					.slice(0, 10),
 				all: state.all.map((appointment: Appointment) =>
 					appointment.id === action.appointment.id
 						? action.appointment
@@ -129,7 +136,7 @@ export const selectors = {
 	getAppointments(state: State) {
 		return state.appointments.all;
 	},
-	getUpcomingAppointments(state: State) {
+	getUpcomingAppointments(state: State, filter: Record<string, any>) {
 		return state.appointments.upcoming;
 	},
 	getAppointment(state: State, id: number) {
@@ -144,31 +151,43 @@ export const controls = {
 		return apiFetch({ path: 'appointments' });
 	},
 	SET_UPCOMING_APPOINTMENTS() {
-		return apiFetch({ path: 'appointments/upcoming' });
+		return apiFetch({ path: 'appointments/upcoming', data: { limit: 10 } });
 	},
 };
 
 export const resolvers = {
 	getAppointments,
 	getAppointment: getAppointments,
-	*getUpcomingAppointments(): Generator<
+	*getUpcomingAppointments(
+		query: Record<string, any>
+	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; appointments: Appointment[] },
 		APIResponse<{ appointments: Appointment[] }>
 	> {
-		const response = yield baseActions.fetchFromAPI('appointment/upcoming');
+		const response = yield baseActions.fetchFromAPI(
+			addQueryArgs('appointment/upcoming', {
+				query,
+			})
+		);
 		const { data } = response;
 		const { appointments } = data;
 		return actions.setUpcomingAppointments(appointments);
 	},
 };
 
-function* getAppointments(): Generator<
+function* getAppointments(
+	query: Record<string, any>
+): Generator<
 	FetchFromApiActionReturn,
 	{ type: string; appointments: Appointment[] },
 	APIResponse<{ appointments: Appointment[] }>
 > {
-	const response = yield baseActions.fetchFromAPI('appointment');
+	const response = yield baseActions.fetchFromAPI(
+		addQueryArgs('appointment/upcoming', {
+			query,
+		})
+	);
 	const { data } = response;
 	const { appointments } = data;
 	return actions.setAppointments(appointments);

@@ -1,8 +1,8 @@
 .status-pill {
 	display: inline-block;
-	padding: 0.25rem 0.5rem;
-	border-radius: 0.25rem;
-	font-size: 0.75rem;
+	padding: 3px 8px;
+	border-radius: 5px;
+	font-size: 10px;
 	font-weight: 600;
 	text-transform: uppercase;
 	color: #fff;
@@ -10,7 +10,7 @@
 }
 
 .status-pill.is-active {
-	background-color: #28a745;
+	background-color: #1493f4;
 }
 
 .status-pill.is-cancelled {
@@ -18,7 +18,7 @@
 }
 
 .status-pill.is-completed {
-	background-color: #0751ff;
+	background-color: #04500b;
 }
 
 .status-pill.is-no-show {

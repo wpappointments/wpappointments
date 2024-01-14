@@ -42,12 +42,10 @@ export default function CancelAppointment({
 					isDestructive
 					onClick={onConfirmClick}
 				>
-					{__('Cancel appointment', 'wpappointments')}
+					{!shouldNotify &&
+						__('Cancel appointment', 'wpappointments')}
 					{shouldNotify &&
-						' ' +
-							__('and', 'wpappointments') +
-							' ' +
-							__('notify customer', 'wpappointments')}
+						__('Cancel appointment and notify', 'wpappointments')}
 				</Button>
 			</div>
 		</Modal>
