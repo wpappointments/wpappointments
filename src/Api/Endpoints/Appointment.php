@@ -235,14 +235,7 @@ class Appointment extends Controller {
 		$cancelled        = $appointment_post->cancel( $id );
 
 		if ( ! $cancelled ) {
-			return self::response(
-				array(
-					'type' => 'error',
-					'data' => array(
-						'message' => __( 'Appointment could not be cancelled', 'wpappointments' ),
-					),
-				)
-			);
+			return self::error( __( 'Appointment could not be cancelled', 'wpappointments' ) );
 		}
 
 		return self::response(
@@ -265,14 +258,18 @@ class Appointment extends Controller {
 	 */
 	public static function delete_appointment( WP_REST_Request $request ) {
 		$appointment_post = new AppointmentPost();
-		$id               = $appointment_post->delete( $request->get_param( 'id' ) );
+		$result           = $appointment_post->delete( $request->get_param( 'id' ) );
+
+		if ( is_wp_error( $result ) ) {
+			return self::error( $result->get_error_message() );
+		}
 
 		return self::response(
 			array(
-				'type' => 'success',
-				'data' => array(
-					'message' => __( 'Appointment deleted successfully', 'wpappointments' ),
-					'id'      => $id,
+				'type'    => 'success',
+				'message' => __( 'Appointment deleted successfully', 'wpappointments' ),
+				'data'    => array(
+					'id' => $result,
 				),
 			)
 		);

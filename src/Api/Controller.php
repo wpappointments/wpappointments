@@ -43,8 +43,6 @@ class Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function error( $message = '', $data = array(), $status = 422 ) {
-		$data['status'] = $status;
-
 		$response = array(
 			'type'    => 'error',
 			'message' => $message,
