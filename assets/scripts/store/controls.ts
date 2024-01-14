@@ -1,21 +1,18 @@
+import { any, is, literal, object, string } from 'valibot';
 import apiFetch from '~/utils/fetch';
-import { FetchFromApiActionReturn } from './actions';
 import { controls as appointments } from './appointments/appointments';
 import { controls as settings } from './settings/settings';
 import { controls as slideouts } from './slideout/slideout';
 
-function isAction(action: unknown): action is FetchFromApiActionReturn {
-	return (
-		action !== null &&
-		typeof action === 'object' &&
-		'path' in action &&
-		typeof action.path === 'string'
-	);
-}
+const FetchFromApiActionSchema = object({
+	type: literal('FETCH_FROM_API'),
+	path: string(),
+	data: any(),
+});
 
 const baseControls = {
 	FETCH_FROM_API(action: unknown) {
-		if (isAction(action)) {
+		if (is(FetchFromApiActionSchema, action)) {
 			return apiFetch({ path: action.path, data: action?.data });
 		}
 

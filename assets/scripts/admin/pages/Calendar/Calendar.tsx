@@ -113,7 +113,9 @@ function applyAppointmentsToCalendar(
 export default function Calendar() {
 	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
 	const appointments = useSelect(() => {
-		return select(store).getAppointments();
+		return select(store).getAppointments({
+			posts_per_page: 100,
+		});
 	}, []);
 
 	const [year, setYear] = useState(new Date().getFullYear());

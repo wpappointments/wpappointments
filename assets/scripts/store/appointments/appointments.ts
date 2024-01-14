@@ -6,6 +6,7 @@ import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
+type Query = Record<string, any>;
 
 export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 	all: [],
@@ -133,10 +134,10 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 };
 
 export const selectors = {
-	getAppointments(state: State) {
+	getAppointments(state: State, _: Query) {
 		return state.appointments.all;
 	},
-	getUpcomingAppointments(state: State, filter: Record<string, any>) {
+	getUpcomingAppointments(state: State, _: Query) {
 		return state.appointments.upcoming;
 	},
 	getAppointment(state: State, id: number) {
@@ -159,7 +160,7 @@ export const resolvers = {
 	getAppointments,
 	getAppointment: getAppointments,
 	*getUpcomingAppointments(
-		query: Record<string, any>
+		query: Query
 	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; appointments: Appointment[] },
@@ -177,14 +178,14 @@ export const resolvers = {
 };
 
 function* getAppointments(
-	query: Record<string, any>
+	query: Query
 ): Generator<
 	FetchFromApiActionReturn,
 	{ type: string; appointments: Appointment[] },
 	APIResponse<{ appointments: Appointment[] }>
 > {
 	const response = yield baseActions.fetchFromAPI(
-		addQueryArgs('appointment/upcoming', {
+		addQueryArgs('appointment', {
 			query,
 		})
 	);
