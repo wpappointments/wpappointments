@@ -81,6 +81,20 @@ class Appointment extends Controller {
 
 		register_rest_route(
 			static::ROUTE_NAMESPACE,
+			'/appointment/(?P<id>\d+)/cancel',
+			array(
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'cancel_appointment' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
 			'/appointment/(?P<id>\d+)',
 			array(
 				array(
@@ -102,14 +116,16 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_appointments( WP_REST_Request $request ) {
+		$query        = $request->get_param( 'query' );
 		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_all();
+		$appointments = $appointment->get_all( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $appointments,
+					'query'        => $query,
 				),
 			)
 		);
@@ -123,14 +139,16 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_upcoming_appointments( WP_REST_Request $request ) {
+		$query        = $request->get_param( 'query' );
 		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_upcoming();
+		$appointments = $appointment->get_upcoming( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $appointments,
+					'query'        => $query,
 				),
 			)
 		);
@@ -149,7 +167,13 @@ class Appointment extends Controller {
 		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 
 		$appointment_post = new AppointmentPost();
-		$appointment      = $appointment_post->create( $title, array( 'datetime' => $date ) );
+		$appointment      = $appointment_post->create(
+			$title,
+			array(
+				'datetime' => $date,
+				'status'   => 'active',
+			)
+		);
 
 		return self::response(
 			array(
@@ -173,10 +197,18 @@ class Appointment extends Controller {
 		$params = $request->get_params();
 		$id     = $request->get_param( 'id' );
 		$title  = $request->get_param( 'title' );
+		$status = $request->get_param( 'status' );
 		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 
 		$appointment_post = new AppointmentPost();
-		$appointment      = $appointment_post->update( $id, $title, array( 'datetime' => $date ) );
+		$appointment      = $appointment_post->update(
+			$id,
+			$title,
+			array(
+				'datetime' => $date,
+				'status'   => $status,
+			)
+		);
 
 		return self::response(
 			array(
@@ -184,6 +216,41 @@ class Appointment extends Controller {
 				'data' => array(
 					'message'     => __( 'Appointment updated successfully', 'wpappointments' ),
 					'appointment' => $appointment,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Cancel appointment
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function cancel_appointment( WP_REST_Request $request ) {
+		$id = $request->get_param( 'id' );
+
+		$appointment_post = new AppointmentPost();
+		$cancelled        = $appointment_post->cancel( $id );
+
+		if ( ! $cancelled ) {
+			return self::response(
+				array(
+					'type' => 'error',
+					'data' => array(
+						'message' => __( 'Appointment could not be cancelled', 'wpappointments' ),
+					),
+				)
+			);
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'       => __( 'Appointment cancelled successfully', 'wpappointments' ),
+					'appointmentId' => $cancelled,
 				),
 			)
 		);

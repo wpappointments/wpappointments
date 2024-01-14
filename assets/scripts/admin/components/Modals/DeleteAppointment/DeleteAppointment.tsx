@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import { Modal, ToggleControl, Button } from '@wordpress/components';
+import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { modal, modalActions } from './DeleteAppointments.module.css';
 
 type Props = {
-	confirmDeleteAppointment: () => Promise<void>;
+	onConfirmClick: () => Promise<void>;
 	closeModal: () => void;
 };
 
 export default function DeleteAppointmentModal({
-	confirmDeleteAppointment,
+	onConfirmClick,
 	closeModal,
 }: Props) {
-	const [deleteModalNotify, setDeleteModalNotify] = useState(true);
-
 	return (
 		<Modal
 			title="Delete appointment?"
@@ -22,28 +19,18 @@ export default function DeleteAppointmentModal({
 		>
 			<p>
 				{__(
-					'This will permanently delete the appointment.',
+					'This will permanently delete the appointment. It cannot be undone.',
 					'wpappointments'
 				)}
 			</p>
-			<ToggleControl
-				onChange={(e) => {
-					setDeleteModalNotify(e);
-				}}
-				checked={deleteModalNotify}
-				label={__(
-					'Notify customer about the cancellation',
-					'wpappointments'
-				)}
-			/>
 			<div className={modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
-					{__('Cancel', 'wpappointments')}
+					{__('Go back', 'wpappointments')}
 				</Button>
 				<Button
 					variant="primary"
 					isDestructive
-					onClick={confirmDeleteAppointment}
+					onClick={onConfirmClick}
 				>
 					{__('Delete', 'wpappointments')}
 				</Button>
