@@ -8,37 +8,14 @@ type AppointmentData = {
 
 export function appointmentsApi() {
 	const dispatch = window.wp.data.dispatch('wpappointments');
+	const select = window.wp.data.select('wpappointments');
 
 	async function getAppointments() {
-		const response = await apiFetch<
-			APIResponse<{ appointments: Appointment[] }>
-		>({
-			path: 'appointment',
-			method: 'GET',
-		});
-
-		const { data: responseData } = response;
-		const { appointments } = responseData;
-
-		dispatch.setAppointments(appointments);
-
-		return response;
+		return select.getAppointments();
 	}
 
 	async function getUpcomingAppointments() {
-		const response = await apiFetch<
-			APIResponse<{ appointments: Appointment[] }>
-		>({
-			path: 'appointment/upcoming',
-			method: 'GET',
-		});
-
-		const { data: responseData } = response;
-		const { appointments } = responseData;
-
-		dispatch.setUpcomingAppointments(appointments);
-
-		return response;
+		return select.getUpcomingAppointments();
 	}
 
 	async function createAppointment(data: AppointmentData) {
@@ -110,12 +87,10 @@ export function appointmentsApi() {
 		deleteAppointment,
 	} as const;
 
-	window.wpappointments.api.getAppointments = getAppointments;
-	window.wpappointments.api.getUpcomingAppointments = getUpcomingAppointments;
-	window.wpappointments.api.createAppointment = createAppointment;
-	window.wpappointments.api.updateAppointment = updateAppointment;
-	window.wpappointments.api.cancelAppointment = cancelAppointment;
-	window.wpappointments.api.deleteAppointment = deleteAppointment;
+	window.wpappointments.api = {
+		...window.wpappointments.api,
+		...functions,
+	};
 
 	return functions;
 }

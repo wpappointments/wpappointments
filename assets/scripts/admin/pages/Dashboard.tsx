@@ -64,7 +64,7 @@ function DashboardAppointments({
 
 	const appointments = useSelect(() => {
 		return select(store).getUpcomingAppointments({
-			posts_per_page: 1,
+			posts_per_page: 15,
 		});
 	}, []);
 
