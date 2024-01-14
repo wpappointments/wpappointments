@@ -116,15 +116,17 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_appointments( WP_REST_Request $request ) {
-		$query        = $request->get_param( 'query' );
-		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_all( $query );
+		$query       = $request->get_param( 'query' );
+		$appointment = new AppointmentPost();
+		$results     = $appointment->get_all( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
-					'appointments' => $appointments,
+					'appointments' => $results->appointments,
+					'post_count'   => $results->post_count,
+					'found_posts'  => $results->found_posts,
 					'query'        => $query,
 				),
 			)
@@ -139,15 +141,17 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_upcoming_appointments( WP_REST_Request $request ) {
-		$query        = $request->get_param( 'query' );
-		$appointment  = new AppointmentPost();
-		$appointments = $appointment->get_upcoming( $query );
+		$query       = $request->get_param( 'query' );
+		$appointment = new AppointmentPost();
+		$results     = $appointment->get_upcoming( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => array(
-					'appointments' => $appointments,
+					'appointments' => $results->appointments,
+					'post_count'   => $results->post_count,
+					'found_posts'  => $results->found_posts,
 					'query'        => $query,
 				),
 			)
@@ -198,7 +202,12 @@ class Appointment extends Controller {
 		$id     = $request->get_param( 'id' );
 		$title  = $request->get_param( 'title' );
 		$status = $request->get_param( 'status' );
-		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
+
+		if ( null === $id ) {
+			return self::error( __( 'Appointment ID is required', 'wpappointments' ) );
+		}
+
+		$date = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->update(
@@ -209,6 +218,10 @@ class Appointment extends Controller {
 				'status'   => $status,
 			)
 		);
+
+		if ( is_wp_error( $appointment ) ) {
+			return self::error( $appointment->get_error_message() );
+		}
 
 		return self::response(
 			array(

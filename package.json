@@ -66,6 +66,7 @@
 		"obj-str": "^1.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-hook-form": "^7.46.1"
+		"react-hook-form": "^7.46.1",
+		"valibot": "^0.25.0"
 	}
 }
