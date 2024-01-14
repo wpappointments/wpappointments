@@ -13,66 +13,57 @@ namespace WPAppointments\Model;
  */
 class AppointmentPost {
 	/**
+	 * Default query part for appointments
+	 *
+	 * @var array
+	 */
+	private $default_query_part = array(
+		'post_type'   => 'appointment',
+		'post_status' => 'publish',
+		'orderby'     => 'meta_value',
+		'meta_key'    => 'datetime',
+		'order'       => 'ASC',
+	);
+
+	/**
 	 * Get all appointments
+	 *
+	 * @param array $query Query params.
 	 *
 	 * @return array
 	 */
 	public function get_all( $query ) {
-		$query = new \WP_Query(
-			array_merge(
-				array(
-					'post_type'      => 'appointment',
-					'post_status'    => 'publish',
-					'posts_per_page' => -1,
-					'orderby'        => 'meta_value',
-					'meta_key'       => 'datetime',
-					'order'          => 'ASC',
-					'meta_query'     => array(
-						array(
-							'key'     => 'status',
-							'value'   => 'active',
-							'compare' => '=',
-						),
+		$default_query = array_merge(
+			$this->default_query_part,
+			array(
+				'posts_per_page' => -1,
+				'meta_query'     => array(
+					array(
+						'key'     => 'status',
+						'value'   => 'active',
+						'compare' => '=',
 					),
 				),
+			)
+		);
+
+		$query = new \WP_Query(
+			array_merge(
+				$default_query,
 				(array) $query
 			)
 		);
 
 		$appointments = array();
-		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $query->posts as $post ) {
-			$status    = get_post_meta( $post->ID, 'status', true );
-			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-			$parsed    = $this->parse_datetime( $timestamp );
-			$date      = $parsed['date'];
-			$time      = $parsed['time'];
-
-			$appointments[] = array(
-				'id'         => $post->ID,
-				'title'      => $post->post_title,
-				'date'       => $date,
-				'time'       => $time,
-				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-				'timestamp'  => $timestamp,
-				'status'     => $status,
-				'actions'    => (object) array(
-					'delete' => (object) array(
-						'name'        => 'DeleteAppointment',
-						'label'       => 'Delete',
-						'method'      => 'DELETE',
-						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
-						'isDangerous' => true,
-					),
-					'edit'   => array(
-						'name'        => 'EditAppointment',
-						'label'       => 'Edit',
-						'method'      => 'PUT',
-						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
-						'isDangerous' => false,
-					),
-				),
+			$meta           = get_post_meta( $post->ID );
+			$appointments[] = $this->prepare_appointment_entity(
+				$post->ID,
+				array(
+					'status'   => $meta['status'][0],
+					'datetime' => $meta['datetime'][0],
+				)
 			);
 		}
 
@@ -87,73 +78,48 @@ class AppointmentPost {
 	 * @return array
 	 */
 	public function get_upcoming( $query ) {
-		$query = new \WP_Query(
-			array_merge(
-				array(
-					'post_type'      => 'appointment',
-					'post_status'    => 'publish',
-					'posts_per_page' => 10,
-					'orderby'        => 'meta_value',
-					'meta_key'       => 'datetime',
-					'order'          => 'ASC',
-					'meta_query'     => array(
-						'relation' => 'AND',
-						array(
-							'key'     => 'datetime',
-							'value'   => time(),
-							'compare' => '>=',
-						),
-						array(
-							'key'     => 'datetime',
-							'value'   => time() + 60 * 60 * 24 * 7,
-							'compare' => '<=',
-						),
-						array(
-							'key'     => 'status',
-							'value'   => 'active',
-							'compare' => '=',
-						),
+		$default_query = array_merge(
+			$this->default_query_part,
+			array(
+				'posts_per_page' => 10,
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'datetime',
+						'value'   => time(),
+						'compare' => '>=',
+					),
+					array(
+						'key'     => 'datetime',
+						'value'   => time() + 60 * 60 * 24 * 7,
+						'compare' => '<=',
+					),
+					array(
+						'key'     => 'status',
+						'value'   => 'active',
+						'compare' => '=',
 					),
 				),
+			),
+		);
+
+		$query = new \WP_Query(
+			array_merge(
+				$default_query,
 				(array) $query
 			)
 		);
 
 		$appointments = array();
-		$length       = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
 		foreach ( $query->posts as $post ) {
-			$status    = get_post_meta( $post->ID, 'status', true );
-			$timestamp = get_post_meta( $post->ID, 'datetime', true );
-			$parsed    = $this->parse_datetime( $timestamp );
-			$date      = $parsed['date'];
-			$time      = $parsed['time'];
-
-			$appointments[] = array(
-				'id'         => $post->ID,
-				'title'      => $post->post_title,
-				'date'       => $date,
-				'time'       => $time,
-				'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-				'timestamp'  => $timestamp,
-				'parsed'     => $parsed,
-				'status'     => $status,
-				'actions'    => (object) array(
-					'delete' => (object) array(
-						'name'        => 'DeleteAppointment',
-						'label'       => 'Delete',
-						'method'      => 'DELETE',
-						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
-						'isDangerous' => true,
-					),
-					'edit'   => array(
-						'name'        => 'EditAppointment',
-						'label'       => 'Edit',
-						'method'      => 'PUT',
-						'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post->ID ),
-						'isDangerous' => false,
-					),
-				),
+			$meta           = get_post_meta( $post->ID );
+			$appointments[] = $this->prepare_appointment_entity(
+				$post->ID,
+				array(
+					'status'   => $meta['status'][0],
+					'datetime' => $meta['datetime'][0],
+				)
 			);
 		}
 
@@ -178,37 +144,7 @@ class AppointmentPost {
 			)
 		);
 
-		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
-		$timestamp = $meta['datetime'];
-		$parsed    = $this->parse_datetime( $timestamp );
-		$date      = $parsed['date'];
-		$time      = $parsed['time'];
-
-		return array(
-			'id'         => $post_id,
-			'title'      => $title,
-			'date'       => $date,
-			'time'       => $time,
-			'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-			'timestamp'  => $timestamp,
-			'status'     => 'active',
-			'actions'    => (object) array(
-				'delete' => (object) array(
-					'name'        => 'DeleteAppointment',
-					'label'       => 'Delete',
-					'method'      => 'DELETE',
-					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post_id ),
-					'isDangerous' => true,
-				),
-				'edit'   => array(
-					'name'        => 'EditAppointment',
-					'label'       => 'Edit',
-					'method'      => 'PUT',
-					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post_id ),
-					'isDangerous' => false,
-				),
-			),
-		);
+		return $this->prepare_appointment_entity( $post_id, $meta );
 	}
 
 	/**
@@ -231,6 +167,46 @@ class AppointmentPost {
 			)
 		);
 
+		return $this->prepare_appointment_entity( $post_id, $meta );
+	}
+
+	/**
+	 * Cancel appointment
+	 *
+	 * @param int $id   Appointment ID.
+	 *
+	 * @return array
+	 */
+	public function cancel( $id ) {
+		return update_post_meta( $id, 'status', 'cancelled' );
+	}
+
+	/**
+	 * Delete appointment
+	 *
+	 * @param int $id Appointment ID.
+	 *
+	 * @return int|\WP_Error
+	 */
+	public function delete( $id ) {
+		$deleted = wp_delete_post( $id, true );
+
+		if ( $deleted ) {
+			return $deleted->ID;
+		}
+
+		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+	}
+
+	/**
+	 * Prepare appointment entity
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $meta Post meta.
+	 *
+	 * @return array
+	 */
+	protected function prepare_appointment_entity( $post_id, $meta ) {
 		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$timestamp = $meta['datetime'];
 		$status    = $meta['status'];
@@ -266,17 +242,6 @@ class AppointmentPost {
 	}
 
 	/**
-	 * Cancel appointment
-	 *
-	 * @param int $id   Appointment ID.
-	 *
-	 * @return array
-	 */
-	public function cancel( $id ) {
-		return update_post_meta( $id, 'status', 'cancelled' );
-	}
-
-	/**
 	 * Parse datetime
 	 *
 	 * @param int $timestamp Timestamp.
@@ -300,22 +265,5 @@ class AppointmentPost {
 			'date' => $date,
 			'time' => $time,
 		);
-	}
-
-	/**
-	 * Delete appointment
-	 *
-	 * @param int $id Appointment ID.
-	 *
-	 * @return int|\WP_Error
-	 */
-	public function delete( $id ) {
-		$deleted = wp_delete_post( $id, true );
-
-		if ( $deleted ) {
-			return $deleted->ID;
-		}
-
-		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
 	}
 }
