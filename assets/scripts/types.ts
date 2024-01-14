@@ -1,20 +1,5 @@
-export type ApiAction = {
-	name: string;
-	label: string;
-	method: string;
-	uri: string;
-	isDangerous: boolean;
-};
+import { Output } from 'valibot';
+import { ApiActionSchema, AppointmentSchema } from './schemas';
 
-export type Appointment = {
-	id: number;
-	title: string;
-	date: string;
-	time: string;
-	timeFromTo: string;
-	timestamp: string;
-	status: 'active' | 'cancelled' | 'completed' | 'no-show';
-	actions: {
-		[key: string]: ApiAction;
-	};
-};
+export type ApiAction = Output<typeof ApiActionSchema>;
+export type Appointment = Output<typeof AppointmentSchema>;

@@ -3,6 +3,7 @@ import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { is } from 'valibot';
 import { APIResponse } from '~/utils/fetch';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
@@ -13,6 +14,7 @@ import Select from '../FormField/Select/Select';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 import { appointmentsApi } from '~/api/appointments';
+import { AppointmentSchema } from '~/schemas';
 
 type Fields = {
 	title: string;
@@ -30,16 +32,6 @@ type FormProps = {
 	) => void;
 	defaultDate?: Date;
 };
-
-function isSelectedAppointmentValid(data: unknown): data is Appointment {
-	return (
-		typeof data === 'object' &&
-		data !== null &&
-		'title' in data &&
-		'date' in data &&
-		'timeFromTo' in data
-	);
-}
 
 export default function AppointmentForm({
 	mode = 'create',
@@ -79,7 +71,7 @@ export default function AppointmentForm({
 		}
 
 		if (mode === 'edit' && currentAppointment) {
-			if (!isSelectedAppointmentValid(currentAppointment)) {
+			if (!is(AppointmentSchema, currentAppointment)) {
 				return;
 			}
 
@@ -100,10 +92,15 @@ export default function AppointmentForm({
 	const onSubmit = async (formData: Fields) => {
 		let data;
 
-		if (isSelectedAppointmentValid(currentAppointment)) {
+		if (is(AppointmentSchema, currentAppointment)) {
 			data = await updateAppointment(currentAppointment.id, formData);
 		} else {
 			data = await createAppointment(formData);
+		}
+
+		if (!data) {
+			console.error('Something went wrong while submitting the form.');
+			return;
 		}
 
 		if (onSubmitComplete) {

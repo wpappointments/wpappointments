@@ -30,7 +30,7 @@ class AppointmentPost {
 	 *
 	 * @param array $query Query params.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public function get_all( $query ) {
 		$default_query = array_merge(
@@ -67,7 +67,11 @@ class AppointmentPost {
 			);
 		}
 
-		return $appointments;
+		return (object) array(
+			'appointments' => $appointments,
+			'post_count'   => $query->post_count,
+			'found_posts'  => $query->found_posts,
+		);
 	}
 
 	/**
@@ -75,7 +79,7 @@ class AppointmentPost {
 	 *
 	 * @param array $query Query params.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public function get_upcoming( $query ) {
 		$default_query = array_merge(
@@ -91,7 +95,7 @@ class AppointmentPost {
 					),
 					array(
 						'key'     => 'datetime',
-						'value'   => time() + 60 * 60 * 24 * 7,
+						'value'   => time() + 60 * 60 * 24 * 14,
 						'compare' => '<=',
 					),
 					array(
@@ -123,7 +127,11 @@ class AppointmentPost {
 			);
 		}
 
-		return $appointments;
+		return (object) array(
+			'appointments' => $appointments,
+			'post_count'   => $query->post_count,
+			'found_posts'  => $query->found_posts,
+		);
 	}
 
 	/**
@@ -141,8 +149,13 @@ class AppointmentPost {
 				'post_status' => 'publish',
 				'post_title'  => $title,
 				'meta_input'  => $meta,
-			)
+			),
+			true
 		);
+
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
 
 		return $this->prepare_appointment_entity( $post_id, $meta );
 	}
@@ -154,18 +167,27 @@ class AppointmentPost {
 	 * @param string $title Appointment title.
 	 * @param array  $meta Appointment post meta.
 	 *
-	 * @return array
+	 * @return array|\WP_Error
 	 */
-	public function update( $id, $title, $meta = array() ) {
-		$post_id = wp_update_post(
-			array(
-				'ID'          => $id,
-				'post_type'   => 'appointment',
-				'post_status' => 'publish',
-				'post_title'  => $title,
-				'meta_input'  => $meta,
-			)
+	public function update( $id, $title = null, $meta = array() ) {
+		$data = array(
+			'ID'        => $id,
+			'post_type' => 'appointment',
 		);
+
+		if ( null !== $title ) {
+			$data['post_title'] = $title;
+		}
+
+		$post_id = wp_update_post( $data, true );
+
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
+
+		foreach ( $meta as $key => $value ) {
+			update_post_meta( $post_id, $key, $value );
+		}
 
 		return $this->prepare_appointment_entity( $post_id, $meta );
 	}
@@ -178,7 +200,13 @@ class AppointmentPost {
 	 * @return array
 	 */
 	public function cancel( $id ) {
-		return update_post_meta( $id, 'status', 'cancelled' );
+		$cancelled = update_post_meta( $id, 'status', 'cancelled' );
+
+		if ( ! $cancelled ) {
+			return new \WP_Error( 'error', __( 'Appointment is already cancelled', 'wpappointments' ) );
+		}
+
+		return $cancelled;
 	}
 
 	/**
@@ -191,7 +219,7 @@ class AppointmentPost {
 	public function delete( $id ) {
 		$status = get_post_meta( $id, 'status', true );
 
-		if ( $status !== 'cancelled' ) {
+		if ( 'cancelled' !== $status ) {
 			return new \WP_Error( 'error', __( 'Appointment must be cancelled before deleting', 'wpappointments' ) );
 		}
 
