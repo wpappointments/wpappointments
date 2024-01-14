@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { UseAppointments } from 'global';
 import { Appointment } from '~/types';
-import DeleteAppointmentModal from '../Modals/DeleteAppointment/DeleteAppointment';
 import { empty, emptyIcon, table } from './Table.module.css';
+import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	onEdit?: (appointment: Appointment) => void;
 	onView?: (appointment: Appointment) => void;
+	onCancel?: (appointmentId: number) => void;
 	deleteAppointment: UseAppointments['deleteAppointment'];
+	cancelAppointment: UseAppointments['deleteAppointment'];
 };
 
 export default function Table({
@@ -19,9 +21,9 @@ export default function Table({
 	onEmptyStateButtonClick,
 	onEdit,
 	onView,
-	deleteAppointment,
+	cancelAppointment,
 }: Props) {
-	const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(0);
+	const [appointmentId, setAppointmentId] = useState(0);
 
 	if (!items || items.length === 0) {
 		return (
@@ -54,102 +56,100 @@ export default function Table({
 					</tr>
 				</thead>
 				<tbody>
-					{items.map(
-						({
-							id,
-							time,
-							date,
-							timeFromTo,
-							title,
-							timestamp,
-							actions,
-						}) => (
-							<tr key={id}>
-								<td>
-									<Button
-										variant="link"
-										onClick={() => {
-											onView &&
-												onView({
-													id,
-													time,
-													date,
-													timeFromTo,
-													title,
-													timestamp,
-													actions,
-												});
-										}}
-									>
-										{title}
-									</Button>
-								</td>
-								<td>{date}</td>
-								<td>{timeFromTo}</td>
-								<td>
-									<Button
-										variant="tertiary"
-										size="small"
-										onClick={() => {
-											onView &&
-												onView({
-													id,
-													time,
-													date,
-													timeFromTo,
-													title,
-													timestamp,
-													actions,
-												});
-										}}
-									>
-										View
-									</Button>
-									<Button
-										variant="tertiary"
-										size="small"
-										onClick={() => {
-											onEdit &&
-												onEdit({
-													id,
-													time,
-													date,
-													timeFromTo,
-													title,
-													timestamp,
-													actions,
-												});
-										}}
-									>
-										Edit
-									</Button>
-									<Button
-										variant="tertiary"
-										size="small"
-										isDestructive
-										onClick={() => {
-											setIsConfirmDeleteOpen(id);
-										}}
-									>
-										Delete
-									</Button>
-								</td>
-							</tr>
-						)
-					)}
+					{items.map((row) => (
+						<TableRow
+							key={row.id}
+							row={row}
+							edit={onEdit}
+							view={onView}
+							setAppointmentId={setAppointmentId}
+						/>
+					))}
 				</tbody>
 			</table>
-			{isConfirmDeleteOpen > 0 && (
-				<DeleteAppointmentModal
-					confirmDeleteAppointment={async () => {
-						await deleteAppointment(isConfirmDeleteOpen);
-						setIsConfirmDeleteOpen(0);
+			{appointmentId > 0 && (
+				<CancelAppointment
+					onConfirmClick={async () => {
+						await cancelAppointment(appointmentId);
+						setAppointmentId(0);
 					}}
 					closeModal={() => {
-						setIsConfirmDeleteOpen(0);
+						setAppointmentId(0);
 					}}
 				/>
 			)}
 		</>
+	);
+}
+
+type TableRowProps = {
+	row: Appointment;
+	edit?: (appointment: Appointment) => void;
+	view?: (appointment: Appointment) => void;
+	setAppointmentId: Dispatch<SetStateAction<number>>;
+};
+
+function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
+	const { id, title, date, timeFromTo } = row;
+
+	return (
+		<tr key={id}>
+			<td>
+				<Button
+					variant="link"
+					onClick={() => {
+						view && view(row);
+					}}
+				>
+					{title}
+				</Button>
+			</td>
+			<td>{date}</td>
+			<td>{timeFromTo}</td>
+			<td>
+				<Button
+					variant="tertiary"
+					size="small"
+					onClick={() => {
+						view && view(row);
+					}}
+				>
+					View
+				</Button>
+				<Button
+					variant="tertiary"
+					size="small"
+					onClick={() => {
+						edit && edit(row);
+					}}
+				>
+					Edit
+				</Button>
+				{row.status === 'active' && (
+					<Button
+						variant="tertiary"
+						size="small"
+						isDestructive
+						onClick={() => {
+							setAppointmentId(id);
+						}}
+					>
+						Cancel
+					</Button>
+				)}
+				{row.status === 'cancelled' && (
+					<Button
+						variant="tertiary"
+						size="small"
+						isDestructive
+						onClick={() => {
+							setAppointmentId(id);
+						}}
+					>
+						Delete
+					</Button>
+				)}
+			</td>
+		</tr>
 	);
 }
