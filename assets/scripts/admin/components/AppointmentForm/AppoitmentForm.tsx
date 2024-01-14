@@ -4,7 +4,6 @@ import { select, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { APIResponse } from '~/utils/fetch';
-import { useAppointments } from '~/hooks/api/appointments';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -13,6 +12,7 @@ import Input from '../FormField/Input/Input';
 import Select from '../FormField/Select/Select';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
+import { appointmentsApi } from '~/api/appointments';
 
 type Fields = {
 	title: string;
@@ -46,7 +46,7 @@ export default function AppointmentForm({
 	onSubmitComplete,
 	defaultDate,
 }: FormProps) {
-	const { createAppointment, updateAppointment } = useAppointments();
+	const { createAppointment, updateAppointment } = appointmentsApi();
 	const { currentSlideout } = useSlideout();
 
 	const { data: selectedAppointment } = currentSlideout || {};
