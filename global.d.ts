@@ -1,9 +1,7 @@
 import { ReactDOM } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
-import { useAppointments } from '~/hooks/api/appointments';
-
-type UseAppointments = ReturnType< typeof useAppointments >;
+import type { AppointmentsApi } from '~/api/appointments';
 
 declare global {
 	interface Window {
@@ -17,13 +15,14 @@ declare global {
 				namespace: string;
 				url: string;
 				nonce: string;
-				getAppointments: UseAppointments[ 'getAppointments' ];
-				getUpcomingAppointments: UseAppointments[ 'getUpcomingAppointments' ];
-				createAppointment: UseAppointments[ 'createAppointment' ];
-				updateAppointment: UseAppointments[ 'updateAppointment' ];
-				cancelAppointment: UseAppointments[ 'cancelAppointment' ];
-				deleteAppointment: UseAppointments[ 'deleteAppointment' ];
+				getAppointments: AppointmentsApi[ 'getAppointments' ];
+				getUpcomingAppointments: AppointmentsApi[ 'getUpcomingAppointments' ];
+				createAppointment: AppointmentsApi[ 'createAppointment' ];
+				updateAppointment: AppointmentsApi[ 'updateAppointment' ];
+				cancelAppointment: AppointmentsApi[ 'cancelAppointment' ];
+				deleteAppointment: AppointmentsApi[ 'deleteAppointment' ];
 			};
 		};
+		wp: any;
 	}
 }
