@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { UseAppointments } from 'global';
 import { Appointment } from '~/types';
 import { empty, emptyIcon, table } from './Table.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
+import { AppointmentsApi } from '~/api/appointments';
 
 type Props = {
 	items?: Appointment[];
@@ -12,8 +12,8 @@ type Props = {
 	onEdit?: (appointment: Appointment) => void;
 	onView?: (appointment: Appointment) => void;
 	onCancel?: (appointmentId: number) => void;
-	deleteAppointment: UseAppointments['deleteAppointment'];
-	cancelAppointment: UseAppointments['deleteAppointment'];
+	deleteAppointment: AppointmentsApi['deleteAppointment'];
+	cancelAppointment: AppointmentsApi['deleteAppointment'];
 };
 
 export default function Table({
