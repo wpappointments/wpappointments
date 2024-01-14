@@ -2,7 +2,6 @@ import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Text } from '~/utils/experimental';
-import { useAppointments } from '~/hooks/api/appointments';
 import useSlideout from '~/hooks/useSlideout';
 import { Slideout } from '~/store/slideout/slideout.types';
 import { store } from '~/store/store';
@@ -12,6 +11,7 @@ import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import Table from '~/admin/components/Table/Table';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
+import { appointmentsApi } from '~/api/appointments';
 import { card } from 'global.module.css';
 
 export default function Dashboard() {
@@ -60,7 +60,7 @@ function DashboardAppointments({
 }: {
 	openSlideOut: (slideout: Slideout) => void;
 }) {
-	const { deleteAppointment, cancelAppointment } = useAppointments();
+	const { deleteAppointment, cancelAppointment } = appointmentsApi();
 
 	const appointments = useSelect(() => {
 		return select(store).getUpcomingAppointments({

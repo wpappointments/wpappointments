@@ -1,6 +1,4 @@
-import { useDispatch } from '@wordpress/data';
 import apiFetch, { APIResponse } from '~/utils/fetch';
-import { store } from '~/store/store';
 import { Appointment } from '~/types';
 
 type AppointmentData = {
@@ -8,8 +6,8 @@ type AppointmentData = {
 	datetime: string;
 };
 
-export function useAppointments() {
-	const dispatch = useDispatch(store);
+export function appointmentsApi() {
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	async function getAppointments() {
 		const response = await apiFetch<
@@ -121,3 +119,5 @@ export function useAppointments() {
 
 	return functions;
 }
+
+export type AppointmentsApi = ReturnType<typeof appointmentsApi>;

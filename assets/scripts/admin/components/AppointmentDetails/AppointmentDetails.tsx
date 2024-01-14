@@ -3,7 +3,6 @@ import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import cn from '~/utils/cn';
-import { useAppointments } from '~/hooks/api/appointments';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -17,9 +16,10 @@ import {
 import { formActions } from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 import DeleteAppointmentModal from '~/admin/components/Modals/DeleteAppointment/DeleteAppointment';
+import { appointmentsApi } from '~/api/appointments';
 
 export default function AppointmentDetails() {
-	const { deleteAppointment, cancelAppointment } = useAppointments();
+	const { deleteAppointment, cancelAppointment } = appointmentsApi();
 	const { currentSlideout, closeSlideOut } = useSlideout('view-appointment');
 	const { openSlideOut } = useSlideout();
 	const [appointmentId, setAppointmentId] = useState(0);
