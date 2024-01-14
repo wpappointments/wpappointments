@@ -41,16 +41,33 @@ export function appointmentsApi() {
 	}
 
 	async function updateAppointment(id: number, data: AppointmentData) {
-		const response = await apiFetch<Response>({
-			path: `appointment/${id}`,
-			method: 'PUT',
-			data,
+		if (!id) {
+			throw new Error(
+				'Cannot update appointment: Appointment ID is required'
+			);
+		}
+
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `appointment/${id}`,
+				method: 'PUT',
+				data,
+			});
+
+			const { data: responseData } = response;
+			const { appointment } = responseData;
+
+			dispatch.updateAppointment(appointment);
+
+			return response;
 		});
 
-		const { data: responseData } = response;
-		const { appointment } = responseData;
-
-		dispatch.updateAppointment(appointment);
+		if (error) {
+			console.error(
+				'Error updating appointment: ' + getErrorMessage(error)
+			);
+			return;
+		}
 
 		return response;
 	}
