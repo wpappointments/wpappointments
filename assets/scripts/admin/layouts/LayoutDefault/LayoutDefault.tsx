@@ -1,8 +1,10 @@
+import { __ } from '@wordpress/i18n';
 import {
 	layout,
 	layoutContent,
 	layoutHeader,
 } from './LayoutDefault.module.css';
+import Toaster from '~/admin/components/Toaster/Toaster';
 
 type Props = {
 	title: string;
@@ -16,6 +18,7 @@ export default function LayoutDefault({ title, children }: Props) {
 				<h1>{title}</h1>
 			</div>
 			<div className={layoutContent}>{children}</div>
+			<Toaster />
 		</div>
 	);
 }
