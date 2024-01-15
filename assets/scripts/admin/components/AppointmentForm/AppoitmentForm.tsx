@@ -3,7 +3,7 @@ import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { is } from 'valibot';
+import { array, boolean, date, is, number, object } from 'valibot';
 import { APIResponse } from '~/utils/fetch';
 import resolve from '~/utils/resolve';
 import { displayErrorToast } from '~/utils/toast';
@@ -35,6 +35,16 @@ type FormProps = {
 	defaultDate?: Date;
 };
 
+const AddAppointmentDataSchema = object({
+	index: number(),
+	isNextMonth: boolean(),
+	isPreviousMonth: boolean(),
+	isToday: boolean(),
+	start: date(),
+	end: date(),
+	appointments: array(AppointmentSchema),
+});
+
 export default function AppointmentForm({
 	mode = 'create',
 	onSubmitComplete,
@@ -65,6 +75,8 @@ export default function AppointmentForm({
 
 			if (defaultDate) {
 				date = defaultDate.toISOString();
+			} else if (is(AddAppointmentDataSchema, currentSlideout?.data)) {
+				date = new Date(currentSlideout.data.start).toISOString();
 			}
 
 			setValue('datetime', date);
@@ -89,7 +101,7 @@ export default function AppointmentForm({
 			setValue('datetime', timestamp);
 			setValue('status', status);
 		}
-	}, [defaultDate, currentAppointment, mode]);
+	}, [defaultDate, currentSlideout, currentAppointment, mode]);
 
 	const onSubmit = async (formData: Fields) => {
 		const [error, result] = await resolve<SubmitResponse>(async () => {
