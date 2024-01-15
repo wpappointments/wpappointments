@@ -1,6 +1,8 @@
-import { getErrorMessage } from '~/utils/error';
+import { __ } from '@wordpress/i18n';
+import { Error, getErrorMessage } from '~/utils/error';
 import apiFetch, { APIResponse } from '~/utils/fetch';
 import resolve from '~/utils/resolve';
+import { displayErrorToast, displaySuccessToast } from '~/utils/toast';
 import { Appointment } from '~/types';
 
 type AppointmentData = {
@@ -37,14 +39,16 @@ export function appointmentsApi() {
 
 		dispatch.createAppointment(appointment);
 
+		displaySuccessToast(
+			__('Appointment created successfully', 'wpappointments')
+		);
+
 		return response;
 	}
 
 	async function updateAppointment(id: number, data: AppointmentData) {
-		if (!id) {
-			throw new Error(
-				'Cannot update appointment: Appointment ID is required'
-			);
+		if (invalidId(id, 'Cannot update appointment')) {
+			return;
 		}
 
 		const [error, response] = await resolve<Response>(async () => {
@@ -63,27 +67,60 @@ export function appointmentsApi() {
 		});
 
 		if (error) {
-			console.error(
-				'Error updating appointment: ' + getErrorMessage(error)
+			handleError(
+				error,
+				__('Cannot update appointment', 'wpappointments')
 			);
 			return;
+		}
+
+		if (response) {
+			displaySuccessToast(
+				__('Appointment updated successfully', 'wpappointments')
+			);
 		}
 
 		return response;
 	}
 
 	async function cancelAppointment(id: number) {
-		const response = await apiFetch<Response>({
-			path: `appointment/${id}/cancel`,
-			method: 'PUT',
+		if (invalidId(id, 'Cannot cancel appointment')) {
+			return;
+		}
+
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `appointment/${id}/cancel`,
+				method: 'PUT',
+			});
+
+			dispatch.cancelAppointment(id);
+
+			return response;
 		});
 
-		dispatch.cancelAppointment(id);
+		if (error) {
+			handleError(
+				error,
+				__('Cannot cancel appointment', 'wpappointments')
+			);
+			return;
+		}
+
+		if (response) {
+			displaySuccessToast(
+				__('Appointment cancelled successfully', 'wpappointments')
+			);
+		}
 
 		return response;
 	}
 
 	async function deleteAppointment(id: number) {
+		if (invalidId(id, 'Cannot delete appointment')) {
+			return;
+		}
+
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
 				path: `appointment/${id}`,
@@ -96,13 +133,41 @@ export function appointmentsApi() {
 		});
 
 		if (error) {
-			console.error(
-				'Error deleting appointment: ' + getErrorMessage(error)
+			handleError(
+				error,
+				__('Cannot delete appointment', 'wpappointments')
 			);
 			return;
 		}
 
+		if (response) {
+			displaySuccessToast(
+				__('Appointment deleted successfully', 'wpappointments')
+			);
+		}
+
 		return response;
+	}
+
+	function invalidId(id: number, errorPrefix: string) {
+		if (!id) {
+			displayErrorToast(
+				`${errorPrefix}: ${__(
+					'Appointment ID is required.',
+					'wpappointments'
+				)}`
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	function handleError(error: Error, message: string) {
+		displayErrorToast(`${message}: ${getErrorMessage(error)}`);
+
+		console.error('Error: ' + getErrorMessage(error));
 	}
 
 	const functions = {
