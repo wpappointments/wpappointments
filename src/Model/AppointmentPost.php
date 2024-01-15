@@ -140,7 +140,7 @@ class AppointmentPost {
 	 * @param string $title Appointment title.
 	 * @param array  $meta Appointment post meta.
 	 *
-	 * @return array
+	 * @return array|\WP_Error
 	 */
 	public function create( $title = 'Appointment', $meta = array() ) {
 		$post_id = wp_insert_post(
@@ -170,8 +170,14 @@ class AppointmentPost {
 	 * @return array|\WP_Error
 	 */
 	public function update( $id, $title = null, $meta = array() ) {
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
 		$data = array(
-			'ID'        => $id,
+			'ID'        => $valid_id,
 			'post_type' => 'appointment',
 		);
 
@@ -197,10 +203,16 @@ class AppointmentPost {
 	 *
 	 * @param int $id   Appointment ID.
 	 *
-	 * @return array
+	 * @return array|\WP_Error
 	 */
 	public function cancel( $id ) {
-		$cancelled = update_post_meta( $id, 'status', 'cancelled' );
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
+		$cancelled = update_post_meta( $valid_id, 'status', 'cancelled' );
 
 		if ( ! $cancelled ) {
 			return new \WP_Error( 'error', __( 'Appointment is already cancelled', 'wpappointments' ) );
@@ -217,6 +229,12 @@ class AppointmentPost {
 	 * @return int|\WP_Error
 	 */
 	public function delete( $id ) {
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
 		$status = get_post_meta( $id, 'status', true );
 
 		if ( 'cancelled' !== $status ) {
@@ -299,5 +317,24 @@ class AppointmentPost {
 			'date' => $date,
 			'time' => $time,
 		);
+	}
+
+	/**
+	 * Validate post ID
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return int|\WP_Error
+	 */
+	protected function validate_post_id( $post_id ) {
+		if ( ! $post_id ) {
+			return new \WP_Error( 'error', __( 'Appointment ID is required', 'wpappointments' ) );
+		}
+
+		if ( ! get_post( $post_id ) ) {
+			return new \WP_Error( 'error', __( 'Appointment not found', 'wpappointments' ) );
+		}
+
+		return $post_id;
 	}
 }

@@ -1,6 +1,7 @@
 import { any, is, literal, object, string } from 'valibot';
 import apiFetch from '~/utils/fetch';
 import { controls as appointments } from './appointments/appointments';
+import { controls as notices } from './notices/notices';
 import { controls as settings } from './settings/settings';
 import { controls as slideouts } from './slideout/slideout';
 
@@ -25,4 +26,5 @@ export default {
 	...settings,
 	...appointments,
 	...slideouts,
+	...notices,
 };

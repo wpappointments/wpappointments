@@ -5,6 +5,8 @@ import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { is } from 'valibot';
 import { APIResponse } from '~/utils/fetch';
+import resolve from '~/utils/resolve';
+import { displayErrorToast } from '~/utils/toast';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
@@ -22,14 +24,14 @@ type Fields = {
 	status: Appointment['status'];
 };
 
+type SubmitResponse = APIResponse<{
+	appointment: Appointment;
+	message: string;
+}>;
+
 type FormProps = {
 	mode: 'view' | 'edit' | 'create';
-	onSubmitComplete?: (
-		data: APIResponse<{
-			appointment: Appointment;
-			message: string;
-		}>
-	) => void;
+	onSubmitComplete?: (data: SubmitResponse) => void;
 	defaultDate?: Date;
 };
 
@@ -90,21 +92,32 @@ export default function AppointmentForm({
 	}, [defaultDate, currentAppointment, mode]);
 
 	const onSubmit = async (formData: Fields) => {
-		let data;
+		const [error, result] = await resolve<SubmitResponse>(async () => {
+			let data;
 
-		if (is(AppointmentSchema, currentAppointment)) {
-			data = await updateAppointment(currentAppointment.id, formData);
-		} else {
-			data = await createAppointment(formData);
-		}
+			if (is(AppointmentSchema, currentAppointment)) {
+				data = await updateAppointment(currentAppointment.id, formData);
+			} else {
+				data = await createAppointment(formData);
+			}
 
-		if (!data) {
-			console.error('Something went wrong while submitting the form.');
+			return data;
+		});
+
+		if (error) {
+			displayErrorToast(
+				__('Something went wrong while submitting the form.')
+			);
+
+			console.error(
+				'Something went wrong while submitting the form.',
+				error
+			);
 			return;
 		}
 
-		if (onSubmitComplete) {
-			onSubmitComplete(data);
+		if (onSubmitComplete && result) {
+			onSubmitComplete(result);
 		}
 
 		if (mode === 'create') {
