@@ -1,0 +1,51 @@
+.toast-container {
+	position: fixed;
+	bottom: 40px;
+	left: 20px;
+	right: 20px;
+	z-index: 1500;
+	padding: 0;
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 5px;
+	width: 350px;
+	max-width: 100%;
+}
+
+@media screen and ( min-width: 782px ) {
+	.toast-container {
+		left: auto;
+		right: var( --wpappointments-large-gap );
+		bottom: var( --wpappointments-large-gap );
+		align-items: flex-end;
+	}
+}
+
+.toast-message {
+	width: 100%;
+	opacity: 0;
+	transform: translateY( 100% );
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.toast-message :global( .components-snackbar ) {
+	width: 100%;
+	border-radius: 5px;
+	padding: 10px 15px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.toast-message.is-active {
+	opacity: 1;
+	transform: translateY( 0 );
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.toast-message.type-success :global( .components-snackbar ) {
+	background-color: #081b0a;
+}
+
+.toast-message.type-error :global( .components-snackbar ) {
+	background-color: #ff0019;
+}

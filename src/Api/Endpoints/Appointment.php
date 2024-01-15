@@ -247,8 +247,8 @@ class Appointment extends Controller {
 		$appointment_post = new AppointmentPost();
 		$cancelled        = $appointment_post->cancel( $id );
 
-		if ( ! $cancelled ) {
-			return self::error( __( 'Appointment could not be cancelled', 'wpappointments' ) );
+		if ( is_wp_error( $cancelled ) ) {
+			return self::error( $cancelled->get_error_message() );
 		}
 
 		return self::response(
