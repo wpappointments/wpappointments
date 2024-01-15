@@ -255,7 +255,6 @@ export default function Calendar() {
 											onClick={() => {
 												openSlideOut({
 													id: 'view-appointment',
-													data: appointment.id,
 												});
 											}}
 										>
@@ -266,6 +265,7 @@ export default function Calendar() {
 										onClick={() => {
 											openSlideOut({
 												id: 'add-appointment',
+												data: day,
 											});
 										}}
 									>
