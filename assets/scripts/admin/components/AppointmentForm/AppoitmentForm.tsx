@@ -15,6 +15,7 @@ import Input from '../FormField/Input/Input';
 import Select from '../FormField/Select/Select';
 import { formActions } from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
+import { useStateContext } from '~/admin/context/StateContext';
 import { appointmentsApi } from '~/api/appointments';
 import { AppointmentSchema } from '~/schemas';
 
@@ -50,14 +51,17 @@ export default function AppointmentForm({
 	onSubmitComplete,
 	defaultDate,
 }: FormProps) {
-	const { createAppointment, updateAppointment } = appointmentsApi();
+	const { invalidate } = useStateContext();
+	const { createAppointment, updateAppointment } = appointmentsApi({
+		invalidateCache: invalidate,
+	});
 	const { currentSlideout } = useSlideout();
 
 	const { data: selectedAppointment } = currentSlideout || {};
 
 	const currentAppointment = useSelect(() => {
 		return select(store).getAppointment(selectedAppointment as number);
-	}, [selectedAppointment]);
+	}, [selectedAppointment, currentSlideout]);
 
 	const {
 		control,
@@ -93,7 +97,7 @@ export default function AppointmentForm({
 
 			const title = currentAppointment.title;
 			const timestamp = new Date(
-				parseInt(currentAppointment.timestamp) * 1000
+				parseInt(currentAppointment.timestamp.toString()) * 1000
 			).toISOString();
 			const status = currentAppointment.status;
 

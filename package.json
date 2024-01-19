@@ -61,6 +61,7 @@
 		"@wordpress/element": "^5.20.0",
 		"@wordpress/hooks": "^3.40.0",
 		"@wordpress/i18n": "^4.41.0",
+		"@wordpress/icons": "^9.39.0",
 		"@wordpress/url": "^3.49.0",
 		"immer": "^10.0.2",
 		"obj-str": "^1.1.0",
