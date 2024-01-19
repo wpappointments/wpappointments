@@ -37,13 +37,13 @@ class AppointmentPost {
 			$this->default_query_part,
 			array(
 				'posts_per_page' => -1,
-				// 'meta_query'     => array(
-				// array(
-				// 'key'     => 'status',
-				// 'value'   => 'active',
-				// 'compare' => '=',
-				// ),
-				// ),
+				'meta_query'     => array(
+					array(
+						'key'     => 'status',
+						'value'   => 'active',
+						'compare' => '=',
+					),
+				),
 			)
 		);
 
@@ -98,15 +98,15 @@ class AppointmentPost {
 		if ( isset( $query['period'] ) ) {
 			$period = $query['period'];
 
-			if ( $period === 'month' ) {
+			if ( 'month' === $period ) {
 				$date_query[1]['value'] = time() + 60 * 60 * 24 * 30;
 			}
 
-			if ( $period === 'year' ) {
+			if ( 'year' === $period ) {
 				$date_query[1]['value'] = time() + 60 * 60 * 24 * 365;
 			}
 
-			if ( $period === 'all' ) {
+			if ( 'all' === $period ) {
 				unset( $date_query[1] );
 			}
 		}
@@ -117,7 +117,7 @@ class AppointmentPost {
 			$status = $query['status'];
 		}
 
-		$status_query = $status === '' ? array() : array(
+		$status_query = '' === $status ? array() : array(
 			'key'     => 'status',
 			'value'   => $status,
 			'compare' => '=',
