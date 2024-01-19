@@ -82,27 +82,57 @@ class AppointmentPost {
 	 * @return object
 	 */
 	public function get_upcoming( $query ) {
+		$date_query = array(
+			array(
+				'key'     => 'datetime',
+				'value'   => time(),
+				'compare' => '>=',
+			),
+			array(
+				'key'     => 'datetime',
+				'value'   => time() + 60 * 60 * 24 * 7,
+				'compare' => '<=',
+			),
+		);
+
+		if ( isset( $query['period'] ) ) {
+			$period = $query['period'];
+
+			if ( 'month' === $period ) {
+				$date_query[1]['value'] = time() + 60 * 60 * 24 * 30;
+			}
+
+			if ( 'year' === $period ) {
+				$date_query[1]['value'] = time() + 60 * 60 * 24 * 365;
+			}
+
+			if ( 'all' === $period ) {
+				unset( $date_query[1] );
+			}
+		}
+
+		$status = 'active';
+
+		if ( isset( $query['status'] ) ) {
+			$status = $query['status'];
+		}
+
+		$status_query = '' === $status ? array() : array(
+			'key'     => 'status',
+			'value'   => $status,
+			'compare' => '=',
+		);
+
 		$default_query = array_merge(
 			$this->default_query_part,
 			array(
 				'posts_per_page' => 10,
-				'meta_query'     => array(
-					'relation' => 'AND',
+				'meta_query'     => array_merge(
 					array(
-						'key'     => 'datetime',
-						'value'   => time(),
-						'compare' => '>=',
+						'relation' => 'AND',
+						$status_query,
 					),
-					array(
-						'key'     => 'datetime',
-						'value'   => time() + 60 * 60 * 24 * 14,
-						'compare' => '<=',
-					),
-					array(
-						'key'     => 'status',
-						'value'   => 'active',
-						'compare' => '=',
-					),
+					$date_query
 				),
 			),
 		);

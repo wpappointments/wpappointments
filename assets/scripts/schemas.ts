@@ -22,7 +22,7 @@ export const AppointmentSchema = object({
 	date: string(),
 	time: string(),
 	timeFromTo: string(),
-	timestamp: string(),
+	timestamp: union([string(), number()]),
 	status: union([
 		literal('active'),
 		literal('cancelled'),
