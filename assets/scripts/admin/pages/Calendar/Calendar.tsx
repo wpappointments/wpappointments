@@ -27,6 +27,7 @@ import {
 import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
+import { StateContextProvider } from '~/admin/context/StateContext';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 
 function getMonthName(month: number) {
@@ -100,10 +101,12 @@ function applyAppointmentsToCalendar(
 		return {
 			...day,
 			appointments: appointments.filter((appointment) => {
+				const timestamp = appointment.timestamp.toString();
+				const start = day.start.getTime() / 1000;
+				const end = day.end.getTime() / 1000;
+
 				return (
-					parseInt(appointment.timestamp) >=
-						day.start.getTime() / 1000 &&
-					parseInt(appointment.timestamp) <= day.end.getTime() / 1000
+					parseInt(timestamp) >= start && parseInt(timestamp) <= end
 				);
 			}),
 		};
@@ -200,98 +203,102 @@ export default function Calendar() {
 	);
 
 	return (
-		<LayoutDefault title="Calendar">
-			<h1>
-				<strong>{getMonthName(month)}</strong> {year}
-			</h1>
-			<div className={topBar}>
-				<ButtonGroup>
-					<Button variant="secondary" size="compact">
-						{__('Day', 'wpappointments')}
-					</Button>
-					<Button variant="secondary" size="compact">
-						{__('Week', 'wpappointments')}
-					</Button>
-					<Button variant="primary" size="compact">
-						{__('Month', 'wpappointments')}
-					</Button>
-				</ButtonGroup>
-				<div className={actions}>
-					{calendarActions.map((action, i) => (
-						<Fragment key={i}>{action}</Fragment>
-					))}
-					<Button
-						variant="primary"
-						onClick={() => {
-							openSlideOut({ id: 'add-appointment' });
-						}}
-					>
-						{__('Create New Appointment', 'wpappointments')}
-					</Button>
+		<StateContextProvider>
+			<LayoutDefault title="Calendar">
+				<h1>
+					<strong>{getMonthName(month)}</strong> {year}
+				</h1>
+				<div className={topBar}>
+					<ButtonGroup>
+						<Button variant="secondary" size="compact">
+							{__('Day', 'wpappointments')}
+						</Button>
+						<Button variant="secondary" size="compact">
+							{__('Week', 'wpappointments')}
+						</Button>
+						<Button variant="primary" size="compact">
+							{__('Month', 'wpappointments')}
+						</Button>
+					</ButtonGroup>
+					<div className={actions}>
+						{calendarActions.map((action, i) => (
+							<Fragment key={i}>{action}</Fragment>
+						))}
+						<Button
+							variant="primary"
+							onClick={() => {
+								openSlideOut({ id: 'add-appointment' });
+							}}
+						>
+							{__('Create New Appointment', 'wpappointments')}
+						</Button>
+					</div>
 				</div>
-			</div>
-			<div className={calendarContainer}>
-				<div className={header}>
-					{daysOfWeek.map((dayName) => (
-						<div key={dayName} className={day}>
-							{dayName}
-						</div>
-					))}
-				</div>
-				<div className={calendar}>
-					{currentMonth.map((day) => (
-						<div key={day.index} className={dayTile}>
-							<div className={dayClasses(day)}>
-								<div className={dayTileLabel}>
-									<div className={dayTileLabelText}>
-										{dayLabel(day.index)}
+				<div className={calendarContainer}>
+					<div className={header}>
+						{daysOfWeek.map((dayName) => (
+							<div key={dayName} className={day}>
+								{dayName}
+							</div>
+						))}
+					</div>
+					<div className={calendar}>
+						{currentMonth.map((day) => (
+							<div key={day.index} className={dayTile}>
+								<div className={dayClasses(day)}>
+									<div className={dayTileLabel}>
+										<div className={dayTileLabelText}>
+											{dayLabel(day.index)}
+										</div>
 									</div>
-								</div>
-								<div className={events}>
-									{day.appointments.map((appointment) => (
-										<div
-											key={appointment.id}
-											className={event}
+									<div className={events}>
+										{day.appointments.map((appointment) => (
+											<div
+												key={appointment.id}
+												className={event}
+												onClick={() => {
+													openSlideOut({
+														id: 'view-appointment',
+														data: appointment.id,
+													});
+												}}
+											>
+												{appointment.title ||
+													'Untitled'}
+											</div>
+										))}
+										<Button
 											onClick={() => {
 												openSlideOut({
-													id: 'view-appointment',
+													id: 'add-appointment',
+													data: day,
 												});
 											}}
 										>
-											{appointment.title || 'Untitled'}
-										</div>
-									))}
-									<Button
-										onClick={() => {
-											openSlideOut({
-												id: 'add-appointment',
-												data: day,
-											});
-										}}
-									>
-										+ {__('Add', 'wpappointments')}
-									</Button>
+											+ {__('Add', 'wpappointments')}
+										</Button>
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))}
+					</div>
 				</div>
-			</div>
-			<SlideOut title={__('Appointment')} id="view-appointment">
-				<AppointmentDetails />
-			</SlideOut>
-			<SlideOut title={__('Edit Appointment')} id="edit-appointment">
-				<AppointmentForm
-					mode="edit"
-					onSubmitComplete={closeCurrentSlideOut}
-				/>
-			</SlideOut>
-			<SlideOut title={__('Create Appointment')} id="add-appointment">
-				<AppointmentForm
-					mode="create"
-					onSubmitComplete={closeCurrentSlideOut}
-				/>
-			</SlideOut>
-		</LayoutDefault>
+				<SlideOut title={__('Appointment')} id="view-appointment">
+					<AppointmentDetails />
+				</SlideOut>
+				<SlideOut title={__('Edit Appointment')} id="edit-appointment">
+					<AppointmentForm
+						mode="edit"
+						onSubmitComplete={closeCurrentSlideOut}
+					/>
+				</SlideOut>
+				<SlideOut title={__('Create Appointment')} id="add-appointment">
+					<AppointmentForm
+						mode="create"
+						onSubmitComplete={closeCurrentSlideOut}
+					/>
+				</SlideOut>
+			</LayoutDefault>
+		</StateContextProvider>
 	);
 }

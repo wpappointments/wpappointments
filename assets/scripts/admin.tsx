@@ -3,7 +3,7 @@ import { createHooks } from '@wordpress/hooks';
 import { render } from '~/utils/dom';
 import { store } from '~/store/store';
 import Calendar from '~/admin/pages/Calendar/Calendar';
-import Dashboard from '~/admin/pages/Dashboard';
+import Dashboard from '~/admin/pages/Dashboard/Dashboard';
 import Settings from '~/admin/pages/Settings/Settings';
 
 window.wpappointments.hooks = createHooks();
