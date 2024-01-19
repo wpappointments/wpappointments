@@ -16,10 +16,14 @@ import {
 import { formActions } from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 import DeleteAppointmentModal from '~/admin/components/Modals/DeleteAppointment/DeleteAppointment';
+import { useStateContext } from '~/admin/context/StateContext';
 import { appointmentsApi } from '~/api/appointments';
 
 export default function AppointmentDetails() {
-	const { deleteAppointment, cancelAppointment } = appointmentsApi();
+	const { invalidate } = useStateContext();
+	const { deleteAppointment, cancelAppointment } = appointmentsApi({
+		invalidateCache: invalidate,
+	});
 	const { currentSlideout, closeSlideOut } = useSlideout('view-appointment');
 	const { openSlideOut } = useSlideout();
 	const [appointmentId, setAppointmentId] = useState(0);

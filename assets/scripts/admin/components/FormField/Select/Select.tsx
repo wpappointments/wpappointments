@@ -31,6 +31,7 @@ type Props<T extends FieldValues> = {
 		label: string;
 		value: string;
 	}[];
+	onChange?: (value: string) => void;
 };
 
 export type FormFieldError<T extends FieldValues> =
@@ -46,6 +47,7 @@ export default function Select<T extends FieldValues>({
 	rules,
 	options,
 	defaultValue,
+	onChange,
 }: Props<T>) {
 	const error: FormFieldError<T> = errors[name];
 
@@ -60,10 +62,24 @@ export default function Select<T extends FieldValues>({
 				control={control}
 				rules={rules}
 				defaultValue={defaultValue}
-				render={({ field: { value, onChange, onBlur } }) => (
+				render={({
+					field: {
+						value,
+						onChange: fieldOnChange,
+						onBlur: fieldOnBlur,
+					},
+				}) => (
 					<SelectControl
-						onBlur={onBlur}
-						onChange={onChange}
+						onBlur={() => {
+							fieldOnBlur();
+						}}
+						onChange={(e) => {
+							fieldOnChange(e);
+
+							if (onChange) {
+								onChange(e);
+							}
+						}}
 						value={value}
 						size="__unstable-large"
 						id={name}
