@@ -5,6 +5,7 @@ import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import { store } from '~/store/store';
 import { formActions } from '../Settings.module.css';
+import Form from '~/admin/components/Form/Form';
 import Input from '~/admin/components/FormField/Input/Input';
 import { card } from 'global.module.css';
 
@@ -49,7 +50,7 @@ export default function AppointmentsSettings() {
 				<Text size="title">Appointments Settings</Text>
 			</CardHeader>
 			<CardBody>
-				<form onSubmit={handleSubmit(onSubmit)}>
+				<Form onSubmit={handleSubmit(onSubmit)}>
 					<Input
 						control={control}
 						errors={errors}
@@ -66,7 +67,7 @@ export default function AppointmentsSettings() {
 							Save changes
 						</Button>
 					</div>
-				</form>
+				</Form>
 			</CardBody>
 		</Card>
 	);
