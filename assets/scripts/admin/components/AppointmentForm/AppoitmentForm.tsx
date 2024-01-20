@@ -10,6 +10,7 @@ import { displayErrorToast } from '~/utils/toast';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
+import Form from '../Form/Form';
 import DateTimePicker from '../FormField/DateTimePicker/DateTimePicker';
 import Input from '../FormField/Input/Input';
 import Select from '../FormField/Select/Select';
@@ -142,7 +143,7 @@ export default function AppointmentForm({
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<Form onSubmit={handleSubmit(onSubmit)}>
 			<Input
 				control={control}
 				errors={errors}
@@ -186,6 +187,6 @@ export default function AppointmentForm({
 					{getSubmitButtonLabel(mode)}
 				</Button>
 			</div>
-		</form>
+		</Form>
 	);
 }
