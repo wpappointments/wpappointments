@@ -1,9 +1,8 @@
-import { field } from './FormField.module.css';
-
 type Props = {
 	children: React.ReactNode;
+	className?: string;
 };
 
-export default function FormField({ children }: Props) {
-	return <div className={field}>{children}</div>;
+export default function FormField({ children, className }: Props) {
+	return <div className={className}>{children}</div>;
 }

@@ -5,6 +5,7 @@ import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import { store } from '~/store/store';
 import { formActions } from '../Settings.module.css';
+import Form from '~/admin/components/Form/Form';
 import Input from '~/admin/components/FormField/Input/Input';
 import { card } from 'global.module.css';
 
@@ -56,7 +57,7 @@ export default function GeneralSettings() {
 				<Text size="title">Profile and company details</Text>
 			</CardHeader>
 			<CardBody>
-				<form onSubmit={handleSubmit(onSubmit)}>
+				<Form onSubmit={handleSubmit(onSubmit)}>
 					<Input
 						control={control}
 						errors={errors}
@@ -92,7 +93,7 @@ export default function GeneralSettings() {
 							Save changes
 						</Button>
 					</div>
-				</form>
+				</Form>
 			</CardBody>
 		</Card>
 	);

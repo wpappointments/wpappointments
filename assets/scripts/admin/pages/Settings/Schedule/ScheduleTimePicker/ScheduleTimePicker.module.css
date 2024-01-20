@@ -34,7 +34,7 @@
 }
 
 .time-picker-control
-	> :global( .FormField-module__field:nth-child( 1 ) )
+	> div:nth-child( 1 )
 	:global( .components-input-control__input ) {
 	padding-left: 4px;
 	padding-right: 0;
@@ -42,7 +42,7 @@
 }
 
 .time-picker-control
-	> :global( .FormField-module__field:nth-child( 3 ) )
+	> div:nth-child( 3 )
 	:global( .components-input-control__input ) {
 	padding-left: 0;
 	padding-right: 4px;
