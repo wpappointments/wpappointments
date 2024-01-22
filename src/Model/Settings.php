@@ -93,8 +93,6 @@ class Settings {
 	public function get_all() {
 		$settings = array();
 
-		// return $this->settings;
-
 		foreach ( $this->settings as $category => $options ) {
 			foreach ( $options as $option ) {
 				$name   = $option['name'];
