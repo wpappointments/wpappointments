@@ -4,9 +4,6 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
-	/* right: calc(600px * calc( var( --nesting-level ) - 1 ) ); */
-	/* width: calc( 100% - calc( 80px * var( --nesting-level ) ) ); */
-	/* width: min(100%, 600px); */
 	width: min( 100%, 700px );
 	transform: translateX( 100px );
 	transition: transform 0.2s ease-in-out, width 0.2s ease-in-out,
