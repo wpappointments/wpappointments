@@ -7,3 +7,7 @@
 	margin-bottom: 8px;
 	padding: 0px;
 }
+
+.field-full-width {
+	flex: 1;
+}

@@ -2,6 +2,7 @@ export type SettingsState = {
 	general: SettingsGeneral;
 	schedule: SettingsSchedule;
 	appointments: SettingsAppointments;
+	calendar: SettingsCalendar;
 };
 
 export type SettingsSchedule = {
@@ -19,10 +20,12 @@ export type SettingsGeneral = {
 	lastName: string;
 	phoneNumber: string;
 	companyName: string;
+	clockType: 12 | 24;
 };
 
 export type SettingsAppointments = {
-	defaultLength: number;
+	defaultLength?: number;
+	timePickerPrecision?: number;
 };
 
 export type Day = keyof SettingsState['schedule'];
@@ -45,3 +48,5 @@ export type DayOpeningHours = {
 		list: OpeningHoursSlot[];
 	};
 };
+
+export type SettingsCalendar = {};

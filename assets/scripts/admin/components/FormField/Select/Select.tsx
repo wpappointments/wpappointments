@@ -1,15 +1,14 @@
 import {
-	Control,
 	Controller,
 	DeepRequired,
 	FieldError,
-	FieldErrors,
 	FieldErrorsImpl,
 	FieldValues,
 	Merge,
 	Path,
 	PathValue,
 	RegisterOptions,
+	useFormContext,
 } from 'react-hook-form';
 import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -18,8 +17,6 @@ import FormField from '../FormField';
 import { fieldLabel } from '../FormField.module.css';
 
 type Props<T extends FieldValues> = {
-	control: Control<T, any>;
-	errors: FieldErrors<T>;
 	name: Path<T>;
 	label: string;
 	rules?: Omit<
@@ -32,6 +29,7 @@ type Props<T extends FieldValues> = {
 		value: string;
 	}[];
 	onChange?: (value: string) => void;
+	fullWidth?: boolean;
 };
 
 export type FormFieldError<T extends FieldValues> =
@@ -40,19 +38,22 @@ export type FormFieldError<T extends FieldValues> =
 	| undefined;
 
 export default function Select<T extends FieldValues>({
-	control,
-	errors,
 	label,
 	name,
 	rules,
 	options,
 	defaultValue,
 	onChange,
+	fullWidth = false,
 }: Props<T>) {
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext();
 	const error: FormFieldError<T> = errors[name];
 
 	return (
-		<FormField>
+		<FormField isFullWidth={fullWidth}>
 			<label className={fieldLabel} htmlFor={name}>
 				{label}
 				{rules?.required && '*'}

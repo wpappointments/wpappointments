@@ -33,6 +33,7 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 		lastName: '',
 		phoneNumber: '',
 		companyName: '',
+		clockType: '24',
 	},
 	schedule: {
 		monday: getDefaultOpeningHours('monday'),
@@ -44,8 +45,10 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 		sunday: getDefaultOpeningHours('sunday'),
 	},
 	appointments: {
-		defaultLength: 30,
+		defaultLength: undefined,
+		timePickerPrecision: undefined,
 	},
+	calendar: {},
 };
 
 export const actions = {
@@ -164,6 +167,9 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 };
 
 export const selectors = {
+	getAllSettings(state: State) {
+		return state.settings;
+	},
 	getGeneralSettings(state: State) {
 		return state.settings.general;
 	},
@@ -172,6 +178,9 @@ export const selectors = {
 	},
 	getAppointmentsSettings(state: State) {
 		return state.settings.appointments;
+	},
+	getCalendarSettings(state: State) {
+		return state.settings.calendar;
 	},
 };
 
@@ -193,7 +202,9 @@ function* getSettings(): Generator<
 }
 
 export const resolvers = {
+	getAllSettings: getSettings,
 	getGeneralSettings: getSettings,
 	getScheduleSettings: getSettings,
 	getAppointmentsSettings: getSettings,
+	getCalendarSettings: getSettings,
 };

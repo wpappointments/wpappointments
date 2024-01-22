@@ -1,12 +1,20 @@
-import { useForm } from 'react-hook-form';
-import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+} from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
+import useFillFormValues from '~/hooks/useFillFormValues';
 import { store } from '~/store/store';
 import { formActions } from '../Settings.module.css';
-import Form from '~/admin/components/Form/Form';
+import { HtmlForm, withForm } from '~/admin/components/Form/Form';
 import Input from '~/admin/components/FormField/Input/Input';
+import Select from '~/admin/components/FormField/Select/Select';
+import FormFieldSet from '~/admin/components/FormFieldSet/FormFieldSet';
 import { card } from 'global.module.css';
 
 type Fields = {
@@ -14,32 +22,17 @@ type Fields = {
 	lastName: string;
 	phoneNumber: string;
 	companyName: string;
+	clockType: 12 | 24;
 };
 
-export default function GeneralSettings() {
-	const {
-		control,
-		handleSubmit,
-		setValue,
-		formState: { errors },
-	} = useForm<Fields>();
-
+export default withForm<Fields>(function GeneralSettings() {
 	const dispatch = useDispatch(store);
 
-	useSelect(() => {
-		const appStore = select(store);
-		const settings = appStore.getGeneralSettings();
-
-		if ('firstName' in settings) {
-			const { firstName, lastName, phoneNumber } = settings;
-
-			setValue('firstName', firstName);
-			setValue('lastName', lastName);
-			setValue('phoneNumber', phoneNumber);
-		}
-
-		return settings;
+	const settings = useSelect(() => {
+		return select(store).getGeneralSettings();
 	}, []);
+
+	useFillFormValues(settings);
 
 	const onSubmit = async (data: Fields) => {
 		await apiFetch({
@@ -56,45 +49,61 @@ export default function GeneralSettings() {
 			<CardHeader>
 				<Text size="title">Profile and company details</Text>
 			</CardHeader>
-			<CardBody>
-				<Form onSubmit={handleSubmit(onSubmit)}>
-					<Input
-						control={control}
-						errors={errors}
-						name="firstName"
-						label="First name"
-						placeholder="Eg. John"
-						rules={{
-							required: true,
-						}}
-					/>
+			<HtmlForm onSubmit={onSubmit}>
+				<CardBody>
+					<FormFieldSet>
+						<Input
+							name="firstName"
+							label="First name"
+							placeholder="Eg. John"
+							rules={{
+								required: true,
+							}}
+						/>
 
-					<Input
-						control={control}
-						errors={errors}
-						name="lastName"
-						label="Last name"
-						placeholder="Eg. Doe"
-						rules={{
-							required: true,
-						}}
-					/>
+						<Input
+							name="lastName"
+							label="Last name"
+							placeholder="Eg. Doe"
+							rules={{
+								required: true,
+							}}
+						/>
 
-					<Input
-						control={control}
-						errors={errors}
-						name="phoneNumber"
-						label="Phone number"
-						placeholder="Eg. +1992334211"
-					/>
-
+						<Input
+							name="phoneNumber"
+							label="Phone number"
+							placeholder="Eg. +1992334211"
+						/>
+					</FormFieldSet>
+				</CardBody>
+				<CardHeader>
+					<Text size="title">General</Text>
+				</CardHeader>
+				<CardBody>
+					<FormFieldSet>
+						<Select
+							name="clockType"
+							label="Clock type"
+							rules={{
+								required: true,
+							}}
+							options={[
+								{ label: '12 hours', value: '12' },
+								{ label: '24 hours', value: '24' },
+							]}
+							defaultValue="24"
+						/>
+					</FormFieldSet>
+				</CardBody>
+				<CardFooter>
 					<div className={formActions}>
 						<Button type="submit" variant="primary">
 							Save changes
 						</Button>
 					</div>
-				</Form>
-			</CardBody>
+				</CardFooter>
+			</HtmlForm>
 		</Card>
 	);
-}
+});

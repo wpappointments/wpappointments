@@ -63,11 +63,13 @@
 		"@wordpress/i18n": "^4.41.0",
 		"@wordpress/icons": "^9.39.0",
 		"@wordpress/url": "^3.49.0",
+		"date-fns": "^3.3.0",
 		"immer": "^10.0.2",
 		"obj-str": "^1.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.46.1",
+		"use-lilius": "^2.0.4",
 		"valibot": "^0.25.0"
 	}
 }

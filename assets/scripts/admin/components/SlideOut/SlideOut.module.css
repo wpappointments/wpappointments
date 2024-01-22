@@ -4,30 +4,47 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
-	width: calc( 100% - calc( 80px * var( --nesting-level ) ) );
+	/* right: calc(600px * calc( var( --nesting-level ) - 1 ) ); */
+	/* width: calc( 100% - calc( 80px * var( --nesting-level ) ) ); */
+	/* width: min(100%, 600px); */
+	width: min( 100%, 700px );
 	transform: translateX( 100px );
-	transition: transform 0.2s ease-in-out;
-	z-index: 1002;
+	transition: transform 0.2s ease-in-out, width 0.2s ease-in-out,
+		right 0.1s ease-in-out;
+	z-index: 1;
 	cursor: auto;
 	pointer-events: unset;
+	border-right: 1px solid #e5e5e5;
 }
 
 .slide-out-open {
 	transform: translateX( 0 );
+	z-index: 1003;
 }
 
 .slide-out-overlay {
 	position: fixed;
 	top: 32px;
 	left: 160px;
-	right: 0;
 	bottom: 0;
+	right: calc(
+		calc( 80px * var( --total-levels ) ) -
+			calc( 80px * var( --nesting-level ) )
+	);
 	z-index: 1001;
 	background-color: rgba( 0, 0, 0, 0.5 );
 	overflow-x: hidden;
-	transition: opacity 0.1s ease-in-out;
+	transition: opacity 0.1s ease-in-out, right 0.2s ease-in-out;
 	opacity: var( --is-open );
 	cursor: pointer;
+}
+
+.slide-out-side-panel {
+	right: 0;
+}
+
+.slide-out-wide {
+	width: calc( 100% - calc( 80px * var( --nesting-level ) ) );
 }
 
 .slide-out .slide-out-overlay {
@@ -59,11 +76,12 @@
 }
 
 .header {
-	width: 100%;
 	border-bottom: 1px solid #e5e5e5;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	padding-left: var( --wpappointments-large-gap );
+	padding-right: var( --wpappointments-large-gap );
 	height: var( --wpappointments-layout-header-height );
 }
 

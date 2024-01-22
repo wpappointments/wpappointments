@@ -37,11 +37,7 @@ export default function Dashboard() {
 	});
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<Fields>();
+	const { handleSubmit } = useForm<Fields>();
 
 	const onSubmit = (data: Fields) => {
 		setFilters(data);
@@ -91,8 +87,6 @@ export default function Dashboard() {
 								onSubmit={handleSubmit(onSubmit)}
 							>
 								<Select
-									control={control}
-									errors={errors}
 									name="status"
 									label="Status"
 									options={[
@@ -118,8 +112,6 @@ export default function Dashboard() {
 									}}
 								/>
 								<Select
-									control={control}
-									errors={errors}
 									name="period"
 									label="Show appointments for next"
 									options={[
@@ -155,17 +147,32 @@ export default function Dashboard() {
 				<SlideOut
 					title={__('Create New Appointment')}
 					id="add-appointment"
+					sidePanel
 				>
 					<AppointmentForm
 						mode="create"
 						onSubmitComplete={closeCurrentSlideOut}
 					/>
 				</SlideOut>
-				<SlideOut title={__('Edit Appointment')} id="edit-appointment">
+				<SlideOut
+					title={__('Edit Appointment')}
+					id="edit-appointment"
+					sidePanel
+				>
 					<AppointmentForm
 						mode="edit"
 						onSubmitComplete={closeCurrentSlideOut}
 					/>
+				</SlideOut>
+				<SlideOut
+					title={__('Find time')}
+					id="find-time"
+					headerRightSlot={<Button>Hello</Button>}
+					style={{
+						right: '700px',
+					}}
+				>
+					<div>Find time</div>
 				</SlideOut>
 			</LayoutDefault>
 		</StateContextProvider>
