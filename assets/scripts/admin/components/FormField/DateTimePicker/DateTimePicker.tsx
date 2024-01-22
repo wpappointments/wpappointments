@@ -51,7 +51,18 @@ export default function DateTimePicker<T extends FieldValues>({
 				rules={rules}
 				defaultValue={defaultValue}
 				render={({ field: { value, onChange } }) => (
-					<WPDateTimePicker onChange={onChange} currentDate={value} />
+					<WPDateTimePicker
+						onChange={onChange}
+						currentDate={value}
+						isInvalidDate={(date) => {
+							return (
+								new Date() > date ||
+								date.getDay() === 0 ||
+								date.getDay() === 6
+							);
+						}}
+						startOfWeek={1}
+					/>
 				)}
 			/>
 			{error && (
