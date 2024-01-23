@@ -39,18 +39,23 @@
 		"after-start": "pnpm composer install && pnpm activate-plugin",
 		"test": "pnpm test-php && pnpm test-wp",
 		"test-php": "wp-env run tests-wordpress --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest -- --configuration phpunit-php.xml --coverage --coverage-html coverage",
-		"test-wp": "wp-env run tests-wordpress --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest -- --configuration phpunit-wp.xml --coverage --coverage-html coverage"
+		"test-wp": "wp-env run tests-wordpress --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/pest -- --configuration phpunit-wp.xml --coverage --coverage-html coverage",
+		"test-js": "jest"
 	},
 	"devDependencies": {
+		"@testing-library/react": "^14.1.2",
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
+		"@types/jest": "^29.5.11",
 		"@types/react": "^18.2.21",
 		"@types/react-dom": "^18.2.7",
 		"@wordpress/env": "^8.7.0",
 		"@wordpress/prettier-config": "^2.24.0",
 		"@wordpress/scripts": "^26.19.0",
 		"husky": "^8.0.3",
+		"jest": "^29.7.0",
 		"lint-staged": "^14.0.1",
 		"prettier": "npm:wp-prettier@2.8.5",
+		"ts-jest": "^29.1.2",
 		"typed-css-modules": "^0.8.1"
 	},
 	"dependencies": {
