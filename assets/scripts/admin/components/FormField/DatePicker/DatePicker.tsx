@@ -17,34 +17,34 @@ import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 import WPDatePicker from '../WPDatePicker/WPDatePicker';
 
-type Props<T extends FieldValues> = {
-	name: Path<T>;
+type Props<TFields extends FieldValues> = {
+	name: Path<TFields>;
 	label: string;
 	rules?: Omit<
-		RegisterOptions<T, Path<T>>,
+		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
-	defaultValue?: PathValue<T, Path<T>>;
+	defaultValue?: PathValue<TFields, Path<TFields>>;
 } & DateTimePickerProps;
 
-export type FormFieldError<T extends FieldValues> =
+export type FormFieldError<TFields extends FieldValues> =
 	| FieldError
-	| Merge<FieldError, FieldErrorsImpl<DeepRequired<T>[string]>>
+	| Merge<FieldError, FieldErrorsImpl<DeepRequired<TFields>[string]>>
 	| undefined;
 
-export default function DatePicker<T extends FieldValues>({
+export default function DatePicker<TFields extends FieldValues>({
 	label,
 	name,
 	rules,
 	defaultValue,
 	isInvalidDate,
-}: Props<T>) {
+}: Props<TFields>) {
 	const {
 		control,
 		formState: { errors },
 	} = useFormContext();
 
-	const error: FormFieldError<T> = errors[name];
+	const error: FormFieldError<TFields> = errors[name];
 
 	return (
 		<FormField>
@@ -84,7 +84,7 @@ export default function DatePicker<T extends FieldValues>({
 			/>
 			{error && (
 				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<T>(error)}
+					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}
 		</FormField>

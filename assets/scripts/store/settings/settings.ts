@@ -33,7 +33,7 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 		lastName: '',
 		phoneNumber: '',
 		companyName: '',
-		clockType: '24',
+		clockType: 24,
 	},
 	schedule: {
 		monday: getDefaultOpeningHours('monday'),

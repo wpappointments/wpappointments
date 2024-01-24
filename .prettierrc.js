@@ -26,7 +26,12 @@ module.exports = {
 	plugins: [ '@trivago/prettier-plugin-sort-imports' ],
 	overrides: [
 		{
-			files: [ 'assets/**/*.ts', 'assets/**/*.tsx' ],
+			files: [
+				'assets/**/*.ts',
+				'assets/**/*.tsx',
+				'tests/js/**/*.ts',
+				'tests/js/**/*.tsx',
+			],
 			options: {
 				parenSpacing: false,
 			},

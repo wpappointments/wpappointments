@@ -25,7 +25,7 @@ type Fields = {
 	clockType: 12 | 24;
 };
 
-export default withForm<Fields>(function GeneralSettings() {
+export default withForm(function GeneralSettings() {
 	const dispatch = useDispatch(store);
 
 	const settings = useSelect(() => {
