@@ -11,7 +11,6 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { DateTimePickerProps } from '@wordpress/components/build-types/date-time/types';
-// import { DatePicker as WPDatePicker } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
