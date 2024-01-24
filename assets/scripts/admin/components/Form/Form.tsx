@@ -15,8 +15,10 @@ type FormProps = {
 	children: React.ReactNode;
 };
 
-export default function Form({ children }: FormProps) {
-	const methods = useForm();
+function Form({ children }: FormProps) {
+	const methods = useForm<{
+		hello: string;
+	}>();
 
 	return <FormProvider {...methods}>{children}</FormProvider>;
 }
@@ -26,7 +28,7 @@ export function HtmlForm<TFields extends FieldValues>({
 	children,
 	className,
 }: Props<TFields>) {
-	const { handleSubmit } = useFormContext();
+	const { handleSubmit } = useFormContext<TFields>();
 
 	return (
 		<form

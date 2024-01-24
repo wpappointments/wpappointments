@@ -16,37 +16,37 @@ import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 import { fieldLabel } from '../FormField.module.css';
 
-type Props<T extends FieldValues> = {
-	name: Path<T>;
+type Props<TFields extends FieldValues> = {
+	name: Path<TFields>;
 	label: string;
 	type?: 'text' | 'number' | 'email' | 'password';
 	placeholder: string;
 	rules?: Omit<
-		RegisterOptions<T, Path<T>>,
+		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
-	defaultValue?: PathValue<T, Path<T>>;
+	defaultValue?: PathValue<TFields, Path<TFields>>;
 };
 
-export type FormFieldError<T extends FieldValues> =
+export type FormFieldError<TFields extends FieldValues> =
 	| FieldError
-	| Merge<FieldError, FieldErrorsImpl<DeepRequired<T>[string]>>
+	| Merge<FieldError, FieldErrorsImpl<DeepRequired<TFields>[string]>>
 	| undefined;
 
-export default function Input<T extends FieldValues>({
+export default function Input<TFields extends FieldValues>({
 	label,
 	name,
 	type = 'text',
 	placeholder,
 	rules,
 	defaultValue,
-}: Props<T>) {
+}: Props<TFields>) {
 	const {
 		control,
 		formState: { errors },
-	} = useFormContext();
+	} = useFormContext<TFields>();
 
-	const error: FormFieldError<T> = errors[name];
+	const error: FormFieldError<TFields> = errors[name];
 
 	return (
 		<FormField>
@@ -73,7 +73,7 @@ export default function Input<T extends FieldValues>({
 			/>
 			{error && (
 				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<T>(error)}
+					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}
 		</FormField>

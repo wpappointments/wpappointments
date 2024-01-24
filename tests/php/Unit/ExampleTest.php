@@ -1,7 +1,10 @@
 <?php
 
-uses(\TestsPHP\TestCase::class);
+uses( \TestsPHP\TestCase::class );
 
-test('example', function () {
-    expect(true)->toBeTrue();
-});
+test(
+	'example',
+	function () {
+		expect( true )->toBeTrue();
+	}
+);

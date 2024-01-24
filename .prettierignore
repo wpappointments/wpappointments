@@ -2,7 +2,6 @@ vendor
 build
 dist
 coverage
-tests
 node_modules
 *-lock.json
 *-lock.yaml

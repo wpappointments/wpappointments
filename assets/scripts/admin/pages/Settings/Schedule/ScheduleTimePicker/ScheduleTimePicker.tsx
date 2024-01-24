@@ -6,8 +6,6 @@ import {
 import Number from '~/admin/components/FormField/Number/Number';
 
 type Props = {
-	control: any;
-	errors: any;
 	day: string;
 	index: number;
 	values: any;
@@ -17,8 +15,6 @@ type Props = {
 };
 
 export default function ScheduleTimePicker({
-	control,
-	errors,
 	day,
 	index,
 	values,
@@ -30,8 +26,6 @@ export default function ScheduleTimePicker({
 		<div className={timePicker}>
 			<div className={timePickerControl}>
 				<Number
-					control={control}
-					errors={errors}
 					key={`${day}.slots.list.${index}.${type}.hour`}
 					name={`${day}.slots.list.${index}.${type}.hour`}
 					placeholder="00"
@@ -54,8 +48,6 @@ export default function ScheduleTimePicker({
 				/>
 				<span className={timePickerSeparator}>:</span>
 				<Number
-					control={control}
-					errors={errors}
 					key={`${day}.slots.list.${index}.${type}.minute`}
 					name={`${day}.slots.list.${index}.${type}.minute`}
 					placeholder="00"
