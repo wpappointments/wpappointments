@@ -1,16 +1,16 @@
 import { addMinutes, differenceInMinutes } from 'date-fns';
 import { OpeningHoursSlot } from '~/store/settings/settings.types';
 
-export function isTimeRangeInAvailableRange(
+export function timeRangeContainsAnother(
 	timeRange: readonly [Date, Date],
-	availableRange: readonly [Date, Date]
+	anotherRange: readonly [Date, Date]
 ): boolean {
-	const [start, end] = timeRange;
-	const [availableStart, availableEnd] = availableRange;
+	const [timeStart, timeEnd] = timeRange;
+	const [compareStart, compareEnd] = anotherRange;
 
 	return (
-		start.getTime() >= availableStart.getTime() &&
-		end.getTime() <= availableEnd.getTime()
+		timeStart.getTime() >= compareStart.getTime() &&
+		timeEnd.getTime() <= compareEnd.getTime()
 	);
 }
 
@@ -84,7 +84,7 @@ export function getRangeAvailableSlots(
 		dateHourNext.setSeconds(0);
 		dateHourNext.setMilliseconds(0);
 
-		if (isTimeRangeInAvailableRange([dateHour, dateHourNext], slot)) {
+		if (timeRangeContainsAnother([dateHour, dateHourNext], slot)) {
 			availableSlots.push(dateHour);
 		}
 	}

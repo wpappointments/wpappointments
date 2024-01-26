@@ -1,106 +1,96 @@
 import {
 	getRangeAvailableSlots,
 	getDayRanges,
-	isTimeRangeInAvailableRange,
+	timeRangeContainsAnother,
 	getDayRange,
 	getRangesAvailableSlots,
 } from '~/utils/appointments';
-import { createAppointmentRange } from './helpers/appointment';
+import { createTimeRange } from './helpers/datetime';
 import { createTimeSlot } from './helpers/schedule';
 
-describe('isTimeRangeInAvailableRange() util', () => {
+describe('timeRangeContainsAnother() util', () => {
 	test('one date range fully inside the other range', () => {
-		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date12pm = new Date(2021, 1, 1, 12, 0); // 12:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const inRange = isTimeRangeInAvailableRange(
-			[date10am, date12pm],
-			[date8am, date2pm]
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([10, 0], [12, 0]), // 10:00 - 12:00
+			createTimeRange([8, 0], [14, 0]) // 8:00 - 14:00
 		);
 
 		expect(inRange).toBe(true);
 	});
 
 	test('one date range fully outside of the other range', () => {
-		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date12pm = new Date(2021, 1, 1, 12, 0); // 12:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const range1 = [date8am, date10am] as const; // 8:00 - 10:00
-		const range2 = [date12pm, date2pm] as const; // 12:00 - 14:00
-
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([8, 0], [10, 0]), // 8:00 - 10:00
+			createTimeRange([12, 0], [14, 0]) // 12:00 - 14:00
+		);
 
 		expect(inRange).toBe(false);
 	});
 
 	test('one date range partially inside the other range', () => {
-		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date12pm = new Date(2021, 1, 1, 12, 0); // 12:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const range1 = [date8am, date12pm] as const; // 10:00 - 12:00
-		const range2 = [date10am, date2pm] as const; // 8:00 - 14:00
-
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([8, 0], [12, 0]), // 8:00 - 12:00
+			createTimeRange([10, 0], [14, 0]) // 10:00 - 14:00
+		);
 
 		expect(inRange).toBe(false);
 	});
 
 	test('one date range fully inside the other range, touching start', () => {
-		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const range1 = [date8am, date10am] as const; // 8:00 - 10:00
-		const range2 = [date8am, date2pm] as const; // 8:00 - 14:00
-
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([8, 0], [10, 0]), // 8:00 - 10:00
+			createTimeRange([8, 0], [14, 0]) // 8:00 - 14:00
+		);
 
 		expect(inRange).toBe(true);
 	});
 
 	test('one date range fully inside the other range, touching end', () => {
-		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const range1 = [date10am, date2pm] as const; // 10:00 - 14:00
-		const range2 = [date8am, date2pm] as const; // 8:00 - 14:00
-
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([10, 0], [14, 0]), // 10:00 - 14:00
+			createTimeRange([8, 0], [14, 0]) // 8:00 - 14:00
+		);
 
 		expect(inRange).toBe(true);
 	});
 
 	test('one date range fully inside the other range, touching start and end = equal ranges', () => {
-		const date10am = new Date(2021, 1, 1, 10, 0); // 10:00
-		const date2pm = new Date(2021, 1, 1, 14, 0); // 14:00
-
-		const range1 = [date10am, date2pm] as const; // 10:00 - 14:00
-		const range2 = [date10am, date2pm] as const; // 8:00 - 14:00
-
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(
+			createTimeRange([10, 0], [14, 0]), // 10:00 - 14:00
+			createTimeRange([10, 0], [14, 0]) // 10:00 - 14:00
+		);
 
 		expect(inRange).toBe(true);
 	});
 
 	test('one date range inside the other, but with different dates', () => {
 		const date8am = new Date(2021, 1, 1, 8, 0); // 8:00
-		const date10am = new Date(2021, 1, 2, 10, 0); // 10:00
 		const date12pm = new Date(2021, 1, 1, 12, 0); // 12:00
+		const date10am = new Date(2021, 1, 2, 10, 0); // 10:00
 		const date2pm = new Date(2021, 1, 2, 14, 0); // 14:00
 
-		const range1 = [date8am, date12pm] as const; // 10:00 - 12:00
-		const range2 = [date10am, date2pm] as const; // 8:00 - 14:00
+		const range1 = [date8am, date12pm] as const; // 10:00 - 12:00 (first day)
+		const range2 = [date10am, date2pm] as const; // 8:00 - 14:00 (second day)
 
-		const inRange = isTimeRangeInAvailableRange(range1, range2);
+		const inRange = timeRangeContainsAnother(range1, range2);
 
 		expect(inRange).toBe(false);
+	});
+});
+
+describe('getDayRange() util', () => {
+	test('should return range for the day', () => {
+		const schedule = createTimeSlot([8, 0], [16, 30]);
+
+		const range = getDayRange(schedule);
+
+		// Starting time
+		expect(range[0].getHours()).toBe(8);
+		expect(range[0].getMinutes()).toBe(0);
+
+		// Ending time
+		expect(range[1].getHours()).toBe(16);
+		expect(range[1].getMinutes()).toBe(30);
 	});
 });
 
@@ -133,22 +123,6 @@ describe('getDayRanges() util', () => {
 	});
 });
 
-describe('getDayRange() util', () => {
-	test('should return range for the day', () => {
-		const schedule = createTimeSlot([8, 0], [16, 30]);
-
-		const range = getDayRange(schedule);
-
-		// Starting time
-		expect(range[0].getHours()).toBe(8);
-		expect(range[0].getMinutes()).toBe(0);
-
-		// Ending time
-		expect(range[1].getHours()).toBe(16);
-		expect(range[1].getMinutes()).toBe(30);
-	});
-});
-
 describe('getRangeAvailableSlots() util', () => {
 	test('should return available slots for default 60 min time range', () => {
 		const schedule = createTimeSlot([8, 0], [12, 0]);
@@ -176,7 +150,7 @@ describe('getRangeAvailableSlots() util', () => {
 
 	test('should return available slots when time range is 30 minutes', () => {
 		const schedule = createTimeSlot([8, 0], [12, 0]);
-		const appointmentRange = createAppointmentRange([8, 0], [8, 30]);
+		const appointmentRange = createTimeRange([8, 0], [8, 30]);
 
 		const slots = getRangeAvailableSlots(schedule, appointmentRange);
 
@@ -217,7 +191,7 @@ describe('getRangeAvailableSlots() util', () => {
 
 	test('should return available slots when time range is 15 minutes', () => {
 		const schedule = createTimeSlot([8, 0], [12, 0]);
-		const appointmentRange = createAppointmentRange([8, 0], [8, 15]);
+		const appointmentRange = createTimeRange([8, 0], [8, 15]);
 
 		const slots = getRangeAvailableSlots(schedule, appointmentRange);
 
@@ -290,7 +264,7 @@ describe('getRangeAvailableSlots() util', () => {
 
 	test('should return available slots when time range is 45 minutes', () => {
 		const schedule = createTimeSlot([8, 0], [12, 0]);
-		const appointmentRange = createAppointmentRange([8, 0], [8, 45]);
+		const appointmentRange = createTimeRange([8, 0], [8, 45]);
 
 		const slots = getRangeAvailableSlots(schedule, appointmentRange);
 
@@ -319,7 +293,7 @@ describe('getRangeAvailableSlots() util', () => {
 
 	test('should return available slots when time range is 103 minutes', () => {
 		const schedule = createTimeSlot([8, 0], [16, 0]);
-		const appointmentRange = createAppointmentRange([8, 0], [9, 43]);
+		const appointmentRange = createTimeRange([8, 0], [9, 43]);
 
 		const slots = getRangeAvailableSlots(schedule, appointmentRange);
 
