@@ -5,6 +5,7 @@ import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
 import { is } from 'valibot';
+import { getNextRoundHourDate } from '~/utils/datetime';
 import { APIResponse } from '~/utils/fetch';
 import resolve from '~/utils/resolve';
 import { displayErrorToast } from '~/utils/toast';
@@ -50,7 +51,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	onSubmitComplete,
 	defaultDate,
 }: FormProps) {
-	const { reset, setValue, getValues } = useFormContext();
+	const { reset, setValue, getValues } = useFormContext<Fields>();
 	const { invalidate } = useStateContext();
 	const { createAppointment, updateAppointment } = appointmentsApi({
 		invalidateCache: invalidate,
@@ -173,6 +174,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 							);
 						}}
 						startOfWeek={1}
+						defaultValue={defaultDate || getNextRoundHourDate()}
 						events={[
 							{
 								date: new Date('2024-01-22T21:22:50.694Z'),
@@ -190,7 +192,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					/>
 				</FormFieldSet>
 
-				<StartEndTimePicker />
+				<StartEndTimePicker date={new Date(getValues('date'))} />
 			</FormFieldSet>
 
 			<div className={formActions}>

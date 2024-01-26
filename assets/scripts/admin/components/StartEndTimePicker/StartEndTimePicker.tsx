@@ -1,15 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
-import { differenceInMinutes, addMinutes } from 'date-fns';
+import { differenceInMinutes, addMinutes, addHours } from 'date-fns';
+import { getRangesAvailableSlots } from '~/utils/appointments';
+import { createTimeRangeFromMinutes } from '~/utils/datetime';
+import { formatTimeForPicker } from '~/utils/format';
+import { SettingsSchedule } from '~/store/settings/settings.types';
 import { store } from '~/store/store';
 import Select from '../FormField/Select/Select';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 
-export default function StartEndTimePicker() {
-	const { getValues, setValue, watch } = useFormContext();
+export type StartEndTimePickerProps = {
+	date: Date;
+};
 
-	const { appointments, general } = useSelect(() => {
+type Fields = {
+	timeHourStart: string;
+	timeMinuteStart: string;
+	timeHourEnd: string;
+	timeMinuteEnd: string;
+	timeType: 'am' | 'pm';
+};
+
+const daysOfWeek = new Map<number, keyof SettingsSchedule>([
+	[0, 'sunday'],
+	[1, 'monday'],
+	[2, 'tuesday'],
+	[3, 'wednesday'],
+	[4, 'thursday'],
+	[5, 'friday'],
+	[6, 'saturday'],
+]);
+
+export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
+	const { getValues, setValue, watch } = useFormContext<Fields>();
+
+	const { appointments, general, schedule } = useSelect(() => {
 		return select(store).getAllSettings();
 	}, []);
 
@@ -21,16 +47,73 @@ export default function StartEndTimePicker() {
 	const type = clockType || 24;
 
 	const [duration, setDuration] = useState(length);
-	const [endMinuteMinValue, setEndMinuteMinValue] = useState(0);
+
+	const [availableHours, setAvailableHours] = useState<Set<string>>();
+	const [availableMinutes, setAvailableMinutes] =
+		useState<Map<string, string[]>>();
+
+	const [minEndHour, setMinEndHour] = useState(0);
+	const [minEndMinute, setMinEndMinute] = useState(0);
+
+	useEffect(() => {
+		if (!date) {
+			return;
+		}
+
+		if (typeof date === 'string') {
+			date = new Date(date);
+		}
+
+		const daySchedule = daysOfWeek.get(date.getDay());
+
+		if (!daySchedule) {
+			return;
+		}
+
+		const monday = schedule[daySchedule].slots.list;
+
+		const availableSlots = getRangesAvailableSlots(
+			monday,
+			createTimeRangeFromMinutes(30)
+		);
+
+		const hours = new Set<string>();
+		const minutes = new Map<string, string[]>();
+
+		for (const slot of availableSlots) {
+			slot.forEach((date) => {
+				const hour = formatTimeForPicker(date.getHours());
+
+				hours.add(hour);
+
+				if (!minutes.has(hour)) {
+					minutes.set(hour, []);
+				}
+
+				minutes.get(hour)?.push(formatTimeForPicker(date.getMinutes()));
+			});
+		}
+
+		setAvailableHours(hours);
+		setAvailableMinutes(minutes);
+
+		const startDate = date;
+		const endDate = addMinutes(startDate, duration);
+
+		if (endDate.getHours() === startDate.getHours()) {
+			setMinEndMinute(startDate.getMinutes() + precision);
+		} else {
+			setMinEndMinute(0);
+		}
+	}, [schedule, date]);
 
 	useEffect(() => {
 		const now = new Date();
-		const year = now.getFullYear();
-		const month = now.getMonth();
-		const day = now.getDate();
-		const hour = now.getHours();
+		now.setMinutes(0);
+		now.setSeconds(0);
+		now.setMilliseconds(0);
 
-		const start = new Date(year, month, day, hour + 1, 0);
+		const start = addHours(now, 1);
 		const end = addMinutes(start, length);
 
 		setDuration(length);
@@ -61,10 +144,10 @@ export default function StartEndTimePicker() {
 				name
 			);
 
-			const hourStart = parseInt(value['timeHourStart']) || 0;
-			const minuteStart = parseInt(value['timeMinuteStart']) || 0;
-			const hourEnd = parseInt(value['timeHourEnd']) || 0;
-			const minuteEnd = parseInt(value['timeMinuteEnd']) || 0;
+			const hourStart = parseInt(value['timeHourStart'] || '0');
+			const minuteStart = parseInt(value['timeMinuteStart'] || '0');
+			const hourEnd = parseInt(value['timeHourEnd'] || '0');
+			const minuteEnd = parseInt(value['timeMinuteEnd'] || '0');
 
 			if (type === 'change' && editingStartDate) {
 				const startDate = new Date(
@@ -85,6 +168,13 @@ export default function StartEndTimePicker() {
 						'timeMinuteEnd',
 						endDate.getMinutes().toString().padStart(2, '0')
 					);
+					setMinEndHour(hourStart);
+				}
+
+				if (endDate.getHours() === startDate.getHours()) {
+					setMinEndMinute(minuteStart + precision);
+				} else {
+					setMinEndMinute(0);
 				}
 			}
 
@@ -94,27 +184,37 @@ export default function StartEndTimePicker() {
 					month,
 					day,
 					hourStart,
-					minuteStart
+					minuteStart,
+					0,
+					0
 				);
 
-				const endDate = new Date(year, month, day, hourEnd, minuteEnd);
+				const endDate = new Date(
+					year,
+					month,
+					day,
+					hourEnd,
+					minuteEnd,
+					0,
+					0
+				);
 
 				if (!isNaN(endDate.getTime()) && !isNaN(startDate.getTime())) {
 					setDuration(differenceInMinutes(endDate, startDate));
 				}
-			}
 
-			if (minuteStart + duration >= 60) {
-				setEndMinuteMinValue(0);
-			} else {
-				setEndMinuteMinValue(minuteStart + precision);
+				if (endDate.getHours() === startDate.getHours()) {
+					setMinEndMinute(minuteStart + precision);
+				} else {
+					setMinEndMinute(0);
+				}
 			}
 		});
 
 		return () => {
 			subscription.unsubscribe();
 		};
-	}, [watch, duration]);
+	}, [watch, duration, precision]);
 
 	return (
 		<FormFieldSet>
@@ -126,7 +226,7 @@ export default function StartEndTimePicker() {
 						rules={{
 							required: true,
 						}}
-						options={createHourOptions(type)}
+						options={createHourOptions(availableHours, type)}
 						fullWidth
 					/>
 
@@ -136,7 +236,11 @@ export default function StartEndTimePicker() {
 						rules={{
 							required: true,
 						}}
-						options={createMinuteOptions(precision)}
+						options={createMinuteOptions(
+							availableMinutes,
+							getValues('timeHourStart'),
+							precision
+						)}
 						fullWidth
 					/>
 
@@ -163,8 +267,9 @@ export default function StartEndTimePicker() {
 							required: true,
 						}}
 						options={createHourOptions(
+							availableHours,
 							type,
-							parseInt(getValues('timeHourStart'))
+							minEndHour
 						)}
 						fullWidth
 					/>
@@ -176,8 +281,10 @@ export default function StartEndTimePicker() {
 							required: true,
 						}}
 						options={createMinuteOptions(
+							availableMinutes,
+							getValues('timeHourEnd'),
 							precision,
-							endMinuteMinValue
+							minEndMinute
 						)}
 						fullWidth
 					/>
@@ -202,8 +309,19 @@ export default function StartEndTimePicker() {
 	);
 }
 
-function createHourOptions(clockType: 12 | 24 = 24, minHour = 0) {
-	const hours = [];
+function createHourOptions(
+	availableHours: Set<string> | undefined,
+	clockType: 12 | 24 = 24,
+	minHour = 0
+) {
+	const hours: {
+		label: string;
+		value: string;
+	}[] = [];
+
+	if (!availableHours) {
+		return hours;
+	}
 
 	const is24 = clockType === 24;
 	const hoursLimit = is24 ? 24 : 12;
@@ -220,7 +338,9 @@ function createHourOptions(clockType: 12 | 24 = 24, minHour = 0) {
 		}
 
 		hours.push({
-			label: i > 7 ? `⚈ ${hour}` : `⚆ ${hour}`,
+			label: availableHours.has(hour.toString())
+				? `⚈ ${hour}`
+				: `⚆ ${hour}`,
 			value: hour,
 		});
 	}
@@ -233,14 +353,21 @@ function createHourOptions(clockType: 12 | 24 = 24, minHour = 0) {
 	return hours;
 }
 
-function createMinuteOptions(precision: number = 30, minMinute = 0) {
+function createMinuteOptions(
+	availableMinutes: Map<string, string[]> | undefined,
+	currentHour: string,
+	precision: number = 30,
+	minMinute = 0
+) {
 	const minutes = [];
 
 	for (let i = minMinute; i < 60; i += precision) {
 		const minute = i.toString().padStart(2, '0');
 
 		minutes.push({
-			label: i > 7 ? `⚈ ${minute}` : `⚆ ${minute}`,
+			label: availableMinutes?.has(currentHour)
+				? `⚈ ${minute}`
+				: `⚆ ${minute}`,
 			value: minute,
 		});
 	}
