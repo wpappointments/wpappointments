@@ -3,7 +3,7 @@ module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
 	moduleNameMapper: {
-		'~/(.*)$': '<rootDir>/assets/scripts/$1',
+		'~/(.*)$': '<rootDir>/assets/backend/$1',
 		'global.module.css': '<rootDir>/assets/styles/global.module.css',
 	},
 };
