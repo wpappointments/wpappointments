@@ -1,14 +1,13 @@
 import {
-	Control,
 	Controller,
 	DeepRequired,
 	FieldError,
-	FieldErrors,
 	FieldErrorsImpl,
 	FieldValues,
 	Merge,
 	Path,
 	RegisterOptions,
+	useFormContext,
 } from 'react-hook-form';
 import { __ } from '@wordpress/i18n';
 import { NumberControl } from '~/utils/experimental';
@@ -16,15 +15,13 @@ import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 import { fieldLabel } from '../FormField.module.css';
 
-type Props<T extends FieldValues> = {
-	control: Control<T, any>;
-	errors: FieldErrors<T>;
-	name: Path<T>;
+type Props<TFields extends FieldValues> = {
+	name: Path<TFields>;
 	label?: string;
 	placeholder: string;
 	disabled?: boolean;
 	rules?: Omit<
-		RegisterOptions<T, Path<T>>,
+		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 	min?: number;
@@ -33,14 +30,12 @@ type Props<T extends FieldValues> = {
 	onChange?: (e: string | undefined) => void;
 };
 
-export type FormFieldError<T extends FieldValues> =
+export type FormFieldError<TFields extends FieldValues> =
 	| FieldError
-	| Merge<FieldError, FieldErrorsImpl<DeepRequired<T>[string]>>
+	| Merge<FieldError, FieldErrorsImpl<DeepRequired<TFields>[string]>>
 	| undefined;
 
-export default function Number<T extends FieldValues>({
-	control,
-	errors,
+export default function Number<TFields extends FieldValues>({
 	label,
 	name,
 	placeholder,
@@ -50,8 +45,13 @@ export default function Number<T extends FieldValues>({
 	max,
 	spinControls = 'custom',
 	onChange: onChangeProp,
-}: Props<T>) {
-	const error: FormFieldError<T> = errors[name];
+}: Props<TFields>) {
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext<TFields>();
+
+	const error: FormFieldError<TFields> = errors[name];
 
 	return (
 		<FormField>
@@ -85,7 +85,7 @@ export default function Number<T extends FieldValues>({
 			/>
 			{error && (
 				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<T>(error)}
+					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}
 		</FormField>

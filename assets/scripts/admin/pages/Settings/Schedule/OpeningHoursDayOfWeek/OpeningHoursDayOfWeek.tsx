@@ -19,13 +19,9 @@ import Toggle from '~/admin/components/FormField/Toggle/Toggle';
 export default function OpeningHoursDayOfWeek({
 	values,
 	showCopyToAllDays = false,
-	control,
-	errors,
 }: {
 	values: DayOpeningHours;
 	showCopyToAllDays?: boolean;
-	control: any;
-	errors: any;
 }) {
 	const {
 		updateWorkingHours,
@@ -77,8 +73,6 @@ export default function OpeningHoursDayOfWeek({
 			>
 				<ScheduleTimePicker
 					{...{
-						control,
-						errors,
 						day,
 						index,
 						values,
@@ -90,8 +84,6 @@ export default function OpeningHoursDayOfWeek({
 				—
 				<ScheduleTimePicker
 					{...{
-						control,
-						errors,
 						day,
 						index,
 						values,
@@ -140,8 +132,6 @@ export default function OpeningHoursDayOfWeek({
 				<div className={dayLabel}>
 					<span>{day}:</span>
 					<Toggle
-						control={control}
-						errors={errors}
 						name={`${day}.enabled`}
 						onChange={(enabled) => {
 							updateWorkingHours({

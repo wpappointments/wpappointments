@@ -1,15 +1,14 @@
 import {
-	Control,
 	Controller,
 	DeepRequired,
 	FieldError,
-	FieldErrors,
 	FieldErrorsImpl,
 	FieldValues,
 	Merge,
 	Path,
 	PathValue,
 	RegisterOptions,
+	useFormContext,
 } from 'react-hook-form';
 import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -17,42 +16,45 @@ import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
 import { fieldLabel } from '../FormField.module.css';
 
-type Props<T extends FieldValues> = {
-	control: Control<T, any>;
-	errors: FieldErrors<T>;
-	name: Path<T>;
+type Props<TFields extends FieldValues> = {
+	name: Path<TFields>;
 	label: string;
 	rules?: Omit<
-		RegisterOptions<T, Path<T>>,
+		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
-	defaultValue?: PathValue<T, Path<T>>;
+	defaultValue?: PathValue<TFields, Path<TFields>>;
 	options: {
 		label: string;
 		value: string;
 	}[];
 	onChange?: (value: string) => void;
+	fullWidth?: boolean;
 };
 
-export type FormFieldError<T extends FieldValues> =
+export type FormFieldError<TFields extends FieldValues> =
 	| FieldError
-	| Merge<FieldError, FieldErrorsImpl<DeepRequired<T>[string]>>
+	| Merge<FieldError, FieldErrorsImpl<DeepRequired<TFields>[string]>>
 	| undefined;
 
-export default function Select<T extends FieldValues>({
-	control,
-	errors,
+export default function Select<TFields extends FieldValues>({
 	label,
 	name,
 	rules,
 	options,
 	defaultValue,
 	onChange,
-}: Props<T>) {
-	const error: FormFieldError<T> = errors[name];
+	fullWidth = false,
+}: Props<TFields>) {
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext<TFields>();
+
+	const error: FormFieldError<TFields> = errors[name];
 
 	return (
-		<FormField>
+		<FormField isFullWidth={fullWidth}>
 			<label className={fieldLabel} htmlFor={name}>
 				{label}
 				{rules?.required && '*'}
@@ -89,7 +91,7 @@ export default function Select<T extends FieldValues>({
 			/>
 			{error && (
 				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<T>(error)}
+					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}
 		</FormField>

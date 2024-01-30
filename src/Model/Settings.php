@@ -33,14 +33,38 @@ class Settings {
 	 */
 	public $settings = array(
 		'general'      => array(
-			'firstName',
-			'lastName',
-			'phoneNumber',
-			'companyName',
+			array(
+				'name' => 'firstName',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'lastName',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'phoneNumber',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'companyName',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'clockType',
+				'type' => 'number',
+			),
 		),
 		'appointments' => array(
-			'defaultLength',
+			array(
+				'name' => 'defaultLength',
+				'type' => 'number',
+			),
+			array(
+				'name' => 'timePickerPrecision',
+				'type' => 'number',
+			),
 		),
+		'calendar'     => array(),
 	);
 
 	/**
@@ -69,12 +93,18 @@ class Settings {
 	public function get_all() {
 		$settings = array();
 
-		foreach ( $this->settings as $category => $keys ) {
-			foreach ( $keys as $key ) {
-				$option = get_option( 'wpappointments_' . $category . '_' . $key );
+		foreach ( $this->settings as $category => $options ) {
+			foreach ( $options as $option ) {
+				$name   = $option['name'];
+				$type   = $option['type'];
+				$option = get_option( 'wpappointments_' . $category . '_' . $name );
+
+				if ( 'number' === $type ) {
+					$option = intval( $option );
+				}
 
 				if ( $option ) {
-					$settings[ $category ][ $key ] = $option;
+					$settings[ $category ][ $name ] = $option;
 				}
 			}
 		}
