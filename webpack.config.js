@@ -21,7 +21,7 @@ cssLoader.options.modules = {
 
 defaultConfig.resolve.alias = {
 	...defaultConfig.resolve.alias,
-	'~': path.resolve( __dirname, 'assets/scripts' ),
+	'~': path.resolve( __dirname, 'assets/backend' ),
 	'global.module.css': path.resolve(
 		__dirname,
 		'assets/styles/global.module.css'
