@@ -184,3 +184,8 @@ export function getNextRoundHourDate() {
 
 	return nextRoundHourDate;
 }
+
+export function parseDateFromString(dateString: string) {
+	const date = new Date(dateString);
+	return date;
+}

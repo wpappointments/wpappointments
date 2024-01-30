@@ -1,0 +1,64 @@
+.rows {
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 2px;
+	border-bottom: 1px solid rgb( 220, 220, 220 );
+}
+
+.item {
+	flex: 1;
+	height: 20px;
+	background-color: rgb( 169, 169, 169 );
+	text-align: right;
+	padding: 5px 0;
+	margin: 1px 0;
+}
+
+.item:hover {
+	background-color: rgb( 211, 211, 211 );
+	cursor: pointer;
+}
+
+.item:hover + .item {
+	background-color: rgb( 211, 211, 211 );
+}
+
+.item-available {
+	background-color: rgb( 0, 185, 56 );
+}
+
+.item-available:hover {
+	background-color: rgb( 32, 237, 93 );
+	cursor: pointer;
+}
+
+.item-available:hover + .item,
+.item-available:hover + .item + .item {
+	background-color: rgb( 32, 237, 93 );
+}
+
+.head {
+	flex: 1;
+	font-weight: bold;
+	font-size: 8px;
+	text-align: center;
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+.head-row {
+	flex: 1;
+	font-weight: bold;
+	font-size: 8px;
+}
+
+.title {
+	margin-top: 0;
+}
