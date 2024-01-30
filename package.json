@@ -14,8 +14,8 @@
 	"scripts": {
 		"init-project": "NODE_ENV=development pnpm install",
 		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/scripts/admin.tsx assets/scripts/index.tsx assets/scripts/globals.tsx",
-		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage && wp-scripts start assets/scripts/admin.tsx assets/scripts/index.tsx assets/scripts/globals.tsx",
-		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage && wp-scripts start assets/scripts/admin.tsx assets/scripts/index.tsx assets/scripts/globals.tsx --hot",
+		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && wp-scripts start assets/scripts/admin.tsx assets/scripts/index.tsx assets/scripts/globals.tsx",
+		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && wp-scripts start assets/scripts/admin.tsx assets/scripts/index.tsx assets/scripts/globals.tsx --hot",
 		"format": "wp-scripts format ./assets/**/* ./tests/js/**/*",
 		"lint": "pnpm lint:js && pnpm lint:css && pnpm phpcs",
 		"lint:css": "wp-scripts lint-style ./assets/**/*.css",

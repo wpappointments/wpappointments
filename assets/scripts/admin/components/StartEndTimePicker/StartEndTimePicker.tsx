@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { differenceInMinutes, addMinutes, addHours } from 'date-fns';
-import { getRangesAvailableSlots } from '~/utils/appointments';
-import { createTimeRangeFromMinutes } from '~/utils/datetime';
+import {
+	getRangesAvailableSlots,
+	timeRangesContainAnother,
+} from '~/utils/appointments';
+import { createTimeRange, createTimeRangeFromMinutes } from '~/utils/datetime';
 import { formatTimeForPicker } from '~/utils/format';
 import { SettingsSchedule } from '~/store/settings/settings.types';
 import { store } from '~/store/store';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Select from '../FormField/Select/Select';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 
@@ -52,8 +57,16 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 	const [availableMinutes, setAvailableMinutes] =
 		useState<Map<string, string[]>>();
 
+	const [availableEndHours, setAvailableEndHours] = useState<Set<string>>();
+	const [availableEndMinutes, setAvailableEndMinutes] =
+		useState<Map<string, string[]>>();
+
 	const [minEndHour, setMinEndHour] = useState(0);
 	const [minEndMinute, setMinEndMinute] = useState(0);
+
+	const [availableRanges, setAvailableRanges] = useState<[Date, Date][]>([]);
+	const [isDateOutsideWorkingHours, setIsDateOutsideWorkingHours] =
+		useState(false);
 
 	useEffect(() => {
 		if (!date) {
@@ -71,31 +84,62 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 		}
 
 		const monday = schedule[daySchedule].slots.list;
-
 		const availableSlots = getRangesAvailableSlots(
 			monday,
-			createTimeRangeFromMinutes(30)
+			createTimeRangeFromMinutes(30),
+			true
 		);
 
 		const hours = new Set<string>();
 		const minutes = new Map<string, string[]>();
 
-		for (const slot of availableSlots) {
-			slot.forEach((date) => {
+		const hoursEnd = new Set<string>();
+		const minutesEnd = new Map<string, string[]>();
+
+		const availableRanges: [Date, Date][] = [];
+
+		for (const slots of availableSlots) {
+			slots.forEach((date, i) => {
 				const hour = formatTimeForPicker(date.getHours());
+				const minute = formatTimeForPicker(date.getMinutes());
 
-				hours.add(hour);
+				if (i < slots.length - 1) {
+					hours.add(hour);
+					hoursEnd.add(hour);
 
-				if (!minutes.has(hour)) {
-					minutes.set(hour, []);
+					if (!minutes.has(hour)) {
+						minutes.set(hour, []);
+					}
+
+					if (!minutesEnd.has(hour)) {
+						minutesEnd.set(hour, []);
+					}
+
+					minutes.get(hour)?.push(minute);
+					minutesEnd.get(hour)?.push(minute);
 				}
 
-				minutes.get(hour)?.push(formatTimeForPicker(date.getMinutes()));
+				if (i === slots.length - 1) {
+					hoursEnd.add(hour);
+
+					if (!minutesEnd.has(hour)) {
+						minutesEnd.set(hour, []);
+					}
+
+					minutesEnd.get(hour)?.push(minute);
+
+					availableRanges.push([slots[0], slots[slots.length - 1]]);
+				}
 			});
 		}
 
 		setAvailableHours(hours);
 		setAvailableMinutes(minutes);
+
+		setAvailableEndHours(hoursEnd);
+		setAvailableEndMinutes(minutesEnd);
+
+		setAvailableRanges(availableRanges);
 
 		const startDate = date;
 		const endDate = addMinutes(startDate, duration);
@@ -149,25 +193,22 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 			const hourEnd = parseInt(value['timeHourEnd'] || '0');
 			const minuteEnd = parseInt(value['timeMinuteEnd'] || '0');
 
+			const startDate = new Date(
+				year,
+				month,
+				day,
+				hourStart,
+				minuteStart
+			);
+			const endDate = addMinutes(startDate, duration);
+
 			if (type === 'change' && editingStartDate) {
-				const startDate = new Date(
-					year,
-					month,
-					day,
-					hourStart,
-					minuteStart
-				);
-				const endDate = addMinutes(startDate, duration);
+				const endHourValue = formatTimeForPicker(hourStart);
+				const endMinuteValue = formatTimeForPicker(minuteStart);
 
 				if (!isNaN(endDate.getTime())) {
-					setValue(
-						'timeHourEnd',
-						endDate.getHours().toString().padStart(2, '0')
-					);
-					setValue(
-						'timeMinuteEnd',
-						endDate.getMinutes().toString().padStart(2, '0')
-					);
+					setValue('timeHourEnd', endHourValue);
+					setValue('timeMinuteEnd', endMinuteValue);
 					setMinEndHour(hourStart);
 				}
 
@@ -209,12 +250,19 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 					setMinEndMinute(0);
 				}
 			}
+
+			setIsDateOutsideWorkingHours(
+				!timeRangesContainAnother(
+					availableRanges,
+					createTimeRange(startDate, endDate)
+				)
+			);
 		});
 
 		return () => {
 			subscription.unsubscribe();
 		};
-	}, [watch, duration, precision]);
+	}, [watch, duration, precision, availableRanges]);
 
 	return (
 		<FormFieldSet>
@@ -267,7 +315,7 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 							required: true,
 						}}
 						options={createHourOptions(
-							availableHours,
+							availableEndHours,
 							type,
 							minEndHour
 						)}
@@ -281,7 +329,7 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 							required: true,
 						}}
 						options={createMinuteOptions(
-							availableMinutes,
+							availableEndMinutes,
 							getValues('timeHourEnd'),
 							precision,
 							minEndMinute
@@ -305,6 +353,13 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 				</FormFieldSet>
 			</FormFieldSet>
 			<i>Duration: {duration} minutes</i>
+			{isDateOutsideWorkingHours && (
+				<ErrorMessage>
+					{__(
+						'Selected time is outside of working hours. You can still create appointment.'
+					)}
+				</ErrorMessage>
+			)}
 		</FormFieldSet>
 	);
 }
@@ -365,9 +420,11 @@ function createMinuteOptions(
 		const minute = i.toString().padStart(2, '0');
 
 		minutes.push({
-			label: availableMinutes?.has(currentHour)
-				? `⚈ ${minute}`
-				: `⚆ ${minute}`,
+			label:
+				availableMinutes?.has(currentHour) &&
+				availableMinutes.get(currentHour)?.includes(minute)
+					? `⚈ ${minute}`
+					: `⚆ ${minute}`,
 			value: minute,
 		});
 	}

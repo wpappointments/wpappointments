@@ -103,7 +103,39 @@ type TimeRangeMinute = Output<typeof TimeRangeMinuteSchema>;
 
 type TimeRange = `${TimeRangeHour}:${TimeRangeMinute}`;
 
-export function createTimeRange(start: TimeRange, end: TimeRange) {
+export function createTimeRange(
+	start: TimeRange | Date,
+	end: TimeRange | Date
+) {
+	if (start instanceof Date && end instanceof Date) {
+		return createTimeRangeFromDates(start, end);
+	}
+
+	if (typeof start === 'string' && typeof end === 'string') {
+		return createTimeRangeFromStrings(start, end);
+	}
+
+	throw new Error(
+		'Invalid arguments. Must be either two date objects or two strings in TimeRange format for example (10:15).'
+	);
+}
+
+export function createTimeRangeFromDates(start: Date, end: Date) {
+	const startDate = new Date(start);
+	const endDate = new Date(end);
+
+	startDate.setSeconds(0);
+	startDate.setMilliseconds(0);
+
+	endDate.setSeconds(0);
+	endDate.setMilliseconds(0);
+
+	const dateTimeRange: [Date, Date] = [startDate, endDate];
+
+	return dateTimeRange;
+}
+
+export function createTimeRangeFromStrings(start: TimeRange, end: TimeRange) {
 	const startTime = start.split(':');
 
 	const startHour = parse(TimeRangeHourSchema, startTime[0]);
@@ -115,8 +147,8 @@ export function createTimeRange(start: TimeRange, end: TimeRange) {
 	const endMinute = parse(TimeRangeMinuteSchema, endTime[1]);
 
 	const dateTimeRange: [Date, Date] = [
-		new Date(2024, 1, 1, parseInt(startHour), parseInt(startMinute), 0),
-		new Date(2024, 1, 1, parseInt(endHour), parseInt(endMinute), 0),
+		new Date(2024, 1, 1, parseInt(startHour), parseInt(startMinute), 0, 0),
+		new Date(2024, 1, 1, parseInt(endHour), parseInt(endMinute), 0, 0),
 	];
 
 	return dateTimeRange;

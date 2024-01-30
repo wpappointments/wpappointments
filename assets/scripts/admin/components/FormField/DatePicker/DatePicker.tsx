@@ -37,6 +37,8 @@ export default function DatePicker<TFields extends FieldValues>({
 	rules,
 	defaultValue,
 	isInvalidDate,
+	events,
+	startOfWeek,
 }: Props<TFields>) {
 	const {
 		control,
@@ -56,28 +58,9 @@ export default function DatePicker<TFields extends FieldValues>({
 					<WPDatePicker
 						onChange={onChange}
 						currentDate={value}
-						isInvalidDate={(date) => {
-							return (
-								new Date() > date ||
-								date.getDay() === 0 ||
-								date.getDay() === 6
-							);
-						}}
-						startOfWeek={1}
-						events={[
-							{
-								date: new Date('2024-01-22T21:22:50.694Z'),
-							},
-							{
-								date: new Date('2024-01-24T21:22:50.694Z'),
-							},
-							{
-								date: new Date('2024-01-26T21:22:50.694Z'),
-							},
-							{
-								date: new Date('2024-01-28T21:22:50.694Z'),
-							},
-						]}
+						isInvalidDate={isInvalidDate}
+						startOfWeek={startOfWeek}
+						events={events}
 					/>
 				)}
 			/>
