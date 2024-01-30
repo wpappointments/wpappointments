@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
 import AppointmentsSettings from './Appointments/Appointments';
+import CalendarSettings from './Calendar/Calendar';
 import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
 import { tabsConainer } from './Settings.module.css';
@@ -21,6 +22,15 @@ const tabs = new Map<string, Tab>([
 			title: 'General settings',
 			className: 'tab-general',
 			component: <GeneralSettings />,
+		},
+	],
+	[
+		'calendar',
+		{
+			name: 'calendar',
+			title: 'Calendar',
+			className: 'tab-calendar',
+			component: <CalendarSettings />,
 		},
 	],
 	[

@@ -1,0 +1,34 @@
+.fieldset {
+	display: block;
+}
+
+.fieldset-has-legend {
+	padding: 10px 15px;
+	border: 1px solid #dedede;
+}
+
+.fieldset-has-legend > :global( legend ) {
+	margin-left: -2px;
+	text-transform: uppercase;
+	font-size: 80%;
+}
+
+.fieldset-fill {
+	flex: 1;
+}
+
+.fields {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.fieldset-horizontal .fields {
+	flex-direction: row;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.fieldset-horizontal-center .fields {
+	align-items: center;
+}

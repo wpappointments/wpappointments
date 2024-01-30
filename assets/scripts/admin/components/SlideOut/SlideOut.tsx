@@ -7,6 +7,8 @@ import {
 	slideOut,
 	slideOutOpen,
 	slideOutOverlay,
+	slideOutSidePanel,
+	slideOutWide,
 } from './SlideOut.module.css';
 
 type Props = {
@@ -14,15 +16,22 @@ type Props = {
 	children: ReactNode;
 	onOverlayClick?: MouseEventHandler<HTMLDivElement>;
 	title?: string;
+	headerRightSlot?: ReactNode;
 	level?: number;
-};
+	type?: 'default' | 'full';
+	sidePanel?: boolean;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export default function SlideOut({
 	id,
 	level = 1,
 	children,
 	title,
+	headerRightSlot,
 	onOverlayClick,
+	type,
+	sidePanel = false,
+	...rest
 }: Props) {
 	const {
 		openSlideouts,
@@ -57,27 +66,36 @@ export default function SlideOut({
 	};
 
 	const isOpen = shouldRenderSlideOut();
+	const showHeader = title || headerRightSlot;
 
 	return (
 		<div
-			className={slideOutOverlay}
+			className={cn({
+				[slideOutOverlay]: true,
+				[slideOutSidePanel]: sidePanel,
+			})}
+			onClick={onOverlayClick || closeCurrentSlideOut}
+			{...rest}
 			style={{
 				'--is-open': isOpen ? 1 : 0,
 				'--nesting-level': nestingLevel,
+				'--total-levels': openSlideouts.length,
 				pointerEvents: isOpen ? 'auto' : 'none',
+				...rest.style,
 			}}
-			onClick={onOverlayClick || closeCurrentSlideOut}
 		>
 			<div
 				className={cn({
 					[slideOut]: true,
 					[slideOutOpen]: isOpen,
+					[slideOutWide]: type === 'full',
 				})}
 				onClick={(e) => e.stopPropagation()}
 			>
-				{title && (
+				{showHeader && (
 					<div className={header}>
 						<h2>{title}</h2>
+						{headerRightSlot}
 					</div>
 				)}
 				<div className={content}>{children}</div>

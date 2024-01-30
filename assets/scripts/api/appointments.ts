@@ -7,7 +7,6 @@ import { Appointment } from '~/types';
 
 type AppointmentData = {
 	title: string;
-	datetime: string;
 };
 
 type Response = APIResponse<{

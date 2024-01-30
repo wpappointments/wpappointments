@@ -1,14 +1,53 @@
-import { form } from './Form.module.css';
+import {
+	FieldValues,
+	FormProvider,
+	useForm,
+	useFormContext,
+} from 'react-hook-form';
 
-type Props = {
+type Props<TFields> = {
 	children: React.ReactNode;
-	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+	onSubmit?: (formData: TFields) => Promise<void>;
+	className?: string;
 };
 
-export default function Form({ children, onSubmit }: Props) {
+type FormProps = {
+	children: React.ReactNode;
+};
+
+function Form({ children }: FormProps) {
+	const methods = useForm<{
+		hello: string;
+	}>();
+
+	return <FormProvider {...methods}>{children}</FormProvider>;
+}
+
+export function HtmlForm<TFields extends FieldValues>({
+	onSubmit,
+	children,
+	className,
+}: Props<TFields>) {
+	const { handleSubmit } = useFormContext<TFields>();
+
 	return (
-		<form className={form} onSubmit={onSubmit}>
+		<form
+			className={className}
+			onSubmit={onSubmit && handleSubmit(onSubmit)}
+		>
 			{children}
 		</form>
 	);
+}
+
+export function withForm<TFields extends FieldValues>(
+	Component: (props: TFields) => JSX.Element
+) {
+	return function FormWrapper(props: TFields) {
+		return (
+			<Form>
+				<Component {...props} />
+			</Form>
+		);
+	};
 }

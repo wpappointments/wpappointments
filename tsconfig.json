@@ -16,6 +16,7 @@
 		"importHelpers": false,
 		"strictNullChecks": true,
 		"noUnusedLocals": true,
+		"esModuleInterop": true,
 		"paths": {
 			"~/*": [ "./assets/scripts/*" ],
 			"global.module.css": [ "./assets/styles/global.module.css" ]

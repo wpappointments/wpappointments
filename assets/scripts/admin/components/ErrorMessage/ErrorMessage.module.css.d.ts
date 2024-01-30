@@ -1,3 +1,3 @@
 export const __esModule: true;
-export const form: string;
+export const error: string;
 
