@@ -15,6 +15,7 @@ import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import Select from '~/admin/components/FormField/Select/Select';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import Table from '~/admin/components/Table/Table';
+import TimeFinder from '~/admin/components/TimeFinder/TimeFinder';
 import {
 	StateContextProvider,
 	useStateContext,
@@ -172,7 +173,7 @@ export default function Dashboard() {
 						right: '700px',
 					}}
 				>
-					<div>Find time</div>
+					<TimeFinder />
 				</SlideOut>
 			</LayoutDefault>
 		</StateContextProvider>

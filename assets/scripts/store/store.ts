@@ -1,6 +1,7 @@
 import { combineReducers, createReduxStore } from '@wordpress/data';
 import actions from './actions';
 import { AppointmentsState } from './appointments/appointments.types';
+import { AvailabilityState } from './availability/availability.types';
 import controls from './controls';
 import { NoticesState } from './notices/notices.types';
 import reducers from './reducers';
@@ -14,6 +15,7 @@ export type State = {
 	settings: SettingsState;
 	slideouts: SlideoutState;
 	notices: NoticesState;
+	availability: AvailabilityState;
 };
 
 export const store = createReduxStore('wpappointments', {

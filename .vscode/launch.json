@@ -4,9 +4,8 @@
 		{
 			"name": "Debug JS",
 			"type": "chrome",
-			"request": "attach",
-			"url": "http://localhost:8888",
-			"webRoot": "${workspaceFolder}"
+			"request": "launch",
+			"url": "http://localhost:8888"
 		},
 		{
 			"name": "Debug Jest Tests",
@@ -32,6 +31,12 @@
 			"pathMappings": {
 				"/var/www/html/wp-content/plugins/wpappointments": "${workspaceFolder}/"
 			}
+		}
+	],
+	"compounds": [
+		{
+			"name": "JS + PHP",
+			"configurations": [ "Debug JS", "Debug PHP" ]
 		}
 	]
 }

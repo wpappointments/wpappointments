@@ -23,5 +23,6 @@ class Api extends Core\Singleton {
 		Endpoints\Ping::init();
 		Endpoints\Appointment::init();
 		Endpoints\Settings::init();
+		Endpoints\TimeFinder::init();
 	}
 }
