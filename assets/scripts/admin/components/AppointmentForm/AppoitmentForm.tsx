@@ -80,6 +80,14 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	}, [defaultDate, currentSlideout, currentAppointment, mode]);
 
 	const onSubmit = async (formData: Fields) => {
+		const date = new Date(formData.date);
+		date.setHours(parseInt(formData.timeHourStart));
+		date.setMinutes(parseInt(formData.timeMinuteStart));
+		date.setSeconds(0);
+		date.setMilliseconds(0);
+
+		formData.date = date.toISOString();
+
 		const [error, result] = await resolve<SubmitResponse>(async () => {
 			let data;
 

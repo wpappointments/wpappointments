@@ -168,7 +168,7 @@ class Appointment extends Controller {
 	public static function create_appointment( WP_REST_Request $request ) {
 		$params = $request->get_params();
 		$title  = $request->get_param( 'title' );
-		$date   = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
+		$date   = rest_parse_date( get_gmt_from_date( $params['date'] ) );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
@@ -207,7 +207,7 @@ class Appointment extends Controller {
 			return self::error( __( 'Appointment ID is required', 'wpappointments' ) );
 		}
 
-		$date = rest_parse_date( get_gmt_from_date( $params['datetime'] ) );
+		$date = rest_parse_date( get_gmt_from_date( $params['date'] ) );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->update(

@@ -2,15 +2,24 @@ import { addMinutes, differenceInMinutes } from 'date-fns';
 import { OpeningHoursSlot } from '~/store/settings/settings.types';
 
 export function timeRangeContainsAnother(
-	timeRange: readonly [Date, Date],
-	anotherRange: readonly [Date, Date]
+	timeRange: [Date, Date],
+	anotherRange: [Date, Date]
 ): boolean {
 	const [timeStart, timeEnd] = timeRange;
 	const [compareStart, compareEnd] = anotherRange;
 
 	return (
-		timeStart.getTime() >= compareStart.getTime() &&
-		timeEnd.getTime() <= compareEnd.getTime()
+		timeStart.getTime() <= compareStart.getTime() &&
+		timeEnd.getTime() >= compareEnd.getTime()
+	);
+}
+
+export function timeRangesContainAnother(
+	timeRanges: [Date, Date][],
+	anotherRange: [Date, Date]
+): boolean {
+	return timeRanges.some((timeRange) =>
+		timeRangeContainsAnother(timeRange, anotherRange)
 	);
 }
 
@@ -35,7 +44,8 @@ export function getDayRanges(schedule: OpeningHoursSlot[]): [Date, Date][] {
 
 export function getRangeAvailableSlots(
 	day: OpeningHoursSlot,
-	appointmentRange?: [Date, Date]
+	appointmentRange?: [Date, Date],
+	extended?: boolean
 ) {
 	const availableSlots = [];
 	const hourLongRange = [new Date(), addMinutes(new Date(), 60)];
@@ -84,9 +94,16 @@ export function getRangeAvailableSlots(
 		dateHourNext.setSeconds(0);
 		dateHourNext.setMilliseconds(0);
 
-		if (timeRangeContainsAnother([dateHour, dateHourNext], slot)) {
+		if (timeRangeContainsAnother(slot, [dateHour, dateHourNext])) {
 			availableSlots.push(dateHour);
 		}
+	}
+
+	if (extended) {
+		return maybeExtendSlotsToNextHour(
+			availableSlots,
+			appoinmentLengthInMinutes
+		);
 	}
 
 	return availableSlots;
@@ -94,7 +111,34 @@ export function getRangeAvailableSlots(
 
 export function getRangesAvailableSlots(
 	schedule: OpeningHoursSlot[],
-	appointmentRange?: [Date, Date]
+	appointmentRange?: [Date, Date],
+	extended?: boolean
 ) {
-	return schedule.map((day) => getRangeAvailableSlots(day, appointmentRange));
+	return schedule.map((day) =>
+		getRangeAvailableSlots(day, appointmentRange, extended)
+	);
+}
+
+export function maybeExtendSlotsToNextHour(
+	slots: Date[],
+	duration: number
+): Date[] {
+	if (slots.length === 0) {
+		return slots;
+	}
+
+	const lastSlot = slots[slots.length - 1];
+	const newSlot = addMinutes(lastSlot, duration);
+
+	if (lastSlot.getHours() === newSlot.getHours()) {
+		return slots;
+	}
+
+	if (newSlot.getMinutes() !== 0) {
+		return slots;
+	}
+
+	const newSlots = [...slots, newSlot];
+
+	return newSlots;
 }

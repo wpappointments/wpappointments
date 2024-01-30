@@ -319,6 +319,7 @@ function Day({
 			aria-label={getDayLabel(day, isSelected, numEvents)}
 			onClick={onClick}
 			onKeyDown={onKeyDown}
+			type="button"
 		>
 			{dateI18n('j', day, -day.getTimezoneOffset())}
 		</button>
