@@ -31,7 +31,6 @@
 		"phpcs:all": "pnpm phpcs src includes tests/php tests/wordpress tests/bootstrap.php wpappointments.php",
 		"phpcs-fix:all": "pnpm phpcs-fix src includes tests/php tests/wordpress tests/bootstrap.php wpappointments.php",
 		"readme": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/wp2md -i readme.txt -o README.md",
-		"prepare": "husky install",
 		"wp-env": "wp-env",
 		"stop": "wp-env stop",
 		"clean": "wp-env clean all",
