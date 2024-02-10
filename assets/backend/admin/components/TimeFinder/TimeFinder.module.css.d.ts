@@ -1,16 +1,31 @@
-export const __esModule: true;
-export const buttons: string;
-export const daysColumn: string;
-export const head: string;
-export const headRow: string;
-export const headRowWeekend: string;
-export const header: string;
-export const item: string;
-export const itemAvailable: string;
-export const row: string;
-export const rows: string;
-export const scrollable: string;
-export const title: string;
-export const titleRow: string;
-export const wrapper: string;
-
+declare const styles:
+  & Readonly<{ "wrapper": string }>
+  & Readonly<{ "scrollable": string }>
+  & Readonly<{ "rows": string }>
+  & Readonly<{ "row": string }>
+  & Readonly<{ "daysColumn": string }>
+  & Readonly<{ "daysColumn": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
+  & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "head": string }>
+  & Readonly<{ "head": string }>
+  & Readonly<{ "head": string }>
+  & Readonly<{ "head": string }>
+  & Readonly<{ "headRow": string }>
+  & Readonly<{ "headRowWeekend": string }>
+  & Readonly<{ "header": string }>
+  & Readonly<{ "titleRow": string }>
+  & Readonly<{ "title": string }>
+  & Readonly<{ "buttons": string }>
+;
+export default styles;
+//# sourceMappingURL=./TimeFinder.module.css.d.ts.map

@@ -6,24 +6,7 @@ import { applyFilters } from '~/utils/hooks';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
-import {
-	header,
-	calendar,
-	day,
-	dayTile,
-	dayTileLabel,
-	previousMonthDay,
-	nextMonthDay,
-	event,
-	events,
-	isToday,
-	dayTileContent,
-	calendarContainer,
-	pagination,
-	actions,
-	topBar,
-	dayTileLabelText,
-} from './Calendar.module.css';
+import styles from './Calendar.module.css';
 import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
@@ -167,18 +150,18 @@ export default function Calendar() {
 
 	const dayClasses = (day: ReturnType<typeof getCalendarMonth>[0]) => {
 		if (day.isPreviousMonth) {
-			return previousMonthDay + ' ' + dayTileContent;
+			return styles.previousMonthDay + ' ' + styles.dayTileContent;
 		}
 
 		if (day.isNextMonth) {
-			return nextMonthDay + ' ' + dayTileContent;
+			return styles.nextMonthDay + ' ' + styles.dayTileContent;
 		}
 
 		if (day.isToday) {
-			return isToday + ' ' + dayTileContent;
+			return styles.isToday + ' ' + styles.dayTileContent;
 		}
 
-		return dayTileContent;
+		return styles.dayTileContent;
 	};
 
 	const dayLabel = (day: number) => {
@@ -188,7 +171,7 @@ export default function Calendar() {
 	const calendarActions = applyFilters<React.JSX.Element[]>(
 		'calendar.actions',
 		[
-			<div className={pagination}>
+			<div className={styles.pagination}>
 				<Button variant="secondary" onClick={switchToPreviousMonth}>
 					&lsaquo;
 				</Button>
@@ -208,7 +191,7 @@ export default function Calendar() {
 				<h1>
 					<strong>{getMonthName(month)}</strong> {year}
 				</h1>
-				<div className={topBar}>
+				<div className={styles.topBar}>
 					<ButtonGroup>
 						<Button variant="secondary" size="compact">
 							{__('Day', 'wpappointments')}
@@ -220,7 +203,7 @@ export default function Calendar() {
 							{__('Month', 'wpappointments')}
 						</Button>
 					</ButtonGroup>
-					<div className={actions}>
+					<div className={styles.actions}>
 						{calendarActions.map((action, i) => (
 							<Fragment key={i}>{action}</Fragment>
 						))}
@@ -234,28 +217,30 @@ export default function Calendar() {
 						</Button>
 					</div>
 				</div>
-				<div className={calendarContainer}>
-					<div className={header}>
+				<div className={styles.calendarContainer}>
+					<div className={styles.header}>
 						{daysOfWeek.map((dayName) => (
-							<div key={dayName} className={day}>
+							<div key={dayName} className={styles.day}>
 								{dayName}
 							</div>
 						))}
 					</div>
-					<div className={calendar}>
+					<div className={styles.calendar}>
 						{currentMonth.map((day) => (
-							<div key={day.index} className={dayTile}>
+							<div key={day.index} className={styles.dayTile}>
 								<div className={dayClasses(day)}>
-									<div className={dayTileLabel}>
-										<div className={dayTileLabelText}>
+									<div className={styles.dayTileLabel}>
+										<div
+											className={styles.dayTileLabelText}
+										>
 											{dayLabel(day.index)}
 										</div>
 									</div>
-									<div className={events}>
+									<div className={styles.events}>
 										{day.appointments.map((appointment) => (
 											<div
 												key={appointment.id}
-												className={event}
+												className={styles.event}
 												onClick={() => {
 													openSlideOut({
 														id: 'view-appointment',
@@ -263,8 +248,7 @@ export default function Calendar() {
 													});
 												}}
 											>
-												{appointment.title ||
-													'Untitled'}
+												{appointment.service}
 											</div>
 										))}
 										<Button

@@ -1,18 +1,24 @@
-export const __esModule: true;
-export const actions: string;
-export const calendar: string;
-export const calendarContainer: string;
-export const day: string;
-export const dayTile: string;
-export const dayTileContent: string;
-export const dayTileLabel: string;
-export const dayTileLabelText: string;
-export const event: string;
-export const events: string;
-export const header: string;
-export const isToday: string;
-export const nextMonthDay: string;
-export const pagination: string;
-export const previousMonthDay: string;
-export const topBar: string;
-
+declare const styles:
+  & Readonly<{ "calendarContainer": string }>
+  & Readonly<{ "calendar": string }>
+  & Readonly<{ "header": string }>
+  & Readonly<{ "header": string }>
+  & Readonly<{ "day": string }>
+  & Readonly<{ "previousMonthDay": string }>
+  & Readonly<{ "nextMonthDay": string }>
+  & Readonly<{ "dayTileContent": string }>
+  & Readonly<{ "dayTileLabelText": string }>
+  & Readonly<{ "dayTileLabelText": string }>
+  & Readonly<{ "isToday": string }>
+  & Readonly<{ "dayTile": string }>
+  & Readonly<{ "dayTileLabel": string }>
+  & Readonly<{ "events": string }>
+  & Readonly<{ "events": string }>
+  & Readonly<{ "events": string }>
+  & Readonly<{ "event": string }>
+  & Readonly<{ "pagination": string }>
+  & Readonly<{ "actions": string }>
+  & Readonly<{ "topBar": string }>
+;
+export default styles;
+//# sourceMappingURL=./Calendar.module.css.d.ts.map

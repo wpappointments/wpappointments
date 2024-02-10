@@ -1,12 +1,5 @@
 import cn from '~/utils/cn';
-import {
-	fields,
-	fieldset,
-	fieldsetFill,
-	fieldsetHasLegend,
-	fieldsetHorizontal,
-	fieldsetHorizontalCenter,
-} from './FormFieldSet.module.css';
+import styles from './FormFieldSet.module.css';
 
 type Props = {
 	children: React.ReactNode;
@@ -27,17 +20,17 @@ export default function FormFieldSet({
 	return (
 		<fieldset
 			className={cn({
-				[fieldset]: true,
-				[fieldsetHorizontal]: horizontal,
-				[fieldsetHorizontalCenter]: horizontalCenter,
-				[fieldsetHasLegend]: !!legend,
-				[fieldsetFill]: true,
+				[styles.fieldset]: true,
+				[styles.fieldsetHorizontal]: horizontal,
+				[styles.fieldsetHorizontalCenter]: horizontalCenter,
+				[styles.fieldsetHasLegend]: !!legend,
+				[styles.fieldsetFill]: true,
 			})}
 			name={name}
 			{...rest}
 		>
 			{legend && <legend>{legend}</legend>}
-			<div className={fields}>{children}</div>
+			<div className={styles.fields}>{children}</div>
 		</fieldset>
 	);
 }

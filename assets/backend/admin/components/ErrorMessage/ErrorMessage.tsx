@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { error } from './ErrorMessage.module.css';
+import styles from './ErrorMessage.module.css';
 
 export type ErrorMessageProps = {
 	children: ReactNode;
 };
 
 export default function ErrorMessage({ children }: ErrorMessageProps) {
-	return <div className={error}>{children}</div>;
+	return <div className={styles.error}>{children}</div>;
 }

@@ -14,7 +14,7 @@ cssLoader.options.modules = {
 	localIdentName: '[name]__[local]',
 	localIdentContext: path.resolve( __dirname, 'src' ),
 	localIdentHashSalt: 'my-custom-hash',
-	namedExport: true,
+	namedExport: false,
 	exportLocalsConvention: 'camelCaseOnly',
 	exportOnlyLocals: false,
 };

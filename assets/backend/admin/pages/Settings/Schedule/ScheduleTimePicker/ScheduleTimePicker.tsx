@@ -1,8 +1,4 @@
-import {
-	timePicker,
-	timePickerControl,
-	timePickerSeparator,
-} from './ScheduleTimePicker.module.css';
+import styles from './ScheduleTimePicker.module.css';
 import Number from '~/admin/components/FormField/Number/Number';
 
 type Props = {
@@ -23,8 +19,8 @@ export default function ScheduleTimePicker({
 	type,
 }: Props) {
 	return (
-		<div className={timePicker}>
-			<div className={timePickerControl}>
+		<div className={styles.timePicker}>
+			<div className={styles.timePickerControl}>
 				<Number
 					key={`${day}.slots.list.${index}.${type}.hour`}
 					name={`${day}.slots.list.${index}.${type}.hour`}
@@ -46,7 +42,7 @@ export default function ScheduleTimePicker({
 						});
 					}}
 				/>
-				<span className={timePickerSeparator}>:</span>
+				<span className={styles.timePickerSeparator}>:</span>
 				<Number
 					key={`${day}.slots.list.${index}.${type}.minute`}
 					name={`${day}.slots.list.${index}.${type}.minute`}

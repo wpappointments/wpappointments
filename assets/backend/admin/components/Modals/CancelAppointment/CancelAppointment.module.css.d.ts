@@ -1,5 +1,8 @@
-export const __esModule: true;
-export const modal: string;
-export const modalActions: string;
-export const notify: string;
-
+declare const styles:
+  & Readonly<{ "modal": string }>
+  & Readonly<{ "modalActions": string }>
+  & Readonly<{ "notify": string }>
+  & Readonly<{ "notify": string }>
+;
+export default styles;
+//# sourceMappingURL=./CancelAppointment.module.css.d.ts.map

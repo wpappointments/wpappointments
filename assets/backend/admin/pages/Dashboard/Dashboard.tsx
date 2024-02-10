@@ -9,7 +9,7 @@ import useSlideout from '~/hooks/useSlideout';
 import { Slideout } from '~/store/slideout/slideout.types';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
-import { filtersForm, upcomingTitleWrapper } from './Dashboard.module.css';
+import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import Select from '~/admin/components/FormField/Select/Select';
@@ -22,12 +22,14 @@ import {
 } from '~/admin/context/StateContext';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 import { appointmentsApi } from '~/api/appointments';
-import { card } from 'global.module.css';
+import globalStyles from 'global.module.css';
 
 type Fields = {
 	status: Appointment['status'] | '';
 	period: 'week' | 'month' | 'year' | 'all' | '';
 };
+
+console.log(globalStyles);
 
 export default function Dashboard() {
 	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
@@ -48,9 +50,9 @@ export default function Dashboard() {
 		<StateContextProvider>
 			<LayoutDefault title="Dashboard">
 				<DashboardStats />
-				<Card className={card}>
+				<Card className={globalStyles.card}>
 					<CardHeader>
-						<div className={upcomingTitleWrapper}>
+						<div className={styles.upcomingTitleWrapper}>
 							<Text size="title">Upcoming Appointments</Text>
 							<Button
 								variant={filtersOpen ? 'primary' : 'secondary'}
@@ -84,7 +86,7 @@ export default function Dashboard() {
 						<CardHeader>
 							<form
 								ref={formRef}
-								className={filtersForm}
+								className={styles.filtersForm}
 								onSubmit={handleSubmit(onSubmit)}
 							>
 								<Select
@@ -232,7 +234,7 @@ function DashboardStats() {
 	}, []);
 
 	return (
-		<Card className={card}>
+		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">Hello {settings.firstName}!</Text>
 				<span>{new Date().toDateString()}</span>

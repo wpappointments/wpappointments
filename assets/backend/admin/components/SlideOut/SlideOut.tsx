@@ -1,15 +1,7 @@
 import { MouseEventHandler, ReactNode } from 'react';
 import cn from '~/utils/cn';
 import useSlideout from '~/hooks/useSlideout';
-import {
-	content,
-	header,
-	slideOut,
-	slideOutOpen,
-	slideOutOverlay,
-	slideOutSidePanel,
-	slideOutWide,
-} from './SlideOut.module.css';
+import styles from './SlideOut.module.css';
 
 type Props = {
 	id: string;
@@ -71,8 +63,8 @@ export default function SlideOut({
 	return (
 		<div
 			className={cn({
-				[slideOutOverlay]: true,
-				[slideOutSidePanel]: sidePanel,
+				[styles.slideOutOverlay]: true,
+				[styles.slideOutSidePanel]: sidePanel,
 			})}
 			onClick={onOverlayClick || closeCurrentSlideOut}
 			{...rest}
@@ -86,19 +78,19 @@ export default function SlideOut({
 		>
 			<div
 				className={cn({
-					[slideOut]: true,
-					[slideOutOpen]: isOpen,
-					[slideOutWide]: type === 'full',
+					[styles.slideOut]: true,
+					[styles.slideOutOpen]: isOpen,
+					[styles.slideOutWide]: type === 'full',
 				})}
 				onClick={(e) => e.stopPropagation()}
 			>
 				{showHeader && (
-					<div className={header}>
+					<div className={styles.header}>
 						<h2>{title}</h2>
 						{headerRightSlot}
 					</div>
 				)}
-				<div className={content}>{children}</div>
+				<div className={styles.content}>{children}</div>
 			</div>
 		</div>
 	);

@@ -34,18 +34,7 @@ import { useLilius } from 'use-lilius';
 // import type { DatePickerProps } from '../types';
 // import { inputToDate } from '../utils';
 import cn from '~/utils/cn';
-import {
-	dayButton,
-	wrapper,
-	navigator,
-	navigatorHeading,
-	calendar as calendarClass,
-	dayOfWeek,
-	dayButtonIsSelected,
-	dayButtonIsToday,
-	dayButtonHasEvents,
-	dayButtonIsInvalid,
-} from './WPDatePicker.module.css';
+import styles from './WPDatePicker.module.css';
 import { TIMEZONELESS_FORMAT } from './constants';
 import { inputToDate } from './utils';
 
@@ -114,12 +103,12 @@ export default function WPDatePicker({
 		<div
 			className={cn({
 				'components-datetime__date': true,
-				[wrapper]: true,
+				[styles.wrapper]: true,
 			})}
 			role="application"
 			aria-label={__('Calendar')}
 		>
-			<div className={navigator}>
+			<div className={styles.navigator}>
 				<Button
 					icon={isRTL() ? arrowRight : arrowLeft}
 					variant="tertiary"
@@ -132,7 +121,7 @@ export default function WPDatePicker({
 						);
 					}}
 				/>
-				<h3 className={navigatorHeading}>
+				<h3 className={styles.navigatorHeading}>
 					<strong>
 						{dateI18n('F', viewing, -viewing.getTimezoneOffset())}
 					</strong>{' '}
@@ -152,12 +141,12 @@ export default function WPDatePicker({
 				/>
 			</div>
 			<div
-				className={calendarClass}
+				className={styles.calendar}
 				onFocus={() => setIsFocusWithinCalendar(true)}
 				onBlur={() => setIsFocusWithinCalendar(false)}
 			>
 				{calendar[0][0].map((day) => (
-					<div className={dayOfWeek} key={day.toString()}>
+					<div className={styles.dayOfWeek} key={day.toString()}>
 						{dateI18n('D', day, -day.getTimezoneOffset())}
 					</div>
 				))}
@@ -306,11 +295,11 @@ function Day({
 			className={cn({
 				'components-datetime__date-day': true,
 				'components-button': true,
-				[dayButton]: true,
-				[dayButtonIsSelected]: isSelected,
-				[dayButtonIsToday]: isToday,
-				[dayButtonHasEvents]: numEvents > 0,
-				[dayButtonIsInvalid]: isInvalid,
+				[styles.dayButton]: true,
+				[styles.dayButtonIsSelected]: isSelected,
+				[styles.dayButtonIsToday]: isToday,
+				[styles.dayButtonHasEvents]: numEvents > 0,
+				[styles.dayButtonIsInvalid]: isInvalid,
 			})}
 			style={{
 				'--grid-column': column,
