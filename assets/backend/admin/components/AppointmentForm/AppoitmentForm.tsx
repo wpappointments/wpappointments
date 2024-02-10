@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
@@ -10,6 +10,7 @@ import { APIResponse } from '~/utils/fetch';
 import resolve from '~/utils/resolve';
 import { displayErrorToast } from '~/utils/toast';
 import useSlideout from '~/hooks/useSlideout';
+import { MonthIndex } from '~/store/slideout/appointment/appointment.types';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import { HtmlForm, withForm } from '../Form/Form';
@@ -50,7 +51,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	onSubmitComplete,
 	defaultDate,
 }: FormProps) {
-	const { reset, setValue, getValues } = useFormContext<Fields>();
+	const { reset, setValue, getValues, watch } = useFormContext<Fields>();
 	const { invalidate } = useStateContext();
 	const { createAppointment, updateAppointment } = appointmentsApi({
 		invalidateCache: invalidate,
@@ -61,6 +62,37 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const currentAppointment = useSelect(() => {
 		return select(store).getAppointment(selectedAppointment as number);
 	}, [selectedAppointment, currentSlideout]);
+
+	const date = watch('date');
+
+	const { currentMonth, currentYear } = useSelect(
+		(select) => {
+			return {
+				currentMonth: select(store).getCurrentMonth(),
+				currentYear: select(store).getCurrentYear(),
+			};
+		},
+		[date]
+	);
+
+	const dispatch = useDispatch(store);
+
+	useEffect(() => {
+		if (!date) {
+			return;
+		}
+
+		const currentDay = new Date(date).getDate();
+		const newDate = new Date(
+			currentYear,
+			currentMonth,
+			currentDay,
+			0,
+			0,
+			0
+		);
+		setValue('date', newDate.toISOString());
+	}, [currentMonth]);
 
 	useEffect(() => {
 		if (mode === 'edit' && currentAppointment) {
@@ -120,6 +152,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		}
 	};
 
+	const defaultDateToday = new Date();
+	defaultDateToday.setMonth(currentMonth);
+	defaultDateToday.setFullYear(currentYear);
+
 	return (
 		<HtmlForm onSubmit={onSubmit}>
 			<FormFieldSet>
@@ -175,6 +211,9 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					</Button>
 				</FormFieldSet>
 
+				<div>
+					{currentMonth} {currentYear}
+				</div>
 				<FormFieldSet legend="Select day" style={{ maxWidth: '300px' }}>
 					<DatePicker
 						name="date"
@@ -187,7 +226,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 							);
 						}}
 						startOfWeek={1}
-						defaultValue={defaultDate || getNextRoundHourDate()}
+						defaultValue={defaultDate || defaultDateToday}
 						events={[
 							{
 								date: new Date('2024-01-22T21:22:50.694Z'),
@@ -202,6 +241,13 @@ export default withForm<FormProps>(function AppointmentFormFields({
 								date: new Date('2024-01-28T21:22:50.694Z'),
 							},
 						]}
+						onMonthPreviewed={(date) => {
+							const _date = new Date(date);
+							dispatch.setCurrentMonth(
+								_date.getMonth() as MonthIndex
+							);
+							dispatch.setCurrentYear(_date.getFullYear());
+						}}
 					/>
 				</FormFieldSet>
 

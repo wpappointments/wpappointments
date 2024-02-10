@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, ButtonGroup } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { Icon, arrowDown, arrowUp } from '@wordpress/icons';
 import { format, getDaysInMonth } from 'date-fns';
 import cn from '~/utils/cn';
 import { formatTime24HourFromDate, formatTimeForPicker } from '~/utils/format';
+import { MonthIndex } from '~/store/slideout/appointment/appointment.types';
 import { store } from '~/store/store';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/admin/context/StateContext';
@@ -18,8 +19,21 @@ export default function TimeFinder() {
 		'earlyMorning' | 'morning' | 'afternoon' | 'evening' | 'allDay'
 	>('morning');
 
-	const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-	const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+	const dispatch = useDispatch(store);
+	const { currentMonth, currentYear } = useSelect((select) => {
+		return {
+			currentMonth: select(store).getCurrentMonth(),
+			currentYear: select(store).getCurrentYear(),
+		};
+	}, []);
+
+	function setCurrentMonth(month: number) {
+		dispatch.setCurrentMonth(month as MonthIndex);
+	}
+
+	function setCurrentYear(year: number) {
+		dispatch.setCurrentYear(year);
+	}
 
 	const availability = useSelect(
 		(select) => {
@@ -184,31 +198,6 @@ export default function TimeFinder() {
 	return (
 		<>
 			<div className={styles.header}>
-				<div className={styles.titleRow}>
-					<h2 className={styles.title}>
-						{format(
-							new Date(currentYear, currentMonth, 0, 0, 0),
-							'LLLL'
-						)}{' '}
-						{currentYear}
-					</h2>
-					<ButtonGroup>
-						<Button
-							variant="secondary"
-							size="small"
-							onClick={goToNextMonth}
-						>
-							<Icon icon={arrowDown} size={12} />
-						</Button>
-						<Button
-							variant="secondary"
-							size="small"
-							onClick={goToPrevMonth}
-						>
-							<Icon icon={arrowUp} size={12} />
-						</Button>
-					</ButtonGroup>
-				</div>
 				<div className={styles.buttons}>
 					<ButtonGroup>
 						<Button
@@ -257,6 +246,31 @@ export default function TimeFinder() {
 							onClick={setDayTime('evening')}
 						>
 							Evening
+						</Button>
+					</ButtonGroup>
+				</div>
+				<div className={styles.titleRow}>
+					<h2 className={styles.title}>
+						{format(
+							new Date(currentYear, currentMonth + 1, 0, 0, 0),
+							'LLLL'
+						)}{' '}
+						{currentYear}
+					</h2>
+					<ButtonGroup>
+						<Button
+							variant="secondary"
+							size="small"
+							onClick={goToNextMonth}
+						>
+							<Icon icon={arrowDown} size={12} />
+						</Button>
+						<Button
+							variant="secondary"
+							size="small"
+							onClick={goToPrevMonth}
+						>
+							<Icon icon={arrowUp} size={12} />
 						</Button>
 					</ButtonGroup>
 				</div>
