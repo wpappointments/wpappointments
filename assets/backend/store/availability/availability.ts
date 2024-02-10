@@ -1,3 +1,4 @@
+import { addQueryArgs } from '@wordpress/url';
 import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/utils/fetch';
 import { FetchFromApiActionReturn, baseActions } from '../actions';
@@ -8,10 +9,11 @@ type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_AVAILABILITY_STATE: AvailabilityState = {
 	today: [],
+	month: [],
 };
 
 export const actions = {
-	setAvailability(availability: AvailabilityState['today']) {
+	setAvailability(availability: AvailabilityState) {
 		return {
 			type: 'SET_AVAILABILITY',
 			availability,
@@ -23,7 +25,8 @@ export const reducer = (state = DEFAULT_AVAILABILITY_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_AVAILABILITY':
 			return produce(state, (draft) => {
-				draft.today = action.availability;
+				draft.today = action.availability.today;
+				draft.month = action.availability.month;
 			});
 
 		default:
@@ -32,7 +35,12 @@ export const reducer = (state = DEFAULT_AVAILABILITY_STATE, action: Action) => {
 };
 
 export const selectors = {
-	getAvailability(state: State) {
+	getAvailability(
+		state: State,
+		currentMonth: number,
+		currentYear: number,
+		_: number
+	) {
 		return state.availability;
 	},
 };
@@ -44,12 +52,20 @@ export const controls = {
 };
 
 export const resolvers = {
-	*getAvailability(): Generator<
+	*getAvailability(
+		currentMonth: number,
+		currentYear: number
+	): Generator<
 		FetchFromApiActionReturn,
-		{ type: string; availability: State['availability']['today'] },
-		APIResponse<{ availability: State['availability']['today'] }>
+		{ type: string; availability: State['availability'] },
+		APIResponse<{ availability: State['availability'] }>
 	> {
-		const response = yield baseActions.fetchFromAPI('availability');
+		const response = yield baseActions.fetchFromAPI(
+			addQueryArgs('availability', {
+				currentMonth,
+				currentYear,
+			})
+		);
 		const { data } = response;
 		const { availability } = data;
 		return actions.setAvailability(availability);

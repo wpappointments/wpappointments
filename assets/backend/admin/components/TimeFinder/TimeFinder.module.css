@@ -1,6 +1,20 @@
+.wrapper {
+	display: flex;
+	gap: 10px;
+}
+
+.scrollable {
+	overflow: scroll;
+	overscroll-behavior-x: contain;
+	flex: 1;
+}
+
 .rows {
 	display: flex;
 	flex-direction: column;
+	flex-shrink: 0;
+	padding-bottom: 30px;
+	gap: 2px;
 }
 
 .row {
@@ -9,25 +23,32 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 2px;
-	border-bottom: 1px solid rgb( 220, 220, 220 );
+}
+
+.days-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 30px;
+	gap: 2px;
 }
 
 .item {
 	flex: 1;
-	height: 20px;
-	background-color: rgb( 169, 169, 169 );
+	height: 22px;
+	background-color: rgb( 212, 212, 212 );
 	text-align: right;
-	padding: 5px 0;
-	margin: 1px 0;
+	border-radius: 3px;
 }
 
 .item:hover {
-	background-color: rgb( 211, 211, 211 );
+	background-color: #c5c1c1;
 	cursor: pointer;
 }
 
 .item:hover + .item {
-	background-color: rgb( 211, 211, 211 );
+	background-color: #c5c1c1;
 }
 
 .item-available {
@@ -45,20 +66,69 @@
 }
 
 .head {
+	position: relative;
 	flex: 1;
 	font-weight: bold;
-	font-size: 8px;
-	text-align: center;
+	font-size: 10px;
 	margin-bottom: 5px;
-	text-align: center;
+	font-family: monospace;
+}
+
+.head::after {
+	content: '';
+	display: block;
+	width: 1px;
+	height: 8px;
+	background-color: rgb( 184, 184, 184 );
+	position: absolute;
+	bottom: -5px;
+}
+
+.head:first-child::after {
+	content: none;
+}
+
+.days-column .head {
+	margin-bottom: 0;
 }
 
 .head-row {
+	font-family: monospace;
 	flex: 1;
 	font-weight: bold;
-	font-size: 8px;
+	font-size: 10px;
+	text-align: left;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 5px;
+	border-radius: 3px;
+}
+
+.head-row-weekend {
+	background-color: #f0f0f0;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.title-row {
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
 .title {
-	margin-top: 0;
+	margin: 0;
+}
+
+.buttons {
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }

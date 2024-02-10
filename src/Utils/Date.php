@@ -29,12 +29,48 @@ class Date {
 		return $period;
 	}
 
+	/**
+	 * Check if a date or date range is available
+	 *
+	 * @param DatePeriod $range Date or date range to check if contained.
+	 * @param DatePeriod $range_in Date or date range to check if contains.
+	 *
+	 * @return bool
+	 */
+	public static function date_range_contains_another_date_range( $range, $range_in ) {
+		$range_start    = $range->getStartDate();
+		$range_end      = $range->getEndDate();
+		$range_in_start = $range_in->getStartDate();
+		$range_in_end   = $range_in->getEndDate();
+		return $range_start >= $range_in_start && $range_end <= $range_in_end;
+	}
+
+	/**
+	 * Check if a date ranges contain another date range
+	 *
+	 * @param array      $ranges Date ranges.
+	 * @param DatePeriod $range_in Date or date range to check if contains.
+	 *
+	 * @return bool
+	 */
+	public static function date_ranges_contain_another_date_range( $range, $ranges_in ) {
+		$contains = false;
+
+		foreach ( $ranges_in as $range_in ) {
+			if ( self::date_range_contains_another_date_range( $range, $range_in ) ) {
+				$contains = true;
+				break;
+			}
+		}
+
+		return $contains;
+	}
+
 	public static function create_day_slots() {
-		$hours_in_day = 24;
-		$start_hour   = 8;
-		$end_hour     = 12;
-		$slots        = array();
-		$date         = new DateTime( 'today midnight' );
+		$start_hour = 0;
+		$end_hour   = 24;
+		$slots      = array();
+		$date       = new DateTime( 'today midnight' );
 		$date->add( new \DateInterval( 'PT' . $start_hour . 'H' ) );
 
 		for ( $i = $start_hour; $i < $end_hour * 2; $i++ ) {

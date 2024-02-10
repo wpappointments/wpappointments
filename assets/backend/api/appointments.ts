@@ -6,7 +6,7 @@ import { displayErrorToast, displaySuccessToast } from '~/utils/toast';
 import { Appointment } from '~/types';
 
 type AppointmentData = {
-	title: string;
+	service: string;
 };
 
 type Response = APIResponse<{

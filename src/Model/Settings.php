@@ -110,7 +110,7 @@ class Settings {
 		}
 
 		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
-		$settings['schedule'] = $schedule['schedule'];
+		$settings['schedule'] = $schedule;
 
 		return $settings;
 	}
@@ -120,10 +120,10 @@ class Settings {
 	 *
 	 * @param int $schedule_post_id Default schedule post ID.
 	 *
-	 * @return array
+	 * @return null|object
 	 */
 	public function get_default_schedule( $schedule_post_id ) {
-		$settings = array();
+		$schedule = null;
 
 		if ( $schedule_post_id ) {
 			$hours = array();
@@ -136,10 +136,10 @@ class Settings {
 				}
 			}
 
-			$settings['schedule'] = (object) $hours;
+			$schedule = (object) $hours;
 		}
 
-		return $settings;
+		return $schedule;
 	}
 
 	/**

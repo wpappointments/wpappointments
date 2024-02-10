@@ -9,16 +9,16 @@
 	background-color: #6c757d;
 }
 
-.status-pill.is-active {
-	background-color: #1493f4;
+.status-pill.is-pending {
+	background-color: #c1c1c1;
+}
+
+.status-pill.is-confirmed {
+	background-color: #36f414;
 }
 
 .status-pill.is-cancelled {
 	background-color: #dc3545;
-}
-
-.status-pill.is-completed {
-	background-color: #04500b;
 }
 
 .status-pill.is-no-show {
