@@ -14,7 +14,6 @@ import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import { HtmlForm, withForm } from '../Form/Form';
 import DatePicker from '../FormField/DatePicker/DatePicker';
-import Input from '../FormField/Input/Input';
 import Select from '../FormField/Select/Select';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import StartEndTimePicker from '../StartEndTimePicker/StartEndTimePicker';
@@ -25,8 +24,8 @@ import { appointmentsApi } from '~/api/appointments';
 import { AppointmentSchema } from '~/schemas';
 
 type Fields = {
-	title: string;
 	date: string;
+	service: string;
 	status: Appointment['status'];
 	timeHourStart: string;
 	timeMinuteStart: string;
@@ -71,10 +70,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 			reset();
 
-			const title = currentAppointment.title;
+			const service = currentAppointment.service;
 			const status = currentAppointment.status;
 
-			setValue('title', title);
+			setValue('service', service);
 			setValue('status', status);
 		}
 	}, [defaultDate, currentSlideout, currentAppointment, mode]);
@@ -126,7 +125,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			<FormFieldSet>
 				{mode === 'edit' && (
 					<Select
-						name="abcd"
+						name="status"
 						label="Status"
 						rules={{
 							required: true,
@@ -140,13 +139,19 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					/>
 				)}
 
-				<Input
-					name="title"
-					label="Title"
-					placeholder="Eg. Meeting with John Doe"
+				<Select
+					name="service"
+					label="Service"
 					rules={{
 						required: true,
 					}}
+					defaultValue={
+						mode === 'edit'
+							? currentAppointment?.service
+							: 'consultation'
+					}
+					readOnly={true}
+					options={[{ label: 'Consultation', value: 'consultation' }]}
 				/>
 
 				<FormFieldSet

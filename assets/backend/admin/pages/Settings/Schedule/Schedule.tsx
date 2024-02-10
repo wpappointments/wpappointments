@@ -21,7 +21,7 @@ type Fields = {
 	sunday: DayOpeningHours;
 };
 
-export default withForm(function ScheduleSettings() {
+function ScheduleSettings() {
 	const { setValue } = useFormContext();
 	const dispatch = useDispatch(store);
 
@@ -74,4 +74,6 @@ export default withForm(function ScheduleSettings() {
 			</CardBody>
 		</Card>
 	);
-});
+}
+
+export default withForm(ScheduleSettings);
