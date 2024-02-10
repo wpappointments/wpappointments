@@ -3,6 +3,7 @@ import { actions as appointments } from './appointments/appointments';
 import { actions as availability } from './availability/availability';
 import { actions as notices } from './notices/notices';
 import { actions as settings } from './settings/settings';
+import { actions as appoitmentSlideoutActions } from './slideout/appointment/appointment';
 import { actions as slideouts } from './slideout/slideout';
 
 export type BaseActions = typeof baseActions;
@@ -26,4 +27,5 @@ export default {
 	...slideouts,
 	...notices,
 	...availability,
+	...appoitmentSlideoutActions,
 };
