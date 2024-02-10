@@ -127,7 +127,7 @@ class Availability {
 		$month = (int) $date->format( 'm' );
 		$year  = (int) $date->format( 'Y' );
 
-		$days_in_month = (int) date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+		$days_in_month = (int) gmdate( 't', mktime( 0, 0, 0, $month, 1, $year ) );
 
 		$slots = array();
 

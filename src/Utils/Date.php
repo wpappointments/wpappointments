@@ -48,8 +48,8 @@ class Date {
 	/**
 	 * Check if a date ranges contain another date range
 	 *
-	 * @param array      $ranges Date ranges.
-	 * @param DatePeriod $range_in Date or date range to check if contains.
+	 * @param DatePeriod $range Date ranges.
+	 * @param array      $ranges_in Date or date range to check if contains.
 	 *
 	 * @return bool
 	 */
@@ -66,6 +66,11 @@ class Date {
 		return $contains;
 	}
 
+	/**
+	 * Create day slots
+	 *
+	 * @return array
+	 */
 	public static function create_day_slots() {
 		$start_hour = 0;
 		$end_hour   = 24;
