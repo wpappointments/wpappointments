@@ -23,7 +23,7 @@
 		"lint:js": "wp-scripts lint-js ./assets/backend/**/*.ts*",
 		"lint:fix": "pnpm phpcs-fix:all && pnpm format",
 		"lint:staged": "lint-staged",
-		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly ----webpackResolveAlias='{\"~\": \"assets/backend\", \"global.module.css\": \"assets/styles/global.module.css\"}'",
+		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly",
 		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch",
 		"plugin-zip": "pnpm build && pnpm composer install --no-dev && wp-scripts plugin-zip && pnpm composer install",
 		"phpcs": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/phpcs",
