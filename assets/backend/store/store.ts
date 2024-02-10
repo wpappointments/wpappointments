@@ -8,6 +8,7 @@ import reducers from './reducers';
 import resolvers from './resolvers';
 import selectors from './selectors';
 import { SettingsState } from './settings/settings.types';
+import { AppointmentSlideoutState } from './slideout/appointment/appointment.types';
 import { SlideoutState } from './slideout/slideout.types';
 
 export type State = {
@@ -16,6 +17,7 @@ export type State = {
 	slideouts: SlideoutState;
 	notices: NoticesState;
 	availability: AvailabilityState;
+	appointmentSlideout: AppointmentSlideoutState;
 };
 
 export const store = createReduxStore('wpappointments', {
