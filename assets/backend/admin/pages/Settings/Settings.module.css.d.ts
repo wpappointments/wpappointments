@@ -1,4 +1,8 @@
-export const __esModule: true;
-export const formActions: string;
-export const tabsConainer: string;
-
+declare const styles:
+  & Readonly<{ "tabsConainer": string }>
+  & Readonly<{ "tabsConainer": string }>
+  & Readonly<{ "tabsConainer": string }>
+  & Readonly<{ "formActions": string }>
+;
+export default styles;
+//# sourceMappingURL=./Settings.module.css.d.ts.map
