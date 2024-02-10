@@ -1,6 +1,6 @@
 import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { modal, modalActions } from './DeleteAppointments.module.css';
+import styles from './DeleteAppointments.module.css';
 
 type Props = {
 	onConfirmClick: () => Promise<void>;
@@ -15,7 +15,7 @@ export default function DeleteAppointmentModal({
 		<Modal
 			title="Delete appointment?"
 			onRequestClose={closeModal}
-			className={modal}
+			className={styles.modal}
 		>
 			<p>
 				{__(
@@ -23,7 +23,7 @@ export default function DeleteAppointmentModal({
 					'wpappointments'
 				)}
 			</p>
-			<div className={modalActions}>
+			<div className={styles.modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
 					{__('Go back', 'wpappointments')}
 				</Button>

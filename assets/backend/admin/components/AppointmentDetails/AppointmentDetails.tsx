@@ -6,14 +6,8 @@ import cn from '~/utils/cn';
 import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
-import {
-	isPending,
-	isConfirmed,
-	isCancelled,
-	isNoShow,
-	statusPill,
-} from './AppointmentDetails.module.css';
-import { formActions } from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
+import styles from './AppointmentDetails.module.css';
+import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 import DeleteAppointmentModal from '~/admin/components/Modals/DeleteAppointment/DeleteAppointment';
 import { useStateContext } from '~/admin/context/StateContext';
@@ -42,11 +36,14 @@ export default function AppointmentDetails() {
 		<>
 			<div
 				className={cn({
-					[statusPill]: true,
-					[isPending]: currentAppointment?.status === 'pending',
-					[isConfirmed]: currentAppointment?.status === 'confirmed',
-					[isCancelled]: currentAppointment?.status === 'cancelled',
-					[isNoShow]: currentAppointment?.status === 'no-show',
+					[styles.statusPill]: true,
+					[styles.isPending]:
+						currentAppointment?.status === 'pending',
+					[styles.isConfirmed]:
+						currentAppointment?.status === 'confirmed',
+					[styles.isCancelled]:
+						currentAppointment?.status === 'cancelled',
+					[styles.isNoShow]: currentAppointment?.status === 'no-show',
 				})}
 			>
 				{currentAppointment?.status}
@@ -54,7 +51,7 @@ export default function AppointmentDetails() {
 			<h2>{currentAppointment?.service}</h2>
 			<p>{currentAppointment?.date}</p>
 			<p>{currentAppointment?.timeFromTo}</p>
-			<div className={formActions}>
+			<div className={formStyles.formActions}>
 				<Button
 					variant="primary"
 					onClick={() => {

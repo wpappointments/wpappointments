@@ -1,4 +1,6 @@
-export const __esModule: true;
-export const modal: string;
-export const modalActions: string;
-
+declare const styles:
+  & Readonly<{ "modal": string }>
+  & Readonly<{ "modalActions": string }>
+;
+export default styles;
+//# sourceMappingURL=./DeleteAppointments.module.css.d.ts.map

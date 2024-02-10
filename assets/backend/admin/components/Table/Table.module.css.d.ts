@@ -1,5 +1,9 @@
-export const __esModule: true;
-export const empty: string;
-export const emptyIcon: string;
-export const table: string;
-
+declare const styles:
+  & Readonly<{ "table": string }>
+  & Readonly<{ "table": string }>
+  & Readonly<{ "table": string }>
+  & Readonly<{ "empty": string }>
+  & Readonly<{ "emptyIcon": string }>
+;
+export default styles;
+//# sourceMappingURL=./Table.module.css.d.ts.map

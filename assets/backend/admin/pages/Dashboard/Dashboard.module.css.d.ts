@@ -1,4 +1,6 @@
-export const __esModule: true;
-export const filtersForm: string;
-export const upcomingTitleWrapper: string;
-
+declare const styles:
+  & Readonly<{ "upcomingTitleWrapper": string }>
+  & Readonly<{ "filtersForm": string }>
+;
+export default styles;
+//# sourceMappingURL=./Dashboard.module.css.d.ts.map

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Appointment } from '~/types';
-import { empty, emptyIcon, table } from './Table.module.css';
+import styles from './Table.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
 import { AppointmentsApi } from '~/api/appointments';
 
@@ -27,9 +27,9 @@ export default function Table({
 
 	if (!items || items.length === 0) {
 		return (
-			<div className={empty}>
+			<div className={styles.empty}>
 				<svg
-					className={emptyIcon}
+					className={styles.emptyIcon}
 					viewBox="0 0 1024 1024"
 					version="1.1"
 					xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@ export default function Table({
 
 	return (
 		<>
-			<table className={table}>
+			<table className={styles.table}>
 				<thead>
 					<tr>
 						<th>Title</th>
