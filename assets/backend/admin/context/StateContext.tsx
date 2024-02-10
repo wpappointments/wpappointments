@@ -1,23 +1,20 @@
 import { createContext, useContext } from 'react';
 
-type StateContextType = {
+export type StateContext = {
 	resolvableSelectors: Map<string, number>;
 	invalidate: (selector: string) => void;
 	getSelector: (selector: string) => any;
 };
 
-const StateContext = createContext<StateContextType>({} as StateContextType);
-
-export default StateContext;
-
-export function StateContextProvider({
-	children,
-}: {
+export type StateContextProviderProps = {
 	children: React.ReactNode;
-}) {
+};
+
+export function StateContextProvider({ children }: StateContextProviderProps) {
 	const resolvableSelectors = new Map<string, any>([
 		['getUpcomingAppointments', 0],
 		['getAppointments', 0],
+		['getAvailability', 0],
 	]);
 
 	const getSelector = (selector: string) => {
@@ -31,18 +28,21 @@ export function StateContextProvider({
 		);
 	};
 
+	const value = {
+		resolvableSelectors,
+		invalidate,
+		getSelector,
+	};
+
 	return (
-		<StateContext.Provider
-			value={{ resolvableSelectors, invalidate, getSelector }}
-		>
-			{children}
-		</StateContext.Provider>
+		<StateContext.Provider value={value}>{children}</StateContext.Provider>
 	);
 }
 
 export function useStateContext() {
-	const { resolvableSelectors, invalidate, getSelector } =
-		useContext(StateContext);
-
-	return { resolvableSelectors, invalidate, getSelector };
+	return { ...useContext(StateContext) };
 }
+
+const StateContext = createContext<StateContext>({} as StateContext);
+
+export default StateContext;

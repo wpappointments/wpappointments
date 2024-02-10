@@ -166,16 +166,16 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$params = $request->get_params();
-		$title  = $request->get_param( 'title' );
-		$date   = rest_parse_date( get_gmt_from_date( $params['date'] ) );
+		$params  = $request->get_params();
+		$service = $request->get_param( 'service' );
+		$date    = rest_parse_date( get_gmt_from_date( $params['date'] ) );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
-			$title,
+			$service,
 			array(
 				'datetime' => $date,
-				'status'   => 'active',
+				'status'   => 'confirmed',
 			)
 		);
 
@@ -198,10 +198,10 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$params = $request->get_params();
-		$id     = $request->get_param( 'id' );
-		$title  = $request->get_param( 'title' );
-		$status = $request->get_param( 'status' );
+		$params  = $request->get_params();
+		$id      = $request->get_param( 'id' );
+		$service = $request->get_param( 'service' );
+		$status  = $request->get_param( 'status' );
 
 		if ( null === $id ) {
 			return self::error( __( 'Appointment ID is required', 'wpappointments' ) );
@@ -212,7 +212,7 @@ class Appointment extends Controller {
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->update(
 			$id,
-			$title,
+			$service,
 			array(
 				'datetime' => $date,
 				'status'   => $status,

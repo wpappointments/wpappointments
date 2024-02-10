@@ -90,7 +90,7 @@ type TableRowProps = {
 };
 
 function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
-	const { id, title, date, timeFromTo } = row;
+	const { id, service, date, timeFromTo } = row;
 
 	return (
 		<tr key={id}>
@@ -101,7 +101,7 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 						view && view(row);
 					}}
 				>
-					{title}
+					{service}
 				</Button>
 			</td>
 			<td>{date}</td>
@@ -125,7 +125,7 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 				>
 					Edit
 				</Button>
-				{row.status === 'active' && (
+				{row.status === 'confirmed' && (
 					<Button
 						variant="tertiary"
 						size="small"

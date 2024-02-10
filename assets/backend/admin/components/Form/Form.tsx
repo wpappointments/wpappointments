@@ -1,33 +1,25 @@
 import {
 	FieldValues,
-	FormProvider,
+	FormProvider as RHFProvider,
 	useForm,
 	useFormContext,
 } from 'react-hook-form';
 
-type Props<TFields> = {
+export type HtmlFormProps<TFields> = {
 	children: React.ReactNode;
 	onSubmit?: (formData: TFields) => Promise<void>;
 	className?: string;
 };
 
-type FormProps = {
+export type FormProviderProps = {
 	children: React.ReactNode;
 };
-
-function Form({ children }: FormProps) {
-	const methods = useForm<{
-		hello: string;
-	}>();
-
-	return <FormProvider {...methods}>{children}</FormProvider>;
-}
 
 export function HtmlForm<TFields extends FieldValues>({
 	onSubmit,
 	children,
 	className,
-}: Props<TFields>) {
+}: HtmlFormProps<TFields>) {
 	const { handleSubmit } = useFormContext<TFields>();
 
 	return (
@@ -40,14 +32,21 @@ export function HtmlForm<TFields extends FieldValues>({
 	);
 }
 
+export function FormProvider({ children }: FormProviderProps) {
+	// TODO: Add a type for the form fields (generic)
+	const methods = useForm();
+
+	return <RHFProvider {...methods}>{children}</RHFProvider>;
+}
+
 export function withForm<TFields extends FieldValues>(
 	Component: (props: TFields) => JSX.Element
 ) {
 	return function FormWrapper(props: TFields) {
 		return (
-			<Form>
+			<FormProvider>
 				<Component {...props} />
-			</Form>
+			</FormProvider>
 		);
 	};
 }

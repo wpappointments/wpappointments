@@ -111,7 +111,7 @@ class AppointmentPost {
 			}
 		}
 
-		$status = 'active';
+		$status = 'confirmed';
 
 		if ( isset( $query['status'] ) ) {
 			$status = $query['status'];
@@ -298,7 +298,7 @@ class AppointmentPost {
 
 		return array(
 			'id'         => $post_id,
-			'title'      => get_the_title( $post_id ),
+			'service'    => get_the_title( $post_id ),
 			'date'       => $date,
 			'time'       => $time,
 			'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),

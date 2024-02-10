@@ -28,6 +28,7 @@ type Props<TFields extends FieldValues> = {
 		label: string;
 		value: string;
 	}[];
+	readOnly?: boolean;
 	onChange?: (value: string) => void;
 	fullWidth?: boolean;
 };
@@ -44,6 +45,7 @@ export default function Select<TFields extends FieldValues>({
 	options,
 	defaultValue,
 	onChange,
+	readOnly = false,
 	fullWidth = false,
 }: Props<TFields>) {
 	const {
@@ -86,6 +88,7 @@ export default function Select<TFields extends FieldValues>({
 						size="__unstable-large"
 						id={name}
 						options={options}
+						disabled={readOnly}
 					/>
 				)}
 			/>
