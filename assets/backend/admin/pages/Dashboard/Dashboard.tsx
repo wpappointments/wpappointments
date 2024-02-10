@@ -29,8 +29,6 @@ type Fields = {
 	period: 'week' | 'month' | 'year' | 'all' | '';
 };
 
-console.log(globalStyles);
-
 export default function Dashboard() {
 	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
 	const [filtersOpen, setFiltersOpen] = useState(false);
