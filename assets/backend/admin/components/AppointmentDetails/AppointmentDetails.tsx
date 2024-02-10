@@ -7,9 +7,9 @@ import useSlideout from '~/hooks/useSlideout';
 import { store } from '~/store/store';
 import { Appointment } from '~/types';
 import {
-	isActive,
+	isPending,
+	isConfirmed,
 	isCancelled,
-	isCompleted,
 	isNoShow,
 	statusPill,
 } from './AppointmentDetails.module.css';
@@ -40,18 +40,18 @@ export default function AppointmentDetails() {
 
 	return (
 		<>
-			<p
+			<div
 				className={cn({
 					[statusPill]: true,
-					[isActive]: currentAppointment?.status === 'active',
-					[isCompleted]: currentAppointment?.status === 'completed',
+					[isPending]: currentAppointment?.status === 'pending',
+					[isConfirmed]: currentAppointment?.status === 'confirmed',
 					[isCancelled]: currentAppointment?.status === 'cancelled',
 					[isNoShow]: currentAppointment?.status === 'no-show',
 				})}
 			>
 				{currentAppointment?.status}
-			</p>
-			<h2>{currentAppointment?.title}</h2>
+			</div>
+			<h2>{currentAppointment?.service}</h2>
 			<p>{currentAppointment?.date}</p>
 			<p>{currentAppointment?.timeFromTo}</p>
 			<div className={formActions}>
@@ -68,7 +68,7 @@ export default function AppointmentDetails() {
 				>
 					{__('Edit Appointment')}
 				</Button>
-				{currentAppointment.status === 'active' && (
+				{currentAppointment.status === 'confirmed' && (
 					<Button
 						isDestructive
 						onClick={() => {
@@ -124,7 +124,7 @@ function AppointmentDetailsModals({
 	deleteAppointment,
 	closeModal,
 }: AppointmentDetailsModalsProps) {
-	if (status === 'active') {
+	if (status === 'confirmed') {
 		return (
 			<CancelAppointment
 				onConfirmClick={cancelAppointment}

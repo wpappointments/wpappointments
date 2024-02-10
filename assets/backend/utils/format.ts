@@ -3,6 +3,10 @@ export function formatTimeForPicker(hourOrMinute: number | string) {
 }
 
 export function formatTime24HourFromDate(date: Date) {
+	if (!date) {
+		return '';
+	}
+
 	const hour = date.getHours();
 	const minute = date.getMinutes();
 

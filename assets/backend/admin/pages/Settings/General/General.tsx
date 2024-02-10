@@ -25,7 +25,7 @@ type Fields = {
 	clockType: 12 | 24;
 };
 
-export default withForm(function GeneralSettings() {
+function GeneralSettings() {
 	const dispatch = useDispatch(store);
 
 	const settings = useSelect(() => {
@@ -106,4 +106,6 @@ export default withForm(function GeneralSettings() {
 			</HtmlForm>
 		</Card>
 	);
-});
+}
+
+export default withForm(GeneralSettings);

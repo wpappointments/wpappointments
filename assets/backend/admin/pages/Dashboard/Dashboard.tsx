@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
@@ -33,7 +33,7 @@ export default function Dashboard() {
 	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
 	const [filtersOpen, setFiltersOpen] = useState(false);
 	const [filters, setFilters] = useState<Fields>({
-		status: 'active',
+		status: 'confirmed',
 		period: 'week',
 	});
 	const formRef = useRef<HTMLFormElement>(null);
@@ -140,10 +140,12 @@ export default function Dashboard() {
 						/>
 					</CardBody>
 				</Card>
-				<SlideOut title={__('Appointment')} id="view-appointment">
-					<Suspense fallback={<p>Loading...</p>}>
-						<AppointmentDetails />
-					</Suspense>
+				<SlideOut
+					title={__('Appointment')}
+					id="view-appointment"
+					headerRightSlot={<Button>Hello</Button>}
+				>
+					<AppointmentDetails />
 				</SlideOut>
 				<SlideOut
 					title={__('Create New Appointment')}
