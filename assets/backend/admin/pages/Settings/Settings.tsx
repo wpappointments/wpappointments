@@ -4,7 +4,7 @@ import AppointmentsSettings from './Appointments/Appointments';
 import CalendarSettings from './Calendar/Calendar';
 import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
-import { tabsConainer } from './Settings.module.css';
+import styles from './Settings.module.css';
 import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
 
 type Tab = {
@@ -57,7 +57,7 @@ export default function Settings() {
 	return (
 		<LayoutDefault title="Settings">
 			<TabPanel
-				className={tabsConainer}
+				className={styles.tabsConainer}
 				activeClass="active-tab"
 				initialTabName={window.location.hash.replace('#', '')}
 				tabs={[...tabs.values()]}

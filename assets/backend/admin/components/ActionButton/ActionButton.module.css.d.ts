@@ -1,4 +1,7 @@
-export const __esModule: true;
-export const actionButton: string;
-export const dangerousActionButton: string;
-
+declare const styles:
+  & Readonly<{ "actionButton": string }>
+  & Readonly<{ "actionButton": string }>
+  & Readonly<{ "dangerousActionButton": string }>
+;
+export default styles;
+//# sourceMappingURL=./ActionButton.module.css.d.ts.map

@@ -1,6 +1,11 @@
-export const __esModule: true;
-export const folded: string;
-export const layout: string;
-export const layoutContent: string;
-export const layoutHeader: string;
-
+declare const styles:
+  & Readonly<{ "layout": string }>
+  & Readonly<{ "layoutHeader": string }>
+  & Readonly<{ "layoutHeader": string }>
+  & Readonly<{ "layoutHeader": string }>
+  & Readonly<{ "layoutHeader": string }>
+  & Readonly<{ "folded": string }>
+  & Readonly<{ "layoutContent": string }>
+;
+export default styles;
+//# sourceMappingURL=./LayoutDefault.module.css.d.ts.map

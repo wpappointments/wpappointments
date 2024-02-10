@@ -10,12 +10,12 @@ import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import useFillFormValues from '~/hooks/useFillFormValues';
 import { store } from '~/store/store';
-import { formActions } from '../Settings.module.css';
+import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/admin/components/Form/Form';
 import Input from '~/admin/components/FormField/Input/Input';
 import Select from '~/admin/components/FormField/Select/Select';
 import FormFieldSet from '~/admin/components/FormFieldSet/FormFieldSet';
-import { card } from 'global.module.css';
+import globalStyles from 'global.module.css';
 
 type Fields = {
 	firstName: string;
@@ -45,7 +45,7 @@ function GeneralSettings() {
 	};
 
 	return (
-		<Card className={card}>
+		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">Profile and company details</Text>
 			</CardHeader>
@@ -97,7 +97,7 @@ function GeneralSettings() {
 					</FormFieldSet>
 				</CardBody>
 				<CardFooter>
-					<div className={formActions}>
+					<div className={formStyles.formActions}>
 						<Button type="submit" variant="primary">
 							Save changes
 						</Button>

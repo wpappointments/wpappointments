@@ -23,8 +23,8 @@
 		"lint:js": "wp-scripts lint-js ./assets/backend/**/*.ts*",
 		"lint:fix": "pnpm phpcs-fix:all && pnpm format",
 		"lint:staged": "lint-staged",
-		"css-types": "tcm -p 'assets/**/*.module.css' -e",
-		"css-types-watch": "tcm -p 'assets/**/*.module.css' -e --watch",
+		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly ----webpackResolveAlias='{\"~\": \"assets/backend\", \"global.module.css\": \"assets/styles/global.module.css\"}'",
+		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch",
 		"plugin-zip": "pnpm build && pnpm composer install --no-dev && wp-scripts plugin-zip && pnpm composer install",
 		"phpcs": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/phpcs",
 		"phpcs-fix": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments bash ./.husky/phpcbf",
@@ -53,12 +53,14 @@
 		"@wordpress/env": "^8.7.0",
 		"@wordpress/prettier-config": "^2.24.0",
 		"@wordpress/scripts": "^26.19.0",
+		"happy-css-modules": "^2.1.2",
 		"husky": "^8.0.3",
 		"jest": "^29.7.0",
 		"lint-staged": "^14.0.1",
+		"postcss": "^8.4.35",
 		"prettier": "npm:wp-prettier@2.8.5",
-		"ts-jest": "^29.1.2",
-		"typed-css-modules": "^0.8.1"
+		"sass": "^1.70.0",
+		"ts-jest": "^29.1.2"
 	},
 	"dependencies": {
 		"@wordpress/api-fetch": "^6.38.0",

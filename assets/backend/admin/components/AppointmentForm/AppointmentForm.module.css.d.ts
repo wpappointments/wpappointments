@@ -1,6 +1,8 @@
-export const __esModule: true;
-export const formActions: string;
-export const modal: string;
-export const modalActions: string;
-export const slideout: string;
-
+declare const styles:
+  & Readonly<{ "formActions": string }>
+  & Readonly<{ "modal": string }>
+  & Readonly<{ "modalActions": string }>
+  & Readonly<{ "slideout": string }>
+;
+export default styles;
+//# sourceMappingURL=./AppointmentForm.module.css.d.ts.map

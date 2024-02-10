@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal, ToggleControl, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { modal, modalActions, notify } from './CancelAppointment.module.css';
+import styles from './CancelAppointment.module.css';
 
 type Props = {
 	onConfirmClick: () => Promise<void>;
@@ -18,10 +18,10 @@ export default function CancelAppointment({
 		<Modal
 			title="Cancel appointment?"
 			onRequestClose={closeModal}
-			className={modal}
+			className={styles.modal}
 		>
 			<p>{__('This will cancel the appointment.', 'wpappointments')}</p>
-			<div className={notify}>
+			<div className={styles.notify}>
 				<ToggleControl
 					onChange={(e) => {
 						setShouldNotify(e);
@@ -33,7 +33,7 @@ export default function CancelAppointment({
 					)}
 				/>
 			</div>
-			<div className={modalActions}>
+			<div className={styles.modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
 					{__('Go back', 'wpappointments')}
 				</Button>

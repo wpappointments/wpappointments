@@ -6,10 +6,10 @@ import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import type { DayOpeningHours } from '~/store/settings/settings.types';
 import { store } from '~/store/store';
-import { formActions } from '../Settings.module.css';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
+import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/admin/components/Form/Form';
-import { card } from 'global.module.css';
+import globalStyles from 'global.module.css';
 
 type Fields = {
 	monday: DayOpeningHours;
@@ -58,14 +58,14 @@ function ScheduleSettings() {
 	}, [schedule]);
 
 	return (
-		<Card className={card}>
+		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">Working hours</Text>
 			</CardHeader>
 			<CardBody>
 				<HtmlForm onSubmit={onSubmit}>
 					{fields}
-					<div className={formActions}>
+					<div className={formStyles.formActions}>
 						<Button type="submit" variant="primary">
 							Save changes
 						</Button>

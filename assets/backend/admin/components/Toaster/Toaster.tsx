@@ -5,13 +5,7 @@ import { __ } from '@wordpress/i18n';
 import cn from '~/utils/cn';
 import { Toast } from '~/store/notices/notices.types';
 import { store } from '~/store/store';
-import {
-	isActive,
-	toastContainer,
-	toastMessage,
-	typeError,
-	typeSuccess,
-} from './Toaster.module.css';
+import styles from './Toaster.module.css';
 
 export default function Toaster() {
 	const toasts = useSelect((select) => {
@@ -19,7 +13,7 @@ export default function Toaster() {
 	}, []);
 
 	return (
-		<div className={toastContainer} id="toast-container">
+		<div className={styles.toastContainer} id="toast-container">
 			{toasts.map((toast) => {
 				return <ToastMessage key={toast.id} toast={toast} />;
 			})}
@@ -37,10 +31,10 @@ function ToastMessage({ toast }: { toast: Toast }) {
 	return (
 		<div
 			className={cn({
-				[toastMessage]: true,
-				[isActive]: loaded,
-				[typeError]: toast.type === 'error',
-				[typeSuccess]: toast.type === 'success',
+				[styles.toastMessage]: true,
+				[styles.isActive]: loaded,
+				[styles.typeError]: toast.type === 'error',
+				[styles.typeSuccess]: toast.type === 'success',
 			})}
 		>
 			<Snackbar key={toast.id}>{toast.message}</Snackbar>

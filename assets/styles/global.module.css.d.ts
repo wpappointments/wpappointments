@@ -1,3 +1,5 @@
-export const __esModule: true;
-export const card: string;
-
+declare const styles:
+  & Readonly<{ "card": string }>
+;
+export default styles;
+//# sourceMappingURL=./global.module.css.d.ts.map

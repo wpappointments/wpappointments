@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { InputControl } from '~/utils/experimental';
 import { getGenericInputErrorMessage } from '~/utils/forms';
 import FormField from '../FormField';
-import { fieldLabel } from '../FormField.module.css';
+import styles from '../FormField.module.css';
 
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
@@ -50,7 +50,7 @@ export default function Input<TFields extends FieldValues>({
 
 	return (
 		<FormField>
-			<label className={fieldLabel} htmlFor={name}>
+			<label className={styles.fieldLabel} htmlFor={name}>
 				{label}
 				{rules?.required && '*'}
 			</label>

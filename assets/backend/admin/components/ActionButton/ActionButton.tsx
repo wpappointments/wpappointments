@@ -1,7 +1,7 @@
 import { Button } from '@wordpress/components';
 import cn from '~/utils/cn';
 import apiFetch, { APIResponse } from '~/utils/fetch';
-import { actionButton, dangerousActionButton } from './ActionButton.module.css';
+import styles from './ActionButton.module.css';
 
 type Action = {
 	name: string;
@@ -34,8 +34,8 @@ export default function ActionButton<T>({
 			isDestructive={isDestructive}
 			size="small"
 			className={cn({
-				[actionButton]: true,
-				[dangerousActionButton]: isDangerous,
+				[styles.actionButton]: true,
+				[styles.dangerousActionButton]: isDangerous,
 			})}
 			onClick={handleAction<T>(action, onSuccess, onError)}
 			key={action.name}

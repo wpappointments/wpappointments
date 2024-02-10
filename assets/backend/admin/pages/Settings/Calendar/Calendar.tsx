@@ -3,10 +3,10 @@ import { useDispatch, useSelect, select } from '@wordpress/data';
 import { Text } from '~/utils/experimental';
 import apiFetch from '~/utils/fetch';
 import { store } from '~/store/store';
-import { formActions } from '../Settings.module.css';
+import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/admin/components/Form/Form';
 import FormFieldSet from '~/admin/components/FormFieldSet/FormFieldSet';
-import { card } from 'global.module.css';
+import globalStyles from 'global.module.css';
 
 type Fields = {};
 
@@ -32,14 +32,14 @@ export default withForm(function CalendarSettings() {
 
 	return (
 		<HtmlForm onSubmit={onSubmit}>
-			<Card className={card}>
+			<Card className={globalStyles.card}>
 				<CardHeader>
 					<Text size="title">Calendar settings</Text>
 				</CardHeader>
 				<CardBody>
 					<FormFieldSet>
 						No fields here yet
-						<div className={formActions}>
+						<div className={formStyles.formActions}>
 							<Button type="submit" variant="primary">
 								Save changes
 							</Button>
