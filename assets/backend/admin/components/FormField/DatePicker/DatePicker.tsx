@@ -24,6 +24,7 @@ type Props<TFields extends FieldValues> = {
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 	defaultValue?: PathValue<TFields, Path<TFields>>;
+	onMonthPreviewed?: (date: Date) => void;
 } & DateTimePickerProps;
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -39,6 +40,7 @@ export default function DatePicker<TFields extends FieldValues>({
 	isInvalidDate,
 	events,
 	startOfWeek,
+	onMonthPreviewed,
 }: Props<TFields>) {
 	const {
 		control,
@@ -61,6 +63,7 @@ export default function DatePicker<TFields extends FieldValues>({
 						isInvalidDate={isInvalidDate}
 						startOfWeek={startOfWeek}
 						events={events}
+						onMonthPreviewed={onMonthPreviewed}
 					/>
 				)}
 			/>
