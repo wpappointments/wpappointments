@@ -1,5 +1,5 @@
 import cn from '~/utils/cn';
-import { fieldFullWidth } from './FormField.module.css';
+import styles from './FormField.module.css';
 
 type Props = {
 	children: React.ReactNode;
@@ -16,7 +16,7 @@ export default function FormField({
 		<div
 			className={cn({
 				[className || '']: true,
-				[fieldFullWidth]: isFullWidth,
+				[styles.fieldFullWidth]: isFullWidth,
 			})}
 		>
 			{children}

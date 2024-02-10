@@ -6,14 +6,7 @@ import cn from '~/utils/cn';
 import type { DayOpeningHours } from '~/store/settings/settings.types';
 import { store } from '~/store/store';
 import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
-import {
-	copyToAllDays,
-	copyToAllDaysWrapper,
-	dayLabel,
-	fieldGroup,
-	fieldGroupRow,
-	fieldGroupSpaceBetween,
-} from './OpeningHoursDayOfWeek.module.css';
+import styles from './OpeningHoursDayOfWeek.module.css';
 import Toggle from '~/admin/components/FormField/Toggle/Toggle';
 
 export default function OpeningHoursDayOfWeek({
@@ -124,12 +117,12 @@ export default function OpeningHoursDayOfWeek({
 	return (
 		<div
 			className={cn({
-				[fieldGroup]: true,
-				[fieldGroupSpaceBetween]: true,
+				[styles.fieldGroup]: true,
+				[styles.fieldGroupSpaceBetween]: true,
 			})}
 		>
-			<div className={fieldGroupRow}>
-				<div className={dayLabel}>
+			<div className={styles.fieldGroupRow}>
+				<div className={styles.dayLabel}>
 					<span>{day}:</span>
 					<Toggle
 						name={`${day}.enabled`}
@@ -164,11 +157,11 @@ export default function OpeningHoursDayOfWeek({
 				</div>
 			</div>
 			{showCopyToAllDays && (
-				<div className={copyToAllDaysWrapper}>
+				<div className={styles.copyToAllDaysWrapper}>
 					<Button
 						size="compact"
 						variant="link"
-						className={copyToAllDays}
+						className={styles.copyToAllDays}
 						onClick={() => {
 							copyWorkingHoursToAllDays(values);
 						}}

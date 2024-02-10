@@ -6,22 +6,7 @@ import { format, getDaysInMonth } from 'date-fns';
 import cn from '~/utils/cn';
 import { formatTime24HourFromDate, formatTimeForPicker } from '~/utils/format';
 import { store } from '~/store/store';
-import {
-	head,
-	item,
-	rows,
-	row,
-	itemAvailable,
-	headRow,
-	title,
-	titleRow,
-	header,
-	buttons,
-	scrollable,
-	daysColumn,
-	wrapper,
-	headRowWeekend,
-} from './TimeFinder.module.css';
+import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/admin/context/StateContext';
 
 export default function TimeFinder() {
@@ -198,9 +183,9 @@ export default function TimeFinder() {
 
 	return (
 		<>
-			<div className={header}>
-				<div className={titleRow}>
-					<h2 className={title}>
+			<div className={styles.header}>
+				<div className={styles.titleRow}>
+					<h2 className={styles.title}>
 						{format(
 							new Date(currentYear, currentMonth, 0, 0, 0),
 							'LLLL'
@@ -224,7 +209,7 @@ export default function TimeFinder() {
 						</Button>
 					</ButtonGroup>
 				</div>
-				<div className={buttons}>
+				<div className={styles.buttons}>
 					<ButtonGroup>
 						<Button
 							variant={
@@ -276,15 +261,15 @@ export default function TimeFinder() {
 					</ButtonGroup>
 				</div>
 			</div>
-			<div className={wrapper}>
-				<div className={daysColumn}>
-					<div className={head}>&nbsp;</div>
+			<div className={styles.wrapper}>
+				<div className={styles.daysColumn}>
+					<div className={styles.head}>&nbsp;</div>
 					{days.map((day) => {
 						return (
 							<div
 								className={cn({
-									[headRow]: true,
-									[headRowWeekend]:
+									[styles.headRow]: true,
+									[styles.headRowWeekend]:
 										day.weekday === 'Sat' ||
 										day.weekday === 'Sun',
 								})}
@@ -297,33 +282,36 @@ export default function TimeFinder() {
 				</div>
 				<div
 					ref={scrollableRef}
-					className={scrollable}
+					className={styles.scrollable}
 					style={{
 						overflow: `${hours === 'allDay' ? 'hidden' : 'auto'}`,
 					}}
 				>
 					<div
-						className={rows}
+						className={styles.rows}
 						style={{
 							width: `${hours === 'allDay' ? 100 : 400}%`,
 						}}
 					>
-						<div className={row}>
+						<div className={styles.row}>
 							{hourHeadings.map((date) => (
-								<div className={head} key={date + 'head'}>
+								<div
+									className={styles.head}
+									key={date + 'head'}
+								>
 									{date}
 								</div>
 							))}
 						</div>
 						{month.map((day) => {
 							return (
-								<div className={row} key={day.date.date}>
+								<div className={styles.row} key={day.date.date}>
 									{[...day.slots].map((slot) => {
 										return (
 											<div
 												className={cn({
-													[item]: true,
-													[itemAvailable]:
+													[styles.item]: true,
+													[styles.itemAvailable]:
 														slot.available,
 												})}
 												key={slot.start.date + 'cell'}

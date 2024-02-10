@@ -1,12 +1,22 @@
-export const __esModule: true;
-export const calendar: string;
-export const dayButton: string;
-export const dayButtonHasEvents: string;
-export const dayButtonIsInvalid: string;
-export const dayButtonIsSelected: string;
-export const dayButtonIsToday: string;
-export const dayOfWeek: string;
-export const navigator: string;
-export const navigatorHeading: string;
-export const wrapper: string;
-
+declare const styles:
+  & Readonly<{ "wrapper": string }>
+  & Readonly<{ "navigator": string }>
+  & Readonly<{ "navigatorHeading": string }>
+  & Readonly<{ "navigatorHeading": string }>
+  & Readonly<{ "calendar": string }>
+  & Readonly<{ "dayOfWeek": string }>
+  & Readonly<{ "dayOfWeek": string }>
+  & Readonly<{ "dayOfWeek": string }>
+  & Readonly<{ "dayButton": string }>
+  & Readonly<{ "dayButtonHasEvents": string }>
+  & Readonly<{ "dayButtonHasEvents": string }>
+  & Readonly<{ "dayButtonIsSelected": string }>
+  & Readonly<{ "dayButtonIsSelected": string }>
+  & Readonly<{ "dayButtonIsSelected": string }>
+  & Readonly<{ "dayButtonIsSelected": string }>
+  & Readonly<{ "dayButtonIsToday": string }>
+  & Readonly<{ "dayButtonIsToday": string }>
+  & Readonly<{ "dayButtonIsInvalid": string }>
+;
+export default styles;
+//# sourceMappingURL=./WPDatePicker.module.css.d.ts.map

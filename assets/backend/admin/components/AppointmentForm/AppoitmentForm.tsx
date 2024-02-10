@@ -17,7 +17,7 @@ import DatePicker from '../FormField/DatePicker/DatePicker';
 import Select from '../FormField/Select/Select';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import StartEndTimePicker from '../StartEndTimePicker/StartEndTimePicker';
-import { formActions } from './AppointmentForm.module.css';
+import styles from './AppointmentForm.module.css';
 import { getSubmitButtonLabel } from './utils';
 import { useStateContext } from '~/admin/context/StateContext';
 import { appointmentsApi } from '~/api/appointments';
@@ -208,7 +208,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				<StartEndTimePicker date={new Date(getValues('date'))} />
 			</FormFieldSet>
 
-			<div className={formActions}>
+			<div className={styles.formActions}>
 				<Button
 					type="submit"
 					variant="primary"
