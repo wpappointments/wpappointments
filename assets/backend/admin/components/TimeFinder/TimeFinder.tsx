@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, ButtonGroup } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
-import {
-	Icon,
-	arrowDown,
-	arrowLeft,
-	arrowRight,
-	arrowUp,
-} from '@wordpress/icons';
+import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { format, getDaysInMonth } from 'date-fns';
 import cn from '~/utils/cn';
 import { formatTime24HourFromDate, formatTimeForPicker } from '~/utils/format';
