@@ -62,7 +62,7 @@ export const resolvers = {
 	> {
 		const response = yield baseActions.fetchFromAPI(
 			addQueryArgs('availability', {
-				currentMonth,
+				currentMonth: currentMonth + 1,
 				currentYear,
 			})
 		);

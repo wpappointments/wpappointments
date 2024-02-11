@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, ButtonGroup } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { Icon, arrowDown, arrowUp } from '@wordpress/icons';
+import {
+	Icon,
+	arrowDown,
+	arrowLeft,
+	arrowRight,
+	arrowUp,
+} from '@wordpress/icons';
 import { format, getDaysInMonth } from 'date-fns';
 import cn from '~/utils/cn';
 import { formatTime24HourFromDate, formatTimeForPicker } from '~/utils/format';
@@ -16,7 +22,7 @@ export default function TimeFinder() {
 	const isScrolling = useRef(true);
 
 	const [hours, setHours] = useState<
-		'earlyMorning' | 'morning' | 'afternoon' | 'evening' | 'allDay'
+		'earlyMorning' | 'morning' | 'afternoon' | 'evening' | 'allDay' | 'auto'
 	>('morning');
 
 	const dispatch = useDispatch(store);
@@ -149,7 +155,9 @@ export default function TimeFinder() {
 		return <div>Loading...</div>;
 	}
 
-	const daysInMonth = getDaysInMonth(new Date(currentYear, currentMonth, 0));
+	const daysInMonth = getDaysInMonth(
+		new Date(currentYear, currentMonth + 1, 0)
+	);
 	const days = [];
 
 	for (let i = 1; i <= daysInMonth; i++) {
@@ -160,8 +168,8 @@ export default function TimeFinder() {
 	}
 
 	function goToNextMonth() {
-		if (currentMonth === 12) {
-			setCurrentMonth(1);
+		if (currentMonth === 11) {
+			setCurrentMonth(0);
 			setCurrentYear(currentYear + 1);
 		} else {
 			setCurrentMonth(currentMonth + 1);
@@ -171,8 +179,8 @@ export default function TimeFinder() {
 	}
 
 	function goToPrevMonth() {
-		if (currentMonth === 1) {
-			setCurrentMonth(12);
+		if (currentMonth === 0) {
+			setCurrentMonth(11);
 			setCurrentYear(currentYear - 1);
 		} else {
 			setCurrentMonth(currentMonth - 1);
@@ -191,8 +199,18 @@ export default function TimeFinder() {
 		}
 	}
 
+	function calculateWidth() {
+		if (hours === 'allDay') {
+			return 100;
+		}
+
+		const multiplier = hourHeadings.length / 24;
+		return multiplier < 1 ? 100 : 200 * multiplier;
+	}
+
 	if (hours === 'allDay') {
-		hourHeadings = hourHeadings.filter((_, i) => i % 4 === 0);
+		const precision = hourHeadings.length / 12;
+		hourHeadings = hourHeadings.filter((_, i) => i % precision === 0);
 	}
 
 	return (
@@ -200,6 +218,13 @@ export default function TimeFinder() {
 			<div className={styles.header}>
 				<div className={styles.buttons}>
 					<ButtonGroup>
+						<Button
+							variant={hours === 'auto' ? 'primary' : 'secondary'}
+							size="small"
+							onClick={setDayTime('auto')}
+						>
+							Auto
+						</Button>
 						<Button
 							variant={
 								hours === 'allDay' ? 'primary' : 'secondary'
@@ -261,16 +286,16 @@ export default function TimeFinder() {
 						<Button
 							variant="secondary"
 							size="small"
-							onClick={goToNextMonth}
+							onClick={goToPrevMonth}
 						>
-							<Icon icon={arrowDown} size={12} />
+							<Icon icon={arrowLeft} size={12} />
 						</Button>
 						<Button
 							variant="secondary"
 							size="small"
-							onClick={goToPrevMonth}
+							onClick={goToNextMonth}
 						>
-							<Icon icon={arrowUp} size={12} />
+							<Icon icon={arrowRight} size={12} />
 						</Button>
 					</ButtonGroup>
 				</div>
@@ -304,7 +329,7 @@ export default function TimeFinder() {
 					<div
 						className={styles.rows}
 						style={{
-							width: `${hours === 'allDay' ? 100 : 400}%`,
+							width: `${calculateWidth()}%`,
 						}}
 					>
 						<div className={styles.row}>
@@ -327,6 +352,8 @@ export default function TimeFinder() {
 													[styles.item]: true,
 													[styles.itemAvailable]:
 														slot.available,
+													[styles.itemBooked]:
+														slot.booked,
 												})}
 												key={slot.start.date + 'cell'}
 											></div>

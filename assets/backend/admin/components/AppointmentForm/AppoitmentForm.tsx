@@ -5,7 +5,6 @@ import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
 import { is } from 'valibot';
-import { getNextRoundHourDate } from '~/utils/datetime';
 import { APIResponse } from '~/utils/fetch';
 import resolve from '~/utils/resolve';
 import { displayErrorToast } from '~/utils/toast';
@@ -17,8 +16,8 @@ import { HtmlForm, withForm } from '../Form/Form';
 import DatePicker from '../FormField/DatePicker/DatePicker';
 import Select from '../FormField/Select/Select';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
-import StartEndTimePicker from '../StartEndTimePicker/StartEndTimePicker';
 import styles from './AppointmentForm.module.css';
+import StartEndTimePicker from './StartEndTimePicker/StartEndTimePicker';
 import { getSubmitButtonLabel } from './utils';
 import { useStateContext } from '~/admin/context/StateContext';
 import { appointmentsApi } from '~/api/appointments';
@@ -33,6 +32,7 @@ type Fields = {
 	timeHourEnd: string;
 	timeMinuteEnd: string;
 	timeType: 'am' | 'pm';
+	duration: number;
 };
 
 type SubmitResponse = APIResponse<{
@@ -159,22 +159,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	return (
 		<HtmlForm onSubmit={onSubmit}>
 			<FormFieldSet>
-				{mode === 'edit' && (
-					<Select
-						name="status"
-						label="Status"
-						rules={{
-							required: true,
-						}}
-						options={[
-							{ label: 'Active', value: 'active' },
-							{ label: 'Completed', value: 'completed' },
-							{ label: 'Cancelled', value: 'cancelled' },
-							{ label: 'No Show', value: 'no-show' },
-						]}
-					/>
-				)}
-
 				<Select
 					name="service"
 					label="Service"
@@ -188,6 +172,25 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					}
 					readOnly={true}
 					options={[{ label: 'Consultation', value: 'consultation' }]}
+				/>
+
+				<Select
+					name="status"
+					label="Status"
+					rules={{
+						required: true,
+					}}
+					options={[
+						{ label: 'Pending', value: 'pending' },
+						{ label: 'Confirmed', value: 'confirmed' },
+						{ label: 'Cancelled', value: 'cancelled' },
+						{ label: 'No Show', value: 'no-show' },
+					]}
+					defaultValue={
+						mode === 'edit'
+							? currentAppointment?.status
+							: 'confirmed'
+					}
 				/>
 
 				<FormFieldSet
@@ -211,9 +214,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					</Button>
 				</FormFieldSet>
 
-				<div>
-					{currentMonth} {currentYear}
-				</div>
 				<FormFieldSet legend="Select day" style={{ maxWidth: '300px' }}>
 					<DatePicker
 						name="date"
