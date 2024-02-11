@@ -59,7 +59,6 @@ export default function AppointmentDetails() {
 							id: 'edit-appointment',
 							parentId: 'view-appointment',
 							data: selectedAppointment,
-							level: 2,
 						});
 					}}
 				>
