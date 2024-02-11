@@ -12,6 +12,8 @@ use WPAppointments\Model\Settings;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use WPAppointments\Api\Endpoints\Appointment;
+use WPAppointments\Model\AppointmentPost;
 
 /**
  * Date utility class
@@ -73,7 +75,7 @@ class Availability {
 	/**
 	 * Return all day slots availability
 	 *
-	 * @param DateTime $date Date.
+	 * @param \DateTime $date Date.
 	 *
 	 * @return (\DateTime|bool)[][] $slots
 	 */
@@ -82,7 +84,36 @@ class Availability {
 		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 		$slots    = array();
 
-		$date->setTime( 0, 0, 0 );
+		$day_start = clone $date;
+		$day_start->setTime( 0, 0, 0 );
+
+		$day_end = clone $date;
+		$day_end->setTime( 23, 59, 59 );
+
+		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$day    = new DatePeriod( $day_start, new DateInterval( 'PT' . $length . 'M' ), $day_end );
+
+		$appointments     = new AppointmentPost();
+		$day_appointments = $appointments->get_day_appointments( $date );
+		$day_appointments = $day_appointments->appointments;
+
+		$day_appointments_periods = array();
+
+		if ( count( $day_appointments ) > 0 ) {
+			foreach ( $day_appointments as $appointment ) {
+				$start_date = new DateTime();
+				$start_date->setTimestamp( $appointment->timestamp );
+				$end_date = new DateTime();
+				$end_date->setTimestamp( $appointment->timestamp + $appointment->duration * 60 );
+				$day_appointments_periods[] = new DatePeriod(
+					$start_date,
+					new DateInterval( 'PT' . $appointment->duration . 'M' ),
+					$end_date
+				);
+			}
+		}
+
+		$test = $date->format( 'j' );
 
 		$weekday          = strtolower( $date->format( 'l' ) );
 		$schedule_slots   = $schedule->$weekday->slots->list;
@@ -96,21 +127,19 @@ class Availability {
 			}
 		}
 
-		for ( $i = 0; $i < 24 * 2; $i++ ) {
-			if ( $i > 0 ) {
-				$date->add( new \DateInterval( 'PT30M' ) );
-			}
-
+		foreach ( $day as $date ) {
 			$start_date = clone $date;
 			$end_date   = clone $date;
-			$end_date->add( new DateInterval( 'PT30M' ) );
-			$date_range = new DatePeriod( $start_date, new DateInterval( 'PT30M' ), $end_date );
+			$end_date->add( new DateInterval( 'PT' . $length . 'M' ) );
+			$date_range = new DatePeriod( $start_date, new DateInterval( 'PT' . $length . 'M' ), $end_date );
 
 			$available = Date::date_ranges_contain_another_date_range( $date_range, $schedule_periods );
+			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $day_appointments_periods );
 
 			$slots[] = array(
 				'start'     => clone $date,
 				'available' => $available,
+				'booked'    => $booked,
 				'schedule'  => $schedule,
 			);
 		}
