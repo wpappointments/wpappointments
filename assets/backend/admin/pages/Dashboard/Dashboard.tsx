@@ -92,10 +92,10 @@ export default function Dashboard() {
 									label="Status"
 									options={[
 										{ label: 'Any', value: '' },
-										{ label: 'Active', value: 'active' },
+										{ label: 'Pending', value: 'pending' },
 										{
-											label: 'Completed',
-											value: 'completed',
+											label: 'Confirmed',
+											value: 'confirmed',
 										},
 										{
 											label: 'Cancelled',
@@ -103,7 +103,7 @@ export default function Dashboard() {
 										},
 										{ label: 'No Show', value: 'no-show' },
 									]}
-									defaultValue="active"
+									defaultValue="confirmed"
 									onChange={() => {
 										formRef.current?.dispatchEvent(
 											new Event('submit', {

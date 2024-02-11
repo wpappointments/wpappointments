@@ -11,9 +11,9 @@ import { createTimeRange, createTimeRangeFromMinutes } from '~/utils/datetime';
 import { formatTimeForPicker } from '~/utils/format';
 import { SettingsSchedule } from '~/store/settings/settings.types';
 import { store } from '~/store/store';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import Select from '../FormField/Select/Select';
-import FormFieldSet from '../FormFieldSet/FormFieldSet';
+import ErrorMessage from '../../ErrorMessage/ErrorMessage';
+import Select from '../../FormField/Select/Select';
+import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 
 export type StartEndTimePickerProps = {
 	date: Date;
@@ -25,6 +25,7 @@ type Fields = {
 	timeHourEnd: string;
 	timeMinuteEnd: string;
 	timeType: 'am' | 'pm';
+	duration: number;
 };
 
 const daysOfWeek = new Map<number, keyof SettingsSchedule>([
@@ -166,6 +167,7 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 		setValue('timeMinuteStart', '00');
 		setValue('timeHourEnd', end.getHours().toString().padStart(2, '0'));
 		setValue('timeMinuteEnd', end.getMinutes().toString().padStart(2, '0'));
+		setValue('duration', length);
 	}, [length]);
 
 	useEffect(() => {
@@ -242,6 +244,10 @@ export default function StartEndTimePicker({ date }: StartEndTimePickerProps) {
 
 				if (!isNaN(endDate.getTime()) && !isNaN(startDate.getTime())) {
 					setDuration(differenceInMinutes(endDate, startDate));
+					setValue(
+						'duration',
+						differenceInMinutes(endDate, startDate)
+					);
 				}
 
 				if (endDate.getHours() === startDate.getHours()) {
