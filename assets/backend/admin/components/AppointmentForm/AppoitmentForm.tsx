@@ -204,9 +204,8 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						onClick={() => {
 							openSlideOut({
 								id: 'find-time',
-								data: getValues(),
-								level: 2,
 								parentId: 'add-appointment',
+								data: getValues(),
 							});
 						}}
 					>

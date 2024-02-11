@@ -150,18 +150,13 @@ export default function Dashboard() {
 				<SlideOut
 					title={__('Create New Appointment')}
 					id="add-appointment"
-					sidePanel
 				>
 					<AppointmentForm
 						mode="create"
 						onSubmitComplete={closeCurrentSlideOut}
 					/>
 				</SlideOut>
-				<SlideOut
-					title={__('Edit Appointment')}
-					id="edit-appointment"
-					sidePanel
-				>
+				<SlideOut title={__('Edit Appointment')} id="edit-appointment">
 					<AppointmentForm
 						mode="edit"
 						onSubmitComplete={closeCurrentSlideOut}
@@ -171,9 +166,9 @@ export default function Dashboard() {
 					title={__('Find time')}
 					id="find-time"
 					headerRightSlot={<Button>Hello</Button>}
-					style={{
-						right: '700px',
-					}}
+					// style={{
+					// 	right: '700px',
+					// }}
 				>
 					<TimeFinder />
 				</SlideOut>

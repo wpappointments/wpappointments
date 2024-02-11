@@ -13,7 +13,7 @@ declare const styles:
   & Readonly<{ "slideOutOverlay": string }>
   & Readonly<{ "slideOutOverlay": string }>
   & Readonly<{ "slideOutOverlay": string }>
-  & Readonly<{ "slideOutSidePanel": string }>
+  & Readonly<{ "slideOutOverlayOpen": string }>
   & Readonly<{ "slideOutWide": string }>
   & Readonly<{ "header": string }>
   & Readonly<{ "header": string }>
