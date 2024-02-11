@@ -16,6 +16,9 @@ declare const styles:
   & Readonly<{ "itemAvailable": string }>
   & Readonly<{ "itemAvailable": string }>
   & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "itemAvailable": string }>
+  & Readonly<{ "itemBooked": string }>
+  & Readonly<{ "itemBooked": string }>
   & Readonly<{ "head": string }>
   & Readonly<{ "head": string }>
   & Readonly<{ "head": string }>

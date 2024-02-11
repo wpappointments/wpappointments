@@ -8,6 +8,8 @@
 
 namespace WPAppointments\Model;
 
+use DateTime;
+
 /**
  * Appointment model class
  */
@@ -21,7 +23,7 @@ class AppointmentPost {
 		'post_type'   => 'appointment',
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value',
-		'meta_key'    => 'datetime',
+		'meta_key'    => 'timestamp',
 		'order'       => 'ASC',
 	);
 
@@ -40,7 +42,7 @@ class AppointmentPost {
 				'meta_query'     => array(
 					array(
 						'key'     => 'status',
-						'value'   => 'active',
+						'value'   => 'confirmed',
 						'compare' => '=',
 					),
 				),
@@ -61,8 +63,8 @@ class AppointmentPost {
 			$appointments[] = $this->prepare_appointment_entity(
 				$post->ID,
 				array(
-					'status'   => $meta['status'][0],
-					'datetime' => $meta['datetime'][0],
+					'status'    => $meta['status'][0],
+					'timestamp' => $meta['timestamp'][0],
 				)
 			);
 		}
@@ -84,12 +86,12 @@ class AppointmentPost {
 	public function get_upcoming( $query ) {
 		$date_query = array(
 			array(
-				'key'     => 'datetime',
+				'key'     => 'timestamp',
 				'value'   => time(),
 				'compare' => '>=',
 			),
 			array(
-				'key'     => 'datetime',
+				'key'     => 'timestamp',
 				'value'   => time() + 60 * 60 * 24 * 7,
 				'compare' => '<=',
 			),
@@ -151,8 +153,66 @@ class AppointmentPost {
 			$appointments[] = $this->prepare_appointment_entity(
 				$post->ID,
 				array(
-					'status'   => $meta['status'][0],
-					'datetime' => $meta['datetime'][0],
+					'status'    => $meta['status'][0],
+					'timestamp' => $meta['timestamp'][0],
+				)
+			);
+		}
+
+		return (object) array(
+			'appointments' => $appointments,
+			'post_count'   => $query->post_count,
+			'found_posts'  => $query->found_posts,
+		);
+	}
+
+	/**
+	 * Get day appointments
+	 *
+	 * @param \DateTime $date Date.
+	 *
+	 * @return object
+	 */
+	public function get_day_appointments( $date ) {
+		$day_start = clone $date;
+		$day_start->setTime( 0, 0, 0 );
+		$day_start = (int) $day_start->getTimestamp();
+
+		$day_end = clone $date;
+		$day_end->setTime( 23, 59, 59 );
+		$day_end = (int) $day_end->getTimestamp();
+
+		$query = new \WP_Query(
+			array_merge(
+				$this->default_query_part,
+				array(
+					'posts_per_page' => -1,
+					'meta_query'     => array(
+						'relation' => 'AND',
+						array(
+							'key'     => 'timestamp',
+							'value'   => $day_start,
+							'compare' => '>=',
+						),
+						array(
+							'key'     => 'timestamp',
+							'value'   => $day_end,
+							'compare' => '<=',
+						),
+					),
+				)
+			)
+		);
+
+		$appointments = array();
+
+		foreach ( $query->posts as $post ) {
+			$meta           = get_post_meta( $post->ID );
+			$appointments[] = $this->prepare_appointment_entity(
+				$post->ID,
+				array(
+					'status'    => $meta['status'][0],
+					'timestamp' => $meta['timestamp'][0],
 				)
 			);
 		}
@@ -290,21 +350,17 @@ class AppointmentPost {
 	 */
 	protected function prepare_appointment_entity( $post_id, $meta ) {
 		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
-		$timestamp = $meta['datetime'];
+		$timestamp = $meta['timestamp'];
 		$status    = $meta['status'];
-		$parsed    = $this->parse_datetime( $timestamp );
-		$date      = $parsed['date'];
-		$time      = $parsed['time'];
+		$duration  = $meta['duration'] ?? $length;
 
-		return array(
-			'id'         => $post_id,
-			'service'    => get_the_title( $post_id ),
-			'date'       => $date,
-			'time'       => $time,
-			'timeFromTo' => $time . ' - ' . wp_date( 'H:i', $timestamp + 60 * $length ),
-			'timestamp'  => $timestamp,
-			'status'     => $status,
-			'actions'    => (object) array(
+		return (object) array(
+			'id'        => $post_id,
+			'service'   => get_the_title( $post_id ),
+			'timestamp' => (int) $timestamp,
+			'status'    => $status,
+			'duration'  => $duration,
+			'actions'   => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',
@@ -312,7 +368,7 @@ class AppointmentPost {
 					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . '/appointment/' . $post_id ),
 					'isDangerous' => true,
 				),
-				'edit'   => array(
+				'edit'   => (object) array(
 					'name'        => 'EditAppointment',
 					'label'       => 'Edit',
 					'method'      => 'PUT',
@@ -324,7 +380,7 @@ class AppointmentPost {
 	}
 
 	/**
-	 * Parse datetime
+	 * Parse timestamp
 	 *
 	 * @param int $timestamp Timestamp.
 	 *
