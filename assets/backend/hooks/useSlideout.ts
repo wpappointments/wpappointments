@@ -14,6 +14,7 @@ export default function useSlideout(id?: string) {
 		}, []);
 
 	const openSlideOut = (slideout: Slideout) => {
+		slideout.level = openSlideouts.length + 1;
 		dispatch.openSlideout(slideout);
 	};
 

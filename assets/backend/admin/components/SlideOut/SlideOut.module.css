@@ -6,7 +6,9 @@
 	right: 0;
 	width: min( 100%, 700px );
 	transform: translateX( 100px );
-	transition: transform 0.2s ease-in-out, width 0.2s ease-in-out,
+	transition:
+		transform 0.2s ease-in-out,
+		width 0.2s ease-in-out,
 		right 0.1s ease-in-out;
 	z-index: 1;
 	cursor: auto;
@@ -33,13 +35,17 @@
 	z-index: 1001;
 	background-color: rgba( 0, 0, 0, 0.5 );
 	overflow-x: hidden;
-	transition: opacity 0.1s ease-in-out, right 0.2s ease-in-out;
-	opacity: var( --is-open );
+	transition:
+		opacity 0.1s ease-in-out,
+		right 0.2s ease-in-out;
+	opacity: 0;
 	cursor: pointer;
+	pointer-events: none;
 }
 
-.slide-out-side-panel {
-	right: 0;
+.slide-out-overlay-open {
+	opacity: 1;
+	pointer-events: auto;
 }
 
 .slide-out-wide {

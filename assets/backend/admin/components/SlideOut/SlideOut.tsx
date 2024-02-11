@@ -11,18 +11,15 @@ type Props = {
 	headerRightSlot?: ReactNode;
 	level?: number;
 	type?: 'default' | 'full';
-	sidePanel?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function SlideOut({
 	id,
-	level = 1,
 	children,
 	title,
 	headerRightSlot,
 	onOverlayClick,
 	type,
-	sidePanel = false,
 	...rest
 }: Props) {
 	const {
@@ -32,14 +29,14 @@ export default function SlideOut({
 		closingSlideout,
 	} = useSlideout(id);
 
-	let nestingLevel = level;
+	let nestingLevel = 1;
 
 	if (currentSlideout) {
-		nestingLevel = currentSlideout.level || level;
+		nestingLevel = currentSlideout.level || 1;
 	}
 
 	if (closingSlideout?.id === id) {
-		nestingLevel = closingSlideout.level || level;
+		nestingLevel = closingSlideout.level || 1;
 	}
 
 	const shouldRenderSlideOut = () => {
@@ -64,15 +61,13 @@ export default function SlideOut({
 		<div
 			className={cn({
 				[styles.slideOutOverlay]: true,
-				[styles.slideOutSidePanel]: sidePanel,
+				[styles.slideOutOverlayOpen]: isOpen,
 			})}
 			onClick={onOverlayClick || closeCurrentSlideOut}
 			{...rest}
 			style={{
-				'--is-open': isOpen ? 1 : 0,
 				'--nesting-level': nestingLevel,
 				'--total-levels': openSlideouts.length,
-				pointerEvents: isOpen ? 'auto' : 'none',
 				...rest.style,
 			}}
 		>
