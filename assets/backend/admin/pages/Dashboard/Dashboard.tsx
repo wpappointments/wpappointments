@@ -15,7 +15,6 @@ import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
 import Select from '~/admin/components/FormField/Select/Select';
 import SlideOut from '~/admin/components/SlideOut/SlideOut';
 import Table from '~/admin/components/Table/Table';
-import TimeFinder from '~/admin/components/TimeFinder/TimeFinder';
 import {
 	StateContextProvider,
 	useStateContext,
@@ -52,7 +51,7 @@ export default function Dashboard() {
 					<CardHeader>
 						<div className={styles.upcomingTitleWrapper}>
 							<Text size="title">Upcoming Appointments</Text>
-							<Button
+							{/* <Button
 								variant={filtersOpen ? 'primary' : 'secondary'}
 								size="small"
 								onClick={() => {
@@ -69,7 +68,7 @@ export default function Dashboard() {
 								}}
 							>
 								Manage all appointments
-							</Button>
+							</Button> */}
 						</div>
 						<Button
 							variant="primary"
@@ -140,11 +139,7 @@ export default function Dashboard() {
 						/>
 					</CardBody>
 				</Card>
-				<SlideOut
-					title={__('Appointment')}
-					id="view-appointment"
-					headerRightSlot={<Button>Hello</Button>}
-				>
+				<SlideOut title={__('Appointment')} id="view-appointment">
 					<AppointmentDetails />
 				</SlideOut>
 				<SlideOut
@@ -161,16 +156,6 @@ export default function Dashboard() {
 						mode="edit"
 						onSubmitComplete={closeCurrentSlideOut}
 					/>
-				</SlideOut>
-				<SlideOut
-					title={__('Find time')}
-					id="find-time"
-					headerRightSlot={<Button>Hello</Button>}
-					// style={{
-					// 	right: '700px',
-					// }}
-				>
-					<TimeFinder />
 				</SlideOut>
 			</LayoutDefault>
 		</StateContextProvider>
@@ -233,10 +218,7 @@ function DashboardStats() {
 				<span>{new Date().toDateString()}</span>
 			</CardHeader>
 			<CardBody>
-				<p>
-					Today you have <strong>3</strong> appointments and{' '}
-					<strong>2</strong> pending appointments.
-				</p>
+				{/* <img src={fakeStats} alt="fake stats" /> */}
 			</CardBody>
 		</Card>
 	);

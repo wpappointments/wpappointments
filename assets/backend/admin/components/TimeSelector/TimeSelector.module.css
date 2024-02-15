@@ -1,0 +1,14 @@
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.find-time {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #e0e0e0;
+}

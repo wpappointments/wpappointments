@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { addMinutes, fromUnixTime } from 'date-fns';
 import { Appointment } from '~/types';
 import styles from './Table.module.css';
 import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
@@ -90,7 +91,23 @@ type TableRowProps = {
 };
 
 function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
-	const { id, service, date, timeFromTo } = row;
+	const { id, service, timestamp, duration } = row;
+	const dateStart = fromUnixTime(timestamp);
+	const dateEnd = addMinutes(dateStart, duration);
+
+	const dateOutput = dateStart.toLocaleDateString();
+
+	const timeFrom = dateStart.toLocaleTimeString('pl-PL', {
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+
+	const timeTo = dateEnd.toLocaleTimeString('pl-PL', {
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+
+	const timeFromTo = `${timeFrom} - ${timeTo}`;
 
 	return (
 		<tr key={id}>
@@ -104,7 +121,7 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 					{service}
 				</Button>
 			</td>
-			<td>{date}</td>
+			<td>{dateOutput}</td>
 			<td>{timeFromTo}</td>
 			<td>
 				<Button

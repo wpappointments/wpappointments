@@ -213,13 +213,6 @@ export default function TimeFinder() {
 				<div className={styles.buttons}>
 					<ButtonGroup>
 						<Button
-							variant={hours === 'auto' ? 'primary' : 'secondary'}
-							size="small"
-							onClick={setDayTime('auto')}
-						>
-							Auto
-						</Button>
-						<Button
 							variant={
 								hours === 'allDay' ? 'primary' : 'secondary'
 							}
