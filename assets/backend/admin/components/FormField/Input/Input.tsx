@@ -18,9 +18,9 @@ import styles from '../FormField.module.css';
 
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
-	label: string;
-	type?: 'text' | 'number' | 'email' | 'password';
-	placeholder: string;
+	label?: string;
+	type?: 'text' | 'number' | 'email' | 'password' | 'hidden';
+	placeholder?: string;
 	rules?: Omit<
 		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -34,8 +34,8 @@ export type FormFieldError<TFields extends FieldValues> =
 	| undefined;
 
 export default function Input<TFields extends FieldValues>({
-	label,
 	name,
+	label,
 	type = 'text',
 	placeholder,
 	rules,
@@ -49,11 +49,21 @@ export default function Input<TFields extends FieldValues>({
 	const error: FormFieldError<TFields> = errors[name];
 
 	return (
-		<FormField>
-			<label className={styles.fieldLabel} htmlFor={name}>
-				{label}
-				{rules?.required && '*'}
-			</label>
+		<FormField
+			style={{
+				display:
+					type === 'hidden' ? (error ? 'block' : 'none') : 'block',
+			}}
+		>
+			{label && (
+				<label
+					className={styles.fieldLabel}
+					htmlFor={name || undefined}
+				>
+					{label}
+					{rules?.required && '*'}
+				</label>
+			)}
 			<Controller
 				name={name}
 				control={control}
@@ -68,11 +78,14 @@ export default function Input<TFields extends FieldValues>({
 						size="__unstable-large"
 						id={name}
 						type={type}
+						style={{
+							display: type === 'hidden' ? 'none' : 'block',
+						}}
 					/>
 				)}
 			/>
 			{error && (
-				<p style={{ marginTop: 0, color: 'red' }}>
+				<p style={{ marginTop: 0, marginBottom: 0, color: 'red' }}>
 					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}

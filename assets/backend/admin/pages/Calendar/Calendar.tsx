@@ -270,12 +270,6 @@ export default function Calendar() {
 				<SlideOut title={__('Appointment')} id="view-appointment">
 					<AppointmentDetails />
 				</SlideOut>
-				<SlideOut title={__('Edit Appointment')} id="edit-appointment">
-					<AppointmentForm
-						mode="edit"
-						onSubmitComplete={closeCurrentSlideOut}
-					/>
-				</SlideOut>
 				<SlideOut title={__('Create Appointment')} id="add-appointment">
 					<AppointmentForm
 						mode="create"

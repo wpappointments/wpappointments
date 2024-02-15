@@ -8,10 +8,10 @@ export function timeRangeContainsAnother(
 	const [timeStart, timeEnd] = timeRange;
 	const [compareStart, compareEnd] = anotherRange;
 
-	return (
-		timeStart.getTime() <= compareStart.getTime() &&
-		timeEnd.getTime() >= compareEnd.getTime()
-	);
+	const rangeStartInside = timeStart.getTime() <= compareStart.getTime();
+	const rangeEndInside = timeEnd.getTime() >= compareEnd.getTime();
+
+	return rangeStartInside && rangeEndInside;
 }
 
 export function timeRangesContainAnother(
@@ -23,9 +23,9 @@ export function timeRangesContainAnother(
 	);
 }
 
-export function getDayRange(day: OpeningHoursSlot): [Date, Date] {
-	const start = new Date();
-	const end = new Date();
+export function getDayRange(day: OpeningHoursSlot, date?: Date): [Date, Date] {
+	const start = new Date(date || Date.now());
+	const end = new Date(date || Date.now());
 
 	start.setHours(+day.start.hour, +day.start.minute);
 	start.setSeconds(0);
@@ -38,12 +38,16 @@ export function getDayRange(day: OpeningHoursSlot): [Date, Date] {
 	return [start, end];
 }
 
-export function getDayRanges(schedule: OpeningHoursSlot[]): [Date, Date][] {
-	return schedule.map(getDayRange);
+export function getDayRanges(
+	schedule: OpeningHoursSlot[],
+	date?: Date
+): [Date, Date][] {
+	return schedule.map((day) => getDayRange(day, date));
 }
 
 export function getRangeAvailableSlots(
 	day: OpeningHoursSlot,
+	date: Date,
 	appointmentRange?: [Date, Date],
 	extended?: boolean
 ) {
@@ -54,10 +58,10 @@ export function getRangeAvailableSlots(
 		roundingMethod: 'ceil',
 	});
 
-	const slot = getDayRange(day);
+	const slot = getDayRange(day, date);
 	const slotStart = slot[0];
 	const slotEnd = slot[1];
-	const midnightDate = new Date();
+	const midnightDate = new Date(date);
 	midnightDate.setHours(0);
 	midnightDate.setMinutes(0);
 
@@ -81,8 +85,8 @@ export function getRangeAvailableSlots(
 		const hour = Math.floor(i / 60);
 		const minutes = Math.floor(i % 60);
 
-		const dateHour = new Date();
-		const dateHourNext = new Date();
+		const dateHour = new Date(date);
+		const dateHourNext = new Date(date);
 
 		dateHour.setHours(hour);
 		dateHour.setMinutes(minutes);
@@ -111,11 +115,12 @@ export function getRangeAvailableSlots(
 
 export function getRangesAvailableSlots(
 	schedule: OpeningHoursSlot[],
+	date: Date,
 	appointmentRange?: [Date, Date],
 	extended?: boolean
 ) {
 	return schedule.map((day) =>
-		getRangeAvailableSlots(day, appointmentRange, extended)
+		getRangeAvailableSlots(day, date, appointmentRange, extended)
 	);
 }
 

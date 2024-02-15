@@ -18,11 +18,9 @@ export const ApiActionSchema = object({
 
 export const AppointmentSchema = object({
 	id: number(),
+	timestamp: number(),
+	duration: number(),
 	service: string(),
-	date: string(),
-	time: string(),
-	timeFromTo: string(),
-	timestamp: union([string(), number()]),
 	status: union([
 		literal('pending'),
 		literal('confirmed'),

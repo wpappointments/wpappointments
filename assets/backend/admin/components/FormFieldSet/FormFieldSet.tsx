@@ -7,6 +7,7 @@ type Props = {
 	legend?: string;
 	horizontal?: boolean;
 	horizontalCenter?: boolean;
+	fieldsClassName?: string;
 } & React.HTMLAttributes<HTMLFieldSetElement>;
 
 export default function FormFieldSet({
@@ -19,18 +20,24 @@ export default function FormFieldSet({
 }: Props) {
 	return (
 		<fieldset
-			className={cn({
-				[styles.fieldset]: true,
-				[styles.fieldsetHorizontal]: horizontal,
-				[styles.fieldsetHorizontalCenter]: horizontalCenter,
-				[styles.fieldsetHasLegend]: !!legend,
-				[styles.fieldsetFill]: true,
-			})}
 			name={name}
+			className={
+				cn({
+					[styles.fieldset]: true,
+					[styles.fieldsetHorizontal]: horizontal,
+					[styles.fieldsetHorizontalCenter]: horizontalCenter,
+					[styles.fieldsetHasLegend]: !!legend,
+					[styles.fieldsetFill]: true,
+				}) +
+				' ' +
+				rest.className
+			}
 			{...rest}
 		>
 			{legend && <legend>{legend}</legend>}
-			<div className={styles.fields}>{children}</div>
+			<div className={styles.fields + ' ' + rest.fieldsClassName}>
+				{children}
+			</div>
 		</fieldset>
 	);
 }

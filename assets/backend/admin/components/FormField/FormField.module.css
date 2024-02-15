@@ -1,3 +1,7 @@
+.field :global( .components-input-control__backdrop ) {
+	border-color: #dedede !important;
+}
+
 .field-label {
 	font-size: 11px;
 	font-weight: 500;
