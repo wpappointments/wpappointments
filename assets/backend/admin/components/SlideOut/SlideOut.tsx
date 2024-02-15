@@ -1,4 +1,5 @@
 import { MouseEventHandler, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import cn from '~/utils/cn';
 import useSlideout from '~/hooks/useSlideout';
 import styles from './SlideOut.module.css';
@@ -57,7 +58,13 @@ export default function SlideOut({
 	const isOpen = shouldRenderSlideOut();
 	const showHeader = title || headerRightSlot;
 
-	return (
+	const portalContainer = document.getElementById('slideout-container');
+
+	if (!portalContainer) {
+		return null;
+	}
+
+	return createPortal(
 		<div
 			className={cn({
 				[styles.slideOutOverlay]: true,
@@ -70,6 +77,7 @@ export default function SlideOut({
 				'--total-levels': openSlideouts.length,
 				...rest.style,
 			}}
+			data-id={id}
 		>
 			<div
 				className={cn({
@@ -87,6 +95,8 @@ export default function SlideOut({
 				)}
 				<div className={styles.content}>{children}</div>
 			</div>
-		</div>
+		</div>,
+		portalContainer,
+		id
 	);
 }

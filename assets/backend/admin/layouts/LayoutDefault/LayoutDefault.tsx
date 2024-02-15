@@ -15,6 +15,7 @@ export default function LayoutDefault({ title, children }: Props) {
 			</div>
 			<div className={styles.layoutContent}>{children}</div>
 			<Toaster />
+			<div id="slideout-container"></div>
 		</div>
 	);
 }

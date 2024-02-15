@@ -19,8 +19,9 @@
 }
 
 .slide-out-open {
-	transform: translateX( 0 );
-	z-index: 1003;
+	transform: translateX(
+		calc( calc( var( --total-levels ) - var( --nesting-level ) ) * -80px )
+	);
 }
 
 .slide-out-overlay {
@@ -28,11 +29,8 @@
 	top: 32px;
 	left: 160px;
 	bottom: 0;
-	right: calc(
-		calc( 80px * var( --total-levels ) ) -
-			calc( 80px * var( --nesting-level ) )
-	);
-	z-index: 1001;
+	right: 0;
+	z-index: calc( 1001 + var( --nesting-level ) );
 	background-color: rgba( 0, 0, 0, 0.5 );
 	overflow-x: hidden;
 	transition:
@@ -46,6 +44,9 @@
 .slide-out-overlay-open {
 	opacity: 1;
 	pointer-events: auto;
+	transition:
+		opacity 0.2s ease-in-out,
+		right 0.1s ease-in-out;
 }
 
 .slide-out-wide {
