@@ -21,7 +21,9 @@ cssLoader.options.modules = {
 
 defaultConfig.resolve.alias = {
 	...defaultConfig.resolve.alias,
-	'~': path.resolve( __dirname, 'assets/backend' ),
+	'~/backend': path.resolve( __dirname, 'assets/backend' ),
+	'~/frontend': path.resolve( __dirname, 'assets/frontend' ),
+	'~/blocks': path.resolve( __dirname, 'assets/gutenberg/blocks' ),
 	'global.module.css': path.resolve(
 		__dirname,
 		'assets/styles/global.module.css'

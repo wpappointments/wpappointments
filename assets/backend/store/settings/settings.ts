@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import apiFetch, { APIResponse } from '~/utils/fetch';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { type State } from '../store';
 import type { Day, DayOpeningHours, SettingsState } from './settings.types';

@@ -1,4 +1,4 @@
-import { formatTimeForPicker } from '~/utils/format';
+import { formatTimeForPicker } from '~/backend/utils/format';
 
 export function createTimeSlot(start: [number, number], end: [number, number]) {
 	return {

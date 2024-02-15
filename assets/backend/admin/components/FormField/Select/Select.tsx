@@ -12,7 +12,7 @@ import {
 } from 'react-hook-form';
 import { SelectControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { getGenericInputErrorMessage } from '~/utils/forms';
+import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
 import styles from '../FormField.module.css';
 

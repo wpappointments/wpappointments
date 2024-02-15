@@ -1,6 +1,6 @@
 import { Button } from '@wordpress/components';
-import cn from '~/utils/cn';
-import apiFetch, { APIResponse } from '~/utils/fetch';
+import cn from '~/backend/utils/cn';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import styles from './ActionButton.module.css';
 
 type Action = {

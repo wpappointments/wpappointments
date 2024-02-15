@@ -33,7 +33,7 @@ import { useLilius } from 'use-lilius';
  */
 // import type { DatePickerProps } from '../types';
 // import { inputToDate } from '../utils';
-import cn from '~/utils/cn';
+import cn from '~/backend/utils/cn';
 import styles from './WPDatePicker.module.css';
 import { TIMEZONELESS_FORMAT } from './constants';
 import { inputToDate } from './utils';

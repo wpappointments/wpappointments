@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Card, CardHeader, CardBody } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
-import cn from '~/utils/cn';
+import cn from '~/backend/utils/cn';
 import styles from './Summary.module.css';
 
 export type SummaryProps = {

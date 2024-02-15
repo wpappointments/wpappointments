@@ -1,5 +1,5 @@
 import { addMinutes, differenceInMinutes } from 'date-fns';
-import { OpeningHoursSlot } from '~/store/settings/settings.types';
+import { OpeningHoursSlot } from '~/backend/store/settings/settings.types';
 
 export function timeRangeContainsAnother(
 	timeRange: [Date, Date],

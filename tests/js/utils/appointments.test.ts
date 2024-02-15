@@ -6,7 +6,7 @@ import {
 	getRangesAvailableSlots,
 	maybeExtendSlotsToNextHour,
 	timeRangesContainAnother,
-} from '~/utils/appointments';
+} from '~/backend/utils/appointments';
 import { createTimeRange } from './helpers/datetime';
 import { createTimeSlot } from './helpers/schedule';
 
