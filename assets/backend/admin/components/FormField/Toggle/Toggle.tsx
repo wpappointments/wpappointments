@@ -11,7 +11,7 @@ import {
 } from 'react-hook-form';
 import { ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { getGenericInputErrorMessage } from '~/utils/forms';
+import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
 
 type Props<TFields extends FieldValues> = {

@@ -6,15 +6,15 @@ import {
 	CardHeader,
 } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
-import { Text } from '~/utils/experimental';
-import apiFetch from '~/utils/fetch';
-import useFillFormValues from '~/hooks/useFillFormValues';
-import { store } from '~/store/store';
-import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
-import { HtmlForm, withForm } from '~/admin/components/Form/Form';
-import Input from '~/admin/components/FormField/Input/Input';
-import Select from '~/admin/components/FormField/Select/Select';
-import FormFieldSet from '~/admin/components/FormFieldSet/FormFieldSet';
+import { Text } from '~/backend/utils/experimental';
+import apiFetch from '~/backend/utils/fetch';
+import useFillFormValues from '~/backend/hooks/useFillFormValues';
+import { store } from '~/backend/store/store';
+import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
+import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
+import Input from '~/backend/admin/components/FormField/Input/Input';
+import Select from '~/backend/admin/components/FormField/Select/Select';
+import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
 
 type Fields = {

@@ -1,5 +1,5 @@
 import styles from './ScheduleTimePicker.module.css';
-import Number from '~/admin/components/FormField/Number/Number';
+import Number from '~/backend/admin/components/FormField/Number/Number';
 
 type Props = {
 	day: string;

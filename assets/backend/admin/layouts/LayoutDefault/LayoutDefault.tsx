@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import styles from './LayoutDefault.module.css';
-import Toaster from '~/admin/components/Toaster/Toaster';
+import Toaster from '~/backend/admin/components/Toaster/Toaster';
 
 type Props = {
 	title: string;

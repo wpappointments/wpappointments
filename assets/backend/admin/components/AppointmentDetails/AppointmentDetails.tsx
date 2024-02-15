@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import cn from '~/utils/cn';
-import useSlideout from '~/hooks/useSlideout';
-import { store } from '~/store/store';
-import { Appointment } from '~/types';
+import cn from '~/backend/utils/cn';
+import useSlideout from '~/backend/hooks/useSlideout';
+import { store } from '~/backend/store/store';
+import { Appointment } from '~/backend/types';
 import styles from './AppointmentDetails.module.css';
-import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
-import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
-import DeleteAppointmentModal from '~/admin/components/Modals/DeleteAppointment/DeleteAppointment';
-import { useStateContext } from '~/admin/context/StateContext';
-import { appointmentsApi } from '~/api/appointments';
+import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
+import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointment/CancelAppointment';
+import DeleteAppointmentModal from '~/backend/admin/components/Modals/DeleteAppointment/DeleteAppointment';
+import { useStateContext } from '~/backend/admin/context/StateContext';
+import { appointmentsApi } from '~/backend/api/appointments';
 
 export default function AppointmentDetails() {
 	const { invalidate } = useStateContext();
@@ -49,8 +49,6 @@ export default function AppointmentDetails() {
 				{currentAppointment?.status}
 			</div>
 			<h2>{currentAppointment?.service}</h2>
-			<p>{currentAppointment?.date}</p>
-			<p>{currentAppointment?.timeFromTo}</p>
 			<div className={formStyles.formActions}>
 				<Button
 					variant="primary"

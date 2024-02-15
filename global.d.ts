@@ -1,7 +1,7 @@
 import { ReactDOM } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
-import type { AppointmentsApi } from '~/api/appointments';
+import type { AppointmentsApi } from '~/backend/api/appointments';
 
 declare global {
 	interface Window {

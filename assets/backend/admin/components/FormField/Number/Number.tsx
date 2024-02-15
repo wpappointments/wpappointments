@@ -10,8 +10,8 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { __ } from '@wordpress/i18n';
-import { NumberControl } from '~/utils/experimental';
-import { getGenericInputErrorMessage } from '~/utils/forms';
+import { NumberControl } from '~/backend/utils/experimental';
+import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
 import styles from '../FormField.module.css';
 

@@ -1,5 +1,5 @@
 import { dispatch } from '@wordpress/data';
-import { store } from '~/store/store';
+import { store } from '~/backend/store/store';
 import randomId from './random';
 
 export function displaySuccessToast(message: string) {

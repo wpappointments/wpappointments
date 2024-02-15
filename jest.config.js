@@ -3,7 +3,9 @@ module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
 	moduleNameMapper: {
-		'~/(.*)$': '<rootDir>/assets/backend/$1',
+		'~/backend/(.*)$': '<rootDir>/assets/backend/$1',
+		'~/frontend/(.*)$': '<rootDir>/assets/backend/$1',
+		'~/blocks/(.*)$': '<rootDir>/assets/gutenberg/blocks/$1',
 		'global.module.css': '<rootDir>/assets/styles/global.module.css',
 	},
 };
