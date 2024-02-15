@@ -1,4 +1,5 @@
 declare const styles:
+  & Readonly<{ "field": string }>
   & Readonly<{ "fieldLabel": string }>
   & Readonly<{ "fieldFullWidth": string }>
 ;

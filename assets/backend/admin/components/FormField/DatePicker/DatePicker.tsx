@@ -68,7 +68,7 @@ export default function DatePicker<TFields extends FieldValues>({
 				)}
 			/>
 			{error && (
-				<p style={{ marginTop: 0, color: 'red' }}>
+				<p style={{ marginBottom: 0, color: 'red' }}>
 					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}

@@ -27,7 +27,8 @@ type Props<TFields extends FieldValues> = {
 	min?: number;
 	max?: number;
 	spinControls?: 'none' | 'custom' | 'native';
-	onChange?: (e: string | undefined) => void;
+	onChange?: (e: number | undefined) => void;
+	defaultValue?: number;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -45,6 +46,7 @@ export default function Number<TFields extends FieldValues>({
 	max,
 	spinControls = 'custom',
 	onChange: onChangeProp,
+	defaultValue,
 }: Props<TFields>) {
 	const {
 		control,
@@ -70,8 +72,9 @@ export default function Number<TFields extends FieldValues>({
 						placeholder={placeholder}
 						onBlur={onBlur}
 						onChange={(value) => {
-							onChange(value);
-							onChangeProp && onChangeProp(value);
+							onChange(value ? +value : undefined);
+							onChangeProp &&
+								onChangeProp(value ? +value : undefined);
 						}}
 						value={value}
 						min={min}
@@ -80,6 +83,7 @@ export default function Number<TFields extends FieldValues>({
 						id={name}
 						spinControls={spinControls}
 						disabled={disabled}
+						defaultValue={defaultValue}
 					/>
 				)}
 			/>
