@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import cn from '~/utils/cn';
-import useSlideout from '~/hooks/useSlideout';
+import cn from '~/backend/utils/cn';
+import useSlideout from '~/backend/hooks/useSlideout';
 import styles from './SlideOut.module.css';
 
 type Props = {

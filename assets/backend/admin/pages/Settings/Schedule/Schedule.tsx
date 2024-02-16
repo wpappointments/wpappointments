@@ -2,13 +2,13 @@ import { useFormContext } from 'react-hook-form';
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { useSelect, select, useDispatch } from '@wordpress/data';
 import { useEffect, useMemo } from '@wordpress/element';
-import { Text } from '~/utils/experimental';
-import apiFetch from '~/utils/fetch';
-import type { DayOpeningHours } from '~/store/settings/settings.types';
-import { store } from '~/store/store';
+import { Text } from '~/backend/utils/experimental';
+import apiFetch from '~/backend/utils/fetch';
+import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
+import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
-import formStyles from '~/admin/components/AppointmentForm/AppointmentForm.module.css';
-import { HtmlForm, withForm } from '~/admin/components/Form/Form';
+import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
+import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import globalStyles from 'global.module.css';
 
 type Fields = {

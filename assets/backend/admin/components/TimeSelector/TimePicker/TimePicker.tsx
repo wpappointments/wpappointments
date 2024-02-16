@@ -6,12 +6,15 @@ import { addMinutes } from 'date-fns';
 import {
 	getRangesAvailableSlots,
 	timeRangesContainAnother,
-} from '~/utils/appointments';
-import { createTimeRange, createTimeRangeFromMinutes } from '~/utils/datetime';
-import { formatTimeForPicker } from '~/utils/format';
-import useSlideout from '~/hooks/useSlideout';
-import { SettingsSchedule } from '~/store/settings/settings.types';
-import { store } from '~/store/store';
+} from '~/backend/utils/appointments';
+import {
+	createTimeRange,
+	createTimeRangeFromMinutes,
+} from '~/backend/utils/datetime';
+import { formatTimeForPicker } from '~/backend/utils/format';
+import useSlideout from '~/backend/hooks/useSlideout';
+import { SettingsSchedule } from '~/backend/store/settings/settings.types';
+import { store } from '~/backend/store/store';
 import Number from '../../FormField/Number/Number';
 import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';

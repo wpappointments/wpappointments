@@ -1,4 +1,4 @@
-import cn from '~/utils/cn';
+import cn from '~/backend/utils/cn';
 import styles from './FormField.module.css';
 
 type Props = {

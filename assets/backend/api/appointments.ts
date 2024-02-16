@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import { Error, getErrorMessage } from '~/utils/error';
-import apiFetch, { APIResponse } from '~/utils/fetch';
-import resolve from '~/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/utils/toast';
-import { Appointment } from '~/types';
+import { Error, getErrorMessage } from '~/backend/utils/error';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import resolve from '~/backend/utils/resolve';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+import { Appointment } from '~/backend/types';
 
 type AppointmentData = {
 	service: string;
