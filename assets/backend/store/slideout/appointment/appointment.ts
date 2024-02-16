@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { Customer } from '../../customers/customers.types';
 import { type State } from '../../store';
 import {
 	MonthIndex,
@@ -11,6 +12,7 @@ type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {
 	curentMonth: 1,
 	currentYear: 2024,
+	selectedCustomer: null,
 };
 
 export const actions = {
@@ -24,6 +26,18 @@ export const actions = {
 		return {
 			type: 'SET_CURRENT_YEAR',
 			year,
+		} as const;
+	},
+	setSelectedCustomer(customer: Customer | null) {
+		return {
+			type: 'SET_SELECTED_CUSTOMER',
+			customer,
+		} as const;
+	},
+	clearSelectedCustomer() {
+		return {
+			type: 'SET_SELECTED_CUSTOMER',
+			customer: null,
 		} as const;
 	},
 };
@@ -40,6 +54,11 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 				draft.currentYear = action.year;
 			});
 
+		case 'SET_SELECTED_CUSTOMER':
+			return produce(state, (draft) => {
+				draft.selectedCustomer = action.customer;
+			});
+
 		default:
 			return state;
 	}
@@ -51,6 +70,9 @@ export const selectors = {
 	},
 	getCurrentYear(state: State) {
 		return state.appointmentSlideout.currentYear;
+	},
+	getSelectedCustomer(state: State) {
+		return state.appointmentSlideout.selectedCustomer;
 	},
 };
 
