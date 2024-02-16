@@ -36,19 +36,19 @@ class Plugin extends Core\Singleton {
 	public function on_plugin_activation() {
 		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
 
-		if ( $default_schedule ) {
-			return;
+		if ( ! $default_schedule ) {
+			$post_id = wp_insert_post(
+				array(
+					'post_title'  => 'Default Schedule',
+					'post_status' => 'publish',
+					'post_type'   => 'wpa_schedule',
+				)
+			);
+
+			update_option( 'wpappointments_default_schedule_id', $post_id );
 		}
 
-		$post_id = wp_insert_post(
-			array(
-				'post_title'  => 'Default Schedule',
-				'post_status' => 'publish',
-				'post_type'   => 'wpa_schedule',
-			)
-		);
-
-		update_option( 'wpappointments_default_schedule_id', $post_id );
+		update_option( 'wpappointments_appointments_defaultLength', 30 );
 	}
 
 	/**

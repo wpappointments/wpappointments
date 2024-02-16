@@ -28,24 +28,27 @@ export default function Summary({
 	return (
 		<Card className={styles.summary}>
 			<CardHeader className={styles.summaryHeader}>
-				Summmary: {headerActions}
+				{__('Date and time summary', 'wpappointments')}: {headerActions}
 			</CardHeader>
 			<CardBody className={styles.summaryBody}>
 				<div className={styles.summaryRow}>
-					<strong>Date</strong> {date.toLocaleDateString('pl-PL')}
+					<strong>{__('Date', 'wpappointments')}</strong>{' '}
+					{date.toLocaleDateString('pl-PL')}
 				</div>
 				<div className={styles.summaryRow}>
-					<strong>Time</strong>{' '}
+					<strong>{__('Time', 'wpappointments')}</strong>{' '}
 					{__(
 						sprintf(
 							'%s to %s',
 							sprintf('%s:%s', timeHourStart, timeMinuteStart),
 							sprintf('%s:%s', timeHourEnd, timeMinuteEnd)
-						)
+						),
+						'wpappointments'
 					)}
 				</div>
 				<div className={styles.summaryRow}>
-					<strong>Duration</strong> {duration} minutes
+					<strong>{__('Duration', 'wpappointments')}</strong>{' '}
+					{duration} minutes
 				</div>
 
 				{isDateOutsideWorkingHours && (
@@ -56,7 +59,8 @@ export default function Summary({
 						})}
 					>
 						{__(
-							'Warning: Selected time is already booked or outside of working hours'
+							'Warning: Selected time is already booked or outside of working hours',
+							'wpappointments'
 						)}
 					</div>
 				)}

@@ -57,7 +57,13 @@ register_deactivation_hook(
 add_action(
 	'init',
 	function () {
-		register_post_type( 'appointment', array( 'public' => true ) );
+		register_post_type(
+			'appointment',
+			array(
+				'public'   => true,
+				'supports' => array( 'custom-fields' ),
+			)
+		);
 	}
 );
 

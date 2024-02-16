@@ -12,7 +12,6 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Utils\Availability;
-use WPAppointments\Utils\Date;
 
 /**
  * TimeFinder endpoint

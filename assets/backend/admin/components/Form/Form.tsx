@@ -1,13 +1,15 @@
+import { FormEventHandler, useRef } from 'react';
 import {
 	FieldValues,
 	FormProvider as RHFProvider,
+	SubmitHandler,
 	useForm,
 	useFormContext,
 } from 'react-hook-form';
 
-export type HtmlFormProps<TFields> = {
+export type HtmlFormProps<TFields extends FieldValues> = {
 	children: React.ReactNode;
-	onSubmit?: (formData: TFields) => Promise<void>;
+	onSubmit?: SubmitHandler<TFields>;
 	className?: string;
 };
 
@@ -21,12 +23,23 @@ export function HtmlForm<TFields extends FieldValues>({
 	className,
 }: HtmlFormProps<TFields>) {
 	const { handleSubmit } = useFormContext<TFields>();
+	const formRef = useRef<HTMLFormElement>(null);
+
+	const submitForm: FormEventHandler<HTMLFormElement> = (event) => {
+		if (!onSubmit) {
+			return;
+		}
+
+		if (formRef.current?.isSameNode(event.target as HTMLFormElement)) {
+			event?.stopPropagation();
+			event?.preventDefault();
+		}
+
+		handleSubmit(onSubmit)(event);
+	};
 
 	return (
-		<form
-			className={className}
-			onSubmit={onSubmit && handleSubmit(onSubmit)}
-		>
+		<form ref={formRef} className={className} onSubmit={submitForm}>
 			{children}
 		</form>
 	);
