@@ -45,42 +45,6 @@ class Customer extends Controller {
 				),
 			)
 		);
-
-		// register_rest_route(
-		// static::ROUTE_NAMESPACE,
-		// '/customer/(?P<id>\d+)',
-		// array(
-		// array(
-		// 'methods'             => WP_REST_Server::READABLE,
-		// 'callback'            => array( __CLASS__, 'get_customer' ),
-		// 'permission_callback' => '__return_true',
-		// ),
-		// )
-		// );
-
-		// register_rest_route(
-		// static::ROUTE_NAMESPACE,
-		// '/customer/(?P<id>\d+)',
-		// array(
-		// array(
-		// 'methods'             => WP_REST_Server::EDITABLE,
-		// 'callback'            => array( __CLASS__, 'update_customer' ),
-		// 'permission_callback' => '__return_true',
-		// ),
-		// )
-		// );
-
-		// register_rest_route(
-		// static::ROUTE_NAMESPACE,
-		// '/customer/(?P<id>\d+)',
-		// array(
-		// array(
-		// 'methods'             => WP_REST_Server::DELETABLE,
-		// 'callback'            => array( __CLASS__, 'delete_customer' ),
-		// 'permission_callback' => '__return_true',
-		// ),
-		// )
-		// );
 	}
 
 	/**
