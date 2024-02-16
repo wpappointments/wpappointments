@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { Button, ButtonGroup } from '@wordpress/components';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { addMinutes } from 'date-fns';
@@ -12,6 +12,9 @@ import { displayErrorToast } from '~/backend/utils/toast';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
+import CustomerCreate from '../CustomerCreate/CustomerCreate';
+import CustomerSelector from '../CustomerSelector/CustomerSelector';
+import CustomerSummary from '../CustomerSelector/Summary/Summary';
 import { HtmlForm, withForm } from '../Form/Form';
 import Input from '../FormField/Input/Input';
 import Select from '../FormField/Select/Select';
@@ -27,13 +30,15 @@ import { AppointmentSchema } from '~/backend/schemas';
 
 export type AppointmentFormFields = {
 	date: string;
-	datetime: string;
+	datetime: string | null;
 	service: string;
 	status: Appointment['status'];
 	timeHourStart: string;
 	timeMinuteStart: string;
 	timeType: 'am' | 'pm';
 	duration: number;
+	customer: string;
+	customerId: number;
 };
 
 type SubmitResponse = APIResponse<{
@@ -61,9 +66,15 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const { currentSlideout, openSlideOut } = useSlideout();
 	const { data: selectedAppointment } = currentSlideout || {};
 
+	const dispatch = useDispatch(store);
+
 	const currentAppointment = useSelect(() => {
 		return select(store).getAppointment(selectedAppointment as number);
 	}, [selectedAppointment, currentSlideout]);
+
+	const selectedCustomer = useSelect(() => {
+		return select(store).getSelectedCustomer();
+	}, []);
 
 	const date = watch('datetime');
 
@@ -76,6 +87,14 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		},
 		[date]
 	);
+
+	useEffect(() => {
+		setValue(
+			'customer',
+			selectedCustomer ? JSON.stringify(selectedCustomer) : ''
+		);
+		setValue('customerId', selectedCustomer?.id || 0);
+	}, [selectedCustomer]);
 
 	useEffect(() => {
 		if (!date) {
@@ -150,6 +169,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 		if (mode === 'create') {
 			reset();
+			dispatch.clearSelectedCustomer();
+			setValue('datetime', null);
+			setValue('customerId', 0);
+			setValue('customer', '');
 		}
 	};
 
@@ -157,7 +180,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	defaultDateToday.setMonth(currentMonth);
 	defaultDateToday.setFullYear(currentYear);
 
-	const start = new Date(date);
+	const start = new Date(date || defaultDateToday);
 	start.setHours(parseInt(getValues('timeHourStart')));
 	start.setMinutes(parseInt(getValues('timeMinuteStart')));
 	start.setSeconds(0);
@@ -206,7 +229,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 							: 'confirmed'
 					}
 				/>
-
+				{date}
 				<FormFieldSet
 					legend={__('Date and time')}
 					style={{
@@ -215,7 +238,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				>
 					<FormFieldSet horizontal horizontalCenter>
 						<span className={styles.noTimeLabel}>
-							No time selected
+							{__('No time selected', 'wpappointments')}
 						</span>
 						<Button
 							variant="secondary"
@@ -268,8 +291,91 @@ export default withForm<FormProps>(function AppointmentFormFields({
 									});
 								}}
 							>
-								Edit
+								{__('Change', 'wpappointments')}
 							</Button>
+						}
+					/>
+				)}
+
+				<FormFieldSet
+					legend={__('Customer', 'wpappointments')}
+					style={{
+						display: selectedCustomer ? 'none' : 'block',
+					}}
+				>
+					<FormFieldSet horizontal horizontalCenter>
+						<span className={styles.noTimeLabel}>
+							{__('No customer selected', 'wpappointments')}
+						</span>
+						<ButtonGroup>
+							<Button
+								variant="secondary"
+								size="small"
+								onClick={() => {
+									openSlideOut({
+										id: `select-customer-${mode}`,
+										parentId: 'add-appointment',
+									});
+								}}
+							>
+								{__('Select customer', 'wpappointments')}
+							</Button>
+							<Button
+								variant="secondary"
+								size="small"
+								onClick={() => {
+									openSlideOut({
+										id: `new-customer-${mode}`,
+										parentId: 'add-appointment',
+									});
+								}}
+							>
+								{__('New customer', 'wpappointments')}
+							</Button>
+						</ButtonGroup>
+					</FormFieldSet>
+
+					<Input type="hidden" name="customerId" />
+
+					<Input
+						type="hidden"
+						name="customer"
+						rules={{
+							required: true,
+						}}
+					/>
+				</FormFieldSet>
+
+				{selectedCustomer && (
+					<CustomerSummary
+						customer={selectedCustomer}
+						headerActions={
+							<ButtonGroup>
+								<Button
+									size="small"
+									variant="secondary"
+									onClick={() => {
+										openSlideOut({
+											id: `select-customer-${mode}`,
+											parentId: 'add-appointment',
+										});
+									}}
+									style={{
+										margin: '0 4px',
+									}}
+								>
+									{__('Change', 'wpappointments')}
+								</Button>
+								<Button
+									size="small"
+									variant="secondary"
+									onClick={() => {
+										dispatch.clearSelectedCustomer();
+									}}
+								>
+									{__('Remove', 'wpappointments')}
+								</Button>
+							</ButtonGroup>
 						}
 					/>
 				)}
@@ -289,8 +395,17 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				</Button>
 			</div>
 
-			<SlideOut title={__('Select time')} id={`select-time-${mode}`}>
+			<SlideOut title={__('Select Time')} id={`select-time-${mode}`}>
 				<TimeSelector mode={mode} />
+			</SlideOut>
+			<SlideOut
+				title={__('Select Customer')}
+				id={`select-customer-${mode}`}
+			>
+				<CustomerSelector />
+			</SlideOut>
+			<SlideOut title={__('New Customer')} id={`new-customer-${mode}`}>
+				<CustomerCreate />
 			</SlideOut>
 		</HtmlForm>
 	);

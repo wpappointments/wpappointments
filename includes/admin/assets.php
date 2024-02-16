@@ -8,7 +8,6 @@
 
 namespace WPAppointments\Admin;
 
-// exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\scripts' );

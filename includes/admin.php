@@ -8,7 +8,6 @@
  * @since 0.0.1
  */
 
-// exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/admin/api.php';

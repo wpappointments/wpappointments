@@ -7,6 +7,8 @@ import { Appointment } from '~/backend/types';
 
 type AppointmentData = {
 	service: string;
+	customer: string;
+	customerId: number;
 };
 
 type Response = APIResponse<{
