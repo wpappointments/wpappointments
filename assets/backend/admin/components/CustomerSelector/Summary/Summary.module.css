@@ -1,0 +1,19 @@
+.summary .summary-header {
+	padding: 15px 20px;
+	font-weight: bold;
+}
+
+.summary .summary-body {
+	padding: 0;
+}
+
+.summary-customer-row {
+	padding: 8px 20px;
+	border-bottom: 1px solid #eee;
+	font-size: 11px;
+}
+
+.summary-customer-row-error {
+	background-color: #d52020;
+	color: #fff;
+}

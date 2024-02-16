@@ -11,6 +11,11 @@ namespace WPAppointments;
 // exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Register blocks
+ *
+ * @return void
+ */
 add_action( 'init', __NAMESPACE__ . '\\blocks' );
 
 /**

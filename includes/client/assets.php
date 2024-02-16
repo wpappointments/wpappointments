@@ -8,9 +8,11 @@
 
 namespace WPAppointments\Client;
 
-// exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Enqueue client scripts and styles
+ */
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\scripts' );
 
 /**

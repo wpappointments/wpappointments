@@ -8,7 +8,6 @@
 
 namespace WPAppointments\Admin;
 
-// exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_body_class', __NAMESPACE__ . '\\body_class', 1000 );

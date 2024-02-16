@@ -1,6 +1,9 @@
+import { Customer } from '../../customers/customers.types';
+
 export type AppointmentSlideoutState = {
 	curentMonth: MonthIndex;
 	currentYear: number;
+	selectedCustomer: Customer | null;
 };
 
 export type Month =

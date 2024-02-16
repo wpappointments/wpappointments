@@ -166,18 +166,22 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$params   = $request->get_params();
-		$service  = $request->get_param( 'service' );
-		$duration = $request->get_param( 'duration' );
-		$date     = rest_parse_date( get_gmt_from_date( $params['date'] ) );
+		$params      = $request->get_params();
+		$service     = $request->get_param( 'service' );
+		$duration    = $request->get_param( 'duration' );
+		$date        = rest_parse_date( get_gmt_from_date( $params['date'] ) );
+		$customer    = $request->get_param( 'customer' );
+		$customer_id = $request->get_param( 'customerId' );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
 			$service,
 			array(
-				'timestamp' => $date,
-				'duration'  => $duration,
-				'status'    => 'confirmed',
+				'timestamp'   => $date,
+				'duration'    => $duration,
+				'customer'    => $customer,
+				'customer_id' => $customer_id,
+				'status'      => 'confirmed',
 			)
 		);
 
