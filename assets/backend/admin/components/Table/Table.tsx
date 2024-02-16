@@ -2,10 +2,10 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, fromUnixTime } from 'date-fns';
-import { Appointment } from '~/types';
+import { Appointment } from '~/backend/types';
 import styles from './Table.module.css';
-import CancelAppointment from '~/admin/components/Modals/CancelAppointment/CancelAppointment';
-import { AppointmentsApi } from '~/api/appointments';
+import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointment/CancelAppointment';
+import { AppointmentsApi } from '~/backend/api/appointments';
 
 type Props = {
 	items?: Appointment[];

@@ -2,12 +2,12 @@ import { Button, Dashicon } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { useCallback, useMemo } from '@wordpress/element';
 import { produce } from 'immer';
-import cn from '~/utils/cn';
-import type { DayOpeningHours } from '~/store/settings/settings.types';
-import { store } from '~/store/store';
+import cn from '~/backend/utils/cn';
+import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
+import { store } from '~/backend/store/store';
 import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
-import Toggle from '~/admin/components/FormField/Toggle/Toggle';
+import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
 
 export default function OpeningHoursDayOfWeek({
 	values,

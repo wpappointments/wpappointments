@@ -66,3 +66,4 @@ add_action(
  */
 require_once __DIR__ . '/includes/admin.php';
 require_once __DIR__ . '/includes/client.php';
+require_once __DIR__ . '/includes/gutenberg.php';

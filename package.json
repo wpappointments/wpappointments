@@ -13,7 +13,7 @@
 	],
 	"scripts": {
 		"init-project": "NODE_ENV=development pnpm install",
-		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx",
+		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.ts assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
 		"build:fe": "pnpm init-project & pnpm css-types & wp-scripts build assets/frontend/index.tsx",
 		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx",
 		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && wp-scripts start assets/backend/admin.tsx assets/frontend/index.tsx assets/backend/globals.tsx --hot",
@@ -49,6 +49,8 @@
 		"@types/jest": "^29.5.12",
 		"@types/react": "^18.2.55",
 		"@types/react-dom": "^18.2.19",
+		"@types/wordpress__block-editor": "^11.5.10",
+		"@types/wordpress__blocks": "^12.5.13",
 		"@wordpress/env": "^9.3.0",
 		"@wordpress/prettier-config": "^3.8.0",
 		"@wordpress/scripts": "^27.2.0",
@@ -63,6 +65,8 @@
 	},
 	"dependencies": {
 		"@wordpress/api-fetch": "^6.48.0",
+		"@wordpress/block-editor": "^12.19.1",
+		"@wordpress/blocks": "^12.28.1",
 		"@wordpress/components": "^26.0.0",
 		"@wordpress/data": "^9.21.0",
 		"@wordpress/date": "^4.51.0",

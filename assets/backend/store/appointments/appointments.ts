@@ -1,7 +1,7 @@
 import { addQueryArgs } from '@wordpress/url';
 import { produce } from 'immer';
-import apiFetch, { APIResponse } from '~/utils/fetch';
-import { Appointment } from '~/types';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { Appointment } from '~/backend/types';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { State } from '../store';
 import { AppointmentsState } from './appointments.types';

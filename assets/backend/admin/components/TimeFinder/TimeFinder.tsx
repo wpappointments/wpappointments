@@ -3,12 +3,15 @@ import { Button, ButtonGroup } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { format, getDaysInMonth } from 'date-fns';
-import cn from '~/utils/cn';
-import { formatTime24HourFromDate, formatTimeForPicker } from '~/utils/format';
-import { MonthIndex } from '~/store/slideout/appointment/appointment.types';
-import { store } from '~/store/store';
+import cn from '~/backend/utils/cn';
+import {
+	formatTime24HourFromDate,
+	formatTimeForPicker,
+} from '~/backend/utils/format';
+import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
+import { store } from '~/backend/store/store';
 import styles from './TimeFinder.module.css';
-import { useStateContext } from '~/admin/context/StateContext';
+import { useStateContext } from '~/backend/admin/context/StateContext';
 
 export default function TimeFinder() {
 	const { invalidate, getSelector } = useStateContext();

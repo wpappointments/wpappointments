@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Snackbar } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import cn from '~/utils/cn';
-import { Toast } from '~/store/notices/notices.types';
-import { store } from '~/store/store';
+import cn from '~/backend/utils/cn';
+import { Toast } from '~/backend/store/notices/notices.types';
+import { store } from '~/backend/store/store';
 import styles from './Toaster.module.css';
 
 export default function Toaster() {

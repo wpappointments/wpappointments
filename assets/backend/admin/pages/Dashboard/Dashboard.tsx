@@ -4,23 +4,23 @@ import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, funnel } from '@wordpress/icons';
-import { Text } from '~/utils/experimental';
-import useSlideout from '~/hooks/useSlideout';
-import { Slideout } from '~/store/slideout/slideout.types';
-import { store } from '~/store/store';
-import { Appointment } from '~/types';
+import { Text } from '~/backend/utils/experimental';
+import useSlideout from '~/backend/hooks/useSlideout';
+import { Slideout } from '~/backend/store/slideout/slideout.types';
+import { store } from '~/backend/store/store';
+import { Appointment } from '~/backend/types';
 import styles from './Dashboard.module.css';
-import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
-import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
-import Select from '~/admin/components/FormField/Select/Select';
-import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import Table from '~/admin/components/Table/Table';
+import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
+import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppoitmentForm';
+import Select from '~/backend/admin/components/FormField/Select/Select';
+import SlideOut from '~/backend/admin/components/SlideOut/SlideOut';
+import Table from '~/backend/admin/components/Table/Table';
 import {
 	StateContextProvider,
 	useStateContext,
-} from '~/admin/context/StateContext';
-import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
-import { appointmentsApi } from '~/api/appointments';
+} from '~/backend/admin/context/StateContext';
+import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
+import { appointmentsApi } from '~/backend/api/appointments';
 import globalStyles from 'global.module.css';
 
 type Fields = {

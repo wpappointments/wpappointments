@@ -2,16 +2,16 @@ import { Button, ButtonGroup } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { applyFilters } from '~/utils/hooks';
-import useSlideout from '~/hooks/useSlideout';
-import { store } from '~/store/store';
-import { Appointment } from '~/types';
+import { applyFilters } from '~/backend/utils/hooks';
+import useSlideout from '~/backend/hooks/useSlideout';
+import { store } from '~/backend/store/store';
+import { Appointment } from '~/backend/types';
 import styles from './Calendar.module.css';
-import AppointmentDetails from '~/admin/components/AppointmentDetails/AppointmentDetails';
-import AppointmentForm from '~/admin/components/AppointmentForm/AppoitmentForm';
-import SlideOut from '~/admin/components/SlideOut/SlideOut';
-import { StateContextProvider } from '~/admin/context/StateContext';
-import LayoutDefault from '~/admin/layouts/LayoutDefault/LayoutDefault';
+import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
+import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppoitmentForm';
+import SlideOut from '~/backend/admin/components/SlideOut/SlideOut';
+import { StateContextProvider } from '~/backend/admin/context/StateContext';
+import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
 function getMonthName(month: number) {
 	const months = [

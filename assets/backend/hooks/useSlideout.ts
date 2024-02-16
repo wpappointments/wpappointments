@@ -1,6 +1,6 @@
 import { select, useDispatch, useSelect } from '@wordpress/data';
-import { Slideout } from '~/store/slideout/slideout.types';
-import { store } from '~/store/store';
+import { Slideout } from '~/backend/store/slideout/slideout.types';
+import { store } from '~/backend/store/store';
 
 export default function useSlideout(id?: string) {
 	const dispatch = useDispatch(store);
