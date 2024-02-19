@@ -9,14 +9,19 @@ type UseSlideoutProps = {
 export default function useSlideout(props?: UseSlideoutProps) {
 	const { id } = props || {};
 	const dispatch = useDispatch(store);
-	const { openSlideouts, currentSlideout, closingSlideout } =
-		useSelect(() => {
-			return {
-				openSlideouts: select(store).getSlideouts(),
-				currentSlideout: select(store).getCurrentSlideout(),
-				closingSlideout: select(store).getClosingSlideout(id),
-			};
-		}, []);
+	const {
+		openSlideouts,
+		currentSlideout,
+		closingSlideout,
+		closingSlideouts,
+	} = useSelect(() => {
+		return {
+			openSlideouts: select(store).getSlideouts(),
+			currentSlideout: select(store).getCurrentSlideout(),
+			closingSlideout: select(store).getClosingSlideout(id),
+			closingSlideouts: select(store).getAllClosingSlideouts(),
+		};
+	}, []);
 
 	const openSlideOut = (slideout: Slideout) => {
 		slideout.level = openSlideouts.length + 1;
@@ -45,6 +50,7 @@ export default function useSlideout(props?: UseSlideoutProps) {
 			? openSlideouts.find((s) => s.id === id)
 			: currentSlideout,
 		closingSlideout,
+		closingSlideouts,
 		openSlideOut,
 		closeSlideOut,
 		closeCurrentSlideOut,

@@ -22,6 +22,11 @@ export const actions = {
 			slideoutId,
 		} as const;
 	},
+	removeSlideout() {
+		return {
+			type: 'REMOVE_CLOSING_SLIDEOUT',
+		} as const;
+	},
 };
 
 export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
@@ -39,9 +44,17 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 						(slideout) => slideout.id === action.slideoutId
 					)
 				);
-				draft.slideouts = draft.slideouts.filter(
-					(slideout) => slideout.id !== action.slideoutId
-				);
+			});
+
+		case 'REMOVE_CLOSING_SLIDEOUT':
+			return produce(state, (draft) => {
+				const removed = draft.slideoutsToClose.pop();
+
+				if (removed) {
+					draft.slideouts = draft.slideouts.filter(
+						(slideout) => slideout.id !== removed.id
+					);
+				}
 			});
 
 		default:
@@ -67,6 +80,9 @@ export const selectors = {
 		}
 
 		return state.slideouts.slideoutsToClose.find((s) => s.id === id);
+	},
+	getAllClosingSlideouts(state: State) {
+		return state.slideouts.slideoutsToClose;
 	},
 };
 
