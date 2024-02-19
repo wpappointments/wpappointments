@@ -204,10 +204,13 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$params  = $request->get_params();
-		$id      = $request->get_param( 'id' );
-		$service = $request->get_param( 'service' );
-		$status  = $request->get_param( 'status' );
+		$params      = $request->get_params();
+		$id          = $request->get_param( 'id' );
+		$service     = $request->get_param( 'service' );
+		$duration    = $request->get_param( 'duration' );
+		$status      = $request->get_param( 'status' );
+		$customer    = $request->get_param( 'customer' );
+		$customer_id = $request->get_param( 'customerId' );
 
 		if ( null === $id ) {
 			return self::error( __( 'Appointment ID is required', 'wpappointments' ) );
@@ -220,8 +223,11 @@ class Appointment extends Controller {
 			$id,
 			$service,
 			array(
-				'timestamp' => $date,
-				'status'    => $status,
+				'timestamp'   => $date,
+				'duration'    => $duration,
+				'customer'    => $customer,
+				'customer_id' => $customer_id,
+				'status'      => $status,
 			)
 		);
 

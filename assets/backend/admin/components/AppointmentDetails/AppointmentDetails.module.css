@@ -1,26 +1,59 @@
+.title {
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 30px;
+}
+
+.service-label {
+	display: block;
+	text-transform: uppercase;
+	margin-bottom: 5px;
+}
+
+.details {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
 .status-pill {
 	display: inline-block;
-	padding: 3px 8px;
-	border-radius: 5px;
-	font-size: 10px;
-	font-weight: 600;
+	padding: var( --wpappointments-main-gap );
+	font-weight: bold;
+	font-size: 12px;
 	text-transform: uppercase;
 	color: #fff;
 	background-color: #6c757d;
+	position: relative;
+	top: calc( -1 * var( --wpappointments-main-gap ) );
+	left: calc( -1 * var( --wpappointments-main-gap ) );
+	width: calc( 100% + ( 2 * var( --wpappointments-main-gap ) ) );
+}
+
+.status-pill > span {
+	border: 1px solid;
+	padding: 3px 5px;
+	border-radius: 5px;
+	margin-left: 5px;
 }
 
 .status-pill.is-pending {
-	background-color: #c1c1c1;
+	background-color: #eaeaea;
+	color: #2e353b;
 }
 
 .status-pill.is-confirmed {
-	background-color: #36f414;
+	background-color: #c0feb5;
+	color: #147602;
 }
 
 .status-pill.is-cancelled {
-	background-color: #dc3545;
+	background-color: #ffb8bf;
+	color: #7a0808;
 }
 
-.status-pill.is-no-show {
-	background-color: #ffc107;
+.status-pill.is-noshow {
+	background-color: #ffeaac;
+	color: #933600;
 }

@@ -18,6 +18,8 @@ export default function FormFieldSet({
 	horizontalCenter = false,
 	...rest
 }: Props) {
+	const { fieldsClassName, ...restProps } = rest;
+
 	return (
 		<fieldset
 			name={name}
@@ -32,7 +34,7 @@ export default function FormFieldSet({
 				' ' +
 				rest.className
 			}
-			{...rest}
+			{...restProps}
 		>
 			{legend && <legend>{legend}</legend>}
 			<div className={styles.fields + ' ' + rest.fieldsClassName}>
