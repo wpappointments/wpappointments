@@ -1,12 +1,20 @@
 import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { InputControl } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
+import { AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
+import SlideOut from '../SlideOut/SlideOut';
 import styles from './CustomerSelector.module.css';
 
-export default function CustomerSelector() {
+export default function CustomerSelector({
+	mode,
+}: {
+	mode: 'edit' | 'create';
+}) {
+	const { setValue } = useFormContext<AppointmentFormFields>();
 	const { closeCurrentSlideOut } = useSlideout();
 	const [searchValue, setSearchValue] = useState('');
 
@@ -39,13 +47,18 @@ export default function CustomerSelector() {
 		);
 
 		if (selectedCustomer) {
+			setValue('customer', JSON.stringify(selectedCustomer));
+			setValue('customerId', id);
 			dispatch.setSelectedCustomer(selectedCustomer);
 			closeCurrentSlideOut();
 		}
 	};
 
 	return (
-		<div>
+		<SlideOut
+			title={__('Select Customer', 'wpappointments')}
+			id="select-customer"
+		>
 			<InputControl
 				label={__('Search for a customer', 'wpappointments')}
 				placeholder={__(
@@ -85,6 +98,6 @@ export default function CustomerSelector() {
 					</div>
 				</>
 			)}
-		</div>
+		</SlideOut>
 	);
 }

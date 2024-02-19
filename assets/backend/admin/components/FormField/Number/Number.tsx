@@ -6,6 +6,7 @@ import {
 	FieldValues,
 	Merge,
 	Path,
+	PathValue,
 	RegisterOptions,
 	useFormContext,
 } from 'react-hook-form';
@@ -18,7 +19,7 @@ import styles from '../FormField.module.css';
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
 	label?: string;
-	placeholder: string;
+	placeholder?: string;
 	disabled?: boolean;
 	rules?: Omit<
 		RegisterOptions<TFields, Path<TFields>>,
@@ -28,7 +29,7 @@ type Props<TFields extends FieldValues> = {
 	max?: number;
 	spinControls?: 'none' | 'custom' | 'native';
 	onChange?: (e: number | undefined) => void;
-	defaultValue?: number;
+	defaultValue?: PathValue<TFields, Path<TFields>>;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -67,9 +68,9 @@ export default function Number<TFields extends FieldValues>({
 				name={name}
 				control={control}
 				rules={rules}
+				defaultValue={defaultValue}
 				render={({ field: { value, onChange, onBlur } }) => (
 					<NumberControl
-						placeholder={placeholder}
 						onBlur={onBlur}
 						onChange={(value) => {
 							onChange(value ? +value : undefined);
@@ -83,7 +84,7 @@ export default function Number<TFields extends FieldValues>({
 						id={name}
 						spinControls={spinControls}
 						disabled={disabled}
-						defaultValue={defaultValue}
+						placeholder={placeholder}
 					/>
 				)}
 			/>

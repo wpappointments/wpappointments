@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { addMinutes } from 'date-fns';
+import { addHours, addMinutes } from 'date-fns';
 import {
 	getRangesAvailableSlots,
 	timeRangesContainAnother,
@@ -29,6 +29,7 @@ type Fields = {
 	timeMinuteStart: string;
 	duration: number;
 	datetime: string;
+	date: string;
 };
 
 const daysOfWeek = new Map<number, keyof SettingsSchedule>([
@@ -89,7 +90,7 @@ function test(date: Date, schedule: SettingsSchedule, length: number) {
 }
 
 export default function TimePicker({ date }: StartEndTimePickerProps) {
-	const { getValues, setValue, watch } = useFormContext<Fields>();
+	const { setValue, watch } = useFormContext<Fields>();
 	const { closeCurrentSlideOut } = useSlideout();
 
 	const { appointments, general, schedule } = useSelect(() => {
@@ -130,6 +131,18 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 		createTimeRange(start, end)
 	);
 
+	const defaultStart = addHours(new Date(), 1);
+	defaultStart.setMinutes(0);
+	defaultStart.setSeconds(0);
+	defaultStart.setMilliseconds(0);
+
+	const defaultTimeHourEnd = formatTimeForPicker(
+		addMinutes(defaultStart, length).getHours()
+	);
+	const defaultTimeMinuteEnd = formatTimeForPicker(
+		addMinutes(defaultStart, length).getMinutes()
+	);
+
 	return (
 		<FormFieldSet>
 			<FormFieldSet horizontal>
@@ -137,6 +150,9 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 					<Select
 						name="timeHourStart"
 						label="Hour"
+						defaultValue={formatTimeForPicker(
+							defaultStart.getHours()
+						)}
 						rules={{
 							required: true,
 						}}
@@ -147,12 +163,13 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 					<Select
 						name="timeMinuteStart"
 						label="Minute"
+						defaultValue="00"
 						rules={{
 							required: true,
 						}}
 						options={createMinuteOptions(
 							availableMinutes,
-							getValues('timeHourStart'),
+							timeHourStart,
 							precision
 						)}
 						fullWidth
@@ -162,10 +179,10 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 					<Number
 						name="duration"
 						label="Minutes"
+						defaultValue={30}
 						rules={{
 							required: true,
 						}}
-						placeholder="30"
 					/>
 				</FormFieldSet>
 			</FormFieldSet>
@@ -174,9 +191,9 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 				date={date}
 				timeHourStart={timeHourStart}
 				timeMinuteStart={timeMinuteStart}
-				timeHourEnd={timeHourEnd}
-				timeMinuteEnd={timeMinuteEnd}
-				duration={duration}
+				timeHourEnd={timeHourEnd || defaultTimeHourEnd}
+				timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
+				duration={duration || length}
 				isDateOutsideWorkingHours={isOutside}
 			/>
 
@@ -190,7 +207,8 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 						padding: '22px 0px',
 					}}
 					onClick={() => {
-						setValue('datetime', start.toISOString());
+						setValue('datetime', start.getTime().toString());
+						setValue('date', start.toISOString());
 						closeCurrentSlideOut();
 					}}
 				>

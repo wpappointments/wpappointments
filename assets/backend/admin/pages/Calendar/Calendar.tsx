@@ -2,14 +2,14 @@ import { Button, ButtonGroup } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import cn from '~/backend/utils/cn';
 import { applyFilters } from '~/backend/utils/hooks';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import styles from './Calendar.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
-import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppoitmentForm';
-import SlideOut from '~/backend/admin/components/SlideOut/SlideOut';
+import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
@@ -97,7 +97,7 @@ function applyAppointmentsToCalendar(
 }
 
 export default function Calendar() {
-	const { openSlideOut, closeCurrentSlideOut } = useSlideout();
+	const { openSlideOut, isSlideoutOpen } = useSlideout();
 	const appointments = useSelect(() => {
 		return select(store).getAppointments({
 			posts_per_page: 100,
@@ -210,7 +210,12 @@ export default function Calendar() {
 						<Button
 							variant="primary"
 							onClick={() => {
-								openSlideOut({ id: 'add-appointment' });
+								openSlideOut({
+									id: 'appointment',
+									data: {
+										mode: 'create',
+									},
+								});
 							}}
 						>
 							{__('Create New Appointment', 'wpappointments')}
@@ -240,11 +245,20 @@ export default function Calendar() {
 										{day.appointments.map((appointment) => (
 											<div
 												key={appointment.id}
-												className={styles.event}
+												className={cn({
+													[styles.event]: true,
+													[styles.status]: true,
+													[styles[
+														appointment.status
+													]]: true,
+												})}
 												onClick={() => {
 													openSlideOut({
 														id: 'view-appointment',
-														data: appointment.id,
+														data: {
+															selectedAppointment:
+																appointment.id,
+														},
 													});
 												}}
 											>
@@ -254,8 +268,10 @@ export default function Calendar() {
 										<Button
 											onClick={() => {
 												openSlideOut({
-													id: 'add-appointment',
-													data: day,
+													id: 'appointment',
+													data: {
+														mode: 'create',
+													},
 												});
 											}}
 										>
@@ -267,15 +283,9 @@ export default function Calendar() {
 						))}
 					</div>
 				</div>
-				<SlideOut title={__('Appointment')} id="view-appointment">
-					<AppointmentDetails />
-				</SlideOut>
-				<SlideOut title={__('Create Appointment')} id="add-appointment">
-					<AppointmentForm
-						mode="create"
-						onSubmitComplete={closeCurrentSlideOut}
-					/>
-				</SlideOut>
+
+				{isSlideoutOpen('view-appointment') && <AppointmentDetails />}
+				{isSlideoutOpen('appointment') && <AppointmentForm />}
 			</LayoutDefault>
 		</StateContextProvider>
 	);

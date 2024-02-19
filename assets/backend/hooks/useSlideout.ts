@@ -2,7 +2,12 @@ import { select, useDispatch, useSelect } from '@wordpress/data';
 import { Slideout } from '~/backend/store/slideout/slideout.types';
 import { store } from '~/backend/store/store';
 
-export default function useSlideout(id?: string) {
+type UseSlideoutProps = {
+	id?: string;
+};
+
+export default function useSlideout(props?: UseSlideoutProps) {
+	const { id } = props || {};
 	const dispatch = useDispatch(store);
 	const { openSlideouts, currentSlideout, closingSlideout } =
 		useSelect(() => {
@@ -18,12 +23,20 @@ export default function useSlideout(id?: string) {
 		dispatch.openSlideout(slideout);
 	};
 
-	const closeSlideOut = (id: string) => {
+	const closeSlideOut = (id: string, callback?: (id: string) => void) => {
 		dispatch.closeSlideout(id);
+
+		if (id && callback) {
+			callback(id);
+		}
 	};
 
-	const closeCurrentSlideOut = () => {
-		closeSlideOut(currentSlideout.id);
+	const closeCurrentSlideOut = (callback?: (id: string) => void) => {
+		closeSlideOut(currentSlideout.id, callback);
+	};
+
+	const isSlideoutOpen = (id: string) => {
+		return openSlideouts.find((s) => s.id === id) !== undefined;
 	};
 
 	return {
@@ -35,5 +48,6 @@ export default function useSlideout(id?: string) {
 		openSlideOut,
 		closeSlideOut,
 		closeCurrentSlideOut,
+		isSlideoutOpen,
 	};
 }

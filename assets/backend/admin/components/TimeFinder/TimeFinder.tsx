@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, ButtonGroup } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
@@ -10,10 +11,15 @@ import {
 } from '~/backend/utils/format';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
+import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
-export default function TimeFinder() {
+type TimeFinderProps = {
+	mode: 'edit' | 'create';
+};
+
+export default function TimeFinder({ mode }: TimeFinderProps) {
 	const { invalidate, getSelector } = useStateContext();
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const isScrolling = useRef(true);
@@ -211,7 +217,10 @@ export default function TimeFinder() {
 	}
 
 	return (
-		<>
+		<SlideOut
+			title={__('Find time', 'wpappointments')}
+			id={`find-time-${mode}`}
+		>
 			<div className={styles.header}>
 				<div className={styles.buttons}>
 					<ButtonGroup>
@@ -355,6 +364,6 @@ export default function TimeFinder() {
 					</div>
 				</div>
 			</div>
-		</>
+		</SlideOut>
 	);
 }

@@ -53,7 +53,7 @@ export function FormProvider({ children }: FormProviderProps) {
 }
 
 export function withForm<TFields extends FieldValues>(
-	Component: (props: TFields) => JSX.Element
+	Component: (props: TFields) => JSX.Element | null
 ) {
 	return function FormWrapper(props: TFields) {
 		return (

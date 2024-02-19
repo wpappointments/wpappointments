@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import cn from '~/backend/utils/cn';
 import useSlideout from '~/backend/hooks/useSlideout';
@@ -7,11 +7,11 @@ import styles from './SlideOut.module.css';
 type Props = {
 	id: string;
 	children: ReactNode;
-	onOverlayClick?: MouseEventHandler<HTMLDivElement>;
 	title?: string;
 	headerRightSlot?: ReactNode;
 	level?: number;
 	type?: 'default' | 'full';
+	onClose?: (id: string) => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function SlideOut({
@@ -19,8 +19,8 @@ export default function SlideOut({
 	children,
 	title,
 	headerRightSlot,
-	onOverlayClick,
 	type,
+	onClose,
 	...rest
 }: Props) {
 	const {
@@ -28,7 +28,7 @@ export default function SlideOut({
 		currentSlideout,
 		closeCurrentSlideOut,
 		closingSlideout,
-	} = useSlideout(id);
+	} = useSlideout({ id });
 
 	let nestingLevel = 1;
 
@@ -55,45 +55,52 @@ export default function SlideOut({
 		);
 	};
 
-	const isOpen = shouldRenderSlideOut();
+	const [isOpen, setIsOpen] = useState(false);
+	// const isOpen = shouldRenderSlideOut();
 	const showHeader = title || headerRightSlot;
 
 	const portalContainer = document.getElementById('slideout-container');
+
+	useEffect(() => {
+		setIsOpen(shouldRenderSlideOut());
+	}, [shouldRenderSlideOut]);
 
 	if (!portalContainer) {
 		return null;
 	}
 
 	return createPortal(
-		<div
-			className={cn({
-				[styles.slideOutOverlay]: true,
-				[styles.slideOutOverlayOpen]: isOpen,
-			})}
-			onClick={onOverlayClick || closeCurrentSlideOut}
-			{...rest}
-			style={{
-				'--nesting-level': nestingLevel,
-				'--total-levels': openSlideouts.length,
-				...rest.style,
-			}}
-			data-id={id}
-		>
+		<div>
 			<div
 				className={cn({
-					[styles.slideOut]: true,
-					[styles.slideOutOpen]: isOpen,
-					[styles.slideOutWide]: type === 'full',
+					[styles.slideOutOverlay]: true,
+					[styles.slideOutOverlayOpen]: isOpen,
 				})}
-				onClick={(e) => e.stopPropagation()}
+				onClick={() => closeCurrentSlideOut(onClose)}
+				{...rest}
+				style={{
+					'--nesting-level': nestingLevel,
+					'--total-levels': openSlideouts.length,
+					...rest.style,
+				}}
+				data-id={id}
 			>
-				{showHeader && (
-					<div className={styles.header}>
-						<h2>{title}</h2>
-						{headerRightSlot}
-					</div>
-				)}
-				<div className={styles.content}>{children}</div>
+				<div
+					className={cn({
+						[styles.slideOut]: true,
+						[styles.slideOutOpen]: isOpen,
+						[styles.slideOutWide]: type === 'full',
+					})}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{showHeader && (
+						<div className={styles.header}>
+							<h2>{title}</h2>
+							{headerRightSlot}
+						</div>
+					)}
+					<div className={styles.content}>{children}</div>
+				</div>
 			</div>
 		</div>,
 		portalContainer,
