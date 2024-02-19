@@ -3,6 +3,7 @@ import {
 	literal,
 	number,
 	object,
+	optional,
 	record,
 	string,
 	union,
@@ -25,7 +26,14 @@ export const AppointmentSchema = object({
 		literal('pending'),
 		literal('confirmed'),
 		literal('cancelled'),
-		literal('no-show'),
+		literal('noshow'),
 	]),
+	customer: object({
+		id: number(),
+		name: string(),
+		email: string(),
+		phone: string(),
+	}),
+	customerId: optional(number()),
 	actions: record(ApiActionSchema),
 });

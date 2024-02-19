@@ -39,13 +39,7 @@ class AppointmentPost {
 			$this->default_query_part,
 			array(
 				'posts_per_page' => -1,
-				'meta_query'     => array(
-					array(
-						'key'     => 'status',
-						'value'   => 'confirmed',
-						'compare' => '=',
-					),
-				),
+				'meta_query'     => array(),
 			)
 		);
 
@@ -63,8 +57,10 @@ class AppointmentPost {
 			$appointments[] = $this->prepare_appointment_entity(
 				$post->ID,
 				array(
-					'status'    => $meta['status'][0],
-					'timestamp' => $meta['timestamp'][0],
+					'status'      => $meta['status'][0],
+					'timestamp'   => $meta['timestamp'][0],
+					'customer_id' => $meta['customer_id'][0],
+					'customer'    => $meta['customer'][0],
 				)
 			);
 		}
@@ -153,8 +149,10 @@ class AppointmentPost {
 			$appointments[] = $this->prepare_appointment_entity(
 				$post->ID,
 				array(
-					'status'    => $meta['status'][0],
-					'timestamp' => $meta['timestamp'][0],
+					'status'      => $meta['status'][0],
+					'timestamp'   => $meta['timestamp'][0],
+					'customer_id' => $meta['customer_id'][0],
+					'customer'    => $meta['customer'][0],
 				)
 			);
 		}
@@ -349,18 +347,22 @@ class AppointmentPost {
 	 * @return array
 	 */
 	protected function prepare_appointment_entity( $post_id, $meta ) {
-		$length    = (int) get_option( 'wpappointments_appointments_defaultLength' );
-		$timestamp = $meta['timestamp'];
-		$status    = $meta['status'];
-		$duration  = $meta['duration'] ?? $length;
+		$length      = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$timestamp   = $meta['timestamp'];
+		$status      = $meta['status'];
+		$duration    = $meta['duration'] ?? $length;
+		$customer_id = $meta['customer_id'];
+		$customer    = json_decode( $meta['customer'] );
 
 		return (object) array(
-			'id'        => $post_id,
-			'service'   => get_the_title( $post_id ),
-			'timestamp' => (int) $timestamp,
-			'status'    => $status,
-			'duration'  => $duration,
-			'actions'   => (object) array(
+			'id'         => $post_id,
+			'service'    => get_the_title( $post_id ),
+			'timestamp'  => (int) $timestamp,
+			'status'     => $status,
+			'duration'   => (int) $duration,
+			'customerId' => (int) $customer_id,
+			'customer'   => $customer,
+			'actions'    => (object) array(
 				'delete' => (object) array(
 					'name'        => 'DeleteAppointment',
 					'label'       => 'Delete',

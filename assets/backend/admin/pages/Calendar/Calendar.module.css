@@ -115,3 +115,23 @@
 	align-items: center;
 	margin-bottom: 20px;
 }
+
+.status.pending {
+	background-color: #eaeaea;
+	color: #2e353b;
+}
+
+.status.confirmed {
+	background-color: #c0feb5;
+	color: #147602;
+}
+
+.status.cancelled {
+	background-color: #ffb8bf;
+	color: #7a0808;
+}
+
+.status.noshow {
+	background-color: #ffeaac;
+	color: #933600;
+}
