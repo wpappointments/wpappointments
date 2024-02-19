@@ -1,9 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { dispatch } from '@wordpress/data';
 import cn from '~/backend/utils/cn';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { store } from '~/backend/store/store';
 import styles from './SlideOut.module.css';
 
 type Props = {
