@@ -31,6 +31,10 @@ export default function useSlideout(props?: UseSlideoutProps) {
 	const closeSlideOut = (id: string, callback?: (id: string) => void) => {
 		dispatch.closeSlideout(id);
 
+		setTimeout(() => {
+			dispatch.removeSlideout();
+		}, 200);
+
 		if (id && callback) {
 			callback(id);
 		}
