@@ -90,7 +90,7 @@ class Availability {
 		$day_end = clone $date;
 		$day_end->setTime( 23, 59, 59 );
 
-		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$length = (int) get_option( 'wpappointments_appointments_timePickerPrecision' );
 		$day    = new DatePeriod( $day_start, new DateInterval( 'PT' . $length . 'M' ), $day_end );
 
 		$appointments     = new AppointmentPost();

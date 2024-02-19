@@ -27,6 +27,7 @@ type Props<TFields extends FieldValues> = {
 	>;
 	min?: number;
 	max?: number;
+	step?: number;
 	spinControls?: 'none' | 'custom' | 'native';
 	onChange?: (e: number | undefined) => void;
 	defaultValue?: PathValue<TFields, Path<TFields>>;
@@ -45,6 +46,7 @@ export default function Number<TFields extends FieldValues>({
 	disabled = false,
 	min,
 	max,
+	step,
 	spinControls = 'custom',
 	onChange: onChangeProp,
 	defaultValue,
@@ -80,6 +82,7 @@ export default function Number<TFields extends FieldValues>({
 						value={value}
 						min={min}
 						max={max}
+						step={step}
 						size="__unstable-large"
 						id={name}
 						spinControls={spinControls}

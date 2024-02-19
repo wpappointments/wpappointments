@@ -1,26 +1,38 @@
 import { useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Button, ButtonGroup } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
-import { format, getDaysInMonth } from 'date-fns';
+import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import {
 	formatTime24HourFromDate,
 	formatTimeForPicker,
 } from '~/backend/utils/format';
+import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
+type Fields = {
+	timeHourStart: string;
+	timeMinuteStart: string;
+	duration: number;
+	datetime: string;
+	date: string;
+};
+
 type TimeFinderProps = {
 	mode: 'edit' | 'create';
 };
 
 export default function TimeFinder({ mode }: TimeFinderProps) {
+	const { getValues, setValue } = useFormContext<Fields>();
 	const { invalidate, getSelector } = useStateContext();
+	const { closeCurrentSlideOut } = useSlideout();
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const isScrolling = useRef(true);
 
@@ -29,6 +41,17 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	>('morning');
 
 	const dispatch = useDispatch(store);
+
+	const appointments = useSelect(() => {
+		return select(store).getAppointmentsSettings();
+	}, []);
+
+	const { timePickerPrecision } = appointments;
+
+	const precision = timePickerPrecision || 15;
+	const duration = getValues('duration');
+	const itemsToHighlight = Math.ceil(duration / precision);
+
 	const { currentMonth, currentYear } = useSelect((select) => {
 		return {
 			currentMonth: select(store).getCurrentMonth(),
@@ -216,6 +239,18 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 		hourHeadings = hourHeadings.filter((_, i) => i % precision === 0);
 	}
 
+	function formatTimeRangeFromSlotDate(date: string) {
+		const startDate = new Date(date);
+		const hours = formatTimeForPicker(startDate.getHours());
+		const minutes = formatTimeForPicker(startDate.getMinutes());
+
+		const endDate = addMinutes(new Date(date), duration);
+		const endHours = formatTimeForPicker(endDate.getHours());
+		const endMinutes = formatTimeForPicker(endDate.getMinutes());
+
+		return `${hours}:${minutes} - ${endHours}:${endMinutes}`;
+	}
+
 	return (
 		<SlideOut
 			title={__('Find time', 'wpappointments')}
@@ -353,8 +388,87 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 														slot.available,
 													[styles.itemBooked]:
 														slot.booked,
+													[styles.itemSelected]:
+														false,
 												})}
 												key={slot.start.date + 'cell'}
+												data-time={formatTimeRangeFromSlotDate(
+													slot.start.date
+												)}
+												onClick={() => {
+													const date = new Date(
+														slot.start.date
+													);
+
+													setValue(
+														'date',
+														slot.start.date
+													);
+													setValue(
+														'timeHourStart',
+														formatTimeForPicker(
+															date.getHours()
+														)
+													);
+													setValue(
+														'timeMinuteStart',
+														formatTimeForPicker(
+															date.getMinutes()
+														)
+													);
+
+													closeCurrentSlideOut();
+												}}
+												onMouseEnter={(e) => {
+													const target =
+														e.target as HTMLDivElement;
+													let next: HTMLDivElement =
+														target;
+
+													// highlight the next itemsToHighlight items
+													for (
+														let i = 0;
+														i <
+														itemsToHighlight - 1;
+														i++
+													) {
+														next =
+															next.nextSibling as HTMLDivElement;
+
+														if (!next) {
+															return;
+														}
+
+														next.classList.add(
+															styles.itemSelected
+														);
+													}
+												}}
+												onMouseLeave={(e) => {
+													const target =
+														e.target as HTMLDivElement;
+													let next: HTMLDivElement =
+														target;
+
+													// remove the highlight from the next itemsToHighlight items
+													for (
+														let i = 0;
+														i <
+														itemsToHighlight - 1;
+														i++
+													) {
+														next =
+															next.nextSibling as HTMLDivElement;
+
+														if (!next) {
+															return;
+														}
+
+														next.classList.remove(
+															styles.itemSelected
+														);
+													}
+												}}
 											></div>
 										);
 									})}

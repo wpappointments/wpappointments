@@ -179,7 +179,9 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 					<Number
 						name="duration"
 						label="Minutes"
-						defaultValue={30}
+						defaultValue={length}
+						min={precision}
+						step={precision}
 						rules={{
 							required: true,
 						}}

@@ -35,38 +35,52 @@
 }
 
 .item {
+	position: relative;
 	flex: 1;
 	height: 22px;
 	background-color: #e7e7e7;
 	text-align: right;
 }
 
-.item:hover {
+.item:hover,
+.item-selected {
 	background-color: #c5c1c1;
 	cursor: pointer;
 }
 
-.item:hover + .item {
-	background-color: #c5c1c1;
+.item:hover::after {
+	content: attr( data-time );
+	position: absolute;
+	bottom: calc( 100% + 2px );
+	white-space: nowrap;
+	left: 0;
+	background-color: #383838;
+	color: #fff;
+	padding: 5px;
+	border-radius: 5px;
+	font-family: monospace;
+	font-weight: bold;
 }
 
 .item-available {
 	background-color: #05d242;
 }
 
-.item-available:hover {
-	background-color: rgb( 32, 237, 93 );
-	cursor: pointer;
-}
-
-.item-available:hover + .item,
-.item-available:hover + .item + .item {
+.item-available:hover,
+.item-available.item-selected {
 	background-color: rgb( 32, 237, 93 );
 }
 
 .item-booked,
-.item-available.item-booked {
+.item-booked.item-available,
+.item-booked.item-selected {
 	background-color: #f70707;
+}
+
+.item-booked:hover,
+.item-booked.item-available:hover,
+.item-booked.item-selected {
+	background-color: #ff4e4e;
 }
 
 .head {
