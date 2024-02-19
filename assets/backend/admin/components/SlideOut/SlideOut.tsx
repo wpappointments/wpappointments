@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { dispatch } from '@wordpress/data';
 import cn from '~/backend/utils/cn';
 import useSlideout from '~/backend/hooks/useSlideout';
+import { store } from '~/backend/store/store';
 import styles from './SlideOut.module.css';
 
 type Props = {
@@ -28,6 +30,7 @@ export default function SlideOut({
 		currentSlideout,
 		closeCurrentSlideOut,
 		closingSlideout,
+		closingSlideouts,
 	} = useSlideout({ id });
 
 	let nestingLevel = 1;
@@ -56,14 +59,27 @@ export default function SlideOut({
 	};
 
 	const [isOpen, setIsOpen] = useState(false);
-	// const isOpen = shouldRenderSlideOut();
 	const showHeader = title || headerRightSlot;
 
 	const portalContainer = document.getElementById('slideout-container');
 
 	useEffect(() => {
 		setIsOpen(shouldRenderSlideOut());
-	}, [shouldRenderSlideOut]);
+	}, []);
+
+	useEffect(() => {
+		if (closingSlideout) {
+			setIsOpen(false);
+		}
+	}, [closingSlideout]);
+
+	function close() {
+		closeCurrentSlideOut();
+
+		setTimeout(() => {
+			dispatch(store).removeSlideout();
+		}, 200);
+	}
 
 	if (!portalContainer) {
 		return null;
@@ -76,11 +92,12 @@ export default function SlideOut({
 					[styles.slideOutOverlay]: true,
 					[styles.slideOutOverlayOpen]: isOpen,
 				})}
-				onClick={() => closeCurrentSlideOut(onClose)}
+				onClick={close}
 				{...rest}
 				style={{
 					'--nesting-level': nestingLevel,
-					'--total-levels': openSlideouts.length,
+					'--total-levels':
+						openSlideouts.length - closingSlideouts.length,
 					...rest.style,
 				}}
 				data-id={id}
