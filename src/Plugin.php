@@ -49,6 +49,7 @@ class Plugin extends Core\Singleton {
 		}
 
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
+		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
 	}
 
 	/**
