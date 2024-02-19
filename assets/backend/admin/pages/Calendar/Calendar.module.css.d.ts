@@ -19,6 +19,14 @@ declare const styles:
   & Readonly<{ "pagination": string }>
   & Readonly<{ "actions": string }>
   & Readonly<{ "topBar": string }>
+  & Readonly<{ "status": string }>
+  & Readonly<{ "status": string }>
+  & Readonly<{ "status": string }>
+  & Readonly<{ "status": string }>
+  & Readonly<{ "pending": string }>
+  & Readonly<{ "confirmed": string }>
+  & Readonly<{ "cancelled": string }>
+  & Readonly<{ "noshow": string }>
 ;
 export default styles;
 //# sourceMappingURL=./Calendar.module.css.d.ts.map

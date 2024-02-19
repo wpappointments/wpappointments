@@ -22,3 +22,22 @@
 .no-time-label {
 	margin-right: 10px;
 }
+
+.summary-customer-row {
+	padding: 8px 20px;
+	border-bottom: 1px solid #eee;
+	font-size: 11px;
+}
+
+.summary-time-row {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 20px;
+	border-bottom: 1px solid #eee;
+	font-size: 11px;
+}
+
+.summary-time-row-error {
+	background-color: #d52020;
+	color: #fff;
+}

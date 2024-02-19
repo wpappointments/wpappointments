@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	Controller,
 	DeepRequired,
@@ -44,10 +45,17 @@ export default function DatePicker<TFields extends FieldValues>({
 }: Props<TFields>) {
 	const {
 		control,
+		setValue,
 		formState: { errors },
 	} = useFormContext();
 
 	const error: FormFieldError<TFields> = errors[name];
+
+	useEffect(() => {
+		if (defaultValue) {
+			setValue(name, defaultValue);
+		}
+	}, []);
 
 	return (
 		<FormField>
@@ -55,7 +63,6 @@ export default function DatePicker<TFields extends FieldValues>({
 				name={name}
 				control={control}
 				rules={rules}
-				defaultValue={defaultValue}
 				render={({ field: { value, onChange } }) => (
 					<WPDatePicker
 						onChange={onChange}

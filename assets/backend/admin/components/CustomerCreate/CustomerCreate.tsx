@@ -1,14 +1,15 @@
-import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
-import { AppointmentFormFields } from '../AppointmentForm/AppoitmentForm';
 import { HtmlForm, withForm } from '../Form/Form';
 import Checkbox from '../FormField/Checkbox/Checkbox';
 import Input from '../FormField/Input/Input';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
+import SlideOut from '../SlideOut/SlideOut';
 import { customersApi } from '~/backend/api/customers';
 
 export type CustomerCreateFormData = {
@@ -19,8 +20,13 @@ export type CustomerCreateFormData = {
 	createAccount: boolean;
 };
 
-export default withForm(function CustomerCreate() {
-	const { reset } = useFormContext<AppointmentFormFields>();
+type CustomerCreateProps = {
+	onSubmitSuccess?: (data: Customer) => void;
+};
+
+export default withForm(function CustomerCreate({
+	onSubmitSuccess,
+}: CustomerCreateProps) {
 	const dispatch = useDispatch(store);
 	const { closeCurrentSlideOut } = useSlideout();
 
@@ -35,40 +41,56 @@ export default withForm(function CustomerCreate() {
 				const { data: responseData } = response;
 				const { customer } = responseData;
 				dispatch.setSelectedCustomer(customer as Customer);
+
+				if (onSubmitSuccess) {
+					onSubmitSuccess(customer as Customer);
+				}
 			}
 		} else {
 			dispatch.createCustomer(rest as Customer);
 			dispatch.setSelectedCustomer(rest as Customer);
+
+			if (onSubmitSuccess) {
+				onSubmitSuccess(rest as Customer);
+			}
 		}
 
 		closeCurrentSlideOut();
-		reset();
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
-			<FormFieldSet>
-				<Input name="name" label="Name" rules={{ required: true }} />
-				<Input name="email" label="Email" type="email" />
-				<Input name="phone" label="Phone" />
-				<Checkbox
-					name="createAccount"
-					label="Create account"
-					defaultValue={true}
-				/>
-			</FormFieldSet>
-			<Button
-				variant="primary"
-				type="submit"
-				style={{
-					width: '100%',
-					justifyContent: 'center',
-					padding: '22px 0px',
-					marginTop: '34px',
-				}}
-			>
-				Create
-			</Button>
-		</HtmlForm>
+		<SlideOut
+			title={__('New Customer', 'wpappointments')}
+			id="create-customer"
+		>
+			<HtmlForm onSubmit={onSubmit}>
+				<FormFieldSet>
+					<Input
+						name="name"
+						label="Name"
+						rules={{ required: true }}
+					/>
+					<Input name="email" label="Email" type="email" />
+					<Input name="phone" label="Phone" />
+					<Checkbox
+						name="createAccount"
+						label="Create account"
+						defaultValue={true}
+					/>
+				</FormFieldSet>
+				<Button
+					variant="primary"
+					type="submit"
+					style={{
+						width: '100%',
+						justifyContent: 'center',
+						padding: '22px 0px',
+						marginTop: '34px',
+					}}
+				>
+					Create
+				</Button>
+			</HtmlForm>
+		</SlideOut>
 	);
 });
