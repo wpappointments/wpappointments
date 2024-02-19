@@ -1,9 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { dispatch } from '@wordpress/data';
 import cn from '~/backend/utils/cn';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { store } from '~/backend/store/store';
 import styles from './SlideOut.module.css';
 
 type Props = {
@@ -73,51 +71,41 @@ export default function SlideOut({
 		}
 	}, [closingSlideout]);
 
-	function close() {
-		closeCurrentSlideOut();
-
-		setTimeout(() => {
-			dispatch(store).removeSlideout();
-		}, 200);
-	}
-
 	if (!portalContainer) {
 		return null;
 	}
 
 	return createPortal(
-		<div>
+		<div
+			className={cn({
+				[styles.slideOutOverlay]: true,
+				[styles.slideOutOverlayOpen]: isOpen,
+			})}
+			onClick={() => closeCurrentSlideOut(onClose)}
+			{...rest}
+			style={{
+				'--nesting-level': nestingLevel,
+				'--total-levels':
+					openSlideouts.length - closingSlideouts.length,
+				...rest.style,
+			}}
+			data-id={id}
+		>
 			<div
 				className={cn({
-					[styles.slideOutOverlay]: true,
-					[styles.slideOutOverlayOpen]: isOpen,
+					[styles.slideOut]: true,
+					[styles.slideOutOpen]: isOpen,
+					[styles.slideOutWide]: type === 'full',
 				})}
-				onClick={close}
-				{...rest}
-				style={{
-					'--nesting-level': nestingLevel,
-					'--total-levels':
-						openSlideouts.length - closingSlideouts.length,
-					...rest.style,
-				}}
-				data-id={id}
+				onClick={(e) => e.stopPropagation()}
 			>
-				<div
-					className={cn({
-						[styles.slideOut]: true,
-						[styles.slideOutOpen]: isOpen,
-						[styles.slideOutWide]: type === 'full',
-					})}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{showHeader && (
-						<div className={styles.header}>
-							<h2>{title}</h2>
-							{headerRightSlot}
-						</div>
-					)}
-					<div className={styles.content}>{children}</div>
-				</div>
+				{showHeader && (
+					<div className={styles.header}>
+						<h2>{title}</h2>
+						{headerRightSlot}
+					</div>
+				)}
+				<div className={styles.content}>{children}</div>
 			</div>
 		</div>,
 		portalContainer,
