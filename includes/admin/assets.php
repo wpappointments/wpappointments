@@ -54,7 +54,7 @@ function scripts() {
 
 	wp_enqueue_style(
 		'wpappointments-admin-css',
-		WPAPPOINTMENTS_PLUGIN_DIR_URL . '/assets/styles/admin.css',
+		WPAPPOINTMENTS_PLUGIN_DIR_URL . '/admin.css',
 		array( 'wp-edit-blocks' ),
 		WPAPPOINTMENTS_VERSION
 	);
