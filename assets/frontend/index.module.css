@@ -1,0 +1,178 @@
+.booking-flow {
+  width: 420px;
+}
+
+.calendar {
+  margin-bottom: 30px;
+}
+
+.calendar-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-control-button {
+  padding: 10px;
+  border: none;
+  appearance: none;
+  cursor: pointer;
+  font-size: 16px;
+  background-color: transparent;
+  color: currentColor;
+}
+
+.calendar-control-button path {
+  fill: currentColor;
+}
+
+.calendar-control-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+}
+
+.calendar-month-header {
+  font-size: 20px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar-header-day {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 52px;
+  text-align: center;
+}
+
+.calendar-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.calendar-day {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  font-size: 18px;
+  border: none;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px 15px;
+  box-sizing: border-box;
+  background-color: #f4ffdc;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.calendar-day-availability {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  right: 8px;
+  background-color: #32b702;
+  border-radius: 6px;
+  height: 6px;
+}
+
+.calendar-day-in-current-month {
+  opacity: 1;
+}
+
+.calendar-day-in-current-month:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.calendar-day:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.calendar-day-selected {
+  background-color: #8bff6b;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.day-slots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 40px;
+}
+
+.day-slot {
+  position: relative;
+  height: 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  appearance: none;;
+  background-color: #00b50c;
+  padding: 0;
+  flex: 1;
+}
+
+.day-slot:hover::after {
+  content: attr(data-time);
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: auto;
+  white-space: nowrap;
+  padding: 4px;
+  background-color: #00b50c;
+  color: white;
+  border-radius: 5px;
+}
+
+.time-slot-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border: 1px solid #878787;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.error {
+  color: red;
+  background-color: #ffcdcd;
+  border: 1px solid red;
+  padding: 4px 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
