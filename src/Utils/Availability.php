@@ -76,10 +76,12 @@ class Availability {
 	 * Return all day slots availability
 	 *
 	 * @param \DateTime $date Date.
+	 * @param bool      $trimUnavailable If true will remove unavailable slots before first
+	 *                                   available slot and after last available slot.
 	 *
 	 * @return (\DateTime|bool)[][] $slots
 	 */
-	public static function get_day_availability( $date ) {
+	public static function get_day_availability( $date, $show_booked_info = false, $trim_unavailable = false ) {
 		$settings = new Settings();
 		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 		$slots    = array();
@@ -113,8 +115,6 @@ class Availability {
 			}
 		}
 
-		$test = $date->format( 'j' );
-
 		$weekday          = strtolower( $date->format( 'l' ) );
 		$schedule_slots   = $schedule->$weekday->slots->list;
 		$schedule_enabled = $schedule->$weekday->enabled;
@@ -136,12 +136,27 @@ class Availability {
 			$available = Date::date_ranges_contain_another_date_range( $date_range, $schedule_periods );
 			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $day_appointments_periods );
 
-			$slots[] = array(
-				'start'     => clone $date,
-				'available' => $available,
-				'booked'    => $booked,
-				'schedule'  => $schedule,
+			if ( $trim_unavailable && ! $available ) {
+				if ( count( $slots ) === 0 ) {
+					continue;
+				}
+
+				break;
+			}
+
+			 // ISO 8601.
+			$slot = array(
+				'start' => $date->format( 'c' ),
 			);
+
+			if ( $show_booked_info ) {
+				$slot['booked'] = $booked;
+				$slot['available'] = $available;
+			} else {
+				$slot['available'] = $available && ! $booked;
+			}
+
+			$slots[] = $slot;
 		}
 
 		return $slots;
@@ -164,7 +179,7 @@ class Availability {
 			$_date   = new DateTime( $year . '-' . $month . '-' . $i . ' midnight' );
 			$slots[] = array(
 				'date'  => $_date,
-				'slots' => self::get_day_availability( $_date ),
+				'slots' => self::get_day_availability( $_date, true ),
 			);
 		}
 
