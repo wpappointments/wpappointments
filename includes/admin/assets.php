@@ -33,32 +33,6 @@ function scripts() {
 		),
 	);
 
-	$screen = get_current_screen();
-
-	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
-		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
-			return;
-		}
-
-		$globals_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/globals.tsx.asset.php';
-
-		wp_enqueue_script(
-			'wpappointments-globals-js',
-			WPAPPOINTMENTS_PLUGIN_DIR_URL . 'build/globals.tsx.js',
-			$globals_deps['dependencies'] + apply_filters( 'wpappointments_globals_js_dependencies', array() ),
-			$globals_deps['version'],
-			true
-		);
-
-		wp_localize_script(
-			'wpappointments-globals-js',
-			'wpappointments',
-			$api
-		);
-
-		return;
-	}
-
 	wp_enqueue_style(
 		'wpappointments-admin-css',
 		WPAPPOINTMENTS_PLUGIN_DIR_URL . '/admin.css',
@@ -88,4 +62,28 @@ function scripts() {
 		'wpappointments',
 		array_merge( $api, $date )
 	);
+
+	$screen = get_current_screen();
+
+	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
+		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
+			return;
+		}
+
+		$globals_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/globals.tsx.asset.php';
+
+		wp_enqueue_script(
+			'wpappointments-globals-js',
+			WPAPPOINTMENTS_PLUGIN_DIR_URL . 'build/globals.tsx.js',
+			$globals_deps['dependencies'] + apply_filters( 'wpappointments_globals_js_dependencies', array() ),
+			$globals_deps['version'],
+			true
+		);
+
+		wp_localize_script(
+			'wpappointments-globals-js',
+			'wpappointments',
+			$api
+		);
+	}
 }

@@ -14,3 +14,4 @@ require_once __DIR__ . '/admin/api.php';
 require_once __DIR__ . '/admin/menu.php';
 require_once __DIR__ . '/admin/assets.php';
 require_once __DIR__ . '/admin/other.php';
+require_once __DIR__ . '/admin/roles.php';
