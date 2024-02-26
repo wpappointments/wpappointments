@@ -212,11 +212,11 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						defaultValue={
 							mode === 'edit' && currentAppointment
 								? currentAppointment?.service
-								: 'Consultation'
+								: 'Appointment'
 						}
 						readOnly={true}
 						options={[
-							{ label: 'Consultation', value: 'consultation' },
+							{ label: 'Appointment', value: 'appointment' },
 						]}
 					/>
 

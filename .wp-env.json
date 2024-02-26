@@ -1,10 +1,6 @@
 {
 	"phpVersion": "8.2",
 	"mappings": {
-		"wp-content/plugins/wpappointments": ".",
-		".htaccess": "./.htaccess"
-	},
-	"config": {
-		"WP_DEBUG": "true"
+		"wp-content/plugins/wpappointments": "."
 	}
 }

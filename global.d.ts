@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
 import type { AppointmentsApi } from '~/backend/api/appointments';
 
+
 declare global {
 	interface Window {
 		ReactDOM: ReactDOM & {
@@ -21,6 +22,11 @@ declare global {
 				updateAppointment: AppointmentsApi[ 'updateAppointment' ];
 				cancelAppointment: AppointmentsApi[ 'cancelAppointment' ];
 				deleteAppointment: AppointmentsApi[ 'deleteAppointment' ];
+			};
+			date: {
+				timezones: string[];
+				weekStartsOn: number;
+				siteTimezone: string;
 			};
 		};
 		wp: any;

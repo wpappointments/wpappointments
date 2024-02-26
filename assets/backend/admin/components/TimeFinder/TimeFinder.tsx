@@ -219,9 +219,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	if (month[0]?.slots) {
 		for (const slot of month[0].slots) {
-			hourHeadings.push(
-				formatTime24HourFromDate(new Date(slot.start.date))
-			);
+			hourHeadings.push(formatTime24HourFromDate(new Date(slot.start)));
 		}
 	}
 
@@ -367,10 +365,10 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 						}}
 					>
 						<div className={styles.row}>
-							{hourHeadings.map((date) => (
+							{hourHeadings.map((date, index) => (
 								<div
 									className={styles.head}
-									key={date + 'head'}
+									key={date + '-head-' + index}
 								>
 									{date}
 								</div>
@@ -379,7 +377,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 						{month.map((day) => {
 							return (
 								<div className={styles.row} key={day.date.date}>
-									{[...day.slots].map((slot) => {
+									{[...day.slots].map((slot, index) => {
 										return (
 											<div
 												className={cn({
@@ -391,18 +389,22 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 													[styles.itemSelected]:
 														false,
 												})}
-												key={slot.start.date + 'cell'}
+												key={
+													slot.start +
+													'-cell-' +
+													index
+												}
 												data-time={formatTimeRangeFromSlotDate(
-													slot.start.date
+													slot.start
 												)}
 												onClick={() => {
 													const date = new Date(
-														slot.start.date
+														slot.start
 													);
 
 													setValue(
 														'date',
-														slot.start.date
+														slot.start
 													);
 													setValue(
 														'timeHourStart',
