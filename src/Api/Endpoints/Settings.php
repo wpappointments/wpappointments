@@ -133,8 +133,6 @@ class Settings extends Controller {
 			$schedule_post_id = get_option( 'wpappointments_default_schedule_id' );
 
 			if ( $schedule_post_id ) {
-				$hours = array();
-
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
 					$test = wp_json_encode( $settings->$day );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );

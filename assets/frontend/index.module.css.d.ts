@@ -14,15 +14,23 @@ declare const styles:
   & Readonly<{ "calendarDayAvailability": string }>
   & Readonly<{ "calendarDayInCurrentMonth": string }>
   & Readonly<{ "calendarDayInCurrentMonth": string }>
+  & Readonly<{ "calendarDayInCurrentMonth": string }>
   & Readonly<{ "calendarDaySelected": string }>
+  & Readonly<{ "calendarDayUnavailable": string }>
   & Readonly<{ "daySlots": string }>
   & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlot": string }>
+  & Readonly<{ "daySlot": string }>
+  & Readonly<{ "daySlotAvailable": string }>
   & Readonly<{ "timeSlotHeader": string }>
+  & Readonly<{ "field": string }>
   & Readonly<{ "input": string }>
   & Readonly<{ "checkboxLabel": string }>
   & Readonly<{ "checkbox": string }>
   & Readonly<{ "error": string }>
+  & Readonly<{ "success": string }>
+  & Readonly<{ "step": string }>
+  & Readonly<{ "submitButton": string }>
 ;
 export default styles;
 //# sourceMappingURL=./index.module.css.d.ts.map

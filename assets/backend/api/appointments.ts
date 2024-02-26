@@ -19,7 +19,7 @@ type Response = APIResponse<{
 export function appointmentsApi({
 	invalidateCache,
 }: {
-	invalidateCache: (selector: string) => void;
+	invalidateCache?: (selector: string) => void;
 }) {
 	const dispatch = window.wp.data.dispatch('wpappointments');
 	const select = window.wp.data.select('wpappointments');
@@ -47,9 +47,11 @@ export function appointmentsApi({
 		displaySuccessToast(
 			__('Appointment created successfully', 'wpappointments')
 		);
-
-		invalidateCache('getAppointments');
-		invalidateCache('getUpcomingAppointments');
+		
+		if (invalidateCache) {
+			invalidateCache('getAppointments');
+			invalidateCache('getUpcomingAppointments');
+		}
 
 		return response;
 	}
@@ -87,8 +89,10 @@ export function appointmentsApi({
 				__('Appointment updated successfully', 'wpappointments')
 			);
 
-			invalidateCache('getAppointments');
-			invalidateCache('getUpcomingAppointments');
+			if (invalidateCache) {
+				invalidateCache('getAppointments');
+				invalidateCache('getUpcomingAppointments');
+			}
 		}
 
 		return response;
@@ -122,9 +126,11 @@ export function appointmentsApi({
 			displaySuccessToast(
 				__('Appointment cancelled successfully', 'wpappointments')
 			);
-
-			invalidateCache('getAppointments');
-			invalidateCache('getUpcomingAppointments');
+			
+			if (invalidateCache) {
+				invalidateCache('getAppointments');
+				invalidateCache('getUpcomingAppointments');
+			}
 		}
 
 		return response;
@@ -158,9 +164,11 @@ export function appointmentsApi({
 			displaySuccessToast(
 				__('Appointment deleted successfully', 'wpappointments')
 			);
-
-			invalidateCache('getAppointments');
-			invalidateCache('getUpcomingAppointments');
+			
+			if (invalidateCache) {
+				invalidateCache('getAppointments');
+				invalidateCache('getUpcomingAppointments');
+			}
 		}
 
 		return response;

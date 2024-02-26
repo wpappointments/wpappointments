@@ -16,11 +16,7 @@ export type AvailabilityState = {
 		slots: {
 			available: boolean;
 			booked: boolean;
-			start: {
-				date: string;
-				timezone_type: number;
-				timezone: string;
-			};
+			start: string;
 		}[];
 	}[];
 };

@@ -3,7 +3,7 @@ export type CustomersState = {
 };
 
 export type Customer = {
-	id: number;
+	id?: number;
 	name: string;
 	email: string;
 	phone: string;

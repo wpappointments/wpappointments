@@ -12,6 +12,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Model\AppointmentPost;
+use WPAppointments\Model\Customer;
 
 /**
  * Appointment endpoint
@@ -61,6 +62,18 @@ class Appointment extends Controller {
 					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/appointment-public',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( __CLASS__, 'create_appointment_public' ),
+					'permission_callback' => '__return_true',
 				),
 			)
 		);
@@ -180,6 +193,50 @@ class Appointment extends Controller {
 				'timestamp'   => $date,
 				'duration'    => $duration,
 				'customer'    => $customer,
+				'customer_id' => $customer_id,
+				'status'      => 'confirmed',
+			)
+		);
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'     => __( 'Appointment created successfully', 'wpappointments' ),
+					'appointment' => $appointment,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Create appointment post from public form
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function create_appointment_public( WP_REST_Request $request ) {
+		$params      = $request->get_params();
+		$date        = rest_parse_date( get_gmt_from_date( $params['date'] ) );
+		$duration    = get_option( 'wpappointments_appointments_defaultLength', 30 );
+		$customer    = $request->get_param( 'customer' );
+		$customer_id = null;
+		$create_account = $request->get_param( 'createAccount' );
+		$password = $request->get_param( 'password' );
+
+		if ( $create_account ) {
+			$customer_model = new Customer();
+			$customer_id = $customer_model->create( (object) $customer, $password );
+		}
+
+		$appointment_post = new AppointmentPost();
+		$appointment      = $appointment_post->create(
+			__( 'Appointment', 'wpappointments' ),
+			array(
+				'timestamp'   => $date,
+				'duration'    => $duration,
+				'customer'    => json_encode( (object) $customer ),
 				'customer_id' => $customer_id,
 				'status'      => 'confirmed',
 			)
