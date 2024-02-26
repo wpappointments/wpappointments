@@ -1,5 +1,5 @@
 import { createRoot } from '@wordpress/element';
-import BookingFlow from '~/frontend/index';
+import BookingFlow from '~/frontend/frontend';
 
 const bookingFlow = document.getElementsByClassName(
 	'wpappointments-booking-flow'

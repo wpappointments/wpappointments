@@ -11,6 +11,7 @@ namespace WPAppointments\Api\Endpoints;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
+use WPAppointments\Model\Customer as ModelCustomer;
 
 /**
  * Customer endpoint
@@ -96,15 +97,8 @@ class Customer extends Controller {
 		$email = $request->get_param( 'email' );
 		$phone = $request->get_param( 'phone' );
 
-		$user_id = wp_insert_user(
-			array(
-				'user_login'   => $email,
-				'user_pass'    => wp_generate_password(),
-				'user_email'   => $email,
-				'display_name' => $name,
-				'role'         => 'wpa-customer',
-			)
-		);
+		$customer = new ModelCustomer();
+		$user_id  = $customer->create( $email, $name, $phone );
 
 		if ( is_wp_error( $user_id ) ) {
 			return self::response(
@@ -116,8 +110,6 @@ class Customer extends Controller {
 				)
 			);
 		}
-
-		update_user_meta( $user_id, 'phone', $phone );
 
 		return self::response(
 			array(

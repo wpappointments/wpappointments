@@ -12,6 +12,9 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Utils\Availability;
+use WPAppointments\Utils\Date;
+use WPAppointments\Utils\Schedule;
+use WPAppointments\Model\Settings;
 
 /**
  * TimeFinder endpoint
@@ -34,6 +37,30 @@ class TimeFinder extends Controller {
 				),
 			)
 		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/calendar-availability',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( __CLASS__, 'calendar_availability' ),
+					'permission_callback' => '__return_true',
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/calendar-availability-v2',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( __CLASS__, 'calendar_availability_v2' ),
+					'permission_callback' => '__return_true',
+				),
+			)
+		);
 	}
 
 	/**
@@ -47,8 +74,7 @@ class TimeFinder extends Controller {
 		$month        = $request->get_param( 'currentMonth' );
 		$year         = $request->get_param( 'currentYear' );
 		$date         = new \DateTime( $year . '-' . $month . '-01' );
-		$is_available = Availability::is_available( $date, 30 );
-		$availability = Availability::get_day_availability( $date );
+		$availability = Availability::get_day_availability( $date, true );
 		$month        = Availability::get_month_availability( $date );
 
 		return self::response(
@@ -59,7 +85,54 @@ class TimeFinder extends Controller {
 						'today' => $availability,
 						'month' => $month,
 					),
-					'is_available' => $is_available,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Get day slots for front end calendar
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function calendar_availability( WP_REST_Request $request ) {
+		$from     = $request->get_param( 'firstDay' );
+		$to       = $request->get_param( 'lastDay' );
+		$timezone = $request->get_param( 'timezone' );
+
+		$slots = Availability::get_availability( $from, $to, $timezone );
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => (object) array(
+					'availability' => $slots,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Get day slots for front end calendar
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function calendar_availability_v2( WP_REST_Request $request ) {
+		$calendar = $request->get_param( 'calendar' );
+		$timezone = $request->get_param( 'timezone' );
+		$calendar = json_decode( $calendar );
+
+		$availability = Availability::get_month_calendar_availability( $calendar, $timezone );
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => (object) array(
+					'availability' => $availability,
 				),
 			)
 		);

@@ -29,7 +29,7 @@ export const AppointmentSchema = object({
 		literal('noshow'),
 	]),
 	customer: object({
-		id: number(),
+		id: optional(number()),
 		name: string(),
 		email: string(),
 		phone: string(),
