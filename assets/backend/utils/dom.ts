@@ -4,9 +4,7 @@ export function render(elements: Map<string, React.JSX.Element>): void {
 	const domElement = document.getElementById('wpappointments-admin');
 
 	if (!domElement) {
-		throw new Error(
-			'Could not find element with id "wpappointments-admin"'
-		);
+		return;
 	}
 
 	const page = domElement.dataset.page;
