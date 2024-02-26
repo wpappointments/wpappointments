@@ -1,3 +1,4 @@
+import { getSettings } from '@wordpress/date';
 import { differenceInMinutes } from 'date-fns';
 import { union, literal, Output, parse } from 'valibot';
 
@@ -188,4 +189,52 @@ export function getNextRoundHourDate() {
 export function parseDateFromString(dateString: string) {
 	const date = new Date(dateString);
 	return date;
+}
+
+export function timeZoneOffsetInMinutes(ianaTimeZone: string) {
+	const now = new Date();
+	now.setSeconds(0, 0);
+
+	// Format current time in `ianaTimeZone` as `M/DD/YYYY, HH:MM:SS`:
+	const tzDateString = now.toLocaleString('en-US', {
+		timeZone: ianaTimeZone,
+		hourCycle: 'h23',
+	});
+
+	// Parse formatted date string:
+	const match = /(\d+)\/(\d+)\/(\d+), (\d+):(\d+)/.exec(tzDateString);
+
+	if (!match) {
+		throw new Error('Invalid date string');
+	}
+
+	const [_, month, day, year, hour, min] = match.map(Number);
+
+	// Change date string's time zone to UTC and get timestamp:
+	const tzTime = Date.UTC(year, month - 1, day, hour, min);
+
+	// Return the offset between UTC and target time zone:
+	return Math.floor((tzTime - now.getTime()) / (1000 * 60));
+}
+
+export function timeZoneOffsetString(ianaTimeZone: string) {
+	const offset = timeZoneOffsetInMinutes(ianaTimeZone);
+	const hours = Math.floor(offset / 60);
+	const minutes = Math.abs(offset % 60);
+
+	const sign = offset < 0 ? '-' : '+';
+
+	return `${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
+export function userSiteTimezoneMatch() {
+	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const siteTimezone = (getSettings().timezone.offset as unknown as number) * 60;
+	const userTimezone = timeZoneOffsetInMinutes(timezone);
+
+	if (siteTimezone === userTimezone) {
+		return false;
+	}
+
+	return timezone;
 }

@@ -2,10 +2,12 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, fromUnixTime } from 'date-fns';
+import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { Appointment } from '~/backend/types';
 import styles from './Table.module.css';
 import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointment/CancelAppointment';
 import { AppointmentsApi } from '~/backend/api/appointments';
+
 
 type Props = {
 	items?: Appointment[];
@@ -109,6 +111,8 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 
 	const timeFromTo = `${timeFrom} - ${timeTo}`;
 
+	const userDiffTimezone = userSiteTimezoneMatch();
+
 	return (
 		<tr key={id}>
 			<td>
@@ -122,7 +126,7 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 				</Button>
 			</td>
 			<td>{dateOutput}</td>
-			<td>{timeFromTo}</td>
+			<td>{timeFromTo}{userDiffTimezone && ` (${userDiffTimezone})`}</td>
 			<td>
 				<Button
 					variant="tertiary"

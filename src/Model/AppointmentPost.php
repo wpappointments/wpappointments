@@ -167,19 +167,31 @@ class AppointmentPost {
 	/**
 	 * Get day appointments
 	 *
-	 * @param \DateTime $date Date.
+	 * @param \DateTimeImmutable $date Date.
 	 *
 	 * @return object
 	 */
 	public function get_day_appointments( $date ) {
-		$day_start = clone $date;
+		$day_start = $date;
 		$day_start->setTime( 0, 0, 0 );
 		$day_start = (int) $day_start->getTimestamp();
 
-		$day_end = clone $date;
+		$day_end = $date;
 		$day_end->setTime( 23, 59, 59 );
 		$day_end = (int) $day_end->getTimestamp();
 
+		return $this->get_date_range_appointments( $day_start, $day_end );
+	}
+
+	/**
+	 * Get date range appointments
+	 * 
+	 * @param \DateTimeImmutable $start_date Start date.
+	 * @param \DateTimeImmutable $end_date   End date.
+	 * 
+	 * @return object
+	 */
+	public function get_date_range_appointments( $start_date, $end_date ) {
 		$query = new \WP_Query(
 			array_merge(
 				$this->default_query_part,
@@ -189,12 +201,12 @@ class AppointmentPost {
 						'relation' => 'AND',
 						array(
 							'key'     => 'timestamp',
-							'value'   => $day_start,
+							'value'   => $start_date,
 							'compare' => '>=',
 						),
 						array(
 							'key'     => 'timestamp',
-							'value'   => $day_end,
+							'value'   => $end_date,
 							'compare' => '<=',
 						),
 					),
@@ -227,10 +239,21 @@ class AppointmentPost {
 	 *
 	 * @param string $title Appointment title.
 	 * @param array  $meta Appointment post meta.
+	 * @param object|int|null $customer Customer to assign to appointment or customer object to create customer.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public function create( $title = 'Appointment', $meta = array() ) {
+	public function create( $title = 'Appointment', $meta = array(), $customer = null ) {
+		if ( null !== $customer ) {
+			$customer_id = $customer;
+
+			if ( is_object( $customer ) ) {
+				$customer_id = ( new Customer() )->create( $customer );
+			}
+
+			$meta['customer_id'] = $customer_id;
+		}
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => 'appointment',
@@ -352,7 +375,12 @@ class AppointmentPost {
 		$status      = $meta['status'];
 		$duration    = $meta['duration'] ?? $length;
 		$customer_id = $meta['customer_id'];
-		$customer    = json_decode( $meta['customer'] );
+
+		$customer = $meta['customer'];
+
+		if ( is_string( $customer ) ) {
+			$customer = json_decode( $customer );
+		}
 
 		return (object) array(
 			'id'         => $post_id,

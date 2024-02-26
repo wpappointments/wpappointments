@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Card, CardHeader, CardBody } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import cn from '~/backend/utils/cn';
+import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import styles from './Summary.module.css';
 
 export type SummaryProps = {
@@ -25,6 +26,8 @@ export default function Summary({
 	isDateOutsideWorkingHours,
 	headerActions,
 }: SummaryProps) {
+	const userDiffTimezone = userSiteTimezoneMatch();
+
 	return (
 		<Card className={styles.summary}>
 			<CardHeader className={styles.summaryHeader}>
@@ -44,7 +47,7 @@ export default function Summary({
 							sprintf('%s:%s', timeHourEnd, timeMinuteEnd)
 						),
 						'wpappointments'
-					)}
+					)}{userDiffTimezone && ` (${userDiffTimezone})`}
 				</div>
 				<div className={styles.summaryRow}>
 					<strong>{__('Duration', 'wpappointments')}</strong>{' '}

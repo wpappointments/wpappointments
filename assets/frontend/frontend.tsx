@@ -3,12 +3,56 @@ import { useForm } from 'react-hook-form';
 import { __ } from '@wordpress/i18n';
 import { Icon, chevronLeft, chevronRight } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
-import { addDays, addMinutes, addYears, format } from 'date-fns';
-import { useLilius } from 'use-lilius';
+import { addDays, addYears, format } from 'date-fns';
+import { Day, useLilius } from 'use-lilius';
+import { Output, array, boolean, date, number, object, optional, safeParse, string, union } from 'valibot';
 import cn from '~/backend/utils/cn';
-import apiFetch from '~/backend/utils/fetch';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import resolve from '~/backend/utils/resolve';
+import { Customer } from '~/backend/store/customers/customers.types';
+import { Appointment } from '~/backend/types';
 import styles from './index.module.css';
 
+export const DaySlotSchema = object({
+	available: boolean(),
+	dateString: string(),
+	date: optional(date()),
+	timestamp: number(),
+	time: optional(string()),
+});
+
+export const DaySchema = object({
+	available: boolean(),
+	date: string(),
+	day: array(DaySlotSchema),
+});
+
+export const AvailabilityResponseSchema = object({
+	type: union([string('success'), string('error')]),
+	data: object({
+		availability: array(array(DaySchema)),
+	}),
+});
+
+export type DaySlot = Output<typeof DaySlotSchema>;
+export type DayCalendar = Output<typeof DaySchema>;
+export type AvailabilityResponse = Output<typeof AvailabilityResponseSchema>;
+
+type Fields = {
+	datetime: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phone: string;
+	account: boolean;
+	password?: string;
+	tos: boolean;
+}
+
+type Response = APIResponse<{
+	appointment: Appointment;
+	message: string;
+}>;
 
 export default function BookingFlow() {
 	const {
@@ -18,7 +62,7 @@ export default function BookingFlow() {
 		setValue,
 		clearErrors,
 		formState: { errors },
-	} = useForm();
+	} = useForm<Fields>();
 
 	const {
 		calendar,
@@ -29,305 +73,364 @@ export default function BookingFlow() {
 		viewing,
 		viewNextMonth,
 		viewPreviousMonth,
-	} = useLilius();
+	} = useLilius({
+		weekStartsOn: Day.MONDAY,
+	});
 
-	console.log(calendar);
+	const [calendarWithAvailability, setCalendarWithAvailability] = useState<
+		[AvailabilityResponse['data']['availability']] | []
+	>([]);
+	const [dayAvailability, setDayAvailability] = useState<
+		DayCalendar['day'] | []
+	>([]);
 
-	const [calendarWithAvailability, setCalendarWithAvailability] = useState([]);
+	const [formError, setFormError] = useState<string | null>(null);
+	const [formSuccess, setFormSuccess] = useState<boolean>(false);
 
-	const onSubmit = (data: any) => {
-		console.log(data);
-	};
-
-	useEffect(() => {
-		if (!calendar.length) {
-			return;
+	const onSubmit = async (data: Fields) => {
+		const customer: Customer = {
+			name: `${data.firstName} ${data.lastName}`,
+			email: data.email,
+			phone: data.phone,
 		}
 
-		const firstDay = calendar[0][0][0];
-		const lastDay = calendar[0][calendar[0].length - 1][6];
-
-		console.log(firstDay, lastDay);
-		console.log(firstDay.getTime() / 1000, lastDay.getTime() / 1000);
-
-		apiFetch({
-			path: addQueryArgs('calendar-availability', {
-				firstDay: Math.floor(firstDay.getTime() / 1000),
-				lastDay: Math.floor(lastDay.getTime() / 1000),
-			}),
-		})
-			.then((data) => {
-				console.log(data);
-				setCalendarWithAvailability(data.data);
-			})
-			.catch((error) => {
-				console.error(error);
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: 'appointment-public',
+				method: 'POST',
+				data: {
+					customer,
+					date: data.datetime,
+					createAccount: data.account,
+					password: data.password,
+				},
 			});
-	}, [viewing.getMonth()]);
 
-	// useEffect(() => {
-	// 	apiFetch({
-	// 		path: addQueryArgs('availability', {
-	// 			currentMonth: viewing.getMonth() + 1,
-	// 			currentYear: viewing.getFullYear(),
-	// 		}),
-	// 	})
-	// 		.then((data) => {
-	// 			// console.log(data);
-	// 			const slots = [];
-	// 			for (const day of data.data.availability.month[
-	// 				viewing.getDate() - 1
-	// 			].slots) {
-	// 				if (!day.available) {
-	// 					if (slots.length) {
-	// 						break;
-	// 					}
-	// 					continue;
-	// 				}
+			return response;
+		});
 
-	// 				slots.push(day);
-	// 			}
-	// 			setDayAvailability(slots);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error(error);
-	// 		});
-	// }, [viewing.getDate()]);
+		if (error) {
+			setFormError('Error creating appointment');
+		}
 
-	// console.log(dayAvailability);
+		if (response) {
+			if ( response.type === 'success' ) {
+				// const { data: responseData } = response;
+				// const { appointment } = responseData;
+
+				setFormSuccess(true);
+			}
+
+			if ( response.type === 'error' && response.message ) {
+				setFormError(response.message);
+			}
+		}
+	};
 
 	const account = watch('account');
+	const datetime = watch('datetime');
 
-	const week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	const week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	const currentMonth = format(viewing, 'LLLL');
 	const currentYear = viewing.getFullYear();
 
-	const daySlots = [];
-	const dayMidnight = new Date();
-	dayMidnight.setHours(0, 0, 0, 0);
+	useEffect(() => {
+		if (!calendarWithAvailability || calendarWithAvailability.length === 0) {
+			return;
+		}
 
-	for (let i = 0; i < 1440; i += 30) {
-		const slotDate = addMinutes(dayMidnight, i);
-		daySlots.push(slotDate);
-	}
+		setDayAvailability(
+			findDayAvailability(selected[0], calendarWithAvailability)
+		);
+	}, [selected]);
 
-	// console.log(daySlots);
+	useEffect(() => {
+		apiFetch({
+			path: addQueryArgs('calendar-availability-v2', {
+				calendar: JSON.stringify(calendar[0]),
+				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+			}),
+		}).then((data) => {
+			const parsed = safeParse(AvailabilityResponseSchema, data);
+			const { output, success } = parsed;
+	
+			if (!success) {
+				console.error('Failed to parse availability response', parsed);
+				return;
+			}
+	
+			const { data: response } = output;
+			const { availability } = response;
+
+			setCalendarWithAvailability([availability]);
+		});
+	}, [viewing.getMonth()]);
 	
 	return (
 		<div className={styles.bookingFlow}>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div className="steps">
-					<div className="step1">
-						<h2>{__('Select date and time', 'wpappointments')}</h2>
-						<div className={styles.calendar}>
-							<div className={styles.calendarControls}>
-								<button
-									onClick={viewPreviousMonth}
-									type="button"
-									disabled={
-										viewing.getMonth() === new Date().getMonth() &&
-										viewing.getFullYear() ===
-											new Date().getFullYear()
-									}
-									className={styles.calendarControlButton}
-								>
-									<Icon icon={chevronLeft} />
-								</button>
-								<h5 className={styles.calendarMonthHeader}>
-									{currentMonth} {currentYear}
-								</h5>
-								<button onClick={viewNextMonth} type="button"
-									className={styles.calendarControlButton}>
-									<Icon icon={chevronRight} />
-								</button>
-							</div>
-							<div className={styles.calendarHeader}>
-								{week.map((day, i) => (
-									<div key={i} className={styles.calendarHeaderDay}>
-										{day}
-									</div>
-								))}
-							</div>
-							{calendarWithAvailability && [calendarWithAvailability].map((month, i) => (
-								<div key={i}>
-									{month.map((week, j) => (
-										<div
-											className={styles.calendarRow}
-											key={`week-${j}`}
-										>
-											{/* {JSON.stringify(day)} */}
-											{week.map((day, k) => {
-												const d = new Date(day.date);
-												const availability = day.availability;
-
-												return (
-													<button
-														key={`day-${k}`}
-														onClick={() => {
-															select(d, true);
-															console.log(selected);
-														}}
-														className={cn({
-															[styles.calendarDay]: true,
-															[styles.calendarDaySelected]:
-																isSelected(d),
-															[styles.calendarDayInCurrentMonth]:
-																d.getMonth() ===
-																viewing.getMonth(),
-														})}
-														type="button"
-														disabled={
-															!inRange(
-																d,
-																addDays(new Date(), -1),
-																addYears(new Date(), 500)
-															)
-														}
-													>
-														{d.getDate()}
-														{inRange(
-															d,
-															addDays(new Date(), -1),
-															addYears(new Date(), 500)
-														) && (
-															<span
-																className={
-																	styles.calendarDayAvailability
-																}
-															></span>
-														)}
-													</button>
-												)
-											})}
+			{formError && <p className={styles.error}>{formError}</p>}
+			{formSuccess && <p className={styles.success}>✅ {__('Appointment created successfully', 'wpappointments')}</p>}
+			{!formSuccess && (
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<div className="steps">
+						<div className={styles.step}>
+							<h2>{__('Select date and time', 'wpappointments')}</h2>
+							<div className={styles.calendar}>
+								<div className={styles.calendarControls}>
+									<button
+										onClick={viewPreviousMonth}
+										type="button"
+										disabled={
+											viewing.getMonth() === new Date().getMonth() &&
+											viewing.getFullYear() ===
+												new Date().getFullYear()
+										}
+										className={styles.calendarControlButton}
+									>
+										<Icon icon={chevronLeft} />
+									</button>
+									<h5 className={styles.calendarMonthHeader}>
+										{currentMonth} {currentYear}
+									</h5>
+									<button onClick={viewNextMonth} type="button"
+										className={styles.calendarControlButton}>
+										<Icon icon={chevronRight} />
+									</button>
+								</div>
+								<div className={styles.calendarHeader}>
+									{week.map((day, i) => (
+										<div key={i} className={styles.calendarHeaderDay}>
+											{day}
 										</div>
 									))}
 								</div>
-							))}
-						</div>
-						{selected && selected[0] && (
-							<>
-								<h5 className={styles.timeSlotHeader}>
-									{__('Select a time slot for', 'wpappointments')} {format(selected[0], 'LLLL do')}
-								</h5>
-								<div className={styles.daySlots}>
-									{daySlots.map((slot, i) => (
-										<button
-											key={i}
-											onClick={() => {
-												setValue('datetime', slot.getTime());
-												clearErrors('datetime');
-											}}
-											type="button"
-											className={styles.daySlot}
-											data-time={format(slot, 'p')}
-										>
-										</button>
-									))}
-								</div>
-								
-							</>
-						)}
-						<div>
-							<input type="hidden" {...register('datetime', {
-								required: true,
-							})} />
-							{errors.datetime && (
-								<p className={styles.error}>{__('Please select a date and time', 'wpappointments')}</p>
+								{calendarWithAvailability && calendarWithAvailability.map((month, i) => (
+									<div key={i}>
+										{month.map((week, j) => (
+											<div
+												className={styles.calendarRow}
+												key={`week-${j}`}
+											>
+												{week.map((day, k) => {
+													const d = new Date( day.date );
+
+													return (
+														<button
+															key={`day-${k}`}
+															onClick={() => {
+																select(d, true);
+															}}
+															className={cn({
+																[styles.calendarDay]: true,
+																[styles.calendarDaySelected]:
+																	isSelected(d),
+																[styles.calendarDayInCurrentMonth]:
+																	d.getMonth() ===
+																	viewing.getMonth(),
+																[styles.calendarDayUnavailable]:
+																	!day.available,
+															})}
+															type="button"
+															disabled={
+																!inRange(
+																	d,
+																	addDays(new Date(), -1),
+																	addYears(new Date(), 500)
+																) || !day.available
+															}
+														>
+															{d.getDate()}
+															{(inRange(
+																d,
+																addDays(new Date(), -1),
+																addYears(new Date(), 500)
+															) && day.available) && (
+																<span
+																	className={
+																		styles.calendarDayAvailability
+																	}
+																></span>
+															)}
+														</button>
+													)
+												})}
+											</div>
+										))}
+									</div>
+								))}
+							</div>
+							{selected && selected[0] && dayAvailability && (
+								<>
+									<h5 className={styles.timeSlotHeader}>
+										{__('Select a time slot for', 'wpappointments')} {format(selected[0], 'LLLL do')}
+									</h5>
+									<div className={styles.daySlots}>
+										{dayAvailability.map((slot, i) => (
+											<button
+												key={i}
+												onClick={() => {
+													setValue('datetime', new Date( slot.timestamp ).toISOString());
+													clearErrors('datetime');
+												}}
+												type="button"
+												className={cn({
+													[styles.daySlot]: true,
+													[styles.daySlotAvailable]: slot.available,
+												})}
+												data-time={slot.time}
+											>
+											</button>
+										))}
+									</div>
+									{datetime && (
+										<div>
+											<strong>Selected time:</strong>{' '}
+											<span>{format(new Date(datetime), 'LLLL do, HH:mm')}</span>
+										</div>
+									)}
+								</>
 							)}
-						</div>
-					</div>
-					<div className="step2">
-						<h2>{__('Customer information', 'wpappointments')}</h2>
-						<div>
-							<input
-								type="text"
-								placeholder={__('First name', 'wpappointments')}
-								className={styles.input}
-								{...register('firstName', {
-									required: true,
-								})}
-							/>
-							{errors.firstName && (
-								<p className={styles.error}>{__('First name is required', 'wpappointments')}</p>
-							)}
-						</div>
-						<div>
-							<input
-								type="text"
-								placeholder={__('Last name', 'wpappointments')}
-								className={styles.input}
-								{...register('lastName', {
-									required: true,
-								})}
-							/>
-							{errors.lastName && (
-								<p className={styles.error}>{__('Last name is required', 'wpappointments')}</p>
-							)}
-						</div>
-						<div>
-							<input
-								type="email"
-								placeholder={__('Email', 'wpappointments')}
-								className={styles.input}
-								{...register('email', {
-									required: true,
-								})}
-							/>
-							{errors.email && (
-								<p className={styles.error}>{__('Email is required', 'wpappointments')}</p>
-							)}
-						</div>
-						<div>
-							<input
-								type="tel"
-								placeholder={__('Phone', 'wpappointments')}
-								className={styles.input}
-								{...register('phone', {
-									required: true,
-								})}
-							/>
-							{errors.phone && (
-								<p className={styles.error}>{__('Phone is required', 'wpappointments')}</p>
-							)}
-						</div>
-						<div>
-							<label className={styles.checkboxLabel}>
-								<input
-									type="checkbox"
-									className={styles.checkbox}
-									{...register('account')}
-								/>
-								{__('Create account', 'wpappointments')}
-							</label>
-							{errors.phone && (
-								<p className={styles.error}>{__('Phone is required', 'wpappointments')}</p>
-							)}
-						</div>
-						{account && (
 							<div>
+								<input type="hidden" {...register('datetime', {
+									required: true,
+								})} />
+								{errors.datetime && (
+									<p className={styles.error}>{__('Please select a date and time', 'wpappointments')}</p>
+								)}
+							</div>
+						</div>
+						<div className={styles.step}>
+							<h2>{__('Customer information', 'wpappointments')}</h2>
+							<div className={styles.field}>
 								<input
-									type="password"
-									placeholder={__('Password (optional)', 'wpappointments')}
+									type="text"
+									placeholder={__('First name', 'wpappointments')}
 									className={styles.input}
-									{...register('password')}
+									{...register('firstName', {
+										required: true,
+									})}
+								/>
+								{errors.firstName && (
+									<p className={styles.error}>{__('First name is required', 'wpappointments')}</p>
+								)}
+							</div>
+							<div className={styles.field}>
+								<input
+									type="text"
+									placeholder={__('Last name', 'wpappointments')}
+									className={styles.input}
+									{...register('lastName', {
+										required: true,
+									})}
+								/>
+								{errors.lastName && (
+									<p className={styles.error}>{__('Last name is required', 'wpappointments')}</p>
+								)}
+							</div>
+							<div className={styles.field}>
+								<input
+									type="email"
+									placeholder={__('Email', 'wpappointments')}
+									className={styles.input}
+									{...register('email', {
+										required: true,
+									})}
+								/>
+								{errors.email && (
+									<p className={styles.error}>{__('Email is required', 'wpappointments')}</p>
+								)}
+							</div>
+							<div className={styles.field}>
+								<input
+									type="tel"
+									placeholder={__('Phone', 'wpappointments')}
+									className={styles.input}
+									{...register('phone', {
+										required: true,
+									})}
 								/>
 								{errors.phone && (
 									<p className={styles.error}>{__('Phone is required', 'wpappointments')}</p>
 								)}
 							</div>
-						)}
+							<div className={styles.field}>
+								<label className={styles.checkboxLabel}>
+									<input
+										type="checkbox"
+										className={styles.checkbox}
+										{...register('account')}
+									/>
+									{__('Create account', 'wpappointments')}
+								</label>
+							</div>
+							{account && (
+								<div className={styles.field}>
+									<input
+										type="password"
+										placeholder={__('Password (optional)', 'wpappointments')}
+										className={styles.input}
+										{...register('password')}
+									/>
+									<small>
+										{__('When left blank, password will be generated automatically', 'wpappointments')}
+									</small>
+								</div>
+							)}
+							<div className={styles.field}>
+								<label className={styles.checkboxLabel}>
+									<input
+										type="checkbox"
+										className={styles.checkbox}
+										{...register('tos')}
+									/>
+									{__('I agree to terms and conditions', 'wpappointments')}
+								</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				
-				<input
-					type="submit"
-					value="Book"
-					className={cn({
-						'wp-block-button__link': true,
-						'wp-block-button': true,
-					})}
-				/>
-			</form>
+					
+					<input
+						type="submit"
+						value="Book"
+						className={cn({
+							'wp-block-button__link': true,
+							'wp-block-button': true,
+							[styles.submitButton]: true,
+						})}
+					/>
+				</form>
+			)}
 		</div>
 	);
+}
+
+function findDayAvailability(
+	dayDate: Date,
+	months: [AvailabilityResponse['data']['availability']]
+) {
+	if (!months || !months.length || !dayDate) {
+		return [];
+	}
+
+	for (const month of months) {
+		for (const week of month) {
+			for (const day of week) {
+				const d = new Date(day.date);
+
+				if (d.getTime() === dayDate.getTime()) {
+					return day.day.map((slot) => {
+						return {
+							date: new Date(slot.timestamp),
+							time: format(new Date(slot.timestamp), 'HH:mm'),
+							available: slot.available,
+							timestamp: slot.timestamp,
+							dateString: slot.dateString
+						};
+					});
+				}
+			}
+		}
+	}
+
+	return [];
 }

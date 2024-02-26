@@ -19,7 +19,8 @@
 		"wpreadme2markdown/wp2md": "^4.0",
 		"pestphp/pest": "^1.23",
 		"yoast/phpunit-polyfills": "^1.0",
-		"php-stubs/wordpress-tests-stubs": "^6.3"
+		"php-stubs/wordpress-tests-stubs": "^6.3",
+		"mockery/mockery": "^1.6"
 	},
 	"config": {
 		"allow-plugins": {
