@@ -28,9 +28,9 @@ function scripts() {
 
 	$date = array(
 		'date' => array(
-			'timezones' => timezone_identifiers_list(),
+			'timezones'    => timezone_identifiers_list(),
 			'siteTimezone' => wp_timezone_string(),
-		)
+		),
 	);
 
 	$screen = get_current_screen();

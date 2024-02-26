@@ -217,17 +217,17 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
-		$params      = $request->get_params();
-		$date        = rest_parse_date( get_gmt_from_date( $params['date'] ) );
-		$duration    = get_option( 'wpappointments_appointments_defaultLength', 30 );
-		$customer    = $request->get_param( 'customer' );
-		$customer_id = null;
+		$params         = $request->get_params();
+		$date           = rest_parse_date( get_gmt_from_date( $params['date'] ) );
+		$duration       = get_option( 'wpappointments_appointments_defaultLength', 30 );
+		$customer       = $request->get_param( 'customer' );
+		$customer_id    = null;
 		$create_account = $request->get_param( 'createAccount' );
-		$password = $request->get_param( 'password' );
+		$password       = $request->get_param( 'password' );
 
 		if ( $create_account ) {
 			$customer_model = new Customer();
-			$customer_id = $customer_model->create( (object) $customer, $password );
+			$customer_id    = $customer_model->create( (object) $customer, $password );
 		}
 
 		$appointment_post = new AppointmentPost();
@@ -236,7 +236,7 @@ class Appointment extends Controller {
 			array(
 				'timestamp'   => $date,
 				'duration'    => $duration,
-				'customer'    => json_encode( (object) $customer ),
+				'customer'    => wp_json_encode( (object) $customer ),
 				'customer_id' => $customer_id,
 				'status'      => 'confirmed',
 			)

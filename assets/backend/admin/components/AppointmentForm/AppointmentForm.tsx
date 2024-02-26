@@ -29,7 +29,6 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
 
-
 export type AppointmentFormFields = {
 	date: string;
 	datetime: string | null;

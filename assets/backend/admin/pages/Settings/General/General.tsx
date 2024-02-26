@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import {
 	Button,
 	Card,
@@ -6,20 +7,19 @@ import {
 	CardHeader,
 } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
+import { getSettings } from '@wordpress/date';
+import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch from '~/backend/utils/fetch';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
+import Checkbox from '~/backend/admin/components/FormField/Checkbox/Checkbox';
 import Input from '~/backend/admin/components/FormField/Input/Input';
 import Select from '~/backend/admin/components/FormField/Select/Select';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
-import Checkbox from '~/backend/admin/components/FormField/Checkbox/Checkbox';
-import { useFormContext } from 'react-hook-form';
-import { __ } from '@wordpress/i18n';
-import { getSettings } from '@wordpress/date';
 
 type Fields = {
 	firstName: string;
@@ -123,13 +123,34 @@ function FormFields() {
 							required: true,
 						}}
 						options={[
-							{ label: __('Sunday', 'wpappointments'), value: '0' },
-							{ label: __('Monday', 'wpappointments'), value: '1' },
-							{ label: __('Tuesday', 'wpappointments'), value: '2' },
-							{ label: __('Wednesday', 'wpappointments'), value: '3' },
-							{ label: __('Thursday', 'wpappointments'), value: '4' },
-							{ label: __('Friday', 'wpappointments'), value: '5' },
-							{ label: __('Saturday', 'wpappointments'), value: '6' },
+							{
+								label: __('Sunday', 'wpappointments'),
+								value: '0',
+							},
+							{
+								label: __('Monday', 'wpappointments'),
+								value: '1',
+							},
+							{
+								label: __('Tuesday', 'wpappointments'),
+								value: '2',
+							},
+							{
+								label: __('Wednesday', 'wpappointments'),
+								value: '3',
+							},
+							{
+								label: __('Thursday', 'wpappointments'),
+								value: '4',
+							},
+							{
+								label: __('Friday', 'wpappointments'),
+								value: '5',
+							},
+							{
+								label: __('Saturday', 'wpappointments'),
+								value: '6',
+							},
 						]}
 						defaultValue={getSettings().l10n.startOfWeek.toString()}
 					/>
@@ -148,27 +169,55 @@ function FormFields() {
 								rules={{
 									required: true,
 								}}
-								options={window.wpappointments.date.timezones.map((timezone) => {
-									return {
-										label: timezone,
-										value: timezone,
-									};
-								})}
+								options={window.wpappointments.date.timezones.map(
+									(timezone) => {
+										return {
+											label: timezone,
+											value: timezone,
+										};
+									}
+								)}
 								defaultValue="24"
 							/>
-							<small>Choose either a city in the same timezone as you or a UTC</small>
+							<small>
+								Choose either a city in the same timezone as you
+								or a UTC
+							</small>
 						</div>
 					)}
 					{timezoneSiteDefault && (
 						<div>
-							<small>Site default timezone is <code><small>{window.wpappointments.date.siteTimezone}</small></code>.</small>
+							<small>
+								Site default timezone is{' '}
+								<code>
+									<small>
+										{
+											window.wpappointments.date
+												.siteTimezone
+										}
+									</small>
+								</code>
+								.
+							</small>
 						</div>
 					)}
 					<div>
-						<small>Universal time is <code><small>2024-02-25 10:35:18</small></code>.</small>
+						<small>
+							Universal time is{' '}
+							<code>
+								<small>2024-02-25 10:35:18</small>
+							</code>
+							.
+						</small>
 					</div>
 					<div>
-						<small>Local time is  <code><small>2024-02-25 11:35:18</small></code>.</small>
+						<small>
+							Local time is{' '}
+							<code>
+								<small>2024-02-25 11:35:18</small>
+							</code>
+							.
+						</small>
 					</div>
 				</FormFieldSet>
 			</CardBody>
@@ -180,7 +229,7 @@ function FormFields() {
 				</div>
 			</CardFooter>
 		</>
-	)
+	);
 }
 
 export default withForm(GeneralSettings);

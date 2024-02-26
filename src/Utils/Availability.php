@@ -12,8 +12,6 @@ use WPAppointments\Model\Settings;
 use DateTime;
 use DatePeriod;
 use DateInterval;
-use DateTimeImmutable;
-use WPAppointments\Api\Endpoints\Appointment;
 use WPAppointments\Model\AppointmentPost;
 
 /**
@@ -24,12 +22,10 @@ class Availability {
 	 * Return all day slots availability
 	 *
 	 * @param \DateTime $date Date.
-	 * @param bool      $trimUnavailable If true will remove unavailable slots before first
-	 *                                   available slot and after last available slot.
 	 *
 	 * @return (string|bool)[][] $slots
 	 */
-	public static function get_day_availability( $date, $show_booked_info = false, $trim_unavailable = false ) {
+	public static function get_day_availability( $date ) {
 		$timezone = empty( $tz ) ? wp_timezone_string() : $tz;
 
 		$slots = self::get_availability(
@@ -68,11 +64,11 @@ class Availability {
 	/**
 	 * Return all week slots availability
 	 *
-	 * @param string $date_start Date in ISO 8601 format.
-	 * @param string $date_end Date in ISO 8601 format.
-	 * @param string $tz Timezone string.
+	 * @param string    $date_start Date in ISO 8601 format.
+	 * @param string    $date_end Date in ISO 8601 format.
+	 * @param string    $tz Timezone string.
 	 * @param \DateTime $now Now in ISO 8601 format.
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function get_availability( $date_start, $date_end, $tz = null, $now = new \DateTime() ) {
@@ -82,17 +78,17 @@ class Availability {
 		$range_start = new \DateTime( $date_start );
 		$range_start->setTimezone( new \DateTimeZone( $timezone ) );
 
-		$range_end  = new \DateTime( $date_end );
+		$range_end = new \DateTime( $date_end );
 		$range_end->setTimezone( new \DateTimeZone( $timezone ) );
-		
-		$length = (int) get_option( 'wpappointments_appointments_timePickerPrecision' );
+
+		$length   = (int) get_option( 'wpappointments_appointments_timePickerPrecision' );
 		$interval = new \DateInterval( 'PT' . $length . 'M' );
-		$range = new \DatePeriod( $range_start, $interval, $range_end );
+		$range    = new \DatePeriod( $range_start, $interval, $range_end );
 
 		$settings = new Settings();
 		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 
-		$appointments     = new AppointmentPost();
+		$appointments       = new AppointmentPost();
 		$range_appointments = $appointments->get_date_range_appointments(
 			(int) $range_start->getTimestamp(),
 			(int) $range_end->getTimestamp()
@@ -114,7 +110,7 @@ class Availability {
 				);
 			}
 		}
-	
+
 		$slots = array();
 
 		foreach ( $range as $slot ) {
@@ -140,23 +136,16 @@ class Availability {
 
 			$available = Date::date_ranges_contain_another_date_range( $date_range, $schedule_periods );
 			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $range_appointments_periods );
-			$is_past = $slot < $now;
+			$is_past   = $slot < $now;
 
-			// $trim_unavailable = true;
-
-			// if ( $trim_unavailable && ! $available ) {
-			// 	if ( count( $slots ) === 0 ) {
-			// 		continue;
-			// 	}
-
-			// 	break;
-			// }
-
-			array_push($slots, (object) [
-				'timestamp' => (int) $slot->format('U') * 1000,
-				'dateString' => $slot->format('c'),
-				'available' => $available && !$is_past && !$booked,
-			]);
+			array_push(
+				$slots,
+				(object) array(
+					'timestamp'  => (int) $slot->format( 'U' ) * 1000,
+					'dateString' => $slot->format( 'c' ),
+					'available'  => $available && ! $is_past && ! $booked,
+				)
+			);
 		}
 
 		return $slots;
@@ -164,31 +153,31 @@ class Availability {
 
 	/**
 	 * Build month availability calendar
-	 * 
+	 *
 	 * @param string[][] $calendar Calendar array.
-	 * @param string $timezone Timezone string.
-	 * 
-	 * Calendar array shape is a two dimensional array of date strings grouped by week. For example:
-	 * 
-	 * [
-	 *   [
-	 *      '2024-01-29T00:00:00+00:00',
-	 * 	    '2024-01-30T00:00:00+00:00',
-	 * 	    '2024-01-31T00:00:00+00:00',
-	 *      '2024-02-01T00:00:00+00:00',
-	 * 		  '2024-02-02T00:00:00+00:00',
-	 * 		  '2024-02-03T01:00:00+00:00',
-	 * 		  '2024-02-04T01:00:00+00:00',
-	 *   ],
-	 *   [
-	 * 		  '2024-02-05T00:00:00+00:00',
-	 * 		  '2024-02-06T00:00:00+00:00',
-	 * 		  '2024-02-07T00:00:00+00:00',
-	 * 		  ...
-	 *   ],
-	 *   ...
-	 * ]
-	 * 
+	 * @param string     $timezone Timezone string.
+	 *
+	 *     Calendar array shape is a two dimensional array of date strings grouped by week. For example:
+	 *
+	 *     [
+	 *       [
+	 *          '2024-01-29T00:00:00+00:00',
+	 *          '2024-01-30T00:00:00+00:00',
+	 *          '2024-01-31T00:00:00+00:00',
+	 *          '2024-02-01T00:00:00+00:00',
+	 *            '2024-02-02T00:00:00+00:00',
+	 *            '2024-02-03T01:00:00+00:00',
+	 *            '2024-02-04T01:00:00+00:00',
+	 *       ],
+	 *       [
+	 *            '2024-02-05T00:00:00+00:00',
+	 *            '2024-02-06T00:00:00+00:00',
+	 *            '2024-02-07T00:00:00+00:00',
+	 *            ...
+	 *       ],
+	 *       ...
+	 *     ].
+	 *
 	 * @return object[][] $calendar
 	 */
 	public static function get_month_calendar_availability( $calendar, $timezone ) {
@@ -213,15 +202,18 @@ class Availability {
 					$timezone,
 				);
 
-				$available_slots = array_filter( $day_availability, function ( $slot ) {
-					return $slot->available === true;
-				} );
+				$available_slots = array_filter(
+					$day_availability,
+					function ( $slot ) {
+						return true === $slot->available;
+					}
+				);
 
-				$week_availability[] = (object) [
-					'date' => $day_date->format( 'c' ),
-					'day' => $day_availability,
+				$week_availability[] = (object) array(
+					'date'      => $day_date->format( 'c' ),
+					'day'       => $day_availability,
 					'available' => count( $available_slots ) > 0,
-				];
+				);
 			}
 
 			$availability[] = $week_availability;

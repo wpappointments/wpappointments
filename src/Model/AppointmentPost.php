@@ -185,10 +185,10 @@ class AppointmentPost {
 
 	/**
 	 * Get date range appointments
-	 * 
+	 *
 	 * @param \DateTimeImmutable $start_date Start date.
 	 * @param \DateTimeImmutable $end_date   End date.
-	 * 
+	 *
 	 * @return object
 	 */
 	public function get_date_range_appointments( $start_date, $end_date ) {
@@ -237,8 +237,8 @@ class AppointmentPost {
 	/**
 	 * Create appointment
 	 *
-	 * @param string $title Appointment title.
-	 * @param array  $meta Appointment post meta.
+	 * @param string          $title Appointment title.
+	 * @param array           $meta Appointment post meta.
 	 * @param object|int|null $customer Customer to assign to appointment or customer object to create customer.
 	 *
 	 * @return array|\WP_Error

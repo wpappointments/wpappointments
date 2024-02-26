@@ -8,7 +8,6 @@ import styles from './Table.module.css';
 import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointment/CancelAppointment';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
-
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
@@ -126,7 +125,10 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 				</Button>
 			</td>
 			<td>{dateOutput}</td>
-			<td>{timeFromTo}{userDiffTimezone && ` (${userDiffTimezone})`}</td>
+			<td>
+				{timeFromTo}
+				{userDiffTimezone && ` (${userDiffTimezone})`}
+			</td>
 			<td>
 				<Button
 					variant="tertiary"

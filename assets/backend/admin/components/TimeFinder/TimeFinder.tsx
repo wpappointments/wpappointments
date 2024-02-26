@@ -219,9 +219,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	if (month[0]?.slots) {
 		for (const slot of month[0].slots) {
-			hourHeadings.push(
-				formatTime24HourFromDate(new Date(slot.start))
-			);
+			hourHeadings.push(formatTime24HourFromDate(new Date(slot.start)));
 		}
 	}
 
@@ -232,7 +230,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 		const multiplier = hourHeadings.length / 24;
 		return multiplier < 1 ? 100 : 200 * multiplier;
-		
 	}
 
 	if (hours === 'allDay') {
@@ -392,8 +389,12 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 													[styles.itemSelected]:
 														false,
 												})}
-												key={slot.start + '-cell-' + index}
-												data-time={formatTimeRangeFromSlotDate(	
+												key={
+													slot.start +
+													'-cell-' +
+													index
+												}
+												data-time={formatTimeRangeFromSlotDate(
 													slot.start
 												)}
 												onClick={() => {
