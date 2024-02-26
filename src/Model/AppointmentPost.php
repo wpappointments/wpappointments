@@ -265,10 +265,16 @@ class AppointmentPost {
 		);
 
 		if ( is_wp_error( $post_id ) ) {
+			do_action( 'wpappointments_appointment_create_error', $post_id, $meta, $customer );
+	
 			return $post_id;
 		}
 
-		return $this->prepare_appointment_entity( $post_id, $meta );
+		$appointment = $this->prepare_appointment_entity( $post_id, $meta );
+
+		do_action( 'wpappointments_appointment_created', $post_id, $meta, $customer, $appointment );
+
+		return $appointment;
 	}
 
 	/**
