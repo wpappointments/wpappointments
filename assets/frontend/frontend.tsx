@@ -5,18 +5,7 @@ import { Icon, chevronLeft, chevronRight } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { addDays, addYears, format } from 'date-fns';
 import { Day, useLilius } from 'use-lilius';
-import {
-	Output,
-	array,
-	boolean,
-	date,
-	number,
-	object,
-	optional,
-	safeParse,
-	string,
-	union,
-} from 'valibot';
+import { Output, array, boolean, date, number, object, optional, safeParse, string, union } from 'valibot';
 import cn from '~/backend/utils/cn';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
@@ -27,8 +16,8 @@ import styles from './index.module.css';
 export const DaySlotSchema = object({
 	available: boolean(),
 	dateString: string(),
-	date: optional(date()),
 	timestamp: number(),
+	date: optional(date()),
 	time: optional(string()),
 });
 
@@ -126,9 +115,6 @@ export default function BookingFlow() {
 
 		if (response) {
 			if (response.type === 'success') {
-				// const { data: responseData } = response;
-				// const { appointment } = responseData;
-
 				setFormSuccess(true);
 			}
 
@@ -153,9 +139,12 @@ export default function BookingFlow() {
 			return;
 		}
 
-		setDayAvailability(
-			findDayAvailability(selected[0], calendarWithAvailability)
+		const availability = findDayAvailability(
+			selected[0],
+			calendarWithAvailability
 		);
+
+		setDayAvailability(availability);
 	}, [selected]);
 
 	useEffect(() => {
@@ -177,6 +166,8 @@ export default function BookingFlow() {
 			const { availability } = response;
 
 			setCalendarWithAvailability([availability]);
+		}).catch((error) => {
+			console.error('Failed to fetch availability', error);
 		});
 	}, [viewing.getMonth()]);
 
