@@ -47,7 +47,8 @@ export default function Summary({
 							sprintf('%s:%s', timeHourEnd, timeMinuteEnd)
 						),
 						'wpappointments'
-					)}{userDiffTimezone && ` (${userDiffTimezone})`}
+					)}
+					{userDiffTimezone && ` (${userDiffTimezone})`}
 				</div>
 				<div className={styles.summaryRow}>
 					<strong>{__('Duration', 'wpappointments')}</strong>{' '}

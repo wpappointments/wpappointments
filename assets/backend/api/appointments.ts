@@ -47,7 +47,7 @@ export function appointmentsApi({
 		displaySuccessToast(
 			__('Appointment created successfully', 'wpappointments')
 		);
-		
+
 		if (invalidateCache) {
 			invalidateCache('getAppointments');
 			invalidateCache('getUpcomingAppointments');
@@ -126,7 +126,7 @@ export function appointmentsApi({
 			displaySuccessToast(
 				__('Appointment cancelled successfully', 'wpappointments')
 			);
-			
+
 			if (invalidateCache) {
 				invalidateCache('getAppointments');
 				invalidateCache('getUpcomingAppointments');
@@ -164,7 +164,7 @@ export function appointmentsApi({
 			displaySuccessToast(
 				__('Appointment deleted successfully', 'wpappointments')
 			);
-			
+
 			if (invalidateCache) {
 				invalidateCache('getAppointments');
 				invalidateCache('getUpcomingAppointments');

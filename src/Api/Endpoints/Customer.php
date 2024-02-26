@@ -98,7 +98,7 @@ class Customer extends Controller {
 		$phone = $request->get_param( 'phone' );
 
 		$customer = new ModelCustomer();
-		$user_id = $customer->create( $email, $name, $phone );
+		$user_id  = $customer->create( $email, $name, $phone );
 
 		if ( is_wp_error( $user_id ) ) {
 			return self::response(

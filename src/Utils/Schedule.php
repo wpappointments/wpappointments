@@ -25,7 +25,7 @@ class Schedule {
 	 */
 	public static function convert_schedule_to_date_range( $schedule, $date ) {
 		$timezone = wp_timezone_string();
-		$start = clone $date;
+		$start    = clone $date;
 		$start->setTime( (int) $schedule->start->hour, (int) $schedule->start->minute );
 		$start->setTimezone( new \DateTimeZone( $timezone ) );
 

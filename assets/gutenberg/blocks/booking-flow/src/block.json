@@ -13,7 +13,11 @@
 	"textdomain": "wpappointments",
 	"editorScript": "file:../../../../../build/booking-flow-block.ts.js",
 	"editorStyle": "file:./index.css",
-	"style": [ "file:./style-index.css", "file:../../../../../build/frontend.tsx.css", "wp-components" ],
+	"style": [
+		"file:./style-index.css",
+		"file:../../../../../build/frontend.tsx.css",
+		"wp-components"
+	],
 	"viewScript": [
 		"file:../../../../../build/booking-flow-block-view.tsx.js",
 		"react",

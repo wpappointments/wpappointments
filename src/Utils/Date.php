@@ -22,13 +22,13 @@ class Date {
 	 * @return DatePeriod
 	 */
 	public static function create_date_range( $start, $end ) {
-		$timezone = wp_timezone_string();
+		$timezone   = wp_timezone_string();
 		$start_date = new \DateTime( $start );
 		$start_date->setTimezone( new \DateTimeZone( $timezone ) );
-		$end_date   = new \DateTime( $end );
+		$end_date = new \DateTime( $end );
 		$end_date->setTimezone( new \DateTimeZone( $timezone ) );
-		$interval   = new \DateInterval( 'P1D' );
-		$period     = new \DatePeriod( $start_date, $interval, $end_date );
+		$interval = new \DateInterval( 'P1D' );
+		$period   = new \DatePeriod( $start_date, $interval, $end_date );
 		return $period;
 	}
 

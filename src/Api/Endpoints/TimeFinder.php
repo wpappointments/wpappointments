@@ -98,8 +98,8 @@ class TimeFinder extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function calendar_availability( WP_REST_Request $request ) {
-		$from = $request->get_param( 'firstDay' );
-		$to = $request->get_param( 'lastDay' );
+		$from     = $request->get_param( 'firstDay' );
+		$to       = $request->get_param( 'lastDay' );
 		$timezone = $request->get_param( 'timezone' );
 
 		$slots = Availability::get_availability( $from, $to, $timezone );
@@ -107,9 +107,9 @@ class TimeFinder extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) [
+				'data' => (object) array(
 					'availability' => $slots,
-				],
+				),
 			)
 		);
 	}
@@ -131,9 +131,9 @@ class TimeFinder extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) [
+				'data' => (object) array(
 					'availability' => $availability,
-				],
+				),
 			)
 		);
 	}

@@ -209,6 +209,7 @@ export function timeZoneOffsetInMinutes(ianaTimeZone: string) {
 	}
 
 	const [_, month, day, year, hour, min] = match.map(Number);
+	_.toString();
 
 	// Change date string's time zone to UTC and get timestamp:
 	const tzTime = Date.UTC(year, month - 1, day, hour, min);
@@ -224,12 +225,16 @@ export function timeZoneOffsetString(ianaTimeZone: string) {
 
 	const sign = offset < 0 ? '-' : '+';
 
-	return `${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+	return `${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+		2,
+		'0'
+	)}`;
 }
 
 export function userSiteTimezoneMatch() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	const siteTimezone = (getSettings().timezone.offset as unknown as number) * 60;
+	const siteTimezone =
+		(getSettings().timezone.offset as unknown as number) * 60;
 	const userTimezone = timeZoneOffsetInMinutes(timezone);
 
 	if (siteTimezone === userTimezone) {
