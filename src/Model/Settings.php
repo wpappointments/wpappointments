@@ -42,6 +42,10 @@ class Settings {
 				'type' => 'string',
 			),
 			array(
+				'name' => 'email',
+				'type' => 'string',
+			),
+			array(
 				'name' => 'phoneNumber',
 				'type' => 'string',
 			),
