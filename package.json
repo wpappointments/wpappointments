@@ -13,10 +13,10 @@
 	],
 	"scripts": {
 		"init-project": "NODE_ENV=development pnpm install",
-		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.ts assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
+		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
 		"build:fe": "pnpm init-project & pnpm css-types & wp-scripts build assets/frontend/frontend.tsx",
-		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.ts assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
-		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.ts assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
+		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
+		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
 		"format": "wp-scripts format ./assets/**/* ./tests/js/**/*",
 		"lint": "pnpm lint:js && pnpm lint:css && pnpm phpcs:all",
 		"lint:css": "wp-scripts lint-style ./assets/**/*.css",

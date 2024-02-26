@@ -11,7 +11,7 @@
 		}
 	},
 	"textdomain": "wpappointments",
-	"editorScript": "file:../../../../../build/booking-flow-block.ts.js",
+	"editorScript": "file:../../../../../build/booking-flow-block.tsx.js",
 	"editorStyle": "file:./index.css",
 	"style": [
 		"file:./style-index.css",
