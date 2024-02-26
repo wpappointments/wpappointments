@@ -87,6 +87,10 @@ export default function CustomerSelector({
 								className={styles.customer}
 								key={customer.id}
 								onClick={() => {
+									if (!customer.id) {
+										return;
+									}
+
 									selectCustomer(customer.id);
 								}}
 							>

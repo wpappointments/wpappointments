@@ -265,14 +265,14 @@ class AppointmentPost {
 		);
 
 		if ( is_wp_error( $post_id ) ) {
-			do_action( 'wpappointments_appointment_create_error', $post_id, $meta, $customer );
-	
+			do_action( 'wpappointments_appointment_create_error', $post_id );
+
 			return $post_id;
 		}
 
 		$appointment = $this->prepare_appointment_entity( $post_id, $meta );
 
-		do_action( 'wpappointments_appointment_created', $post_id, $meta, $customer, $appointment );
+		do_action( 'wpappointments_appointment_created', $appointment );
 
 		return $appointment;
 	}
@@ -293,6 +293,15 @@ class AppointmentPost {
 			return $valid_id;
 		}
 
+		$current_appointment_meta = array(
+			'status'      => get_post_meta( $valid_id, 'status', true ),
+			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
+			'duration'    => get_post_meta( $valid_id, 'duration', true ),
+			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
+			'customer'    => get_post_meta( $valid_id, 'customer', true ),
+		);
+		$current_appointment      = $this->prepare_appointment_entity( $valid_id, $current_appointment_meta );
+
 		$data = array(
 			'ID'        => $valid_id,
 			'post_type' => 'appointment',
@@ -305,6 +314,8 @@ class AppointmentPost {
 		$post_id = wp_update_post( $data, true );
 
 		if ( is_wp_error( $post_id ) ) {
+			do_action( 'wpappointments_appointment_update_error', $post_id );
+
 			return $post_id;
 		}
 
@@ -312,7 +323,11 @@ class AppointmentPost {
 			update_post_meta( $post_id, $key, $value );
 		}
 
-		return $this->prepare_appointment_entity( $post_id, $meta );
+		$new_appointment = $this->prepare_appointment_entity( $post_id, $meta );
+
+		do_action( 'wpappointments_appointment_updated', $new_appointment, $current_appointment );
+
+		return $new_appointment;
 	}
 
 	/**
@@ -329,13 +344,89 @@ class AppointmentPost {
 			return $valid_id;
 		}
 
+		$meta = [
+			'status'      => get_post_meta( $valid_id, 'status', true ),
+			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
+			'duration'    => get_post_meta( $valid_id, 'duration', true ),
+			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
+			'customer'    => get_post_meta( $valid_id, 'customer', true ),
+		];
+
 		$cancelled = update_post_meta( $valid_id, 'status', 'cancelled' );
 
 		if ( ! $cancelled ) {
 			return new \WP_Error( 'error', __( 'Appointment is already cancelled', 'wpappointments' ) );
 		}
 
+		do_action( 'wpappointments_appointment_cancelled', $this->prepare_appointment_entity( $valid_id, $meta ) );
+
 		return $cancelled;
+	}
+
+	/**
+	 * Confirm appointment
+	 * 
+	 * @param int $id Appointment ID.
+	 * 
+	 * @return int|\WP_Error
+	 */
+	public function confirm( $id ) {
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
+		$meta = [
+			'status'      => get_post_meta( $valid_id, 'status', true ),
+			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
+			'duration'    => get_post_meta( $valid_id, 'duration', true ),
+			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
+			'customer'    => get_post_meta( $valid_id, 'customer', true ),
+		];
+
+		$confirmed = update_post_meta( $valid_id, 'status', 'confirmed' );
+
+		if ( ! $confirmed ) {
+			return new \WP_Error( 'error', __( 'Appointment is already confirmed', 'wpappointments' ) );
+		}
+
+		do_action( 'wpappointments_appointment_confirmed', $this->prepare_appointment_entity( $valid_id, $meta ) );
+
+		return $confirmed;
+	}
+
+	/**
+	 * Mark appointment as no show
+	 * 
+	 * @param int $id Appointment ID.
+	 * 
+	 * @return int|\WP_Error
+	 */
+	public function no_show( $id ) {
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
+		$meta = [
+			'status'      => get_post_meta( $valid_id, 'status', true ),
+			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
+			'duration'    => get_post_meta( $valid_id, 'duration', true ),
+			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
+			'customer'    => get_post_meta( $valid_id, 'customer', true ),
+		];
+
+		$no_show = update_post_meta( $valid_id, 'status', 'no_show' );
+
+		if ( ! $no_show ) {
+			return new \WP_Error( 'error', __( 'Appointment is already marked as no show', 'wpappointments' ) );
+		}
+
+		do_action( 'wpappointments_appointment_no_show', $this->prepare_appointment_entity( $valid_id, $meta ) );
+
+		return $no_show;
 	}
 
 	/**
