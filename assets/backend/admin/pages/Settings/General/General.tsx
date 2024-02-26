@@ -91,6 +91,15 @@ function FormFields() {
 					/>
 
 					<Input
+						name="email"
+						label="Email"
+						placeholder="example@example.com"
+						rules={{
+							required: true,
+						}}
+					/>
+
+					<Input
 						name="phoneNumber"
 						label="Phone number"
 						placeholder="Eg. +1992334211"
