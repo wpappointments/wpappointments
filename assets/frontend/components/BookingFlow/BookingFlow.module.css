@@ -1,0 +1,40 @@
+.form :first-child {
+  margin-top: 0;
+}
+
+.field {
+	margin-bottom: 20px;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.checkbox {
+	margin-right: 10px;
+}
+
+.error {
+	color: red;
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 13px;
+  text-align: left;
+  padding: 0 5px;
+}
+
+.success {
+	color: rgb( 17, 76, 17 );
+}
+
+.step {
+	margin-bottom: 50px;
+}
+
+.field-info {
+  display: block;
+  text-align: left;
+  margin-top: 8px;
+}

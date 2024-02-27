@@ -2,13 +2,13 @@ import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 import Edit from './edit';
 
-
 export type EditorFile = {
 	name: string;
 	contents: string;
 };
 
 export type BookingFlowBlockAttributes = {
+	flowType: 'OneStep' | 'MultiStep';
 	alignment: 'Left' | 'Center' | 'Right';
 	width: 'Narrow' | 'Full';
 };
