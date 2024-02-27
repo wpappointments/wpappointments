@@ -7,6 +7,7 @@ import {
 	Panel,
 	PanelBody,
 	SelectControl,
+	ToggleControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
@@ -36,7 +37,7 @@ export default function Edit({
 			<BookingFlow attributes={attributes} />
 			<InspectorControls>
 				<Panel>
-					<PanelBody title="General">
+					<PanelBody title={__('General', 'wpappointments')}>
 						<SelectControl
 							label={__('Flow type', 'wpappointments')}
 							value={attributes.flowType}
@@ -49,7 +50,17 @@ export default function Edit({
 							}
 						/>
 					</PanelBody>
-					<PanelBody title="Alignment">
+					<PanelBody title={__('Calendar', 'wpappointments')}>
+						<ToggleControl
+							label={__('Trim time slots outside of working hours', 'wpappointments')}
+							help={__('When showing the time picker, hide time slots that are not available for booking before and after opening hours', 'wpappointments')}
+							checked={attributes.trimUnavailable}
+							onChange={(trimUnavailable) =>
+								setAttributes({ trimUnavailable })
+							}
+						/>
+					</PanelBody>
+					<PanelBody title={__('Alignment', 'wpappointments')}>
 						<ButtonGroup>
 							<Button
 								variant={
@@ -89,7 +100,7 @@ export default function Edit({
 							/>
 						</ButtonGroup>
 					</PanelBody>
-					<PanelBody title="Size">
+					<PanelBody title={__('Size', 'wpappointments')}>
 						<ButtonGroup>
 							<Button
 								variant={

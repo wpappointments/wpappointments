@@ -193,7 +193,7 @@ test(
 		$start_date = '2024-03-01T00:00:00.000Z';
 		$end_date   = '2024-03-01T23:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime( '2024-03-01T16:00:00.000Z' ) );
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', false, new \DateTime( '2024-03-01T16:00:00.000Z' ) );
 
 		$available = array_filter(
 			$result,
@@ -212,7 +212,7 @@ test(
 		$start_date = '2024-03-01T00:00:00.000Z';
 		$end_date   = '2024-03-01T23:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+01:00', new \DateTime( '2024-03-01T16:00:00.000Z' ) );
+		$result = Availability::get_availability( $start_date, $end_date, '+01:00', false, new \DateTime( '2024-03-01T16:00:00.000Z' ) );
 
 		$available = array_filter(
 			$result,

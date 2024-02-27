@@ -109,10 +109,13 @@
 
 .day-slots {
 	display: flex;
-	/* justify-content: center; */
 	align-items: center;
 	gap: 2px;
 	margin-bottom: 20px;
+}
+
+.day-slots.center {
+	justify-content: center;
 }
 
 .day-slot {
