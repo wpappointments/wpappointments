@@ -7,4 +7,4 @@ declare const styles:
   & Readonly<{ "widthFull": string }>
 ;
 export default styles;
-//# sourceMappingURL=./index.module.css.d.ts.map
+//# sourceMappingURL=./frontend.module.css.d.ts.map

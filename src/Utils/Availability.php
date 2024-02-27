@@ -31,7 +31,8 @@ class Availability {
 		$slots = self::get_availability(
 			$date->format( 'Y-m-d' ) . ' 00:00:00',
 			$date->format( 'Y-m-d' ) . ' 23:59:59',
-			$timezone
+			$timezone,
+			true
 		);
 
 		return $slots;
@@ -67,11 +68,12 @@ class Availability {
 	 * @param string    $date_start Date in ISO 8601 format.
 	 * @param string    $date_end Date in ISO 8601 format.
 	 * @param string    $tz Timezone string.
+	 * @param bool      $trim Whether should trim timeslots outside of working hours from left and right of the day time slots.
 	 * @param \DateTime $now Now in ISO 8601 format.
 	 *
 	 * @return array
 	 */
-	public static function get_availability( $date_start, $date_end, $tz = null, $now = new \DateTime() ) {
+	public static function get_availability( $date_start, $date_end, $tz = null, $trim = false, $now = new \DateTime() ) {
 		$timezone = empty( $tz ) ? wp_timezone_string() : $tz;
 		$now->setTimezone( new \DateTimeZone( $timezone ) );
 
@@ -138,6 +140,10 @@ class Availability {
 			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
 
+			if ( $trim && ! $available ) {
+				continue;
+			}
+
 			array_push(
 				$slots,
 				(object) array(
@@ -148,7 +154,26 @@ class Availability {
 			);
 		}
 
-		return $slots;
+		$maybe_trimmed_slots = $slots;
+
+		if ( $trim ) {
+			$maybe_trimmed_slots = array_reverse( $slots );
+			$trimmed_slots = array();
+
+			foreach ( $maybe_trimmed_slots as $slot ) {
+				if ( $slot->available ) {
+					$found_first_available = true;
+				}
+
+				if ( $found_first_available ) {
+					$trimmed_slots[] = $slot;
+				}
+			}
+
+			$maybe_trimmed_slots = array_reverse( $trimmed_slots );
+		}
+
+		return $maybe_trimmed_slots;
 	}
 
 	/**
@@ -156,6 +181,7 @@ class Availability {
 	 *
 	 * @param string[][] $calendar Calendar array.
 	 * @param string     $timezone Timezone string.
+	 * @param bool       $trim Whether should trim timeslots outside of working hours from left and right of the day time slots.
 	 *
 	 *     Calendar array shape is a two dimensional array of date strings grouped by week. For example:
 	 *
@@ -180,7 +206,7 @@ class Availability {
 	 *
 	 * @return object[][] $calendar
 	 */
-	public static function get_month_calendar_availability( $calendar, $timezone ) {
+	public static function get_month_calendar_availability( $calendar, $timezone, $trim = false ) {
 		$availability = array();
 
 		foreach ( $calendar as $week ) {
@@ -200,6 +226,7 @@ class Availability {
 					$day_start->format( 'c' ),
 					$day_end->format( 'c' ),
 					$timezone,
+					$trim
 				);
 
 				$available_slots = array_filter(

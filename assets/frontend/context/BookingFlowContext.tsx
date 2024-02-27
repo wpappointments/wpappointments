@@ -8,12 +8,9 @@ import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { Appointment } from '~/backend/types';
-import {
-	AvailabilityResponse,
-	AvailabilityResponseSchema,
-	DayCalendar,
-} from '../frontend';
+import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
+
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -73,6 +70,7 @@ export function BookingFlowContextProvider({
 	>([]);
 	const [formError, setFormError] = useState<string | null>(null);
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
+  const [refreshDayAvailability, setRefreshDayAvailability] = useState(0);
 
 	useEffect(() => {
 		if (
@@ -88,13 +86,14 @@ export function BookingFlowContextProvider({
 		);
 
 		setDayAvailability(availability);
-	}, [selected]);
+	}, [selected, refreshDayAvailability]);
 
 	useEffect(() => {
 		apiFetch({
 			path: addQueryArgs('calendar-availability-v2', {
 				calendar: JSON.stringify(calendar[0]),
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+				trim: attributes.trimUnavailable,
 			}),
 		})
 			.then((data) => {
@@ -113,11 +112,12 @@ export function BookingFlowContextProvider({
 				const { availability } = response;
 
 				setCalendarWithAvailability([availability]);
+        setRefreshDayAvailability((prev) => prev + 1);
 			})
 			.catch((error) => {
 				console.error('Failed to fetch availability', error);
 			});
-	}, [viewing.getMonth()]);
+	}, [viewing.getMonth(), attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
 		const customer: Customer = {
