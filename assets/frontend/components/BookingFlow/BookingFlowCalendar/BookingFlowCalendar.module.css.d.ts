@@ -50,8 +50,9 @@ declare const styles:
   & Readonly<{ "center": string }>
   & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlot": string }>
-  & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlotAvailable": string }>
+  & Readonly<{ "daySlotAvailable": string }>
+  & Readonly<{ "daySlotSelected": string }>
   & Readonly<{ "timeSlotHeader": string }>
   & Readonly<{ "error": string }>
 ;
