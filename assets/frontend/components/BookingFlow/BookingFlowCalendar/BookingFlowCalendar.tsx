@@ -84,10 +84,16 @@ export default function BookingFlowCalendar() {
 									{week.map((day, k) => {
 										const d = new Date(day.date);
 										const totalSlots = day.totalSlots || 0;
-										const totalAvailable = day.totalAvailable || 0;
-										const percentage = (totalAvailable / totalSlots) * 100;
+										const totalAvailable =
+											day.totalAvailable || 0;
+										const percentage =
+											(totalAvailable / totalSlots) * 100;
 
-										let threshold: 'High' | 'Medium' | 'Low' | 'Limited' = 'High';
+										let threshold:
+											| 'High'
+											| 'Medium'
+											| 'Low'
+											| 'Limited' = 'High';
 
 										if (percentage < 50) {
 											threshold = 'Medium';
@@ -116,8 +122,9 @@ export default function BookingFlowCalendar() {
 														viewing.getMonth(),
 													[styles.calendarDayUnavailable]:
 														!day.available,
-													[styles[`calendarDayThreshold${threshold}`]]:
-														true,
+													[styles[
+														`calendarDayThreshold${threshold}`
+													]]: true,
 												})}
 												type="button"
 												disabled={
@@ -143,9 +150,11 @@ export default function BookingFlowCalendar() {
 																styles.calendarDayAvailability
 															}
 														>
-															<span style={{
-																width: `${percentage}%`,
-															}}></span>
+															<span
+																style={{
+																	width: `${percentage}%`,
+																}}
+															></span>
 														</span>
 													)}
 											</button>

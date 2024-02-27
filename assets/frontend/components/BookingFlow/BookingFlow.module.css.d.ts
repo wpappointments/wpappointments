@@ -6,6 +6,7 @@ declare const styles:
   & Readonly<{ "error": string }>
   & Readonly<{ "success": string }>
   & Readonly<{ "step": string }>
+  & Readonly<{ "alignLeft": string }>
   & Readonly<{ "fieldInfo": string }>
 ;
 export default styles;
