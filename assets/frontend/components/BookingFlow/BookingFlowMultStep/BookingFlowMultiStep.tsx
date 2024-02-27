@@ -15,8 +15,10 @@ import {
 
 export default function BookingFlowMultiStep() {
 	const { form, onSubmit, formError, formSuccess } = useBookingFlowContext();
-	const { handleSubmit, setValue, getValues } = form;
+	const { handleSubmit, setValue, getValues, watch } = form;
 	const [currentStep, setCurrentStep] = useState(0);
+
+  const datetime = watch('datetime');
 
 	const onSubmitDate = (data: BookingFlowCalendarFields) => {
 		setValue('datetime', data.datetime);
@@ -55,7 +57,14 @@ export default function BookingFlowMultiStep() {
 						[multiStepStyles.stepsHeaderLabel]: true,
 						[multiStepStyles.stepsHeaderLabelActive]:
 							currentStep === 1,
+            [multiStepStyles.stepsHeaderLabelClickable]:
+              currentStep !== 1 && !formSuccess && datetime,
 					})}
+          onClick={() => {
+            if (currentStep !== 1 && !formSuccess && datetime) {
+              setCurrentStep(1);
+            }
+          }}
 				>
 					{__('About you', 'wpappointments')}
 				</div>
