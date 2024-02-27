@@ -7,8 +7,14 @@ import styles from './BookingFlowCalendar.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
 export default function BookingFlowCalendar() {
-	const { lilius, form, calendarWithAvailability, dayAvailability } =
-		useBookingFlowContext();
+	const {
+		lilius,
+		form,
+		calendarWithAvailability,
+		dayAvailability,
+		attributes,
+	} = useBookingFlowContext();
+
 	const {
 		selected,
 		inRange,
@@ -18,6 +24,7 @@ export default function BookingFlowCalendar() {
 		viewNextMonth,
 		viewPreviousMonth,
 	} = lilius;
+
 	const {
 		setValue,
 		clearErrors,
@@ -25,6 +32,8 @@ export default function BookingFlowCalendar() {
 		watch,
 		formState: { errors },
 	} = form;
+
+	const { alignment } = attributes;
 
 	const datetime = watch('datetime');
 	const week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -130,7 +139,10 @@ export default function BookingFlowCalendar() {
 						{__('Select a time slot for', 'wpappointments')}{' '}
 						{format(selected[0], 'LLLL do')}
 					</h5>
-					<div className={styles.daySlots}>
+					<div className={cn({
+						[styles.daySlots]: true,
+						[styles.center]: alignment === 'Center'
+					})}>
 						{dayAvailability.map((slot, i) => (
 							<button
 								key={i}

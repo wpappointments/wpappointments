@@ -15,6 +15,10 @@
 		"width": {
 			"type": "string",
 			"default": "Narrow"
+		},
+		"trimUnavailable": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"textdomain": "wpappointments",
