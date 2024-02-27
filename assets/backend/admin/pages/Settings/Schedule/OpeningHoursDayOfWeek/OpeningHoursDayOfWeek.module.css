@@ -27,6 +27,10 @@
 	border-bottom: 1px solid #e5e5e5;
 }
 
+.field-group:last-child {
+	border-bottom: none;
+}
+
 .field-group-row {
 	display: flex;
 	gap: 16px;

@@ -5,6 +5,7 @@ declare const styles:
   & Readonly<{ "copyToAllDays": string }>
   & Readonly<{ "componentsButton": string }>
   & Readonly<{ "fieldGroup": string }>
+  & Readonly<{ "fieldGroup": string }>
   & Readonly<{ "fieldGroupRow": string }>
   & Readonly<{ "fieldGroupRow": string }>
   & Readonly<{ "fieldGroupRow": string }>

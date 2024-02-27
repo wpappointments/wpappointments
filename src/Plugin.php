@@ -48,6 +48,20 @@ class Plugin extends Core\Singleton {
 			update_option( 'wpappointments_default_schedule_id', $post_id );
 		}
 
+		$default_service = get_option( 'wpappointments_defaultServiceId' );
+
+		if ( ! $default_service ) {
+			$post_id = wp_insert_post(
+				array(
+					'post_title'  => 'Appointment',
+					'post_status' => 'publish',
+					'post_type'   => 'wpa_service',
+				)
+			);
+
+			update_option( 'wpappointments_defaultServiceId', $post_id );
+		}
+
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
 		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
 	}
@@ -58,6 +72,10 @@ class Plugin extends Core\Singleton {
 	 * @return void
 	 */
 	public function on_plugin_deactivation() {
+		$this->delete_schedule_post();
+	}
+
+	private function delete_schedule_post() {
 		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
 
 		if ( ! $default_schedule ) {

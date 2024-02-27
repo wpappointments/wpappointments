@@ -128,7 +128,11 @@ class Settings extends Controller {
 
 		if ( 'schedule' !== $category ) {
 			$settings_model = new SettingsModel();
-			$settings_model->update( $category, $settings );
+			$result = $settings_model->update( $category, $settings );
+
+			if ( is_wp_error( $result ) ) {
+				return self::error( $result->get_error_message() );
+			}
 		} else {
 			$schedule_post_id = get_option( 'wpappointments_default_schedule_id' );
 
