@@ -67,9 +67,23 @@
 	justify-content: center;
 	padding: 10px 10px 15px;
 	box-sizing: border-box;
-	/* border-radius: 999px; */
 	opacity: 0.5;
+}
+
+.calendar-day-threshold-high {
 	background-color: #b1ffa1;
+}
+
+.calendar-day-threshold-medium {
+	background-color: #ffda73;
+}
+
+.calendar-day-threshold-low {
+	background-color: #f9a5a5;
+}
+
+.calendar-day-threshold-limited {
+	background-color: #fc6464;
 }
 
 .calendar-day-availability {
@@ -77,9 +91,47 @@
 	left: 13px;
 	bottom: 8px;
 	right: 13px;
-	background-color: #41c611;
 	border-radius: 6px;
 	height: 6px;
+	overflow: hidden;
+}
+
+.calendar-day-availability span {
+	display: block;
+	border-radius: 6px;
+	height: 100%;
+}
+
+.calendar-day-threshold-high .calendar-day-availability {
+	background-color: rgba(65, 198, 17, 0.4);
+}
+
+.calendar-day-threshold-high .calendar-day-availability span {
+	background-color: #41c611;
+}
+
+.calendar-day-threshold-medium .calendar-day-availability {
+	background-color: rgba(204, 157, 26, 0.4);
+}
+
+.calendar-day-threshold-medium .calendar-day-availability span {
+	background-color: #d35f00;
+}
+
+.calendar-day-threshold-low .calendar-day-availability {
+	background-color: rgba(240, 29, 78, 0.4);
+}
+
+.calendar-day-threshold-low .calendar-day-availability span {
+	background-color: #b23f65;
+}
+
+.calendar-day-threshold-limited .calendar-day-availability {
+	background-color: rgba(155, 41, 25, 0.4);
+}
+
+.calendar-day-threshold-limited .calendar-day-availability span {
+	background-color: #340510;
 }
 
 .calendar-day-in-current-month {
@@ -97,9 +149,24 @@
 }
 
 .calendar-day-selected {
-	background-color: #8bff6b;
 	font-size: 22px;
 	font-weight: bold;
+}
+
+.calendar-day-threshold-high.calendar-day-selected {
+	background-color: #8bff6b;
+}
+
+.calendar-day-threshold-medium.calendar-day-selected {
+	background-color: #fdcd49;
+}
+
+.calendar-day-threshold-low.calendar-day-selected {
+	background-color: #fab9b9;
+}
+
+.calendar-day-threshold-limited.calendar-day-selected {
+	background-color: #ff4e4e;
 }
 
 .calendar-day-in-current-month.calendar-day-unavailable {

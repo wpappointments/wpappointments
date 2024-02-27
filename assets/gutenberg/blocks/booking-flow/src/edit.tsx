@@ -52,8 +52,14 @@ export default function Edit({
 					</PanelBody>
 					<PanelBody title={__('Calendar', 'wpappointments')}>
 						<ToggleControl
-							label={__('Trim time slots outside of working hours', 'wpappointments')}
-							help={__('When showing the time picker, hide time slots that are not available for booking before and after opening hours', 'wpappointments')}
+							label={__(
+								'Trim time slots outside of working hours',
+								'wpappointments'
+							)}
+							help={__(
+								'When showing the time picker, hide time slots that are not available for booking before and after opening hours',
+								'wpappointments'
+							)}
 							checked={attributes.trimUnavailable}
 							onChange={(trimUnavailable) =>
 								setAttributes({ trimUnavailable })
