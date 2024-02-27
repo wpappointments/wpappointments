@@ -26,6 +26,8 @@ export type SettingsGeneral = {
 export type SettingsAppointments = {
 	defaultLength?: number;
 	timePickerPrecision?: number;
+	serviceId?: number;
+	serviceName?: string;
 };
 
 export type Day = keyof SettingsState['schedule'];

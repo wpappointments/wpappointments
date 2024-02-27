@@ -1,19 +1,14 @@
 import { useFormContext } from 'react-hook-form';
-import {
-	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-} from '@wordpress/components';
+import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { getSettings } from '@wordpress/date';
 import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
-import apiFetch from '~/backend/utils/fetch';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import resolve from '~/backend/utils/resolve';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
-import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Checkbox from '~/backend/admin/components/FormField/Checkbox/Checkbox';
 import Input from '~/backend/admin/components/FormField/Input/Input';
@@ -32,6 +27,11 @@ type Fields = {
 	timezone: string;
 };
 
+type Response = APIResponse<{
+	data: Fields;
+	message: string;
+}>;
+
 function GeneralSettings() {
 	const dispatch = useDispatch(store);
 
@@ -42,24 +42,36 @@ function GeneralSettings() {
 	useFillFormValues(settings);
 
 	const onSubmit = async (data: Fields) => {
-		await apiFetch({
-			path: 'settings/general',
-			method: 'PATCH',
-			data,
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: 'settings/general',
+				method: 'PATCH',
+				data,
+			});
+
+			return response;
 		});
 
-		dispatch.setPluginSettings({ general: data });
+		if (error) {
+			displayErrorToast(error?.message);
+			return;
+		}
+
+		if (response === null) {
+			displayErrorToast('Error saving settings');
+			return;
+		}
+
+		if (response.data.message) {
+			dispatch.setPluginSettings({ general: data });
+			displaySuccessToast(response.data.message);
+		}
 	};
 
 	return (
-		<Card className={globalStyles.card}>
-			<CardHeader>
-				<Text size="title">Profile and company details</Text>
-			</CardHeader>
-			<HtmlForm onSubmit={onSubmit}>
-				<FormFields />
-			</HtmlForm>
-		</Card>
+		<HtmlForm onSubmit={onSubmit}>
+			<FormFields />
+		</HtmlForm>
 	);
 }
 
@@ -69,7 +81,10 @@ function FormFields() {
 	const timezoneSiteDefault = watch('timezoneSiteDefault');
 
 	return (
-		<>
+		<Card className={globalStyles.card}>
+			<CardHeader>
+				<Text size="title">Profile and company details</Text>
+			</CardHeader>
 			<CardBody>
 				<FormFieldSet>
 					<Input
@@ -106,7 +121,7 @@ function FormFields() {
 					/>
 				</FormFieldSet>
 			</CardBody>
-			<CardHeader>
+			<CardHeader style={{ borderTop: '1px solid #eee', marginTop: 15 }}>
 				<Text size="title">General</Text>
 			</CardHeader>
 			<CardBody>
@@ -231,13 +246,11 @@ function FormFields() {
 				</FormFieldSet>
 			</CardBody>
 			<CardFooter>
-				<div className={formStyles.formActions}>
-					<Button type="submit" variant="primary">
-						Save changes
-					</Button>
-				</div>
+				<Button type="submit" variant="primary">
+					Save changes
+				</Button>
 			</CardFooter>
-		</>
+		</Card>
 	);
 }
 
