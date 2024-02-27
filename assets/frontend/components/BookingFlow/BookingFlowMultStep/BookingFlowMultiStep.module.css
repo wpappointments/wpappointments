@@ -1,32 +1,48 @@
 .steps-header {
 	display: flex;
+  margin: 0 auto;
 }
 
 .steps-header-label {
 	flex: 1;
-	text-align: center;
-	border-bottom: 1px solid rgba(206, 206, 206, 0.2);
 	padding: 10px 2px;
+  cursor: not-allowed;
+}
+
+.steps-header-label-center {
+	text-align: center;
+}
+
+.steps-header-label::before {
+  content: attr(data-step);
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #41c611;
+  color: #41c611;
+  font-size: 10px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
 .steps-header-label-active {
-	position: relative;
+  font-weight: bold;
 }
 
-.steps-header-label-active::after {
-	content: '';
-	position: absolute;
-	bottom: -1px;
-	left: 0;
-	right: 0;
-	height: 3px;
-	background-color: #41c611;
+.steps-header-label-active::before {
+  background-color: #41c611;
+  color: white;
 }
 
 .steps-header-label-clickable {
   cursor: pointer;
 }
 
-.steps-header-label-clickable:hover {
-  background-color: rgba(206, 206, 206, 0.2);
+.steps-header-label-clickable:hover::before {
+  background-color: #41c611;
+  color: white;
 }

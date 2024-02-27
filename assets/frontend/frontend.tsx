@@ -28,6 +28,8 @@ export const DaySchema = object({
 	available: boolean(),
 	date: string(),
 	day: array(DaySlotSchema),
+	totalAvailable: optional(number()),
+	totalSlots: optional(number()),
 });
 
 export const AvailabilityResponseSchema = object({

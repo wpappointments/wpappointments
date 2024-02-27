@@ -83,6 +83,29 @@ export default function BookingFlowCalendar() {
 								>
 									{week.map((day, k) => {
 										const d = new Date(day.date);
+										const totalSlots = day.totalSlots || 0;
+										const totalAvailable =
+											day.totalAvailable || 0;
+										const percentage =
+											(totalAvailable / totalSlots) * 100;
+
+										let threshold:
+											| 'High'
+											| 'Medium'
+											| 'Low'
+											| 'Limited' = 'High';
+
+										if (percentage < 50) {
+											threshold = 'Medium';
+										}
+
+										if (percentage < 30) {
+											threshold = 'Low';
+										}
+
+										if (percentage < 15) {
+											threshold = 'Limited';
+										}
 
 										return (
 											<button
@@ -99,6 +122,9 @@ export default function BookingFlowCalendar() {
 														viewing.getMonth(),
 													[styles.calendarDayUnavailable]:
 														!day.available,
+													[styles[
+														`calendarDayThreshold${threshold}`
+													]]: true,
 												})}
 												type="button"
 												disabled={
@@ -123,7 +149,13 @@ export default function BookingFlowCalendar() {
 															className={
 																styles.calendarDayAvailability
 															}
-														></span>
+														>
+															<span
+																style={{
+																	width: `${percentage}%`,
+																}}
+															></span>
+														</span>
 													)}
 											</button>
 										);
@@ -139,10 +171,12 @@ export default function BookingFlowCalendar() {
 						{__('Select a time slot for', 'wpappointments')}{' '}
 						{format(selected[0], 'LLLL do')}
 					</h5>
-					<div className={cn({
-						[styles.daySlots]: true,
-						[styles.center]: alignment === 'Center'
-					})}>
+					<div
+						className={cn({
+							[styles.daySlots]: true,
+							[styles.center]: alignment === 'Center',
+						})}
+					>
 						{dayAvailability.map((slot, i) => (
 							<button
 								key={i}

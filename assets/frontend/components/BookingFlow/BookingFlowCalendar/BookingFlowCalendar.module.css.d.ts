@@ -10,10 +10,39 @@ declare const styles:
   & Readonly<{ "calendarRow": string }>
   & Readonly<{ "calendarDay": string }>
   & Readonly<{ "calendarDay": string }>
+  & Readonly<{ "calendarDayThresholdHigh": string }>
+  & Readonly<{ "calendarDayThresholdHigh": string }>
+  & Readonly<{ "calendarDayThresholdHigh": string }>
+  & Readonly<{ "calendarDayThresholdHigh": string }>
+  & Readonly<{ "calendarDayThresholdMedium": string }>
+  & Readonly<{ "calendarDayThresholdMedium": string }>
+  & Readonly<{ "calendarDayThresholdMedium": string }>
+  & Readonly<{ "calendarDayThresholdMedium": string }>
+  & Readonly<{ "calendarDayThresholdLow": string }>
+  & Readonly<{ "calendarDayThresholdLow": string }>
+  & Readonly<{ "calendarDayThresholdLow": string }>
+  & Readonly<{ "calendarDayThresholdLow": string }>
+  & Readonly<{ "calendarDayThresholdLimited": string }>
+  & Readonly<{ "calendarDayThresholdLimited": string }>
+  & Readonly<{ "calendarDayThresholdLimited": string }>
+  & Readonly<{ "calendarDayThresholdLimited": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
+  & Readonly<{ "calendarDayAvailability": string }>
   & Readonly<{ "calendarDayAvailability": string }>
   & Readonly<{ "calendarDayInCurrentMonth": string }>
   & Readonly<{ "calendarDayInCurrentMonth": string }>
   & Readonly<{ "calendarDayInCurrentMonth": string }>
+  & Readonly<{ "calendarDaySelected": string }>
+  & Readonly<{ "calendarDaySelected": string }>
+  & Readonly<{ "calendarDaySelected": string }>
+  & Readonly<{ "calendarDaySelected": string }>
   & Readonly<{ "calendarDaySelected": string }>
   & Readonly<{ "calendarDayUnavailable": string }>
   & Readonly<{ "daySlots": string }>
