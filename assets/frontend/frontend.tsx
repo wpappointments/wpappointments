@@ -13,7 +13,7 @@ import {
 import cn from '~/backend/utils/cn';
 import BookingFlow from './components/BookingFlow/BookingFlow';
 import { BookingFlowContextProvider } from './context/BookingFlowContext';
-import styles from './index.module.css';
+import styles from './frontend.module.css';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 
 export const DaySlotSchema = object({

@@ -11,6 +11,7 @@ export type BookingFlowBlockAttributes = {
 	flowType: 'OneStep' | 'MultiStep';
 	alignment: 'Left' | 'Center' | 'Right';
 	width: 'Narrow' | 'Full';
+	trimUnavailable: boolean;
 };
 
 // @ts-ignore
