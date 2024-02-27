@@ -81,91 +81,91 @@ add_action(
  * @return void
  */
 function send_cancelled_appointment_email( $appointment ) {
-  ob_start();
-  require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-cancelled.html';
-  $content = ob_get_clean();
+	ob_start();
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-cancelled.html';
+	$content = ob_get_clean();
 
-  wp_mail(
-    $appointment->customer->email,
-    sprintf(
-      /* translators: %1$s: Date, %2$s: Time */
-      __( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
-      wp_date( 'F j, Y', $appointment->timestamp ),
-      wp_date( 'g:i a', $appointment->timestamp )
-    ),
-    evaluate_merge_tag( $content, $appointment )
-  );
+	wp_mail(
+		$appointment->customer->email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
+			wp_date( 'F j, Y', $appointment->timestamp ),
+			wp_date( 'g:i a', $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
 }
 
 add_action(
-  'wpappointments_appointment_cancelled',
-  __NAMESPACE__ . '\\send_cancelled_appointment_email',
-  10,
-  1
+	'wpappointments_appointment_cancelled',
+	__NAMESPACE__ . '\\send_cancelled_appointment_email',
+	10,
+	1
 );
 
 /**
  * Email template for appointment confirmed
  *
- * @param string                           $content Email content.
- * @param \WPAppointments\Appointment      $appointment Appointment object.
+ * @param string                      $content Email content.
+ * @param \WPAppointments\Appointment $appointment Appointment object.
  *
- * @return string
+ * @return void
  */
 function send_confirmed_appointment_email( $content, $appointment ) {
-  ob_start();
-  require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-confirmed.html';
-  $content = ob_get_clean();
+	ob_start();
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-confirmed.html';
+	$content = ob_get_clean();
 
-  wp_mail(
-    $appointment->customer->email,
-    sprintf(
-      /* translators: %1$s: Date, %2$s: Time */
-      __( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
-      wp_date( 'F j, Y', $appointment->timestamp ),
-      wp_date( 'g:i a', $appointment->timestamp )
-    ),
-    evaluate_merge_tag( $content, $appointment )
-  );
+	wp_mail(
+		$appointment->customer->email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
+			wp_date( 'F j, Y', $appointment->timestamp ),
+			wp_date( 'g:i a', $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
 }
 
 add_action(
-  'wpappointments_appointment_confirmed',
-  __NAMESPACE__ . '\\send_confirmed_appointment_email',
-  10,
-  2
+	'wpappointments_appointment_confirmed',
+	__NAMESPACE__ . '\\send_confirmed_appointment_email',
+	10,
+	2
 );
 
 /**
  * Email template for appointment no-show
  *
- * @param string                           $content Email content.
- * @param \WPAppointments\Appointment      $appointment Appointment object.
+ * @param string                      $content Email content.
+ * @param \WPAppointments\Appointment $appointment Appointment object.
  *
- * @return string
+ * @return void
  */
 function send_no_show_appointment_email( $content, $appointment ) {
-  ob_start();
-  require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-no-show.html';
-  $content = ob_get_clean();
+	ob_start();
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-no-show.html';
+	$content = ob_get_clean();
 
-  wp_mail(
-    $appointment->customer->email,
-    sprintf(
-      /* translators: %1$s: Date, %2$s: Time */
-      __( 'Appointment No-Show: %1$s at %2$s', 'wpappointments' ),
-      wp_date( 'F j, Y', $appointment->timestamp ),
-      wp_date( 'g:i a', $appointment->timestamp )
-    ),
-    evaluate_merge_tag( $content, $appointment )
-  );
+	wp_mail(
+		$appointment->customer->email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment No-Show: %1$s at %2$s', 'wpappointments' ),
+			wp_date( 'F j, Y', $appointment->timestamp ),
+			wp_date( 'g:i a', $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
 }
 
 add_action(
-  'wpappointments_appointment_no_show',
-  __NAMESPACE__ . '\\send_no_show_appointment_email',
-  10,
-  2
+	'wpappointments_appointment_no_show',
+	__NAMESPACE__ . '\\send_no_show_appointment_email',
+	10,
+	2
 );
 
 /**
