@@ -10,5 +10,5 @@ for (const element of bookingFlow) {
 	const root = createRoot(rootElement);
 	const attributes = JSON.parse(atob(rootElement.dataset.attributes || ''));
 
-	root.render(<BookingFlow {...attributes} />);
+	root.render(<BookingFlow attributes={attributes} />);
 }
