@@ -4,6 +4,10 @@
 	"name": "wpappointments/booking-flow",
 	"title": "Boooking Flow",
 	"attributes": {
+		"flowType": {
+			"type": "string",
+			"default": "OneStep"
+		},
 		"alignment": {
 			"type": "string",
 			"default": "Left"
