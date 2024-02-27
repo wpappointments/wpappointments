@@ -344,13 +344,13 @@ class AppointmentPost {
 			return $valid_id;
 		}
 
-		$meta = [
+		$meta = array(
 			'status'      => get_post_meta( $valid_id, 'status', true ),
 			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
 			'duration'    => get_post_meta( $valid_id, 'duration', true ),
 			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
 			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		];
+		);
 
 		$cancelled = update_post_meta( $valid_id, 'status', 'cancelled' );
 
@@ -365,9 +365,9 @@ class AppointmentPost {
 
 	/**
 	 * Confirm appointment
-	 * 
+	 *
 	 * @param int $id Appointment ID.
-	 * 
+	 *
 	 * @return int|\WP_Error
 	 */
 	public function confirm( $id ) {
@@ -377,13 +377,13 @@ class AppointmentPost {
 			return $valid_id;
 		}
 
-		$meta = [
+		$meta = array(
 			'status'      => get_post_meta( $valid_id, 'status', true ),
 			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
 			'duration'    => get_post_meta( $valid_id, 'duration', true ),
 			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
 			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		];
+		);
 
 		$confirmed = update_post_meta( $valid_id, 'status', 'confirmed' );
 
@@ -398,9 +398,9 @@ class AppointmentPost {
 
 	/**
 	 * Mark appointment as no show
-	 * 
+	 *
 	 * @param int $id Appointment ID.
-	 * 
+	 *
 	 * @return int|\WP_Error
 	 */
 	public function no_show( $id ) {
@@ -410,13 +410,13 @@ class AppointmentPost {
 			return $valid_id;
 		}
 
-		$meta = [
+		$meta = array(
 			'status'      => get_post_meta( $valid_id, 'status', true ),
 			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
 			'duration'    => get_post_meta( $valid_id, 'duration', true ),
 			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
 			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		];
+		);
 
 		$no_show = update_post_meta( $valid_id, 'status', 'no_show' );
 

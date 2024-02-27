@@ -1,8 +1,8 @@
 import { ReactDOM } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
+import 'little-state-machine';
 import type { AppointmentsApi } from '~/backend/api/appointments';
-
 
 declare global {
 	interface Window {
@@ -30,5 +30,12 @@ declare global {
 			};
 		};
 		wp: any;
+	}
+}
+
+declare module 'little-state-machine' {
+	interface GlobalState {
+		currentStep: number;
+		datetime: string;
 	}
 }
