@@ -194,9 +194,17 @@
 	padding: 0;
 	flex: 15px;
 	flex-grow: 0;
+	cursor: not-allowed;
 }
 
-.day-slot:hover {
+.day-slot-available {
+	background-color: #41c611;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+.day-slot-available:hover,
+.day-slot-selected  {
 	background-color: #8bff6b;
 	cursor: pointer;
 }
@@ -216,12 +224,7 @@
 	border-radius: 5px;
 }
 
-.day-slot-available {
-	background-color: #41c611;
-}
-
 .time-slot-header {
-	/* text-align: center; */
 	margin-bottom: 20px;
 }
 

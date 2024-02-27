@@ -111,6 +111,10 @@ export default function BookingFlowCalendar() {
 											<button
 												key={`day-${k}`}
 												onClick={() => {
+													if (!day.available) {
+														return;
+													}
+
 													select(d, true);
 												}}
 												className={cn({
@@ -181,6 +185,10 @@ export default function BookingFlowCalendar() {
 							<button
 								key={i}
 								onClick={() => {
+									if (!slot.available) {
+										return;
+									}
+
 									setValue(
 										'datetime',
 										new Date(slot.timestamp).toISOString()
@@ -191,6 +199,8 @@ export default function BookingFlowCalendar() {
 								className={cn({
 									[styles.daySlot]: true,
 									[styles.daySlotAvailable]: slot.available,
+									[styles.daySlotSelected]:
+										datetime && new Date(slot.timestamp).toISOString() === datetime,
 								})}
 								data-time={slot.time}
 							></button>
@@ -198,10 +208,10 @@ export default function BookingFlowCalendar() {
 					</div>
 					{datetime && (
 						<div>
-							<strong>Selected time:</strong>{' '}
-							<span>
+							<span>Selected time:</span>{' '}
+							<strong>
 								{format(new Date(datetime), 'LLLL do, HH:mm')}
-							</span>
+							</strong>
 						</div>
 					)}
 				</>
