@@ -1,5 +1,24 @@
-.booking-flow {
+.booking-flow.align-left {
+	text-align: left;
+	margin-right: auto;
+}
+
+.booking-flow.align-center {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.booking-flow.align-right {
+	text-align: right;
+	margin-left: auto;
+}
+
+.booking-flow.widthNarrow {
 	width: 450px;
+}
+
+.booking-flow.widthFull {
+	width: 100%;
 }
 
 .calendar {

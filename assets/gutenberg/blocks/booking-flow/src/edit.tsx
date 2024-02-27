@@ -1,10 +1,19 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
-import { useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import type { BlockEditProps } from '@wordpress/blocks';
-import type { Attributes } from './booking-flow-block';
+import { Button, ButtonGroup, Panel, PanelBody } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import type { BookingFlowBlockAttributes } from './booking-flow-block';
 import BookingFlow from '~/frontend/frontend';
+import { Icon, column, positionCenter, positionLeft, positionRight, stretchFullWidth } from '@wordpress/icons';
 
-export default function Edit({ attributes }: BlockEditProps<Attributes>) {
+
+export default function Edit({
+	attributes,
+	setAttributes,
+}: BlockEditProps<BookingFlowBlockAttributes>) {
+	const { alignment, width } = attributes;
+
 	return (
 		<div
 			{...(useBlockProps() as DetailedHTMLProps<
@@ -12,7 +21,79 @@ export default function Edit({ attributes }: BlockEditProps<Attributes>) {
 				HTMLDivElement
 			>)}
 		>
-			<BookingFlow />
+			<BookingFlow attributes={attributes} />
+			<InspectorControls>
+				<Panel>
+					<PanelBody title="Alignment">
+						<ButtonGroup>
+							<Button
+								variant={
+									alignment === 'Left'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() =>
+									setAttributes({ alignment: 'Left' })
+								}
+								icon={<Icon icon={positionLeft} />}
+								label={__('Align left', 'wpappointments')}
+							/>
+							<Button
+								variant={
+									alignment === 'Center'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() =>
+									setAttributes({ alignment: 'Center' })
+								}
+								icon={<Icon icon={positionCenter} />}
+								label={__('Align center', 'wpappointments')}
+							/>
+							<Button
+								variant={
+									alignment === 'Right'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() =>
+									setAttributes({ alignment: 'Right' })
+								}
+								icon={<Icon icon={positionRight} />}
+								label={__('Align right', 'wpappointments')}
+							/>
+						</ButtonGroup>
+					</PanelBody>
+					<PanelBody title="Size">
+						<ButtonGroup>
+							<Button
+								variant={
+									width === 'Narrow'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() =>
+									setAttributes({ width: 'Narrow' })
+								}
+								icon={<Icon icon={column} />}
+								label={__('Size narrow', 'wpappointments')}
+							/>
+							<Button
+								variant={
+									width === 'Full'
+										? 'primary'
+										: 'secondary'
+								}
+								onClick={() =>
+									setAttributes({ width: 'Full' })
+								}
+								icon={<Icon icon={stretchFullWidth} />}
+								label={__('Size full width', 'wpappointments')}
+							/>
+						</ButtonGroup>
+					</PanelBody>
+				</Panel>
+			</InspectorControls>
 		</div>
 	);
 }

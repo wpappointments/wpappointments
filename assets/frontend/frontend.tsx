@@ -12,6 +12,7 @@ import resolve from '~/backend/utils/resolve';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { Appointment } from '~/backend/types';
 import styles from './index.module.css';
+import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 
 export const DaySlotSchema = object({
 	available: boolean(),
@@ -54,7 +55,12 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
-export default function BookingFlow() {
+export type BookingFlowProps = {
+	attributes: BookingFlowBlockAttributes;
+};
+
+export default function BookingFlow({ attributes }: BookingFlowProps) {
+	const { alignment, width } = attributes;
 	const {
 		register,
 		handleSubmit,
@@ -172,7 +178,11 @@ export default function BookingFlow() {
 	}, [viewing.getMonth()]);
 
 	return (
-		<div className={styles.bookingFlow}>
+		<div className={cn({
+			[styles.bookingFlow]: true,
+			[styles[`align${alignment}`]]: true,
+			[styles[`width${width}`]]: true,
+		})}>
 			{formError && <p className={styles.error}>{formError}</p>}
 			{formSuccess && (
 				<p className={styles.success}>
