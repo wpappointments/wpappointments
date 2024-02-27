@@ -9,7 +9,6 @@ export default function BookingFlowConfirmation() {
 	const dateTime = getValues('datetime');
 	const date = new Date(dateTime).toLocaleDateString();
 	const time = new Date(dateTime).toLocaleTimeString();
-	const confirmationNumber = '123456';
 
 	return (
 		<div className={styles.alignLeft}>
@@ -21,8 +20,6 @@ export default function BookingFlowConfirmation() {
 			<strong>Date</strong>: {date}
 			<br />
 			<strong>Time</strong>: {time}
-			<br />
-			<strong>Confirmation Number</strong>: {confirmationNumber}
 			<br />
 		</div>
 	);
