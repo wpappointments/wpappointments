@@ -102,7 +102,7 @@ class TimeFinder extends Controller {
 		$to       = $request->get_param( 'lastDay' );
 		$timezone = $request->get_param( 'timezone' );
 
-		$slots = Availability::get_availability( $from, $to, $timezone, true );
+		$slots = Availability::get_availability( $from, $to, $timezone );
 
 		return self::response(
 			array(
@@ -124,7 +124,7 @@ class TimeFinder extends Controller {
 	public static function calendar_availability_v2( WP_REST_Request $request ) {
 		$calendar = $request->get_param( 'calendar' );
 		$timezone = $request->get_param( 'timezone' );
-		$trim 	  = $request->get_param( 'trim' ) === 'true' ? true : false;
+		$trim     = $request->get_param( 'trim' ) === 'true' ? true : false;
 		$calendar = json_decode( $calendar );
 
 		$availability = Availability::get_month_calendar_availability( $calendar, $timezone, $trim );

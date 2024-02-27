@@ -31,8 +31,7 @@ class Availability {
 		$slots = self::get_availability(
 			$date->format( 'Y-m-d' ) . ' 00:00:00',
 			$date->format( 'Y-m-d' ) . ' 23:59:59',
-			$timezone,
-			true
+			$timezone
 		);
 
 		return $slots;
@@ -73,7 +72,7 @@ class Availability {
 	 *
 	 * @return array
 	 */
-	public static function get_availability( $date_start, $date_end, $tz = null, $trim = false, $now = new \DateTime() ) {
+	public static function get_availability( $date_start, $date_end, $tz = null, $now = new \DateTime() ) {
 		$timezone = empty( $tz ) ? wp_timezone_string() : $tz;
 		$now->setTimezone( new \DateTimeZone( $timezone ) );
 
@@ -140,40 +139,52 @@ class Availability {
 			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
 
-			if ( $trim && ! $available ) {
-				continue;
-			}
-
 			array_push(
 				$slots,
 				(object) array(
 					'timestamp'  => (int) $slot->format( 'U' ) * 1000,
 					'dateString' => $slot->format( 'c' ),
 					'available'  => $available && ! $is_past && ! $booked,
+					'inSchedule' => $available,
 				)
 			);
 		}
 
-		$maybe_trimmed_slots = $slots;
+		$trimmed_slots = array();
 
-		if ( $trim ) {
-			$maybe_trimmed_slots = array_reverse( $slots );
-			$trimmed_slots = array();
+		$found_first_available = false;
 
-			foreach ( $maybe_trimmed_slots as $slot ) {
-				if ( $slot->available ) {
-					$found_first_available = true;
-				}
-
-				if ( $found_first_available ) {
-					$trimmed_slots[] = $slot;
-				}
+		foreach ( $slots as $slot ) {
+			if ( $slot->inSchedule ) {
+				$found_first_available = true;
 			}
 
-			$maybe_trimmed_slots = array_reverse( $trimmed_slots );
+			if ( $found_first_available ) {
+				$trimmed_slots[] = $slot;
+			}
 		}
 
-		return $maybe_trimmed_slots;
+		$trimmed_slots_reverse = array_reverse( $trimmed_slots );
+		$trimmed_slots_2       = array();
+
+		$found_first_available = false;
+
+		foreach ( $trimmed_slots_reverse as $slot ) {
+			if ( $slot->inSchedule ) {
+				$found_first_available = true;
+			}
+
+			if ( $found_first_available ) {
+				$trimmed_slots_2[] = $slot;
+			}
+		}
+
+		$trimmed_slots = array_reverse( $trimmed_slots_2 );
+
+		return array(
+			'slots'         => $slots,
+			'trimmed_slots' => $trimmed_slots,
+		);
 	}
 
 	/**
@@ -225,21 +236,27 @@ class Availability {
 				$day_availability = self::get_availability(
 					$day_start->format( 'c' ),
 					$day_end->format( 'c' ),
-					$timezone,
-					$trim
+					$timezone
 				);
 
+				$slots         = $day_availability['slots'];
+				$trimmed_slots = $day_availability['trimmed_slots'];
+
+				$slots = $trim ? $trimmed_slots : $slots;
+
 				$available_slots = array_filter(
-					$day_availability,
+					$slots,
 					function ( $slot ) {
 						return true === $slot->available;
 					}
 				);
 
 				$week_availability[] = (object) array(
-					'date'      => $day_date->format( 'c' ),
-					'day'       => $day_availability,
-					'available' => count( $available_slots ) > 0,
+					'date'           => $day_date->format( 'c' ),
+					'day'            => $slots,
+					'available'      => count( $available_slots ) > 0,
+					'totalAvailable' => count( $available_slots ),
+					'totalSlots'     => count( $slots ),
 				);
 			}
 

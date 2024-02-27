@@ -1,6 +1,8 @@
 declare const styles:
   & Readonly<{ "stepsHeader": string }>
   & Readonly<{ "stepsHeaderLabel": string }>
+  & Readonly<{ "stepsHeaderLabel": string }>
+  & Readonly<{ "stepsHeaderLabelCenter": string }>
   & Readonly<{ "stepsHeaderLabelActive": string }>
   & Readonly<{ "stepsHeaderLabelActive": string }>
   & Readonly<{ "stepsHeaderLabelClickable": string }>
