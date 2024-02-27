@@ -24,3 +24,9 @@
 	margin-left: var( --wpappointments-large-gap );
 	margin-right: var( --wpappointments-large-gap );
 }
+
+/* make gutenberg block custom icon white when inside selected element */
+.block-editor-block-icon.has-colors svg path,
+.block-editor-block-icon.has-colors svg rect {
+	fill: currentColor;
+}

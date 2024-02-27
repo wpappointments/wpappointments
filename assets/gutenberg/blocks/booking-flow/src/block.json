@@ -4,10 +4,13 @@
 	"name": "wpappointments/booking-flow",
 	"title": "Boooking Flow",
 	"attributes": {
-		"message": {
+		"alignment": {
 			"type": "string",
-			"source": "text",
-			"selector": "div"
+			"default": "Left"
+		},
+		"width": {
+			"type": "string",
+			"default": "Narrow"
 		}
 	},
 	"textdomain": "wpappointments",
