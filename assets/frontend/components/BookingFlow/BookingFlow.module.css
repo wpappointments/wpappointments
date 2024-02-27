@@ -33,6 +33,11 @@
 	margin-bottom: 50px;
 }
 
+.align-left {
+  text-align: left;
+  margin-right: auto;
+}
+
 .field-info {
   display: block;
   text-align: left;

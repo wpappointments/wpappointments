@@ -165,7 +165,7 @@ class Availability {
 		}
 
 		$trimmed_slots_reverse = array_reverse( $trimmed_slots );
-		$trimmed_slots_2 = array();
+		$trimmed_slots_2       = array();
 
 		$found_first_available = false;
 
@@ -181,10 +181,10 @@ class Availability {
 
 		$trimmed_slots = array_reverse( $trimmed_slots_2 );
 
-		return [
-			'slots' => $slots,
-			'trimmed_slots' => $trimmed_slots
-		];
+		return array(
+			'slots'         => $slots,
+			'trimmed_slots' => $trimmed_slots,
+		);
 	}
 
 	/**
@@ -239,7 +239,7 @@ class Availability {
 					$timezone
 				);
 
-				$slots = $day_availability['slots'];
+				$slots         = $day_availability['slots'];
 				$trimmed_slots = $day_availability['trimmed_slots'];
 
 				$slots = $trim ? $trimmed_slots : $slots;
@@ -252,9 +252,9 @@ class Availability {
 				);
 
 				$week_availability[] = (object) array(
-					'date'            => $day_date->format( 'c' ),
-					'day'             => $slots,
-					'available'       => count( $available_slots ) > 0,
+					'date'           => $day_date->format( 'c' ),
+					'day'            => $slots,
+					'available'      => count( $available_slots ) > 0,
 					'totalAvailable' => count( $available_slots ),
 					'totalSlots'     => count( $slots ),
 				);
