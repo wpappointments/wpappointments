@@ -1,6 +1,7 @@
 .tabs-conainer :global .components-tab-panel__tabs {
 	background-color: #fff;
 	box-shadow: rgba( 0, 0, 0, 0.1 ) 0px 0px 0px 1px;
+	margin-bottom: 10px;
 }
 
 .tabs-conainer :global .components-tab-panel__tabs-item {

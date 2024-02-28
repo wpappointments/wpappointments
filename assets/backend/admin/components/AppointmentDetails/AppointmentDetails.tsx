@@ -151,7 +151,7 @@ type AppointmentDetailsModalsProps = {
 	closeModal: () => void;
 };
 
-function AppointmentDetailsModals({
+export function AppointmentDetailsModals({
 	status,
 	cancelAppointment,
 	deleteAppointment,

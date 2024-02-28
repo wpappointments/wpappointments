@@ -26,18 +26,20 @@ export type SettingsGeneral = {
 export type SettingsAppointments = {
 	defaultLength?: number;
 	timePickerPrecision?: number;
+	serviceId?: number;
+	serviceName?: string;
 };
 
-export type Day = keyof SettingsState['schedule'];
+export type Day = keyof SettingsSchedule;
 
 export type OpeningHoursSlot = {
 	start: {
-		hour: string;
-		minute: string;
+		hour: string | null;
+		minute: string | null;
 	};
 	end: {
-		hour: string;
-		minute: string;
+		hour: string | null;
+		minute: string | null;
 	};
 };
 

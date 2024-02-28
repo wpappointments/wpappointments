@@ -2,11 +2,13 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, fromUnixTime } from 'date-fns';
+import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { Appointment } from '~/backend/types';
+import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './Table.module.css';
-import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointment/CancelAppointment';
 import { AppointmentsApi } from '~/backend/api/appointments';
+
 
 type Props = {
 	items?: Appointment[];
@@ -24,8 +26,12 @@ export default function Table({
 	onEdit,
 	onView,
 	cancelAppointment,
+	deleteAppointment,
 }: Props) {
-	const [appointmentId, setAppointmentId] = useState(0);
+	const [appointmentModal, setAppointmentModal] = useState<{
+		id: number;
+		status: Appointment['status'];
+	} | null>(null);
 
 	if (!items || items.length === 0) {
 		return (
@@ -38,9 +44,9 @@ export default function Table({
 				>
 					<path d="M839.2 101.3H184.9L65.3 539.5 64 922.7h896V549.3l-120.8-448zM241.9 176h540.3L884 549.3H678.7l-74.7 112H420l-74.7-112H140.1L241.9 176z" />
 				</svg>
-				<p>You have no appointments yet</p>
+				<p>{__('You have no appointments yet', 'wpappointments')}</p>
 				<Button variant="primary" onClick={onEmptyStateButtonClick}>
-					Create New Appointment
+					{__('Create New Appointment', 'wpappointments')}
 				</Button>
 			</div>
 		);
@@ -51,9 +57,10 @@ export default function Table({
 			<table className={styles.table}>
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>Date</th>
-						<th>Time</th>
+						<th>{__('Title', 'wpappointments')}</th>
+						<th>{__('Date', 'wpappointments')}</th>
+						<th>{__('Time', 'wpappointments')}</th>
+						<th>{__('Status', 'wpappointments')}</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -64,19 +71,24 @@ export default function Table({
 							row={row}
 							edit={onEdit}
 							view={onView}
-							setAppointmentId={setAppointmentId}
+							setAppointmentModal={setAppointmentModal}
 						/>
 					))}
 				</tbody>
 			</table>
-			{appointmentId > 0 && (
-				<CancelAppointment
-					onConfirmClick={async () => {
-						await cancelAppointment(appointmentId);
-						setAppointmentId(0);
+			{appointmentModal && (
+				<AppointmentDetailsModals
+					status={appointmentModal.status}
+					cancelAppointment={async () => {
+						await cancelAppointment(appointmentModal.id);
+						setAppointmentModal(null);
+					}}
+					deleteAppointment={async () => {
+						await deleteAppointment(appointmentModal.id);
+						setAppointmentModal(null);
 					}}
 					closeModal={() => {
-						setAppointmentId(0);
+						setAppointmentModal(null);
 					}}
 				/>
 			)}
@@ -88,10 +100,18 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
-	setAppointmentId: Dispatch<SetStateAction<number>>;
+	setAppointmentModal: Dispatch<SetStateAction<{
+		id: number;
+		status: Appointment['status'];
+	} | null>>;
 };
 
-function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
+function TableRow({
+	row,
+	edit,
+	view,
+	setAppointmentModal,
+}: TableRowProps) {
 	const { id, service, timestamp, duration } = row;
 	const dateStart = fromUnixTime(timestamp);
 	const dateEnd = addMinutes(dateStart, duration);
@@ -121,13 +141,26 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 						view && view(row);
 					}}
 				>
-					{service}
+					<strong>{service}</strong>
 				</Button>
+				<br />
+				{__('Customer', 'wpappointments')}:{' '}
+				<strong>{row.customer.name}</strong>
 			</td>
 			<td>{dateOutput}</td>
 			<td>
 				{timeFromTo}
 				{userDiffTimezone && ` (${userDiffTimezone})`}
+			</td>
+			<td>
+				<span
+					className={cn({
+						[styles.status]: true,
+						[styles[row.status]]: true,
+					})}
+				>
+					{row.status}
+				</span>
 			</td>
 			<td>
 				<Button
@@ -137,7 +170,7 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 						view && view(row);
 					}}
 				>
-					View
+					{__('View', 'wpappointments')}
 				</Button>
 				<Button
 					variant="tertiary"
@@ -146,18 +179,18 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 						edit && edit(row);
 					}}
 				>
-					Edit
+					{__('Edit', 'wpappointments')}
 				</Button>
-				{row.status === 'confirmed' && (
+				{(row.status === 'confirmed' || row.status === 'pending') && (
 					<Button
 						variant="tertiary"
 						size="small"
 						isDestructive
 						onClick={() => {
-							setAppointmentId(id);
+							setAppointmentModal({ id, status: row.status });
 						}}
 					>
-						Cancel
+						{__('Cancel', 'wpappointments')}
 					</Button>
 				)}
 				{row.status === 'cancelled' && (
@@ -166,10 +199,10 @@ function TableRow({ row, edit, view, setAppointmentId }: TableRowProps) {
 						size="small"
 						isDestructive
 						onClick={() => {
-							setAppointmentId(id);
+							setAppointmentModal({ id, status: row.status });
 						}}
 					>
-						Delete
+						{__('Delete', 'wpappointments')}
 					</Button>
 				)}
 			</td>

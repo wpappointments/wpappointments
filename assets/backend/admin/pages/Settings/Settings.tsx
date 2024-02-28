@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
 import AppointmentsSettings from './Appointments/Appointments';
-import CalendarSettings from './Calendar/Calendar';
 import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
+
 
 type Tab = {
 	name: string;
@@ -25,12 +25,12 @@ const tabs = new Map<string, Tab>([
 		},
 	],
 	[
-		'calendar',
+		'appoinments',
 		{
-			name: 'calendar',
-			title: 'Calendar',
-			className: 'tab-calendar',
-			component: <CalendarSettings />,
+			name: 'appoinments',
+			title: 'Appointments',
+			className: 'tab-appointments',
+			component: <AppointmentsSettings />,
 		},
 	],
 	[
@@ -40,15 +40,6 @@ const tabs = new Map<string, Tab>([
 			title: 'Schedule',
 			className: 'tab-schedule',
 			component: <ScheduleSettings />,
-		},
-	],
-	[
-		'appoinments',
-		{
-			name: 'appoinments',
-			title: 'Appointments',
-			className: 'tab-appointments',
-			component: <AppointmentsSettings />,
 		},
 	],
 ]);

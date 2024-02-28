@@ -1,58 +1,157 @@
+import { useSelect, select } from '@wordpress/data';
+import { addMinutes, format } from 'date-fns';
+import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
+import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
-import Number from '~/backend/admin/components/FormField/Number/Number';
+import Select from '~/backend/admin/components/FormField/Select/Select';
 
 type Props = {
-	day: string;
+	day: keyof SettingsSchedule;
 	index: number;
-	values: any;
-	enabled: boolean;
-	updateWorkingHoursTime: any;
+	timePickerPrecision?: number;
 	type: 'start' | 'end';
+	updateWorkingHoursTime: (args: {
+		values: DayOpeningHours;
+		value: string;
+		index: number;
+		type: 'start' | 'end';
+		time: 'hour' | 'minute';
+	}) => void;
 };
 
 export default function ScheduleTimePicker({
 	day,
 	index,
-	values,
-	enabled,
-	updateWorkingHoursTime,
+	timePickerPrecision,
 	type,
+	updateWorkingHoursTime,
 }: Props) {
+	const settings = useSelect(() => {
+		return select(store).getAllSettings();
+	}, []);
+
+	const { schedule, appointments } = settings;
+
 	return (
 		<div className={styles.timePicker}>
 			<div className={styles.timePickerControl}>
-				<Number
+				<Select
 					key={`${day}.slots.list.${index}.${type}.hour`}
 					name={`${day}.slots.list.${index}.${type}.hour`}
-					placeholder="00"
-					min={0}
-					max={23}
-					spinControls="none"
-					disabled={!enabled}
 					onChange={(value) => {
-						if (!value) {
-							return;
-						}
-
 						updateWorkingHoursTime({
-							values,
+							values: schedule[day],
 							value,
 							index,
 							type,
+							time: 'hour',
 						});
 					}}
+					options={createHourOptions(type, schedule[day].slots.list[index].start.hour)}
+					defaultValue={schedule[day].slots.list[index][type].hour ?? '00'}
+					noArrow
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
-				<Number
+				<Select
 					key={`${day}.slots.list.${index}.${type}.minute`}
 					name={`${day}.slots.list.${index}.${type}.minute`}
-					placeholder="00"
-					min={0}
-					max={59}
-					spinControls="none"
-					disabled={!enabled}
+					onChange={(value) => {
+						updateWorkingHoursTime({
+							values: schedule[day],
+							value: value,
+							index,
+							type,
+							time: 'minute',
+						});
+					}}
+					options={createMinuteOptions(appointments.timePickerPrecision)}
+					defaultValue={schedule[day].slots.list[index][type].minute ?? '00'}
+					noArrow
 				/>
 			</div>
 		</div>
 	);
+}
+
+class DateRange {
+	start: Date;
+	end: Date;
+	interval: number;
+
+	constructor(start: Date, end: Date, interval: number) {
+		this.start = start;
+		this.end = end;
+		this.interval = interval;
+	}
+
+	[Symbol.iterator]() {
+		const start = this.start;
+		const end = this.end;
+		const interval = this.interval;
+
+		let current = start;
+
+		return {
+			next() {
+				if (current < end) {
+					const value = current;
+					current = addMinutes(current, interval);
+					return { value, done: false };
+				}
+
+				return { done: true };
+			},
+		};
+	}
+}
+
+function createHourOptions(type: 'start' | 'end', minHour: string | null) {
+	const options = [];
+	let min = 0;
+
+	if (minHour && type === 'end') {
+		min = parseInt(minHour, 10);
+	}
+
+	const range = new DateRange(
+		new Date(0, 0, 0, min, 0),
+		new Date(0, 0, 0, 24, 0),
+		60
+	);
+
+	for (const date of range) {
+		if (!date) {
+			continue;
+		}
+
+		options.push({
+			label: format(date, 'HH'),
+			value: format(date, 'HH'),
+		});
+	}
+
+	return options;
+}
+
+function createMinuteOptions(precision = 30) {
+	const options = [];
+
+	const range = new DateRange(
+		new Date(0, 0, 0, 0, 0),
+		new Date(0, 0, 0, 0, 60),
+		precision
+	);
+
+	for (const date of range) {
+		if (!date) {
+			continue;
+		}
+
+		options.push({
+			label: format(date, 'mm'),
+			value: format(date, 'mm'),
+		});
+	}
+
+	return options;
 }

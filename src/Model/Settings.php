@@ -77,16 +77,20 @@ class Settings {
 	 * @param string $category Settings category ('general', 'schedules').
 	 * @param array  $settings Settings to update.
 	 *
-	 * @return array
+	 * @return array|\WP_Error
 	 */
 	public function update( $category, $settings = array() ) {
 		$_category = $category ? $category . '_' : '';
 
-		foreach ( $settings as $key => $value ) {
-			update_option( 'wpappointments_' . $_category . $key, $value );
+		if ( true === array_key_exists( $category, $this->settings ) ) {
+			foreach ( $settings as $key => $value ) {
+				update_option( 'wpappointments_' . $_category . $key, $value );
+			}
+
+			return $this->get_all();
 		}
 
-		return $this->get_all();
+		return new \WP_Error( 'invalid_category', 'Invalid category' );
 	}
 
 	/**
@@ -116,6 +120,10 @@ class Settings {
 		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 		$settings['schedule'] = $schedule;
 
+		$service = $this->get_default_service( get_option( 'wpappointments_defaultServiceId' ) );
+		$settings['appointments']['service'] = $service;
+		$settings['appointments']['serviceName'] = $service->post_title;
+
 		return $settings;
 	}
 
@@ -124,7 +132,7 @@ class Settings {
 	 *
 	 * @param int $schedule_post_id Default schedule post ID.
 	 *
-	 * @return null|object
+	 * @return null|\WP_Post
 	 */
 	public function get_default_schedule( $schedule_post_id ) {
 		$schedule = null;
@@ -144,6 +152,23 @@ class Settings {
 		}
 
 		return $schedule;
+	}
+
+	/**
+	 * Get default service settings
+	 * 
+	 * @param string $service_post_id Default service post ID.
+	 * 
+	 * @return null|\WP_Post
+	 */
+	public function get_default_service( $service_post_id ) {
+		$service = null;
+
+		if ( $service_post_id ) {
+			$service = get_post( $service_post_id );
+		}
+
+		return $service;
 	}
 
 	/**

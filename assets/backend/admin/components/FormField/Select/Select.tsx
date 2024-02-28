@@ -18,7 +18,7 @@ import styles from '../FormField.module.css';
 
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
-	label: string;
+	label?: string;
 	rules?: Omit<
 		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -31,6 +31,7 @@ type Props<TFields extends FieldValues> = {
 	readOnly?: boolean;
 	onChange?: (value: string) => void;
 	fullWidth?: boolean;
+	noArrow?: boolean;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -47,6 +48,7 @@ export default function Select<TFields extends FieldValues>({
 	onChange,
 	readOnly = false,
 	fullWidth = false,
+	noArrow = false,
 }: Props<TFields>) {
 	const {
 		control,
@@ -57,10 +59,12 @@ export default function Select<TFields extends FieldValues>({
 
 	return (
 		<FormField isFullWidth={fullWidth}>
-			<label className={styles.fieldLabel} htmlFor={name}>
-				{label}
-				{rules?.required && '*'}
-			</label>
+			{label && (
+				<label className={styles.fieldLabel} htmlFor={name}>
+					{label}
+					{rules?.required && '*'}
+				</label>
+			)}
 			<Controller
 				name={name}
 				control={control}
@@ -84,11 +88,13 @@ export default function Select<TFields extends FieldValues>({
 								onChange(e);
 							}
 						}}
-						value={value}
+						defaultValue={value}
 						size="__unstable-large"
 						id={name}
 						options={options}
 						disabled={readOnly}
+						suffix={noArrow ? <></> : null}
+						style={{ paddingRight: noArrow ? 16 : undefined }}
 					/>
 				)}
 			/>

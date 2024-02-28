@@ -1,10 +1,12 @@
+import { useFormContext } from 'react-hook-form';
 import { Button, Dashicon } from '@wordpress/components';
-import { useDispatch } from '@wordpress/data';
-import { useCallback, useMemo } from '@wordpress/element';
+import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useCallback } from '@wordpress/element';
 import { produce } from 'immer';
 import cn from '~/backend/utils/cn';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
+import { ScheduleFormFields } from '../Schedule';
 import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
 import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
@@ -12,10 +14,14 @@ import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
 export default function OpeningHoursDayOfWeek({
 	values,
 	showCopyToAllDays = false,
+	timePickerPrecision,
 }: {
 	values: DayOpeningHours;
 	showCopyToAllDays?: boolean;
+	timePickerPrecision?: number;
 }) {
+	const { setValue, reset } = useFormContext<ScheduleFormFields>();
+
 	const {
 		updateWorkingHours,
 		addWorkingHoursSlot,
@@ -23,11 +29,19 @@ export default function OpeningHoursDayOfWeek({
 		copyWorkingHoursToAllDays,
 	} = useDispatch(store);
 
+	const settings = useSelect(() => {
+		return select(store).getAllSettings();
+	}, []);
+
+	const { schedule } = settings;
+
 	const {
 		day,
 		enabled,
-		slots: { list: slots },
+		slots,
 	} = values;
+
+	const { list } = slots || { list: [] };
 
 	const updateWorkingHoursTime = useCallback(
 		({
@@ -35,11 +49,13 @@ export default function OpeningHoursDayOfWeek({
 			value,
 			index,
 			type,
+			time,
 		}: {
 			values: DayOpeningHours;
 			value: string;
 			index: number;
 			type: 'start' | 'end';
+			time: 'hour' | 'minute';
 		}) => {
 			updateWorkingHours(
 				produce(values, (draft) => {
@@ -47,72 +63,29 @@ export default function OpeningHoursDayOfWeek({
 						return;
 					}
 
-					draft.slots.list[index][type].hour = value;
+					if (!draft.slots) {
+						draft.slots = {
+							list: [
+								{
+									start: {
+										hour: null,
+										minute: null,
+									},
+									end: {
+										hour: null,
+										minute: null,
+									},
+								},
+							],
+						};
+					}
+
+					draft.slots.list[index][type][time] = value;
 				})
 			);
 		},
 		[updateWorkingHours]
 	);
-
-	const slotTimePicker = useMemo(() => {
-		return slots.map((slot, index) => (
-			<div
-				key={`${index}-${day}-${slot.start.hour}-${slot.start.minute}-${slot.end.hour}-${slot.end.minute}`}
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: '10px',
-				}}
-			>
-				<ScheduleTimePicker
-					{...{
-						day,
-						index,
-						values,
-						enabled,
-						updateWorkingHoursTime,
-						type: 'start',
-					}}
-				/>
-				—
-				<ScheduleTimePicker
-					{...{
-						day,
-						index,
-						values,
-						enabled,
-						updateWorkingHoursTime,
-						type: 'end',
-					}}
-				/>
-				{enabled && index > 0 && (
-					<Button
-						type="submit"
-						size="small"
-						variant="tertiary"
-						isDestructive={true}
-						onClick={() => {
-							removeWorkingHoursSlot(day, index);
-						}}
-					>
-						<Dashicon icon="remove" size={14} />
-					</Button>
-				)}
-				{enabled && index === slots.length - 1 && (
-					<Button
-						type="submit"
-						size="small"
-						variant="tertiary"
-						onClick={() => {
-							addWorkingHoursSlot(day);
-						}}
-					>
-						<Dashicon icon="plus-alt" size={15} />
-					</Button>
-				)}
-			</div>
-		));
-	}, [slots.length, enabled]);
 
 	return (
 		<div
@@ -132,6 +105,7 @@ export default function OpeningHoursDayOfWeek({
 								enabled,
 							});
 						}}
+						defaultChecked={true}
 					/>
 				</div>
 				<div
@@ -141,9 +115,61 @@ export default function OpeningHoursDayOfWeek({
 						gap: '5px',
 					}}
 				>
-					{slots && enabled ? (
-						slotTimePicker
-					) : (
+					{list && enabled && (
+						list.map((slot, index) => (
+							<div
+								key={`${index}-${day}-${slot.start.hour}-${slot.start.minute}-${slot.end.hour}-${slot.end.minute}`}
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: '10px',
+								}}
+							>
+								<ScheduleTimePicker
+									day={day}
+									index={index}
+									type="start"
+									timePickerPrecision={timePickerPrecision}
+									updateWorkingHoursTime={updateWorkingHoursTime}
+								/>
+								—
+								<ScheduleTimePicker
+									day={day}
+									index={index}
+									type="end"
+									timePickerPrecision={timePickerPrecision}
+									updateWorkingHoursTime={updateWorkingHoursTime}
+								/>
+								{enabled && index > 0 && (
+									<Button
+										type="submit"
+										size="small"
+										variant="tertiary"
+										isDestructive={true}
+										onClick={() => {
+											removeWorkingHoursSlot(day, index);
+											reset();
+										}}
+									>
+										<Dashicon icon="remove" size={14} />
+									</Button>
+								)}
+								{enabled && index === list.length - 1 && (
+									<Button
+										type="submit"
+										size="small"
+										variant="tertiary"
+										onClick={() => {
+											addWorkingHoursSlot(day);
+										}}
+									>
+										<Dashicon icon="plus-alt" size={15} />
+									</Button>
+								)}
+							</div>
+						))
+					)}
+					{!enabled && (
 						<div
 							style={{
 								height: '100%',
@@ -164,6 +190,33 @@ export default function OpeningHoursDayOfWeek({
 						className={styles.copyToAllDays}
 						onClick={() => {
 							copyWorkingHoursToAllDays(values);
+
+							const days = Object.keys(schedule) as Array<
+								keyof typeof schedule
+							>;
+							const slots = values.slots.list[0];
+
+							reset();
+
+
+							for (const day of days) {
+								setValue(
+									`${day}.slots.list.0.start.hour`,
+									slots.start.hour
+								);
+								setValue(
+									`${day}.slots.list.0.start.minute`,
+									slots.start.minute
+								);
+								setValue(
+									`${day}.slots.list.0.end.hour`,
+									slots.end.hour
+								);
+								setValue(
+									`${day}.slots.list.0.end.minute`,
+									slots.end.minute
+								);
+							}
 						}}
 					>
 						Copy to all days
