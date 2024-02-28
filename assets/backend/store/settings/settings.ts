@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { type State } from '../store';
-import type { Day, DayOpeningHours, SettingsState } from './settings.types';
+import type { Day, DayOpeningHours, SettingsSchedule, SettingsState } from './settings.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
@@ -14,12 +14,12 @@ function getDefaultOpeningHours(day: Day) {
 			list: [
 				{
 					start: {
-						hour: '10',
-						minute: '00',
+						hour: null,
+						minute:null,
 					},
 					end: {
-						hour: '18',
-						minute: '00',
+						hour: null,
+						minute: null,
 					},
 				},
 			],
@@ -142,16 +142,14 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 
 		case 'COPY_WORKING_HOURS_TO_ALL_DAYS':
 			return produce(state, (draft) => {
-				const createCopyFor = (day = action.data.day) => ({
-					...draft.schedule[day],
-					...{
-						...action.data,
-						day: day,
-					},
+				const monday = action.data;
+				const createCopyFor = (day: keyof SettingsSchedule) => ({
+					...monday,
+					day,
 				});
 
-				draft.schedule = {
-					...draft.schedule,
+				const schedule = {
+					monday: monday,
 					tuesday: createCopyFor('tuesday'),
 					wednesday: createCopyFor('wednesday'),
 					thursday: createCopyFor('thursday'),
@@ -159,6 +157,8 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 					saturday: createCopyFor('saturday'),
 					sunday: createCopyFor('sunday'),
 				};
+
+				draft.schedule = schedule;
 			});
 
 		default:

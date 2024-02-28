@@ -1,49 +1,61 @@
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { Text } from '~/backend/utils/experimental';
-import apiFetch from '~/backend/utils/fetch';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import resolve from '~/backend/utils/resolve';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { store } from '~/backend/store/store';
-import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Input from '~/backend/admin/components/FormField/Input/Input';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
+import useFillFormValues from '~/backend/hooks/useFillFormValues';
 
 type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
+	serviceName: string;
 };
 
+type Response = APIResponse<{
+	data: Fields;
+	message: string;
+}>;
+
 export default withForm(function AppointmentsSettings() {
-	const { setValue } = useFormContext();
 	const dispatch = useDispatch(store);
 
-	const { defaultLength, timePickerPrecision } = useSelect(() => {
+	const settings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 
-	useEffect(() => {
-		if (defaultLength !== undefined) {
-			setValue('defaultLength', defaultLength);
-		}
-	}, [defaultLength]);
-
-	useEffect(() => {
-		if (timePickerPrecision !== undefined) {
-			setValue('timePickerPrecision', timePickerPrecision);
-		}
-	}, [timePickerPrecision]);
+	useFillFormValues(settings);
 
 	const onSubmit = async (data: Fields) => {
-		await apiFetch({
-			path: 'settings/appointments',
-			method: 'PATCH',
-			data,
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: 'settings/appointments',
+				method: 'PATCH',
+				data,
+			});
+
+			return response;
 		});
 
-		dispatch.setPluginSettings({ appointments: data });
+		if (error) {
+			displayErrorToast(error?.message);
+			return;
+		}
+
+		if (response === null) {
+			displayErrorToast('Error saving settings');
+			return;
+		}
+
+		if (response.data.message) {
+			dispatch.setPluginSettings({ appointments: data });
+			displaySuccessToast(response.data.message);
+		}
 	};
 
 	return (
@@ -54,6 +66,16 @@ export default withForm(function AppointmentsSettings() {
 				</CardHeader>
 				<CardBody>
 					<FormFieldSet>
+						<Input
+							type="text"
+							name="serviceName"
+							label="Service Name"
+							placeholder="Appointment"
+							rules={{
+								required: true,
+							}}
+						/>
+
 						<Input
 							type="number"
 							name="defaultLength"
@@ -75,14 +97,13 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
-
-						<div className={formStyles.formActions}>
-							<Button type="submit" variant="primary">
-								Save changes
-							</Button>
-						</div>
 					</FormFieldSet>
 				</CardBody>
+				<CardFooter>
+					<Button type="submit" variant="primary">
+						Save changes
+					</Button>
+				</CardFooter>
 			</Card>
 		</HtmlForm>
 	);

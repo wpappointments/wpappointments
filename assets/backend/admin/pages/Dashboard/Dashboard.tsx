@@ -11,13 +11,11 @@ import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
 import Table from '~/backend/admin/components/Table/Table';
-import {
-	StateContextProvider,
-	useStateContext,
-} from '~/backend/admin/context/StateContext';
+import { StateContextProvider, useStateContext } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import { appointmentsApi } from '~/backend/api/appointments';
 import globalStyles from 'global.module.css';
+
 
 type Fields = {
 	status: Appointment['status'] | '';
@@ -39,7 +37,7 @@ export default function Dashboard() {
 					<CardHeader>
 						<div className={styles.upcomingTitleWrapper}>
 							<Text size="title">
-								{__('Upcoming Appointments', 'wpappointments')}
+								{__('All Appointments', 'wpappointments')}
 							</Text>
 						</div>
 						<Button
@@ -84,17 +82,22 @@ function DashboardAppointments({
 	});
 
 	const appointments = useSelect(() => {
-		return select(store).getUpcomingAppointments({
+		return select(store).getAppointments({
 			...filters,
-			posts_per_page: 30,
+			posts_per_page: -1,
 		});
-	}, [filters, getSelector('getUpcomingAppointments')]);
+	}, [filters, getSelector('getAppointments')]);
 
 	return (
 		<Table
 			items={appointments}
 			onEmptyStateButtonClick={() => {
-				openSlideOut({ id: 'add-appointment' });
+				openSlideOut({
+					id: 'appointment',
+					data: {
+						mode: 'create',
+					},
+				});
 			}}
 			onEdit={(data) => {
 				openSlideOut({

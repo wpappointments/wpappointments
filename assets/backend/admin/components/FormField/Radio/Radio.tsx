@@ -10,7 +10,7 @@ import {
 	RegisterOptions,
 	useFormContext,
 } from 'react-hook-form';
-import { ToggleControl } from '@wordpress/components';
+import { RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
@@ -18,12 +18,13 @@ import FormField from '../FormField';
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
 	label?: string;
+	placeholder?: string;
 	rules?: Omit<
 		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
-	defaultChecked: boolean;
-	onChange: (e: boolean) => void;
+	defaultValue?: PathValue<TFields, Path<TFields>>;
+	options: Array<{ label: string; value: string }>;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -31,12 +32,12 @@ export type FormFieldError<TFields extends FieldValues> =
 	| Merge<FieldError, FieldErrorsImpl<DeepRequired<TFields>[string]>>
 	| undefined;
 
-export default function Toggle<TFields extends FieldValues>({
-	label,
+export default function Radio<TFields extends FieldValues>({
 	name,
+	label,
 	rules,
-	defaultChecked,
-	onChange: onChangeProp,
+	defaultValue,
+	options,
 }: Props<TFields>) {
 	const {
 		control,
@@ -46,27 +47,23 @@ export default function Toggle<TFields extends FieldValues>({
 	const error: FormFieldError<TFields> = errors[name];
 
 	return (
-		<FormField>
+		<FormField style={{ marginTop: 10 }}>
 			<Controller
 				name={name}
 				control={control}
 				rules={rules}
-				defaultValue={defaultChecked as PathValue<TFields, Path<TFields>>}
-				render={({ field: { value, onChange, onBlur } }) => (
-					<ToggleControl
-						onBlur={onBlur}
-						onChange={(e) => {
-							onChange(e);
-							onChangeProp(e);
-						}}
-						checked={value}
-						label={label && `${label}${rules?.required ? '*' : ''}`}
-						id={name}
+				defaultValue={defaultValue}
+				render={({ field: { value, onChange } }) => (
+					<RadioControl
+						onChange={onChange}
+						selected={value}
+						label={`${label}${rules?.required ? '*' : ''}`}
+						options={options}
 					/>
 				)}
 			/>
 			{error && (
-				<p style={{ marginTop: 0, color: 'red' }}>
+				<p style={{ marginTop: 0, marginBottom: 0, color: 'red' }}>
 					{getGenericInputErrorMessage<TFields>(error)}
 				</p>
 			)}
