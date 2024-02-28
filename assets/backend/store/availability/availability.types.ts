@@ -14,9 +14,18 @@ export type AvailabilityState = {
 			timezone: string;
 		};
 		slots: {
-			available: boolean;
-			booked: boolean;
-			start: string;
-		}[];
+			slots: {
+				available: boolean;
+				dateString: string;
+				inSchedule: boolean;
+				timestamp: number;
+			}[];
+			trimmedSlots: {
+				available: boolean;
+				dateString: string;
+				inSchedule: boolean;
+				timestamp: number;
+			}[];
+		};
 	}[];
 };
