@@ -183,7 +183,7 @@ class Availability {
 
 		return array(
 			'slots'         => $slots,
-			'trimmed_slots' => $trimmed_slots,
+			'trimmedSlots'  => $trimmed_slots,
 		);
 	}
 
