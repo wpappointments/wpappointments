@@ -239,17 +239,17 @@ class Availability {
 					$timezone
 				);
 
-				$slots         = $day_availability['slots'];
-				$trimmed_slots = $day_availability['trimmed_slots'];
+				$slots         = $day_availability['slots'] ?? array();
+				$trimmed_slots = $day_availability['trimmedSlots'];
 
 				$slots = $trim ? $trimmed_slots : $slots;
 
-				$available_slots = array_filter(
+				$available_slots = $slots ? array_filter(
 					$slots,
 					function ( $slot ) {
 						return true === $slot->available;
 					}
-				);
+				) : array();
 
 				$week_availability[] = (object) array(
 					'date'           => $day_date->format( 'c' ),
