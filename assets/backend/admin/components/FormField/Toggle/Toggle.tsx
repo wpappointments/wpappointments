@@ -6,6 +6,7 @@ import {
 	FieldValues,
 	Merge,
 	Path,
+	PathValue,
 	RegisterOptions,
 	useFormContext,
 } from 'react-hook-form';
@@ -21,6 +22,7 @@ type Props<TFields extends FieldValues> = {
 		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
+	defaultChecked: boolean;
 	onChange: (e: boolean) => void;
 };
 
@@ -33,6 +35,7 @@ export default function Toggle<TFields extends FieldValues>({
 	label,
 	name,
 	rules,
+	defaultChecked,
 	onChange: onChangeProp,
 }: Props<TFields>) {
 	const {
@@ -48,6 +51,7 @@ export default function Toggle<TFields extends FieldValues>({
 				name={name}
 				control={control}
 				rules={rules}
+				defaultValue={defaultChecked as PathValue<TFields, Path<TFields>>}
 				render={({ field: { value, onChange, onBlur } }) => (
 					<ToggleControl
 						onBlur={onBlur}

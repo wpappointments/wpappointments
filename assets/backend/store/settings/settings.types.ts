@@ -30,16 +30,16 @@ export type SettingsAppointments = {
 	serviceName?: string;
 };
 
-export type Day = keyof SettingsState['schedule'];
+export type Day = keyof SettingsSchedule;
 
 export type OpeningHoursSlot = {
 	start: {
-		hour: string;
-		minute: string;
+		hour: string | null;
+		minute: string | null;
 	};
 	end: {
-		hour: string;
-		minute: string;
+		hour: string | null;
+		minute: string | null;
 	};
 };
 

@@ -223,7 +223,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 	);
 }
 
-function createHourOptions(
+export function createHourOptions(
 	availableHours: Set<string> | undefined,
 	clockType: 12 | 24 = 24,
 	minHour = 0
@@ -267,7 +267,7 @@ function createHourOptions(
 	return hours;
 }
 
-function createMinuteOptions(
+export function createMinuteOptions(
 	availableMinutes: Map<string, string[]> | undefined,
 	currentHour: string,
 	precision: number = 30,

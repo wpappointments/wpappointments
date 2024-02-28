@@ -103,7 +103,7 @@ export default function BookingFlowCalendar() {
 											threshold = 'Low';
 										}
 
-										if (percentage < 15) {
+										if (percentage < 15 || totalAvailable === 1) {
 											threshold = 'Limited';
 										}
 
