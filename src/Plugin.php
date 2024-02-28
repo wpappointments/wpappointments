@@ -73,6 +73,7 @@ class Plugin extends Core\Singleton {
 	 */
 	public function on_plugin_deactivation() {
 		$this->delete_schedule_post();
+		delete_option( 'wpappointments_default_schedule_id' );
 	}
 
 	private function delete_schedule_post() {

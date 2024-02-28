@@ -3,6 +3,7 @@ declare const styles:
   & Readonly<{ "timePicker": string }>
   & Readonly<{ "timePicker": string }>
   & Readonly<{ "timePicker": string }>
+  & Readonly<{ "timePicker": string }>
   & Readonly<{ "timePickerControl": string }>
   & Readonly<{ "timePickerControl": string }>
   & Readonly<{ "timePickerControl": string }>

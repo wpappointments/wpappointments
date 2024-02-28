@@ -52,3 +52,7 @@
 .time-picker :global( .components-input-control__backdrop ) {
 	border: none !important;
 }
+
+.time-picker :global( .components-base-control__field ) {
+	margin-bottom: 0;
+}

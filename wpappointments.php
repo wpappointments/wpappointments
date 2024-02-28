@@ -64,6 +64,10 @@ add_action(
 				'supports' => array( 'custom-fields' ),
 			)
 		);
+		register_post_type('wpa_schedule', array(
+			'public' => true,
+			'supports' => array('custom-fields'),
+		));
 	}
 );
 
