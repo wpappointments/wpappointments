@@ -217,8 +217,8 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	let hourHeadings = [];
 
-	if (month[0]?.slots) {
-		for (const slot of month[0].slots) {
+	if (month[0]?.slots?.slots) {
+		for (const slot of month[0].slots.slots) {
 			hourHeadings.push(formatTime24HourFromDate(new Date(slot.start)));
 		}
 	}
@@ -377,7 +377,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 						{month.map((day) => {
 							return (
 								<div className={styles.row} key={day.date.date}>
-									{[...day.slots].map((slot, index) => {
+									{[...day.slots.slots].map((slot, index) => {
 										return (
 											<div
 												className={cn({
