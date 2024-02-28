@@ -11,7 +11,6 @@ import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
 import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
 
-
 export default function OpeningHoursDayOfWeek({
 	values,
 	showCopyToAllDays = false,

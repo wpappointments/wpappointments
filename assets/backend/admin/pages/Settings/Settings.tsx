@@ -6,6 +6,7 @@ import ScheduleSettings from './Schedule/Schedule';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
+
 type Tab = {
 	name: string;
 	title: string;
@@ -24,21 +25,21 @@ const tabs = new Map<string, Tab>([
 		},
 	],
 	[
-		'schedule',
-		{
-			name: 'schedule',
-			title: 'Schedule',
-			className: 'tab-schedule',
-			component: <ScheduleSettings />,
-		},
-	],
-	[
 		'appoinments',
 		{
 			name: 'appoinments',
 			title: 'Appointments',
 			className: 'tab-appointments',
 			component: <AppointmentsSettings />,
+		},
+	],
+	[
+		'schedule',
+		{
+			name: 'schedule',
+			title: 'Schedule',
+			className: 'tab-schedule',
+			component: <ScheduleSettings />,
 		},
 	],
 ]);
