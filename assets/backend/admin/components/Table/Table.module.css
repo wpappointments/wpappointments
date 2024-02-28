@@ -6,9 +6,10 @@
 
 .table th,
 .table td {
-	padding: 8px 16px;
+	padding: 12px 16px;
 	border: 1px solid #e5e5e5;
 	text-align: left;
+	vertical-align: top;
 }
 
 .empty {
@@ -24,4 +25,32 @@
 	vertical-align: middle;
 	fill: currentColor;
 	overflow: hidden;
+}
+
+.status {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.pending {
+	background-color: #eaeaea;
+	color: #2e353b;
+}
+
+.confirmed {
+	background-color: #c0feb5;
+	color: #147602;
+}
+
+.cancelled {
+	background-color: #ffb8bf;
+	color: #7a0808;
+}
+
+.noshow {
+	background-color: #ffeaac;
+	color: #933600;
 }

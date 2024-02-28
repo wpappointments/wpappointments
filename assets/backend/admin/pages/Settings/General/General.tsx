@@ -1,8 +1,15 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+} from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { getSettings } from '@wordpress/date';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+import { format } from 'date-fns';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
@@ -12,6 +19,7 @@ import { store } from '~/backend/store/store';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Checkbox from '~/backend/admin/components/FormField/Checkbox/Checkbox';
 import Input from '~/backend/admin/components/FormField/Input/Input';
+import Radio from '~/backend/admin/components/FormField/Radio/Radio';
 import Select from '~/backend/admin/components/FormField/Select/Select';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
@@ -78,6 +86,8 @@ function GeneralSettings() {
 function FormFields() {
 	const { watch } = useFormContext();
 
+	const dateFormat = watch('dateFormat');
+	const timeFormat = watch('timeFormat');
 	const timezoneSiteDefault = watch('timezoneSiteDefault');
 
 	return (
@@ -122,24 +132,10 @@ function FormFields() {
 				</FormFieldSet>
 			</CardBody>
 			<CardHeader style={{ borderTop: '1px solid #eee', marginTop: 15 }}>
-				<Text size="title">General</Text>
+				<Text size="title">{__('Calendar', 'wpappointments')}</Text>
 			</CardHeader>
 			<CardBody>
-				<FormFieldSet style={{ marginBottom: 15 }}>
-					<Select
-						name="clockType"
-						label="Clock type"
-						rules={{
-							required: true,
-						}}
-						options={[
-							{ label: '12 hours', value: '12' },
-							{ label: '24 hours', value: '24' },
-						]}
-						defaultValue="24"
-					/>
-				</FormFieldSet>
-				<FormFieldSet style={{ marginBottom: 15 }}>
+				<FormFieldSet>
 					<Select
 						name="startOfWeek"
 						label="Week starts on"
@@ -179,7 +175,28 @@ function FormFields() {
 						defaultValue={getSettings().l10n.startOfWeek.toString()}
 					/>
 				</FormFieldSet>
-				<FormFieldSet>
+			</CardBody>
+			<CardHeader style={{ borderTop: '1px solid #eee', marginTop: 15 }}>
+				<Text size="title">
+					{__('Date and time', 'wpappointments')}
+				</Text>
+			</CardHeader>
+			<CardBody>
+				<FormFieldSet style={{ marginBottom: 15 }}>
+					<Select
+						name="clockType"
+						label="Clock type"
+						rules={{
+							required: true,
+						}}
+						options={[
+							{ label: '12 hours', value: '12' },
+							{ label: '24 hours', value: '24' },
+						]}
+						defaultValue="24"
+					/>
+				</FormFieldSet>
+				<FormFieldSet style={{ marginBottom: 25 }}>
 					<Checkbox
 						name="timezoneSiteDefault"
 						label="Use site default timezone"
@@ -244,6 +261,127 @@ function FormFields() {
 						</small>
 					</div>
 				</FormFieldSet>
+				<FormFieldSet style={{ marginBottom: 25 }}>
+					<div>
+						<div style={{ marginBottom: 15 }}>
+							<Radio
+								name="dateFormat"
+								label={__('Date format', 'wpappointments')}
+								defaultValue="F j, Y"
+								options={[
+									{
+										label: format(
+											new Date(),
+											'MMMM d, yyyy'
+										),
+										value: 'F j, Y',
+									},
+									{
+										label: format(
+											new Date(),
+											'yyyy-MM-dd'
+										),
+										value: 'Y-m-d'
+									},
+									{
+										label: format(
+											new Date(),
+											'MM/dd/yyyy'
+										),
+										value: 'm/d/Y'
+									},
+									{
+										label: format(
+											new Date(),
+											'dd/MM/yyyy'
+										),
+										value: 'd/m/Y'
+									},
+									{ label: 'Custom', value: 'custom' },
+								]}
+							/>
+						</div>
+						{dateFormat === 'custom' && (
+							<Input
+								name="customDateFormat"
+								label={__(
+									'Custom date format',
+									'wpappointments'
+								)}
+								placeholder="Eg. Y-m-d"
+								rules={{
+									required: true,
+								}}
+							/>
+						)}
+						{dateFormat &&
+							dateFormatMap.get(dateFormat) &&
+							sprintf(
+								__('Preview: %s', 'wpappointments'),
+								format(
+									new Date(),
+									dateFormatMap.get(dateFormat) || 'MMMM d, yyyy'
+								)
+							)}
+					</div>
+					{__(
+						'Default date format is derived from WordPress site settings',
+						'wpappointments'
+					)}
+				</FormFieldSet>
+				<FormFieldSet style={{ marginBottom: 25 }}>
+					<div>
+						<div style={{ marginBottom: 15 }}>
+							<Radio
+								name="timeFormat"
+								label={__('Time format', 'wpappointments')}
+								defaultValue="g:i a"
+								options={[
+									{ label: format(new Date(), 'h:mm aaa'), value: 'g:i a' },
+									{ label: format(new Date(), 'h:mm aa'), value: 'g:i A' },
+									{ label: format(new Date(), 'HH:mm'), value: 'H:i' },
+									{ label: 'Custom', value: 'custom' },
+								]}
+							/>
+						</div>
+						{timeFormat === 'custom' && (
+							<Input
+								name="customDateFormat"
+								label={__(
+									'Custom time format',
+									'wpappointments'
+								)}
+								placeholder="Eg. g:i a"
+								rules={{
+									required: true,
+								}}
+							/>
+						)}
+						{timeFormat &&
+							timeFormatMap.get(timeFormat) &&
+							sprintf(
+								__('Preview: %s', 'wpappointments'),
+								format(
+									new Date(),
+									timeFormatMap.get(timeFormat || '') ||
+										'g:i a'
+								)
+							)}
+					</div>
+					{__(
+						'Default time format is derived from WordPress site settings',
+						'wpappointments'
+					)}
+					<a
+						href="https://wordpress.org/documentation/article/customize-date-and-time-format/"
+						target="_blank"
+					>
+						{__(
+							'Documentation on date and time formatting.',
+							'wpappointments'
+						)}
+					</a>
+				</FormFieldSet>
 			</CardBody>
 			<CardFooter>
 				<Button type="submit" variant="primary">
@@ -253,5 +391,18 @@ function FormFields() {
 		</Card>
 	);
 }
+
+export const dateFormatMap = new Map<string, string>([
+	['F j, Y', 'MMMM d, yyyy'],
+	['Y-m-d', 'yyyy-MM-dd'],
+	['m/d/Y', 'MM/dd/yyyy'],
+	['d/m/Y', 'dd/MM/yyyy'],
+]);
+
+export const timeFormatMap = new Map<string, string>([
+	['g:i aaa', 'h:mm a'],
+	['g:i aa', 'h:mm A'],
+	['H:i', 'HH:mm'],
+]);
 
 export default withForm(GeneralSettings);
