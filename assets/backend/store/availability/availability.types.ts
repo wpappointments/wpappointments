@@ -16,13 +16,15 @@ export type AvailabilityState = {
 		slots: {
 			slots: {
 				available: boolean;
-				booked: boolean;
-				start: string;
+				dateString: string;
+				inSchedule: boolean;
+				timestamp: number;
 			}[];
 			trimmedSlots: {
 				available: boolean;
-				booked: boolean;
-				start: string;
+				dateString: string;
+				inSchedule: boolean;
+				timestamp: number;
 			}[];
 		};
 	}[];

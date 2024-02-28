@@ -6,16 +6,14 @@ import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
-import {
-	formatTime24HourFromDate,
-	formatTimeForPicker,
-} from '~/backend/utils/format';
+import { formatTime24HourFromDate, formatTimeForPicker } from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
+
 
 type Fields = {
 	timeHourStart: string;
@@ -219,7 +217,9 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	if (month[0]?.slots?.slots) {
 		for (const slot of month[0].slots.slots) {
-			hourHeadings.push(formatTime24HourFromDate(new Date(slot.start)));
+			hourHeadings.push(
+				formatTime24HourFromDate(new Date(slot.dateString))
+			);
 		}
 	}
 
@@ -385,26 +385,26 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 													[styles.itemAvailable]:
 														slot.available,
 													[styles.itemBooked]:
-														slot.booked,
+														slot.inSchedule && !slot.available && slot.timestamp >= Date.now(),
 													[styles.itemSelected]:
 														false,
 												})}
 												key={
-													slot.start +
+													slot.dateString +
 													'-cell-' +
 													index
 												}
 												data-time={formatTimeRangeFromSlotDate(
-													slot.start
+													slot.dateString
 												)}
 												onClick={() => {
 													const date = new Date(
-														slot.start
+														slot.dateString
 													);
 
 													setValue(
 														'date',
-														slot.start
+														slot.dateString
 													);
 													setValue(
 														'timeHourStart',
