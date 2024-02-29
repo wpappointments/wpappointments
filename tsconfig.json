@@ -22,8 +22,10 @@
 			"~/backend/*": [ "./assets/backend/*" ],
 			"~/frontend/*": [ "./assets/frontend/*" ],
 			"~/blocks/*": [ "./assets/gutenberg/blocks/*" ],
+			"~/images/*": [ "./assets/images/*" ],
 			"global.module.css": [ "./assets/styles/global.module.css" ]
 		}
 	},
+	"include": [ "assets/**/*", "index.d.ts", "global.d.ts", "react.d.ts" ],
 	"exclude": [ "node_modules", "build", "vendor" ]
 }

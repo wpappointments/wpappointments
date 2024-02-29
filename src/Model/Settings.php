@@ -120,8 +120,8 @@ class Settings {
 		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
 		$settings['schedule'] = $schedule;
 
-		$service = $this->get_default_service( get_option( 'wpappointments_defaultServiceId' ) );
-		$settings['appointments']['service'] = $service;
+		$service                                 = $this->get_default_service( get_option( 'wpappointments_defaultServiceId' ) );
+		$settings['appointments']['service']     = $service;
 		$settings['appointments']['serviceName'] = $service->post_title;
 
 		return $settings;
@@ -156,9 +156,9 @@ class Settings {
 
 	/**
 	 * Get default service settings
-	 * 
+	 *
 	 * @param string $service_post_id Default service post ID.
-	 * 
+	 *
 	 * @return null|\WP_Post
 	 */
 	public function get_default_service( $service_post_id ) {
