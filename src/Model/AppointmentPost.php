@@ -61,6 +61,7 @@ class AppointmentPost {
 					'timestamp'   => $meta['timestamp'][0],
 					'customer_id' => $meta['customer_id'][0],
 					'customer'    => $meta['customer'][0],
+					'duration'    => $meta['duration'][0],
 				)
 			);
 		}
@@ -153,6 +154,7 @@ class AppointmentPost {
 					'timestamp'   => $meta['timestamp'][0],
 					'customer_id' => $meta['customer_id'][0],
 					'customer'    => $meta['customer'][0],
+					'duration'    => $meta['duration'][0],
 				)
 			);
 		}
