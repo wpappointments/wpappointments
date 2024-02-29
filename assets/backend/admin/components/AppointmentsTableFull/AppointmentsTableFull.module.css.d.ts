@@ -2,6 +2,7 @@ declare const styles:
   & Readonly<{ "table": string }>
   & Readonly<{ "table": string }>
   & Readonly<{ "table": string }>
+  & Readonly<{ "table": string }>
   & Readonly<{ "empty": string }>
   & Readonly<{ "emptyIcon": string }>
   & Readonly<{ "status": string }>
@@ -13,4 +14,4 @@ declare const styles:
   & Readonly<{ "actionsTableCell": string }>
 ;
 export default styles;
-//# sourceMappingURL=./Table.module.css.d.ts.map
+//# sourceMappingURL=./AppointmentsTableFull.module.css.d.ts.map
