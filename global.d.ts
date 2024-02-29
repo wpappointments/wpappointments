@@ -1,4 +1,5 @@
 import { ReactDOM } from 'react';
+import 'react';
 import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
 import 'little-state-machine';
@@ -37,5 +38,11 @@ declare module 'little-state-machine' {
 	interface GlobalState {
 		currentStep: number;
 		datetime: string;
+	}
+}
+
+declare module 'react' {
+	interface CSSProperties {
+		[ key: `--${ string }` ]: string | number;
 	}
 }
