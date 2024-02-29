@@ -5,7 +5,7 @@ import { Appointment } from '~/backend/types';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
-import { getPeriodFromTimestamp, getStrictPeriodFromTimestamp } from './utils';
+import { getStrictPeriodFromTimestamp } from './utils';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;

@@ -7,10 +7,11 @@ import useSlideout from '~/backend/hooks/useSlideout';
 import { Slideout } from '~/backend/store/slideout/slideout.types';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
+import AppointmentsTableMinimal from '../../components/AppointmentsTableMinimal/AppointmentsTableMinimal';
 import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
-import Table from '~/backend/admin/components/Table/Table';
+import Table from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
 import {
 	StateContextProvider,
 	useStateContext,
@@ -36,14 +37,10 @@ export default function Dashboard() {
 		<StateContextProvider>
 			<LayoutDefault title="Dashboard">
 				<div className={styles.header}>
-					<div className={styles.stats}>
-						<DashboardStats />
-					</div>
-					<div className={styles.upcoming}>
-						<UpcomingAppointments openSlideOut={openSlideOut} />
-					</div>
+					<DashboardStats />
+					<UpcomingAppointments openSlideOut={openSlideOut} />
 				</div>
-				<div className={styles.allAppointments}>
+				<div>
 					<Card className={globalStyles.card}>
 						<CardHeader>
 							<div className={styles.upcomingTitleWrapper}>
@@ -160,10 +157,9 @@ function UpcomingAppointments({
 					backgroundColor: '#ececec',
 					height: 215,
 					overflow: 'auto',
-					padding: '10px 20px',
 				}}
 			>
-				<Table
+				<AppointmentsTableMinimal
 					items={appointments}
 					onView={(data) => {
 						openSlideOut({
@@ -173,9 +169,6 @@ function UpcomingAppointments({
 							},
 						});
 					}}
-					hideActions
-					hideHeader
-					hideEmptyStateButton
 					emptyStateMessage={__(
 						'No appointments in the next 24 hours',
 						'wpappointments'
