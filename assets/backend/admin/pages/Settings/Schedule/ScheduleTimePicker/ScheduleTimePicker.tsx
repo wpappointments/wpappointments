@@ -1,6 +1,9 @@
 import { useSelect, select } from '@wordpress/data';
 import { addMinutes, format } from 'date-fns';
-import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
+import {
+	DayOpeningHours,
+	SettingsSchedule,
+} from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 import Select from '~/backend/admin/components/FormField/Select/Select';
@@ -47,8 +50,13 @@ export default function ScheduleTimePicker({
 							time: 'hour',
 						});
 					}}
-					options={createHourOptions(type, schedule[day].slots.list[index].start.hour)}
-					defaultValue={schedule[day].slots.list[index][type].hour ?? '00'}
+					options={createHourOptions(
+						type,
+						schedule[day].slots.list[index].start.hour
+					)}
+					defaultValue={
+						schedule[day].slots.list[index][type].hour ?? '00'
+					}
 					noArrow
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
@@ -64,8 +72,12 @@ export default function ScheduleTimePicker({
 							time: 'minute',
 						});
 					}}
-					options={createMinuteOptions(appointments.timePickerPrecision)}
-					defaultValue={schedule[day].slots.list[index][type].minute ?? '00'}
+					options={createMinuteOptions(
+						appointments.timePickerPrecision
+					)}
+					defaultValue={
+						schedule[day].slots.list[index][type].minute ?? '00'
+					}
 					noArrow
 				/>
 			</div>

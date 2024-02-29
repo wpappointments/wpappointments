@@ -5,7 +5,7 @@ import { Appointment } from '~/backend/types';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
-import { getPeriodFromTimestamp } from './utils';
+import { getPeriodFromTimestamp, getStrictPeriodFromTimestamp } from './utils';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
@@ -130,20 +130,29 @@ export const selectors = {
 	getUpcomingAppointments(state: State, filters?: Query) {
 		return state.appointments.appointments.filter(
 			(appointment: Appointment) => {
-				if (!filters) {
-					return true;
+				const { status, period } = filters || {};
+
+				let statuses = [];
+
+				if (typeof status === 'string') {
+					statuses = [status];
+				} else if (Array.isArray(status)) {
+					statuses = status;
 				}
 
-				const { status, period } = filters;
-				const periods = getPeriodFromTimestamp(
-					appointment.timestamp.toString()
+				const periodCompare = getStrictPeriodFromTimestamp(
+					appointment.timestamp
 				);
 
-				if (status && appointment.status !== status) {
+				if (
+					status &&
+					appointment.status &&
+					!statuses.includes(appointment.status)
+				) {
 					return false;
 				}
 
-				if (period && !periods.includes(period)) {
+				if (period && periodCompare !== period) {
 					return false;
 				}
 
@@ -183,24 +192,5 @@ export const resolvers = {
 		const { data } = response;
 		const { appointments } = data;
 		return actions.setAppointments(appointments);
-	},
-	*getUpcomingAppointments(
-		query: Query
-	): Generator<
-		FetchFromApiActionReturn,
-		{ type: string; appointments: Appointment[] },
-		APIResponse<{ appointments: Appointment[] }>
-	> {
-		const response = yield baseActions.fetchFromAPI(
-			addQueryArgs('appointment/upcoming', {
-				query,
-			})
-		);
-		const { data } = response;
-		const { appointments } = data;
-		return actions.setUpcomingAppointments(
-			JSON.stringify(query),
-			appointments
-		);
 	},
 };

@@ -6,6 +6,7 @@ module.exports = {
 		'~/backend/(.*)$': '<rootDir>/assets/backend/$1',
 		'~/frontend/(.*)$': '<rootDir>/assets/backend/$1',
 		'~/blocks/(.*)$': '<rootDir>/assets/gutenberg/blocks/$1',
+		'~/images/(.*)$': '<rootDir>/assets/images/$1',
 		'global.module.css': '<rootDir>/assets/styles/global.module.css',
 	},
 };

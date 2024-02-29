@@ -1,6 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import {
+	Icon,
+	info,
+	edit as editIcon,
+	cancelCircleFilled,
+	trash,
+} from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -9,15 +16,18 @@ import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetai
 import styles from './Table.module.css';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
-
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	onEdit?: (appointment: Appointment) => void;
 	onView?: (appointment: Appointment) => void;
 	onCancel?: (appointmentId: number) => void;
-	deleteAppointment: AppointmentsApi['deleteAppointment'];
-	cancelAppointment: AppointmentsApi['deleteAppointment'];
+	deleteAppointment?: AppointmentsApi['deleteAppointment'];
+	cancelAppointment?: AppointmentsApi['deleteAppointment'];
+	hideActions?: boolean;
+	hideHeader?: boolean;
+	hideEmptyStateButton?: boolean;
+	emptyStateMessage?: string;
 };
 
 export default function Table({
@@ -27,6 +37,10 @@ export default function Table({
 	onView,
 	cancelAppointment,
 	deleteAppointment,
+	hideActions = false,
+	hideHeader = false,
+	hideEmptyStateButton = false,
+	emptyStateMessage,
 }: Props) {
 	const [appointmentModal, setAppointmentModal] = useState<{
 		id: number;
@@ -36,18 +50,31 @@ export default function Table({
 	if (!items || items.length === 0) {
 		return (
 			<div className={styles.empty}>
-				<svg
-					className={styles.emptyIcon}
-					viewBox="0 0 1024 1024"
-					version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path d="M839.2 101.3H184.9L65.3 539.5 64 922.7h896V549.3l-120.8-448zM241.9 176h540.3L884 549.3H678.7l-74.7 112H420l-74.7-112H140.1L241.9 176z" />
-				</svg>
-				<p>{__('You have no appointments yet', 'wpappointments')}</p>
-				<Button variant="primary" onClick={onEmptyStateButtonClick}>
-					{__('Create New Appointment', 'wpappointments')}
-				</Button>
+				<div>
+					<svg
+						className={styles.emptyIcon}
+						viewBox="0 0 1024 1024"
+						version="1.1"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path d="M839.2 101.3H184.9L65.3 539.5 64 922.7h896V549.3l-120.8-448zM241.9 176h540.3L884 549.3H678.7l-74.7 112H420l-74.7-112H140.1L241.9 176z" />
+					</svg>
+					<p>
+						{emptyStateMessage ||
+							__(
+								'You have no appointments yet',
+								'wpappointments'
+							)}
+					</p>
+					{!hideEmptyStateButton && (
+						<Button
+							variant="primary"
+							onClick={onEmptyStateButtonClick}
+						>
+							{__('Create New Appointment', 'wpappointments')}
+						</Button>
+					)}
+				</div>
 			</div>
 		);
 	}
@@ -55,15 +82,17 @@ export default function Table({
 	return (
 		<>
 			<table className={styles.table}>
-				<thead>
-					<tr>
-						<th>{__('Title', 'wpappointments')}</th>
-						<th>{__('Date', 'wpappointments')}</th>
-						<th>{__('Time', 'wpappointments')}</th>
-						<th>{__('Status', 'wpappointments')}</th>
-						<th></th>
-					</tr>
-				</thead>
+				{!hideHeader && (
+					<thead>
+						<tr>
+							<th>{__('Title', 'wpappointments')}</th>
+							<th>{__('Date', 'wpappointments')}</th>
+							<th>{__('Time', 'wpappointments')}</th>
+							<th>{__('Status', 'wpappointments')}</th>
+							{!hideActions && <th style={{ width: 80 }}></th>}
+						</tr>
+					</thead>
+				)}
 				<tbody>
 					{items.map((row) => (
 						<TableRow
@@ -72,6 +101,7 @@ export default function Table({
 							edit={onEdit}
 							view={onView}
 							setAppointmentModal={setAppointmentModal}
+							hideActions={hideActions}
 						/>
 					))}
 				</tbody>
@@ -80,10 +110,18 @@ export default function Table({
 				<AppointmentDetailsModals
 					status={appointmentModal.status}
 					cancelAppointment={async () => {
+						if (!cancelAppointment) {
+							return;
+						}
+
 						await cancelAppointment(appointmentModal.id);
 						setAppointmentModal(null);
 					}}
 					deleteAppointment={async () => {
+						if (!deleteAppointment) {
+							return;
+						}
+
 						await deleteAppointment(appointmentModal.id);
 						setAppointmentModal(null);
 					}}
@@ -100,10 +138,13 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
-	setAppointmentModal: Dispatch<SetStateAction<{
-		id: number;
-		status: Appointment['status'];
-	} | null>>;
+	setAppointmentModal: Dispatch<
+		SetStateAction<{
+			id: number;
+			status: Appointment['status'];
+		} | null>
+	>;
+	hideActions?: boolean;
 };
 
 function TableRow({
@@ -111,6 +152,7 @@ function TableRow({
 	edit,
 	view,
 	setAppointmentModal,
+	hideActions = false,
 }: TableRowProps) {
 	const { id, service, timestamp, duration } = row;
 	const dateStart = fromUnixTime(timestamp);
@@ -140,6 +182,7 @@ function TableRow({
 					onClick={() => {
 						view && view(row);
 					}}
+					style={{ marginBottom: '5px' }}
 				>
 					<strong>{service}</strong>
 				</Button>
@@ -162,50 +205,53 @@ function TableRow({
 					{row.status}
 				</span>
 			</td>
-			<td>
-				<Button
-					variant="tertiary"
-					size="small"
-					onClick={() => {
-						view && view(row);
-					}}
-				>
-					{__('View', 'wpappointments')}
-				</Button>
-				<Button
-					variant="tertiary"
-					size="small"
-					onClick={() => {
-						edit && edit(row);
-					}}
-				>
-					{__('Edit', 'wpappointments')}
-				</Button>
-				{(row.status === 'confirmed' || row.status === 'pending') && (
+			{!hideActions && (
+				<td className={styles.actionsTableCell}>
 					<Button
 						variant="tertiary"
 						size="small"
-						isDestructive
 						onClick={() => {
-							setAppointmentModal({ id, status: row.status });
+							view && view(row);
 						}}
-					>
-						{__('Cancel', 'wpappointments')}
-					</Button>
-				)}
-				{row.status === 'cancelled' && (
+						icon={<Icon icon={info} />}
+						label={__('View appointment details', 'wpappointments')}
+					/>
 					<Button
 						variant="tertiary"
 						size="small"
-						isDestructive
 						onClick={() => {
-							setAppointmentModal({ id, status: row.status });
+							edit && edit(row);
 						}}
-					>
-						{__('Delete', 'wpappointments')}
-					</Button>
-				)}
-			</td>
+						icon={<Icon icon={editIcon} />}
+						label={__('Edit appointment details', 'wpappointments')}
+					/>
+					{(row.status === 'confirmed' ||
+						row.status === 'pending') && (
+						<Button
+							variant="tertiary"
+							size="small"
+							isDestructive
+							onClick={() => {
+								setAppointmentModal({ id, status: row.status });
+							}}
+							icon={<Icon icon={cancelCircleFilled} />}
+							label={__('Cancel appointment', 'wpappointments')}
+						/>
+					)}
+					{row.status === 'cancelled' && (
+						<Button
+							variant="tertiary"
+							size="small"
+							isDestructive
+							onClick={() => {
+								setAppointmentModal({ id, status: row.status });
+							}}
+							icon={<Icon icon={trash} />}
+							label={__('Delete appointment', 'wpappointments')}
+						/>
+					)}
+				</td>
+			)}
 		</tr>
 	);
 }

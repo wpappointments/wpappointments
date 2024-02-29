@@ -77,23 +77,23 @@ test(
 
 		expect( $result )->toBeArray();
 		expect( $result )->toHaveCount( 48 );
-		expect( $result[0]->dateString )->toBe( '2024-03-01T00:00:00+00:00' );
-		expect( $result[0]->available )->toBeFalse();
-		expect( $result[17]->dateString )->toBe( '2024-03-01T08:30:00+00:00' );
-		expect( $result[17]->available )->toBeFalse();
-		expect( $result[18]->dateString )->toBe( '2024-03-01T09:00:00+00:00' );
-		expect( $result[18]->available )->toBeTrue();
-		expect( $result[33]->dateString )->toBe( '2024-03-01T16:30:00+00:00' );
-		expect( $result[33]->available )->toBeTrue();
-		expect( $result[34]->dateString )->toBe( '2024-03-01T17:00:00+00:00' );
-		expect( $result[34]->available )->toBeFalse();
-		expect( $result[47]->dateString )->toBe( '2024-03-01T23:30:00+00:00' );
-		expect( $result[47]->available )->toBeFalse();
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T00:00:00+00:00' );
+		expect( $result[0]['available'] )->toBeFalse();
+		expect( $result[17]['dateString'] )->toBe( '2024-03-01T08:30:00+00:00' );
+		expect( $result[17]['available'] )->toBeFalse();
+		expect( $result[18]['dateString'] )->toBe( '2024-03-01T09:00:00+00:00' );
+		expect( $result[18]['available'] )->toBeTrue();
+		expect( $result[33]['dateString'] )->toBe( '2024-03-01T16:30:00+00:00' );
+		expect( $result[33]['available'] )->toBeTrue();
+		expect( $result[34]['dateString'] )->toBe( '2024-03-01T17:00:00+00:00' );
+		expect( $result[34]['available'] )->toBeFalse();
+		expect( $result[47]['dateString'] )->toBe( '2024-03-01T23:30:00+00:00' );
+		expect( $result[47]['available'] )->toBeFalse();
 
 		$available = array_filter(
 			$result,
 			function ( $slot ) {
-				return true === $slot->available;
+				return true === $slot['available'];
 			}
 		);
 
@@ -113,23 +113,23 @@ test(
 
 		expect( $result )->toBeArray();
 		expect( $result )->toHaveCount( 48 );
-		expect( $result[0]->dateString )->toBe( '2024-03-01T00:00:00+01:00' );
-		expect( $result[0]->available )->toBeFalse();
-		expect( $result[19]->dateString )->toBe( '2024-03-01T09:30:00+01:00' );
-		expect( $result[19]->available )->toBeFalse();
-		expect( $result[20]->dateString )->toBe( '2024-03-01T10:00:00+01:00' );
-		expect( $result[20]->available )->toBeTrue();
-		expect( $result[35]->dateString )->toBe( '2024-03-01T17:30:00+01:00' );
-		expect( $result[35]->available )->toBeTrue();
-		expect( $result[36]->dateString )->toBe( '2024-03-01T18:00:00+01:00' );
-		expect( $result[36]->available )->toBeFalse();
-		expect( $result[47]->dateString )->toBe( '2024-03-01T23:30:00+01:00' );
-		expect( $result[47]->available )->toBeFalse();
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T00:00:00+01:00' );
+		expect( $result[0]['available'] )->toBeFalse();
+		expect( $result[19]['dateString'] )->toBe( '2024-03-01T09:30:00+01:00' );
+		expect( $result[19]['available'] )->toBeFalse();
+		expect( $result[20]['dateString'] )->toBe( '2024-03-01T10:00:00+01:00' );
+		expect( $result[20]['available'] )->toBeTrue();
+		expect( $result[35]['dateString'] )->toBe( '2024-03-01T17:30:00+01:00' );
+		expect( $result[35]['available'] )->toBeTrue();
+		expect( $result[36]['dateString'] )->toBe( '2024-03-01T18:00:00+01:00' );
+		expect( $result[36]['available'] )->toBeFalse();
+		expect( $result[47]['dateString'] )->toBe( '2024-03-01T23:30:00+01:00' );
+		expect( $result[47]['available'] )->toBeFalse();
 
 		$available = array_filter(
 			$result,
 			function ( $slot ) {
-				return true === $slot->available;
+				return true === $slot['available'];
 			}
 		);
 
@@ -149,23 +149,23 @@ test(
 
 		expect( $result )->toBeArray();
 		expect( $result )->toHaveCount( 48 );
-		expect( $result[0]->dateString )->toBe( '2024-03-01T00:00:00-08:00' );
-		expect( $result[0]->available )->toBeFalse();
-		expect( $result[1]->dateString )->toBe( '2024-03-01T00:30:00-08:00' );
-		expect( $result[1]->available )->toBeFalse();
-		expect( $result[2]->dateString )->toBe( '2024-03-01T01:00:00-08:00' );
-		expect( $result[2]->available )->toBeTrue();
-		expect( $result[17]->dateString )->toBe( '2024-03-01T08:30:00-08:00' );
-		expect( $result[17]->available )->toBeTrue();
-		expect( $result[18]->dateString )->toBe( '2024-03-01T09:00:00-08:00' );
-		expect( $result[18]->available )->toBeFalse();
-		expect( $result[47]->dateString )->toBe( '2024-03-01T23:30:00-08:00' );
-		expect( $result[47]->available )->toBeFalse();
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T00:00:00-08:00' );
+		expect( $result[0]['available'] )->toBeFalse();
+		expect( $result[1]['dateString'] )->toBe( '2024-03-01T00:30:00-08:00' );
+		expect( $result[1]['available'] )->toBeFalse();
+		expect( $result[2]['dateString'] )->toBe( '2024-03-01T01:00:00-08:00' );
+		expect( $result[2]['available'] )->toBeTrue();
+		expect( $result[17]['dateString'] )->toBe( '2024-03-01T08:30:00-08:00' );
+		expect( $result[17]['available'] )->toBeTrue();
+		expect( $result[18]['dateString'] )->toBe( '2024-03-01T09:00:00-08:00' );
+		expect( $result[18]['available'] )->toBeFalse();
+		expect( $result[47]['dateString'] )->toBe( '2024-03-01T23:30:00-08:00' );
+		expect( $result[47]['available'] )->toBeFalse();
 
 		$available = array_filter(
 			$result,
 			function ( $slot ) {
-				return true === $slot->available;
+				return true === $slot['available'];
 			}
 		);
 
@@ -184,10 +184,10 @@ test(
 
 		expect( $result )->toBeArray();
 		expect( $result )->toHaveCount( 2 );
-		expect( $result[0]->dateString )->toBe( '2024-03-01T09:00:00+00:00' );
-		expect( $result[0]->available )->toBeTrue();
-		expect( $result[1]->dateString )->toBe( '2024-03-01T09:30:00+00:00' );
-		expect( $result[1]->available )->toBeTrue();
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T09:00:00+00:00' );
+		expect( $result[0]['available'] )->toBeTrue();
+		expect( $result[1]['dateString'] )->toBe( '2024-03-01T09:30:00+00:00' );
+		expect( $result[1]['available'] )->toBeTrue();
 	}
 );
 
@@ -203,7 +203,7 @@ test(
 		$available = array_filter(
 			$result,
 			function ( $slot ) {
-				return true === $slot->available;
+				return true === $slot['available'];
 			}
 		);
 
@@ -223,7 +223,7 @@ test(
 		$available = array_filter(
 			$result,
 			function ( $slot ) {
-				return true === $slot->available;
+				return true === $slot['available'];
 			}
 		);
 

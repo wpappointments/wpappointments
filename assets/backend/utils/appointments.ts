@@ -26,7 +26,7 @@ export function timeRangesContainAnother(
 export function getDayRange(day: OpeningHoursSlot, date?: Date): [Date, Date] {
 	const start = new Date(date || Date.now());
 	const end = new Date(date || Date.now());
-	
+
 	const startHour = day.start.hour ? +day.start.hour : 0;
 	const endHour = day.end.hour ? +day.end.hour : 0;
 	const startMinute = day.start.minute ? +day.start.minute : 0;
