@@ -76,6 +76,11 @@ class Plugin extends Core\Singleton {
 		delete_option( 'wpappointments_default_schedule_id' );
 	}
 
+	/**
+	 * Delete default schedule post
+	 *
+	 * @return void
+	 */
 	private function delete_schedule_post() {
 		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
 

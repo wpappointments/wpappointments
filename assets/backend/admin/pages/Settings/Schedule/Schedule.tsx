@@ -1,5 +1,11 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+} from '@wordpress/components';
 import { useSelect, select, useDispatch } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { Text } from '~/backend/utils/experimental';
@@ -11,7 +17,6 @@ import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import globalStyles from 'global.module.css';
-
 
 export type ScheduleFormFields = {
 	monday: DayOpeningHours;

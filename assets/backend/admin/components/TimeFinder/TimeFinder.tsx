@@ -6,14 +6,16 @@ import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
-import { formatTime24HourFromDate, formatTimeForPicker } from '~/backend/utils/format';
+import {
+	formatTime24HourFromDate,
+	formatTimeForPicker,
+} from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
-
 
 type Fields = {
 	timeHourStart: string;
@@ -385,7 +387,10 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 													[styles.itemAvailable]:
 														slot.available,
 													[styles.itemBooked]:
-														slot.inSchedule && !slot.available && slot.timestamp >= Date.now(),
+														slot.inSchedule &&
+														!slot.available &&
+														slot.timestamp >=
+															Date.now(),
 													[styles.itemSelected]:
 														false,
 												})}

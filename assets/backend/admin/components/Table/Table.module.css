@@ -14,7 +14,11 @@
 
 .empty {
 	text-align: center;
-	padding: 50px 16px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* padding: 50px 16px; */
 }
 
 .empty-icon {
@@ -53,4 +57,13 @@
 .noshow {
 	background-color: #ffeaac;
 	color: #933600;
+}
+
+.actions-table-cell > button:not(:first-child) {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.actions-table-cell:hover > button {
+	opacity: 1;
 }

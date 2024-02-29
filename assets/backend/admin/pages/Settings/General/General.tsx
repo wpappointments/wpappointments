@@ -277,25 +277,16 @@ function FormFields() {
 										value: 'F j, Y',
 									},
 									{
-										label: format(
-											new Date(),
-											'yyyy-MM-dd'
-										),
-										value: 'Y-m-d'
+										label: format(new Date(), 'yyyy-MM-dd'),
+										value: 'Y-m-d',
 									},
 									{
-										label: format(
-											new Date(),
-											'MM/dd/yyyy'
-										),
-										value: 'm/d/Y'
+										label: format(new Date(), 'MM/dd/yyyy'),
+										value: 'm/d/Y',
 									},
 									{
-										label: format(
-											new Date(),
-											'dd/MM/yyyy'
-										),
-										value: 'd/m/Y'
+										label: format(new Date(), 'dd/MM/yyyy'),
+										value: 'd/m/Y',
 									},
 									{ label: 'Custom', value: 'custom' },
 								]}
@@ -320,7 +311,8 @@ function FormFields() {
 								__('Preview: %s', 'wpappointments'),
 								format(
 									new Date(),
-									dateFormatMap.get(dateFormat) || 'MMMM d, yyyy'
+									dateFormatMap.get(dateFormat) ||
+										'MMMM d, yyyy'
 								)
 							)}
 					</div>
@@ -337,9 +329,18 @@ function FormFields() {
 								label={__('Time format', 'wpappointments')}
 								defaultValue="g:i a"
 								options={[
-									{ label: format(new Date(), 'h:mm aaa'), value: 'g:i a' },
-									{ label: format(new Date(), 'h:mm aa'), value: 'g:i A' },
-									{ label: format(new Date(), 'HH:mm'), value: 'H:i' },
+									{
+										label: format(new Date(), 'h:mm aaa'),
+										value: 'g:i a',
+									},
+									{
+										label: format(new Date(), 'h:mm aa'),
+										value: 'g:i A',
+									},
+									{
+										label: format(new Date(), 'HH:mm'),
+										value: 'H:i',
+									},
 									{ label: 'Custom', value: 'custom' },
 								]}
 							/>

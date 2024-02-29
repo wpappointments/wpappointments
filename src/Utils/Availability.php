@@ -67,7 +67,6 @@ class Availability {
 	 * @param string    $date_start Date in ISO 8601 format.
 	 * @param string    $date_end Date in ISO 8601 format.
 	 * @param string    $tz Timezone string.
-	 * @param bool      $trim Whether should trim timeslots outside of working hours from left and right of the day time slots.
 	 * @param \DateTime $now Now in ISO 8601 format.
 	 *
 	 * @return array
@@ -141,7 +140,7 @@ class Availability {
 
 			array_push(
 				$slots,
-				(object) array(
+				array(
 					'timestamp'  => (int) $slot->format( 'U' ) * 1000,
 					'dateString' => $slot->format( 'c' ),
 					'available'  => $available && ! $is_past && ! $booked,
@@ -155,7 +154,7 @@ class Availability {
 		$found_first_available = false;
 
 		foreach ( $slots as $slot ) {
-			if ( $slot->inSchedule ) {
+			if ( $slot['inSchedule'] ) {
 				$found_first_available = true;
 			}
 
@@ -170,7 +169,7 @@ class Availability {
 		$found_first_available = false;
 
 		foreach ( $trimmed_slots_reverse as $slot ) {
-			if ( $slot->inSchedule ) {
+			if ( $slot['inSchedule'] ) {
 				$found_first_available = true;
 			}
 
@@ -182,8 +181,8 @@ class Availability {
 		$trimmed_slots = array_reverse( $trimmed_slots_2 );
 
 		return array(
-			'slots'         => $slots,
-			'trimmedSlots'  => $trimmed_slots,
+			'slots'        => $slots,
+			'trimmedSlots' => $trimmed_slots,
 		);
 	}
 
@@ -247,7 +246,7 @@ class Availability {
 				$available_slots = $slots ? array_filter(
 					$slots,
 					function ( $slot ) {
-						return true === $slot->available;
+						return true === $slot['available'];
 					}
 				) : array();
 

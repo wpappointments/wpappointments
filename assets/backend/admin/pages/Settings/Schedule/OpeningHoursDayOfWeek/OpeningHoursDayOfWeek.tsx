@@ -35,11 +35,7 @@ export default function OpeningHoursDayOfWeek({
 
 	const { schedule } = settings;
 
-	const {
-		day,
-		enabled,
-		slots,
-	} = values;
+	const { day, enabled, slots } = values;
 
 	const { list } = slots || { list: [] };
 
@@ -115,7 +111,8 @@ export default function OpeningHoursDayOfWeek({
 						gap: '5px',
 					}}
 				>
-					{list && enabled && (
+					{list &&
+						enabled &&
 						list.map((slot, index) => (
 							<div
 								key={`${index}-${day}-${slot.start.hour}-${slot.start.minute}-${slot.end.hour}-${slot.end.minute}`}
@@ -130,7 +127,9 @@ export default function OpeningHoursDayOfWeek({
 									index={index}
 									type="start"
 									timePickerPrecision={timePickerPrecision}
-									updateWorkingHoursTime={updateWorkingHoursTime}
+									updateWorkingHoursTime={
+										updateWorkingHoursTime
+									}
 								/>
 								—
 								<ScheduleTimePicker
@@ -138,7 +137,9 @@ export default function OpeningHoursDayOfWeek({
 									index={index}
 									type="end"
 									timePickerPrecision={timePickerPrecision}
-									updateWorkingHoursTime={updateWorkingHoursTime}
+									updateWorkingHoursTime={
+										updateWorkingHoursTime
+									}
 								/>
 								{enabled && index > 0 && (
 									<Button
@@ -167,8 +168,7 @@ export default function OpeningHoursDayOfWeek({
 									</Button>
 								)}
 							</div>
-						))
-					)}
+						))}
 					{!enabled && (
 						<div
 							style={{
@@ -197,7 +197,6 @@ export default function OpeningHoursDayOfWeek({
 							const slots = values.slots.list[0];
 
 							reset();
-
 
 							for (const day of days) {
 								setValue(
