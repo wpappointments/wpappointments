@@ -230,3 +230,69 @@ test(
 		expect( $available )->toHaveCount( 2 );
 	}
 );
+
+test(
+	'Should create availability array - with appointment in - one day period - using only GMT timezone',
+	function () {
+		// Create 60 minutes long appointment at 9 am March 1st 2024.
+		$appointment = new \WPAppointments\Model\AppointmentPost();
+		$appointment->create(
+			'Noop',
+			array(
+				'timestamp'   => 1709283600,
+				'duration'    => 60,
+				'customer'    => '{"name":"Noop","email":"noop@noop.com","phone":"+1 (000) 000-0000"}',
+				'customer_id' => 0,
+				'status'      => 'confirmed',
+			)
+		);
+
+		// Get availability for March 1st 2024.
+		$start_date = '2024-03-01T00:00:00.000Z';
+		$end_date   = '2024-03-01T23:59:59.000Z';
+
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00' );
+		$result = $result['slots'];
+
+		// Expect 48 slots (30 min precision).
+		expect( $result )->toBeArray();
+		expect( $result )->toHaveCount( 48 );
+
+		// First slot should be unavailable.
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T00:00:00+00:00' );
+		expect( $result[0]['available'] )->toBeFalse();
+		expect( $result[17]['dateString'] )->toBe( '2024-03-01T08:30:00+00:00' );
+		expect( $result[17]['available'] )->toBeFalse();
+
+		// 9 am slot should be unavailable (already booked).
+		expect( $result[18]['dateString'] )->toBe( '2024-03-01T09:00:00+00:00' );
+		expect( $result[18]['available'] )->toBeFalse();
+
+		// 9:30 am slot should be still unavailable (already booked, appointment is 60 min).
+		expect( $result[19]['dateString'] )->toBe( '2024-03-01T09:30:00+00:00' );
+		expect( $result[19]['available'] )->toBeFalse();
+
+		// Finally, 10:00 am slot should be unavailable.
+		expect( $result[20]['dateString'] )->toBe( '2024-03-01T10:00:00+00:00' );
+		expect( $result[20]['available'] )->toBeTrue();
+
+		// The rest of the schedule should be as normal.
+		expect( $result[33]['dateString'] )->toBe( '2024-03-01T16:30:00+00:00' );
+		expect( $result[33]['available'] )->toBeTrue();
+		expect( $result[34]['dateString'] )->toBe( '2024-03-01T17:00:00+00:00' );
+		expect( $result[34]['available'] )->toBeFalse();
+		expect( $result[47]['dateString'] )->toBe( '2024-03-01T23:30:00+00:00' );
+		expect( $result[47]['available'] )->toBeFalse();
+
+		$available = array_filter(
+			$result,
+			function ( $slot ) {
+				return true === $slot['available'];
+			}
+		);
+
+		// Expect 14 available slots.
+		// 9:00 am to 5:00 pm is 16 slots, minus 2 booked slots.
+		expect( $available )->toHaveCount( 14 );
+	}
+)->only();
