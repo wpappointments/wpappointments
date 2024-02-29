@@ -13,7 +13,7 @@ import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
-import styles from './Table.module.css';
+import styles from './AppointmentsTableFull.module.css';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
 type Props = {
@@ -30,7 +30,7 @@ type Props = {
 	emptyStateMessage?: string;
 };
 
-export default function Table({
+export default function AppointmentsTableFull({
 	items,
 	onEmptyStateButtonClick,
 	onEdit,

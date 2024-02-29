@@ -26,6 +26,6 @@
 			"global.module.css": [ "./assets/styles/global.module.css" ]
 		}
 	},
-	"include": [ "assets/**/*", "index.d.ts", "global.d.ts", "react.d.ts" ],
+	"include": [ "assets/**/*", "index.d.ts", "global.d.ts" ],
 	"exclude": [ "node_modules", "build", "vendor" ]
 }
