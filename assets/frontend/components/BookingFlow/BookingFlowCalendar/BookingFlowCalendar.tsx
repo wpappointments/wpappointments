@@ -103,7 +103,10 @@ export default function BookingFlowCalendar() {
 											threshold = 'Low';
 										}
 
-										if (percentage < 15 || totalAvailable === 1) {
+										if (
+											percentage < 15 ||
+											totalAvailable === 1
+										) {
 											threshold = 'Limited';
 										}
 
@@ -200,7 +203,10 @@ export default function BookingFlowCalendar() {
 									[styles.daySlot]: true,
 									[styles.daySlotAvailable]: slot.available,
 									[styles.daySlotSelected]:
-										datetime && new Date(slot.timestamp).toISOString() === datetime,
+										datetime &&
+										new Date(
+											slot.timestamp
+										).toISOString() === datetime,
 								})}
 								data-time={slot.time}
 							></button>

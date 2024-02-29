@@ -6,7 +6,6 @@ import ScheduleSettings from './Schedule/Schedule';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
-
 type Tab = {
 	name: string;
 	title: string;

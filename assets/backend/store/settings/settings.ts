@@ -2,7 +2,12 @@ import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { type State } from '../store';
-import type { Day, DayOpeningHours, SettingsSchedule, SettingsState } from './settings.types';
+import type {
+	Day,
+	DayOpeningHours,
+	SettingsSchedule,
+	SettingsState,
+} from './settings.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
@@ -15,7 +20,7 @@ function getDefaultOpeningHours(day: Day) {
 				{
 					start: {
 						hour: null,
-						minute:null,
+						minute: null,
 					},
 					end: {
 						hour: null,

@@ -128,7 +128,7 @@ class Settings extends Controller {
 
 		if ( 'schedule' !== $category ) {
 			$settings_model = new SettingsModel();
-			$result = $settings_model->update( $category, $settings );
+			$result         = $settings_model->update( $category, $settings );
 
 			if ( is_wp_error( $result ) ) {
 				return self::error( $result->get_error_message() );

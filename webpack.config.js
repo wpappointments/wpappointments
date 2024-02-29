@@ -24,6 +24,7 @@ defaultConfig.resolve.alias = {
 	'~/backend': path.resolve( __dirname, 'assets/backend' ),
 	'~/frontend': path.resolve( __dirname, 'assets/frontend' ),
 	'~/blocks': path.resolve( __dirname, 'assets/gutenberg/blocks' ),
+	'~/images': path.resolve( __dirname, 'assets/images' ),
 	'global.module.css': path.resolve(
 		__dirname,
 		'assets/styles/global.module.css'

@@ -51,7 +51,9 @@ export default function Toggle<TFields extends FieldValues>({
 				name={name}
 				control={control}
 				rules={rules}
-				defaultValue={defaultChecked as PathValue<TFields, Path<TFields>>}
+				defaultValue={
+					defaultChecked as PathValue<TFields, Path<TFields>>
+				}
 				render={({ field: { value, onChange, onBlur } }) => (
 					<ToggleControl
 						onBlur={onBlur}
