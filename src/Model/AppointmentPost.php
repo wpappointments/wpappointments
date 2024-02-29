@@ -225,6 +225,7 @@ class AppointmentPost {
 				array(
 					'status'    => $meta['status'][0],
 					'timestamp' => $meta['timestamp'][0],
+					'duration'  => $meta['duration'][0],
 				)
 			);
 		}
@@ -473,9 +474,9 @@ class AppointmentPost {
 		$timestamp   = $meta['timestamp'];
 		$status      = $meta['status'];
 		$duration    = $meta['duration'] ?? $length;
-		$customer_id = $meta['customer_id'];
+		$customer_id = $meta['customer_id'] ?? 0;
 
-		$customer = $meta['customer'];
+		$customer = $meta['customer'] ?? null;
 
 		if ( is_string( $customer ) ) {
 			$customer = json_decode( $customer );
