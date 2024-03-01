@@ -86,9 +86,10 @@ function DashboardAppointments({
 	filters: Fields;
 }) {
 	const { invalidate, getSelector } = useStateContext();
-	const { deleteAppointment, cancelAppointment } = appointmentsApi({
-		invalidateCache: invalidate,
-	});
+	const { deleteAppointment, cancelAppointment, confirmAppointment } =
+		appointmentsApi({
+			invalidateCache: invalidate,
+		});
 
 	const appointments = useSelect(() => {
 		return select(store).getAppointments({
@@ -126,6 +127,7 @@ function DashboardAppointments({
 				});
 			}}
 			onCancel={cancelAppointment}
+			confirmAppointment={confirmAppointment}
 			deleteAppointment={deleteAppointment}
 			cancelAppointment={cancelAppointment}
 		/>
