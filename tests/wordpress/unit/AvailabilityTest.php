@@ -21,11 +21,11 @@ beforeEach(
 			)
 		);
 
-		update_option( 'wpappointments_default_schedule_id', $post_id );
+		update_option( 'wpappointments_default_scheduleId', $post_id );
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
 		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
 
-		$schedule_post_id = get_option( 'wpappointments_default_schedule_id' );
+		$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
 		$make_slot        = function ( $day, $start, $end, $enabled = false ) {
 				return (object) array(
 					'day'     => $day,

@@ -34,7 +34,7 @@ class Plugin extends Core\Singleton {
 	 * @return void
 	 */
 	public function on_plugin_activation() {
-		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
+		$default_schedule = get_option( 'wpappointments_default_scheduleId' );
 
 		if ( ! $default_schedule ) {
 			$post_id = wp_insert_post(
@@ -45,7 +45,36 @@ class Plugin extends Core\Singleton {
 				)
 			);
 
-			update_option( 'wpappointments_default_schedule_id', $post_id );
+			update_option( 'wpappointments_default_scheduleId', $post_id );
+
+			$days = array( 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' );
+
+			foreach ( $days as $day ) {
+				update_post_meta(
+					$post_id,
+					'wpappointments_schedule_' . $day,
+					json_encode(
+						array(
+							'day'     => $day,
+							'enabled' => false,
+							'slots'   => array(
+								'list' => array(
+									array(
+										'start' => array(
+											'hour'   => null,
+											'minute' => null,
+										),
+										'end'   => array(
+											'hour'   => null,
+											'minute' => null,
+										),
+									),
+								),
+							),
+						)
+					)
+				);
+			}
 		}
 
 		$default_service = get_option( 'wpappointments_defaultServiceId' );
@@ -73,7 +102,7 @@ class Plugin extends Core\Singleton {
 	 */
 	public function on_plugin_deactivation() {
 		$this->delete_schedule_post();
-		delete_option( 'wpappointments_default_schedule_id' );
+		delete_option( 'wpappointments_default_scheduleId' );
 	}
 
 	/**
@@ -82,7 +111,7 @@ class Plugin extends Core\Singleton {
 	 * @return void
 	 */
 	private function delete_schedule_post() {
-		$default_schedule = get_option( 'wpappointments_default_schedule_id' );
+		$default_schedule = get_option( 'wpappointments_default_scheduleId' );
 
 		if ( ! $default_schedule ) {
 			return;
