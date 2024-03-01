@@ -3,8 +3,14 @@ import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { addHours, addMinutes } from 'date-fns';
-import { getRangesAvailableSlots, timeRangesContainAnother } from '~/backend/utils/appointments';
-import { createTimeRange, createTimeRangeFromMinutes } from '~/backend/utils/datetime';
+import {
+	getRangesAvailableSlots,
+	timeRangesContainAnother,
+} from '~/backend/utils/appointments';
+import {
+	createTimeRange,
+	createTimeRangeFromMinutes,
+} from '~/backend/utils/datetime';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { SettingsSchedule } from '~/backend/store/settings/settings.types';
@@ -13,7 +19,6 @@ import Number from '../../FormField/Number/Number';
 import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 import Summary from '../Summary/Summary';
-
 
 export type StartEndTimePickerProps = {
 	date: Date;

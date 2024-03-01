@@ -7,13 +7,13 @@ import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { formatTimeForPicker } from '~/backend/utils/format';
+import { formatTime } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
-import { formatTime } from '~/backend/utils/i18n';
 
 type Fields = {
 	timeHourStart: string;
@@ -217,9 +217,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	if (month[0]?.slots?.slots) {
 		for (const slot of month[0].slots.slots) {
-			hourHeadings.push(
-				formatTime(new Date(slot.dateString))
-			);
+			hourHeadings.push(formatTime(new Date(slot.dateString)));
 		}
 	}
 

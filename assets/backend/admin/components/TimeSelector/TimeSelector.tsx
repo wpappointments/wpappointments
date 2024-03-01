@@ -70,7 +70,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 								date.getDay() === 6
 							);
 						}}
-						startOfWeek={1} // TODO: get from settings
+						startOfWeek={window.wpappointments.date.startOfWeek as 0 | 1 | 2 | 3 | 4 | 5 | 6}
 						events={[]} // TODO: add days with available spots to events
 						onMonthPreviewed={(date) => {
 							const _date = new Date(date);
@@ -82,9 +82,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					/>
 				</FormFieldSet>
 
-				{date && (
-					<TimePicker date={new Date(date)} />
-				)}
+				{date && <TimePicker date={new Date(date)} />}
 
 				{isSlideoutOpen(`find-time-${mode}`) && (
 					<TimeFinder mode={mode} />

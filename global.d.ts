@@ -26,7 +26,7 @@ declare global {
 			};
 			date: {
 				timezones: string[];
-				weekStartsOn: number;
+				startOfWeek: number;
 				siteTimezone: string;
 				formatMaps: Record<string, string>;
 				formats: Record<string, string>;

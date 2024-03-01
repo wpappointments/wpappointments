@@ -1,6 +1,9 @@
 import { useSelect, select } from '@wordpress/data';
 import { addMinutes, format } from 'date-fns';
-import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
+import {
+	DayOpeningHours,
+	SettingsSchedule,
+} from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 import Select from '~/backend/admin/components/FormField/Select/Select';
@@ -116,7 +119,11 @@ class DateRange {
 	}
 }
 
-function createHourOptions(type: 'start' | 'end', minHour: string | null, clockType: '12' | '24' = '24') {
+function createHourOptions(
+	type: 'start' | 'end',
+	minHour: string | null,
+	clockType: '12' | '24' = '24'
+) {
 	const options = [];
 	let min = 0;
 
