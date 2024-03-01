@@ -70,7 +70,16 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 								date.getDay() === 6
 							);
 						}}
-						startOfWeek={window.wpappointments.date.startOfWeek as 0 | 1 | 2 | 3 | 4 | 5 | 6}
+						startOfWeek={
+							window.wpappointments.date.startOfWeek as
+								| 0
+								| 1
+								| 2
+								| 3
+								| 4
+								| 5
+								| 6
+						}
 						events={[]} // TODO: add days with available spots to events
 						onMonthPreviewed={(date) => {
 							const _date = new Date(date);

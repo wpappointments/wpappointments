@@ -1,5 +1,6 @@
 declare const styles:
   & Readonly<{ "wrapper": string }>
+  & Readonly<{ "scrollableWrapper": string }>
   & Readonly<{ "scrollable": string }>
   & Readonly<{ "rows": string }>
   & Readonly<{ "row": string }>
@@ -23,7 +24,6 @@ declare const styles:
   & Readonly<{ "itemBooked": string }>
   & Readonly<{ "itemBooked": string }>
   & Readonly<{ "itemBooked": string }>
-  & Readonly<{ "head": string }>
   & Readonly<{ "head": string }>
   & Readonly<{ "head": string }>
   & Readonly<{ "head": string }>

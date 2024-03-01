@@ -18,6 +18,7 @@ import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-fl
 
 export const DaySlotSchema = object({
 	available: boolean(),
+	inSchedule: boolean(),
 	dateString: string(),
 	timestamp: number(),
 	date: optional(date()),
