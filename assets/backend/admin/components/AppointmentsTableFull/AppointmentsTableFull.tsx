@@ -6,6 +6,7 @@ import {
 	info,
 	edit as editIcon,
 	cancelCircleFilled,
+	check,
 	trash,
 } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
@@ -216,8 +217,7 @@ function TableRow({
 						icon={<Icon icon={editIcon} />}
 						label={__('Edit appointment details', 'wpappointments')}
 					/>
-					{(row.status === 'confirmed' ||
-						row.status === 'pending') && (
+					{row.status === 'confirmed' && (
 						<Button
 							variant="tertiary"
 							size="small"
@@ -227,6 +227,20 @@ function TableRow({
 							}}
 							icon={<Icon icon={cancelCircleFilled} />}
 							label={__('Cancel appointment', 'wpappointments')}
+						/>
+					)}
+					{row.status === 'pending' && (
+						<Button
+							variant="secondary"
+							size="small"
+							onClick={() => {
+								setAppointmentModal({
+									id,
+									status: 'confirmed',
+								});
+							}}
+							icon={<Icon icon={check} />}
+							label={__('Confirm appointment', 'wpappointments')}
 						/>
 					)}
 					{row.status === 'cancelled' && (
