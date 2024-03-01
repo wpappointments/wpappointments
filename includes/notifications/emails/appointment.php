@@ -44,6 +44,38 @@ add_action(
 );
 
 /**
+ * Send email notification to the customer when an appointment is created
+ *
+ * @param \WPAppointments\Appointment $appointment Appointment object.
+ *
+ * @return void
+ */
+function send_appointment_created_customer_email( $appointment ) {
+	$content = get_template_content( 'appointment-created-customer' );
+
+	$formats = get_date_formats();
+
+	wp_mail(
+		$appointment->customer->email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
+}
+
+add_action(
+	'wpappointments_appointment_created',
+	__NAMESPACE__ . '\\send_appointment_created_customer_email',
+	10,
+	1
+);
+
+
+/**
  * Email template for appointment updated
  *
  * @param \WPAppointments\Appointment $new_appointment New appointment object.
