@@ -55,7 +55,6 @@ add_action(
  */
 function send_appointment_created_customer_email( $appointment ) {
 	$content = get_template_content( 'appointment-created-customer' );
-
 	$formats = get_date_formats();
 
 	wp_mail(
@@ -88,7 +87,6 @@ add_action(
  */
 function send_updated_appointment_email( $new_appointment, $previous_appointment ) {
 	$content = get_template_content( 'appointment-updated' );
-
 	$formats = get_date_formats();
 
 	wp_mail(
@@ -119,7 +117,6 @@ add_action(
  */
 function send_cancelled_appointment_email( $appointment ) {
 	$content = get_template_content( 'appointment-cancelled' );
-
 	$formats = get_date_formats();
 
 	wp_mail(
@@ -151,7 +148,6 @@ add_action(
  */
 function send_confirmed_appointment_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-confirmed' );
-
 	$formats = get_date_formats();
 
 	wp_mail(
@@ -183,7 +179,6 @@ add_action(
  */
 function send_no_show_appointment_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-no-show' );
-
 	$formats = get_date_formats();
 
 	wp_mail(
@@ -215,8 +210,7 @@ add_action(
  * @return string
  */
 function evaluate_merge_tag( $content, $new_appointment, $previous_appointment = null ) {
-	$formats = get_date_formats();
-
+	$formats  = get_date_formats();
 	$settings = new Settings();
 
 	$tags = array(
