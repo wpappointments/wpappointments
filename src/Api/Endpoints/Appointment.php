@@ -120,6 +120,20 @@ class Appointment extends Controller {
 				),
 			)
 		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/appointment/(?P<id>\d+)/confirm',
+			array(
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'confirm_appointment' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
 	}
 
 	/**
@@ -357,6 +371,27 @@ class Appointment extends Controller {
 				'message' => __( 'Appointment deleted successfully', 'wpappointments' ),
 				'data'    => array(
 					'id' => $result,
+				),
+			)
+		);
+	}
+
+	public static function confirm_appointment( WP_REST_Request $request ) {
+		$id = $request->get_param( 'id' );
+
+		$appointment_post = new AppointmentPost();
+		$confirmed        = $appointment_post->confirm( $id );
+
+		if ( is_wp_error( $confirmed ) ) {
+			return self::error( $confirmed->get_error_message() );
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'       => __( 'Appointment confirmed successfully', 'wpappointments' ),
+					'appointmentId' => $id,
 				),
 			)
 		);
