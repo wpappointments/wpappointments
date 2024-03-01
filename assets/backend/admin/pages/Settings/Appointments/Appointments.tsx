@@ -108,6 +108,7 @@ export default withForm(function AppointmentsSettings() {
 						/>
 						<Select
 							name="defaultStatus"
+							defaultValue={settings.defaultStatus || 'confirmed'}
 							options={[
 								{ label: 'Confirmed', value: 'confirmed' },
 								{ label: 'Pending', value: 'pending' },
