@@ -79,6 +79,10 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	const { month } = availability;
 
 	useEffect(() => {
+		setCurrentMonth(new Date().getMonth() as MonthIndex);
+	}, []);
+
+	useEffect(() => {
 		if (!scrollableRef.current) {
 			return;
 		}
@@ -257,7 +261,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 							size="small"
 							onClick={setDayTime('allDay')}
 						>
-							All day
+							{__('All day', 'wpappointments')}
 						</Button>
 						<Button
 							variant={
@@ -268,7 +272,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 							size="small"
 							onClick={setDayTime('earlyMorning')}
 						>
-							Early Morning
+							{__('Early Morning', 'wpappointments')}
 						</Button>
 						<Button
 							variant={
@@ -277,7 +281,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 							size="small"
 							onClick={setDayTime('morning')}
 						>
-							Morning
+							{__('Morning', 'wpappointments')}
 						</Button>
 						<Button
 							variant={
@@ -286,7 +290,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 							size="small"
 							onClick={setDayTime('afternoon')}
 						>
-							Afternoon
+							{__('Afternoon', 'wpappointments')}
 						</Button>
 						<Button
 							variant={
@@ -295,7 +299,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 							size="small"
 							onClick={setDayTime('evening')}
 						>
-							Evening
+							{__('Evening', 'wpappointments')}
 						</Button>
 					</ButtonGroup>
 				</div>
