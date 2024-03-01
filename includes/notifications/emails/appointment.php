@@ -148,6 +148,38 @@ add_action(
  *
  * @return void
  */
+function send_appointment_cancelled_admin_email( $appointment ) {
+	$content     = get_template_content( 'appointment-cancelled-admin' );
+	$formats     = get_date_formats();
+	$settings    = new Settings();
+	$admin_email = $settings->get_setting( 'general', 'email' );
+
+	wp_mail(
+		$admin_email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
+}
+
+add_action(
+	'wpappointments_appointment_cancelled',
+	__NAMESPACE__ . '\\send_appointment_cancelled_admin_email',
+	10,
+	1
+);
+
+/**
+ * Email template for appointment cancelled
+ *
+ * @param \WPAppointments\Appointment $appointment Appointment object.
+ *
+ * @return void
+ */
 function send_appointment_cancelled_customer_email( $appointment ) {
 	$content = get_template_content( 'appointment-cancelled-customer' );
 	$formats = get_date_formats();
