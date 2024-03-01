@@ -13,6 +13,7 @@ use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Model\AppointmentPost;
 use WPAppointments\Model\Customer;
+use WPAppointments\Model\Settings;
 
 /**
  * Appointment endpoint
@@ -217,9 +218,10 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
+		$settings       = new Settings();
 		$params         = $request->get_params();
 		$date           = rest_parse_date( get_gmt_from_date( $params['date'] ) );
-		$duration       = get_option( 'wpappointments_appointments_defaultLength', 30 );
+		$duration       = $settings->get_setting( 'appointments', 'defaultLength' );
 		$customer       = $request->get_param( 'customer' );
 		$customer_id    = null;
 		$create_account = $request->get_param( 'createAccount' );
@@ -238,7 +240,10 @@ class Appointment extends Controller {
 				'duration'    => $duration,
 				'customer'    => wp_json_encode( (object) $customer ),
 				'customer_id' => $customer_id,
-				'status'      => 'confirmed',
+				'status'      => $settings->get_setting(
+					'appointments',
+					'defaultStatus',
+				) ?: 'confirmed',
 			)
 		);
 
