@@ -223,7 +223,7 @@ function evaluate_merge_tag( $content, $new_appointment, $previous_appointment =
 		'{admin_first_name}' => get_option( 'wpappointments_general_firstName' ),
 		'{admin_last_name}'  => get_option( 'wpappointments_general_lastName' ),
 		'{admin_email}'      => get_option( 'wpappointments_general_email' ),
-		'{admin_phone}'      => get_option( 'wpappointments_general_phone' ),
+		'{admin_phone}'      => get_option( 'wpappointments_general_phoneNumber' ),
 	);
 
 	return str_replace( array_keys( $tags ), array_values( $tags ), $content );
