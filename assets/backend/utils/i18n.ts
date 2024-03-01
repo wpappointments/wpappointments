@@ -2,6 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { FormatRelativeToken, format, formatRelative } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 
+
 export function formatDate(date: Date | string | number) {
 	let _date = date;
 
@@ -85,6 +86,46 @@ export function formatDateRelative(
 	}
 
 	return formatRelative(_date, _baseDate, { locale });
+}
+
+export function getWeekDays(format: 'short' | 'long' = 'short') {
+	const dateSettings = window.wpappointments.date;
+	const { startOfWeek } = dateSettings;
+
+	const weekDaysLong = [
+		__('Sunday', 'wpappointments'),
+		__('Monday', 'wpappointments'),
+		__('Tuesday', 'wpappointments'),
+		__('Wednesday', 'wpappointments'),
+		__('Thursday', 'wpappointments'),
+		__('Friday', 'wpappointments'),
+		__('Saturday', 'wpappointments'),
+	];
+
+	const weekDaysShort = [
+		__('Sun', 'wpappointments'),
+		__('Mon', 'wpappointments'),
+		__('Tue', 'wpappointments'),
+		__('Wed', 'wpappointments'),
+		__('Thu', 'wpappointments'),
+		__('Fri', 'wpappointments'),
+		__('Sat', 'wpappointments'),
+	];
+
+	const weekDays = format === 'short' ? weekDaysShort : weekDaysLong;
+
+	// Shift the array to start from the correct day
+	const shiftedWeekDays = [
+		...weekDays.slice(startOfWeek),
+		...weekDays.slice(0, startOfWeek),
+	];
+
+	return shiftedWeekDays.map((day, index) => {
+		return {
+			label: day,
+			value: index,
+		};
+	});
 }
 
 export const dateFormatMap = new Map<string, string>([
