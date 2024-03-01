@@ -10,6 +10,8 @@ namespace WPAppointments\Notifications\Emails;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
+
 /**
  * Email template for appointment created
  *
