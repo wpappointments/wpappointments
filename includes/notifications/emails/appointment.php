@@ -19,7 +19,7 @@ require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
  *
  * @return void
  */
-function send_new_appointment_email( $appointment ) {
+function send_appointment_created_admin_email( $appointment ) {
 	ob_start();
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-created.html';
 	$content = ob_get_clean();
@@ -40,7 +40,7 @@ function send_new_appointment_email( $appointment ) {
 
 add_action(
 	'wpappointments_appointment_created',
-	__NAMESPACE__ . '\\send_new_appointment_email',
+	__NAMESPACE__ . '\\send_appointment_created_admin_email',
 	10,
 	1
 );
