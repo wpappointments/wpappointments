@@ -8,3 +8,4 @@ wpappointments.zip
 .DS_Store
 htaccess
 wp-includes
+.wp-env.override.json

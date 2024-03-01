@@ -63,7 +63,7 @@ export default function AppointmentDetails() {
 					[styles.isPending]: status === 'pending',
 					[styles.isConfirmed]: status === 'confirmed',
 					[styles.isCancelled]: status === 'cancelled',
-					[styles.isNoshow]: status === 'no_show',
+					[styles.isNoshow]: status === 'noshow',
 				})}
 			>
 				{__('Status', 'wpappointments')}:{' '}
@@ -187,7 +187,7 @@ function getStatusEmoji(status: Appointment['status']) {
 		return '❌';
 	}
 
-	if (status === 'no_show') {
+	if (status === 'noshow') {
 		return '🚷';
 	}
 

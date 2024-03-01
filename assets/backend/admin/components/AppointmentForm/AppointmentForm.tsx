@@ -230,7 +230,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 							{ label: 'Pending', value: 'pending' },
 							{ label: 'Confirmed', value: 'confirmed' },
 							{ label: 'Cancelled', value: 'cancelled' },
-							{ label: 'No Show', value: 'no_show' },
+							{ label: 'No Show', value: 'noshow' },
 						]}
 						defaultValue={
 							mode === 'edit' && currentAppointment

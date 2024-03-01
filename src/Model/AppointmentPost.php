@@ -38,7 +38,7 @@ class AppointmentPost {
 		$default_query = array_merge(
 			$this->default_query_part,
 			array(
-				'posts_per_page' => -1,
+				'posts_per_page' => - 1,
 				'meta_query'     => array(),
 			)
 		);
@@ -189,7 +189,7 @@ class AppointmentPost {
 	 * Get date range appointments
 	 *
 	 * @param \DateTimeImmutable $start_date Start date.
-	 * @param \DateTimeImmutable $end_date   End date.
+	 * @param \DateTimeImmutable $end_date End date.
 	 *
 	 * @return object
 	 */
@@ -198,7 +198,7 @@ class AppointmentPost {
 			array_merge(
 				$this->default_query_part,
 				array(
-					'posts_per_page' => -1,
+					'posts_per_page' => - 1,
 					'meta_query'     => array(
 						'relation' => 'AND',
 						array(
@@ -283,7 +283,7 @@ class AppointmentPost {
 	/**
 	 * Update appointment
 	 *
-	 * @param int    $id   Appointment ID.
+	 * @param int    $id Appointment ID.
 	 * @param string $title Appointment title.
 	 * @param array  $meta Appointment post meta.
 	 *
@@ -328,7 +328,9 @@ class AppointmentPost {
 
 		$new_appointment = $this->prepare_appointment_entity( $post_id, $meta );
 
-		do_action( 'wpappointments_appointment_updated', $new_appointment, $current_appointment );
+		$callback = $new_appointment->status === 'pending' ? 'updated' : $new_appointment->status;
+
+		do_action( 'wpappointments_appointment_' . $callback, $new_appointment, $current_appointment );
 
 		return $new_appointment;
 	}
@@ -336,7 +338,7 @@ class AppointmentPost {
 	/**
 	 * Cancel appointment
 	 *
-	 * @param int $id   Appointment ID.
+	 * @param int $id Appointment ID.
 	 *
 	 * @return array|\WP_Error
 	 */
