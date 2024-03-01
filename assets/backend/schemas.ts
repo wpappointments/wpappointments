@@ -26,7 +26,7 @@ export const AppointmentSchema = object({
 		literal('pending'),
 		literal('confirmed'),
 		literal('cancelled'),
-		literal('noshow'),
+		literal('no_show'),
 	]),
 	customer: object({
 		id: optional(number()),
