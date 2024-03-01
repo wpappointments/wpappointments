@@ -174,6 +174,49 @@ export function appointmentsApi({
 		return response;
 	}
 
+	async function confirmAppointment(id: number) {
+		if (invalidId(id, 'Cannot confirm appointment')) {
+			return;
+		}
+
+		console.log('confirmAppointment', id);
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `appointment/${id}/confirm`,
+				method: 'PUT',
+			});
+
+			const { data: responseData } = response;
+			const { appointmentId } = responseData;
+
+			dispatch.confirmAppointment(appointmentId);
+
+			return response;
+		});
+
+		if (error) {
+			handleError(
+				error,
+				__('Cannot confirm appointment', 'wpappointments')
+			);
+			return;
+		}
+
+		if (response) {
+			displaySuccessToast(
+				__('Appointment confirmed successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				console.log('invalidateCache');
+				invalidateCache('getAppointments');
+				invalidateCache('getUpcomingAppointments');
+			}
+		}
+
+		return response;
+	}
+
 	function invalidId(id: number, errorPrefix: string) {
 		if (!id) {
 			displayErrorToast(
@@ -202,6 +245,7 @@ export function appointmentsApi({
 		updateAppointment,
 		cancelAppointment,
 		deleteAppointment,
+		confirmAppointment,
 	} as const;
 
 	window.wpappointments.api = {

@@ -26,6 +26,7 @@ type Props = {
 	onCancel?: (appointmentId: number) => void;
 	deleteAppointment?: AppointmentsApi['deleteAppointment'];
 	cancelAppointment?: AppointmentsApi['deleteAppointment'];
+	confirmAppointment?: AppointmentsApi['confirmAppointment'];
 	hideActions?: boolean;
 	hideHeader?: boolean;
 	hideEmptyStateButton?: boolean;
@@ -37,6 +38,7 @@ export default function AppointmentsTableFull({
 	onEmptyStateButtonClick,
 	onEdit,
 	onView,
+	confirmAppointment,
 	cancelAppointment,
 	deleteAppointment,
 	hideActions = false,
@@ -102,6 +104,14 @@ export default function AppointmentsTableFull({
 							row={row}
 							edit={onEdit}
 							view={onView}
+							confirmAppointment={async () => {
+								if (!confirmAppointment) {
+									return;
+								}
+
+								await confirmAppointment(row.id);
+								setAppointmentModal(null);
+							}}
 							setAppointmentModal={setAppointmentModal}
 							hideActions={hideActions}
 						/>
@@ -140,6 +150,7 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
+	confirmAppointment?: (appointment: Appointment) => void;
 	setAppointmentModal: Dispatch<
 		SetStateAction<{
 			id: number;
@@ -153,6 +164,7 @@ function TableRow({
 	row,
 	edit,
 	view,
+	confirmAppointment,
 	setAppointmentModal,
 	hideActions = false,
 }: TableRowProps) {
@@ -234,10 +246,7 @@ function TableRow({
 							variant="secondary"
 							size="small"
 							onClick={() => {
-								setAppointmentModal({
-									id,
-									status: 'confirmed',
-								});
+								confirmAppointment && confirmAppointment(row);
 							}}
 							icon={<Icon icon={check} />}
 							label={__('Confirm appointment', 'wpappointments')}
