@@ -46,6 +46,35 @@ class Plugin extends Core\Singleton {
 			);
 
 			update_option( 'wpappointments_default_scheduleId', $post_id );
+
+			$days = array( 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' );
+
+			foreach ( $days as $day ) {
+				update_post_meta(
+					$post_id,
+					'wpappointments_schedule_' . $day,
+					json_encode(
+						array(
+							'day'     => $day,
+							'enabled' => false,
+							'slots'   => array(
+								'list' => array(
+									array(
+										'start' => array(
+											'hour'   => null,
+											'minute' => null,
+										),
+										'end'   => array(
+											'hour'   => null,
+											'minute' => null,
+										),
+									),
+								),
+							),
+						)
+					)
+				);
+			}
 		}
 
 		$default_service = get_option( 'wpappointments_defaultServiceId' );
