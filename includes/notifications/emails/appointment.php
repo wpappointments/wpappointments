@@ -308,7 +308,7 @@ add_action(
  *
  * @return void
  */
-function send_appointment_no_show_email( $content, $appointment ) {
+function send_appointment_noshow_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-no-show-customer' );
 	$formats = get_date_formats();
 
@@ -325,8 +325,8 @@ function send_appointment_no_show_email( $content, $appointment ) {
 }
 
 add_action(
-	'wpappointments_appointment_no_show',
-	__NAMESPACE__ . '\\send_appointment_no_show_email',
+	'wpappointments_appointment_noshow',
+	__NAMESPACE__ . '\\send_appointment_noshow_email',
 	10,
 	2
 );
