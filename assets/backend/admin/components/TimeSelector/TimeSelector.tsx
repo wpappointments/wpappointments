@@ -82,7 +82,9 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					/>
 				</FormFieldSet>
 
-				<TimePicker date={new Date(date)} />
+				{date && (
+					<TimePicker date={new Date(date)} />
+				)}
 
 				{isSlideoutOpen(`find-time-${mode}`) && (
 					<TimeFinder mode={mode} />
