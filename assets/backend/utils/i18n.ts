@@ -2,7 +2,6 @@ import { __, sprintf } from '@wordpress/i18n';
 import { FormatRelativeToken, format, formatRelative } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 
-
 export function formatDate(date: Date | string | number) {
 	let _date = date;
 
