@@ -24,6 +24,7 @@ export type SettingsGeneral = {
 };
 
 export type SettingsAppointments = {
+	defaultStatus: 'confirmed' | 'pending';
 	defaultLength?: number;
 	timePickerPrecision?: number;
 	serviceId?: number;

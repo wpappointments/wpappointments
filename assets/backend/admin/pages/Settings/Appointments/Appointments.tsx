@@ -23,7 +23,7 @@ type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
 	serviceName: string;
-	defaultStatus: string;
+	defaultStatus: 'confirmed' | 'pending';
 };
 
 type Response = APIResponse<{
