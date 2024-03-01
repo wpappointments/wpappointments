@@ -85,6 +85,39 @@ add_action(
  *
  * @return void
  */
+function send_appointment_updated_admin_email( $new_appointment, $previous_appointment ) {
+	$content     = get_template_content( 'appointment-updated-admin' );
+	$formats     = get_date_formats();
+	$settings    = new Settings();
+	$admin_email = $settings->get_setting( 'general', 'email' );
+
+	wp_mail(
+		$admin_email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Updated: %1$s at %2$s', 'wpappointments' ),
+			wp_date( $formats['date'], $new_appointment->timestamp ),
+			wp_date( $formats['time'], $new_appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $new_appointment, $previous_appointment )
+	);
+}
+
+add_action(
+	'wpappointments_appointment_updated',
+	__NAMESPACE__ . '\\send_appointment_updated_admin_email',
+	10,
+	2
+);
+
+/**
+ * Email template for appointment updated
+ *
+ * @param \WPAppointments\Appointment $new_appointment New appointment object.
+ * @param \WPAppointments\Appointment $previous_appointment Previous appointment object.
+ *
+ * @return void
+ */
 function send_appointment_updated_customer_email( $new_appointment, $previous_appointment ) {
 	$content = get_template_content( 'appointment-updated-customer' );
 	$formats = get_date_formats();
