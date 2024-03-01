@@ -10,7 +10,7 @@ import {
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {
-	curentMonth: 1,
+	curentMonth: 0,
 	currentYear: 2024,
 	selectedCustomer: null,
 };
