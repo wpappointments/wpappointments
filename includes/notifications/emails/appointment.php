@@ -115,12 +115,11 @@ add_action(
 /**
  * Email template for appointment confirmed
  *
- * @param string                      $content Email content.
  * @param \WPAppointments\Appointment $appointment Appointment object.
  *
  * @return void
  */
-function send_confirmed_appointment_email( $content, $appointment ) {
+function send_confirmed_appointment_email( $appointment ) {
 	ob_start();
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-confirmed.html';
 	$content = ob_get_clean();
@@ -143,7 +142,7 @@ add_action(
 	'wpappointments_appointment_confirmed',
 	__NAMESPACE__ . '\\send_confirmed_appointment_email',
 	10,
-	2
+	1
 );
 
 /**
