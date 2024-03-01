@@ -22,12 +22,13 @@ require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
  * @return void
  */
 function send_appointment_created_admin_email( $appointment ) {
-	$content = get_template_content( 'appointment-created-admin' );
-
-	$formats = get_date_formats();
+	$settings    = new Settings();
+	$content     = get_template_content( 'appointment-created-admin' );
+	$formats     = get_date_formats();
+	$admin_email = $settings->get_setting( 'general', 'email' );
 
 	wp_mail(
-		$appointment->customer->email,
+		$admin_email,
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
