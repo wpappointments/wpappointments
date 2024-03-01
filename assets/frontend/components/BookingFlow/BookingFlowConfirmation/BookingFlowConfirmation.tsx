@@ -1,25 +1,26 @@
 import { __ } from '@wordpress/i18n';
 import styles from '../BookingFlow.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+import { formatDate, formatTime } from '~/backend/utils/i18n';
 
 export default function BookingFlowConfirmation() {
 	const { form } = useBookingFlowContext();
 	const { getValues } = form;
 
 	const dateTime = getValues('datetime');
-	const date = new Date(dateTime).toLocaleDateString();
-	const time = new Date(dateTime).toLocaleTimeString();
+	const date = formatDate(new Date(dateTime));
+	const time = formatTime(new Date(dateTime));
 
 	return (
 		<div className={styles.alignLeft}>
 			<h2>{__('Appointment created successfully!', 'wpappointments')}</h2>
-			<p>Thank you for scheduling your appointment!</p>
+			<p>{__('Thank you for scheduling your appointment!', 'wpappointmetns')}</p>
 			<p>
-				<strong>Details</strong>:
+				<strong>{__('Details', 'wpappointments')}</strong>:
 			</p>
-			<strong>Date</strong>: {date}
+			<strong>{__('Date', 'wpappointments')}</strong>: {date}
 			<br />
-			<strong>Time</strong>: {time}
+			<strong>{__('Time', 'wpappointments')}</strong>: {time}
 			<br />
 		</div>
 	);

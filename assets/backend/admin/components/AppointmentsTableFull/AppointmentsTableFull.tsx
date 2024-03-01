@@ -11,6 +11,7 @@ import {
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
+import { formatDate, formatTime } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
@@ -158,18 +159,8 @@ function TableRow({
 	const dateStart = fromUnixTime(timestamp);
 	const dateEnd = addMinutes(dateStart, duration);
 
-	const dateOutput = dateStart.toLocaleDateString();
-
-	const timeFrom = dateStart.toLocaleTimeString('pl-PL', {
-		hour: '2-digit',
-		minute: '2-digit',
-	});
-
-	const timeTo = dateEnd.toLocaleTimeString('pl-PL', {
-		hour: '2-digit',
-		minute: '2-digit',
-	});
-
+	const timeFrom = formatTime(dateStart);
+	const timeTo = formatTime(dateEnd);
 	const timeFromTo = `${timeFrom} - ${timeTo}`;
 
 	const userDiffTimezone = userSiteTimezoneMatch();
@@ -190,7 +181,7 @@ function TableRow({
 				{__('Customer', 'wpappointments')}:{' '}
 				<strong>{row.customer.name}</strong>
 			</td>
-			<td>{dateOutput}</td>
+			<td>{formatDate(timestamp)}</td>
 			<td>
 				{timeFromTo}
 				{userDiffTimezone && ` (${userDiffTimezone})`}

@@ -10,6 +10,8 @@ namespace WPAppointments\Notifications\Emails;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
+
 /**
  * Email template for appointment created
  *
@@ -22,13 +24,15 @@ function send_new_appointment_email( $appointment ) {
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-created.html';
 	$content = ob_get_clean();
 
+	$formats = get_date_formats();
+
 	wp_mail(
 		$appointment->customer->email,
 		sprintf(
 			/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
-			wp_date( 'F j, Y', $appointment->timestamp ),
-			wp_date( 'g:i a', $appointment->timestamp )
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -54,13 +58,15 @@ function send_updated_appointment_email( $new_appointment, $previous_appointment
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-updated.html';
 	$content = ob_get_clean();
 
+	$formats = get_date_formats();
+
 	wp_mail(
 		$new_appointment->customer->email,
 		sprintf(
 			/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Updated: %1$s at %2$s', 'wpappointments' ),
-			wp_date( 'F j, Y', $new_appointment->timestamp ),
-			wp_date( 'g:i a', $new_appointment->timestamp )
+			wp_date( $formats['date'], $new_appointment->timestamp ),
+			wp_date( $formats['time'], $new_appointment->timestamp )
 		),
 		evaluate_merge_tag( $content, $new_appointment, $previous_appointment )
 	);
@@ -85,13 +91,15 @@ function send_cancelled_appointment_email( $appointment ) {
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-cancelled.html';
 	$content = ob_get_clean();
 
+	$formats = get_date_formats();
+
 	wp_mail(
 		$appointment->customer->email,
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
-			wp_date( 'F j, Y', $appointment->timestamp ),
-			wp_date( 'g:i a', $appointment->timestamp )
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -117,13 +125,15 @@ function send_confirmed_appointment_email( $content, $appointment ) {
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-confirmed.html';
 	$content = ob_get_clean();
 
+	$formats = get_date_formats();
+
 	wp_mail(
 		$appointment->customer->email,
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
-			wp_date( 'F j, Y', $appointment->timestamp ),
-			wp_date( 'g:i a', $appointment->timestamp )
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -149,13 +159,15 @@ function send_no_show_appointment_email( $content, $appointment ) {
 	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-no-show.html';
 	$content = ob_get_clean();
 
+	$formats = get_date_formats();
+
 	wp_mail(
 		$appointment->customer->email,
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment No-Show: %1$s at %2$s', 'wpappointments' ),
-			wp_date( 'F j, Y', $appointment->timestamp ),
-			wp_date( 'g:i a', $appointment->timestamp )
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -178,12 +190,14 @@ add_action(
  * @return string
  */
 function evaluate_merge_tag( $content, $new_appointment, $previous_appointment = null ) {
+	$formats = get_date_formats();
+
 	$tags = array(
 		'{customer_name}'    => $new_appointment->customer->name,
-		'{previous_date}'    => $previous_appointment ? wp_date( 'F j, Y', $previous_appointment->timestamp ) : '',
-		'{previous_time}'    => $previous_appointment ? wp_date( 'g:i a', $previous_appointment->timestamp ) : '',
-		'{date}'             => wp_date( 'F j, Y', $new_appointment->timestamp ),
-		'{time}'             => wp_date( 'g:i a', $new_appointment->timestamp ),
+		'{previous_date}'    => $previous_appointment ? wp_date( $formats['date'], $previous_appointment->timestamp ) : '',
+		'{previous_time}'    => $previous_appointment ? wp_date( $formats['time'], $previous_appointment->timestamp ) : '',
+		'{date}'             => wp_date( $formats['date'], $new_appointment->timestamp ),
+		'{time}'             => wp_date( $formats['time'], $new_appointment->timestamp ),
 		'{admin_first_name}' => get_option( 'wpappointments_general_firstName' ),
 		'{admin_last_name}'  => get_option( 'wpappointments_general_lastName' ),
 		'{admin_email}'      => get_option( 'wpappointments_general_email' ),

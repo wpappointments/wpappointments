@@ -1,8 +1,9 @@
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { formatRelative, fromUnixTime } from 'date-fns';
+import { fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
+import { formatDateRelative } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';
 import styles from './AppointmentsTableMinimal.module.css';
 
@@ -100,7 +101,7 @@ function TableRow({ row, view }: TableRowProps) {
 				{row.customer.name}
 			</td>
 			<td>
-				{formatRelative(dateStart, new Date())}
+				{formatDateRelative(dateStart, new Date())}
 				{userDiffTimezone && ` (${userDiffTimezone})`}
 			</td>
 			<td>{duration} min</td>

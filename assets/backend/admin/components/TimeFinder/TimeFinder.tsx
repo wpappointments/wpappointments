@@ -6,16 +6,14 @@ import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from '~/backend/utils/cn';
-import {
-	formatTime24HourFromDate,
-	formatTimeForPicker,
-} from '~/backend/utils/format';
+import { formatTimeForPicker } from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
+import { formatTime } from '~/backend/utils/i18n';
 
 type Fields = {
 	timeHourStart: string;
@@ -220,7 +218,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	if (month[0]?.slots?.slots) {
 		for (const slot of month[0].slots.slots) {
 			hourHeadings.push(
-				formatTime24HourFromDate(new Date(slot.dateString))
+				formatTime(new Date(slot.dateString))
 			);
 		}
 	}
@@ -241,14 +239,9 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	function formatTimeRangeFromSlotDate(date: string) {
 		const startDate = new Date(date);
-		const hours = formatTimeForPicker(startDate.getHours());
-		const minutes = formatTimeForPicker(startDate.getMinutes());
-
 		const endDate = addMinutes(new Date(date), duration);
-		const endHours = formatTimeForPicker(endDate.getHours());
-		const endMinutes = formatTimeForPicker(endDate.getMinutes());
 
-		return `${hours}:${minutes} - ${endHours}:${endMinutes}`;
+		return `${formatTime(startDate)} - ${formatTime(endDate)}`;
 	}
 
 	return (

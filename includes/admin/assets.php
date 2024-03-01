@@ -18,6 +18,8 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\scripts' );
  * @return void
  */
 function scripts() {
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
+
 	$api = array(
 		'api' => array(
 			'root'      => esc_url_raw( rest_url() ),
@@ -27,10 +29,7 @@ function scripts() {
 	);
 
 	$date = array(
-		'date' => array(
-			'timezones'    => timezone_identifiers_list(),
-			'siteTimezone' => wp_timezone_string(),
-		),
+		'date' => create_date_settings_array(),
 	);
 
 	wp_enqueue_style(

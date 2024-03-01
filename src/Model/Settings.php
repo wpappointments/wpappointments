@@ -54,8 +54,36 @@ class Settings {
 				'type' => 'string',
 			),
 			array(
+				'name' => 'startOfWeek',
+				'type' => 'string',
+			),
+			array(
 				'name' => 'clockType',
-				'type' => 'number',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'timezoneSiteDefault',
+				'type' => 'boolean',
+			),
+			array(
+				'name' => 'timezone',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'dateFormat',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'timeFormat',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'customDateFormat',
+				'type' => 'string',
+			),
+			array(
+				'name' => 'customTimeFormat',
+				'type' => 'string',
 			),
 		),
 		'appointments' => array(
@@ -109,6 +137,10 @@ class Settings {
 
 				if ( 'number' === $type ) {
 					$option = intval( $option );
+				}
+
+				if ( 'boolean' === $type ) {
+					$option = filter_var( $option, FILTER_VALIDATE_BOOLEAN );
 				}
 
 				if ( $option ) {
@@ -178,8 +210,30 @@ class Settings {
 	 *
 	 * @return array
 	 */
-	public function get_by_category( $category ) {
-		return $category;  // TODO: Implement.
+	public function get_all_by_category( $category ) {
+		$settings = array();
+
+		if ( true === array_key_exists( $category, $this->settings ) ) {
+			foreach ( $this->settings[ $category ] as $option ) {
+				$name   = $option['name'];
+				$type   = $option['type'];
+				$option = get_option( 'wpappointments_' . $category . '_' . $name );
+
+				if ( 'number' === $type ) {
+					$option = intval( $option );
+				}
+
+				if ( 'boolean' === $type ) {
+					$option = filter_var( $option, FILTER_VALIDATE_BOOLEAN );
+				}
+
+				if ( $option ) {
+					$settings[ $name ] = $option;
+				}
+			}
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -191,5 +245,19 @@ class Settings {
 	 */
 	public function get( $key ) {
 		return get_option( $key );
+	}
+
+	/**
+	 * Get setting by category and name
+	 *
+	 * @param string      $category Settings category ('general', 'schedules').
+	 * @param string|null $name Setting key.
+	 *
+	 * @return array
+	 */
+	public function get_setting( $category, $name = null ) {
+		$option = get_option( 'wpappointments_' . $category . '_' . $name );
+
+		return $option;
 	}
 }

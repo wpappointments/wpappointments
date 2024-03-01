@@ -47,7 +47,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 							});
 						}}
 					>
-						Find time
+						{__('Find time', 'wpappointments')}
 					</Button>
 				</FormFieldSet>
 
@@ -70,8 +70,8 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 								date.getDay() === 6
 							);
 						}}
-						startOfWeek={1}
-						events={[]} // TODO: add days with available spots to eventsa
+						startOfWeek={1} // TODO: get from settings
+						events={[]} // TODO: add days with available spots to events
 						onMonthPreviewed={(date) => {
 							const _date = new Date(date);
 							const month = _date.getMonth() as MonthIndex;
@@ -82,7 +82,9 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					/>
 				</FormFieldSet>
 
-				<TimePicker date={new Date(date)} />
+				{date && (
+					<TimePicker date={new Date(date)} />
+				)}
 
 				{isSlideoutOpen(`find-time-${mode}`) && (
 					<TimeFinder mode={mode} />
