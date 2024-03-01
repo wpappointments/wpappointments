@@ -117,6 +117,9 @@ export default withForm(function AppointmentsSettings() {
 								'Default status for the frontend form',
 								'wpappointments'
 							)}
+							rules={{
+								required: true,
+							}}
 						/>
 					</FormFieldSet>
 				</CardBody>
