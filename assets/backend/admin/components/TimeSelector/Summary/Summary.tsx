@@ -3,7 +3,9 @@ import { Card, CardHeader, CardBody } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
+import { formatDate, formatTime } from '~/backend/utils/i18n';
 import styles from './Summary.module.css';
+
 
 export type SummaryProps = {
 	date: Date;
@@ -28,6 +30,14 @@ export default function Summary({
 }: SummaryProps) {
 	const userDiffTimezone = userSiteTimezoneMatch();
 
+	const dateTimeStart = new Date(date);
+	dateTimeStart.setHours(parseInt(timeHourStart));
+	dateTimeStart.setMinutes(parseInt(timeMinuteStart));
+
+	const dateTimeEnd = new Date(date);
+	dateTimeEnd.setHours(parseInt(timeHourEnd));
+	dateTimeEnd.setMinutes(parseInt(timeMinuteEnd));
+
 	return (
 		<Card className={styles.summary}>
 			<CardHeader className={styles.summaryHeader}>
@@ -36,17 +46,15 @@ export default function Summary({
 			<CardBody className={styles.summaryBody}>
 				<div className={styles.summaryRow}>
 					<strong>{__('Date', 'wpappointments')}</strong>{' '}
-					{date.toLocaleDateString('pl-PL')}
+					{date && formatDate(date)}
 				</div>
 				<div className={styles.summaryRow}>
 					<strong>{__('Time', 'wpappointments')}</strong>{' '}
-					{__(
-						sprintf(
-							'%s to %s',
-							sprintf('%s:%s', timeHourStart, timeMinuteStart),
-							sprintf('%s:%s', timeHourEnd, timeMinuteEnd)
-						),
-						'wpappointments'
+					{/* translators: %s: start time, %s: end time */}
+					{sprintf(
+						__('%s to %s', 'wpappointments'),
+						formatTime(dateTimeStart),
+						formatTime(dateTimeEnd)
 					)}
 					{userDiffTimezone && ` (${userDiffTimezone})`}
 				</div>

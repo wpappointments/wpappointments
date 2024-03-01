@@ -16,3 +16,8 @@
 	background-color: #d52020;
 	color: #fff;
 }
+
+.summary-customer-name {
+	font-size: 110%;
+  line-height: 1.8;
+}

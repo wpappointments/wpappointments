@@ -17,7 +17,7 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 			</CardHeader>
 			<CardBody className={styles.summaryBody}>
 				<div className={styles.summaryCustomerRow}>
-					<div>
+					<div className={styles.summaryCustomerName}>
 						<strong>{customer.name}</strong>
 					</div>
 					<span>

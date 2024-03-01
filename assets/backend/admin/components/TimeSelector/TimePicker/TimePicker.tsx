@@ -3,14 +3,8 @@ import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { addHours, addMinutes } from 'date-fns';
-import {
-	getRangesAvailableSlots,
-	timeRangesContainAnother,
-} from '~/backend/utils/appointments';
-import {
-	createTimeRange,
-	createTimeRangeFromMinutes,
-} from '~/backend/utils/datetime';
+import { getRangesAvailableSlots, timeRangesContainAnother } from '~/backend/utils/appointments';
+import { createTimeRange, createTimeRangeFromMinutes } from '~/backend/utils/datetime';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { SettingsSchedule } from '~/backend/store/settings/settings.types';
@@ -19,6 +13,7 @@ import Number from '../../FormField/Number/Number';
 import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 import Summary from '../Summary/Summary';
+
 
 export type StartEndTimePickerProps = {
 	date: Date;
@@ -32,6 +27,7 @@ type Fields = {
 	date: string;
 };
 
+// TODO: use dat-fns locale for this
 const daysOfWeek = new Map<number, keyof SettingsSchedule>([
 	[0, 'sunday'],
 	[1, 'monday'],
@@ -189,15 +185,17 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 				</FormFieldSet>
 			</FormFieldSet>
 
-			<Summary
-				date={date}
-				timeHourStart={timeHourStart}
-				timeMinuteStart={timeMinuteStart}
-				timeHourEnd={timeHourEnd || defaultTimeHourEnd}
-				timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
-				duration={duration || length}
-				isDateOutsideWorkingHours={isOutside}
-			/>
+			{timeHourStart && timeMinuteStart && (
+				<Summary
+					date={date}
+					timeHourStart={timeHourStart}
+					timeMinuteStart={timeMinuteStart}
+					timeHourEnd={timeHourEnd || defaultTimeHourEnd}
+					timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
+					duration={duration || length}
+					isDateOutsideWorkingHours={isOutside}
+				/>
+			)}
 
 			<div style={{ marginTop: '20px' }}>
 				<Button
@@ -225,7 +223,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 
 export function createHourOptions(
 	availableHours: Set<string> | undefined,
-	clockType: 12 | 24 = 24,
+	clockType: '12' | '24' = '24',
 	minHour = 0
 ) {
 	const hours: {
@@ -237,24 +235,30 @@ export function createHourOptions(
 		return hours;
 	}
 
-	const is24 = clockType === 24;
-	const hoursLimit = is24 ? 24 : 12;
+	const is24 = clockType === '24';
 
-	for (let i = minHour; i < hoursLimit; i++) {
-		let hour = i.toString();
+	for (let i = minHour; i < 24; i++) {
+		let hour = i.toString().padStart(2, '0');
+		let label = hour;
 
-		if (is24) {
-			hour = hour.padStart(2, '0');
-		}
+		if (!is24) {
+			if (i <= 12) {
+				label = i + ' am';
+			}
 
-		if (!is24 && i === 0) {
-			hour = '12';
+			if (i > 12) {
+				label = i - 12 + ' pm';
+			}
+
+			if (i === 0) {
+				label = '12 pm';
+			}
 		}
 
 		hours.push({
 			label: availableHours.has(hour.toString())
-				? `⚈ ${hour}`
-				: `⚆ ${hour}`,
+				? `⚈ ${label}`
+				: `⚆ ${label}`,
 			value: hour,
 		});
 	}

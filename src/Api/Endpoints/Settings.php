@@ -109,7 +109,20 @@ class Settings extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_category_settings( WP_REST_Request $request ) {
-		return false; // TODO: Implement.
+		$params   = $request->get_url_params();
+		$category = $params['category'];
+
+		$settings = new SettingsModel();
+		$settings = $settings->get_all_by_category( $category );
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'settings' => $settings,
+				),
+			)
+		);
 	}
 
 	/**

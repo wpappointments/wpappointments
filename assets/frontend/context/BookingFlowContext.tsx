@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { addQueryArgs } from '@wordpress/url';
-import { format } from 'date-fns';
 import { useLilius, Day } from 'use-lilius';
 import { safeParse } from 'valibot';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
@@ -14,6 +13,7 @@ import {
 	DayCalendar,
 } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
+import { formatTime } from '~/backend/utils/i18n';
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -192,7 +192,7 @@ function findDayAvailability(
 					return day.day.map((slot) => {
 						return {
 							date: new Date(slot.timestamp),
-							time: format(new Date(slot.timestamp), 'HH:mm'),
+							time: formatTime(new Date(slot.timestamp)),
 							available: slot.available,
 							timestamp: slot.timestamp,
 							dateString: slot.dateString,

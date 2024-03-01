@@ -22,6 +22,7 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\scripts' );
  */
 function scripts() {
 	$client_deps = require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/build/index.tsx.asset.php';
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
 
 	wp_enqueue_script(
 		'wpappointments-client-js',
@@ -35,11 +36,12 @@ function scripts() {
 		'wpappointments-client-js',
 		'wpappointments',
 		array(
-			'api' => array(
+			'api'  => array(
 				'root'      => esc_url_raw( rest_url() ),
 				'namespace' => trailingslashit( WPAPPOINTMENTS_API_NAMESPACE ),
 				'url'       => esc_url_raw( trailingslashit( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ) ),
 			),
+			'date' => create_date_settings_array(),
 		)
 	);
 }

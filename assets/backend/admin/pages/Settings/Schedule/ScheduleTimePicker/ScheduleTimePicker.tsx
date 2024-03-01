@@ -1,9 +1,6 @@
 import { useSelect, select } from '@wordpress/data';
 import { addMinutes, format } from 'date-fns';
-import {
-	DayOpeningHours,
-	SettingsSchedule,
-} from '~/backend/store/settings/settings.types';
+import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 import Select from '~/backend/admin/components/FormField/Select/Select';
@@ -33,7 +30,8 @@ export default function ScheduleTimePicker({
 		return select(store).getAllSettings();
 	}, []);
 
-	const { schedule, appointments } = settings;
+	const { schedule, appointments, general } = settings;
+	const { clockType } = general;
 
 	return (
 		<div className={styles.timePicker}>
@@ -52,7 +50,8 @@ export default function ScheduleTimePicker({
 					}}
 					options={createHourOptions(
 						type,
-						schedule[day].slots.list[index].start.hour
+						schedule[day].slots.list[index].start.hour,
+						clockType || 24
 					)}
 					defaultValue={
 						schedule[day].slots.list[index][type].hour ?? '00'
@@ -117,7 +116,7 @@ class DateRange {
 	}
 }
 
-function createHourOptions(type: 'start' | 'end', minHour: string | null) {
+function createHourOptions(type: 'start' | 'end', minHour: string | null, clockType: '12' | '24' = '24') {
 	const options = [];
 	let min = 0;
 
@@ -137,7 +136,7 @@ function createHourOptions(type: 'start' | 'end', minHour: string | null) {
 		}
 
 		options.push({
-			label: format(date, 'HH'),
+			label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
 			value: format(date, 'HH'),
 		});
 	}
