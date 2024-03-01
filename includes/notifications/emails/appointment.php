@@ -20,16 +20,14 @@ require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
  * @return void
  */
 function send_appointment_created_admin_email( $appointment ) {
-	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-created-admin.html';
-	$content = ob_get_clean();
+	$content = get_template_content( 'appointment-created-admin' );
 
 	$formats = get_date_formats();
 
 	wp_mail(
 		$appointment->customer->email,
 		sprintf(
-			/* translators: %1$s: Date, %2$s: Time */
+		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
 			wp_date( $formats['date'], $appointment->timestamp ),
 			wp_date( $formats['time'], $appointment->timestamp )
@@ -48,22 +46,20 @@ add_action(
 /**
  * Email template for appointment updated
  *
- * @param \WPAppointments\Appointment $new_appointment     New appointment object.
+ * @param \WPAppointments\Appointment $new_appointment New appointment object.
  * @param \WPAppointments\Appointment $previous_appointment Previous appointment object.
  *
  * @return void
  */
 function send_updated_appointment_email( $new_appointment, $previous_appointment ) {
-	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-updated.html';
-	$content = ob_get_clean();
+	$content = get_template_content( 'appointment-updated' );
 
 	$formats = get_date_formats();
 
 	wp_mail(
 		$new_appointment->customer->email,
 		sprintf(
-			/* translators: %1$s: Date, %2$s: Time */
+		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Updated: %1$s at %2$s', 'wpappointments' ),
 			wp_date( $formats['date'], $new_appointment->timestamp ),
 			wp_date( $formats['time'], $new_appointment->timestamp )
@@ -87,9 +83,7 @@ add_action(
  * @return void
  */
 function send_cancelled_appointment_email( $appointment ) {
-	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-cancelled.html';
-	$content = ob_get_clean();
+	$content = get_template_content( 'appointment-cancelled' );
 
 	$formats = get_date_formats();
 
@@ -121,9 +115,7 @@ add_action(
  * @return void
  */
 function send_confirmed_appointment_email( $content, $appointment ) {
-	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-confirmed.html';
-	$content = ob_get_clean();
+	$content = get_template_content( 'appointment-confirmed' );
 
 	$formats = get_date_formats();
 
@@ -155,9 +147,7 @@ add_action(
  * @return void
  */
 function send_no_show_appointment_email( $content, $appointment ) {
-	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-no-show.html';
-	$content = ob_get_clean();
+	$content = get_template_content( 'appointment-no-show' );
 
 	$formats = get_date_formats();
 
@@ -205,4 +195,18 @@ function evaluate_merge_tag( $content, $new_appointment, $previous_appointment =
 	);
 
 	return str_replace( array_keys( $tags ), array_values( $tags ), $content );
+}
+
+/**
+ * Get the content of the email template
+ *
+ * @param string $template_name Name of the template.
+ *
+ * @return string
+ */
+function get_template_content( $template_name ): string {
+	ob_start();
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/' . $template_name . '.html';
+
+	return ob_get_clean();
 }
