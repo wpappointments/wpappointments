@@ -198,7 +198,6 @@ function FormFields() {
 							{ label: '12 hours', value: '12' },
 							{ label: '24 hours', value: '24' },
 						]}
-						defaultValue="24"
 					/>
 				</FormFieldSet>
 				<FormFieldSet style={{ marginBottom: 25 }}>

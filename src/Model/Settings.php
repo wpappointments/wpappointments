@@ -59,7 +59,7 @@ class Settings {
 			),
 			array(
 				'name' => 'clockType',
-				'type' => 'number',
+				'type' => 'string',
 			),
 			array(
 				'name' => 'timezoneSiteDefault',
