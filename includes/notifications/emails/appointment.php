@@ -146,7 +146,7 @@ add_action(
  *
  * @return void
  */
-function send_confirmed_appointment_email( $content, $appointment ) {
+function send_appointment_confirmed_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-confirmed' );
 	$formats = get_date_formats();
 
@@ -164,7 +164,7 @@ function send_confirmed_appointment_email( $content, $appointment ) {
 
 add_action(
 	'wpappointments_appointment_confirmed',
-	__NAMESPACE__ . '\\send_confirmed_appointment_email',
+	__NAMESPACE__ . '\\send_appointment_confirmed_email',
 	10,
 	2
 );
