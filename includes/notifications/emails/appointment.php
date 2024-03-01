@@ -21,7 +21,7 @@ require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
  */
 function send_appointment_created_admin_email( $appointment ) {
 	ob_start();
-	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-created.html';
+	require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'includes/notifications/emails/html/appointment-created-admin.html';
 	$content = ob_get_clean();
 
 	$formats = get_date_formats();
