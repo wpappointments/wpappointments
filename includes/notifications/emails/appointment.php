@@ -8,6 +8,8 @@
 
 namespace WPAppointments\Notifications\Emails;
 
+use WPAppointments\Model\Settings;
+
 defined( 'ABSPATH' ) || exit;
 
 require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
@@ -214,16 +216,18 @@ add_action(
 function evaluate_merge_tag( $content, $new_appointment, $previous_appointment = null ) {
 	$formats = get_date_formats();
 
+	$settings = new Settings();
+
 	$tags = array(
 		'{customer_name}'    => $new_appointment->customer->name,
 		'{previous_date}'    => $previous_appointment ? wp_date( $formats['date'], $previous_appointment->timestamp ) : '',
 		'{previous_time}'    => $previous_appointment ? wp_date( $formats['time'], $previous_appointment->timestamp ) : '',
 		'{date}'             => wp_date( $formats['date'], $new_appointment->timestamp ),
 		'{time}'             => wp_date( $formats['time'], $new_appointment->timestamp ),
-		'{admin_first_name}' => get_option( 'wpappointments_general_firstName' ),
-		'{admin_last_name}'  => get_option( 'wpappointments_general_lastName' ),
-		'{admin_email}'      => get_option( 'wpappointments_general_email' ),
-		'{admin_phone}'      => get_option( 'wpappointments_general_phoneNumber' ),
+		'{admin_first_name}' => $settings->get_setting( 'general', 'firstName' ),
+		'{admin_last_name}'  => $settings->get_setting( 'general', 'lastName' ),
+		'{admin_email}'      => $settings->get_setting( 'general', 'email' ),
+		'{admin_phone}'      => $settings->get_setting( 'general', 'phoneNumber' ),
 	);
 
 	return str_replace( array_keys( $tags ), array_values( $tags ), $content );
