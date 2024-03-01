@@ -20,7 +20,7 @@ export type SettingsGeneral = {
 	lastName: string;
 	phoneNumber: string;
 	companyName: string;
-	clockType: 12 | 24;
+	clockType: '12' | '24';
 };
 
 export type SettingsAppointments = {

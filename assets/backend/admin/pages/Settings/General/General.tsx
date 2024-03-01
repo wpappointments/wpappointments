@@ -30,7 +30,7 @@ type Fields = {
 	lastName: string;
 	phoneNumber: string;
 	companyName: string;
-	clockType: 12 | 24;
+	clockType: '12' | '24';
 	startOfWeek: number;
 	timezoneSiteDefault: boolean;
 	timezone: string;

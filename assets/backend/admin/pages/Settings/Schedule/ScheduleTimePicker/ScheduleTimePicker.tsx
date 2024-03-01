@@ -116,7 +116,7 @@ class DateRange {
 	}
 }
 
-function createHourOptions(type: 'start' | 'end', minHour: string | null, clockType: number) {
+function createHourOptions(type: 'start' | 'end', minHour: string | null, clockType: '12' | '24' = '24') {
 	const options = [];
 	let min = 0;
 
@@ -136,7 +136,7 @@ function createHourOptions(type: 'start' | 'end', minHour: string | null, clockT
 		}
 
 		options.push({
-			label: format(date, clockType === 24 ? 'HH' : 'h aaa'),
+			label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
 			value: format(date, 'HH'),
 		});
 	}

@@ -26,6 +26,7 @@ function create_date_settings_array() {
 	);
 
 	$settings = new Settings();
+  $formats = get_date_formats();
 
 	return array(
 		'timezones'    => timezone_identifiers_list(),
@@ -36,12 +37,26 @@ function create_date_settings_array() {
 			'time' => $php_to_js_time_format_map,
 		),
 		'formats'      => array(
-			'date' => $settings->get_setting( 'general', 'dateFormat' ),
-			'time' => $settings->get_setting( 'general', 'timeFormat' ),
+			'date' => $formats['date'],
+			'time' => $formats['time'],
 		),
 		'formatsJs'    => array(
-			'date' => $php_to_js_date_format_map[ $settings->get_setting( 'general', 'dateFormat' ) ],
-			'time' => $php_to_js_time_format_map[ $settings->get_setting( 'general', 'timeFormat' ) ],
+			'date' => $php_to_js_date_format_map[ $formats['date'] ],
+			'time' => $php_to_js_time_format_map[ $formats['time'] ],
 		),
 	);
+}
+
+/*
+  * Get date format and time formats
+  *
+  * @return array
+  */
+function get_date_formats() {
+  $settings = new Settings();
+
+  return [
+    'date' => $settings->get_setting( 'general', 'dateFormat' ),
+    'time' => $settings->get_setting( 'general', 'timeFormat' ),
+  ];
 }

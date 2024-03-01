@@ -223,7 +223,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 
 export function createHourOptions(
 	availableHours: Set<string> | undefined,
-	clockType: 12 | 24 = 24,
+	clockType: '12' | '24' = '24',
 	minHour = 0
 ) {
 	const hours: {
@@ -235,7 +235,7 @@ export function createHourOptions(
 		return hours;
 	}
 
-	const is24 = clockType === 24;
+	const is24 = clockType === '24';
 
 	for (let i = minHour; i < 24; i++) {
 		let hour = i.toString().padStart(2, '0');
