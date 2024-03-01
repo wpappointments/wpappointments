@@ -6,7 +6,6 @@ import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDate, formatTime } from '~/backend/utils/i18n';
 import styles from './Summary.module.css';
 
-
 export type SummaryProps = {
 	date: Date;
 	timeHourStart: string;
