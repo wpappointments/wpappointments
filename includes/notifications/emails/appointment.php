@@ -115,7 +115,7 @@ add_action(
  *
  * @return void
  */
-function send_cancelled_appointment_email( $appointment ) {
+function send_appointment_cancelled( $appointment ) {
 	$content = get_template_content( 'appointment-cancelled' );
 	$formats = get_date_formats();
 
@@ -133,7 +133,7 @@ function send_cancelled_appointment_email( $appointment ) {
 
 add_action(
 	'wpappointments_appointment_cancelled',
-	__NAMESPACE__ . '\\send_cancelled_appointment_email',
+	__NAMESPACE__ . '\\send_appointment_cancelled',
 	10,
 	1
 );
