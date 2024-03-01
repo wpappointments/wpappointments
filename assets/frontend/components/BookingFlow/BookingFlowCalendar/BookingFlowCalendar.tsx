@@ -36,6 +36,7 @@ export default function BookingFlowCalendar() {
 	const { alignment } = attributes;
 
 	const datetime = watch('datetime');
+	// TODO: use dat-fns locale for this
 	const week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	const currentMonth = format(viewing, 'LLLL');
 	const currentYear = viewing.getFullYear();
