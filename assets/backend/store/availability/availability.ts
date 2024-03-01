@@ -8,7 +8,6 @@ import { AvailabilityState } from './availability.types';
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_AVAILABILITY_STATE: AvailabilityState = {
-	today: [],
 	month: [],
 };
 
@@ -25,7 +24,6 @@ export const reducer = (state = DEFAULT_AVAILABILITY_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_AVAILABILITY':
 			return produce(state, (draft) => {
-				draft.today = action.availability.today;
 				draft.month = action.availability.month;
 			});
 
@@ -39,6 +37,7 @@ export const selectors = {
 		state: State,
 		currentMonth: number,
 		currentYear: number,
+		timezone: string,
 		_: number
 	) {
 		return state.availability;
@@ -54,7 +53,8 @@ export const controls = {
 export const resolvers = {
 	*getAvailability(
 		currentMonth: number,
-		currentYear: number
+		currentYear: number,
+		timezone: string
 	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; availability: State['availability'] },
@@ -64,6 +64,7 @@ export const resolvers = {
 			addQueryArgs('availability', {
 				currentMonth: currentMonth + 1,
 				currentYear,
+				timezone,
 			})
 		);
 		const { data } = response;

@@ -19,49 +19,6 @@ use WPAppointments\Model\AppointmentPost;
  */
 class Availability {
 	/**
-	 * Return all day slots availability
-	 *
-	 * @param \DateTime $date Date.
-	 *
-	 * @return (string|bool)[][] $slots
-	 */
-	public static function get_day_availability( $date ) {
-		$timezone = empty( $tz ) ? wp_timezone_string() : $tz;
-
-		$slots = self::get_availability(
-			$date->format( 'Y-m-d' ) . ' 00:00:00',
-			$date->format( 'Y-m-d' ) . ' 23:59:59',
-			$timezone
-		);
-
-		return $slots;
-	}
-
-	/**
-	 * Return all month slots availability
-	 *
-	 * @param DateTime $date Date.
-	 */
-	public static function get_month_availability( $date ) {
-		$month = (int) $date->format( 'm' );
-		$year  = (int) $date->format( 'Y' );
-
-		$days_in_month = (int) gmdate( 't', mktime( 0, 0, 0, $month, 1, $year ) );
-
-		$slots = array();
-
-		for ( $i = 1; $i <= $days_in_month; $i++ ) {
-			$_date   = new DateTime( $year . '-' . $month . '-' . $i . ' midnight' );
-			$slots[] = array(
-				'date'  => $_date,
-				'slots' => self::get_day_availability( $_date, true ),
-			);
-		}
-
-		return $slots;
-	}
-
-	/**
 	 * Return all week slots availability
 	 *
 	 * @param string    $date_start Date in ISO 8601 format.
@@ -184,6 +141,64 @@ class Availability {
 			'slots'        => $slots,
 			'trimmedSlots' => $trimmed_slots,
 		);
+	}
+
+	/**
+	 * Get month days availability
+	 *
+	 * @param string $current_month Current month.
+	 * @param string $current_year Current year.
+	 * @param string $timezone Timezone string.
+	 *
+	 * @return object[] $days
+	 */
+	public static function get_month_days_availability( $current_month, $current_year, $timezone ) {
+		$first_day = new DateTime( $current_year . '-' . $current_month . '-01' );
+		$first_day->setTimezone( new \DateTimeZone( $timezone ) );
+
+		$last_day = new DateTime( $current_year . '-' . $current_month . '-' . $first_day->format( 't' ) );
+		$last_day->setTimezone( new \DateTimeZone( $timezone ) );
+
+		$first_day->setTime( 0, 0, 0 );
+		$last_day->setTime( 23, 59, 59 );
+
+		$days = array();
+
+		$interval = new \DateInterval( 'P1D' );
+		$range    = new \DatePeriod( $first_day, $interval, $last_day );
+
+		foreach ( $range as $day ) {
+			$day_start = clone $day;
+			$day_start->setTime( 0, 0, 0 );
+
+			$day_end = clone $day;
+			$day_end->setTime( 23, 59, 59 );
+
+			$day_availability = self::get_availability(
+				$day_start->format( 'c' ),
+				$day_end->format( 'c' ),
+				$timezone
+			);
+
+			$slots = $day_availability['slots'] ?? array();
+
+			$available_slots = array_filter(
+				$slots,
+				function ( $slot ) {
+					return true === $slot['available'];
+				}
+			);
+
+			$days[] = (object) array(
+				'date'           => $day->format( 'c' ),
+				'day'            => $slots,
+				'available'      => count( $available_slots ) > 0,
+				'totalAvailable' => count( $available_slots ),
+				'totalSlots'     => count( $slots ),
+			);
+		}
+
+		return $days;
 	}
 
 	/**
