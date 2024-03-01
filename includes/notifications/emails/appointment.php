@@ -244,7 +244,7 @@ add_action(
  *
  * @return void
  */
-function send_appointment_confirmed_email( $content, $appointment ) {
+function send_appointment_confirmed_customer_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-confirmed-customer' );
 	$formats = get_date_formats();
 
@@ -262,7 +262,7 @@ function send_appointment_confirmed_email( $content, $appointment ) {
 
 add_action(
 	'wpappointments_appointment_confirmed',
-	__NAMESPACE__ . '\\send_appointment_confirmed_email',
+	__NAMESPACE__ . '\\send_appointment_confirmed_customer_email',
 	10,
 	2
 );
