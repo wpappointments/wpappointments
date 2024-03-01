@@ -185,15 +185,17 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 				</FormFieldSet>
 			</FormFieldSet>
 
-			<Summary
-				date={date}
-				timeHourStart={timeHourStart}
-				timeMinuteStart={timeMinuteStart}
-				timeHourEnd={timeHourEnd || defaultTimeHourEnd}
-				timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
-				duration={duration || length}
-				isDateOutsideWorkingHours={isOutside}
-			/>
+			{timeHourStart && timeMinuteStart && (
+				<Summary
+					date={date}
+					timeHourStart={timeHourStart}
+					timeMinuteStart={timeMinuteStart}
+					timeHourEnd={timeHourEnd || defaultTimeHourEnd}
+					timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
+					duration={duration || length}
+					isDateOutsideWorkingHours={isOutside}
+				/>
+			)}
 
 			<div style={{ marginTop: '20px' }}>
 				<Button
