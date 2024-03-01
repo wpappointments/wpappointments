@@ -9,7 +9,8 @@
 add_action(
 	'init',
 	function () {
-		if ( defined( 'WPAPPOINTMENTS_DEBUG' ) ) {
+		/** @disregard P1011 because this constant is defined through wp-env config */
+		if ( defined( 'WPAPPOINTMENTS_DEBUG' && WPAPPOINTMENTS_DEBUG) ) {
 			register_post_type(
 				'appointment',
 				array(
