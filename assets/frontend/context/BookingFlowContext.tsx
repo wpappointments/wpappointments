@@ -1,19 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { addQueryArgs } from '@wordpress/url';
-import { useLilius, Day } from 'use-lilius';
+import { useLilius } from 'use-lilius';
 import { safeParse } from 'valibot';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { Appointment } from '~/backend/types';
-import {
-	AvailabilityResponse,
-	AvailabilityResponseSchema,
-	DayCalendar,
-} from '../frontend';
+import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
-import { formatTime } from '~/backend/utils/i18n';
+
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -47,6 +44,7 @@ export type BookingFlowContext = {
 	formError: string | null;
 	formSuccess: boolean;
 	onSubmit: (data: BookingFlowFormFields) => Promise<void>;
+	weekDays: ReturnType<typeof getWeekDays>;
 };
 
 export type BookingFlowContextProviderProps = {
@@ -60,7 +58,7 @@ export function BookingFlowContextProvider({
 }: BookingFlowContextProviderProps) {
 	const form = useForm<BookingFlowFormFields>();
 	const lilius = useLilius({
-		weekStartsOn: Day.MONDAY,
+		weekStartsOn: window.wpappointments.date.startOfWeek,
 	});
 
 	const { calendar, selected, viewing } = lilius;
@@ -157,6 +155,8 @@ export function BookingFlowContextProvider({
 		}
 	};
 
+	const weekDays = getWeekDays();
+
 	const value = {
 		attributes,
 		dayAvailability,
@@ -166,6 +166,7 @@ export function BookingFlowContextProvider({
 		formError,
 		formSuccess,
 		onSubmit,
+		weekDays,
 	};
 
 	return (

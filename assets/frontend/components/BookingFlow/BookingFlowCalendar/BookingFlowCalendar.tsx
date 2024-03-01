@@ -13,6 +13,7 @@ export default function BookingFlowCalendar() {
 		calendarWithAvailability,
 		dayAvailability,
 		attributes,
+		weekDays,
 	} = useBookingFlowContext();
 
 	const {
@@ -36,8 +37,6 @@ export default function BookingFlowCalendar() {
 	const { alignment } = attributes;
 
 	const datetime = watch('datetime');
-	// TODO: use dat-fns locale for this
-	const week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 	const currentMonth = format(viewing, 'LLLL');
 	const currentYear = viewing.getFullYear();
 
@@ -68,9 +67,9 @@ export default function BookingFlowCalendar() {
 					</button>
 				</div>
 				<div className={styles.calendarHeader}>
-					{week.map((day, i) => (
+					{weekDays.map((day, i) => (
 						<div key={i} className={styles.calendarHeaderDay}>
-							{day}
+							{day.label}
 						</div>
 					))}
 				</div>
