@@ -43,7 +43,7 @@ class Availability {
 		$range    = new \DatePeriod( $range_start, $interval, $range_end );
 
 		$settings = new Settings();
-		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
+		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_scheduleId' ) );
 
 		$appointments       = new AppointmentPost();
 		$range_appointments = $appointments->get_date_range_appointments(

@@ -147,7 +147,7 @@ class Settings extends Controller {
 				return self::error( $result->get_error_message() );
 			}
 		} else {
-			$schedule_post_id = get_option( 'wpappointments_default_schedule_id' );
+			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {

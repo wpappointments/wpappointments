@@ -149,7 +149,7 @@ class Settings {
 			}
 		}
 
-		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_schedule_id' ) );
+		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_scheduleId' ) );
 		$settings['schedule'] = $schedule;
 
 		$service                                 = $this->get_default_service( get_option( 'wpappointments_defaultServiceId' ) );
