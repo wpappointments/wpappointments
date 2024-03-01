@@ -36,7 +36,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	const [hours, setHours] = useState<
 		'earlyMorning' | 'morning' | 'afternoon' | 'evening' | 'allDay' | 'auto'
-	>('morning');
+	>('allDay');
 
 	const dispatch = useDispatch(store);
 
