@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 require_once WPAPPOINTMENTS_PLUGIN_DIR_PATH . '/includes/utils/datetime.php';
 
 /**
- * Email template for appointment created
+ * Send email notification to the site admin when an appointment is created
  *
  * @param \WPAppointments\Appointment $appointment Appointment object.
  *
