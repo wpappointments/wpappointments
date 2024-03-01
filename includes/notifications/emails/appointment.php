@@ -211,6 +211,39 @@ add_action(
  *
  * @return void
  */
+function send_appointment_confirmed_admin_email( $content, $appointment ) {
+	$content     = get_template_content( 'appointment-confirmed-admin' );
+	$formats     = get_date_formats();
+	$settings    = new Settings();
+	$admin_email = $settings->get_setting( 'general', 'email' );
+
+	wp_mail(
+		$admin_email,
+		sprintf(
+		/* translators: %1$s: Date, %2$s: Time */
+			__( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
+			wp_date( $formats['date'], $appointment->timestamp ),
+			wp_date( $formats['time'], $appointment->timestamp )
+		),
+		evaluate_merge_tag( $content, $appointment )
+	);
+}
+
+add_action(
+	'wpappointments_appointment_confirmed',
+	__NAMESPACE__ . '\\send_appointment_confirmed_admin_email',
+	10,
+	2
+);
+
+/**
+ * Email template for appointment confirmed
+ *
+ * @param string                      $content Email content.
+ * @param \WPAppointments\Appointment $appointment Appointment object.
+ *
+ * @return void
+ */
 function send_appointment_confirmed_email( $content, $appointment ) {
 	$content = get_template_content( 'appointment-confirmed-customer' );
 	$formats = get_date_formats();
