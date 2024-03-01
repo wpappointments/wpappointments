@@ -85,7 +85,7 @@ add_action(
  *
  * @return void
  */
-function send_updated_appointment_email( $new_appointment, $previous_appointment ) {
+function send_appointment_updated_customer_email( $new_appointment, $previous_appointment ) {
 	$content = get_template_content( 'appointment-updated' );
 	$formats = get_date_formats();
 
@@ -103,7 +103,7 @@ function send_updated_appointment_email( $new_appointment, $previous_appointment
 
 add_action(
 	'wpappointments_appointment_updated',
-	__NAMESPACE__ . '\\send_updated_appointment_email',
+	__NAMESPACE__ . '\\send_appointment_updated_customer_email',
 	10,
 	2
 );
