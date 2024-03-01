@@ -28,6 +28,9 @@ declare global {
 				timezones: string[];
 				weekStartsOn: number;
 				siteTimezone: string;
+				formatMaps: Record<string, string>;
+				formats: Record<string, string>;
+				formatsJs: Record<string, string>;
 			};
 		};
 		wp: any;

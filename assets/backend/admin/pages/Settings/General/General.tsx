@@ -12,6 +12,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { format } from 'date-fns';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { dateFormatMap, timeFormatMap } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
@@ -33,6 +34,10 @@ type Fields = {
 	startOfWeek: number;
 	timezoneSiteDefault: boolean;
 	timezone: string;
+	dateFormat: string;
+	customDateFormat: string;
+	timeFormat: string;
+	customTimeFormat: string;
 };
 
 type Response = APIResponse<{
@@ -200,7 +205,7 @@ function FormFields() {
 					<Checkbox
 						name="timezoneSiteDefault"
 						label="Use site default timezone"
-						defaultValue={true}
+						defaultValue={false}
 					/>
 					{!timezoneSiteDefault && (
 						<div>
@@ -221,15 +226,20 @@ function FormFields() {
 								defaultValue="24"
 							/>
 							<small>
-								Choose either a city in the same timezone as you
-								or a UTC
+								{__(
+									'Choose either a city in the same timezone as you or a UTC',
+									'wpappointments'
+								)}
 							</small>
 						</div>
 					)}
 					{timezoneSiteDefault && (
 						<div>
 							<small>
-								Site default timezone is{' '}
+								{__(
+									'Site default timezone is',
+									'wpappointments'
+								)}{' '}
 								<code>
 									<small>
 										{
@@ -244,18 +254,22 @@ function FormFields() {
 					)}
 					<div>
 						<small>
-							Universal time is{' '}
+							{__('Universal time is', 'wpappointments')}{' '}
 							<code>
-								<small>2024-02-25 10:35:18</small>
+								<small>
+									{_formatDate(new Date().toISOString())}
+								</small>
 							</code>
 							.
 						</small>
 					</div>
 					<div>
 						<small>
-							Local time is{' '}
+							{__('Local time is', 'wpappointments')}{' '}
 							<code>
-								<small>2024-02-25 11:35:18</small>
+								<small>
+									{format(new Date(), 'yyyy-MM-dd HH:ii:ss')}
+								</small>
 							</code>
 							.
 						</small>
@@ -347,7 +361,7 @@ function FormFields() {
 						</div>
 						{timeFormat === 'custom' && (
 							<Input
-								name="customDateFormat"
+								name="customTimeFormat"
 								label={__(
 									'Custom time format',
 									'wpappointments'
@@ -393,17 +407,14 @@ function FormFields() {
 	);
 }
 
-export const dateFormatMap = new Map<string, string>([
-	['F j, Y', 'MMMM d, yyyy'],
-	['Y-m-d', 'yyyy-MM-dd'],
-	['m/d/Y', 'MM/dd/yyyy'],
-	['d/m/Y', 'dd/MM/yyyy'],
-]);
+function _formatDate(date: string) {
+	const offsetDate = new Date(
+		new Date(date).setMinutes(
+			new Date(date).getMinutes() + new Date(date).getTimezoneOffset()
+		)
+	);
 
-export const timeFormatMap = new Map<string, string>([
-	['g:i aaa', 'h:mm a'],
-	['g:i aa', 'h:mm A'],
-	['H:i', 'HH:mm'],
-]);
+	return format(offsetDate, 'yyyy-MM-dd HH:mm:ss');
+}
 
 export default withForm(GeneralSettings);
