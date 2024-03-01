@@ -8,9 +8,12 @@ import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { Appointment } from '~/backend/types';
-import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
+import {
+	AvailabilityResponse,
+	AvailabilityResponseSchema,
+	DayCalendar,
+} from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
-
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -90,7 +93,7 @@ export function BookingFlowContextProvider({
 
 	useEffect(() => {
 		apiFetch({
-			path: addQueryArgs('calendar-availability-v2', {
+			path: addQueryArgs('calendar-availability', {
 				calendar: JSON.stringify(calendar[0]),
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 				trim: attributes.trimUnavailable,
@@ -195,6 +198,7 @@ function findDayAvailability(
 							date: new Date(slot.timestamp),
 							time: formatTime(new Date(slot.timestamp)),
 							available: slot.available,
+							inSchedule: slot.inSchedule,
 							timestamp: slot.timestamp,
 							dateString: slot.dateString,
 						};

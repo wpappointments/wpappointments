@@ -70,6 +70,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 			return select(store).getAvailability(
 				currentMonth,
 				currentYear,
+				Intl.DateTimeFormat().resolvedOptions().timeZone,
 				getSelector('getAvailability')
 			);
 		},
@@ -219,8 +220,8 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 
 	let hourHeadings = [];
 
-	if (month[0]?.slots?.slots) {
-		for (const slot of month[0].slots.slots) {
+	if (month[0]?.day) {
+		for (const slot of month[0].day) {
 			hourHeadings.push(formatTime(new Date(slot.dateString)));
 		}
 	}
@@ -235,7 +236,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	}
 
 	if (hours === 'allDay') {
-		const precision = hourHeadings.length / 12;
+		const precision = hourHeadings.length / 6;
 		hourHeadings = hourHeadings.filter((_, i) => i % precision === 0);
 	}
 
@@ -348,135 +349,141 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 						);
 					})}
 				</div>
-				<div
-					ref={scrollableRef}
-					className={styles.scrollable}
-					style={{
-						overflow: `${hours === 'allDay' ? 'hidden' : 'auto'}`,
-					}}
-				>
+				<div className={styles.scrollableWrapper}>
 					<div
-						className={styles.rows}
+						ref={scrollableRef}
+						className={styles.scrollable}
 						style={{
-							width: `${calculateWidth()}%`,
+							overflow: `${
+								hours === 'allDay' ? 'hidden' : 'auto'
+							}`,
 						}}
 					>
-						<div className={styles.row}>
-							{hourHeadings.map((date, index) => (
-								<div
-									className={styles.head}
-									key={date + '-head-' + index}
-								>
-									{date}
-								</div>
-							))}
+						<div
+							className={styles.rows}
+							style={{
+								width: `${calculateWidth()}%`,
+							}}
+						>
+							<div className={styles.row}>
+								{hourHeadings.map((date, index) => (
+									<div
+										className={styles.head}
+										key={date + '-head-' + index}
+									>
+										{date}
+									</div>
+								))}
+							</div>
+							{month.map((day) => {
+								return (
+									<div className={styles.row} key={day.date}>
+										{[...day.day].map((slot, index) => {
+											return (
+												<div
+													className={cn({
+														[styles.item]: true,
+														[styles.itemAvailable]:
+															slot.available,
+														[styles.itemBooked]:
+															slot.inSchedule &&
+															!slot.available &&
+															slot.timestamp >=
+																Date.now(),
+														[styles.itemSelected]:
+															false,
+													})}
+													key={
+														slot.dateString +
+														'-cell-' +
+														index
+													}
+													data-time={formatTimeRangeFromSlotDate(
+														slot.dateString
+													)}
+													onClick={() => {
+														const date = new Date(
+															slot.dateString
+														);
+
+														setValue(
+															'date',
+															slot.dateString
+														);
+														setValue(
+															'timeHourStart',
+															formatTimeForPicker(
+																date.getHours()
+															)
+														);
+														setValue(
+															'timeMinuteStart',
+															formatTimeForPicker(
+																date.getMinutes()
+															)
+														);
+
+														closeCurrentSlideOut();
+													}}
+													onMouseEnter={(e) => {
+														const target =
+															e.target as HTMLDivElement;
+														let next: HTMLDivElement =
+															target;
+
+														// highlight the next itemsToHighlight items
+														for (
+															let i = 0;
+															i <
+															itemsToHighlight -
+																1;
+															i++
+														) {
+															next =
+																next.nextSibling as HTMLDivElement;
+
+															if (!next) {
+																return;
+															}
+
+															next.classList.add(
+																styles.itemSelected
+															);
+														}
+													}}
+													onMouseLeave={(e) => {
+														const target =
+															e.target as HTMLDivElement;
+														let next: HTMLDivElement =
+															target;
+
+														// remove the highlight from the next itemsToHighlight items
+														for (
+															let i = 0;
+															i <
+															itemsToHighlight -
+																1;
+															i++
+														) {
+															next =
+																next.nextSibling as HTMLDivElement;
+
+															if (!next) {
+																return;
+															}
+
+															next.classList.remove(
+																styles.itemSelected
+															);
+														}
+													}}
+												></div>
+											);
+										})}
+									</div>
+								);
+							})}
 						</div>
-						{month.map((day) => {
-							return (
-								<div className={styles.row} key={day.date.date}>
-									{[...day.slots.slots].map((slot, index) => {
-										return (
-											<div
-												className={cn({
-													[styles.item]: true,
-													[styles.itemAvailable]:
-														slot.available,
-													[styles.itemBooked]:
-														slot.inSchedule &&
-														!slot.available &&
-														slot.timestamp >=
-															Date.now(),
-													[styles.itemSelected]:
-														false,
-												})}
-												key={
-													slot.dateString +
-													'-cell-' +
-													index
-												}
-												data-time={formatTimeRangeFromSlotDate(
-													slot.dateString
-												)}
-												onClick={() => {
-													const date = new Date(
-														slot.dateString
-													);
-
-													setValue(
-														'date',
-														slot.dateString
-													);
-													setValue(
-														'timeHourStart',
-														formatTimeForPicker(
-															date.getHours()
-														)
-													);
-													setValue(
-														'timeMinuteStart',
-														formatTimeForPicker(
-															date.getMinutes()
-														)
-													);
-
-													closeCurrentSlideOut();
-												}}
-												onMouseEnter={(e) => {
-													const target =
-														e.target as HTMLDivElement;
-													let next: HTMLDivElement =
-														target;
-
-													// highlight the next itemsToHighlight items
-													for (
-														let i = 0;
-														i <
-														itemsToHighlight - 1;
-														i++
-													) {
-														next =
-															next.nextSibling as HTMLDivElement;
-
-														if (!next) {
-															return;
-														}
-
-														next.classList.add(
-															styles.itemSelected
-														);
-													}
-												}}
-												onMouseLeave={(e) => {
-													const target =
-														e.target as HTMLDivElement;
-													let next: HTMLDivElement =
-														target;
-
-													// remove the highlight from the next itemsToHighlight items
-													for (
-														let i = 0;
-														i <
-														itemsToHighlight - 1;
-														i++
-													) {
-														next =
-															next.nextSibling as HTMLDivElement;
-
-														if (!next) {
-															return;
-														}
-
-														next.classList.remove(
-															styles.itemSelected
-														);
-													}
-												}}
-											></div>
-										);
-									})}
-								</div>
-							);
-						})}
 					</div>
 				</div>
 			</div>

@@ -3,10 +3,20 @@
 	gap: 10px;
 }
 
+.scrollable-wrapper {
+	position: relative;
+	flex: 1;
+}
+
 .scrollable {
 	overflow: scroll;
 	overscroll-behavior-x: contain;
-	flex: 1;
+	position: relative;
+	width: 100%;
+	padding-left: 25px;
+	padding-right: 25px;
+	left: -25px;
+	right: -25px;
 }
 
 .rows {
@@ -87,9 +97,11 @@
 	position: relative;
 	flex: 1;
 	font-weight: bold;
-	font-size: 10px;
-	margin-bottom: 5px;
+	font-size: 12px;
 	font-family: monospace;
+	left: -15px;
+	text-align: left;
+	padding-bottom: 5px;
 }
 
 .head::after {
@@ -100,21 +112,18 @@
 	background-color: rgb( 184, 184, 184 );
 	position: absolute;
 	bottom: -5px;
+	left: 15px;
 }
 
-.head:first-child::after {
+.days-column .head:first-child::after {
 	content: none;
-}
-
-.days-column .head {
-	margin-bottom: 0;
 }
 
 .head-row {
 	font-family: monospace;
 	flex: 1;
 	font-weight: bold;
-	font-size: 10px;
+	font-size: 12px;
 	text-align: left;
 	width: 100%;
 	display: flex;
