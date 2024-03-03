@@ -179,7 +179,6 @@ export function appointmentsApi({
 			return;
 		}
 
-		console.log('confirmAppointment', id);
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
 				path: `appointment/${id}/confirm`,
