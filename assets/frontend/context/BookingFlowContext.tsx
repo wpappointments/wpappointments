@@ -8,12 +8,9 @@ import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { Appointment } from '~/backend/types';
-import {
-	AvailabilityResponse,
-	AvailabilityResponseSchema,
-	DayCalendar,
-} from '../frontend';
+import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
+
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -48,6 +45,7 @@ export type BookingFlowContext = {
 	formSuccess: boolean;
 	onSubmit: (data: BookingFlowFormFields) => Promise<void>;
 	weekDays: ReturnType<typeof getWeekDays>;
+	availabilityLoading: boolean;
 };
 
 export type BookingFlowContextProviderProps = {
@@ -74,6 +72,7 @@ export function BookingFlowContextProvider({
 	>([]);
 	const [formError, setFormError] = useState<string | null>(null);
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
+	const [availabilityLoading, setAvailabilityLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (
@@ -108,6 +107,7 @@ export function BookingFlowContextProvider({
 						'Failed to parse availability response',
 						parsed
 					);
+					setAvailabilityLoading(false);
 					return;
 				}
 
@@ -115,6 +115,7 @@ export function BookingFlowContextProvider({
 				const { availability } = response;
 
 				setCalendarWithAvailability([availability]);
+				setAvailabilityLoading(false);
 			})
 			.catch((error) => {
 				console.error('Failed to fetch availability', error);
@@ -164,6 +165,7 @@ export function BookingFlowContextProvider({
 		attributes,
 		dayAvailability,
 		calendarWithAvailability,
+		availabilityLoading,
 		lilius,
 		form,
 		formError,
