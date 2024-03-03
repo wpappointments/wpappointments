@@ -41,8 +41,8 @@ function create_date_settings_array() {
 			'time' => $formats['time'],
 		),
 		'formatsJs'    => array(
-			'date' => $php_to_js_date_format_map[ $formats['date'] ],
-			'time' => $php_to_js_time_format_map[ $formats['time'] ],
+			'date' => $formats['date'] ? $php_to_js_date_format_map[ $formats['date'] ] : 'MMMM d, yyyy',
+			'time' => $formats['time'] ? $php_to_js_time_format_map[ $formats['time'] ] : 'h:mm aa',
 		),
 	);
 }

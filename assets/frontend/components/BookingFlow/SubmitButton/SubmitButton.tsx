@@ -3,14 +3,15 @@ import styles from './SubmitButton.module.css';
 
 export default function SubmitButton({ label = 'Book' }) {
 	return (
-		<input
+		<button
 			type="submit"
-			value={label}
 			className={cn({
 				'wp-block-button__link': true,
 				'wp-block-button': true,
 				[styles.submitButton]: true,
 			})}
-		/>
+		>
+			{label}
+		</button>
 	);
 }
