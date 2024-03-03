@@ -1,10 +1,19 @@
+.all-day-label,
 .day-label {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	width: 160px;
 	height: 40px;
 	text-transform: capitalize;
+}
+
+.day-label {
+	width: 160px;
+}
+
+.all-day-label > span {
+	display: inline-block;
+	margin-right: 15px;
 }
 
 .copy-to-all-days-wrapper {

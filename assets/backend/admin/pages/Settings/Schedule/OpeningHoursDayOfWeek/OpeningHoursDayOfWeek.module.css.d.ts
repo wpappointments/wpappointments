@@ -1,4 +1,7 @@
 declare const styles:
+  & Readonly<{ "allDayLabel": string }>
+  & Readonly<{ "allDayLabel": string }>
+  & Readonly<{ "dayLabel": string }>
   & Readonly<{ "dayLabel": string }>
   & Readonly<{ "copyToAllDaysWrapper": string }>
   & Readonly<{ "copyToAllDays": string }>

@@ -54,6 +54,7 @@ export type OpeningHoursSlot = {
 export type DayOpeningHours = {
 	day: Day;
 	enabled: boolean;
+	allDay: boolean;
 	slots: {
 		list: OpeningHoursSlot[];
 	};
