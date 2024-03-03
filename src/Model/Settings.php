@@ -95,6 +95,10 @@ class Settings {
 				'name' => 'timePickerPrecision',
 				'type' => 'number',
 			),
+			array(
+				'name' => 'defaultStatus',
+				'type' => 'string',
+			),
 		),
 		'calendar'     => array(),
 	);

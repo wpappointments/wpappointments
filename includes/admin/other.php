@@ -25,7 +25,7 @@ function body_class( $classes ) {
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		$classes .= ' wpappointments-admin';
 
-		if ( $screen->id === 'admin_page_wpappointments-wizard' ) {
+		if ( 'admin_page_wpappointments-wizard' === $screen->id ) {
 			$classes .= ' wpappointments-admin-wizard';
 		}
 	}
@@ -54,7 +54,7 @@ function render_globals_component() {
 
 /**
  * Redirect to wizard after plugin activation
- * 
+ *
  * @return void
  */
 function redirect_to_wizard() {
@@ -72,7 +72,7 @@ add_action( 'activated_plugin', __NAMESPACE__ . '\\redirect_to_wizard' );
 
 /**
  * Mark the wizard as complete
- * 
+ *
  * @return void
  */
 function mark_wizard_complete() {

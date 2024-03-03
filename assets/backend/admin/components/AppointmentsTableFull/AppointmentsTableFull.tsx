@@ -6,6 +6,7 @@ import {
 	info,
 	edit as editIcon,
 	cancelCircleFilled,
+	check,
 	trash,
 } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
@@ -25,6 +26,7 @@ type Props = {
 	onCancel?: (appointmentId: number) => void;
 	deleteAppointment?: AppointmentsApi['deleteAppointment'];
 	cancelAppointment?: AppointmentsApi['deleteAppointment'];
+	confirmAppointment?: AppointmentsApi['confirmAppointment'];
 	hideActions?: boolean;
 	hideHeader?: boolean;
 	hideEmptyStateButton?: boolean;
@@ -36,6 +38,7 @@ export default function AppointmentsTableFull({
 	onEmptyStateButtonClick,
 	onEdit,
 	onView,
+	confirmAppointment,
 	cancelAppointment,
 	deleteAppointment,
 	hideActions = false,
@@ -101,6 +104,13 @@ export default function AppointmentsTableFull({
 							row={row}
 							edit={onEdit}
 							view={onView}
+							confirmAppointment={async () => {
+								if (!confirmAppointment) {
+									return;
+								}
+
+								await confirmAppointment(row.id);
+							}}
 							setAppointmentModal={setAppointmentModal}
 							hideActions={hideActions}
 						/>
@@ -139,6 +149,7 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
+	confirmAppointment?: (appointmentId: number) => void;
 	setAppointmentModal: Dispatch<
 		SetStateAction<{
 			id: number;
@@ -152,6 +163,7 @@ function TableRow({
 	row,
 	edit,
 	view,
+	confirmAppointment,
 	setAppointmentModal,
 	hideActions = false,
 }: TableRowProps) {
@@ -216,8 +228,7 @@ function TableRow({
 						icon={<Icon icon={editIcon} />}
 						label={__('Edit appointment details', 'wpappointments')}
 					/>
-					{(row.status === 'confirmed' ||
-						row.status === 'pending') && (
+					{row.status === 'confirmed' && (
 						<Button
 							variant="tertiary"
 							size="small"
@@ -227,6 +238,18 @@ function TableRow({
 							}}
 							icon={<Icon icon={cancelCircleFilled} />}
 							label={__('Cancel appointment', 'wpappointments')}
+						/>
+					)}
+					{row.status === 'pending' && (
+						<Button
+							variant="tertiary"
+							size="small"
+							onClick={() => {
+								confirmAppointment &&
+									confirmAppointment(row.id);
+							}}
+							icon={<Icon icon={check} />}
+							label={__('Confirm appointment', 'wpappointments')}
 						/>
 					)}
 					{row.status === 'cancelled' && (
