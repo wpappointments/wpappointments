@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Modal, ToggleControl, Button } from '@wordpress/components';
+import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import styles from './CancelAppointment.module.css';
 
@@ -12,8 +11,6 @@ export default function CancelAppointment({
 	onConfirmClick,
 	closeModal,
 }: Props) {
-	const [shouldNotify, setShouldNotify] = useState(true);
-
 	return (
 		<Modal
 			title="Cancel appointment?"
@@ -21,18 +18,6 @@ export default function CancelAppointment({
 			className={styles.modal}
 		>
 			<p>{__('This will cancel the appointment.', 'wpappointments')}</p>
-			<div className={styles.notify}>
-				<ToggleControl
-					onChange={(e) => {
-						setShouldNotify(e);
-					}}
-					checked={shouldNotify}
-					label={__(
-						'Notify customer about the cancellation',
-						'wpappointments'
-					)}
-				/>
-			</div>
 			<div className={styles.modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
 					{__('Go back', 'wpappointments')}
@@ -42,10 +27,7 @@ export default function CancelAppointment({
 					isDestructive
 					onClick={onConfirmClick}
 				>
-					{!shouldNotify &&
-						__('Cancel appointment', 'wpappointments')}
-					{shouldNotify &&
-						__('Cancel appointment and notify', 'wpappointments')}
+					{__('Cancel appointment', 'wpappointments')}
 				</Button>
 			</div>
 		</Modal>

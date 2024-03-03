@@ -1,17 +1,10 @@
-import { useFormContext } from 'react-hook-form';
-import {
-	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-} from '@wordpress/components';
-import { useSelect, select, useDispatch } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+import { useSchedule } from '~/backend/hooks/useSchedule';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
@@ -34,29 +27,8 @@ type Response = APIResponse<{
 }>;
 
 function ScheduleSettings() {
-	const { setValue } = useFormContext<ScheduleFormFields>();
-	const dispatch = useDispatch(store);
-
-	const settings = useSelect(() => {
-		return select(store).getAllSettings();
-	}, []);
-
-	const { schedule, appointments } = settings;
-	const { timePickerPrecision } = appointments;
-
-	useEffect(() => {
-		const days = Object.keys(schedule) as Array<keyof typeof schedule>;
-
-		for (const day of days) {
-			const daySchedule = schedule[day];
-			const slotList = daySchedule.slots.list;
-
-			for (let i = 0; i < (slotList?.length || 0); i++) {
-				setValue(`${day}.day`, day);
-				setValue(`${day}.enabled`, daySchedule.enabled ?? false);
-			}
-		}
-	}, [schedule]);
+	const { schedule, timePickerPrecision } = useSchedule();
+  const dispatch = useDispatch(store);
 
 	const onSubmit = async (data: ScheduleFormFields) => {
 		const days = Object.keys(data) as Array<keyof typeof data>;

@@ -24,6 +24,10 @@ function body_class( $classes ) {
 
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		$classes .= ' wpappointments-admin';
+
+		if ( $screen->id === 'admin_page_wpappointments-wizard' ) {
+			$classes .= ' wpappointments-admin-wizard';
+		}
 	}
 
 	return $classes;
@@ -47,3 +51,34 @@ function render_globals_component() {
 
 	echo '<div id="wpappointments-globals"></div>';
 }
+
+/**
+ * Redirect to wizard after plugin activation
+ * 
+ * @return void
+ */
+function redirect_to_wizard() {
+	$wizard_completed = get_option( 'wpappointments_wizard_completed' );
+	if ( ! $wizard_completed ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpappointments-wizard' ) );
+		exit;
+	} else {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpappointments' ) );
+		exit;
+	}
+}
+
+add_action( 'activated_plugin', __NAMESPACE__ . '\\redirect_to_wizard' );
+
+/**
+ * Mark the wizard as complete
+ * 
+ * @return void
+ */
+function mark_wizard_complete() {
+	update_option( 'wpappointments_wizard_completed', true );
+	wp_safe_redirect( admin_url( 'admin.php?page=wpappointments' ) );
+	exit;
+}
+
+add_action( 'admin_post_wpappointments_wizard_complete', __NAMESPACE__ . '\\mark_wizard_complete' );

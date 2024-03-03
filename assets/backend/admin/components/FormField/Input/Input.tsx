@@ -26,6 +26,7 @@ type Props<TFields extends FieldValues> = {
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 	defaultValue?: PathValue<TFields, Path<TFields>>;
+	help?: string;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -40,6 +41,7 @@ export default function Input<TFields extends FieldValues>({
 	placeholder,
 	rules,
 	defaultValue,
+	help,
 }: Props<TFields>) {
 	const {
 		control,
@@ -81,6 +83,7 @@ export default function Input<TFields extends FieldValues>({
 						style={{
 							display: type === 'hidden' ? 'none' : 'block',
 						}}
+						help={help}
 					/>
 				)}
 			/>
