@@ -2,6 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { Button, Dashicon } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { produce } from 'immer';
 import cn from '~/backend/utils/cn';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
@@ -35,7 +36,7 @@ export default function OpeningHoursDayOfWeek({
 
 	const { schedule } = settings;
 
-	const { day, enabled, slots } = values;
+	const { day, enabled, allDay, slots } = values;
 
 	const { list } = slots || { list: [] };
 
@@ -91,18 +92,35 @@ export default function OpeningHoursDayOfWeek({
 			})}
 		>
 			<div className={styles.fieldGroupRow}>
-				<div className={styles.dayLabel}>
-					<span>{day}:</span>
-					<Toggle
-						name={`${day}.enabled`}
-						onChange={(enabled) => {
-							updateWorkingHours({
-								...values,
-								enabled,
-							});
-						}}
-						defaultChecked={true}
-					/>
+				<div>
+					<div className={styles.dayLabel}>
+						<span>{day}:</span>
+						<Toggle
+							name={`${day}.enabled`}
+							onChange={(enabled) => {
+								updateWorkingHours({
+									...values,
+									enabled,
+								});
+							}}
+							defaultChecked={true}
+						/>
+					</div>
+					{enabled && (
+						<div className={styles.allDayLabel}>
+							<span>{__('All day', 'wpappointnents')}:</span>
+							<Toggle
+								name={`${day}.allDay`}
+								onChange={(allDay) => {
+									updateWorkingHours({
+										...values,
+										allDay,
+									});
+								}}
+								defaultChecked={false}
+							/>
+						</div>
+					)}
 				</div>
 				<div
 					style={{
@@ -111,7 +129,7 @@ export default function OpeningHoursDayOfWeek({
 						gap: '5px',
 					}}
 				>
-					{list &&
+					{!allDay &&
 						enabled &&
 						list.map((slot, index) => (
 							<div

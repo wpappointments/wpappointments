@@ -24,6 +24,7 @@ export function useSchedule() {
 			for (let i = 0; i < (slotList?.length || 0); i++) {
 				setValue(`${day}.day`, day);
 				setValue(`${day}.enabled`, daySchedule.enabled ?? false);
+				setValue(`${day}.allDay`, daySchedule.allDay ?? false);
 			}
 		}
 	}, [schedule]);
