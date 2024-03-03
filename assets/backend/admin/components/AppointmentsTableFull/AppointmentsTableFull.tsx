@@ -193,7 +193,7 @@ function TableRow({
 						[styles[row.status]]: true,
 					})}
 				>
-					{row.status.replace('_', ' ')}
+					{row.status}
 				</span>
 			</td>
 			{!hideActions && (
