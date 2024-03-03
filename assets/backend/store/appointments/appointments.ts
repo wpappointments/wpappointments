@@ -55,6 +55,12 @@ export const actions = {
 			appointmentId,
 		} as const;
 	},
+	confirmAppointment(appointmentId: number) {
+		return {
+			type: 'CONFIRM_APPOINTMENT',
+			appointmentId,
+		} as const;
+	},
 };
 
 export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
@@ -118,6 +124,18 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 				);
 			});
 
+		case 'CONFIRM_APPOINTMENT':
+			return produce(state, (draft) => {
+				draft.appointments = draft.appointments.map(
+					(appointment: Appointment) =>
+						appointment.id === action.appointmentId
+							? {
+									...appointment,
+									status: 'confirmed',
+							  }
+							: appointment
+				);
+			});
 		default:
 			return state;
 	}

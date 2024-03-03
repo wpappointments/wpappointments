@@ -53,7 +53,7 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 
 		if (response.data.message) {
 			dispatch.setPluginSettings({ appointments: data });
-      onSuccess();
+			onSuccess();
 		}
 	};
 
@@ -65,21 +65,25 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 }
 
 function FormFields() {
-  const { schedule, timePickerPrecision } = useSchedule();
+	const { schedule, timePickerPrecision } = useSchedule();
 
 	return (
 		<div>
-      <div style={{ marginBottom: 25 }}>
-        {Object.values(schedule).map((daySettings, index) => (
-          <OpeningHoursDayOfWeek
-            key={daySettings.day}
-            showCopyToAllDays={index === 0}
-            values={daySettings}
-            timePickerPrecision={timePickerPrecision}
-          />
-        ))}
-      </div>
-			<Button className={styles.stepButton} type="submit" variant="primary">
+			<div style={{ marginBottom: 25 }}>
+				{Object.values(schedule).map((daySettings, index) => (
+					<OpeningHoursDayOfWeek
+						key={daySettings.day}
+						showCopyToAllDays={index === 0}
+						values={daySettings}
+						timePickerPrecision={timePickerPrecision}
+					/>
+				))}
+			</div>
+			<Button
+				className={styles.stepButton}
+				type="submit"
+				variant="primary"
+			>
 				{__('Continue', 'wpappointments')}
 			</Button>
 		</div>

@@ -206,12 +206,11 @@ add_action(
 /**
  * Email template for appointment confirmed
  *
- * @param string                      $content Email content.
  * @param \WPAppointments\Appointment $appointment Appointment object.
  *
  * @return void
  */
-function send_appointment_confirmed_admin_email( $content, $appointment ) {
+function send_appointment_confirmed_admin_email( $appointment ) {
 	$content     = get_template_content( 'appointment-confirmed-admin' );
 	$formats     = get_date_formats();
 	$settings    = new Settings();
@@ -233,18 +232,17 @@ add_action(
 	'wpappointments_appointment_confirmed',
 	__NAMESPACE__ . '\\send_appointment_confirmed_admin_email',
 	10,
-	2
+	1
 );
 
 /**
  * Email template for appointment confirmed
  *
- * @param string                      $content Email content.
  * @param \WPAppointments\Appointment $appointment Appointment object.
  *
  * @return void
  */
-function send_appointment_confirmed_customer_email( $content, $appointment ) {
+function send_appointment_confirmed_customer_email( $appointment ) {
 	$content = get_template_content( 'appointment-confirmed-customer' );
 	$formats = get_date_formats();
 
@@ -264,7 +262,7 @@ add_action(
 	'wpappointments_appointment_confirmed',
 	__NAMESPACE__ . '\\send_appointment_confirmed_customer_email',
 	10,
-	2
+	1
 );
 
 /**

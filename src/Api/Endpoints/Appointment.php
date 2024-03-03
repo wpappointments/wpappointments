@@ -13,6 +13,7 @@ use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Model\AppointmentPost;
 use WPAppointments\Model\Customer;
+use WPAppointments\Model\Settings;
 
 /**
  * Appointment endpoint
@@ -119,6 +120,20 @@ class Appointment extends Controller {
 				),
 			)
 		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/appointment/(?P<id>\d+)/confirm',
+			array(
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'confirm_appointment' ),
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				),
+			)
+		);
 	}
 
 	/**
@@ -217,9 +232,10 @@ class Appointment extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
+		$settings       = new Settings();
 		$params         = $request->get_params();
 		$date           = rest_parse_date( get_gmt_from_date( $params['date'] ) );
-		$duration       = get_option( 'wpappointments_appointments_defaultLength', 30 );
+		$duration       = $settings->get_setting( 'appointments', 'defaultLength' );
 		$customer       = $request->get_param( 'customer' );
 		$customer_id    = null;
 		$create_account = $request->get_param( 'createAccount' );
@@ -230,6 +246,12 @@ class Appointment extends Controller {
 			$customer_id    = $customer_model->create( (object) $customer, $password );
 		}
 
+		$status = $settings->get_setting( 'appointments', 'defaultStatus' );
+
+		if ( ! $status ) {
+			$status = 'confirmed';
+		}
+
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
 			__( 'Appointment', 'wpappointments' ),
@@ -238,7 +260,7 @@ class Appointment extends Controller {
 				'duration'    => $duration,
 				'customer'    => wp_json_encode( (object) $customer ),
 				'customer_id' => $customer_id,
-				'status'      => 'confirmed',
+				'status'      => $status,
 			)
 		);
 
@@ -352,6 +374,34 @@ class Appointment extends Controller {
 				'message' => __( 'Appointment deleted successfully', 'wpappointments' ),
 				'data'    => array(
 					'id' => $result,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Confirm appointment
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function confirm_appointment( WP_REST_Request $request ) {
+		$id = $request->get_param( 'id' );
+
+		$appointment_post = new AppointmentPost();
+		$confirmed        = $appointment_post->confirm( $id );
+
+		if ( is_wp_error( $confirmed ) ) {
+			return self::error( $confirmed->get_error_message() );
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => array(
+					'message'       => __( 'Appointment confirmed successfully', 'wpappointments' ),
+					'appointmentId' => $id,
 				),
 			)
 		);

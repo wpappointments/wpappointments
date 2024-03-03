@@ -87,7 +87,7 @@ function settings_page() {
 
 /**
  * Create wizard page
- * 
+ *
  * @return void
  */
 function wizard_page() {

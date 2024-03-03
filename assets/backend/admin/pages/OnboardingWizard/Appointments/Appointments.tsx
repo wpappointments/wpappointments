@@ -76,7 +76,10 @@ function FormFields() {
 					rules={{
 						required: true,
 					}}
-					help={__('Don\'t worry. You can always change it later.', 'wpappointments')}
+					help={__(
+						"Don't worry. You can always change it later.",
+						'wpappointments'
+					)}
 				/>
 
 				<Input
@@ -99,10 +102,17 @@ function FormFields() {
 						min: 1,
 						max: 60 * 24,
 					}}
-					help={__('People will be able to book appointments every n minutes. For example if set to 30 minutes people can book 8:00, 8:30, 9:00 etc.', 'wpappointments')}
+					help={__(
+						'People will be able to book appointments every n minutes. For example if set to 30 minutes people can book 8:00, 8:30, 9:00 etc.',
+						'wpappointments'
+					)}
 				/>
 			</FormFieldSet>
-			<Button className={styles.stepButton} type="submit" variant="primary">
+			<Button
+				className={styles.stepButton}
+				type="submit"
+				variant="primary"
+			>
 				{__('Continue', 'wpappointments')}
 			</Button>
 		</div>

@@ -6,6 +6,7 @@ import {
 	CardHeader,
 } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
@@ -14,6 +15,7 @@ import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Input from '~/backend/admin/components/FormField/Input/Input';
+import Select from '~/backend/admin/components/FormField/Select/Select';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
 
@@ -21,6 +23,7 @@ type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
 	serviceName: string;
+	defaultStatus: 'confirmed' | 'pending';
 };
 
 type Response = APIResponse<{
@@ -102,6 +105,25 @@ export default withForm(function AppointmentsSettings() {
 								min: 1,
 								max: 60 * 24,
 							}}
+						/>
+						<Select
+							name="defaultStatus"
+							defaultValue={settings.defaultStatus || 'confirmed'}
+							options={[
+								{ label: 'Confirmed', value: 'confirmed' },
+								{ label: 'Pending', value: 'pending' },
+							]}
+							label={__(
+								'Default appointment status',
+								'wpappointments'
+							)}
+							rules={{
+								required: true,
+							}}
+							help={__(
+								'Default status for appointments created by your clients. You can change the status of each appointment individually.',
+								'wpappointments'
+							)}
 						/>
 					</FormFieldSet>
 				</CardBody>

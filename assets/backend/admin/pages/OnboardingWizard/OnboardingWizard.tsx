@@ -31,7 +31,7 @@ export function OnboardingWizard() {
 			</div>
 			<div className={styles.wizardContent}>
 				{currentStep === 0 && (
-					<Welcome setCurrentStep={setCurrentStep} />	
+					<Welcome setCurrentStep={setCurrentStep} />
 				)}
 				{currentStep === 1 && (
 					<OnboardingWizardStep1 setCurrentStep={setCurrentStep} />
@@ -45,9 +45,7 @@ export function OnboardingWizard() {
 				{currentStep === 4 && (
 					<OnboardingWizardStep4 setCurrentStep={setCurrentStep} />
 				)}
-				{currentStep === 5 && (
-					<AllSet />
-				)}
+				{currentStep === 5 && <AllSet />}
 			</div>
 		</div>
 	);
@@ -64,7 +62,9 @@ function Welcome({ setCurrentStep }: StepProps) {
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>Welcome to WP Appointments!</h1>
 				<p className={styles.leadText}>
-					It's great to have you here! We'll be guiding you through the setup process - first, answer a few questions to tailor your experience.
+					It's great to have you here! We'll be guiding you through
+					the setup process - first, answer a few questions to tailor
+					your experience.
 				</p>
 			</div>
 			<Button
@@ -92,7 +92,8 @@ function AllSet() {
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>All set!</h1>
 				<p className={styles.leadText}>
-					You are all set up and ready to start accepting appointments!
+					You are all set up and ready to start accepting
+					appointments!
 				</p>
 			</div>
 			<Button
@@ -104,7 +105,7 @@ function AllSet() {
 					padding: '5px 70px',
 					height: 'auto',
 				}}
-				href='/wp-admin/admin-post.php?action=wpappointments_wizard_complete'
+				href="/wp-admin/admin-post.php?action=wpappointments_wizard_complete"
 			>
 				{__('Set up appointments', 'wpappointments')}
 			</Button>
@@ -116,9 +117,14 @@ function OnboardingWizardStep1({ setCurrentStep }: StepProps) {
 	return (
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>{__('Tell us a bit about you', 'wpappointments')}</h1>
+				<h1 className={styles.title}>
+					{__('Tell us a bit about you', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
-					{__('We use this information in set up notifications and you can also display this on the site.', 'wpappointments')}
+					{__(
+						'We use this information in set up notifications and you can also display this on the site.',
+						'wpappointments'
+					)}
 				</p>
 			</div>
 			<General
@@ -134,9 +140,14 @@ function OnboardingWizardStep2({ setCurrentStep }: StepProps) {
 	return (
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>{__('What appointments do you accept?', 'wpappointments')}</h1>
+				<h1 className={styles.title}>
+					{__('What appointments do you accept?', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
-					{__('In the free version you can set up to one appointment. Sepcify the lenght and tell us in which intervals people can book.', 'wpappointments')}
+					{__(
+						'In the free version you can set up to one appointment. Sepcify the lenght and tell us in which intervals people can book.',
+						'wpappointments'
+					)}
 				</p>
 			</div>
 			<Appointments
@@ -152,7 +163,9 @@ function OnboardingWizardStep3({ setCurrentStep }: StepProps) {
 	return (
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>{__('Tailor you calendar options', 'wpappointments')}</h1>
+				<h1 className={styles.title}>
+					{__('Tailor you calendar options', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
 					{__('You know what to do.', 'wpappointments')}
 				</p>
@@ -170,9 +183,14 @@ function OnboardingWizardStep4({ setCurrentStep }: StepProps) {
 	return (
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>{__('Setup you working hours', 'wpappointments')}</h1>
+				<h1 className={styles.title}>
+					{__('Setup you working hours', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
-					{__('You may specify one or many working hours periods for each week day.', 'wpappointments')}
+					{__(
+						'You may specify one or many working hours periods for each week day.',
+						'wpappointments'
+					)}
 				</p>
 			</div>
 			<Schedule
