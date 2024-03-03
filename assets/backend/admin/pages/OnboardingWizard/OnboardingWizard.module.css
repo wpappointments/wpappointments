@@ -1,0 +1,66 @@
+.wizard {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  overflow: auto;
+}
+
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 40px 20px;
+}
+
+.logoIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.wizard-content {
+  width: 500px;
+  max-width: calc(100% - 50px);
+  margin: 50px auto;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+  transition: width 0.3s ease;
+}
+
+.welcome {
+  margin: 40px auto;
+  text-align: center;
+}
+
+.step-header {
+  text-align: center;
+  margin-bottom: 40px;
+  width: 120%;
+  margin-left: -10%;
+  margin-right: -10%;
+}
+
+.title {
+  font-size: 36px;
+  line-height: 1.25;
+}
+
+.lead-text {
+  font-size: 18px;
+  margin: 20px 0;
+  color: #727171;
+}
+
+.step-button {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  height: auto;
+  padding: 15px 20px;
+}
