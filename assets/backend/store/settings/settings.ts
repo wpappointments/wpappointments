@@ -52,6 +52,7 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 	appointments: {
 		defaultLength: undefined,
 		timePickerPrecision: undefined,
+		defaultStatus: 'confirmed',
 	},
 	calendar: {},
 };
