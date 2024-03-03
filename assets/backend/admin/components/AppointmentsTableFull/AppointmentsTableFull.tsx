@@ -110,7 +110,6 @@ export default function AppointmentsTableFull({
 								}
 
 								await confirmAppointment(row.id);
-								setAppointmentModal(null);
 							}}
 							setAppointmentModal={setAppointmentModal}
 							hideActions={hideActions}
