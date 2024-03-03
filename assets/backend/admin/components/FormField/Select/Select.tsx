@@ -32,6 +32,7 @@ type Props<TFields extends FieldValues> = {
 	onChange?: (value: string) => void;
 	fullWidth?: boolean;
 	noArrow?: boolean;
+	help?: string;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -46,6 +47,7 @@ export default function Select<TFields extends FieldValues>({
 	options,
 	defaultValue,
 	onChange,
+	help,
 	readOnly = false,
 	fullWidth = false,
 	noArrow = false,
@@ -93,6 +95,7 @@ export default function Select<TFields extends FieldValues>({
 						id={name}
 						options={options}
 						disabled={readOnly}
+						help={help}
 						suffix={noArrow ? <></> : null}
 						style={{ paddingRight: noArrow ? 16 : undefined }}
 					/>

@@ -114,12 +114,16 @@ export default withForm(function AppointmentsSettings() {
 								{ label: 'Pending', value: 'pending' },
 							]}
 							label={__(
-								'Default status for the frontend form',
+								'Default appointment status',
 								'wpappointments'
 							)}
 							rules={{
 								required: true,
 							}}
+							help={__(
+								'Default status for appointments created by your clients. You can change the status of each appointment individually.',
+								'wpappointments'
+							)}
 						/>
 					</FormFieldSet>
 				</CardBody>
