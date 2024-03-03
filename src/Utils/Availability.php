@@ -82,10 +82,17 @@ class Availability {
 			$weekday          = strtolower( $start->format( 'l' ) );
 			$schedule_slots   = $schedule->$weekday->slots->list;
 			$schedule_enabled = $schedule->$weekday->enabled;
+			$schedule_all_day = $schedule->$weekday->allDay;
 
 			$schedule_periods = array();
 
-			if ( $schedule_enabled ) {
+			if ( $schedule_all_day ) {
+				$schedule_periods[] = new \DatePeriod(
+					$start,
+					$interval,
+					$end
+				);
+			} else if ( $schedule_enabled ) {
 				foreach ( $schedule_slots as $schedule_slot ) {
 					$schedule_periods[] = Schedule::convert_schedule_to_date_range( $schedule_slot, $start );
 				}
