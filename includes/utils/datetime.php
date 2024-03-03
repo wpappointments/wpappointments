@@ -55,8 +55,19 @@ function create_date_settings_array() {
 function get_date_formats() {
 	$settings = new Settings();
 
+	$date = $settings->get_setting( 'general', 'dateFormat' );
+	$time = $settings->get_setting( 'general', 'timeFormat' );
+
+	if ( ! $date ) {
+		$date = get_option( 'date_format' );
+	}
+
+	if ( ! $time ) {
+		$time = get_option( 'time_format' );
+	}
+
 	return array(
-		'date' => $settings->get_setting( 'general', 'dateFormat' ),
-		'time' => $settings->get_setting( 'general', 'timeFormat' ),
+		'date' => $date,
+		'time' => $time,
 	);
 }

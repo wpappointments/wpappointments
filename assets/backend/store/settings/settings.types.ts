@@ -16,11 +16,18 @@ export type SettingsSchedule = {
 };
 
 export type SettingsGeneral = {
-	firstName: string;
-	lastName: string;
-	phoneNumber: string;
-	companyName: string;
-	clockType: '12' | '24';
+	firstName?: string;
+	lastName?: string;
+	phoneNumber?: string;
+	companyName?: string;
+	clockType?: '12' | '24';
+	startOfWeek?: number;
+	timezoneSiteDefault?: boolean;
+	timezone?: string;
+	dateFormat?: string;
+	customDateFormat?: string;
+	timeFormat?: string;
+	customTimeFormat?: string;
 };
 
 export type SettingsAppointments = {
