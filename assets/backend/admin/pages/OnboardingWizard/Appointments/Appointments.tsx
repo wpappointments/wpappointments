@@ -8,12 +8,14 @@ import { store } from '~/backend/store/store';
 import styles from '../OnboardingWizard.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Input from '~/backend/admin/components/FormField/Input/Input';
+import Select from '~/backend/admin/components/FormField/Select/Select';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 
 type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
 	serviceName: string;
+	defaultStatus: 'confirmed' | 'pending';
 };
 
 type Response = APIResponse<{
@@ -107,6 +109,26 @@ function FormFields() {
 						'wpappointments'
 					)}
 				/>
+
+				<Select
+						name="defaultStatus"
+						defaultValue="confirmed"
+						options={[
+							{ label: 'Confirmed', value: 'confirmed' },
+							{ label: 'Pending', value: 'pending' },
+						]}
+						label={__(
+							'Default appointment status',
+							'wpappointments'
+						)}
+						rules={{
+							required: true,
+						}}
+						help={__(
+							'Default status for appointments created by your clients. You can change the status of each appointment individually.',
+							'wpappointments'
+						)}
+					/>
 			</FormFieldSet>
 			<Button
 				className={styles.stepButton}
