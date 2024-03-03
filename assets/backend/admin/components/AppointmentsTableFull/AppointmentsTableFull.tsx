@@ -245,7 +245,8 @@ function TableRow({
 							variant="tertiary"
 							size="small"
 							onClick={() => {
-								confirmAppointment && confirmAppointment(row.id);
+								confirmAppointment &&
+									confirmAppointment(row.id);
 							}}
 							icon={<Icon icon={check} />}
 							label={__('Confirm appointment', 'wpappointments')}

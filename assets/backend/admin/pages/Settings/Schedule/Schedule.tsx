@@ -1,4 +1,10 @@
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@wordpress/components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+} from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
@@ -28,7 +34,7 @@ type Response = APIResponse<{
 
 function ScheduleSettings() {
 	const { schedule, timePickerPrecision } = useSchedule();
-  const dispatch = useDispatch(store);
+	const dispatch = useDispatch(store);
 
 	const onSubmit = async (data: ScheduleFormFields) => {
 		const days = Object.keys(data) as Array<keyof typeof data>;
