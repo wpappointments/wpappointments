@@ -149,7 +149,7 @@ type TableRowProps = {
 	row: Appointment;
 	edit?: (appointment: Appointment) => void;
 	view?: (appointment: Appointment) => void;
-	confirmAppointment?: (appointment: Appointment) => void;
+	confirmAppointment?: (appointmentId: number) => void;
 	setAppointmentModal: Dispatch<
 		SetStateAction<{
 			id: number;
@@ -242,10 +242,10 @@ function TableRow({
 					)}
 					{row.status === 'pending' && (
 						<Button
-							variant="secondary"
+							variant="tertiary"
 							size="small"
 							onClick={() => {
-								confirmAppointment && confirmAppointment(row);
+								confirmAppointment && confirmAppointment(row.id);
 							}}
 							icon={<Icon icon={check} />}
 							label={__('Confirm appointment', 'wpappointments')}
