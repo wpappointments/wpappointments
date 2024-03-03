@@ -186,10 +186,7 @@ export function appointmentsApi({
 				method: 'PUT',
 			});
 
-			const { data: responseData } = response;
-			const { appointmentId } = responseData;
-
-			dispatch.confirmAppointment(appointmentId);
+			dispatch.confirmAppointment(id);
 
 			return response;
 		});
