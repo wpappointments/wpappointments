@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Icon } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { check } from '@wordpress/icons';
 import { addMinutes } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { formatTimeForPicker } from '~/backend/utils/format';
@@ -17,14 +18,13 @@ import CancelAppointment from '~/backend/admin/components/Modals/CancelAppointme
 import DeleteAppointmentModal from '~/backend/admin/components/Modals/DeleteAppointment/DeleteAppointment';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
-import { check } from '@wordpress/icons';
-
 
 export default function AppointmentDetails() {
 	const { invalidate } = useStateContext();
-	const { deleteAppointment, cancelAppointment, confirmAppointment } = appointmentsApi({
-		invalidateCache: invalidate,
-	});
+	const { deleteAppointment, cancelAppointment, confirmAppointment } =
+		appointmentsApi({
+			invalidateCache: invalidate,
+		});
 	const { currentSlideout, closeSlideOut } = useSlideout({
 		id: 'view-appointment',
 	});

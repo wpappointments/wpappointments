@@ -53,7 +53,7 @@ class Plugin extends Core\Singleton {
 				update_post_meta(
 					$post_id,
 					'wpappointments_schedule_' . $day,
-					json_encode(
+					wp_json_encode(
 						array(
 							'day'     => $day,
 							'enabled' => false,

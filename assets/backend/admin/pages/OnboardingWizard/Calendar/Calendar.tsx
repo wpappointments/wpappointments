@@ -53,7 +53,7 @@ function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 
 		if (response.data.message) {
 			dispatch.setPluginSettings({ general: data });
-      onSuccess();
+			onSuccess();
 		}
 	};
 
@@ -118,7 +118,11 @@ function FormFields() {
 					]}
 				/>
 			</FormFieldSet>
-			<Button className={styles.stepButton} type="submit" variant="primary">
+			<Button
+				className={styles.stepButton}
+				type="submit"
+				variant="primary"
+			>
 				{__('Continue', 'wpappointments')}
 			</Button>
 		</div>

@@ -5,10 +5,10 @@ import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
+import styles from '../OnboardingWizard.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import Input from '~/backend/admin/components/FormField/Input/Input';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
-import styles from '../OnboardingWizard.module.css';
 
 type Fields = {
 	firstName: string;
@@ -54,7 +54,7 @@ function GeneralSettings({ onSuccess }: { onSuccess: () => void }) {
 
 		if (response.data.message) {
 			dispatch.setPluginSettings({ general: data });
-      onSuccess();
+			onSuccess();
 		}
 	};
 
@@ -102,7 +102,11 @@ function FormFields() {
 					placeholder="Eg. +1992334211"
 				/>
 			</FormFieldSet>
-			<Button className={styles.stepButton} type="submit" variant="primary">
+			<Button
+				className={styles.stepButton}
+				type="submit"
+				variant="primary"
+			>
 				{__('Continue', 'wpappointments')}
 			</Button>
 		</div>

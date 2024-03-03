@@ -328,9 +328,19 @@ class AppointmentPost {
 
 		$new_appointment = $this->prepare_appointment_entity( $post_id, $meta );
 
-		$callback = $new_appointment->status === 'pending' ? 'updated' : $new_appointment->status;
-
-		do_action( 'wpappointments_appointment_' . $callback, $new_appointment, $current_appointment );
+		if ( 'pending' === $new_appointment->status ) {
+			do_action(
+				'wpappointments_appointment_updated',
+				$new_appointment,
+				$current_appointment
+			);
+		} else {
+			do_action(
+				'wpappointments_appointment_' . $new_appointment->status,
+				$new_appointment,
+				$current_appointment
+			);
+		}
 
 		return $new_appointment;
 	}
@@ -469,7 +479,7 @@ class AppointmentPost {
 	 * @param int   $post_id Post ID.
 	 * @param array $meta Post meta.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	protected function prepare_appointment_entity( $post_id, $meta ) {
 		$length      = (int) get_option( 'wpappointments_appointments_defaultLength' );

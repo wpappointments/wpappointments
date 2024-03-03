@@ -246,6 +246,12 @@ class Appointment extends Controller {
 			$customer_id    = $customer_model->create( (object) $customer, $password );
 		}
 
+		$status = $settings->get_setting( 'appointments', 'defaultStatus' );
+
+		if ( ! $status ) {
+			$status = 'confirmed';
+		}
+
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
 			__( 'Appointment', 'wpappointments' ),
@@ -254,10 +260,7 @@ class Appointment extends Controller {
 				'duration'    => $duration,
 				'customer'    => wp_json_encode( (object) $customer ),
 				'customer_id' => $customer_id,
-				'status'      => $settings->get_setting(
-					'appointments',
-					'defaultStatus',
-				) ?: 'confirmed',
+				'status'      => $status,
 			)
 		);
 
@@ -376,6 +379,13 @@ class Appointment extends Controller {
 		);
 	}
 
+	/**
+	 * Confirm appointment
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
 	public static function confirm_appointment( WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 

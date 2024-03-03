@@ -105,7 +105,6 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 
 		case 'CANCEL_APPOINTMENT':
 			return produce(state, (draft) => {
-
 				draft.appointments = draft.appointments.map(
 					(appointment: Appointment) =>
 						appointment.id === action.appointmentId
