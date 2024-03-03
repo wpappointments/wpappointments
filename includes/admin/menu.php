@@ -47,6 +47,15 @@ function menu() {
 		'wpappointments-settings',
 		__NAMESPACE__ . '\\settings_page'
 	);
+
+	add_submenu_page(
+		'noexistingpageslug',
+		__( 'Wizard', 'wpappointments' ),
+		__( 'Wizard', 'wpappointments' ),
+		'activate_plugins',
+		'wpappointments-wizard',
+		__NAMESPACE__ . '\\wizard_page'
+	);
 }
 
 /**
@@ -74,4 +83,13 @@ function calendar_page() {
  */
 function settings_page() {
 	echo '<div id="wpappointments-admin" data-page="settings"></div>';
+}
+
+/**
+ * Create wizard page
+ * 
+ * @return void
+ */
+function wizard_page() {
+	echo '<div id="wpappointments-admin" data-page="wizard"></div>';
 }
