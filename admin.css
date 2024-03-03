@@ -19,6 +19,21 @@
 	padding-top: var( --wpappointments-layout-header-height );
 }
 
+.wpappointments-admin-wizard #wpbody-content {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	background: white;
+	z-index: calc(infinity);
+	padding: 0;
+}
+
+.wpappointments-admin-wizard #wpappointments-admin {
+	height: 100%;
+}
+
 .wpappointments-admin #wpbody-content > .notice {
 	margin-top: 30px;
 	margin-left: var( --wpappointments-large-gap );

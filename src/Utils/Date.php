@@ -22,7 +22,7 @@ class Date {
 	 * @return DatePeriod
 	 */
 	public static function create_date_range( $start, $end ) {
-		$timezone   = wp_timezone_string();
+		$timezone   = 'Europe/Warsaw';
 		$start_date = new \DateTime( $start );
 		$start_date->setTimezone( new \DateTimeZone( $timezone ) );
 		$end_date = new \DateTime( $end );

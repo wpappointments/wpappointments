@@ -101,8 +101,30 @@ class Plugin extends Core\Singleton {
 	 * @return void
 	 */
 	public function on_plugin_deactivation() {
-		$this->delete_schedule_post();
-		delete_option( 'wpappointments_default_scheduleId' );
+		/** @disregard P1011 because this constant is defined through wp-env config */
+		if ( defined( 'WPAPPOINTMENTS_PURGE' ) && WPAPPOINTMENTS_PURGE ) {
+			$this->delete_schedule_post();
+			delete_option( 'wpappointments_default_scheduleId' );
+
+			$this->delete_service_post();
+			delete_option( 'wpappointments_defaultServiceId' );
+
+			delete_option( 'wpappointments_appointments_defaultLength' );
+			delete_option( 'wpappointments_appointments_timePickerPrecision' );
+			delete_option( 'wpappointments_general_firstName' );
+			delete_option( 'wpappointments_general_lastName' );
+			delete_option( 'wpappointments_general_email' );
+			delete_option( 'wpappointments_general_phoneNumber' );
+			delete_option( 'wpappointments_general_startOfWeek' );
+			delete_option( 'wpappointments_general_clockType' );
+			delete_option( 'wpappointments_general_timeFormat' );
+			delete_option( 'wpappointments_general_dateFormat' );
+		}
+
+		/** @disregard P1011 because this constant is defined through wp-env config */
+		if ( defined( 'WPAPPOINTMENTS_PURGE_WIZARD' ) && WPAPPOINTMENTS_PURGE_WIZARD ) {
+			delete_option( 'wpappointments_wizard_completed' );
+		}
 	}
 
 	/**
@@ -118,5 +140,20 @@ class Plugin extends Core\Singleton {
 		}
 
 		wp_delete_post( $default_schedule, true );
+	}
+
+	/**
+	 * Delete default service post
+	 *
+	 * @return void
+	 */
+	private function delete_service_post() {
+		$default_service = get_option( 'wpappointments_defaultServiceId' );
+
+		if ( ! $default_service ) {
+			return;
+		}
+
+		wp_delete_post( $default_service, true );
 	}
 }

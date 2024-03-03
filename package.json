@@ -15,8 +15,8 @@
 		"init-project": "NODE_ENV=development pnpm install",
 		"build": "pnpm init-project & pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
 		"build:fe": "pnpm init-project & pnpm css-types & wp-scripts build assets/frontend/frontend.tsx",
-		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
-		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
+		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --update --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
+		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --update --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
 		"format": "wp-scripts format ./assets/**/* ./tests/js/**/*",
 		"lint": "pnpm lint:js && pnpm lint:css && pnpm phpcs:all",
 		"lint:css": "wp-scripts lint-style ./assets/**/*.css",
@@ -46,6 +46,7 @@
 		"type-check": "tsc"
 	},
 	"devDependencies": {
+		"@svgr/webpack": "^8.1.0",
 		"@testing-library/react": "^14.2.1",
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
 		"@types/jest": "^29.5.12",
@@ -65,6 +66,7 @@
 		"sass": "^1.70.0",
 		"ts-jest": "^29.1.2",
 		"typescript": "^5.3.3",
+		"url-loader": "^4.1.1",
 		"wp-prettier": "^3.0.3"
 	},
 	"dependencies": {
