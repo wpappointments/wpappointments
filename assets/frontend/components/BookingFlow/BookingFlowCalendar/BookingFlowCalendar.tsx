@@ -14,6 +14,7 @@ export default function BookingFlowCalendar() {
 		dayAvailability,
 		attributes,
 		weekDays,
+		availabilityLoading,
 	} = useBookingFlowContext();
 
 	const {
@@ -73,7 +74,22 @@ export default function BookingFlowCalendar() {
 						</div>
 					))}
 				</div>
-				{calendarWithAvailability &&
+				{availabilityLoading && (
+					<div>
+						{Array.from({ length: 5 }).map((_, i) => (
+							<div key={i} className={styles.calendarRow}>
+								{Array.from({ length: 7 }).map((_, j) => (
+									<button
+										key={j}
+										disabled={true}
+										className={styles.calendarDay}
+									></button>
+								))}
+							</div>
+						))}
+					</div>
+				)}
+				{calendarWithAvailability && !availabilityLoading &&
 					calendarWithAvailability.map((month, i) => (
 						<div key={i}>
 							{month.map((week, j) => (
