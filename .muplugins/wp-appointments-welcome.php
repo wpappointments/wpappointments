@@ -297,7 +297,7 @@ add_action( 'admin_bar_menu', function ( $wp_admin_bar ) {
 add_action( 'admin_footer', function () {
 	?>
     <div class="drawer js-feedback-drawer">
-        <button type="button" class="drawer-close">
+        <button type="button" class="drawer-close js-feedback-link">
             Close
         </button>
         <div class="drawer-content">
