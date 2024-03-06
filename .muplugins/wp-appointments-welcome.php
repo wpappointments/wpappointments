@@ -106,6 +106,10 @@ add_action( 'admin_head', function () {
         background-color: #fff;
       }
 
+      .wp-admin.index-php #wpwrap {
+        overflow-y: hidden;
+      }
+
       .welcome-panel-header-wrapper {
         background-color: var(--brand-color-default);
       }
