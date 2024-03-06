@@ -15,15 +15,17 @@ add_action( 'welcome_panel', function () {
 	$activate_url = wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ) . '&amp;plugin_status=all&amp;paged=1&', 'activate-plugin_' . $plugin_file )
 	?>
     <div class="welcome-panel-content">
-        <div class="welcome-panel-header">
-            <h2><?php _e( 'Welcome to WP Appointments!' ); ?></h2>
-            <p>
-                We're thrilled to let you peek behind the curtain at our WP Appointments plugin, which is currently
-                in
-                beta. Our team is refining and enhancing its features to align perfectly with your needs. Right now,
-                you
-                have access to the foundational features of our free version.
-            </p>
+        <div class="welcome-panel-header-wrapper">
+            <div class="welcome-panel-header">
+                <h2><?php _e( 'Welcome to WP Appointments!' ); ?></h2>
+                <p>
+                    We're thrilled to let you peek behind the curtain at our WP Appointments plugin, which is currently
+                    in
+                    beta. Our team is refining and enhancing its features to align perfectly with your needs. Right now,
+                    you
+                    have access to the foundational features of our free version.
+                </p>
+            </div>
         </div>
         <div class="welcome-panel-column-container">
             <div class="welcome-panel-column">
@@ -65,11 +67,13 @@ add_action( 'welcome_panel', function () {
                 </div>
             </div>
         </div>
-        <footer class="welcome-panel-footer">
-            <a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary">
-                Activate WP Appointments
-            </a>
-        </footer>
+        <div class="welcome-panel-footer-wrapper">
+            <footer class="welcome-panel-footer">
+                <a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary">
+                    Activate WP Appointments
+                </a>
+            </footer>
+        </div>
     </div>
 	<?php
 } );
@@ -89,6 +93,7 @@ add_action( 'admin_head', function () {
         --brand-color-default: #0053fa;
         --brand-color-light: #1577fa;
         --brand-color-dark: #001d2e;
+        --max-width: 1500px;
       }
 
       /* hide the close button and empty widgets containers */
@@ -97,8 +102,17 @@ add_action( 'admin_head', function () {
         display: none;
       }
 
-      .welcome-panel-header {
+      .welcome-panel {
+        background-color: #fff;
+      }
+
+      .welcome-panel-header-wrapper {
         background-color: var(--brand-color-default);
+      }
+
+      .welcome-panel-header {
+        max-width: var(--max-width);
+        margin-inline: auto;
         padding: 48px;
 
         &::before {
@@ -124,6 +138,11 @@ add_action( 'admin_head', function () {
         max-width: 75%;
       }
 
+      .welcome-panel .welcome-panel-column-container {
+        max-width: var(--max-width);
+        margin-inline: auto;
+      }
+
       .welcome-panel-column-content {
         display: flex;
         flex-direction: column;
@@ -132,6 +151,7 @@ add_action( 'admin_head', function () {
 
       .welcome-panel-column {
         display: block;
+        max-width: none;
       }
 
       .welcome-panel-column .button-secondary {
@@ -157,9 +177,15 @@ add_action( 'admin_head', function () {
         line-height: 1.5;
       }
 
-      .welcome-panel-footer {
+      .welcome-panel-footer-wrapper {
         background-color: #fafafa;
-        padding: 24px 48px;
+      }
+
+      .welcome-panel-footer {
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding: 24px 32px;
+        box-sizing: border-box;
       }
 
       .welcome-panel-footer .button-primary {
@@ -194,7 +220,7 @@ add_action( 'admin_head', function () {
         z-index: 999;
         top: 32px;
         right: 0;
-        width: 40%;
+        width: 85%;
         height: 100%;
         transition: transform 0.3s ease-in-out;
         transform: translateX(150%);
@@ -234,6 +260,21 @@ add_action( 'admin_head', function () {
         box-shadow: 0 0 30px rgb(0, 0, 0, 0.5);
       }
 
+      @media (min-width: 769px) {
+        .welcome-panel-footer {
+          padding: 24px 48px;
+        }
+
+        .drawer {
+          max-width: 60%;
+        }
+      }
+
+      @media (min-width: 1025px) {
+        .drawer {
+          max-width: 40%;
+        }
+      }
     </style>
 	<?php
 } );
