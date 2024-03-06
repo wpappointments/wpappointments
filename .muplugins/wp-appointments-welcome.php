@@ -14,63 +14,63 @@ add_action( 'welcome_panel', function () {
 	$plugin_file  = 'wp-appointments.php';
 	$activate_url = wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ) . '&amp;plugin_status=all&amp;paged=1&', 'activate-plugin_' . $plugin_file )
 	?>
-	<div class="welcome-panel-content">
-		<div class="welcome-panel-header">
-			<h2><?php _e( 'Welcome to WP Appointments!' ); ?></h2>
-			<p>
-				We're thrilled to let you peek behind the curtain at our WP Appointments plugin, which is currently
-				in
-				beta. Our team is refining and enhancing its features to align perfectly with your needs. Right now,
-				you
-				have access to the foundational features of our free version.
-			</p>
-		</div>
-		<div class="welcome-panel-column-container">
-			<div class="welcome-panel-column">
-				<div class="welcome-panel-column-content">
-					<h3>
-						What's inside?
-					</h3>
-					<p>
-						At this stage, you can easily manage meetings, tweak them to your heart's content, and add
-						clients smoothly. Moreover, you can define available time intervals in settings, making
-						availability clear. With a calendar view on the website, you can make hassle-free meeting
-					</p>
-				</div>
-			</div>
-			<div class="welcome-panel-column">
-				<div class="welcome-panel-column-content">
-					<h3>
-						What's next?
-					</h3>
-					<p>
-						But we're far from done. We're already working on introducing services, locations and
-						revamping
-						our calendar view to make your planning process even more seamless.
-					</p>
-				</div>
-			</div>
-			<div class="welcome-panel-column">
-				<div class="welcome-panel-column-content">
-					<h3>
-						Feedback is key
-					</h3>
-					<p>
-						Your feedback is crucial to us. Your insights and suggestions will truly shape the future of
-						WP
-						Appointments. We'd be deeply grateful if you could share your feedback through this survey.
-						Let's collaborate to create a future of effortless scheduling.
-					</p>
-					<a href="" class="button button-secondary">Send Feedback</a>
-				</div>
-			</div>
-		</div>
-		<footer class="welcome-panel-footer">
-			<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary">
-				Activate WP Appointments
-			</a>
-		</footer>
-	</div>
+    <div class="welcome-panel-content">
+        <div class="welcome-panel-header">
+            <h2><?php _e( 'Welcome to WP Appointments!' ); ?></h2>
+            <p>
+                We're thrilled to let you peek behind the curtain at our WP Appointments plugin, which is currently
+                in
+                beta. Our team is refining and enhancing its features to align perfectly with your needs. Right now,
+                you
+                have access to the foundational features of our free version.
+            </p>
+        </div>
+        <div class="welcome-panel-column-container">
+            <div class="welcome-panel-column">
+                <div class="welcome-panel-column-content">
+                    <h3>
+                        What's inside?
+                    </h3>
+                    <p>
+                        At this stage, you can easily manage meetings, tweak them to your heart's content, and add
+                        clients smoothly. Moreover, you can define available time intervals in settings, making
+                        availability clear. With a calendar view on the website, you can make hassle-free meeting
+                    </p>
+                </div>
+            </div>
+            <div class="welcome-panel-column">
+                <div class="welcome-panel-column-content">
+                    <h3>
+                        What's next?
+                    </h3>
+                    <p>
+                        But we're far from done. We're already working on introducing services, locations and
+                        revamping
+                        our calendar view to make your planning process even more seamless.
+                    </p>
+                </div>
+            </div>
+            <div class="welcome-panel-column">
+                <div class="welcome-panel-column-content">
+                    <h3>
+                        Feedback is key
+                    </h3>
+                    <p>
+                        Your feedback is crucial to us. Your insights and suggestions will truly shape the future of
+                        WP
+                        Appointments. We'd be deeply grateful if you could share your feedback through this survey.
+                        Let's collaborate to create a future of effortless scheduling.
+                    </p>
+                    <a href="#" class="button button-secondary js-feedback-link">Send Feedback</a>
+                </div>
+            </div>
+        </div>
+        <footer class="welcome-panel-footer">
+            <a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary">
+                Activate WP Appointments
+            </a>
+        </footer>
+    </div>
 	<?php
 } );
 
@@ -84,10 +84,11 @@ add_action( 'wp_dashboard_setup', function () {
 
 add_action( 'admin_head', function () {
 	?>
-	<style>
+    <style>
       :root {
         --brand-color-default: #0053fa;
         --brand-color-light: #1577fa;
+        --brand-color-dark: #001d2e;
       }
 
       /* hide the close button and empty widgets containers */
@@ -200,8 +201,13 @@ add_action( 'admin_head', function () {
       }
 
       .drawer-content {
-        background: #fafafa;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         overflow-y: auto;
+        background: var(--brand-color-dark);
         box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
       }
 
@@ -212,7 +218,7 @@ add_action( 'admin_head', function () {
       .drawer-close {
         position: absolute;
         z-index: -1;
-        left: -30px;
+        left: -29px;
         top: 20px;
         border-radius: 3px 3px 0 0;
         padding: 5px 10px;
@@ -223,12 +229,12 @@ add_action( 'admin_head', function () {
         color: white;
         transform: rotate(-90deg);
         transform-origin: bottom;
-        background-color: var(--brand-color-light);
+        background-color: var(--brand-color-dark);
         cursor: pointer;
         box-shadow: 0 0 30px rgb(0, 0, 0, 0.5);
       }
 
-	</style>
+    </style>
 	<?php
 } );
 
@@ -249,25 +255,15 @@ add_action( 'admin_bar_menu', function ( $wp_admin_bar ) {
 
 add_action( 'admin_footer', function () {
 	?>
-	<script>
-        (function () {
-            const feedbackLink = document.querySelector('.js-feedback-link');
-            feedbackLink.addEventListener('click', function (event) {
-                event.preventDefault();
-                const drawer = document.querySelector('.js-feedback-drawer');
-                drawer.classList.toggle('is-open');
-            });
-        })();
-	</script>
-	<div class="drawer js-feedback-drawer">
-		<button type="button" class="drawer-close">
-			Close
-		</button>
-		<div class="drawer-content">
-			<iframe data-tally-src="https://tally.so/embed/w518KZ?dynamicHeight=1" loading="lazy" width="100%"
-			        height="1609"
-			        frameborder="0" marginheight="0" marginwidth="0" title="WP Appointments - beta testing"></iframe>
-			<script>var d = document, w = "https://tally.so/widgets/embed.js", v = function () {
+    <div class="drawer js-feedback-drawer">
+        <button type="button" class="drawer-close">
+            Close
+        </button>
+        <div class="drawer-content">
+            <iframe data-tally-src="https://tally.so/embed/w518KZ?dynamicHeight=1" loading="lazy" width="100%"
+                    height="1609"
+                    frameborder="0" marginheight="0" marginwidth="0" title="WP Appointments - beta testing"></iframe>
+            <script>var d = document, w = "https://tally.so/widgets/embed.js", v = function () {
                     "undefined" != typeof Tally ? Tally.loadEmbeds() : d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function (e) {
                         e.src = e.dataset.tallySrc
                     }))
@@ -276,8 +272,19 @@ add_action( 'admin_footer', function () {
                     var s = d.createElement("script");
                     s.src = w, s.onload = v, s.onerror = v, d.body.appendChild(s);
                 }</script>
-		</div>
-	</div>
+        </div>
+    </div>
+    <script type="module">
+        (function ($) {
+            const $drawer = $('.js-feedback-drawer');
+            const $buttons = $('.js-feedback-link')
+
+            $buttons.on('click', (event) => {
+                event.preventDefault();
+                $drawer.toggleClass('is-open')
+            });
+        })(window.jQuery);
+    </script>
 	<?php
 } );
 
