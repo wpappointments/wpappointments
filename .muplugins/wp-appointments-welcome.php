@@ -107,7 +107,7 @@ add_action( 'admin_head', function () {
       }
 
       .wp-admin.index-php #wpwrap {
-        overflow-y: hidden;
+        overflow-x: hidden;
       }
 
       .welcome-panel-header-wrapper {
