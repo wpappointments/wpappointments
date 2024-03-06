@@ -216,9 +216,9 @@ add_action( 'admin_head', function () {
       }
 
       .drawer {
-        position: fixed;
+        position: absolute;
         z-index: 999;
-        top: 32px;
+        top: 0;
         right: 0;
         width: 85%;
         height: 100%;
@@ -227,7 +227,7 @@ add_action( 'admin_head', function () {
       }
 
       .drawer-content {
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
@@ -328,4 +328,3 @@ add_action( 'admin_footer', function () {
     </script>
 	<?php
 } );
-
