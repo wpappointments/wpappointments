@@ -17,6 +17,7 @@
 .muplugins
 .wp-env.override.json
 .wp-env.override.example.json
+.zipignore
 assets
 composer.json
 composer.lock
