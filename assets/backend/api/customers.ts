@@ -1,8 +1,8 @@
-import { __ } from '@wordpress/i18n';
-import { Error, getErrorMessage } from '~/backend/utils/error';
-import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import {__} from '@wordpress/i18n';
+import {Error, getErrorMessage} from '~/backend/utils/error';
+import apiFetch, {APIResponse} from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+import {displayErrorToast, displaySuccessToast} from '~/backend/utils/toast';
 
 type CustomerData = {
 	name: string;
@@ -43,7 +43,17 @@ export function customersApi(options?: CustomersApiOptions) {
 			handleError(error, 'Error creating customer');
 		}
 
-		if (response) {
+		if (response && response.type === 'error') {
+			const error:Error = {
+				type: 'error',
+				message: response?.data?.message || 'Unknown error',
+				data: [],
+			};
+
+			handleError(error, 'Error creating customer');
+		}
+
+		if (response && response.type === 'success') {
 			const { data: responseData } = response;
 			const { customer } = responseData;
 
