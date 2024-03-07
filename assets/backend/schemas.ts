@@ -31,8 +31,8 @@ export const AppointmentSchema = object({
 	customer: object({
 		id: optional(number()),
 		name: string(),
-		email: string(),
-		phone: string(),
+		email: optional(string()),
+		phone: optional(string()),
 	}),
 	customerId: optional(number()),
 	actions: record(ApiActionSchema),
