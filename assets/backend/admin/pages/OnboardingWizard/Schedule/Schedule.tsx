@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -14,6 +15,7 @@ type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
 	serviceName: string;
+	defaultStatus: 'confirmed' | 'pending';
 };
 
 type Response = APIResponse<{
@@ -23,6 +25,7 @@ type Response = APIResponse<{
 
 function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 	const dispatch = useDispatch(store);
+	const [error, setError] = useState<string | null>(null);
 
 	const settings = useSelect(() => {
 		return select(store).getScheduleSettings();
@@ -42,12 +45,12 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 		});
 
 		if (error) {
-			// displayErrorToast(error?.message);
+			setError(error?.message);
 			return;
 		}
 
 		if (response === null) {
-			// displayErrorToast('Error saving settings');
+			setError('Error saving settings');
 			return;
 		}
 
@@ -59,6 +62,7 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 
 	return (
 		<HtmlForm onSubmit={onSubmit}>
+			{error && <div className={styles.error}>{error}</div>}
 			<FormFields />
 		</HtmlForm>
 	);
