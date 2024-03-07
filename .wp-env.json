@@ -2,6 +2,6 @@
 	"phpVersion": "8.2",
 	"mappings": {
 		"wp-content/plugins/wpappointments": ".",
-		"wp-content/mu-plugins/mailhog.php": ".muplugins/mailhog.php"
+		"wp-content/mu-plugins/": ".muplugins/"
 	}
 }
