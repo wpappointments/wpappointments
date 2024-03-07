@@ -120,7 +120,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 
 	const precision = timePickerPrecision || 15;
 	const length = defaultLength || 30;
-	const type = clockType || 24;
+	const type = clockType || '24';
 
 	const { availableHours, availableMinutes, availableRanges } =
 		test(date, schedule, duration || length) || {};
@@ -190,7 +190,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 				</FormFieldSet>
 			</FormFieldSet>
 
-			{timeHourStart && timeMinuteStart && (
+			{timeHourStart && timeMinuteStart && date && (
 				<Summary
 					date={date}
 					timeHourStart={timeHourStart}
