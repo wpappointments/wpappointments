@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -25,6 +26,7 @@ type Response = APIResponse<{
 
 function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 	const dispatch = useDispatch(store);
+	const [error, setError] = useState<string | null>(null);
 
 	const settings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
@@ -44,12 +46,12 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 		});
 
 		if (error) {
-			// displayErrorToast(error?.message);
+			setError(error?.message);
 			return;
 		}
 
 		if (response === null) {
-			// displayErrorToast('Error saving settings');
+			setError('Error saving settings');
 			return;
 		}
 
@@ -61,6 +63,7 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 
 	return (
 		<HtmlForm onSubmit={onSubmit}>
+			{error && <div className={styles.error}>{error}</div>}
 			<FormFields />
 		</HtmlForm>
 	);
@@ -111,24 +114,21 @@ function FormFields() {
 				/>
 
 				<Select
-						name="defaultStatus"
-						defaultValue="confirmed"
-						options={[
-							{ label: 'Confirmed', value: 'confirmed' },
-							{ label: 'Pending', value: 'pending' },
-						]}
-						label={__(
-							'Default appointment status',
-							'wpappointments'
-						)}
-						rules={{
-							required: true,
-						}}
-						help={__(
-							'Default status for appointments created by your clients. You can change the status of each appointment individually.',
-							'wpappointments'
-						)}
-					/>
+					name="defaultStatus"
+					defaultValue="confirmed"
+					options={[
+						{ label: 'Confirmed', value: 'confirmed' },
+						{ label: 'Pending', value: 'pending' },
+					]}
+					label={__('Default appointment status', 'wpappointments')}
+					rules={{
+						required: true,
+					}}
+					help={__(
+						'Default status for appointments created by your clients. You can change the status of each appointment individually.',
+						'wpappointments'
+					)}
+				/>
 			</FormFieldSet>
 			<Button
 				className={styles.stepButton}
