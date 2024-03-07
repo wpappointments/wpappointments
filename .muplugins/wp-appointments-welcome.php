@@ -11,7 +11,7 @@ add_action( 'admin_init', function () {
 } );
 
 add_action( 'welcome_panel', function () {
-	$plugin_file  = 'wp-appointments.php';
+	$plugin_file  = 'wpappointments.php';
 	$activate_url = wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ) . '&amp;plugin_status=all&amp;paged=1&', 'activate-plugin_' . $plugin_file )
 	?>
     <div class="welcome-panel-content">
