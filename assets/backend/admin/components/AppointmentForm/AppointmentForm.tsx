@@ -280,7 +280,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						/>
 					</FormFieldSet>
 
-					{datetime && (
+					{datetime && date && (
 						<Summary
 							date={new Date(date)}
 							timeHourStart={timeHourStart}
