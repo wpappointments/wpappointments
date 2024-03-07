@@ -132,7 +132,7 @@ add_action( 'admin_head', function () {
         background-color: #fff;
       }
 
-      .wp-admin.index-php #wpwrap {
+      .wp-admin #wpwrap {
         overflow-x: hidden;
       }
 
