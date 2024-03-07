@@ -7,6 +7,7 @@ import General from './General/General';
 import styles from './OnboardingWizard.module.css';
 import Schedule from './Schedule/Schedule';
 import logoIcon from '~/images/icons/logo-icon.svg';
+import gutenbergBlock from '~/images/gutenberg-block.png';
 
 export function OnboardingWizard() {
 	const [currentStep, setCurrentStep] = useState(0);
@@ -92,9 +93,33 @@ function AllSet() {
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>All set!</h1>
 				<p className={styles.leadText}>
-					You are all set up and ready to start accepting
-					appointments!
+					{__(
+						'You\'re good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.',	
+						'wpappointments'
+					)}
 				</p>
+				<hr style={{ width: 80 }} />
+				<p className={styles.leadText}>
+					{__(
+						'For more information about the plugin please see this walktrough video:',
+						'wpappointments'
+					)}{' '}
+					<a href="https://www.youtube.com/watch?v=0J2QdDbelmY" target="_blank">
+						{__('Watch video', 'wpappointments')}
+					</a>
+				</p>
+				<hr style={{ width: 80 }} />
+				<p className={styles.leadText}>
+					{__(
+						'When you are ready, you can insert a "Booking Flow" Gutenberg block on any of your pages.',
+						'wpappointments'
+					)}
+				</p>
+				<img
+					src={gutenbergBlock}
+					className={styles.gutenbergBlockImage}
+					alt="Gutenberg block inserting visual guide"
+				/>
 			</div>
 			<Button
 				variant="primary"
@@ -107,7 +132,7 @@ function AllSet() {
 				}}
 				href="/wp-admin/admin-post.php?action=wpappointments_wizard_complete"
 			>
-				{__('Set up appointments', 'wpappointments')}
+				{__('Go to dashboard', 'wpappointments')}
 			</Button>
 		</div>
 	);

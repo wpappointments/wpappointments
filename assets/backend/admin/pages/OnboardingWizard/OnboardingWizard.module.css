@@ -70,3 +70,7 @@
   margin-bottom: 20px;
   text-align: center;
 }
+
+.gutenberg-block-image {
+  max-width: 350px;
+}

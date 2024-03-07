@@ -125,7 +125,7 @@ function FormFields() {
 						required: true,
 					}}
 					help={__(
-						'Default status for appointments created by your clients. You can change the status of each appointment individually.',
+						'Default status for appointments created by your clients. You can change the status of each appointment individually. If Pending selected, you will have to confirm each appointment manually.',
 						'wpappointments'
 					)}
 				/>
