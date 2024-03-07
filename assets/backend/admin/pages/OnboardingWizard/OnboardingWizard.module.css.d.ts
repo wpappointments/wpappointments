@@ -10,6 +10,7 @@ declare const styles:
   & Readonly<{ "leadText": string }>
   & Readonly<{ "stepButton": string }>
   & Readonly<{ "error": string }>
+  & Readonly<{ "gutenbergBlockImage": string }>
 ;
 export default styles;
 //# sourceMappingURL=./OnboardingWizard.module.css.d.ts.map
