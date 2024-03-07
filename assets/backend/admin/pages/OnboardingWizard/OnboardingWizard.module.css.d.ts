@@ -9,6 +9,7 @@ declare const styles:
   & Readonly<{ "title": string }>
   & Readonly<{ "leadText": string }>
   & Readonly<{ "stepButton": string }>
+  & Readonly<{ "error": string }>
 ;
 export default styles;
 //# sourceMappingURL=./OnboardingWizard.module.css.d.ts.map

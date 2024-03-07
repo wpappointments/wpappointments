@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { getSettings } from '@wordpress/date';
@@ -23,6 +24,7 @@ type Response = APIResponse<{
 
 function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 	const dispatch = useDispatch(store);
+	const [error, setError] = useState<string | null>(null);
 
 	const settings = useSelect(() => {
 		return select(store).getGeneralSettings();
@@ -42,12 +44,12 @@ function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 		});
 
 		if (error) {
-			// displayErrorToast(error?.message);
+			setError(error?.message);
 			return;
 		}
 
 		if (response === null) {
-			// displayErrorToast('Error saving settings');
+			setError('Error saving settings');
 			return;
 		}
 
@@ -59,6 +61,7 @@ function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 
 	return (
 		<HtmlForm onSubmit={onSubmit}>
+			{error && <div className={styles.error}>{error}</div>}
 			<FormFields />
 		</HtmlForm>
 	);
