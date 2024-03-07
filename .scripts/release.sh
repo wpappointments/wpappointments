@@ -18,4 +18,4 @@ zip -qr wpappointments.zip . -x@.zipignore
 rm -rf vendor
 mv vendor-temp vendor
 
-echo "Release complete ✨ "
+echo "\r\nRelease complete ✨ "
