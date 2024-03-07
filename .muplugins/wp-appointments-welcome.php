@@ -221,7 +221,7 @@ add_action( 'admin_head', function () {
 
       .drawer {
         position: absolute;
-        z-index: 999;
+        z-index: 10000;
         top: 0;
         right: 0;
         width: 85%;
@@ -322,11 +322,20 @@ add_action( 'admin_footer', function () {
     <script type="module">
         (function ($) {
             const $drawer = $('.js-feedback-drawer');
-            const $buttons = $('.js-feedback-link')
+            const $buttons = $('.js-feedback-link');
+
+            $(window).click(function() {
+              $drawer.removeClass('is-open');
+            });
 
             $buttons.on('click', (event) => {
+                event.stopPropagation();
                 event.preventDefault();
-                $drawer.toggleClass('is-open')
+                $drawer.toggleClass('is-open');
+            });
+
+            $drawer.click(function(event){
+              event.stopPropagation();
             });
         })(window.jQuery);
     </script>
