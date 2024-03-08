@@ -27,14 +27,6 @@ add_action(
 					'supports' => array( 'custom-fields' ),
 				)
 			);
-			register_post_type(
-				'wpa_customer',
-				array(
-					'label'    => 'Customers',
-					'public'   => true,
-					'supports' => array( 'custom-fields' ),
-				)
-			);
 		}
 	}
 );
