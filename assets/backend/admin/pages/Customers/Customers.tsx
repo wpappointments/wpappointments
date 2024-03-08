@@ -5,6 +5,7 @@ import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
+import Table from '~/backend/admin/components/CustomersTableFull/CustomersTableFull';
 import { StateContextProvider, useStateContext } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import globalStyles from 'global.module.css';
@@ -52,10 +53,10 @@ function DashboardCustomers() {
 	}, [getSelector('getAllCustomers')]);
 
 	return (
-		<div>
-			{customers.map((customer) => (
-				<div key={customer.id}>{customer.name}</div>
-			))}
-		</div>
+		<Table
+			items={customers}
+			hideHeader
+			emptyStateMessage={__('You have no customers yet', 'wpappointments')}
+		/>
 	);
 }

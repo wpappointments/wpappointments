@@ -16,6 +16,8 @@ import { formatDate, formatTime } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
+import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
+import Table from '~/backend/admin/components/TableFull/Table/Table';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
 type Props = {
@@ -53,39 +55,23 @@ export default function AppointmentsTableFull({
 
 	if (!items || items.length === 0) {
 		return (
-			<div className={styles.empty}>
-				<div>
-					<svg
-						className={styles.emptyIcon}
-						viewBox="0 0 1024 1024"
-						version="1.1"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path d="M839.2 101.3H184.9L65.3 539.5 64 922.7h896V549.3l-120.8-448zM241.9 176h540.3L884 549.3H678.7l-74.7 112H420l-74.7-112H140.1L241.9 176z" />
-					</svg>
-					<p>
-						{emptyStateMessage ||
-							__(
-								'You have no appointments yet',
-								'wpappointments'
-							)}
-					</p>
-					{!hideEmptyStateButton && (
-						<Button
-							variant="primary"
-							onClick={onEmptyStateButtonClick}
-						>
-							{__('Create New Appointment', 'wpappointments')}
-						</Button>
-					)}
-				</div>
-			</div>
+			<Empty>
+				<p>
+					{emptyStateMessage ||
+						__('You have no appointments yet', 'wpappointments')}
+				</p>
+				{!hideEmptyStateButton && (
+					<Button variant="primary" onClick={onEmptyStateButtonClick}>
+						{__('Create New Appointment', 'wpappointments')}
+					</Button>
+				)}
+			</Empty>
 		);
 	}
 
 	return (
 		<>
-			<table className={styles.table}>
+			<Table>
 				{!hideHeader && (
 					<thead>
 						<tr>
@@ -116,7 +102,7 @@ export default function AppointmentsTableFull({
 						/>
 					))}
 				</tbody>
-			</table>
+			</Table>
 			{appointmentModal && (
 				<AppointmentDetailsModals
 					status={appointmentModal.status}

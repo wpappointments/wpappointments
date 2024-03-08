@@ -1,39 +1,4 @@
-.table {
-	width: 100%;
-	border-collapse: collapse;
-	background-color: #fff;
-}
 
-.table :global(.is-link) {
-	text-decoration: none;
-}
-
-.table th,
-.table td {
-	padding: 12px 16px;
-	border: 1px solid #e5e5e5;
-	text-align: left;
-	vertical-align: top;
-}
-
-.empty {
-	text-align: center;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	/* padding: 50px 16px; */
-}
-
-.empty-icon {
-	font-size: 24px;
-	color: #bcbcbc;
-	width: min( 80px, 50vw );
-	height: min( 80px, 50vw );
-	vertical-align: middle;
-	fill: currentColor;
-	overflow: hidden;
-}
 
 .status {
 	display: inline-block;

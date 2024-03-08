@@ -1,10 +1,4 @@
 declare const styles:
-  & Readonly<{ "table": string }>
-  & Readonly<{ "table": string }>
-  & Readonly<{ "table": string }>
-  & Readonly<{ "table": string }>
-  & Readonly<{ "empty": string }>
-  & Readonly<{ "emptyIcon": string }>
   & Readonly<{ "status": string }>
   & Readonly<{ "pending": string }>
   & Readonly<{ "confirmed": string }>
