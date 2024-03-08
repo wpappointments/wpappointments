@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="WPAppointments\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/php" isTestSource="false" packagePrefix="TestsPHP\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/wordpress" isTestSource="false" packagePrefix="TestsWP\" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dealerdirect/phpcodesniffer-composer-installer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
@@ -68,6 +67,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/wpreadme2markdown/wpreadme2markdown" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yoast/phpunit-polyfills" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-stubs/wordpress-stubs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
