@@ -41,6 +41,15 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
+		__( 'Customers', 'wpappointments' ),
+		__( 'Customers', 'wpappointments' ),
+		'activate_plugins',
+		'wpappointments-customers',
+		__NAMESPACE__ . '\customers_page'
+	);
+
+	add_submenu_page(
+		'wpappointments',
 		__( 'Settings', 'wpappointments' ),
 		__( 'Settings', 'wpappointments' ),
 		'activate_plugins',
