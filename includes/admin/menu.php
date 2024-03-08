@@ -86,6 +86,15 @@ function calendar_page() {
 }
 
 /**
+ * Create customers admin page
+ *
+ * @return void
+ */
+function customers_page() {
+	echo '<div id="wpappointments-admin" data-page="customers"></div>';
+}
+
+/**
  * Create settings admin page
  *
  * @return void
