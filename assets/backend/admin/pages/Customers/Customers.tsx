@@ -6,17 +6,19 @@ import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
 import Table from '~/backend/admin/components/CustomersTableFull/CustomersTableFull';
-import { StateContextProvider, useStateContext } from '~/backend/admin/context/StateContext';
+import {
+	StateContextProvider,
+	useStateContext,
+} from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import globalStyles from 'global.module.css';
-
 
 export default function Customers() {
 	const { openSlideOut } = useSlideout();
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Settings">
+			<LayoutDefault title="Customers">
 				<Card className={globalStyles.card}>
 					<CardHeader>
 						<Text size="title">
@@ -56,7 +58,10 @@ function DashboardCustomers() {
 		<Table
 			items={customers}
 			hideHeader
-			emptyStateMessage={__('You have no customers yet', 'wpappointments')}
+			emptyStateMessage={__(
+				'You have no customers yet',
+				'wpappointments'
+			)}
 		/>
 	);
 }
