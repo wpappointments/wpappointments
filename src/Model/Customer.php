@@ -21,12 +21,15 @@ class Customer {
 	 * @return int|\WP_Error
 	 */
 	public function create( $customer, $password = null ) {
+		$email = sanitize_text_field( wp_unslash( $customer->email ), true );
+		$name  = sanitize_user( wp_unslash( $customer->name ), true );
+
 		$user_id = wp_insert_user(
 			array(
-				'user_login'   => $customer->email,
+				'user_login'   => $email ?: $name,
 				'user_pass'    => $password ?? wp_generate_password(),
-				'user_email'   => $customer->email,
-				'display_name' => $customer->name,
+				'user_email'   => $email,
+				'display_name' => $name,
 				'role'         => 'wpa-customer',
 			)
 		);
@@ -35,7 +38,7 @@ class Customer {
 			return $user_id;
 		}
 
-		update_user_meta( $user_id, 'phone', $customer->phone );
+		update_user_meta( $user_id, 'phone', sanitize_text_field( $customer->phone ) );
 
 		return $user_id;
 	}
