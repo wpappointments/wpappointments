@@ -417,7 +417,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				{isSlideoutOpen('create-customer') && (
 					<CustomerCreate
 						onSubmitSuccess={(data: Customer) => {
-							setValue('customerId', data.id || 0);
+							setValue('customerId', 0);
 							setValue('customer', JSON.stringify(data));
 						}}
 					/>
