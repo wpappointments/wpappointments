@@ -32,26 +32,16 @@ export default withForm(function CustomerCreate({
 
 	const onSubmit: SubmitHandler<CustomerCreateFormData> = async (data) => {
 		const { createCustomer } = customersApi();
-		const { createAccount, ...rest } = data;
 
-		if (createAccount) {
-			const response = await createCustomer(rest);
+		const response = await createCustomer(data);
 
-			if (response) {
-				const { data: responseData } = response;
-				const { customer } = responseData;
-				dispatch.setSelectedCustomer(customer as Customer);
-
-				if (onSubmitSuccess) {
-					onSubmitSuccess(customer as Customer);
-				}
-			}
-		} else {
-			dispatch.createCustomer(rest as Customer);
-			dispatch.setSelectedCustomer(rest as Customer);
+		if (response) {
+			const { data: responseData } = response;
+			const { customer } = responseData;
+			dispatch.setSelectedCustomer(customer as Customer);
 
 			if (onSubmitSuccess) {
-				onSubmitSuccess(rest as Customer);
+				onSubmitSuccess(customer as Customer);
 			}
 		}
 
