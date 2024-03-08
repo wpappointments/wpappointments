@@ -39,10 +39,9 @@ export default function CustomersTableFull({
 		<Table>
 			<thead>
 				<tr>
-					<th>{__('Title', 'wpappointments')}</th>
-					<th>{__('Date', 'wpappointments')}</th>
-					<th>{__('Time', 'wpappointments')}</th>
-					<th>{__('Status', 'wpappointments')}</th>
+					<th>{__('Name', 'wpappointments')}</th>
+					<th>{__('Email', 'wpappointments')}</th>
+					<th>{__('Phone', 'wpappointments')}</th>
 					<th style={{ width: 80 }}></th>
 				</tr>
 			</thead>
@@ -88,9 +87,8 @@ function TableRow({ row, edit, view, setCustomerModal }: TableRowProps) {
 					<strong>{name}</strong>
 				</Button>
 			</td>
-			<td>{phone}</td>
 			<td>{email}</td>
-			<td>demo</td>
+			<td>{phone}</td>
 			<td className="">
 				<Button
 					variant="tertiary"
