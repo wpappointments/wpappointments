@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import { Button, Card, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
@@ -12,10 +12,8 @@ import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
 import Table from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
-import {
-	StateContextProvider,
-	useStateContext,
-} from '~/backend/admin/context/StateContext';
+import CardBody from '~/backend/admin/components/CardBody/CardBody';
+import { StateContextProvider, useStateContext } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import { appointmentsApi } from '~/backend/api/appointments';
 import statsPlaceholder from '~/images/stats-placeholder.png';
@@ -62,7 +60,7 @@ export default function Dashboard() {
 								{__('Create New Appointment', 'wpappointments')}
 							</Button>
 						</CardHeader>
-						<CardBody style={{ backgroundColor: '#ececec' }}>
+						<CardBody>
 							<DashboardAppointments
 								filters={filters}
 								openSlideOut={openSlideOut}
@@ -154,13 +152,7 @@ function UpcomingAppointments({
 					{__('Upcoming Appointments', 'wpappointments')}
 				</Text>
 			</CardHeader>
-			<CardBody
-				style={{
-					backgroundColor: '#ececec',
-					height: 215,
-					overflow: 'auto',
-				}}
-			>
+			<CardBody>
 				<AppointmentsTableMinimal
 					items={appointments}
 					onView={(data) => {
