@@ -26,7 +26,7 @@ type Fields = {
 
 export default function Dashboard() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
-	const [filters, _] = useState<Fields>({
+	const [filters] = useState<Fields>({
 		status: 'confirmed',
 		period: 'week',
 	});
