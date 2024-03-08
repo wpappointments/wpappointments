@@ -1,13 +1,4 @@
-import {
-	boolean,
-	literal,
-	number,
-	object,
-	optional,
-	record,
-	string,
-	union,
-} from 'valibot';
+import { boolean, literal, number, object, optional, record, string, union } from 'valibot';
 
 export const ApiActionSchema = object({
 	name: string(),
@@ -35,5 +26,13 @@ export const AppointmentSchema = object({
 		phone: optional(string()),
 	}),
 	customerId: optional(number()),
+	actions: record(ApiActionSchema),
+});
+
+export const CustomerSchema = object({
+	id: number(),
+	name: string(),
+	email: optional(string()),
+	phone: optional(string()),
 	actions: record(ApiActionSchema),
 });
