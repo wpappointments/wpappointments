@@ -1,24 +1,19 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '@wordpress/components';
+import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
-import {
-	Icon,
-	info,
-	edit as editIcon,
-	cancelCircleFilled,
-	check,
-	trash,
-} from '@wordpress/icons';
+import { Icon, info, edit as editIcon, cancelCircleFilled, check, trash } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
-import { formatDate, formatTime } from '~/backend/utils/i18n';
+import { formatDate, formatDateRelative, formatTime } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import Table from '~/backend/admin/components/TableFull/Table/Table';
 import { AppointmentsApi } from '~/backend/api/appointments';
+
 
 type Props = {
 	items?: Appointment[];
@@ -33,6 +28,9 @@ type Props = {
 	hideHeader?: boolean;
 	hideEmptyStateButton?: boolean;
 	emptyStateMessage?: string;
+	totalItems?: number;
+	totalPages?: number;
+	perPage?: number;
 };
 
 export default function AppointmentsTableFull({
@@ -47,6 +45,9 @@ export default function AppointmentsTableFull({
 	hideHeader = false,
 	hideEmptyStateButton = false,
 	emptyStateMessage,
+	totalItems = 0,
+	totalPages = 0,
+	perPage = 10,
 }: Props) {
 	const [appointmentModal, setAppointmentModal] = useState<{
 		id: number;
@@ -68,6 +69,120 @@ export default function AppointmentsTableFull({
 			</Empty>
 		);
 	}
+
+	const fields = [
+		{
+			id: 'status',
+			header: __('Status'),
+			getValue: ({ item }) => item.status,
+			render: ({ item }) => {
+				return (
+					<>
+						{item.status === 'pending' && (
+							<span
+								className={cn({
+									[styles.pending]: true,
+								})}
+								title={__('Pending', 'wpappointments')}
+							></span>
+						)}
+						{item.status === 'confirmed' && (
+							<span
+								className={cn({
+									[styles.status]: true,
+									[styles.confirmed]: true,
+								})}
+								title={__('Confirmed', 'wpappointments')}
+							></span>
+						)}
+					</>
+				);
+			},
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			id: 'title',
+			header: __('Title'),
+			getValue: ({ item }) => item.service,
+			render: ({ item }) => {
+				return (
+					<>
+						{item.service} - {item.customer.name}
+					</>
+				);
+			},
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			id: 'date',
+			header: __('Date'),
+			getValue: ({ item }) => item.dateStart,
+			render: ({ item }) => {
+				const dateStart = fromUnixTime(item.timestamp);
+				const userDiffTimezone = userSiteTimezoneMatch();
+				return (
+					<>
+						{formatDateRelative(dateStart, new Date())}
+						{userDiffTimezone && ` (${userDiffTimezone})`}
+					</>
+				);
+			},
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			id: 'duration',
+			header: __('Duration'),
+			getValue: ({ item }) => item.duration,
+			render: ({ item }) => {
+				return <>{item.duration} min</>;
+			},
+			enableSorting: false,
+			enableHiding: false,
+		},
+	];
+
+	const view = {
+		type: 'table',
+		layout: {},
+		hiddenFields: [],
+		perPage: perPage,
+		page: 1,
+	};
+
+	const actions = [
+		{
+			id: 'view',
+			icon: 'info-outline',
+			isPrimary: true,
+			label: __('View', 'wpappointments'),
+			callback: (item: Appointment) => {
+				onView && onView(item);
+			},
+		},
+	];
+	const paginationInfo = {
+		totalItems: totalItems || null,
+		totalPages: totalPages || null,
+		perPage: perPage,
+	};
+
+	return (
+		<>
+			<DataViews
+				view={view}
+				onChangeView={() => {}}
+				fields={fields}
+				actions={actions}
+				data={items}
+				paginationInfo={paginationInfo}
+				search={false}
+				supportedLayouts="table"
+			/>
+		</>
+	);
 
 	return (
 		<>
