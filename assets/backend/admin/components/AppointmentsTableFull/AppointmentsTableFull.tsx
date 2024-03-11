@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
-import { Icon, info, edit as editIcon, cancelCircleFilled, check, trash } from '@wordpress/icons';
+import {
+	Icon,
+	info,
+	edit as editIcon,
+	cancelCircleFilled,
+	check,
+	trash,
+} from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -63,7 +70,7 @@ export default function AppointmentsTableFull({
 		{
 			id: 'title',
 			header: __('Title', 'wpappointments'),
-			render: ({ item }) => {
+			render: ({ item }: { item: Appointment }) => {
 				return (
 					<>
 						<Button
@@ -87,7 +94,7 @@ export default function AppointmentsTableFull({
 		{
 			id: 'date',
 			header: __('Date', 'wpappointments'),
-			render: ({ item }) => {
+			render: ({ item }: { item: Appointment }) => {
 				return <>{formatDate(item.timestamp)}</>;
 			},
 			enableSorting: false,
@@ -96,7 +103,7 @@ export default function AppointmentsTableFull({
 		{
 			id: 'time',
 			header: __('Time', 'wpappointments'),
-			render: ({ item }) => {
+			render: ({ item }: { item: Appointment }) => {
 				const { timestamp, duration } = item;
 				const dateStart = fromUnixTime(timestamp);
 				const dateEnd = addMinutes(dateStart, duration);
@@ -120,7 +127,7 @@ export default function AppointmentsTableFull({
 		{
 			id: 'status',
 			header: __('Status', 'wpappointments'),
-			render: ({ item }) => {
+			render: ({ item }: { item: Appointment }) => {
 				return (
 					<>
 						<span
