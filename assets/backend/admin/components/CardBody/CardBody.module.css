@@ -1,3 +1,4 @@
 .card-body {
-  background-color: #ececec;
+	background-color: #ececec;
+	flex: 1;
 }
