@@ -43,7 +43,7 @@ export default function AppointmentsTableMinimal({
 	}
 
 	return (
-		<>
+		<div className={styles.wrapper}>
 			<table className={styles.table}>
 				<tbody>
 					{items.map((row) => (
@@ -51,7 +51,7 @@ export default function AppointmentsTableMinimal({
 					))}
 				</tbody>
 			</table>
-		</>
+		</div>
 	);
 }
 
