@@ -72,43 +72,23 @@ export default function AppointmentsTableFull({
 
 	const fields = [
 		{
-			id: 'status',
-			header: __('Status'),
-			getValue: ({ item }) => item.status,
-			render: ({ item }) => {
-				return (
-					<>
-						{item.status === 'pending' && (
-							<span
-								className={cn({
-									[styles.pending]: true,
-								})}
-								title={__('Pending', 'wpappointments')}
-							></span>
-						)}
-						{item.status === 'confirmed' && (
-							<span
-								className={cn({
-									[styles.status]: true,
-									[styles.confirmed]: true,
-								})}
-								title={__('Confirmed', 'wpappointments')}
-							></span>
-						)}
-					</>
-				);
-			},
-			enableSorting: false,
-			enableHiding: false,
-		},
-		{
 			id: 'title',
-			header: __('Title'),
-			getValue: ({ item }) => item.service,
+			header: __('Title', 'wpappointments'),
 			render: ({ item }) => {
 				return (
 					<>
-						{item.service} - {item.customer.name}
+						<Button
+							variant="link"
+							onClick={() => {
+								onView && onView(item);
+							}}
+							style={{ marginBottom: '5px' }}
+						>
+							<strong>{item.service}</strong>
+						</Button>
+						<br />
+						{__('Customer', 'wpappointments')}:{' '}
+						<strong>{item.customer.name}</strong>
 					</>
 				);
 			},
@@ -117,14 +97,30 @@ export default function AppointmentsTableFull({
 		},
 		{
 			id: 'date',
-			header: __('Date'),
-			getValue: ({ item }) => item.dateStart,
+			header: __('Date', 'wpappointments'),
 			render: ({ item }) => {
-				const dateStart = fromUnixTime(item.timestamp);
+				return <>{formatDate(item.timestamp)}</>;
+			},
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			id: 'time',
+			header: __('Time', 'wpappointments'),
+			render: ({ item }) => {
+				const { timestamp, duration } = item;
+				const dateStart = fromUnixTime(timestamp);
+				const dateEnd = addMinutes(dateStart, duration);
+
+				const timeFrom = formatTime(dateStart);
+				const timeTo = formatTime(dateEnd);
+				const timeFromTo = `${timeFrom} - ${timeTo}`;
+
 				const userDiffTimezone = userSiteTimezoneMatch();
+
 				return (
 					<>
-						{formatDateRelative(dateStart, new Date())}
+						{timeFromTo}
 						{userDiffTimezone && ` (${userDiffTimezone})`}
 					</>
 				);
@@ -133,11 +129,21 @@ export default function AppointmentsTableFull({
 			enableHiding: false,
 		},
 		{
-			id: 'duration',
-			header: __('Duration'),
-			getValue: ({ item }) => item.duration,
+			id: 'status',
+			header: __('Status', 'wpappointments'),
 			render: ({ item }) => {
-				return <>{item.duration} min</>;
+				return (
+					<>
+						<span
+							className={cn({
+								[styles.status]: true,
+								[styles[item.status]]: true,
+							})}
+						>
+							{item.status}
+						</span>
+					</>
+				);
 			},
 			enableSorting: false,
 			enableHiding: false,
@@ -157,7 +163,7 @@ export default function AppointmentsTableFull({
 			id: 'view',
 			icon: 'info-outline',
 			isPrimary: true,
-			label: __('View', 'wpappointments'),
+			label: __('View appointment details', 'wpappointments'),
 			callback: (item: Appointment) => {
 				onView && onView(item);
 			},
@@ -181,43 +187,6 @@ export default function AppointmentsTableFull({
 				search={false}
 				supportedLayouts="table"
 			/>
-		</>
-	);
-
-	return (
-		<>
-			<Table>
-				{!hideHeader && (
-					<thead>
-						<tr>
-							<th>{__('Title', 'wpappointments')}</th>
-							<th>{__('Date', 'wpappointments')}</th>
-							<th>{__('Time', 'wpappointments')}</th>
-							<th>{__('Status', 'wpappointments')}</th>
-							{!hideActions && <th style={{ width: 80 }}></th>}
-						</tr>
-					</thead>
-				)}
-				<tbody>
-					{items.map((row) => (
-						<TableRow
-							key={row.id}
-							row={row}
-							edit={onEdit}
-							view={onView}
-							confirmAppointment={async () => {
-								if (!confirmAppointment) {
-									return;
-								}
-
-								await confirmAppointment(row.id);
-							}}
-							setAppointmentModal={setAppointmentModal}
-							hideActions={hideActions}
-						/>
-					))}
-				</tbody>
-			</Table>
 			{appointmentModal && (
 				<AppointmentDetailsModals
 					status={appointmentModal.status}
@@ -243,130 +212,5 @@ export default function AppointmentsTableFull({
 				/>
 			)}
 		</>
-	);
-}
-
-type TableRowProps = {
-	row: Appointment;
-	edit?: (appointment: Appointment) => void;
-	view?: (appointment: Appointment) => void;
-	confirmAppointment?: (appointmentId: number) => void;
-	setAppointmentModal: Dispatch<
-		SetStateAction<{
-			id: number;
-			status: Appointment['status'];
-		} | null>
-	>;
-	hideActions?: boolean;
-};
-
-function TableRow({
-	row,
-	edit,
-	view,
-	confirmAppointment,
-	setAppointmentModal,
-	hideActions = false,
-}: TableRowProps) {
-	const { id, service, timestamp, duration } = row;
-	const dateStart = fromUnixTime(timestamp);
-	const dateEnd = addMinutes(dateStart, duration);
-
-	const timeFrom = formatTime(dateStart);
-	const timeTo = formatTime(dateEnd);
-	const timeFromTo = `${timeFrom} - ${timeTo}`;
-
-	const userDiffTimezone = userSiteTimezoneMatch();
-
-	return (
-		<tr key={id}>
-			<td>
-				<Button
-					variant="link"
-					onClick={() => {
-						view && view(row);
-					}}
-					style={{ marginBottom: '5px' }}
-				>
-					<strong>{service}</strong>
-				</Button>
-				<br />
-				{__('Customer', 'wpappointments')}:{' '}
-				<strong>{row.customer.name}</strong>
-			</td>
-			<td>{formatDate(timestamp)}</td>
-			<td>
-				{timeFromTo}
-				{userDiffTimezone && ` (${userDiffTimezone})`}
-			</td>
-			<td>
-				<span
-					className={cn({
-						[styles.status]: true,
-						[styles[row.status]]: true,
-					})}
-				>
-					{row.status}
-				</span>
-			</td>
-			{!hideActions && (
-				<td className={styles.actionsTableCell}>
-					<Button
-						variant="tertiary"
-						size="small"
-						onClick={() => {
-							view && view(row);
-						}}
-						icon={<Icon icon={info} />}
-						label={__('View appointment details', 'wpappointments')}
-					/>
-					<Button
-						variant="tertiary"
-						size="small"
-						onClick={() => {
-							edit && edit(row);
-						}}
-						icon={<Icon icon={editIcon} />}
-						label={__('Edit appointment details', 'wpappointments')}
-					/>
-					{row.status === 'confirmed' && (
-						<Button
-							variant="tertiary"
-							size="small"
-							isDestructive
-							onClick={() => {
-								setAppointmentModal({ id, status: row.status });
-							}}
-							icon={<Icon icon={cancelCircleFilled} />}
-							label={__('Cancel appointment', 'wpappointments')}
-						/>
-					)}
-					{row.status === 'pending' && (
-						<Button
-							variant="tertiary"
-							size="small"
-							onClick={() => {
-								confirmAppointment &&
-									confirmAppointment(row.id);
-							}}
-							icon={<Icon icon={check} />}
-							label={__('Confirm appointment', 'wpappointments')}
-						/>
-					)}
-					{row.status === 'cancelled' && (
-						<Button
-							variant="tertiary"
-							size="small"
-							isDestructive
-							onClick={() => {
-								setAppointmentModal({ id, status: row.status });
-							}}
-							icon={<Icon icon={trash} />}
-							label={__('Delete appointment', 'wpappointments')}
-						/>
-					)}
-				</td>
-			)}
-		</tr>
 	);
 }
