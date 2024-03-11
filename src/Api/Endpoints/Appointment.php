@@ -155,6 +155,7 @@ class Appointment extends Controller {
 					'appointments' => $results->appointments,
 					'post_count'   => $results->post_count,
 					'found_posts'  => $results->found_posts,
+					'current_page' => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
 					'query'        => $query,
 				),
 			)

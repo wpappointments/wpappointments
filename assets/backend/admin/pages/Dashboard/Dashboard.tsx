@@ -19,6 +19,7 @@ import { appointmentsApi } from '~/backend/api/appointments';
 import statsPlaceholder from '~/images/stats-placeholder.png';
 import globalStyles from 'global.module.css';
 
+
 type Fields = {
 	status: Appointment['status'] | '';
 	period: 'week' | 'month' | 'year' | 'all' | '';
@@ -89,10 +90,10 @@ function DashboardAppointments({
 			invalidateCache: invalidate,
 		});
 
-	const appointments = useSelect(() => {
+	const { appointments, totalItems, currentPage } = useSelect(() => {
 		return select(store).getAppointments({
 			...filters,
-			posts_per_page: -1,
+			posts_per_page: 10,
 		});
 	}, [filters, getSelector('getAppointments')]);
 
@@ -127,6 +128,8 @@ function DashboardAppointments({
 			confirmAppointment={confirmAppointment}
 			deleteAppointment={deleteAppointment}
 			cancelAppointment={cancelAppointment}
+			totalItems={totalItems}
+			currentPage={currentPage}
 		/>
 	);
 }

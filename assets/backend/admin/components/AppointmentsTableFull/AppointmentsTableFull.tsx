@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
-import {
-	Icon,
-	info,
-	edit as editIcon,
-	cancelCircleFilled,
-	check,
-	trash,
-} from '@wordpress/icons';
+import { Icon, info, edit as editIcon, cancelCircleFilled, check, trash } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -19,6 +12,7 @@ import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetai
 import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { AppointmentsApi } from '~/backend/api/appointments';
+
 
 type Props = {
 	items?: Appointment[];
@@ -30,7 +24,7 @@ type Props = {
 	confirmAppointment?: AppointmentsApi['confirmAppointment'];
 	emptyStateMessage?: string;
 	totalItems?: number;
-	totalPages?: number;
+	currentPage?: number;
 	perPage?: number;
 };
 
@@ -44,7 +38,7 @@ export default function AppointmentsTableFull({
 	deleteAppointment,
 	emptyStateMessage,
 	totalItems = 0,
-	totalPages = 0,
+	currentPage = 1,
 	perPage = 10,
 }: Props) {
 	const [appointmentModal, setAppointmentModal] = useState<{
@@ -209,10 +203,12 @@ export default function AppointmentsTableFull({
 		},
 	];
 	const paginationInfo = {
-		totalItems: totalItems || null,
-		totalPages: totalPages || null,
-		perPage: perPage,
+		totalItems: 51,
+		totalPages: 6,
+		perPage: 10,
 	};
+
+	console.log(paginationInfo);
 
 	return (
 		<>

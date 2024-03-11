@@ -7,6 +7,7 @@ import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
 import { getStrictPeriodFromTimestamp } from './utils';
 
+
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
 
@@ -15,10 +16,16 @@ export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 };
 
 export const actions = {
-	setAppointments(appointments: Appointment[]) {
+	setAppointments(
+		appointments: Appointment[],
+		totalItems: number,
+		currentPage: number
+	) {
 		return {
 			type: 'SET_APPOINTMENTS',
 			appointments,
+			totalItems,
+			currentPage,
 		} as const;
 	},
 	setUpcomingAppointments(
@@ -143,7 +150,11 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 
 export const selectors = {
 	getAppointments(state: State, _?: Query) {
-		return state.appointments.appointments;
+		return {
+			appointments: state.appointments.appointments,
+			totalItems: state.appointments.totalItems,
+			currentPage: state.appointments.currentPage,
+		};
 	},
 	getUpcomingAppointments(state: State, filters?: Query) {
 		return state.appointments.appointments.filter(
@@ -208,7 +219,8 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		const { appointments } = data;
-		return actions.setAppointments(appointments);
+		console.log(data);
+		const {appointments, found_posts: totalItems, current_page: currentPage} = data;
+		return actions.setAppointments(appointments, totalItems, currentPage);
 	},
 };
