@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
@@ -6,12 +6,11 @@ import { Icon, info, edit as editIcon, cancelCircleFilled, check, trash } from '
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
-import { formatDate, formatDateRelative, formatTime } from '~/backend/utils/i18n';
+import { formatDate, formatTime } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
-import Table from '~/backend/admin/components/TableFull/Table/Table';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
 
@@ -24,8 +23,6 @@ type Props = {
 	deleteAppointment?: AppointmentsApi['deleteAppointment'];
 	cancelAppointment?: AppointmentsApi['deleteAppointment'];
 	confirmAppointment?: AppointmentsApi['confirmAppointment'];
-	hideActions?: boolean;
-	hideHeader?: boolean;
 	hideEmptyStateButton?: boolean;
 	emptyStateMessage?: string;
 	totalItems?: number;
@@ -41,8 +38,6 @@ export default function AppointmentsTableFull({
 	confirmAppointment,
 	cancelAppointment,
 	deleteAppointment,
-	hideActions = false,
-	hideHeader = false,
 	hideEmptyStateButton = false,
 	emptyStateMessage,
 	totalItems = 0,
@@ -161,11 +156,55 @@ export default function AppointmentsTableFull({
 	const actions = [
 		{
 			id: 'view',
-			icon: 'info-outline',
+			icon: () => <Icon icon={info} />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
 			callback: (item: Appointment) => {
-				onView && onView(item);
+				onView && onView(item[0]);
+			},
+		},
+		{
+			id: 'edit',
+			icon: () => <Icon icon={editIcon} />,
+			isPrimary: true,
+			label: __('Edit appointment details', 'wpappointments'),
+			callback: (item: Appointment) => {
+				onEdit && onEdit(item[0]);
+			},
+		},
+		{
+			id: 'cancel',
+			isDestructor: true,
+			icon: () => <Icon icon={cancelCircleFilled} />,
+			isPrimary: true,
+			isEligible: (item: Appointment) => item.status === 'confirmed',
+			label: __('Cancel appointment', 'wpappointments'),
+			callback: (item: Appointment) => {
+				const { id, status } = item[0];
+				setAppointmentModal({ id, status });
+			},
+		},
+		{
+			id: 'confirm',
+			icon: () => <Icon icon={check} />,
+			isPrimary: true,
+			isEligible: (item: Appointment) => item.status === 'pending',
+			label: __('Confirm appointment', 'wpappointments'),
+			callback: (item: Appointment) => {
+				const { id } = item[0];
+				confirmAppointment && confirmAppointment(id);
+			},
+		},
+		{
+			id: 'delete',
+			icon: () => <Icon icon={trash} />,
+			isPrimary: true,
+			isEligible: (item: Appointment) => item.status === 'cancelled',
+			isDestructive: true,
+			label: __('Delete appointment', 'wpappointments'),
+			callback: (item: Appointment) => {
+				const { id, status } = item[0];
+				setAppointmentModal({ id, status });
 			},
 		},
 	];
