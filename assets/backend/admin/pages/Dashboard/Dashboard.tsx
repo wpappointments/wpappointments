@@ -124,7 +124,6 @@ function DashboardAppointments({
 					},
 				});
 			}}
-			onCancel={cancelAppointment}
 			confirmAppointment={confirmAppointment}
 			deleteAppointment={deleteAppointment}
 			cancelAppointment={cancelAppointment}

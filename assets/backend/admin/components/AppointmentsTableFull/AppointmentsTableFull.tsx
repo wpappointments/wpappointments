@@ -13,17 +13,14 @@ import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
-
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
 	onEdit?: (appointment: Appointment) => void;
 	onView?: (appointment: Appointment) => void;
-	onCancel?: (appointmentId: number) => void;
 	deleteAppointment?: AppointmentsApi['deleteAppointment'];
 	cancelAppointment?: AppointmentsApi['deleteAppointment'];
 	confirmAppointment?: AppointmentsApi['confirmAppointment'];
-	hideEmptyStateButton?: boolean;
 	emptyStateMessage?: string;
 	totalItems?: number;
 	totalPages?: number;
@@ -38,7 +35,6 @@ export default function AppointmentsTableFull({
 	confirmAppointment,
 	cancelAppointment,
 	deleteAppointment,
-	hideEmptyStateButton = false,
 	emptyStateMessage,
 	totalItems = 0,
 	totalPages = 0,
@@ -56,11 +52,9 @@ export default function AppointmentsTableFull({
 					{emptyStateMessage ||
 						__('You have no appointments yet', 'wpappointments')}
 				</p>
-				{!hideEmptyStateButton && (
-					<Button variant="primary" onClick={onEmptyStateButtonClick}>
-						{__('Create New Appointment', 'wpappointments')}
-					</Button>
-				)}
+				<Button variant="primary" onClick={onEmptyStateButtonClick}>
+					{__('Create New Appointment', 'wpappointments')}
+				</Button>
 			</Empty>
 		);
 	}
