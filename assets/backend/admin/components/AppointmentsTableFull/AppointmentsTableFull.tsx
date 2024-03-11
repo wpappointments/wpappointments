@@ -13,6 +13,7 @@ import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
+
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
@@ -153,8 +154,8 @@ export default function AppointmentsTableFull({
 			icon: () => <Icon icon={info} />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
-			callback: (item: Appointment) => {
-				onView && onView(item[0]);
+			callback: ([item]: [Appointment]) => {
+				onView && onView(item);
 			},
 		},
 		{
@@ -162,8 +163,8 @@ export default function AppointmentsTableFull({
 			icon: () => <Icon icon={editIcon} />,
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
-			callback: (item: Appointment) => {
-				onEdit && onEdit(item[0]);
+			callback: ([item]: [Appointment]) => {
+				onEdit && onEdit(item);
 			},
 		},
 		{
@@ -173,8 +174,8 @@ export default function AppointmentsTableFull({
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'confirmed',
 			label: __('Cancel appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				const { id, status } = item[0];
+			callback: ([item]: [Appointment]) => {
+				const { id, status } = item;
 				setAppointmentModal({ id, status });
 			},
 		},
@@ -184,9 +185,8 @@ export default function AppointmentsTableFull({
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'pending',
 			label: __('Confirm appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				const { id } = item[0];
-				confirmAppointment && confirmAppointment(id);
+			callback: ([item]: [Appointment]) => {
+				confirmAppointment && confirmAppointment(item.id);
 			},
 		},
 		{
@@ -196,8 +196,8 @@ export default function AppointmentsTableFull({
 			isEligible: (item: Appointment) => item.status === 'cancelled',
 			isDestructive: true,
 			label: __('Delete appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				const { id, status } = item[0];
+			callback: ([item]: [Appointment]) => {
+				const { id, status } = item;
 				setAppointmentModal({ id, status });
 			},
 		},
