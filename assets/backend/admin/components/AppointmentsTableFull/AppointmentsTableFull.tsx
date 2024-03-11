@@ -13,7 +13,6 @@ import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { AppointmentsApi } from '~/backend/api/appointments';
 
-
 type Props = {
 	items?: Appointment[];
 	onEmptyStateButtonClick?: () => void;
