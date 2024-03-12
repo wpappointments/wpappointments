@@ -35,7 +35,9 @@ class AppointmentPost {
 	 * @return object
 	 */
 	public function get_all( $query ) {
-		$default_query = array_merge(
+		$appointments   = array();
+		$posts_per_page = get_query_var( 'posts_per_page' ) ? get_query_var( 'posts_per_page' ) : 10;
+		$default_query  = array_merge(
 			$this->default_query_part,
 			array(
 				'posts_per_page' => - 1,
@@ -49,8 +51,6 @@ class AppointmentPost {
 				(array) $query
 			)
 		);
-
-		$appointments = array();
 
 		foreach ( $query->posts as $post ) {
 			$meta           = get_post_meta( $post->ID );
@@ -67,9 +67,11 @@ class AppointmentPost {
 		}
 
 		return (object) array(
-			'appointments' => $appointments,
-			'post_count'   => $query->post_count,
-			'found_posts'  => $query->found_posts,
+			'appointments'   => $appointments,
+			'total_items'    => $query->found_posts,
+			'total_pages'    => ceil( $query->found_posts / $posts_per_page ),
+			'posts_per_page' => $posts_per_page,
+			'current_page'   => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
 		);
 	}
 

@@ -7,24 +7,32 @@ import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
 import { getStrictPeriodFromTimestamp } from './utils';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
+type Response = APIResponse<{ appointments: Appointment[], totalItems: number, totalPages: number,postsPerPage: number, currentPage: number }>;
 
 export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 	appointments: [],
+	totalItems: 0,
+	totalPages: 1,
+	postsPerPage: 10,
+	currentPage: 1,
 };
 
 export const actions = {
 	setAppointments(
 		appointments: Appointment[],
 		totalItems: number,
+		totalPages: number,
+		postsPerPage: number,
 		currentPage: number
 	) {
 		return {
 			type: 'SET_APPOINTMENTS',
 			appointments,
 			totalItems,
+			totalPages,
+			postsPerPage,
 			currentPage,
 		} as const;
 	},
@@ -75,6 +83,10 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 		case 'SET_APPOINTMENTS':
 			return produce(state, (draft) => {
 				draft.appointments = action.appointments;
+				draft.totalItems = action.totalItems;
+				draft.totalPages = action.totalPages;
+				draft.postsPerPage = action.postsPerPage;
+				draft.currentPage = action.currentPage;
 			});
 
 		case 'SET_UPCOMING_APPOINTMENTS':
@@ -153,6 +165,8 @@ export const selectors = {
 		return {
 			appointments: state.appointments.appointments,
 			totalItems: state.appointments.totalItems,
+			totalPages: state.appointments.totalPages,
+			postsPerPage: state.appointments.postsPerPage,
 			currentPage: state.appointments.currentPage,
 		};
 	},
@@ -211,7 +225,7 @@ export const resolvers = {
 	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; appointments: Appointment[] },
-		APIResponse<{ appointments: Appointment[] }>
+		Response
 	> {
 		const response = yield baseActions.fetchFromAPI(
 			addQueryArgs('appointment', {
@@ -219,8 +233,7 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		console.log(data);
-		const {appointments, found_posts: totalItems, current_page: currentPage} = data;
-		return actions.setAppointments(appointments, totalItems, currentPage);
+		const { appointments, totalItems, totalPages, postsPerPage, currentPage } = data;
+		return actions.setAppointments(appointments, totalItems, totalPages, postsPerPage, currentPage);
 	},
 };

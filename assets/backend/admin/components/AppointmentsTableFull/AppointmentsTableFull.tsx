@@ -1,59 +1,107 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
+import { select, useSelect } from '@wordpress/data';
+// @ts-ignore
 import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
-import { Icon, info, edit as editIcon, cancelCircleFilled, check, trash } from '@wordpress/icons';
+import {
+	Icon,
+	info,
+	edit as editIcon,
+	cancelCircleFilled,
+	check,
+	trash,
+} from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDate, formatTime } from '~/backend/utils/i18n';
+import useSlideout from '~/backend/hooks/useSlideout';
+import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
-import { AppointmentsApi } from '~/backend/api/appointments';
+import { useStateContext } from '~/backend/admin/context/StateContext';
+import { appointmentsApi } from '~/backend/api/appointments';
 
-
-type Props = {
-	items?: Appointment[];
-	onEmptyStateButtonClick?: () => void;
-	onEdit?: (appointment: Appointment) => void;
-	onView?: (appointment: Appointment) => void;
-	deleteAppointment?: AppointmentsApi['deleteAppointment'];
-	cancelAppointment?: AppointmentsApi['deleteAppointment'];
-	confirmAppointment?: AppointmentsApi['confirmAppointment'];
-	emptyStateMessage?: string;
-	totalItems?: number;
-	currentPage?: number;
-	perPage?: number;
+type Fields = {
+	status: Appointment['status'] | '';
+	period: 'week' | 'month' | 'year' | 'all' | '';
+	paged: number;
 };
 
-export default function AppointmentsTableFull({
-	items,
-	onEmptyStateButtonClick,
-	onEdit,
-	onView,
-	confirmAppointment,
-	cancelAppointment,
-	deleteAppointment,
-	emptyStateMessage,
-	totalItems = 0,
-	currentPage = 1,
-	perPage = 10,
-}: Props) {
+export default function AppointmentsTableFull() {
+	const { openSlideOut } = useSlideout({
+		id: 'appointment',
+	});
+
 	const [appointmentModal, setAppointmentModal] = useState<{
 		id: number;
 		status: Appointment['status'];
 	} | null>(null);
 
-	if (!items || items.length === 0) {
+	const { invalidate, getSelector } = useStateContext();
+	const { deleteAppointment, cancelAppointment, confirmAppointment } =
+		appointmentsApi({
+			invalidateCache: invalidate,
+		});
+	const [filters, setFilters] = useState<Fields>({
+		status: 'confirmed',
+		period: 'week',
+		paged: 1,
+	});
+
+	const { appointments, totalItems, totalPages, currentPage } =
+		useSelect(() => {
+			return select(store).getAppointments({
+				...filters,
+				posts_per_page: 10,
+				version: getSelector('getAppointments'),
+			});
+		}, [filters, getSelector('getAppointments')]);
+
+	const [view, setView] = useState({
+		type: 'table',
+		layout: {},
+		hiddenFields: [],
+		perPage: 10,
+		page: currentPage,
+	});
+
+	const addAppointment = () => {
+		openSlideOut({
+			id: 'appointment',
+			data: {
+				mode: 'create',
+			},
+		});
+	};
+
+	const editAppointment = (row: Appointment) => {
+		openSlideOut({
+			id: 'appointment',
+			data: {
+				selectedAppointment: row.id,
+				mode: 'edit',
+			},
+		});
+	};
+
+	const viewAppointment = (row: Appointment) => {
+		openSlideOut({
+			id: 'view-appointment',
+			data: {
+				selectedAppointment: row.id,
+			},
+		});
+	};
+
+	if (!appointments || appointments.length === 0) {
 		return (
 			<Empty>
-				<p>
-					{emptyStateMessage ||
-						__('You have no appointments yet', 'wpappointments')}
-				</p>
-				<Button variant="primary" onClick={onEmptyStateButtonClick}>
+				<p>{__('You have no appointments yet', 'wpappointments')}</p>
+				<Button variant="primary" onClick={addAppointment}>
 					{__('Create New Appointment', 'wpappointments')}
 				</Button>
 			</Empty>
@@ -70,7 +118,7 @@ export default function AppointmentsTableFull({
 						<Button
 							variant="link"
 							onClick={() => {
-								onView && onView(item);
+								viewAppointment && viewAppointment(item);
 							}}
 							style={{ marginBottom: '5px' }}
 						>
@@ -140,14 +188,6 @@ export default function AppointmentsTableFull({
 		},
 	];
 
-	const view = {
-		type: 'table',
-		layout: {},
-		hiddenFields: [],
-		perPage: perPage,
-		page: 1,
-	};
-
 	const actions = [
 		{
 			id: 'view',
@@ -155,7 +195,7 @@ export default function AppointmentsTableFull({
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
-				onView && onView(item);
+				viewAppointment && viewAppointment(item);
 			},
 		},
 		{
@@ -164,7 +204,7 @@ export default function AppointmentsTableFull({
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
-				onEdit && onEdit(item);
+				editAppointment && editAppointment(item);
 			},
 		},
 		{
@@ -202,22 +242,29 @@ export default function AppointmentsTableFull({
 			},
 		},
 	];
-	const paginationInfo = {
-		totalItems: 51,
-		totalPages: 6,
-		perPage: 10,
-	};
 
-	console.log(paginationInfo);
+	const paginationInfo = {
+		totalItems: totalItems,
+		totalPages: totalPages,
+	};
 
 	return (
 		<>
 			<DataViews
 				view={view}
-				onChangeView={() => {}}
+				onChangeView={(currentState) => {
+					setView(currentState);
+					setFilters({
+						...filters,
+						paged: currentState.page,
+					});
+					console.log(currentState);
+
+					invalidate('getAppointments');
+				}}
 				fields={fields}
 				actions={actions}
-				data={items}
+				data={appointments}
 				paginationInfo={paginationInfo}
 				search={false}
 				supportedLayouts="table"

@@ -153,9 +153,10 @@ class Appointment extends Controller {
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $results->appointments,
-					'post_count'   => $results->post_count,
-					'found_posts'  => $results->found_posts,
-					'current_page' => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
+					'totalItems'   => $results->total_items,
+					'totalPages'   => $results->total_pages,
+					'postsPerPage' => $results->posts_per_page,
+					'currentPage'  => $results->current_page,
 					'query'        => $query,
 				),
 			)
