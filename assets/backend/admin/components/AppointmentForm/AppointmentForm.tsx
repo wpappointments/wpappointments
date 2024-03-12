@@ -29,7 +29,6 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
 
-
 export type AppointmentFormFields = {
 	date: string;
 	datetime: string | null;
@@ -197,11 +196,13 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		addMinutes(start, duration).getMinutes()
 	);
 
+	const title =
+		mode === 'edit'
+			? __('Edit Appointment', 'wpappointments')
+			: __('Create New Appointment', 'wpappointments');
+
 	return (
-		<SlideOut
-			title={__('Create New Appointment', 'wpappointments')}
-			id="appointment"
-		>
+		<SlideOut title={title} id="appointment">
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
 					<Select
