@@ -53,33 +53,22 @@ class Customer extends Controller {
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
-	 * @return WP_REST_Response
+	 * @return \WP_REST_Response
 	 */
 	public static function get_all_customers( WP_REST_Request $request ) {
-		$users_query = new \WP_User_Query(
-			array(
-				'role' => 'wpa-customer',
-			)
-		);
-
-		$users = array();
-
-		foreach ( $users_query->get_results() as $user ) {
-			$users[] = array(
-				'id'         => $user->ID,
-				'name'       => $user->display_name,
-				'email'      => $user->user_email,
-				'phone'      => get_user_meta( $user->ID, 'phone', true ),
-				'created_at' => $user->user_registered,
-				'updated_at' => $user->user_modified,
-			);
-		}
+		$query    = $request->get_param( 'query' );
+		$customer = new ModelCustomer();
+		$results  = $customer->get_all( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
 				'data' => (object) array(
-					'customers' => $users,
+					'customers'    => $results->customers,
+					'totalItems'   => $results->total_items,
+					'totalPages'   => $results->total_pages,
+					'postsPerPage' => $results->posts_per_page,
+					'currentPage'  => $results->current_page,
 				),
 			)
 		);
