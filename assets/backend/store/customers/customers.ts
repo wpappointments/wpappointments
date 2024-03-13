@@ -1,23 +1,46 @@
 import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { Customer } from '~/backend/types';
 import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
+type Response = APIResponse<{
+	customers: Customer[];
+	totalItems: number;
+	totalPages: number;
+	postsPerPage: number;
+	currentPage: number;
+}>;
+
 export const DEFAULT_CUSTOMERS_STATE: CustomersState = {
-	allCustomers: [],
+	customers: [],
+	totalItems: 0,
+	totalPages: 1,
+	postsPerPage: 10,
+	currentPage: 1,
 };
 
 export const actions = {
-	setAllCustomers(customers: State['customers']['allCustomers']) {
+	setCustomers(
+		customers: Customer[],
+		totalItems: number,
+		totalPages: number,
+		postsPerPage: number,
+		currentPage: number
+	) {
 		return {
 			type: 'SET_CUSTOMERS',
 			customers,
+			totalItems,
+			totalPages,
+			postsPerPage,
+			currentPage,
 		} as const;
 	},
-	createCustomer(customer: State['customers']['allCustomers'][0]) {
+	createCustomer(customer: Customer) {
 		return {
 			type: 'CREATE_CUSTOMER',
 			customer,
@@ -29,12 +52,16 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_CUSTOMERS':
 			return produce(state, (draft) => {
-				draft.allCustomers = action.customers;
+				draft.customers = action.customers;
+				draft.totalItems = action.totalItems;
+				draft.totalPages = action.totalPages;
+				draft.postsPerPage = action.postsPerPage;
+				draft.currentPage = action.currentPage;
 			});
 
 		case 'CREATE_CUSTOMER':
 			return produce(state, (draft) => {
-				draft.allCustomers.push(action.customer);
+				draft.customers.push(action.customer);
 			});
 
 		default:
@@ -44,7 +71,13 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 
 export const selectors = {
 	getAllCustomers(state: State) {
-		return state.customers.allCustomers;
+		return {
+			customers: state.customers.customers,
+			totalItems: state.customers.totalItems,
+			totalPages: state.customers.totalPages,
+			postsPerPage: state.customers.postsPerPage,
+			currentPage: state.customers.currentPage,
+		};
 	},
 };
 
@@ -57,12 +90,23 @@ export const controls = {
 export const resolvers = {
 	*getAllCustomers(): Generator<
 		FetchFromApiActionReturn,
-		{ type: string; customers: State['customers']['allCustomers'] },
-		APIResponse<{ customers: State['customers']['allCustomers'] }>
+		{
+			type: string;
+			customers: Customer[];
+		},
+		Response
 	> {
 		const response = yield baseActions.fetchFromAPI('customer');
 		const { data } = response;
-		const { customers } = data;
-		return actions.setAllCustomers(customers);
+		const { customers, totalItems, totalPages, postsPerPage, currentPage } =
+			data;
+
+		return actions.setCustomers(
+			customers,
+			totalItems,
+			totalPages,
+			postsPerPage,
+			currentPage
+		);
 	},
 };

@@ -1,5 +1,9 @@
 export type CustomersState = {
-	allCustomers: Customer[];
+	customers: Customer[];
+	totalItems: number;
+	totalPages: number;
+	postsPerPage: number;
+	currentPage: number;
 };
 
 export type Customer = {
