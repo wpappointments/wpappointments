@@ -30,6 +30,14 @@ type Fields = {
 	paged: number;
 };
 
+type View = {
+	type: 'table';
+	layout: object;
+	hiddenFields: [];
+	perPage: number;
+	page: number;
+};
+
 export default function AppointmentsTableFull() {
 	const { openSlideOut } = useSlideout({
 		id: 'appointment',
@@ -60,7 +68,7 @@ export default function AppointmentsTableFull() {
 			});
 		}, [filters, getSelector('getAppointments')]);
 
-	const [view, setView] = useState({
+	const [view, setView] = useState<View>({
 		type: 'table',
 		layout: {},
 		hiddenFields: [],
@@ -251,7 +259,7 @@ export default function AppointmentsTableFull() {
 		<>
 			<DataViews
 				view={view}
-				onChangeView={(currentState) => {
+				onChangeView={(currentState: View) => {
 					setView(currentState);
 					setFilters({
 						...filters,
