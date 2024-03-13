@@ -1,8 +1,8 @@
-import {__} from '@wordpress/i18n';
-import {Error, getErrorMessage} from '~/backend/utils/error';
-import apiFetch, {APIResponse} from '~/backend/utils/fetch';
+import { __ } from '@wordpress/i18n';
+import { Error, getErrorMessage } from '~/backend/utils/error';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import {displayErrorToast, displaySuccessToast} from '~/backend/utils/toast';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 
 type CustomerData = {
 	name: string;
@@ -24,8 +24,8 @@ export function customersApi(options?: CustomersApiOptions) {
 	const dispatch = window.wp.data.dispatch('wpappointments');
 	const select = window.wp.data.select('wpappointments');
 
-	async function getAllCustomers() {
-		return select.getAllCustomers();
+	async function getCustomers() {
+		return select.getCustomers();
 	}
 
 	async function createCustomer(data: CustomerData) {
@@ -44,7 +44,7 @@ export function customersApi(options?: CustomersApiOptions) {
 		}
 
 		if (response && response.type === 'error') {
-			const error:Error = {
+			const error: Error = {
 				type: 'error',
 				message: response?.data?.message || 'Unknown error',
 				data: [],
@@ -64,7 +64,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			);
 
 			if (invalidateCache) {
-				invalidateCache('getAllCustomers');
+				invalidateCache('getCustomers');
 			}
 		}
 
@@ -78,7 +78,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	}
 
 	const functions = {
-		getAllCustomers,
+		getCustomers,
 		createCustomer,
 	} as const;
 

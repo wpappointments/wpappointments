@@ -70,7 +70,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 };
 
 export const selectors = {
-	getAllCustomers(state: State) {
+	getCustomers(state: State) {
 		return {
 			customers: state.customers.customers,
 			totalItems: state.customers.totalItems,
@@ -88,7 +88,7 @@ export const controls = {
 };
 
 export const resolvers = {
-	*getAllCustomers(): Generator<
+	*getCustomers(): Generator<
 		FetchFromApiActionReturn,
 		{
 			type: string;

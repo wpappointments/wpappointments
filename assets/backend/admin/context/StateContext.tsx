@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 
-
 export type StateContext = {
 	resolvableSelectors: Map<string, number>;
 	invalidate: (selector: string) => void;
@@ -16,7 +15,7 @@ export function StateContextProvider({ children }: StateContextProviderProps) {
 		['getUpcomingAppointments', 0],
 		['getAppointments', 0],
 		['getAvailability', 0],
-		['getAllCustomers', 0],
+		['getCustomers', 0],
 	]);
 
 	const getSelector = (selector: string) => {

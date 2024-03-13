@@ -19,7 +19,7 @@ export default function CustomerSelector({
 	const [searchValue, setSearchValue] = useState('');
 
 	const customers = useSelect(() => {
-		return select(store).getAllCustomers();
+		return select(store).getCustomers();
 	}, [searchValue]);
 
 	const filteredCustomers = customers.filter((customer) => {

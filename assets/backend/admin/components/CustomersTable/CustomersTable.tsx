@@ -47,8 +47,8 @@ export default function CustomersTable() {
 		paged: 1,
 	});
 	const { customers, totalItems, totalPages, currentPage } = useSelect(() => {
-		return select(store).getAllCustomers();
-	}, [filters, getSelector('getAllCustomers')]);
+		return select(store).getCustomers();
+	}, [filters, getSelector('getCustomers')]);
 
 	const [view, setView] = useState<View>({
 		type: 'table',
@@ -195,7 +195,6 @@ export default function CustomersTable() {
 						...filters,
 						paged: currentState.page,
 					});
-					console.log(currentState);
 
 					invalidate('getAppointments');
 				}}
