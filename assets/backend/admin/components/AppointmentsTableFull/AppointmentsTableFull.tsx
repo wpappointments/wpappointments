@@ -4,14 +4,6 @@ import { select, useSelect } from '@wordpress/data';
 // @ts-ignore
 import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
-import {
-	Icon,
-	info,
-	edit as editIcon,
-	cancelCircleFilled,
-	check,
-	trash,
-} from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -21,6 +13,13 @@ import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
+import {
+	Info,
+	Edit,
+	Confirm,
+	Cancel,
+	Delete,
+} from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
@@ -191,7 +190,7 @@ export default function AppointmentsTableFull() {
 	const actions = [
 		{
 			id: 'view',
-			icon: () => <Icon icon={info} />,
+			icon: () => <Info />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
@@ -200,7 +199,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'edit',
-			icon: () => <Icon icon={editIcon} />,
+			icon: () => <Edit />,
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
@@ -210,7 +209,7 @@ export default function AppointmentsTableFull() {
 		{
 			id: 'cancel',
 			isDestructor: true,
-			icon: () => <Icon icon={cancelCircleFilled} />,
+			icon: () => <Cancel />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'confirmed',
 			label: __('Cancel appointment', 'wpappointments'),
@@ -221,7 +220,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'confirm',
-			icon: () => <Icon icon={check} />,
+			icon: () => <Confirm />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'pending',
 			label: __('Confirm appointment', 'wpappointments'),
@@ -231,7 +230,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'delete',
-			icon: () => <Icon icon={trash} />,
+			icon: () => <Delete />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'cancelled',
 			isDestructive: true,
