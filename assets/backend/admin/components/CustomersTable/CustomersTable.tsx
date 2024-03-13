@@ -15,8 +15,6 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 
 type Fields = {
-	status: Appointment['status'] | '';
-	period: 'week' | 'month' | 'year' | 'all' | '';
 	paged: number;
 };
 
@@ -42,8 +40,6 @@ export default function CustomersTable() {
 			invalidateCache: invalidate,
 		});
 	const [filters, setFilters] = useState<Fields>({
-		status: 'confirmed',
-		period: 'week',
 		paged: 1,
 	});
 	const { customers, totalItems, totalPages, currentPage } = useSelect(() => {
