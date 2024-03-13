@@ -16,6 +16,7 @@ import { appointmentsApi } from '~/backend/api/appointments';
 
 type Fields = {
 	paged: number;
+	number: number;
 };
 
 type View = {
@@ -41,13 +42,11 @@ export default function CustomersTable() {
 		});
 	const [filters, setFilters] = useState<Fields>({
 		paged: 1,
+		number: 10,
 	});
 	const { customers, totalItems, totalPages, currentPage } = useSelect(() => {
-		console.log(getSelector('getCustomers'));
-
 		return select(store).getCustomers({
 			...filters,
-			number: 10,
 			version: getSelector('getCustomers'),
 		});
 	}, [filters, getSelector('getCustomers')]);
@@ -194,8 +193,8 @@ export default function CustomersTable() {
 				onChangeView={(currentState: View) => {
 					setView(currentState);
 					setFilters({
-						...filters,
 						paged: currentState.page,
+						number: currentState.perPage,
 					});
 
 					invalidate('getCustomers');

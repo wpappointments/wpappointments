@@ -68,7 +68,8 @@ class Customer {
 	 */
 	public function get_all( $query ) {
 		$users          = array();
-		$posts_per_page = get_query_var( 'posts_per_page' ) ? get_query_var( 'posts_per_page' ) : 10;
+		$posts_per_page = $query['number'] ?? 10;
+		$paged          = $query['paged'] ?? 1;
 
 		$query = new \WP_User_Query(
 			array_merge(
@@ -92,7 +93,7 @@ class Customer {
 			'total_items'    => $query->total_users,
 			'total_pages'    => ceil( $query->total_users / $posts_per_page ),
 			'posts_per_page' => $posts_per_page,
-			'current_page'   => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
+			'current_page'   => $paged,
 		);
 	}
 
