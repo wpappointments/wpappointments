@@ -9,7 +9,13 @@ import { getStrictPeriodFromTimestamp } from './utils';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
-type Response = APIResponse<{ appointments: Appointment[], totalItems: number, totalPages: number,postsPerPage: number, currentPage: number }>;
+type Response = APIResponse<{
+	appointments: Appointment[];
+	totalItems: number;
+	totalPages: number;
+	postsPerPage: number;
+	currentPage: number;
+}>;
 
 export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 	appointments: [],
@@ -233,7 +239,20 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		const { appointments, totalItems, totalPages, postsPerPage, currentPage } = data;
-		return actions.setAppointments(appointments, totalItems, totalPages, postsPerPage, currentPage);
+		const {
+			appointments,
+			totalItems,
+			totalPages,
+			postsPerPage,
+			currentPage,
+		} = data;
+
+		return actions.setAppointments(
+			appointments,
+			totalItems,
+			totalPages,
+			postsPerPage,
+			currentPage
+		);
 	},
 };
