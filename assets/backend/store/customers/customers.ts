@@ -1,3 +1,4 @@
+import { addQueryArgs } from '@wordpress/url';
 import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { Customer } from '~/backend/types';
@@ -6,7 +7,7 @@ import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
-
+type Query = Record<string, any>;
 type Response = APIResponse<{
 	customers: Customer[];
 	totalItems: number;
@@ -70,7 +71,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 };
 
 export const selectors = {
-	getCustomers(state: State) {
+	getCustomers(state: State, _?: Query) {
 		return {
 			customers: state.customers.customers,
 			totalItems: state.customers.totalItems,
@@ -88,7 +89,7 @@ export const controls = {
 };
 
 export const resolvers = {
-	*getCustomers(): Generator<
+	*getCustomers(query: Query): Generator<
 		FetchFromApiActionReturn,
 		{
 			type: string;
@@ -96,7 +97,11 @@ export const resolvers = {
 		},
 		Response
 	> {
-		const response = yield baseActions.fetchFromAPI('customer');
+		const response = yield baseActions.fetchFromAPI(
+			addQueryArgs('customer', {
+				query,
+			})
+		);
 		const { data } = response;
 		const { customers, totalItems, totalPages, postsPerPage, currentPage } =
 			data;
