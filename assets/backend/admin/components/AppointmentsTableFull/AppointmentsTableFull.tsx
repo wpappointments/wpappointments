@@ -265,7 +265,6 @@ export default function AppointmentsTableFull() {
 						...filters,
 						paged: currentState.page,
 					});
-					console.log(currentState);
 
 					invalidate('getAppointments');
 				}}
