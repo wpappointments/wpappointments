@@ -6,14 +6,13 @@ import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
+import { Customer } from '~/backend/types';
 import { Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
+import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
-import DeleteModal from '~/backend/admin/components/modals/Delete/Delete';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
-
 
 type Fields = {
 	paged: number;
@@ -38,7 +37,7 @@ export function CustomerDetailsModals({
 	closeModal,
 }: CustomerDetailsModalsProps) {
 	return (
-		<DeleteModal
+		<DeleteCustomerModal
 			title={__('Delete Customer', 'wpappointments')}
 			message={__(
 				'Are you sure you want to delete this customer? This action cannot be undone.',
