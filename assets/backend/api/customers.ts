@@ -6,11 +6,16 @@ import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Customer } from '~/backend/types';
 
+type UpdateCustomerData = Pick<Customer, 'id' | 'name' | 'email' | 'phone'>;
+type CreateCustomerData = Pick<Customer, 'name' | 'email' | 'phone'>;
 
-type CustomerData = Pick<Customer, 'id' | 'name' | 'email' | 'phone'>;
+export type UpdateResponse = APIResponse<{
+	customer: UpdateCustomerData;
+	message: string;
+}>;
 
-type Response = APIResponse<{
-	customer: CustomerData & { id: number };
+export type CreateResponse = APIResponse<{
+	customer: CreateCustomerData;
 	message: string;
 }>;
 
@@ -27,9 +32,9 @@ export function customersApi(options?: CustomersApiOptions) {
 		return select.getCustomers();
 	}
 
-	async function createCustomer(data: CustomerData) {
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+	async function createCustomer(data: CreateCustomerData) {
+		const [error, response] = await resolve<CreateResponse>(async () => {
+			const response = await apiFetch<CreateResponse>({
 				path: 'customer',
 				method: 'POST',
 				data,
@@ -70,15 +75,13 @@ export function customersApi(options?: CustomersApiOptions) {
 		return response;
 	}
 
-	async function updateCustomer(data: CustomerData) {
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+	async function updateCustomer(data: UpdateCustomerData) {
+		const [error, response] = await resolve<UpdateResponse>(async () => {
+			return await apiFetch<UpdateResponse>({
 				path: `customer/${data.id}`,
 				method: 'POST',
 				data,
 			});
-
-			return response;
 		});
 
 		if (error) {
