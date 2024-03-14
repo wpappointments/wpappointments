@@ -127,4 +127,34 @@ class Customer {
 
 		return $user_id;
 	}
+
+	public function delete( $id ) {
+		require_once ABSPATH . 'wp-admin/includes/user.php';
+
+		$valid_id = $this->validate_user_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
+		$deleted = wp_delete_user( $id );
+
+		if ( $deleted ) {
+			return true;
+		}
+
+		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+	}
+
+	protected function validate_user_id( $post_id ) {
+		if ( ! $post_id ) {
+			return new \WP_Error( 'error', __( 'User ID is required', 'wpappointments' ) );
+		}
+
+		if ( ! get_user_by( 'ID', $post_id ) ) {
+			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
+		}
+
+		return $post_id;
+	}
 }

@@ -198,7 +198,7 @@ export default function CustomersTable() {
 			label: __('Delete appointment', 'wpappointments'),
 			callback: ([item]: [Customer]) => {
 				const { id } = item;
-				setCustomerModal(id);
+				setCustomerModal({ id });
 			},
 		},
 	];

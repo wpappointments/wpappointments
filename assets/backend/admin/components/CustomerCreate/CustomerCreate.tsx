@@ -54,7 +54,6 @@ export default withForm(function CustomerCreate({
 			title={__('New Customer', 'wpappointments')}
 			id="create-customer"
 		>
-			{alert(1)}
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
 					<Input

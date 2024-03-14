@@ -8,6 +8,7 @@
 
 namespace WPAppointments\Api\Endpoints;
 
+use stdClass;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
@@ -42,6 +43,18 @@ class Customer extends Controller {
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_customer' ),
+					'permission_callback' => '__return_true',
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/customer/(?P<id>\d+)',
+			array(
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( __CLASS__, 'delete' ),
 					'permission_callback' => '__return_true',
 				),
 			)
@@ -87,7 +100,7 @@ class Customer extends Controller {
 		$phone = $request->get_param( 'phone' );
 
 		$model           = new ModelCustomer();
-		$customer        = new \stdClass();
+		$customer        = new stdClass();
 		$customer->email = $email;
 		$customer->name  = $name;
 		$customer->phone = $phone;
@@ -115,6 +128,25 @@ class Customer extends Controller {
 						'email' => $email,
 						'phone' => $phone,
 					),
+				),
+			)
+		);
+	}
+
+	public static function delete( WP_REST_Request $request ) {
+		$model  = new ModelCustomer();
+		$result = $model->delete( $request->get_param( 'id' ) );
+
+		if ( is_wp_error( $result ) ) {
+			return self::error( $result->get_error_message() );
+		}
+
+		return self::response(
+			array(
+				'type'    => 'success',
+				'message' => __( 'Customer deleted successfully', 'wpappointments' ),
+				'data'    => array(
+					'id' => $result,
 				),
 			)
 		);

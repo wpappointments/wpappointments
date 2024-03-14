@@ -6,6 +6,7 @@ import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
+
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
 type Response = APIResponse<{
@@ -47,6 +48,12 @@ export const actions = {
 			customer,
 		} as const;
 	},
+	deleteCustomer(id: number) {
+		return {
+			type: 'DELETE_CUSTOMER',
+			id,
+		} as const;
+	},
 };
 
 export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
@@ -63,6 +70,14 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 		case 'CREATE_CUSTOMER':
 			return produce(state, (draft) => {
 				draft.customers.push(action.customer);
+			});
+
+		case 'DELETE_CUSTOMER':
+			return produce(state, (draft) => {
+				draft.customers = draft.customers.filter(
+					(customer: Customer) =>
+						customer.id !== action.id
+				);
 			});
 
 		default:
