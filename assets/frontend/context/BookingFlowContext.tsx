@@ -122,7 +122,7 @@ export function BookingFlowContextProvider({
 	}, [viewing.getMonth(), attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
-		const customer: Customer = {
+		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
 			name: `${data.firstName} ${data.lastName}`,
 			email: data.email,
 			phone: data.phone,
