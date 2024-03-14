@@ -1,8 +1,10 @@
 import { __ } from '@wordpress/i18n';
+import { missingId } from '~/backend/utils/api';
 import { Error, getErrorMessage } from '~/backend/utils/error';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+
 
 type CustomerData = {
 	name: string;
@@ -71,6 +73,40 @@ export function customersApi(options?: CustomersApiOptions) {
 		return response;
 	}
 
+	async function deleteCustomer(id: number) {
+		if (missingId(id, 'Cannot delete customer')) {
+			return;
+		}
+
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `customer/${id}`,
+				method: 'DELETE',
+			});
+
+			dispatch.deleteCustomer(id);
+
+			return response;
+		});
+
+		if (error) {
+			handleError(error, __('Cannot delete customer', 'wpappointments'));
+			return;
+		}
+
+		if (response) {
+			displaySuccessToast(
+				__('Customer deleted successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getCustomers');
+			}
+		}
+
+		return response;
+	}
+
 	function handleError(error: Error, message: string) {
 		displayErrorToast(`${message}: ${getErrorMessage(error)}`);
 
@@ -80,6 +116,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	const functions = {
 		getCustomers,
 		createCustomer,
+		deleteCustomer,
 	} as const;
 
 	window.wpappointments.api = {
