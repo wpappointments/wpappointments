@@ -1,6 +1,5 @@
 import { Customer } from '~/backend/types';
 
-
 export type AppointmentSlideoutState = {
 	curentMonth: MonthIndex;
 	currentYear: number;

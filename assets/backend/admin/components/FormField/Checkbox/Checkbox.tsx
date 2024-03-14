@@ -1,9 +1,19 @@
 import { CSSProperties } from 'react';
-import { Controller, DeepRequired, FieldError, FieldErrorsImpl, FieldValues, Merge, Path, PathValue, RegisterOptions, useFormContext } from 'react-hook-form';
+import {
+	Controller,
+	DeepRequired,
+	FieldError,
+	FieldErrorsImpl,
+	FieldValues,
+	Merge,
+	Path,
+	PathValue,
+	RegisterOptions,
+	useFormContext,
+} from 'react-hook-form';
 import { CheckboxControl } from '@wordpress/components';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
-
 
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
@@ -37,7 +47,7 @@ export default function Checkbox<TFields extends FieldValues>({
 	const error: FormFieldError<TFields> = errors[name];
 
 	return (
-		<FormField style={{marginTop: 10, ...style}}>
+		<FormField style={{ marginTop: 10, ...style }}>
 			<Controller
 				name={name}
 				control={control}

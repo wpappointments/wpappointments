@@ -111,7 +111,7 @@ class Customer {
 
 		$user_id = wp_insert_user(
 			array(
-				'user_login'   => $email ?: $name,
+				'user_login'   => $email ? $email : $name,
 				'user_pass'    => $password ?? wp_generate_password(),
 				'user_email'   => $email,
 				'display_name' => $name,
@@ -128,6 +128,13 @@ class Customer {
 		return get_user_by( 'id', $user_id );
 	}
 
+	/**
+	 * Delete customer
+	 *
+	 * @param int $id Customer ID.
+	 *
+	 * @return bool|\WP_Error
+	 */
 	public function delete( $id ) {
 		require_once ABSPATH . 'wp-admin/includes/user.php';
 
@@ -146,6 +153,13 @@ class Customer {
 		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
 	}
 
+	/**
+	 * Validate user ID
+	 *
+	 * @param int $post_id User ID.
+	 *
+	 * @return int|\WP_Error
+	 */
 	protected function validate_user_id( $post_id ) {
 		if ( ! $post_id ) {
 			return new \WP_Error( 'error', __( 'User ID is required', 'wpappointments' ) );
@@ -185,7 +199,7 @@ class Customer {
 		$update = wp_update_user(
 			array(
 				'ID'           => $id,
-				'user_login'   => $email ?: $name,
+				'user_login'   => $email ? $email : $name,
 				'user_email'   => $email,
 				'display_name' => $name,
 			)

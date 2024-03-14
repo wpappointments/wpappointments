@@ -13,7 +13,6 @@ import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import { customersApi, UpdateCustomerData } from '~/backend/api/customers';
 
-
 export type CustomerFormData = {
 	id?: number;
 	name: string;
@@ -106,7 +105,8 @@ export default withForm(function CustomerCreate({
 							label="Create account"
 							defaultValue={true}
 							style={{
-								display: screen === 'customers' ? 'none' : 'flex',
+								display:
+									screen === 'customers' ? 'none' : 'flex',
 							}}
 						/>
 					)}

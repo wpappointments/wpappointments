@@ -7,7 +7,6 @@ import {
 	Year,
 } from './appointment.types';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {

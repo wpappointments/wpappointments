@@ -6,7 +6,6 @@ import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Appointment } from '~/backend/types';
 
-
 type AppointmentData = {
 	service: string;
 	customer: string;

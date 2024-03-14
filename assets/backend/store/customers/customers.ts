@@ -6,7 +6,6 @@ import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
 type Response = APIResponse<{
@@ -80,11 +79,10 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 
 		case 'UPDATE_CUSTOMER':
 			return produce(state, (draft) => {
-				draft.customers = draft.customers.map(
-					(customer: Customer) =>
-						customer.id === action.customer.id
-							? action.customer
-							: customer
+				draft.customers = draft.customers.map((customer: Customer) =>
+					customer.id === action.customer.id
+						? action.customer
+						: customer
 				);
 
 				// draft.customers.sort((a: Appointment, b: Appointment) => {

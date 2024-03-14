@@ -9,9 +9,8 @@ import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import globalStyles from 'global.module.css';
 
-
 export default function Customers() {
-	const {openSlideOut, isSlideoutOpen} = useSlideout();
+	const { openSlideOut, isSlideoutOpen } = useSlideout();
 	return (
 		<StateContextProvider>
 			<LayoutDefault title="Customers">
@@ -39,9 +38,7 @@ export default function Customers() {
 						<CustomersTable />
 					</CardBody>
 				</Card>
-				{isSlideoutOpen('customer') && (
-					<CustomerCreate/>
-				)}
+				{isSlideoutOpen('customer') && <CustomerCreate />}
 			</LayoutDefault>
 		</StateContextProvider>
 	);

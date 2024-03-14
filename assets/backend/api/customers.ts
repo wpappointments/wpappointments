@@ -6,7 +6,6 @@ import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Customer } from '~/backend/types';
 
-
 export type UpdateCustomerData = Pick<
 	Customer,
 	'id' | 'name' | 'email' | 'phone'

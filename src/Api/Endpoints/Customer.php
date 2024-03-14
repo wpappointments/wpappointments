@@ -146,6 +146,13 @@ class Customer extends Controller {
 		);
 	}
 
+	/**
+	 * Delete a customer
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response
+	 */
 	public static function delete( WP_REST_Request $request ) {
 		$model  = new ModelCustomer();
 		$result = $model->delete( $request->get_param( 'id' ) );

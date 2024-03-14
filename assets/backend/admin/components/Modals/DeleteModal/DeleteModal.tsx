@@ -2,7 +2,6 @@ import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import styles from './DeleteModal.module.css';
 
-
 type Props = {
 	title: string;
 	message: string;

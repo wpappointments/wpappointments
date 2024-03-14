@@ -29,7 +29,6 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
 
-
 export type AppointmentFormFields = {
 	date: string;
 	datetime: string | null;
@@ -416,9 +415,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						appointment={currentAppointment}
 					/>
 				)}
-				{isSlideoutOpen('select-customer') && (
-					<CustomerSelector/>
-				)}
+				{isSlideoutOpen('select-customer') && <CustomerSelector />}
 				{isSlideoutOpen('customer') && (
 					<CustomerCreate
 						onSubmitSuccess={(data: Customer) => {

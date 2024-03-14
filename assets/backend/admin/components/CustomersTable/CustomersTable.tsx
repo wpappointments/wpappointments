@@ -14,7 +14,6 @@ import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 
-
 type Fields = {
 	paged: number;
 	number: number;

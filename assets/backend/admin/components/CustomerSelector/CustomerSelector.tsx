@@ -9,7 +9,6 @@ import { AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './CustomerSelector.module.css';
 
-
 export default function CustomerSelector() {
 	const { setValue } = useFormContext<AppointmentFormFields>();
 	const { closeCurrentSlideOut } = useSlideout();

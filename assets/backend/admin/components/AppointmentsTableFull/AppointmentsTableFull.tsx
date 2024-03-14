@@ -13,11 +13,16 @@ import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
-import { Info, Edit, Confirm, Cancel, Delete } from '~/backend/admin/components/Icons/Icons';
+import {
+	Info,
+	Edit,
+	Confirm,
+	Cancel,
+	Delete,
+} from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
-
 
 type Fields = {
 	status: Appointment['status'] | '';

@@ -13,7 +13,6 @@ import AppointmentForm from '~/backend/admin/components/AppointmentForm/Appointm
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
-
 function getMonthName(month: number) {
 	const months = [
 		__('January', 'wpappointments'),
