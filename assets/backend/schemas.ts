@@ -1,11 +1,21 @@
 import { boolean, literal, number, object, optional, record, string, union } from 'valibot';
 
+
 export const ApiActionSchema = object({
 	name: string(),
 	label: string(),
 	method: string(),
 	uri: string(),
 	isDangerous: boolean(),
+});
+
+export const CustomerSchema = object({
+	id: number(),
+	name: string(),
+	email: optional(string()),
+	phone: optional(string()),
+	created: string(),
+	actions: optional(record(ApiActionSchema)),
 });
 
 export const AppointmentSchema = object({
@@ -19,20 +29,7 @@ export const AppointmentSchema = object({
 		literal('cancelled'),
 		literal('noshow'),
 	]),
-	customer: object({
-		id: optional(number()),
-		name: string(),
-		email: optional(string()),
-		phone: optional(string()),
-	}),
+	customer: CustomerSchema,
 	customerId: optional(number()),
-	actions: record(ApiActionSchema),
-});
-
-export const CustomerSchema = object({
-	id: number(),
-	name: string(),
-	email: optional(string()),
-	phone: optional(string()),
 	actions: record(ApiActionSchema),
 });

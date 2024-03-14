@@ -19,7 +19,6 @@ import DeleteAppointmentModal from '~/backend/admin/components/Modals/DeleteAppo
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 
-
 export default function AppointmentDetails() {
 	const { invalidate } = useStateContext();
 	const { deleteAppointment, cancelAppointment, confirmAppointment } =

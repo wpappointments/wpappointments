@@ -12,7 +12,6 @@ import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import { customersApi } from '~/backend/api/customers';
 
-
 export type CustomerCreateFormData = {
 	id?: number;
 	name: string;

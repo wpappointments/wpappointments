@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Card, CardBody, CardHeader } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Customer } from '~/backend/store/customers/customers.types';
+import { Customer } from '~/backend/types';
 import styles from './Summary.module.css';
 
 
