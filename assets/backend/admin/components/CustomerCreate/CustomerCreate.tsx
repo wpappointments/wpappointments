@@ -11,8 +11,9 @@ import Input from '../FormField/Input/Input';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import { customersApi } from '~/backend/api/customers';
+import { CreateResponse, UpdateResponse } from '~/backend/api/customers';
 
-export type CustomerCreateFormData = {
+export type CustomerFormData = {
 	id?: number;
 	name: string;
 	email: string;
@@ -30,13 +31,16 @@ export default withForm(function CustomerCreate() {
 		useFillFormValues(selectedCustomer);
 	}
 
-	const onSubmit: SubmitHandler<CustomerCreateFormData> = async (data) => {
+	const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
 		const { createCustomer, updateCustomer } = customersApi();
 
-		const response =
-			mode === 'create'
-				? await createCustomer(data)
-				: await updateCustomer(data);
+		let response: CreateResponse | UpdateResponse | null = null;
+
+		if (mode === 'create') {
+			response = await createCustomer(data);
+		} else if ('id' in data && typeof data.id === 'number') {
+			response = await updateCustomer(data as Required<CustomerFormData>);
+		}
 
 		if (response) {
 			const {
