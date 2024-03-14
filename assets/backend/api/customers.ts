@@ -6,15 +6,19 @@ import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Customer } from '~/backend/types';
 
-type UpdateCustomerData = Pick<Customer, 'id' | 'name' | 'email' | 'phone'>;
+
+export type UpdateCustomerData = Pick<
+	Customer,
+	'id' | 'name' | 'email' | 'phone'
+>;
 type CreateCustomerData = Pick<Customer, 'name' | 'email' | 'phone'>;
 
-export type UpdateResponse = APIResponse<{
+type UpdateResponse = APIResponse<{
 	customer: UpdateCustomerData;
 	message: string;
 }>;
 
-export type CreateResponse = APIResponse<{
+type CreateResponse = APIResponse<{
 	customer: CreateCustomerData;
 	message: string;
 }>;
