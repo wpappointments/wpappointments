@@ -68,14 +68,13 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 
 		case 'CREATE_CUSTOMER':
 			return produce(state, (draft) => {
-				draft.customers.push(action.customer);
+				draft.customers.unshift(action.customer);
 			});
 
 		case 'DELETE_CUSTOMER':
 			return produce(state, (draft) => {
 				draft.customers = draft.customers.filter(
-					(customer: Customer) =>
-						customer.id !== action.id
+					(customer: Customer) => customer.id !== action.id
 				);
 			});
 

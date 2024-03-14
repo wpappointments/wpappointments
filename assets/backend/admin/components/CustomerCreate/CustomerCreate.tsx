@@ -1,9 +1,8 @@
 import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { useDispatch } from '@wordpress/data';
+import { select, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
 import { HtmlForm, withForm } from '../Form/Form';
 import Checkbox from '../FormField/Checkbox/Checkbox';
@@ -11,6 +10,7 @@ import Input from '../FormField/Input/Input';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import { customersApi } from '~/backend/api/customers';
+
 
 export type CustomerCreateFormData = {
 	id?: number;
@@ -20,13 +20,7 @@ export type CustomerCreateFormData = {
 	createAccount: boolean;
 };
 
-type CustomerCreateProps = {
-	onSubmitSuccess?: (data: Customer) => void;
-};
-
-export default withForm(function CustomerCreate({
-	onSubmitSuccess,
-}: CustomerCreateProps) {
+export default withForm(function CustomerCreate() {
 	const dispatch = useDispatch(store);
 	const { closeCurrentSlideOut } = useSlideout();
 
@@ -36,23 +30,28 @@ export default withForm(function CustomerCreate({
 		const response = await createCustomer(data);
 
 		if (response) {
-			const { data: responseData } = response;
-			const { customer } = responseData;
-			dispatch.setSelectedCustomer(customer as Customer);
+			const {
+				customers,
+				totalItems,
+				totalPages,
+				postsPerPage,
+				currentPage,
+			} = select(store).getCustomers();
 
-			if (onSubmitSuccess) {
-				onSubmitSuccess(customer as Customer);
-			}
+			dispatch.setCustomers(
+				customers,
+				totalItems,
+				totalPages,
+				postsPerPage,
+				currentPage
+			);
 		}
 
 		closeCurrentSlideOut();
 	};
 
 	return (
-		<SlideOut
-			title={__('New Customer', 'wpappointments')}
-			id="customer"
-		>
+		<SlideOut title={__('New Customer', 'wpappointments')} id="customer">
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
 					<Input
