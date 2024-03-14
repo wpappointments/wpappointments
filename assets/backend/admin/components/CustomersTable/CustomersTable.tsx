@@ -8,13 +8,11 @@ import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
-import { Appointment } from '~/backend/types';
 import { Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import DeleteModal from '~/backend/admin/components/modals/Delete/Delete';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
-
 
 type Fields = {
 	paged: number;
