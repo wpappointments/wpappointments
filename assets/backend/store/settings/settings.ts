@@ -15,6 +15,7 @@ function getDefaultOpeningHours(day: Day) {
 	return {
 		day,
 		enabled: false,
+		allDay: false,
 		slots: {
 			list: [
 				{
