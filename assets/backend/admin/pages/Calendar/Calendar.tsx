@@ -100,7 +100,7 @@ export default function Calendar() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
 	const { appointments } = useSelect(() => {
 		return select(store).getAppointments({
-			posts_per_page: 100,
+			posts_per_page: -1,
 		});
 	}, []);
 
