@@ -32,7 +32,7 @@
 		"phpcs-fix:all": "pnpm phpcs-fix src includes tests/php tests/wordpress tests/bootstrap.php wpappointments.php",
 		"readme": "wp-env run tests-cli --env-cwd=wp-content/plugins/wpappointments ./vendor/bin/wp2md -i readme.txt -o README.md",
 		"wp-env": "wp-env",
-		"zip": "wp-env run cli --env-cwd=wp-content/plugins/wpappointments wp dist-archive . wpappointments.zip -- --path=/var/www/html",
+		"zip": "sh .scripts/release.sh",
 		"stop": "wp-env stop && bash .scripts/mailhog stop",
 		"clean": "wp-env clean all",
 		"composer": "wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer",
