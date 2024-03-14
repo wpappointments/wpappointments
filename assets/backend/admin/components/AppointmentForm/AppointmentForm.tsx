@@ -10,8 +10,8 @@ import { formatTimeForPicker } from '~/backend/utils/format';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast } from '~/backend/utils/toast';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
+import { Customer } from '~/backend/types';
 import { Appointment } from '~/backend/types';
 import CustomerCreate from '../CustomerCreate/CustomerCreate';
 import CustomerSelector from '../CustomerSelector/CustomerSelector';
@@ -28,6 +28,7 @@ import { getSubmitButtonLabel } from './utils';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
+
 
 export type AppointmentFormFields = {
 	date: string;
