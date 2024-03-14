@@ -100,11 +100,11 @@ export default function CustomersTable() {
 		});
 	};
 
-	const viewAppointment = (row: Appointment) => {
+	const viewCustomer = (row: Customer) => {
 		openSlideOut({
-			id: 'view-appointment',
+			id: 'view-customer',
 			data: {
-				selectedAppointment: row.id,
+				id: row.id,
 			},
 		});
 	};
@@ -130,7 +130,7 @@ export default function CustomersTable() {
 						<Button
 							variant="link"
 							onClick={() => {
-								viewAppointment && viewAppointment(item);
+								viewCustomer && viewCustomer(item);
 							}}
 							style={{ marginBottom: '5px' }}
 						>
@@ -178,7 +178,7 @@ export default function CustomersTable() {
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
-				viewAppointment && viewAppointment(item);
+				viewCustomer && viewCustomer(item);
 			},
 		},
 		{
