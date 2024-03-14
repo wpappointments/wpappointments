@@ -1,6 +1,7 @@
 import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import styles from './Delete.module.css';
+import styles from './DeleteModal.module.css';
+
 
 type Props = {
 	title: string;
@@ -9,7 +10,7 @@ type Props = {
 	closeModal: () => void;
 };
 
-export default function DeleteAppointmentModal({
+export default function DeleteModal({
 	title,
 	message,
 	onConfirmClick,

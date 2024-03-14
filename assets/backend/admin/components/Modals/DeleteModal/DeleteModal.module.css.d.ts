@@ -3,4 +3,4 @@ declare const styles:
   & Readonly<{ "modalActions": string }>
 ;
 export default styles;
-//# sourceMappingURL=./Delete.module.css.d.ts.map
+//# sourceMappingURL=./DeleteModal.module.css.d.ts.map
