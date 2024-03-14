@@ -6,8 +6,7 @@ import { safeParse } from 'valibot';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
-import { Customer } from '~/backend/store/customers/customers.types';
-import { Appointment } from '~/backend/types';
+import { Appointment, Customer } from '~/backend/types';
 import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 

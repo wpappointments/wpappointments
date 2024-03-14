@@ -1,11 +1,12 @@
 import { produce } from 'immer';
-import { Customer } from '../../customers/customers.types';
-import { type State } from '../../store';
+import { type State } from '~/backend/store/store';
+import { Customer } from '~/backend/types';
 import {
 	MonthIndex,
 	AppointmentSlideoutState,
 	Year,
 } from './appointment.types';
+
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 

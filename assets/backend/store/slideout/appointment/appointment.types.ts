@@ -1,4 +1,5 @@
-import { Customer } from '../../customers/customers.types';
+import { Customer } from '~/backend/types';
+
 
 export type AppointmentSlideoutState = {
 	curentMonth: MonthIndex;
