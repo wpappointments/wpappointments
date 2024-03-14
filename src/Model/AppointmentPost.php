@@ -36,7 +36,7 @@ class AppointmentPost {
 	 */
 	public function get_all( $query ) {
 		$appointments   = array();
-		$posts_per_page = get_query_var( 'posts_per_page' ) ? get_query_var( 'posts_per_page' ) : 10;
+		$posts_per_page = $query['posts_per_page'] ?? 10;
 		$default_query  = array_merge(
 			$this->default_query_part,
 			array(
