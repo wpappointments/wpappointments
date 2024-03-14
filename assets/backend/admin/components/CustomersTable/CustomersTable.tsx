@@ -81,9 +81,9 @@ export default function CustomersTable() {
 		page: currentPage,
 	});
 
-	const addAppointment = () => {
+	const addCustomer = () => {
 		openSlideOut({
-			id: 'appointment',
+			id: 'customer',
 			data: {
 				mode: 'create',
 			},
@@ -113,7 +113,7 @@ export default function CustomersTable() {
 		return (
 			<Empty>
 				<p>{__('You have no customers yet', 'wpappointments')}</p>
-				<Button variant="primary" onClick={addAppointment}>
+				<Button variant="primary" onClick={addCustomer}>
 					{__('Create New Customer', 'wpappointments')}
 				</Button>
 			</Empty>
