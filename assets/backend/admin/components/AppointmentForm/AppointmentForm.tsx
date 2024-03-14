@@ -337,7 +337,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 									size="small"
 									onClick={() => {
 										openSlideOut({
-											id: 'create-customer',
+											id: 'customer',
+											data: {
+												mode: 'create',
+											},
 										});
 									}}
 								>
@@ -416,7 +419,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				{isSlideoutOpen('select-customer') && (
 					<CustomerSelector/>
 				)}
-				{isSlideoutOpen('create-customer') && (
+				{isSlideoutOpen('customer') && (
 					<CustomerCreate
 						onSubmitSuccess={(data: Customer) => {
 							setValue('customerId', 0);
