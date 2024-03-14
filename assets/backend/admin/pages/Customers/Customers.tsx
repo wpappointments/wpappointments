@@ -2,7 +2,6 @@ import { Button, Card, CardHeader } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { Customer } from '~/backend/store/customers/customers.types';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
 import CustomerCreate from '~/backend/admin/components/CustomerCreate/CustomerCreate';
 import CustomersTable from '~/backend/admin/components/CustomersTable/CustomersTable';
@@ -39,12 +38,7 @@ export default function Customers() {
 					</CardBody>
 				</Card>
 				{isSlideoutOpen('customer') && (
-					<CustomerCreate
-						onSubmitSuccess={(data: Customer) => {
-							setValue('customerId', 0);
-							setValue('customer', JSON.stringify(data));
-						}}
-					/>
+					<CustomerCreate/>
 				)}
 			</LayoutDefault>
 		</StateContextProvider>
