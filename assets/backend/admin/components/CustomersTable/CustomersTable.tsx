@@ -14,6 +14,7 @@ import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 
+
 type Fields = {
 	paged: number;
 	number: number;
@@ -174,7 +175,7 @@ export default function CustomersTable() {
 			id: 'view',
 			icon: () => <Info />,
 			isPrimary: true,
-			label: __('View appointment details', 'wpappointments'),
+			label: __('View customer details', 'wpappointments'),
 			callback: ([item]: [Customer]) => {
 				viewCustomer && viewCustomer(item);
 			},
@@ -183,7 +184,7 @@ export default function CustomersTable() {
 			id: 'edit',
 			icon: () => <Edit />,
 			isPrimary: true,
-			label: __('Edit appointment details', 'wpappointments'),
+			label: __('Edit customer details', 'wpappointments'),
 			callback: ([item]: [Customer]) => {
 				editCustomer && editCustomer(item);
 			},
@@ -193,7 +194,7 @@ export default function CustomersTable() {
 			icon: () => <Delete />,
 			isPrimary: true,
 			isDestructive: true,
-			label: __('Delete appointment', 'wpappointments'),
+			label: __('Delete customer', 'wpappointments'),
 			callback: ([item]: [Customer]) => {
 				const { id } = item;
 				setCustomerModal({ id });
