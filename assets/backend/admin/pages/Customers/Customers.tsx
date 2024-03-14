@@ -2,15 +2,16 @@ import { Button, Card, CardHeader } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
+import { Customer } from '~/backend/store/customers/customers.types';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
+import CustomerCreate from '~/backend/admin/components/CustomerCreate/CustomerCreate';
 import CustomersTable from '~/backend/admin/components/CustomersTable/CustomersTable';
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import globalStyles from 'global.module.css';
 
 export default function Customers() {
-	const { openSlideOut } = useSlideout();
-
+	const {openSlideOut, isSlideoutOpen} = useSlideout();
 	return (
 		<StateContextProvider>
 			<LayoutDefault title="Customers">
@@ -37,6 +38,14 @@ export default function Customers() {
 						<CustomersTable />
 					</CardBody>
 				</Card>
+				{isSlideoutOpen('customer') && (
+					<CustomerCreate
+						onSubmitSuccess={(data: Customer) => {
+							setValue('customerId', 0);
+							setValue('customer', JSON.stringify(data));
+						}}
+					/>
+				)}
 			</LayoutDefault>
 		</StateContextProvider>
 	);
