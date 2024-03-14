@@ -4,13 +4,10 @@ import { Error, getErrorMessage } from '~/backend/utils/error';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+import { Customer } from '~/backend/types';
 
 
-type CustomerData = {
-	name: string;
-	email: string;
-	phone: string;
-};
+type CustomerData = Pick<Customer, 'id' | 'name' | 'email' | 'phone'>;
 
 type Response = APIResponse<{
 	customer: CustomerData & { id: number };
