@@ -177,7 +177,7 @@ export default function CustomersTable() {
 			icon: () => <Info />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: ([item]: [Customer]) => {
 				viewCustomer && viewCustomer(item);
 			},
 		},
@@ -186,7 +186,7 @@ export default function CustomersTable() {
 			icon: () => <Edit />,
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: ([item]: [Customer]) => {
 				editCustomer && editCustomer(item);
 			},
 		},
