@@ -9,16 +9,13 @@ import { AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
 import SlideOut from '../SlideOut/SlideOut';
 import styles from './CustomerSelector.module.css';
 
-export default function CustomerSelector({
-	mode,
-}: {
-	mode: 'edit' | 'create';
-}) {
+
+export default function CustomerSelector() {
 	const { setValue } = useFormContext<AppointmentFormFields>();
 	const { closeCurrentSlideOut } = useSlideout();
 	const [searchValue, setSearchValue] = useState('');
 
-	const customers = useSelect(() => {
+	const { customers } = useSelect(() => {
 		return select(store).getCustomers();
 	}, [searchValue]);
 
@@ -29,14 +26,24 @@ export default function CustomerSelector({
 
 		const search = searchValue.toLowerCase();
 		const name = customer.name.toLowerCase();
-		const email = customer.email.toLowerCase();
-		const phone = customer.phone.toLowerCase();
+		const email = customer?.email?.toLowerCase();
+		const phone = customer?.phone?.toLowerCase();
 
-		return (
-			name.includes(search) ||
-			email.includes(search) ||
-			phone.includes(search)
-		);
+		let match = false;
+
+		if (name.includes(search)) {
+			match = true;
+		}
+
+		if (email && email.includes(search)) {
+			match = true;
+		}
+
+		if (phone && phone.includes(search)) {
+			match = true;
+		}
+
+		return match;
 	});
 
 	const dispatch = useDispatch(store);

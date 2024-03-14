@@ -414,7 +414,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					/>
 				)}
 				{isSlideoutOpen('select-customer') && (
-					<CustomerSelector mode={mode} />
+					<CustomerSelector/>
 				)}
 				{isSlideoutOpen('create-customer') && (
 					<CustomerCreate
