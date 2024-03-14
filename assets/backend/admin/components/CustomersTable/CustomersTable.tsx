@@ -52,7 +52,7 @@ export function CustomerDetailsModals({
 }
 
 export default function CustomersTable() {
-	const { openSlideOut, isSlideoutOpen } = useSlideout({
+	const { openSlideOut } = useSlideout({
 		id: 'customer',
 	});
 	const [customerModal, setCustomerModal] = useState<{
