@@ -1,7 +1,6 @@
 import { CSSProperties } from 'react';
 import { Controller, DeepRequired, FieldError, FieldErrorsImpl, FieldValues, Merge, Path, PathValue, RegisterOptions, useFormContext } from 'react-hook-form';
 import { CheckboxControl } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
 
