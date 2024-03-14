@@ -37,7 +37,7 @@ export default function Checkbox<TFields extends FieldValues>({
 	const error: FormFieldError<TFields> = errors[name];
 
 	return (
-		<FormField style={{ marginTop: 10 }}>
+		<FormField style={{marginTop: 10, ...style}}>
 			<Controller
 				name={name}
 				control={control}
@@ -50,7 +50,6 @@ export default function Checkbox<TFields extends FieldValues>({
 						checked={value}
 						id={name}
 						label={`${label}${rules?.required ? '*' : ''}`}
-						style={style}
 					/>
 				)}
 			/>
