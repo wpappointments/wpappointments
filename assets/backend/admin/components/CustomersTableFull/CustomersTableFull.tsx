@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { edit as editIcon, Icon, info, trash } from '@wordpress/icons';
 import { Customer } from '~/backend/types';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import Table from '~/backend/admin/components/TableFull/Table/Table';
+
 
 type Props = {
 	items?: Customer[];
