@@ -53,6 +53,18 @@ class Customer extends Controller {
 			'/customer/(?P<id>\d+)',
 			array(
 				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( __CLASS__, 'update' ),
+					'permission_callback' => '__return_true',
+				),
+			)
+		);
+
+		register_rest_route(
+			static::ROUTE_NAMESPACE,
+			'/customer/(?P<id>\d+)',
+			array(
+				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete' ),
 					'permission_callback' => '__return_true',
@@ -148,6 +160,54 @@ class Customer extends Controller {
 				'message' => __( 'Customer deleted successfully', 'wpappointments' ),
 				'data'    => array(
 					'id' => $result,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Update a customer
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function update( WP_REST_Request $request ) {
+		$id    = $request->get_param( 'id' );
+		$name  = $request->get_param( 'name' );
+		$email = $request->get_param( 'email' );
+		$phone = $request->get_param( 'phone' );
+
+		$model           = new ModelCustomer();
+		$customer        = new stdClass();
+		$customer->email = $email;
+		$customer->name  = $name;
+		$customer->phone = $phone;
+		$user            = $model->update( $id, $customer );
+
+		if ( is_wp_error( $user ) ) {
+			return self::response(
+				array(
+					'type' => 'error',
+					'data' => (object) array(
+						'message' => $user->get_error_message(),
+					),
+				)
+			);
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => (object) array(
+					'message'  => __( 'Customer updated successfully', 'wpappointments' ),
+					'customer' => array(
+						'id'      => $user->ID,
+						'name'    => $name,
+						'email'   => $email,
+						'phone'   => $phone,
+						'created' => $user->user_registered,
+					),
 				),
 			)
 		);
