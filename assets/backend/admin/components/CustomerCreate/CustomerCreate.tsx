@@ -5,13 +5,14 @@ import { __ } from '@wordpress/i18n';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
+import { Customer } from '~/backend/types';
 import { HtmlForm, withForm } from '../Form/Form';
 import Checkbox from '../FormField/Checkbox/Checkbox';
 import Input from '../FormField/Input/Input';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
-import { customersApi } from '~/backend/api/customers';
-import { CreateResponse, UpdateResponse } from '~/backend/api/customers';
+import { customersApi, UpdateCustomerData } from '~/backend/api/customers';
+
 
 export type CustomerFormData = {
 	id?: number;
@@ -21,7 +22,13 @@ export type CustomerFormData = {
 	createAccount: boolean;
 };
 
-export default withForm(function CustomerCreate() {
+type CustomerCreateProps = {
+	onSubmitSuccess?: (data: Customer) => void;
+};
+
+export default withForm(function CustomerCreate({
+	onSubmitSuccess,
+}: CustomerCreateProps) {
 	const dispatch = useDispatch(store);
 	const { currentSlideout, closeCurrentSlideOut } = useSlideout();
 	const { data } = currentSlideout || {};
@@ -33,31 +40,41 @@ export default withForm(function CustomerCreate() {
 
 	const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
 		const { createCustomer, updateCustomer } = customersApi();
+		const { createAccount, ...rest } = data;
 
-		let response: CreateResponse | UpdateResponse | null = null;
+		// @todo: refactor maybe? 🤪
+		if (createAccount) {
+			const response = await createCustomer(rest);
 
-		if (mode === 'create') {
-			response = await createCustomer(data);
-		} else if ('id' in data && typeof data.id === 'number') {
-			response = await updateCustomer(data as Required<CustomerFormData>);
+			if (response) {
+				const { data: responseData } = response;
+				const { customer } = responseData;
+				dispatch.setSelectedCustomer(customer as Customer);
+
+				if (onSubmitSuccess) {
+					onSubmitSuccess(customer as Customer);
+				}
+			}
+		} else {
+			dispatch.setSelectedCustomer(rest as Customer);
+
+			if (onSubmitSuccess) {
+				onSubmitSuccess(rest as Customer);
+			}
 		}
 
-		if (response) {
-			const {
-				customers,
-				totalItems,
-				totalPages,
-				postsPerPage,
-				currentPage,
-			} = select(store).getCustomers();
+		if (mode === 'edit') {
+			const response = await updateCustomer(data as UpdateCustomerData);
 
-			dispatch.setCustomers(
-				customers,
-				totalItems,
-				totalPages,
-				postsPerPage,
-				currentPage
-			);
+			if (response) {
+				const { data: responseData } = response;
+				const { customer } = responseData;
+				dispatch.updateCustomer(customer as Customer);
+
+				if (onSubmitSuccess) {
+					onSubmitSuccess(customer as Customer);
+				}
+			}
 		}
 
 		closeCurrentSlideOut();
