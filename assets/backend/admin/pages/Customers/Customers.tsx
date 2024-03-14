@@ -9,6 +9,7 @@ import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import globalStyles from 'global.module.css';
 
+
 export default function Customers() {
 	const {openSlideOut, isSlideoutOpen} = useSlideout();
 	return (
@@ -26,6 +27,7 @@ export default function Customers() {
 									id: 'customer',
 									data: {
 										mode: 'create',
+										screen: 'customers',
 									},
 								});
 							}}
