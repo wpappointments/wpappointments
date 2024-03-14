@@ -14,6 +14,7 @@ import DeleteModal from '~/backend/admin/components/modals/Delete/Delete';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 
+
 type Fields = {
 	paged: number;
 	number: number;
@@ -92,7 +93,7 @@ export default function CustomersTable() {
 		openSlideOut({
 			id: 'customer',
 			data: {
-				selectedAppointment: row.id,
+				selectedCustomer: row.id,
 				mode: 'edit',
 			},
 		});
