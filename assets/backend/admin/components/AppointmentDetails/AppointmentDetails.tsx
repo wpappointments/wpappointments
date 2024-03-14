@@ -19,16 +19,16 @@ import DeleteAppointmentModal from '~/backend/admin/components/Modals/DeleteAppo
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 
+
 export default function AppointmentDetails() {
 	const { invalidate } = useStateContext();
 	const { deleteAppointment, cancelAppointment, confirmAppointment } =
 		appointmentsApi({
 			invalidateCache: invalidate,
 		});
-	const { currentSlideout, closeSlideOut } = useSlideout({
+	const { currentSlideout, closeSlideOut, openSlideOut } = useSlideout({
 		id: 'view-appointment',
 	});
-	const { openSlideOut } = useSlideout();
 	const [appointmentId, setAppointmentId] = useState(0);
 
 	const { data } = currentSlideout || {};
