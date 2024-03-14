@@ -12,6 +12,7 @@ import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import { customersApi } from '~/backend/api/customers';
 
+
 export type CustomerCreateFormData = {
 	id?: number;
 	name: string;
@@ -53,6 +54,7 @@ export default withForm(function CustomerCreate({
 			title={__('New Customer', 'wpappointments')}
 			id="create-customer"
 		>
+			{alert(1)}
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
 					<Input

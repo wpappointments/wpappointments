@@ -6,13 +6,15 @@ import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
+import { Customer } from '~/backend/store/customers/customers.types';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
-import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
-import { Info, Edit, Delete } from '~/backend/admin/components/Icons/Icons';
+import { Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
+import DeleteModal from '~/backend/admin/components/modals/Delete/Delete';
 import { useStateContext } from '~/backend/admin/context/StateContext';
-import { appointmentsApi } from '~/backend/api/appointments';
+import { customersApi } from '~/backend/api/customers';
+
 
 type Fields = {
 	paged: number;
@@ -27,19 +29,39 @@ type View = {
 	page: number;
 };
 
+type CustomerDetailsModalsProps = {
+	deleteAppointment: () => Promise<void>;
+	closeModal: () => void;
+};
+
+export function CustomerDetailsModals({
+	deleteAppointment,
+	closeModal,
+}: CustomerDetailsModalsProps) {
+	return (
+		<DeleteModal
+			title={__('Delete Customer', 'wpappointments')}
+			message={__(
+				'Are you sure you want to delete this customer? This action cannot be undone.',
+				'wpappointments'
+			)}
+			onConfirmClick={deleteAppointment}
+			closeModal={closeModal}
+		/>
+	);
+}
+
 export default function CustomersTable() {
-	const { openSlideOut } = useSlideout({
+	const { openSlideOut, isSlideoutOpen } = useSlideout({
 		id: 'customer',
 	});
-	const [appointmentModal, setAppointmentModal] = useState<{
+	const [customerModal, setCustomerModal] = useState<{
 		id: number;
-		status: Appointment['status'];
 	} | null>(null);
 	const { invalidate, getSelector } = useStateContext();
-	const { deleteAppointment, cancelAppointment, confirmAppointment } =
-		appointmentsApi({
-			invalidateCache: invalidate,
-		});
+	const { deleteCustomer } = customersApi({
+		invalidateCache: invalidate,
+	});
 	const [filters, setFilters] = useState<Fields>({
 		paged: 1,
 		number: 10,
@@ -174,9 +196,9 @@ export default function CustomersTable() {
 			isPrimary: true,
 			isDestructive: true,
 			label: __('Delete appointment', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
-				const { id, status } = item;
-				setAppointmentModal({ id, status });
+			callback: ([item]: [Customer]) => {
+				const { id } = item;
+				setCustomerModal(id);
 			},
 		},
 	];
@@ -206,27 +228,18 @@ export default function CustomersTable() {
 				search={false}
 				supportedLayouts="table"
 			/>
-			{appointmentModal && (
-				<AppointmentDetailsModals
-					status={appointmentModal.status}
-					cancelAppointment={async () => {
-						if (!cancelAppointment) {
-							return;
-						}
-
-						await cancelAppointment(appointmentModal.id);
-						setAppointmentModal(null);
-					}}
+			{customerModal && (
+				<CustomerDetailsModals
 					deleteAppointment={async () => {
-						if (!deleteAppointment) {
+						if (!deleteCustomer) {
 							return;
 						}
 
-						await deleteAppointment(appointmentModal.id);
-						setAppointmentModal(null);
+						await deleteCustomer(customerModal.id);
+						setCustomerModal(null);
 					}}
 					closeModal={() => {
-						setAppointmentModal(null);
+						setCustomerModal(null);
 					}}
 				/>
 			)}
