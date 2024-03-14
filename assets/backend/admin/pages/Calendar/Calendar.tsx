@@ -13,6 +13,7 @@ import AppointmentForm from '~/backend/admin/components/AppointmentForm/Appointm
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
+
 function getMonthName(month: number) {
 	const months = [
 		__('January', 'wpappointments'),
@@ -98,7 +99,7 @@ function applyAppointmentsToCalendar(
 
 export default function Calendar() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
-	const appointments = useSelect(() => {
+	const { appointments } = useSelect(() => {
 		return select(store).getAppointments({
 			posts_per_page: 100,
 		});
