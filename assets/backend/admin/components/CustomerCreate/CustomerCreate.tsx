@@ -42,7 +42,6 @@ export default withForm(function CustomerCreate({
 		const { createCustomer, updateCustomer } = customersApi();
 		const { createAccount, ...rest } = data;
 
-		// @todo: refactor maybe? 🤪
 		if (createAccount) {
 			const response = await createCustomer(rest);
 
@@ -56,6 +55,10 @@ export default withForm(function CustomerCreate({
 				}
 			}
 		} else {
+			if (mode === 'create') {
+				dispatch.createCustomer(rest as Customer);
+			}
+
 			dispatch.setSelectedCustomer(rest as Customer);
 
 			if (onSubmitSuccess) {
