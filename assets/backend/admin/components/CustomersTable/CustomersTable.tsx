@@ -90,9 +90,9 @@ export default function CustomersTable() {
 		});
 	};
 
-	const editAppointment = (row: Appointment) => {
+	const editCustomer = (row: Customer) => {
 		openSlideOut({
-			id: 'appointment',
+			id: 'customer',
 			data: {
 				selectedAppointment: row.id,
 				mode: 'edit',
@@ -187,7 +187,7 @@ export default function CustomersTable() {
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
 			callback: ([item]: [Appointment]) => {
-				editAppointment && editAppointment(item);
+				editCustomer && editCustomer(item);
 			},
 		},
 		{
