@@ -85,6 +85,7 @@ export default function CustomersTable() {
 			id: 'customer',
 			data: {
 				mode: 'create',
+				screen: 'customers',
 			},
 		});
 	};

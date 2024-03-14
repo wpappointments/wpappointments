@@ -1,6 +1,6 @@
 import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { select, useDispatch } from '@wordpress/data';
+import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import useSlideout from '~/backend/hooks/useSlideout';
@@ -32,7 +32,7 @@ export default withForm(function CustomerCreate({
 	const dispatch = useDispatch(store);
 	const { currentSlideout, closeCurrentSlideOut } = useSlideout();
 	const { data } = currentSlideout || {};
-	const { selectedCustomer, mode } = (data as any) || {};
+	const { selectedCustomer, mode, screen } = (data as any) || {};
 
 	if (mode === 'edit' && selectedCustomer) {
 		useFillFormValues(selectedCustomer);
@@ -105,6 +105,9 @@ export default withForm(function CustomerCreate({
 							name="createAccount"
 							label="Create account"
 							defaultValue={true}
+							style={{
+								display: screen === 'customer' ? 'none' : 'flex',
+							}}
 						/>
 					)}
 				</FormFieldSet>

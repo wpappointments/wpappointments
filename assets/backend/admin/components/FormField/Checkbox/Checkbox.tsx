@@ -1,19 +1,10 @@
-import {
-	Controller,
-	DeepRequired,
-	FieldError,
-	FieldErrorsImpl,
-	FieldValues,
-	Merge,
-	Path,
-	PathValue,
-	RegisterOptions,
-	useFormContext,
-} from 'react-hook-form';
+import { CSSProperties } from 'react';
+import { Controller, DeepRequired, FieldError, FieldErrorsImpl, FieldValues, Merge, Path, PathValue, RegisterOptions, useFormContext } from 'react-hook-form';
 import { CheckboxControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
+
 
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
@@ -24,6 +15,7 @@ type Props<TFields extends FieldValues> = {
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 	defaultValue?: PathValue<TFields, Path<TFields>>;
+	style?: CSSProperties;
 };
 
 export type FormFieldError<TFields extends FieldValues> =
@@ -36,6 +28,7 @@ export default function Checkbox<TFields extends FieldValues>({
 	label,
 	rules,
 	defaultValue,
+	style,
 }: Props<TFields>) {
 	const {
 		control,
@@ -58,6 +51,7 @@ export default function Checkbox<TFields extends FieldValues>({
 						checked={value}
 						id={name}
 						label={`${label}${rules?.required ? '*' : ''}`}
+						style={style}
 					/>
 				)}
 			/>
