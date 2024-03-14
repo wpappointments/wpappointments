@@ -73,6 +73,49 @@ export function customersApi(options?: CustomersApiOptions) {
 		return response;
 	}
 
+	async function updateCustomer(data: CustomerData) {
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `customer/${data.id}`,
+				method: 'POST',
+				data,
+			});
+
+			return response;
+		});
+
+		if (error) {
+			handleError(error, 'Error updating customer');
+		}
+
+		if (response && response.type === 'error') {
+			const error: Error = {
+				type: 'error',
+				message: response?.data?.message || 'Unknown error',
+				data: [],
+			};
+
+			handleError(error, 'Error updating customer');
+		}
+
+		if (response && response.type === 'success') {
+			const { data: responseData } = response;
+			const { customer } = responseData;
+
+			dispatch.updateCustomer(customer);
+
+			displaySuccessToast(
+				__('Customer updated successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getCustomers');
+			}
+		}
+
+		return response;
+	}
+
 	async function deleteCustomer(id: number) {
 		if (missingId(id, 'Cannot delete customer')) {
 			return;
@@ -116,6 +159,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	const functions = {
 		getCustomers,
 		createCustomer,
+		updateCustomer,
 		deleteCustomer,
 	} as const;
 

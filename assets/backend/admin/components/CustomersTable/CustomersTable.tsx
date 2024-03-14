@@ -93,7 +93,7 @@ export default function CustomersTable() {
 		openSlideOut({
 			id: 'customer',
 			data: {
-				selectedCustomer: row.id,
+				selectedCustomer: row,
 				mode: 'edit',
 			},
 		});

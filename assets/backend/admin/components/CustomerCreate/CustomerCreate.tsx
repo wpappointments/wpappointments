@@ -2,6 +2,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { select, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { HtmlForm, withForm } from '../Form/Form';
@@ -22,12 +23,21 @@ export type CustomerCreateFormData = {
 
 export default withForm(function CustomerCreate() {
 	const dispatch = useDispatch(store);
-	const { closeCurrentSlideOut } = useSlideout();
+	const { currentSlideout, closeCurrentSlideOut } = useSlideout();
+	const { data } = currentSlideout || {};
+	const { selectedCustomer, mode } = (data as any) || {};
+
+	if (mode === 'edit' && selectedCustomer) {
+		useFillFormValues(selectedCustomer);
+	}
 
 	const onSubmit: SubmitHandler<CustomerCreateFormData> = async (data) => {
-		const { createCustomer } = customersApi();
+		const { createCustomer, updateCustomer } = customersApi();
 
-		const response = await createCustomer(data);
+		const response =
+			mode === 'create'
+				? await createCustomer(data)
+				: await updateCustomer(data);
 
 		if (response) {
 			const {
@@ -50,8 +60,14 @@ export default withForm(function CustomerCreate() {
 		closeCurrentSlideOut();
 	};
 
+	const submitText = mode === 'create' ? 'Create' : 'Update';
+	const title =
+		mode === 'create'
+			? __('New Customer', 'wpappointments')
+			: __('Update Customer', 'wpappointments');
+
 	return (
-		<SlideOut title={__('New Customer', 'wpappointments')} id="customer">
+		<SlideOut title={title} id="customer">
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
 					<Input
@@ -61,11 +77,13 @@ export default withForm(function CustomerCreate() {
 					/>
 					<Input name="email" label="Email" type="email" />
 					<Input name="phone" label="Phone" />
-					<Checkbox
-						name="createAccount"
-						label="Create account"
-						defaultValue={true}
-					/>
+					{mode === 'create' && (
+						<Checkbox
+							name="createAccount"
+							label="Create account"
+							defaultValue={true}
+						/>
+					)}
 				</FormFieldSet>
 				<Button
 					variant="primary"
@@ -77,7 +95,7 @@ export default withForm(function CustomerCreate() {
 						marginTop: '34px',
 					}}
 				>
-					Create
+					{submitText}
 				</Button>
 			</HtmlForm>
 		</SlideOut>

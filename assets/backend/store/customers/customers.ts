@@ -1,10 +1,11 @@
 import { addQueryArgs } from '@wordpress/url';
 import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
-import { Customer } from '~/backend/types';
+import { Appointment, Customer } from '~/backend/types';
 import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
+
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
@@ -47,6 +48,12 @@ export const actions = {
 			customer,
 		} as const;
 	},
+	updateCustomer(customer: Customer) {
+		return {
+			type: 'UPDATE_CUSTOMER',
+			customer,
+		} as const;
+	},
 	deleteCustomer(id: number) {
 		return {
 			type: 'DELETE_CUSTOMER',
@@ -69,6 +76,23 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 		case 'CREATE_CUSTOMER':
 			return produce(state, (draft) => {
 				draft.customers.unshift(action.customer);
+			});
+
+		case 'UPDATE_CUSTOMER':
+			return produce(state, (draft) => {
+				draft.customers = draft.customers.map(
+					(customer: Customer) =>
+						customer.id === action.customer.id
+							? action.customer
+							: customer
+				);
+
+				// draft.customers.sort((a: Appointment, b: Appointment) => {
+				// 	return (
+				// 		parseInt(a.timestamp.toString()) -
+				// 		parseInt(b.timestamp.toString())
+				// 	);
+				// });
 			});
 
 		case 'DELETE_CUSTOMER':
