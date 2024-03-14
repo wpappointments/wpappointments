@@ -104,14 +104,14 @@ class Customer extends Controller {
 		$customer->email = $email;
 		$customer->name  = $name;
 		$customer->phone = $phone;
-		$user_id         = $model->create( $customer );
+		$user            = $model->create( $customer );
 
-		if ( is_wp_error( $user_id ) ) {
+		if ( is_wp_error( $user ) ) {
 			return self::response(
 				array(
 					'type' => 'error',
 					'data' => (object) array(
-						'message' => $user_id->get_error_message(),
+						'message' => $user->get_error_message(),
 					),
 				)
 			);
@@ -123,10 +123,11 @@ class Customer extends Controller {
 				'data' => (object) array(
 					'message'  => __( 'Customer created successfully', 'wpappointments' ),
 					'customer' => array(
-						'id'    => $user_id,
-						'name'  => $name,
-						'email' => $email,
-						'phone' => $phone,
+						'id'      => $user->ID,
+						'name'    => $name,
+						'email'   => $email,
+						'phone'   => $phone,
+						'created' => $user->user_registered,
 					),
 				),
 			)

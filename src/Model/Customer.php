@@ -125,7 +125,7 @@ class Customer {
 
 		update_user_meta( $user_id, 'phone', sanitize_text_field( $customer->phone ) );
 
-		return $user_id;
+		return get_user_by( 'id', $user_id );
 	}
 
 	public function delete( $id ) {
