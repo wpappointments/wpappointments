@@ -106,7 +106,7 @@ export default withForm(function CustomerCreate({
 							label="Create account"
 							defaultValue={true}
 							style={{
-								display: screen === 'customer' ? 'none' : 'flex',
+								display: screen === 'customers' ? 'none' : 'flex',
 							}}
 						/>
 					)}
