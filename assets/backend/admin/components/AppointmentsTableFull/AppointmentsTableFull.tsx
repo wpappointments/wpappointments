@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { cancelCircleFilled, check, edit, Icon, info, trash } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -13,10 +14,10 @@ import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetai
 import styles from './AppointmentsTableFull.module.css';
 import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
 import { Action } from '~/backend/admin/components/DataViews/types';
-import { Cancel, Confirm, Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
+import { COLORS as colors } from '~/backend/constants';
 
 
 type Fields = {
@@ -194,7 +195,7 @@ export default function AppointmentsTableFull() {
 	const actions: Action[] = [
 		{
 			id: 'view',
-			icon: <Info />,
+			icon: <Icon icon={info} color={colors.blue} />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
 			callback: (item: Appointment) => {
@@ -203,7 +204,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'edit',
-			icon: <Edit />,
+			icon: <Icon icon={edit} color={colors.blue} />,
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
 			callback: (item: Appointment) => {
@@ -213,7 +214,7 @@ export default function AppointmentsTableFull() {
 		{
 			id: 'cancel',
 			isDestructive: true,
-			icon: <Cancel />,
+			icon: <Icon icon={cancelCircleFilled} color={colors.red} />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'confirmed',
 			label: __('Cancel appointment', 'wpappointments'),
@@ -224,7 +225,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'confirm',
-			icon: <Confirm />,
+			icon: <Icon icon={check} color={colors.green} />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'pending',
 			label: __('Confirm appointment', 'wpappointments'),
@@ -234,7 +235,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'delete',
-			icon: <Delete />,
+			icon: <Icon icon={trash} color={colors.red} />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'cancelled',
 			isDestructive: true,

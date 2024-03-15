@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { Icon, info, edit, trash } from '@wordpress/icons';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
+import { Action } from '../DataViews/types';
 import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import { Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
-import { Action } from '../DataViews/types';
+import { COLORS as colors } from '~/backend/constants';
+
 
 type Fields = {
 	paged: number;
@@ -179,7 +181,7 @@ export default function CustomersTable() {
 	const actions: Action[] = [
 		{
 			id: 'view',
-			icon: <Info />,
+			icon: <Icon icon={info} color={colors.blue} />,
 			isPrimary: true,
 			label: __('View customer details', 'wpappointments'),
 			callback: (item: Customer) => {
@@ -188,7 +190,7 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'edit',
-			icon: <Edit />,
+			icon: <Icon icon={edit} color={colors.blue} />,
 			isPrimary: true,
 			label: __('Edit customer details', 'wpappointments'),
 			callback: (item: Customer) => {
@@ -197,7 +199,7 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'delete',
-			icon: <Delete />,
+			icon: <Icon icon={trash} color={colors.red} />,
 			isPrimary: true,
 			isDestructive: true,
 			label: __('Delete customer', 'wpappointments'),
