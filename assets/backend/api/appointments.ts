@@ -205,7 +205,6 @@ export function appointmentsApi({
 			);
 
 			if (invalidateCache) {
-				console.log('invalidateCache');
 				invalidateCache('getAppointments');
 				invalidateCache('getUpcomingAppointments');
 			}
