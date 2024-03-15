@@ -87,12 +87,8 @@ export const actions = {
 export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_APPOINTMENTS':
-			return produce(state, (draft) => {
-				draft.appointments = action.appointments;
-				draft.totalItems = action.totalItems;
-				draft.totalPages = action.totalPages;
-				draft.postsPerPage = action.postsPerPage;
-				draft.currentPage = action.currentPage;
+			return produce(state, () => {
+				return action;
 			});
 
 		case 'SET_UPCOMING_APPOINTMENTS':

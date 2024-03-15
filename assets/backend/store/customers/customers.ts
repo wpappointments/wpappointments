@@ -64,12 +64,8 @@ export const actions = {
 export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_CUSTOMERS':
-			return produce(state, (draft) => {
-				draft.customers = action.customers;
-				draft.totalItems = action.totalItems;
-				draft.totalPages = action.totalPages;
-				draft.postsPerPage = action.postsPerPage;
-				draft.currentPage = action.currentPage;
+			return produce(state, () => {
+				return action;
 			});
 
 		case 'CREATE_CUSTOMER':
@@ -84,13 +80,6 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 						? action.customer
 						: customer
 				);
-
-				// draft.customers.sort((a: Appointment, b: Appointment) => {
-				// 	return (
-				// 		parseInt(a.timestamp.toString()) -
-				// 		parseInt(b.timestamp.toString())
-				// 	);
-				// });
 			});
 
 		case 'DELETE_CUSTOMER':
@@ -107,13 +96,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 
 export const selectors = {
 	getCustomers(state: State, _?: Query) {
-		return {
-			customers: state.customers.customers,
-			totalItems: state.customers.totalItems,
-			totalPages: state.customers.totalPages,
-			postsPerPage: state.customers.postsPerPage,
-			currentPage: state.customers.currentPage,
-		};
+		return state.customers
 	},
 };
 
