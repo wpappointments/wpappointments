@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
-// @ts-ignore
-import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
+// @ts-ignore
+import { DataViews } from 'wpapppointments-dataviews';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
