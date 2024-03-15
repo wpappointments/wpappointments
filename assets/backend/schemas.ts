@@ -22,7 +22,7 @@ export const CustomerSchema = object({
 	name: string(),
 	email: optional(string()),
 	phone: optional(string()),
-	created: string(),
+	created: optional(string()),
 	actions: optional(record(ApiActionSchema)),
 });
 
