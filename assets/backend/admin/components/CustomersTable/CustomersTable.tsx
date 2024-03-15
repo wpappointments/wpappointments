@@ -12,7 +12,7 @@ import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/D
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
-
+import { Action } from '../DataViews/types';
 
 type Fields = {
 	paged: number;
@@ -163,39 +163,45 @@ export default function CustomersTable() {
 			id: 'created',
 			header: __('Created', 'wpappointments'),
 			render: ({ item }: { item: Customer }) => {
-				return <>{formatDate(item.created)}</>;
+				return (
+					<>
+						{item.created
+							? formatDate(item.created)
+							: __('Missing date information', 'wpappointments')}
+					</>
+				);
 			},
 			enableSorting: false,
 			enableHiding: false,
 		},
 	];
 
-	const actions = [
+	const actions: Action[] = [
 		{
 			id: 'view',
-			icon: () => <Info />,
+			icon: <Info />,
 			isPrimary: true,
 			label: __('View customer details', 'wpappointments'),
-			callback: ([item]: [Customer]) => {
+			callback: (item: Customer) => {
 				viewCustomer && viewCustomer(item);
 			},
 		},
 		{
 			id: 'edit',
-			icon: () => <Edit />,
+			icon: <Edit />,
 			isPrimary: true,
 			label: __('Edit customer details', 'wpappointments'),
-			callback: ([item]: [Customer]) => {
+			callback: (item: Customer) => {
 				editCustomer && editCustomer(item);
 			},
 		},
 		{
 			id: 'delete',
-			icon: () => <Delete />,
+			icon: <Delete />,
 			isPrimary: true,
 			isDestructive: true,
 			label: __('Delete customer', 'wpappointments'),
-			callback: ([item]: [Customer]) => {
+			callback: (item: Customer) => {
 				const { id } = item;
 				setCustomerModal({ id });
 			},
@@ -224,8 +230,6 @@ export default function CustomersTable() {
 				actions={actions}
 				data={customers}
 				paginationInfo={paginationInfo}
-				search={false}
-				supportedLayouts="table"
 			/>
 			{customerModal && (
 				<CustomerDetailsModals
