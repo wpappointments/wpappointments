@@ -1,44 +1,42 @@
-import { DropdownMenu } from '@wordpress/components';
+import { Appointment, Customer } from '~/backend/types';
+import styles from './DataViews.module.css';
+import DataViewsBody from './DataViewsBody';
+import DataViewsFooter from './DataViewsFooter';
+import DataViewsHeader from './DataViewsHeader';
 import {
-	more,
-	arrowLeft,
-	arrowRight,
-	arrowUp,
-	arrowDown,
-} from '@wordpress/icons';
+	View,
+	Field,
+	Action,
+	PaginationInfo,
+} from '~/backend/admin/components/DataViews/types';
 
-export function DataViews() {
-	const MyDropdown = () => (
-		<DropdownMenu
-			icon={more}
-			label={__('More', 'wpappointments')}
-			controls={[
-				{
-					title: 'Up',
-					icon: arrowUp,
-					onClick: () => console.log('up'),
-				},
-				{
-					title: 'Right',
-					icon: arrowRight,
-					onClick: () => console.log('right'),
-				},
-				{
-					title: 'Down',
-					icon: arrowDown,
-					onClick: () => console.log('down'),
-				},
-				{
-					title: 'Left',
-					icon: arrowLeft,
-					onClick: () => console.log('left'),
-				},
-			]}
-		/>
-	);
+export type DataViewsProps = {
+	view: View;
+	onChangeView: (view: View) => void;
+	fields: Field[];
+	actions: Action[];
+	data: Appointment[] | Customer[];
+	paginationInfo: PaginationInfo;
+};
+
+export function DataViews({
+	view,
+	onChangeView,
+	fields,
+	actions,
+	data,
+	paginationInfo,
+}: DataViewsProps) {
 	return (
-		<>
-			<MyDropdown />
-		</>
+		<table className={styles.dataViews}>
+			<DataViewsHeader fields={fields} />
+			<DataViewsBody fields={fields} data={data} actions={actions} />
+			<DataViewsFooter
+				view={view}
+				onChangeView={onChangeView}
+				fields={fields}
+				paginationInfo={paginationInfo}
+			/>
+		</table>
 	);
 }
