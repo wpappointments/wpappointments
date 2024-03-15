@@ -7,15 +7,10 @@ import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
 import { getStrictPeriodFromTimestamp } from './utils';
 
+
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
-type Response = APIResponse<{
-	appointments: Appointment[];
-	totalItems: number;
-	totalPages: number;
-	postsPerPage: number;
-	currentPage: number;
-}>;
+type Response = APIResponse<AppointmentsState>;
 
 export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 	appointments: [],
@@ -26,13 +21,13 @@ export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 };
 
 export const actions = {
-	setAppointments(
-		appointments: Appointment[],
-		totalItems: number,
-		totalPages: number,
-		postsPerPage: number,
-		currentPage: number
-	) {
+	setAppointments({
+		appointments,
+		totalItems,
+		totalPages,
+		postsPerPage,
+		currentPage,
+	}: AppointmentsState) {
 		return {
 			type: 'SET_APPOINTMENTS',
 			appointments,
@@ -164,13 +159,7 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 
 export const selectors = {
 	getAppointments(state: State, _?: Query) {
-		return {
-			appointments: state.appointments.appointments,
-			totalItems: state.appointments.totalItems,
-			totalPages: state.appointments.totalPages,
-			postsPerPage: state.appointments.postsPerPage,
-			currentPage: state.appointments.currentPage,
-		};
+		return state.appointments;
 	},
 	getUpcomingAppointments(state: State, filters?: Query) {
 		return state.appointments.appointments.filter(
@@ -235,20 +224,7 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		const {
-			appointments,
-			totalItems,
-			totalPages,
-			postsPerPage,
-			currentPage,
-		} = data;
 
-		return actions.setAppointments(
-			appointments,
-			totalItems,
-			totalPages,
-			postsPerPage,
-			currentPage
-		);
+		return actions.setAppointments(data);
 	},
 };

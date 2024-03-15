@@ -6,15 +6,10 @@ import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
+
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
-type Response = APIResponse<{
-	customers: Customer[];
-	totalItems: number;
-	totalPages: number;
-	postsPerPage: number;
-	currentPage: number;
-}>;
+type Response = APIResponse<CustomersState>;
 
 export const DEFAULT_CUSTOMERS_STATE: CustomersState = {
 	customers: [],
@@ -25,13 +20,13 @@ export const DEFAULT_CUSTOMERS_STATE: CustomersState = {
 };
 
 export const actions = {
-	setCustomers(
-		customers: Customer[],
-		totalItems: number,
-		totalPages: number,
-		postsPerPage: number,
-		currentPage: number
-	) {
+	setCustomers({
+		customers,
+		totalItems,
+		totalPages,
+		postsPerPage,
+		currentPage,
+	}: CustomersState) {
 		return {
 			type: 'SET_CUSTOMERS',
 			customers,
@@ -121,15 +116,7 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		const { customers, totalItems, totalPages, postsPerPage, currentPage } =
-			data;
 
-		return actions.setCustomers(
-			customers,
-			totalItems,
-			totalPages,
-			postsPerPage,
-			currentPage
-		);
+		return actions.setCustomers(data);
 	},
 };
