@@ -17,7 +17,7 @@
 		"build:fe": "pnpm init-project & pnpm css-types & wp-scripts build assets/frontend/frontend.tsx",
 		"start": "pnpm init-project & pnpm css-types-watch & wp-env start --update --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
 		"start:hot": "pnpm init-project & pnpm css-types-watch & wp-env start --update --xdebug=develop,coverage,debug && bash .scripts/mailhog start && wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
-		"format": "wp-scripts format ./assets/**/* ./tests/js/**/*",
+		"format": "wp-scripts format ./assets/backend/**/* ./assets/frontend/**/* ./assets/gutenberg/**/* ./assets/styles/**/* ./tests/js/**/*",
 		"lint": "pnpm lint:js && pnpm lint:css && pnpm phpcs:all",
 		"lint:css": "wp-scripts lint-style ./assets/**/*.css",
 		"lint:js": "wp-scripts lint-js ./assets/backend/**/*.ts*",
