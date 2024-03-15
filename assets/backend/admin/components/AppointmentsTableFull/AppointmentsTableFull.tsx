@@ -4,7 +4,7 @@ import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, fromUnixTime } from 'date-fns';
 // @ts-ignore
-import { DataViews } from 'wpapppointments-dataviews';
+import { DataViews } from '@wordpress/dataviews';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDate, formatTime } from '~/backend/utils/i18n';

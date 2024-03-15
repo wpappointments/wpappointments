@@ -3,7 +3,7 @@ import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 // @ts-ignore
-import { DataViews } from 'wpapppointments-dataviews';
+import { DataViews } from '@wordpress/dataviews';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
