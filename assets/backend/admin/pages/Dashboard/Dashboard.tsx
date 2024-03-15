@@ -9,12 +9,13 @@ import AppointmentsTableMinimal from '../../components/AppointmentsTableMinimal/
 import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
-import Table from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
+import AppointmentsTableFull from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import statsPlaceholder from '~/images/stats-placeholder.png';
 import globalStyles from 'global.module.css';
+
 
 export default function Dashboard() {
 	// @todo refactor - move to each component
@@ -63,7 +64,7 @@ export default function Dashboard() {
 }
 
 function DashboardAppointments() {
-	return <Table />;
+	return <AppointmentsTableFull/>;
 }
 
 function UpcomingAppointments({
