@@ -1,5 +1,5 @@
-import { IconProps } from '@wordpress/icons/build-types/icon';
 import type { ReactNode } from 'react';
+import { IconProps } from '@wordpress/icons/build-types/icon';
 import { Appointment, Customer } from '~/backend/types';
 
 export type CollectionItem = Appointment | Customer;

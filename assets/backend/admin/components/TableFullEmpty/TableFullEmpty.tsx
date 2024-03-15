@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import styles from './TableFullEmpty.module.css';
 
-
 type Props = {
 	children: ReactNode;
 };

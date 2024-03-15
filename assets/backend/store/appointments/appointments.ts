@@ -7,7 +7,6 @@ import { State } from '../store';
 import { AppointmentsState } from './appointments.types';
 import { getStrictPeriodFromTimestamp } from './utils';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
 type Response = APIResponse<AppointmentsState>;

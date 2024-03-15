@@ -15,7 +15,6 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 import { COLORS as colors } from '~/backend/constants';
 
-
 type Fields = {
 	paged: number;
 	number: number;

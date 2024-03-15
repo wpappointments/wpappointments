@@ -6,7 +6,6 @@ import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { type CustomersState } from './customers.types';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
 type Response = APIResponse<CustomersState>;
@@ -91,7 +90,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 
 export const selectors = {
 	getCustomers(state: State, _?: Query) {
-		return state.customers
+		return state.customers;
 	},
 };
 

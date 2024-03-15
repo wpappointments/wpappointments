@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { cancelCircleFilled, check, edit, Icon, info, trash } from '@wordpress/icons';
+import {
+	cancelCircleFilled,
+	check,
+	edit,
+	Icon,
+	info,
+	trash,
+} from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -18,7 +25,6 @@ import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullE
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { COLORS as colors } from '~/backend/constants';
-
 
 type Fields = {
 	status: Appointment['status'] | '';

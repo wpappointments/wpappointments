@@ -16,7 +16,6 @@ import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import statsPlaceholder from '~/images/stats-placeholder.png';
 import globalStyles from 'global.module.css';
 
-
 export default function Dashboard() {
 	// @todo refactor - move to each component
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
@@ -64,7 +63,7 @@ export default function Dashboard() {
 }
 
 function DashboardAppointments() {
-	return <AppointmentsTableFull/>;
+	return <AppointmentsTableFull />;
 }
 
 function UpcomingAppointments({
