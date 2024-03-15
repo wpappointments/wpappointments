@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
-// @ts-ignore
-import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
 import { formatDate } from '~/backend/utils/i18n';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
+import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
 import { Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
+
 
 type Fields = {
 	paged: number;

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
-// @ts-ignore
-import { DataViews } from '@wordpress/dataviews';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
@@ -13,16 +11,12 @@ import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
-import {
-	Info,
-	Edit,
-	Confirm,
-	Cancel,
-	Delete,
-} from '~/backend/admin/components/Icons/Icons';
+import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
+import { Info, Edit, Confirm, Cancel, Delete } from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
+
 
 type Fields = {
 	status: Appointment['status'] | '';
@@ -258,25 +252,7 @@ export default function AppointmentsTableFull() {
 
 	return (
 		<>
-			<DataViews
-				view={view}
-				onChangeView={(currentState: View) => {
-					setView(currentState);
-					setFilters({
-						...filters,
-						paged: currentState.page,
-						posts_per_page: currentState.perPage,
-					});
-
-					invalidate('getAppointments');
-				}}
-				fields={fields}
-				actions={actions}
-				data={appointments}
-				paginationInfo={paginationInfo}
-				search={false}
-				supportedLayouts="table"
-			/>
+			<DataViews/>
 			{appointmentModal && (
 				<AppointmentDetailsModals
 					status={appointmentModal.status}
