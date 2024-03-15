@@ -14,7 +14,7 @@ import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetai
 import styles from './AppointmentsTableFull.module.css';
 import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
 import { Action } from '~/backend/admin/components/DataViews/types';
-import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
+import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { COLORS as colors } from '~/backend/constants';
@@ -103,12 +103,12 @@ export default function AppointmentsTableFull() {
 
 	if (!appointments || appointments.length === 0) {
 		return (
-			<Empty>
+			<TableFullEmpty>
 				<p>{__('You have no appointments yet', 'wpappointments')}</p>
 				<Button variant="primary" onClick={addAppointment}>
 					{__('Create New Appointment', 'wpappointments')}
 				</Button>
-			</Empty>
+			</TableFullEmpty>
 		);
 	}
 

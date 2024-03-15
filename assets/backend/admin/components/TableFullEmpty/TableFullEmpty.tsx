@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
-import styles from './Empty.module.css';
+import styles from './TableFullEmpty.module.css';
+
 
 type Props = {
 	children: ReactNode;
 };
 
-export default function Empty({ children }: Props) {
+export default function TableFullEmpty({ children }: Props) {
 	return (
 		<div className={styles.empty}>
 			<svg

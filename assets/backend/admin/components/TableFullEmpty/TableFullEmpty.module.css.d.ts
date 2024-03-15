@@ -3,4 +3,4 @@ declare const styles:
   & Readonly<{ "emptyIcon": string }>
 ;
 export default styles;
-//# sourceMappingURL=./Empty.module.css.d.ts.map
+//# sourceMappingURL=./TableFullEmpty.module.css.d.ts.map

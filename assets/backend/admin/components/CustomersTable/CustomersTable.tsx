@@ -10,7 +10,7 @@ import { Customer } from '~/backend/types';
 import { Action } from '../DataViews/types';
 import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
 import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
-import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
+import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 import { COLORS as colors } from '~/backend/constants';
@@ -112,12 +112,12 @@ export default function CustomersTable() {
 
 	if (!customers || customers.length === 0) {
 		return (
-			<Empty>
+			<TableFullEmpty>
 				<p>{__('You have no customers yet', 'wpappointments')}</p>
 				<Button variant="primary" onClick={addCustomer}>
 					{__('Create New Customer', 'wpappointments')}
 				</Button>
-			</Empty>
+			</TableFullEmpty>
 		);
 	}
 
