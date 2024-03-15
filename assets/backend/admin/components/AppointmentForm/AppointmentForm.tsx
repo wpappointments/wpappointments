@@ -4,15 +4,14 @@ import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { addMinutes } from 'date-fns';
-import { is } from 'valibot';
+import { safeParse } from 'valibot';
 import { APIResponse } from '~/backend/utils/fetch';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import resolve from '~/backend/utils/resolve';
 import { displayErrorToast } from '~/backend/utils/toast';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
-import { Customer } from '~/backend/types';
-import { Appointment } from '~/backend/types';
+import { Customer, Appointment } from '~/backend/types';
 import CustomerCreate from '../CustomerCreate/CustomerCreate';
 import CustomerSelector from '../CustomerSelector/CustomerSelector';
 import CustomerSummary from '../CustomerSelector/Summary/Summary';
@@ -74,7 +73,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const { selectedAppointment, mode } = (data as any) || {};
 
 	const currentAppointment = useSelect(() => {
-		return select(store).getAppointment(selectedAppointment);
+		return select(store).getAppointment(selectedAppointment as number);
 	}, [selectedAppointment]);
 
 	const selectedCustomer = useSelect(() => {
@@ -102,7 +101,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 	useEffect(() => {
 		if (mode === 'edit' && currentAppointment) {
-			if (!is(AppointmentSchema, currentAppointment)) {
+			const result = safeParse(AppointmentSchema, currentAppointment);
+
+			if (result.issues) {
+				console.warn('Appointment data is invalid', result.issues);
 				return;
 			}
 
@@ -139,7 +141,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		const [error, result] = await resolve<SubmitResponse>(async () => {
 			let data;
 
-			if (is(AppointmentSchema, currentAppointment)) {
+			if (mode === 'edit' && currentAppointment) {
 				data = await updateAppointment(currentAppointment.id, formData);
 			} else {
 				data = await createAppointment(formData);
