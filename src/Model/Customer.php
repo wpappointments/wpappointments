@@ -156,20 +156,20 @@ class Customer {
 	/**
 	 * Validate user ID
 	 *
-	 * @param int $post_id User ID.
+	 * @param int $user_id User ID.
 	 *
 	 * @return int|\WP_Error
 	 */
-	protected function validate_user_id( $post_id ) {
-		if ( ! $post_id ) {
+	protected function validate_user_id( $user_id ) {
+		if ( ! $user_id ) {
 			return new \WP_Error( 'error', __( 'User ID is required', 'wpappointments' ) );
 		}
 
-		if ( ! get_user_by( 'ID', $post_id ) ) {
+		if ( ! get_user_by( 'ID', $user_id ) ) {
 			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
 		}
 
-		return $post_id;
+		return $user_id;
 	}
 
 	/**
