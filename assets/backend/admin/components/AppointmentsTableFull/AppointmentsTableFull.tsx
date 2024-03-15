@@ -12,7 +12,8 @@ import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
 import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import { Info, Edit, Confirm, Cancel, Delete } from '~/backend/admin/components/Icons/Icons';
+import { Action } from '~/backend/admin/components/DataViews/types';
+import { Cancel, Confirm, Delete, Edit, Info } from '~/backend/admin/components/Icons/Icons';
 import Empty from '~/backend/admin/components/TableFull/Empty/Empty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
@@ -190,55 +191,55 @@ export default function AppointmentsTableFull() {
 		},
 	];
 
-	const actions = [
+	const actions: Action[] = [
 		{
 			id: 'view',
-			icon: () => <Info />,
+			icon: <Info />,
 			isPrimary: true,
 			label: __('View appointment details', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: (item: Appointment) => {
 				viewAppointment && viewAppointment(item);
 			},
 		},
 		{
 			id: 'edit',
-			icon: () => <Edit />,
+			icon: <Edit />,
 			isPrimary: true,
 			label: __('Edit appointment details', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: (item: Appointment) => {
 				editAppointment && editAppointment(item);
 			},
 		},
 		{
 			id: 'cancel',
-			isDestructor: true,
-			icon: () => <Cancel />,
+			isDestructive: true,
+			icon: <Cancel />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'confirmed',
 			label: __('Cancel appointment', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: (item: Appointment) => {
 				const { id, status } = item;
 				setAppointmentModal({ id, status });
 			},
 		},
 		{
 			id: 'confirm',
-			icon: () => <Confirm />,
+			icon: <Confirm />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'pending',
 			label: __('Confirm appointment', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: (item: Appointment) => {
 				confirmAppointment && confirmAppointment(item.id);
 			},
 		},
 		{
 			id: 'delete',
-			icon: () => <Delete />,
+			icon: <Delete />,
 			isPrimary: true,
 			isEligible: (item: Appointment) => item.status === 'cancelled',
 			isDestructive: true,
 			label: __('Delete appointment', 'wpappointments'),
-			callback: ([item]: [Appointment]) => {
+			callback: (item: Appointment) => {
 				const { id, status } = item;
 				setAppointmentModal({ id, status });
 			},
@@ -252,7 +253,23 @@ export default function AppointmentsTableFull() {
 
 	return (
 		<>
-			<DataViews/>
+			<DataViews
+				view={view}
+				onChangeView={(currentState) => {
+					setView(currentState);
+					setFilters({
+						...filters,
+						paged: currentState.page,
+						posts_per_page: currentState.perPage,
+					});
+
+					invalidate('getAppointments');
+				}}
+				fields={fields}
+				actions={actions}
+				data={appointments}
+				paginationInfo={paginationInfo}
+			/>
 			{appointmentModal && (
 				<AppointmentDetailsModals
 					status={appointmentModal.status}
