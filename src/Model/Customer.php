@@ -103,7 +103,7 @@ class Customer {
 	 * @param object $customer Customer data object.
 	 * @param string $password Customer password in plain text.
 	 *
-	 * @return int|\WP_Error
+	 * @return \WP_User|\WP_Error
 	 */
 	public function create( $customer, $password = null ) {
 		$email = sanitize_text_field( wp_unslash( $customer->email ), true );
@@ -178,7 +178,7 @@ class Customer {
 	 * @param int    $id       Customer ID.
 	 * @param object $customer Customer data object.
 	 *
-	 * @return int|\WP_Error
+	 * @return \WP_User|\WP_Error
 	 */
 	public function update( $id, $customer ) {
 		$valid_id = $this->validate_user_id( $id );
