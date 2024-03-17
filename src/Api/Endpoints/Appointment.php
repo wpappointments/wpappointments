@@ -180,8 +180,8 @@ class Appointment extends Controller {
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $results->appointments,
-					'postCount'   => $results->post_count,
-					'foundPosts'  => $results->found_posts,
+					'postCount'    => $results->post_count,
+					'foundPosts'   => $results->found_posts,
 					'query'        => $query,
 				),
 			)

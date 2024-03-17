@@ -55,11 +55,11 @@ class Customer {
 		}
 
 		return (object) array(
-			'customers'      => $users,
-			'totalItems'    => $query->total_users,
-			'totalPages'    => ceil( $query->total_users / $posts_per_page ),
+			'customers'    => $users,
+			'totalItems'   => $query->total_users,
+			'totalPages'   => ceil( $query->total_users / $posts_per_page ),
 			'postsPerPage' => $posts_per_page,
-			'currentPage'   => $paged,
+			'currentPage'  => $paged,
 		);
 	}
 
