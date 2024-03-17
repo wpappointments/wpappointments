@@ -73,7 +73,7 @@ function UpcomingAppointments({
 }) {
 	const appointments = useSelect(() => {
 		return select(store).getUpcomingAppointments({
-			posts_per_page: 10,
+			postsPerPage: 10,
 			status: ['confirmed', 'pending'],
 			period: 'day',
 		});

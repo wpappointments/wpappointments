@@ -26,40 +26,6 @@ class Customer {
 	);
 
 	/**
-	 * Prepare user entity
-	 *
-	 * @param \WP_User $user User object.
-	 * @param array    $meta User meta.
-	 *
-	 * @return object
-	 */
-	protected function prepare_user_entity( $user, $meta ) {
-		return (object) array(
-			'id'      => $user->ID,
-			'name'    => $user->display_name,
-			'email'   => $user->user_email,
-			'phone'   => $meta['phone'],
-			'created' => $user->user_registered,
-			'actions' => (object) array(
-				'delete' => (object) array(
-					'name'        => 'DeleteCustomer',
-					'label'       => 'Delete',
-					'method'      => 'DELETE',
-					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . ' / customer / ' . $user->ID ),
-					'isDangerous' => true,
-				),
-				'edit'   => (object) array(
-					'name'        => 'EditCustomer',
-					'label'       => 'Edit',
-					'method'      => 'PUT',
-					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . ' / customer / ' . $user->ID ),
-					'isDangerous' => false,
-				),
-			),
-		);
-	}
-
-	/**
 	 * Get all customers
 	 *
 	 * @param array $query Query params.
@@ -90,10 +56,10 @@ class Customer {
 
 		return (object) array(
 			'customers'      => $users,
-			'total_items'    => $query->total_users,
-			'total_pages'    => ceil( $query->total_users / $posts_per_page ),
-			'posts_per_page' => $posts_per_page,
-			'current_page'   => $paged,
+			'totalItems'    => $query->total_users,
+			'totalPages'    => ceil( $query->total_users / $posts_per_page ),
+			'postsPerPage' => $posts_per_page,
+			'currentPage'   => $paged,
 		);
 	}
 
@@ -193,6 +159,40 @@ class Customer {
 		}
 
 		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+	}
+
+	/**
+	 * Prepare user entity
+	 *
+	 * @param \WP_User $user User object.
+	 * @param array    $meta User meta.
+	 *
+	 * @return object
+	 */
+	protected function prepare_user_entity( $user, $meta ) {
+		return (object) array(
+			'id'      => $user->ID,
+			'name'    => $user->display_name,
+			'email'   => $user->user_email,
+			'phone'   => $meta['phone'],
+			'created' => $user->user_registered,
+			'actions' => (object) array(
+				'delete' => (object) array(
+					'name'        => 'DeleteCustomer',
+					'label'       => 'Delete',
+					'method'      => 'DELETE',
+					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . ' / customer / ' . $user->ID ),
+					'isDangerous' => true,
+				),
+				'edit'   => (object) array(
+					'name'        => 'EditCustomer',
+					'label'       => 'Edit',
+					'method'      => 'PUT',
+					'uri'         => rest_url( WPAPPOINTMENTS_API_NAMESPACE . ' / customer / ' . $user->ID ),
+					'isDangerous' => false,
+				),
+			),
+		);
 	}
 
 	/**

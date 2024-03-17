@@ -68,10 +68,10 @@ class AppointmentPost {
 
 		return (object) array(
 			'appointments'   => $appointments,
-			'total_items'    => $query->found_posts,
-			'total_pages'    => ceil( $query->found_posts / $posts_per_page ),
-			'posts_per_page' => $posts_per_page,
-			'current_page'   => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
+			'totalItems'    => $query->found_posts,
+			'totalPages'    => ceil( $query->found_posts / $posts_per_page ),
+			'postPerPage' => $posts_per_page,
+			'currentPage'   => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
 		);
 	}
 
@@ -163,8 +163,8 @@ class AppointmentPost {
 
 		return (object) array(
 			'appointments' => $appointments,
-			'post_count'   => $query->post_count,
-			'found_posts'  => $query->found_posts,
+			'postCount'   => $query->post_count,
+			'foundPosts'  => $query->found_posts,
 		);
 	}
 
@@ -234,8 +234,8 @@ class AppointmentPost {
 
 		return (object) array(
 			'appointments' => $appointments,
-			'post_count'   => $query->post_count,
-			'found_posts'  => $query->found_posts,
+			'postCount'   => $query->post_count,
+			'foundPosts'  => $query->found_posts,
 		);
 	}
 

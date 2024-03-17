@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import {
-	cancelCircleFilled,
-	check,
-	edit,
-	Icon,
-	info,
-	trash,
-} from '@wordpress/icons';
+import { cancelCircleFilled, check, edit, Icon, info, trash } from '@wordpress/icons';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from '~/backend/utils/cn';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
@@ -26,11 +19,12 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { COLORS as colors } from '~/backend/constants';
 
+
 type Fields = {
 	status: Appointment['status'] | '';
 	period: 'week' | 'month' | 'year' | 'all' | '';
 	paged: number;
-	posts_per_page: number;
+	postsPerPage: number;
 };
 
 type View = {
@@ -60,7 +54,7 @@ export default function AppointmentsTableFull() {
 		status: 'confirmed',
 		period: 'week',
 		paged: 1,
-		posts_per_page: 10,
+		postsPerPage: 10,
 	});
 
 	const { appointments, totalItems, totalPages, currentPage } =
@@ -267,7 +261,7 @@ export default function AppointmentsTableFull() {
 					setFilters({
 						...filters,
 						paged: currentState.page,
-						posts_per_page: currentState.perPage,
+						postsPerPage: currentState.perPage,
 					});
 
 					invalidate('getAppointments');
