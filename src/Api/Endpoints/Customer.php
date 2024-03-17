@@ -90,10 +90,10 @@ class Customer extends Controller {
 				'type' => 'success',
 				'data' => (object) array(
 					'customers'    => $results->customers,
-					'totalItems'   => $results->total_items,
-					'totalPages'   => $results->total_pages,
-					'postsPerPage' => $results->posts_per_page,
-					'currentPage'  => $results->current_page,
+					'totalItems'   => $results->totalItems,
+					'totalPages'   => $results->totalPages,
+					'postsPerPage' => $results->postsPerPage,
+					'currentPage'  => $results->currentPage,
 				),
 			)
 		);

@@ -24,7 +24,7 @@ type Fields = {
 	status: Appointment['status'] | '';
 	period: 'week' | 'month' | 'year' | 'all' | '';
 	paged: number;
-	postsPerPage: number;
+	posts_per_page: number;
 };
 
 type View = {
@@ -54,7 +54,7 @@ export default function AppointmentsTableFull() {
 		status: 'confirmed',
 		period: 'week',
 		paged: 1,
-		postsPerPage: 10,
+		posts_per_page: 10,
 	});
 
 	const { appointments, totalItems, totalPages, currentPage } =
@@ -248,9 +248,11 @@ export default function AppointmentsTableFull() {
 	];
 
 	const paginationInfo = {
-		totalItems: totalItems,
-		totalPages: totalPages,
+		totalItems,
+		totalPages,
 	};
+
+	console.log('paginationInfo', paginationInfo);
 
 	return (
 		<>
@@ -261,7 +263,7 @@ export default function AppointmentsTableFull() {
 					setFilters({
 						...filters,
 						paged: currentState.page,
-						postsPerPage: currentState.perPage,
+						posts_per_page: currentState.perPage,
 					});
 
 					invalidate('getAppointments');
