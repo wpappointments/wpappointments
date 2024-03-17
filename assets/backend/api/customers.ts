@@ -1,17 +1,24 @@
-import {__} from '@wordpress/i18n';
-import {Error, getErrorMessage} from '~/backend/utils/error';
-import apiFetch, {APIResponse} from '~/backend/utils/fetch';
+import { __ } from '@wordpress/i18n';
+import { missingId } from '~/backend/utils/api';
+import { Error, getErrorMessage } from '~/backend/utils/error';
+import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import {displayErrorToast, displaySuccessToast} from '~/backend/utils/toast';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
+import { Customer } from '~/backend/types';
 
-type CustomerData = {
-	name: string;
-	email: string;
-	phone: string;
-};
+export type UpdateCustomerData = Pick<
+	Customer,
+	'id' | 'name' | 'email' | 'phone'
+>;
+type CreateCustomerData = Pick<Customer, 'name' | 'email' | 'phone'>;
 
-type Response = APIResponse<{
-	customer: CustomerData & { id: number };
+type UpdateResponse = APIResponse<{
+	customer: UpdateCustomerData;
+	message: string;
+}>;
+
+type CreateResponse = APIResponse<{
+	customer: CreateCustomerData;
 	message: string;
 }>;
 
@@ -24,13 +31,13 @@ export function customersApi(options?: CustomersApiOptions) {
 	const dispatch = window.wp.data.dispatch('wpappointments');
 	const select = window.wp.data.select('wpappointments');
 
-	async function getAllCustomers() {
-		return select.getAllCustomers();
+	async function getCustomers() {
+		return select.getCustomers();
 	}
 
-	async function createCustomer(data: CustomerData) {
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+	async function createCustomer(data: CreateCustomerData) {
+		const [error, response] = await resolve<CreateResponse>(async () => {
+			const response = await apiFetch<CreateResponse>({
 				path: 'customer',
 				method: 'POST',
 				data,
@@ -44,7 +51,7 @@ export function customersApi(options?: CustomersApiOptions) {
 		}
 
 		if (response && response.type === 'error') {
-			const error:Error = {
+			const error: Error = {
 				type: 'error',
 				message: response?.data?.message || 'Unknown error',
 				data: [],
@@ -64,7 +71,82 @@ export function customersApi(options?: CustomersApiOptions) {
 			);
 
 			if (invalidateCache) {
-				invalidateCache('getAllCustomers');
+				invalidateCache('getCustomers');
+			}
+		}
+
+		return response;
+	}
+
+	async function updateCustomer(data: UpdateCustomerData) {
+		const [error, response] = await resolve<UpdateResponse>(async () => {
+			return await apiFetch<UpdateResponse>({
+				path: `customer/${data.id}`,
+				method: 'POST',
+				data,
+			});
+		});
+
+		if (error) {
+			handleError(error, 'Error updating customer');
+		}
+
+		if (response && response.type === 'error') {
+			const error: Error = {
+				type: 'error',
+				message: response?.data?.message || 'Unknown error',
+				data: [],
+			};
+
+			handleError(error, 'Error updating customer');
+		}
+
+		if (response && response.type === 'success') {
+			const { data: responseData } = response;
+			const { customer } = responseData;
+
+			dispatch.updateCustomer(customer);
+
+			displaySuccessToast(
+				__('Customer updated successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getCustomers');
+			}
+		}
+
+		return response;
+	}
+
+	async function deleteCustomer(id: number) {
+		if (missingId(id, 'Cannot delete customer')) {
+			return;
+		}
+
+		const [error, response] = await resolve<Response>(async () => {
+			const response = await apiFetch<Response>({
+				path: `customer/${id}`,
+				method: 'DELETE',
+			});
+
+			dispatch.deleteCustomer(id);
+
+			return response;
+		});
+
+		if (error) {
+			handleError(error, __('Cannot delete customer', 'wpappointments'));
+			return;
+		}
+
+		if (response) {
+			displaySuccessToast(
+				__('Customer deleted successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getCustomers');
 			}
 		}
 
@@ -78,8 +160,10 @@ export function customersApi(options?: CustomersApiOptions) {
 	}
 
 	const functions = {
-		getAllCustomers,
+		getCustomers,
 		createCustomer,
+		updateCustomer,
+		deleteCustomer,
 	} as const;
 
 	window.wpappointments.api = {

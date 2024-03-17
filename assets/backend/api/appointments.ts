@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { missingId } from '~/backend/utils/api';
 import { Error, getErrorMessage } from '~/backend/utils/error';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
@@ -57,7 +58,7 @@ export function appointmentsApi({
 	}
 
 	async function updateAppointment(id: number, data: AppointmentData) {
-		if (invalidId(id, 'Cannot update appointment')) {
+		if (missingId(id, 'Cannot update appointment')) {
 			return;
 		}
 
@@ -99,7 +100,7 @@ export function appointmentsApi({
 	}
 
 	async function cancelAppointment(id: number) {
-		if (invalidId(id, 'Cannot cancel appointment')) {
+		if (missingId(id, 'Cannot cancel appointment')) {
 			return;
 		}
 
@@ -137,7 +138,7 @@ export function appointmentsApi({
 	}
 
 	async function deleteAppointment(id: number) {
-		if (invalidId(id, 'Cannot delete appointment')) {
+		if (missingId(id, 'Cannot delete appointment')) {
 			return;
 		}
 
@@ -175,7 +176,7 @@ export function appointmentsApi({
 	}
 
 	async function confirmAppointment(id: number) {
-		if (invalidId(id, 'Cannot confirm appointment')) {
+		if (missingId(id, 'Cannot confirm appointment')) {
 			return;
 		}
 
@@ -204,28 +205,12 @@ export function appointmentsApi({
 			);
 
 			if (invalidateCache) {
-				console.log('invalidateCache');
 				invalidateCache('getAppointments');
 				invalidateCache('getUpcomingAppointments');
 			}
 		}
 
 		return response;
-	}
-
-	function invalidId(id: number, errorPrefix: string) {
-		if (!id) {
-			displayErrorToast(
-				`${errorPrefix}: ${__(
-					'Appointment ID is required.',
-					'wpappointments'
-				)}`
-			);
-
-			return true;
-		}
-
-		return false;
 	}
 
 	function handleError(error: Error, message: string) {

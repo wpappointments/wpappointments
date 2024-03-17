@@ -153,8 +153,10 @@ class Appointment extends Controller {
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $results->appointments,
-					'post_count'   => $results->post_count,
-					'found_posts'  => $results->found_posts,
+					'totalItems'   => $results->totalItems,
+					'totalPages'   => $results->totalPages,
+					'postsPerPage' => $results->postsPerPage,
+					'currentPage'  => $results->currentPage,
 					'query'        => $query,
 				),
 			)
@@ -178,8 +180,8 @@ class Appointment extends Controller {
 				'type' => 'success',
 				'data' => array(
 					'appointments' => $results->appointments,
-					'post_count'   => $results->post_count,
-					'found_posts'  => $results->found_posts,
+					'postCount'    => $results->post_count,
+					'foundPosts'   => $results->found_posts,
 					'query'        => $query,
 				),
 			)

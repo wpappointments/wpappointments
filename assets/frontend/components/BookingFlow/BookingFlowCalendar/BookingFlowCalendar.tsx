@@ -89,7 +89,8 @@ export default function BookingFlowCalendar() {
 						))}
 					</div>
 				)}
-				{calendarWithAvailability && !availabilityLoading &&
+				{calendarWithAvailability &&
+					!availabilityLoading &&
 					calendarWithAvailability.map((month, i) => (
 						<div key={i}>
 							{month.map((week, j) => (

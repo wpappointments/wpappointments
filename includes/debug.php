@@ -14,6 +14,7 @@ add_action(
 			register_post_type(
 				'appointment',
 				array(
+					'label'    => 'Appointments',
 					'public'   => true,
 					'supports' => array( 'custom-fields' ),
 				)
@@ -21,6 +22,7 @@ add_action(
 			register_post_type(
 				'wpa_schedule',
 				array(
+					'label'    => 'Schedules',
 					'public'   => true,
 					'supports' => array( 'custom-fields' ),
 				)

@@ -4,7 +4,7 @@
 		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
 		"This file is @generated automatically"
 	],
-	"content-hash": "c733300df39dae9d0dcff5173c3125b6",
+	"content-hash": "dd9ac2d8612397fcdead4f97a969682c",
 	"packages": [],
 	"packages-dev": [
 		{
@@ -1163,6 +1163,53 @@
 				"source": "https://github.com/phar-io/version/tree/3.2.1"
 			},
 			"time": "2022-02-21T01:04:05+00:00"
+		},
+		{
+			"name": "php-stubs/wordpress-stubs",
+			"version": "v6.4.3",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/php-stubs/wordpress-stubs.git",
+				"reference": "6105bdab2f26c0204fe90ecc53d5684754550e8f"
+			},
+			"dist": {
+				"type": "zip",
+				"url": "https://api.github.com/repos/php-stubs/wordpress-stubs/zipball/6105bdab2f26c0204fe90ecc53d5684754550e8f",
+				"reference": "6105bdab2f26c0204fe90ecc53d5684754550e8f",
+				"shasum": ""
+			},
+			"require-dev": {
+				"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+				"nikic/php-parser": "^4.13",
+				"php": "^7.4 || ~8.0.0",
+				"php-stubs/generator": "^0.8.3",
+				"phpdocumentor/reflection-docblock": "^5.3",
+				"phpstan/phpstan": "^1.10.49",
+				"phpunit/phpunit": "^9.5",
+				"szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.11"
+			},
+			"suggest": {
+				"paragonie/sodium_compat": "Pure PHP implementation of libsodium",
+				"symfony/polyfill-php80": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+				"szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
+			},
+			"type": "library",
+			"notification-url": "https://packagist.org/downloads/",
+			"license": [
+				"MIT"
+			],
+			"description": "WordPress function and class declaration stubs for static analysis.",
+			"homepage": "https://github.com/php-stubs/wordpress-stubs",
+			"keywords": [
+				"PHPStan",
+				"static analysis",
+				"wordpress"
+			],
+			"support": {
+				"issues": "https://github.com/php-stubs/wordpress-stubs/issues",
+				"source": "https://github.com/php-stubs/wordpress-stubs/tree/v6.4.3"
+			},
+			"time": "2024-02-11T18:56:19+00:00"
 		},
 		{
 			"name": "php-stubs/wordpress-tests-stubs",

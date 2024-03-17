@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { Card, CardHeader, CardBody } from '@wordpress/components';
+import { Card, CardBody, CardHeader } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Customer } from '~/backend/store/customers/customers.types';
+import { Customer } from '~/backend/types';
 import styles from './Summary.module.css';
 
 export type SummaryProps = {
@@ -20,14 +20,30 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 					<div className={styles.summaryCustomerName}>
 						<strong>{customer.name}</strong>
 					</div>
-					<span>
-						mail:{' '}
-						<a href={`mailto:${customer.email}`} target="_blank">
-							{customer.email}
-						</a>{' '}
-						| phone:{' '}
-						<a href={`tel:${customer.phone}`}>{customer.phone}</a>
-					</span>
+					{(customer.email || customer.phone) && (
+						<span>
+							{customer.email && (
+								<>
+									mail:{' '}
+									<a
+										href={`mailto:${customer.email}`}
+										target="_blank"
+									>
+										{customer.email}
+									</a>{' '}
+									|{' '}
+								</>
+							)}
+							{customer.phone && (
+								<>
+									phone:{' '}
+									<a href={`tel:${customer.phone}`}>
+										{customer.phone}
+									</a>
+								</>
+							)}
+						</span>
+					)}
 				</div>
 			</CardBody>
 		</Card>

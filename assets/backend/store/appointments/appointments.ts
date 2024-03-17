@@ -9,16 +9,31 @@ import { getStrictPeriodFromTimestamp } from './utils';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 type Query = Record<string, any>;
+type Response = APIResponse<AppointmentsState>;
 
 export const DEFAULT_APPOINTMENTS_STATE: AppointmentsState = {
 	appointments: [],
+	totalItems: 0,
+	totalPages: 1,
+	postsPerPage: 10,
+	currentPage: 1,
 };
 
 export const actions = {
-	setAppointments(appointments: Appointment[]) {
+	setAppointments({
+		appointments,
+		totalItems,
+		totalPages,
+		postsPerPage,
+		currentPage,
+	}: AppointmentsState) {
 		return {
 			type: 'SET_APPOINTMENTS',
 			appointments,
+			totalItems,
+			totalPages,
+			postsPerPage,
+			currentPage,
 		} as const;
 	},
 	setUpcomingAppointments(
@@ -66,8 +81,8 @@ export const actions = {
 export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_APPOINTMENTS':
-			return produce(state, (draft) => {
-				draft.appointments = action.appointments;
+			return produce(state, () => {
+				return action;
 			});
 
 		case 'SET_UPCOMING_APPOINTMENTS':
@@ -143,7 +158,7 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 
 export const selectors = {
 	getAppointments(state: State, _?: Query) {
-		return state.appointments.appointments;
+		return state.appointments;
 	},
 	getUpcomingAppointments(state: State, filters?: Query) {
 		return state.appointments.appointments.filter(
@@ -200,7 +215,7 @@ export const resolvers = {
 	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; appointments: Appointment[] },
-		APIResponse<{ appointments: Appointment[] }>
+		Response
 	> {
 		const response = yield baseActions.fetchFromAPI(
 			addQueryArgs('appointment', {
@@ -208,7 +223,7 @@ export const resolvers = {
 			})
 		);
 		const { data } = response;
-		const { appointments } = data;
-		return actions.setAppointments(appointments);
+
+		return actions.setAppointments(data);
 	},
 };
