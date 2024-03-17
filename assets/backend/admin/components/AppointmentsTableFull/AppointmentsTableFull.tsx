@@ -252,8 +252,6 @@ export default function AppointmentsTableFull() {
 		totalPages,
 	};
 
-	console.log('paginationInfo', paginationInfo);
-
 	return (
 		<>
 			<DataViews
