@@ -129,6 +129,48 @@ class Customer {
 	}
 
 	/**
+	 * Update customer
+	 *
+	 * @param int    $id       Customer ID.
+	 * @param object $customer Customer data object.
+	 *
+	 * @return \WP_User|\WP_Error
+	 */
+	public function update( $id, $customer ) {
+		$valid_id = $this->validate_user_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			return $valid_id;
+		}
+
+		$user = get_user_by( 'ID', $id );
+
+		if ( ! $user ) {
+			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
+		}
+
+		$email = sanitize_text_field( wp_unslash( $customer->email ), true );
+		$name  = sanitize_user( wp_unslash( $customer->name ), true );
+
+		$update = wp_update_user(
+			array(
+				'ID'           => $id,
+				'user_login'   => $email ? $email : $name,
+				'user_email'   => $email,
+				'display_name' => $name,
+			)
+		);
+
+		if ( is_wp_error( $update ) ) {
+			return $update;
+		}
+
+		update_user_meta( $id, 'phone', sanitize_text_field( $customer->phone ) );
+
+		return get_user_by( 'id', $id );
+	}
+
+	/**
 	 * Delete customer
 	 *
 	 * @param int $id Customer ID.
@@ -170,47 +212,5 @@ class Customer {
 		}
 
 		return $user_id;
-	}
-
-	/**
-	 * Update customer
-	 *
-	 * @param int    $id       Customer ID.
-	 * @param object $customer Customer data object.
-	 *
-	 * @return \WP_User|\WP_Error
-	 */
-	public function update( $id, $customer ) {
-		$valid_id = $this->validate_user_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
-		}
-
-		$user = get_user_by( 'ID', $id );
-
-		if ( ! $user ) {
-			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
-		}
-
-		$email = sanitize_text_field( wp_unslash( $customer->email ), true );
-		$name  = sanitize_user( wp_unslash( $customer->name ), true );
-
-		$update = wp_update_user(
-			array(
-				'ID'           => $id,
-				'user_login'   => $email ? $email : $name,
-				'user_email'   => $email,
-				'display_name' => $name,
-			)
-		);
-
-		if ( is_wp_error( $update ) ) {
-			return $update;
-		}
-
-		update_user_meta( $id, 'phone', sanitize_text_field( $customer->phone ) );
-
-		return get_user_by( 'id', $id );
 	}
 }
