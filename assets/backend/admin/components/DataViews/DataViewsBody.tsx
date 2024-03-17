@@ -29,6 +29,7 @@ export default function DataViewsBody({
 									isDestructive={action.isDestructive}
 									size="compact"
 									onClick={() => action.callback(item)}
+									key={action.id}
 								/>
 							) : null
 						)}
