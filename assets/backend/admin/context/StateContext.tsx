@@ -15,6 +15,7 @@ export function StateContextProvider({ children }: StateContextProviderProps) {
 		['getUpcomingAppointments', 0],
 		['getAppointments', 0],
 		['getAvailability', 0],
+		['getCustomers', 0],
 	]);
 
 	const getSelector = (selector: string) => {

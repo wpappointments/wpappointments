@@ -25,10 +25,9 @@ export default function AppointmentDetails() {
 		appointmentsApi({
 			invalidateCache: invalidate,
 		});
-	const { currentSlideout, closeSlideOut } = useSlideout({
+	const { currentSlideout, closeSlideOut, openSlideOut } = useSlideout({
 		id: 'view-appointment',
 	});
-	const { openSlideOut } = useSlideout();
 	const [appointmentId, setAppointmentId] = useState(0);
 
 	const { data } = currentSlideout || {};

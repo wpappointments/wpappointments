@@ -6,11 +6,13 @@ import { safeParse } from 'valibot';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
-import { Customer } from '~/backend/store/customers/customers.types';
-import { Appointment } from '~/backend/types';
-import { AvailabilityResponse, AvailabilityResponseSchema, DayCalendar } from '../frontend';
+import { Appointment, Customer } from '~/backend/types';
+import {
+	AvailabilityResponse,
+	AvailabilityResponseSchema,
+	DayCalendar,
+} from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
-
 
 type Response = APIResponse<{
 	appointment: Appointment;
@@ -72,7 +74,8 @@ export function BookingFlowContextProvider({
 	>([]);
 	const [formError, setFormError] = useState<string | null>(null);
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
-	const [availabilityLoading, setAvailabilityLoading] = useState<boolean>(true);
+	const [availabilityLoading, setAvailabilityLoading] =
+		useState<boolean>(true);
 
 	useEffect(() => {
 		if (
@@ -123,7 +126,7 @@ export function BookingFlowContextProvider({
 	}, [viewing.getMonth(), attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
-		const customer: Customer = {
+		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
 			name: `${data.firstName} ${data.lastName}`,
 			email: data.email,
 			phone: data.phone,

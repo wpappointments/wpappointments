@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="JS" type="JavascriptDebugType" uri="http://localhost:8888">
+    <mapping url="http://localhost:8888" local-file="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>

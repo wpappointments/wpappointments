@@ -92,7 +92,7 @@ class Availability {
 					$interval,
 					$end
 				);
-			} else if ( $schedule_enabled ) {
+			} elseif ( $schedule_enabled ) {
 				foreach ( $schedule_slots as $schedule_slot ) {
 					$schedule_periods[] = Schedule::convert_schedule_to_date_range( $schedule_slot, $start );
 				}

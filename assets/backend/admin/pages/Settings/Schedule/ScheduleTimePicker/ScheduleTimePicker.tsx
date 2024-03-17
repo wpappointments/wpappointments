@@ -54,7 +54,7 @@ export default function ScheduleTimePicker({
 					options={createHourOptions(
 						type,
 						schedule[day].slots.list[index].start.hour,
-						clockType || 24
+						clockType || '24'
 					)}
 					defaultValue={
 						schedule[day].slots.list[index][type].hour ?? '00'

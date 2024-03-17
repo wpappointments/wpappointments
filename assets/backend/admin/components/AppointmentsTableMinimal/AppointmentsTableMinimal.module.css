@@ -1,3 +1,8 @@
+.wrapper {
+	overflow-y: auto;
+	max-height: 190px;
+}
+
 .table {
 	width: 100%;
 	border-collapse: collapse;

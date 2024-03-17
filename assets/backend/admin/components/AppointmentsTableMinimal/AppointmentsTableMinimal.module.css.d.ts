@@ -1,4 +1,5 @@
 declare const styles:
+  & Readonly<{ "wrapper": string }>
   & Readonly<{ "table": string }>
   & Readonly<{ "table": string }>
   & Readonly<{ "table": string }>

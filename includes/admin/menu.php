@@ -41,6 +41,15 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
+		__( 'Customers', 'wpappointments' ),
+		__( 'Customers', 'wpappointments' ),
+		'activate_plugins',
+		'wpappointments-customers',
+		__NAMESPACE__ . '\customers_page'
+	);
+
+	add_submenu_page(
+		'wpappointments',
 		__( 'Settings', 'wpappointments' ),
 		__( 'Settings', 'wpappointments' ),
 		'activate_plugins',
@@ -74,6 +83,15 @@ function admin_page() {
  */
 function calendar_page() {
 	echo '<div id="wpappointments-admin" data-page="calendar"></div>';
+}
+
+/**
+ * Create customers admin page
+ *
+ * @return void
+ */
+function customers_page() {
+	echo '<div id="wpappointments-admin" data-page="customers"></div>';
 }
 
 /**

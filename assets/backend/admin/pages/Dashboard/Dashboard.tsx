@@ -1,37 +1,24 @@
-import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import { Button, Card, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { Slideout } from '~/backend/store/slideout/slideout.types';
 import { store } from '~/backend/store/store';
-import { Appointment } from '~/backend/types';
 import AppointmentsTableMinimal from '../../components/AppointmentsTableMinimal/AppointmentsTableMinimal';
 import styles from './Dashboard.module.css';
 import AppointmentDetails from '~/backend/admin/components/AppointmentDetails/AppointmentDetails';
 import AppointmentForm from '~/backend/admin/components/AppointmentForm/AppointmentForm';
-import Table from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
-import {
-	StateContextProvider,
-	useStateContext,
-} from '~/backend/admin/context/StateContext';
+import AppointmentsTableFull from '~/backend/admin/components/AppointmentsTableFull/AppointmentsTableFull';
+import CardBody from '~/backend/admin/components/CardBody/CardBody';
+import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
-import { appointmentsApi } from '~/backend/api/appointments';
 import statsPlaceholder from '~/images/stats-placeholder.png';
 import globalStyles from 'global.module.css';
 
-type Fields = {
-	status: Appointment['status'] | '';
-	period: 'week' | 'month' | 'year' | 'all' | '';
-};
-
 export default function Dashboard() {
+	// @todo refactor - move to each component
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
-	const [filters, _] = useState<Fields>({
-		status: 'confirmed',
-		period: 'week',
-	});
 
 	return (
 		<StateContextProvider>
@@ -62,11 +49,8 @@ export default function Dashboard() {
 								{__('Create New Appointment', 'wpappointments')}
 							</Button>
 						</CardHeader>
-						<CardBody style={{ backgroundColor: '#ececec' }}>
-							<DashboardAppointments
-								filters={filters}
-								openSlideOut={openSlideOut}
-							/>
+						<CardBody>
+							<DashboardAppointments />
 						</CardBody>
 					</Card>
 				</div>
@@ -78,60 +62,8 @@ export default function Dashboard() {
 	);
 }
 
-function DashboardAppointments({
-	openSlideOut,
-	filters,
-}: {
-	openSlideOut: (slideout: Slideout) => void;
-	filters: Fields;
-}) {
-	const { invalidate, getSelector } = useStateContext();
-	const { deleteAppointment, cancelAppointment, confirmAppointment } =
-		appointmentsApi({
-			invalidateCache: invalidate,
-		});
-
-	const appointments = useSelect(() => {
-		return select(store).getAppointments({
-			...filters,
-			posts_per_page: -1,
-		});
-	}, [filters, getSelector('getAppointments')]);
-
-	return (
-		<Table
-			items={appointments}
-			onEmptyStateButtonClick={() => {
-				openSlideOut({
-					id: 'appointment',
-					data: {
-						mode: 'create',
-					},
-				});
-			}}
-			onEdit={(data) => {
-				openSlideOut({
-					id: 'appointment',
-					data: {
-						selectedAppointment: data.id,
-						mode: 'edit',
-					},
-				});
-			}}
-			onView={(data) => {
-				openSlideOut({
-					id: 'view-appointment',
-					data: {
-						selectedAppointment: data.id,
-					},
-				});
-			}}
-			onCancel={cancelAppointment}
-			confirmAppointment={confirmAppointment}
-			deleteAppointment={deleteAppointment}
-			cancelAppointment={cancelAppointment}
-		/>
-	);
+function DashboardAppointments() {
+	return <AppointmentsTableFull />;
 }
 
 function UpcomingAppointments({
@@ -154,13 +86,7 @@ function UpcomingAppointments({
 					{__('Upcoming Appointments', 'wpappointments')}
 				</Text>
 			</CardHeader>
-			<CardBody
-				style={{
-					backgroundColor: '#ececec',
-					height: 215,
-					overflow: 'auto',
-				}}
-			>
+			<CardBody>
 				<AppointmentsTableMinimal
 					items={appointments}
 					onView={(data) => {

@@ -6,8 +6,8 @@ import Calendar from './Calendar/Calendar';
 import General from './General/General';
 import styles from './OnboardingWizard.module.css';
 import Schedule from './Schedule/Schedule';
-import logoIcon from '~/images/icons/logo-icon.svg';
 import gutenbergBlock from '~/images/gutenberg-block.png';
+import logoIcon from '~/images/icons/logo-icon.svg';
 
 export function OnboardingWizard() {
 	const [currentStep, setCurrentStep] = useState(0);
@@ -94,7 +94,7 @@ function AllSet() {
 				<h1 className={styles.title}>All set!</h1>
 				<p className={styles.leadText}>
 					{__(
-						'You\'re good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.',	
+						"You're good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.",
 						'wpappointments'
 					)}
 				</p>
@@ -104,7 +104,10 @@ function AllSet() {
 						'For more information about the plugin please see this walktrough video:',
 						'wpappointments'
 					)}{' '}
-					<a href="https://www.youtube.com/watch?v=0J2QdDbelmY" target="_blank">
+					<a
+						href="https://www.youtube.com/watch?v=0J2QdDbelmY"
+						target="_blank"
+					>
 						{__('Watch video', 'wpappointments')}
 					</a>
 				</p>
