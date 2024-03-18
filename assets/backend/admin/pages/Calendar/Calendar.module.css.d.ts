@@ -27,6 +27,7 @@ declare const styles:
   & Readonly<{ "confirmed": string }>
   & Readonly<{ "cancelled": string }>
   & Readonly<{ "noshow": string }>
+  & Readonly<{ "disabled": string }>
 ;
 export default styles;
 //# sourceMappingURL=./Calendar.module.css.d.ts.map

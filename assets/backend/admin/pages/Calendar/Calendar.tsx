@@ -51,7 +51,7 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
 	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
 
-	let days = [];
+	const days = [];
 
 	for (
 		let i = 2 - firstDayOfCurrentMonth;
@@ -193,10 +193,28 @@ export default function Calendar() {
 				</h1>
 				<div className={styles.topBar}>
 					<ButtonGroup>
-						<Button variant="secondary" size="compact">
+						<Button
+							variant="secondary"
+							size="compact"
+							disabled
+							className={styles.disabled}
+							title={__(
+								'Currently not available',
+								'wpappointments'
+							)}
+						>
 							{__('Day', 'wpappointments')}
 						</Button>
-						<Button variant="secondary" size="compact">
+						<Button
+							variant="secondary"
+							size="compact"
+							disabled
+							className={styles.disabled}
+							title={__(
+								'Currently not available',
+								'wpappointments'
+							)}
+						>
 							{__('Week', 'wpappointments')}
 						</Button>
 						<Button variant="primary" size="compact">
