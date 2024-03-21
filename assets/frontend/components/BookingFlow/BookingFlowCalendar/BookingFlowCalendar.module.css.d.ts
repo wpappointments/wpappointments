@@ -47,7 +47,9 @@ declare const styles:
   & Readonly<{ "calendarDayUnavailable": string }>
   & Readonly<{ "daySlots": string }>
   & Readonly<{ "daySlots": string }>
+  & Readonly<{ "daySlots": string }>
   & Readonly<{ "center": string }>
+  & Readonly<{ "right": string }>
   & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlotAvailable": string }>
