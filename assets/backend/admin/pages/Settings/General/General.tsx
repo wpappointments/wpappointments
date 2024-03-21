@@ -125,6 +125,7 @@ function FormFields() {
 					<Input
 						name="email"
 						label="Email"
+						type="email"
 						placeholder="example@example.com"
 						rules={{
 							required: true,
