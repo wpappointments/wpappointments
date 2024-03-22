@@ -25,6 +25,10 @@ TODO
 
 ## Changelog
 
+### 0.1.2
+
+- Fix unicode characters not being saved properly
+
 ### 0.0.1
 
 -   Initial release
