@@ -260,7 +260,7 @@ class Appointment extends Controller {
 			array(
 				'timestamp'   => $date,
 				'duration'    => $duration,
-				'customer'    => wp_json_encode( (object) $customer ),
+				'customer'    => wp_json_encode( (object) $customer, JSON_UNESCAPED_UNICODE ),
 				'customer_id' => $customer_id,
 				'status'      => $status,
 			)
