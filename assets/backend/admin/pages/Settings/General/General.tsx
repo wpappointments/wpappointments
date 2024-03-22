@@ -98,7 +98,9 @@ function FormFields() {
 	return (
 		<Card className={globalStyles.card}>
 			<CardHeader>
-				<Text size="title">Profile and company details</Text>
+				<Text size="title">
+					{__('Profile and company details', 'wpappointments')}
+				</Text>
 			</CardHeader>
 			<CardBody>
 				<FormFieldSet>
@@ -123,6 +125,7 @@ function FormFields() {
 					<Input
 						name="email"
 						label="Email"
+						type="email"
 						placeholder="example@example.com"
 						rules={{
 							required: true,
