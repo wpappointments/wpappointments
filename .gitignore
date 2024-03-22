@@ -3,7 +3,7 @@ build
 coverage
 vendor
 wpappointments
-wpappointments.zip
+*.zip
 .phpunit.result.cache
 .DS_Store
 htaccess
