@@ -93,6 +93,7 @@ function FormFields() {
 				<Input
 					name="email"
 					label={__('Email', 'wpappointments')}
+					type="email"
 					placeholder="example@example.com"
 					rules={{
 						required: true,
