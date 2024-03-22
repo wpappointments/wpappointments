@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP Appointments
- * Version: 0.1.1
+ * Version: 0.1.2
  *
  * @package WPAppointments
  * @since 0.0.1
