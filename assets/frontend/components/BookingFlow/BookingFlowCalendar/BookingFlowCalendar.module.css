@@ -186,6 +186,10 @@
 	justify-content: center;
 }
 
+.day-slots.right {
+	justify-content: end;
+}
+
 .day-slot {
 	position: relative;
 	height: 25px;

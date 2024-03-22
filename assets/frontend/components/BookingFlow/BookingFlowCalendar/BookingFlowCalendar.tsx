@@ -199,6 +199,7 @@ export default function BookingFlowCalendar() {
 						className={cn({
 							[styles.daySlots]: true,
 							[styles.center]: alignment === 'Center',
+							[styles.right]: alignment === 'Right',
 						})}
 					>
 						{dayAvailability.map((slot, i) => (
