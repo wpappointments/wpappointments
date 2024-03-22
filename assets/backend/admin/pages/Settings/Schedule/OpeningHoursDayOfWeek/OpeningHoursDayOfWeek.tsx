@@ -12,6 +12,7 @@ import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
 import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
 
+
 export default function OpeningHoursDayOfWeek({
 	values,
 	showCopyToAllDays = false,
@@ -98,10 +99,16 @@ export default function OpeningHoursDayOfWeek({
 						<Toggle
 							name={`${day}.enabled`}
 							onChange={(enabled) => {
-								updateWorkingHours({
+								const newValues = {
 									...values,
 									enabled,
-								});
+								};
+
+								if (!enabled) {
+									newValues.allDay = false;
+								}
+
+								updateWorkingHours(newValues);
 							}}
 							defaultChecked={true}
 						/>
@@ -112,6 +119,7 @@ export default function OpeningHoursDayOfWeek({
 							<Toggle
 								name={`${day}.allDay`}
 								onChange={(allDay) => {
+									console.log(allDay);
 									updateWorkingHours({
 										...values,
 										allDay,
