@@ -202,6 +202,7 @@ class Appointment extends Controller {
 		$date        = rest_parse_date( get_gmt_from_date( $params['date'] ) );
 		$customer    = $request->get_param( 'customer' );
 		$customer_id = $request->get_param( 'customerId' );
+		$status      = $request->get_param( 'status' );
 
 		$appointment_post = new AppointmentPost();
 		$appointment      = $appointment_post->create(
@@ -211,7 +212,7 @@ class Appointment extends Controller {
 				'duration'    => $duration,
 				'customer'    => $customer,
 				'customer_id' => $customer_id,
-				'status'      => 'confirmed',
+				'status'      => $status,
 			)
 		);
 
