@@ -7,8 +7,8 @@ import { MonthIndex, AppointmentSlideoutState, Year } from './appointment.types'
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {
-	currentMonth: 0,
-	currentYear: 2024,
+	currentMonth: new Date().getMonth() as MonthIndex,
+	currentYear: new Date().getFullYear() as Year,
 	selectedCustomer: null,
 };
 
