@@ -3,7 +3,6 @@ import { type State } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
 import { MonthIndex, AppointmentSlideoutState, Year } from './appointment.types';
 
-
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {
