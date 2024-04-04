@@ -58,8 +58,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 		};
 	}, []);
 
-	console.log(currentMonth);
-
 	function setCurrentMonth(month: number) {
 		dispatch.setCurrentMonth(month as MonthIndex);
 	}
