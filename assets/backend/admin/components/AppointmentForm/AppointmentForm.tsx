@@ -132,8 +132,18 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			setValue('duration', duration);
 			setValue('customer', JSON.stringify(customer));
 			setValue('customerId', customerId || 0);
+		} else if (defaultDate) {
+			const timeHourStart = formatTimeForPicker(defaultDate.getHours());
+			const timeMinuteStart = formatTimeForPicker(
+				defaultDate.getMinutes()
+			);
+			setValue('date', defaultDate?.toISOString());
+			setValue('datetime', defaultDate?.getTime().toString());
+			setValue('timeHourStart', timeHourStart);
+			setValue('timeMinuteStart', timeMinuteStart);
+			setValue('duration', 60);
 		}
-	}, [defaultDate, mode]);
+	}, [mode]);
 
 	const onSubmit = async (formData: AppointmentFormFields) => {
 		const date = new Date(formData.date);
@@ -275,7 +285,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 								Select time
 							</Button>
 						</FormFieldSet>
-
 						<Input
 							type="hidden"
 							name="datetime"
