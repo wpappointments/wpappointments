@@ -70,8 +70,11 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 		let startMinute = 0;
 
 		// todo: fix this TS error
+		// @ts-ignore
 		if (settings[dayOfWeek]) {
+			// @ts-ignore
 			startHour = settings[dayOfWeek].slots.list[0].start.hour;
+			// @ts-ignore
 			startMinute = settings[dayOfWeek].slots.list[0].start.minute;
 		}
 
