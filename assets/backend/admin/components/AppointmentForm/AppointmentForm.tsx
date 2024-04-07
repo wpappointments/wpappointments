@@ -89,6 +89,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const customer = watch('customer');
 
 	const defaultCustomer = customer ? JSON.parse(customer) : selectedCustomer;
+	const appointmentsSettings = useSelect(() => {
+		return select(store).getAppointmentsSettings();
+	}, []);
+	const { defaultLength } = appointmentsSettings;
 
 	const { currentMonth, currentYear } = useSelect(
 		(select) => {
@@ -141,9 +145,9 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			setValue('datetime', defaultDate?.getTime().toString());
 			setValue('timeHourStart', timeHourStart);
 			setValue('timeMinuteStart', timeMinuteStart);
-			setValue('duration', 60);
+			setValue('duration', defaultLength || 30);
 		}
-	}, [mode]);
+	}, [mode, defaultLength]);
 
 	const onSubmit = async (formData: AppointmentFormFields) => {
 		const date = new Date(formData.date);
