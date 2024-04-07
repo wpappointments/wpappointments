@@ -28,6 +28,7 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
 
+
 export type AppointmentFormFields = {
 	date: string;
 	datetime: string | null;
@@ -104,7 +105,12 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			const result = safeParse(AppointmentSchema, currentAppointment);
 
 			if (result.issues) {
-				console.warn('Appointment data is invalid', result.issues);
+				const message = result.issues
+					.map((issue) => issue.message)
+					.join(' ');
+
+				console.warn('Appointment data is invalid', message);
+
 				return;
 			}
 
