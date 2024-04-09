@@ -10,6 +10,7 @@ namespace WPAppointments\Utils;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use WPAppointments\Model\Settings;
 
 /**
  * Schedule utility class
@@ -24,14 +25,18 @@ class Schedule {
 	 * @return DatePeriod
 	 */
 	public static function convert_schedule_to_date_range( $schedule, $date ) {
-		$timezone = wp_timezone_string();
-		$start    = clone $date;
-		$start->setTime( (int) $schedule->start->hour, (int) $schedule->start->minute );
+		$settings = new Settings();
+		$use_default_timezone = $settings->get_setting( 'general', 'timezoneSiteDefault' );
+		$custom_timezone = $settings->get_setting( 'general', 'timezone' );
+		$timezone = $use_default_timezone ? wp_timezone_string() : $custom_timezone;
+
+		$start = clone $date;
 		$start->setTimezone( new \DateTimeZone( $timezone ) );
+		$start->setTime( (int) $schedule->start->hour, (int) $schedule->start->minute );
 
 		$end = clone $date;
-		$end->setTime( (int) $schedule->end->hour, (int) $schedule->end->minute );
 		$end->setTimezone( new \DateTimeZone( $timezone ) );
+		$end->setTime( (int) $schedule->end->hour, (int) $schedule->end->minute );
 
 		$interval = new DateInterval( 'PT30M' );
 		$period   = new DatePeriod( $start, $interval, $end );

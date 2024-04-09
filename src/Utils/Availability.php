@@ -21,8 +21,8 @@ class Availability {
 	/**
 	 * Return all week slots availability
 	 *
-	 * @param string    $date_start Date in ISO 8601 format.
-	 * @param string    $date_end Date in ISO 8601 format.
+	 * @param string    $date_start Date in ISO 8601 format GMT timezone.
+	 * @param string    $date_end Date in ISO 8601 format GMT timezone.
 	 * @param string    $tz Timezone string.
 	 * @param \DateTime $now Now in ISO 8601 format.
 	 *
