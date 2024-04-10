@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import { useSelect, select } from '@wordpress/data';
+import { useCallback, useEffect } from '@wordpress/element';
 import { addMinutes, format } from 'date-fns';
-import {
-	DayOpeningHours,
-	SettingsSchedule,
-} from '~/backend/store/settings/settings.types';
+import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 import Select from '~/backend/admin/components/FormField/Select/Select';
+
 
 type Props = {
 	day: keyof SettingsSchedule;
@@ -33,8 +33,29 @@ export default function ScheduleTimePicker({
 		return select(store).getAllSettings();
 	}, []);
 
-	const { schedule, appointments, general } = settings;
+	const { schedule, general } = settings;
 	const { clockType } = general;
+	const [selectedHour, setSelectedHour] = useState<number>(0);
+	const [availableMinutes, setAvailableMinutes] = useState({
+		label: '00',
+		value: '00',
+	});
+
+	const allDayOptions = createAllDayOptions(
+		timePickerPrecision,
+		clockType || '24'
+	);
+
+	useEffect(() => {
+		setAvailableMinutes(allDayOptions[selectedHour]?.hours ?? []);
+	}, [selectedHour]);
+
+	const handleMinuteChange = useCallback(
+		(value: string) => {
+			setSelectedHour(parseInt(value, 10));
+		},
+		[setSelectedHour]
+	);
 
 	return (
 		<div className={styles.timePicker}>
@@ -42,23 +63,9 @@ export default function ScheduleTimePicker({
 				<Select
 					key={`${day}.slots.list.${index}.${type}.hour`}
 					name={`${day}.slots.list.${index}.${type}.hour`}
-					onChange={(value) => {
-						updateWorkingHoursTime({
-							values: schedule[day],
-							value,
-							index,
-							type,
-							time: 'hour',
-						});
-					}}
-					options={createHourOptions(
-						type,
-						schedule[day].slots.list[index].start.hour,
-						clockType || '24'
-					)}
-					defaultValue={
-						schedule[day].slots.list[index][type].hour ?? '00'
-					}
+					onChange={handleMinuteChange}
+					options={allDayOptions}
+					defaultValue={'00'}
 					noArrow
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
@@ -74,12 +81,8 @@ export default function ScheduleTimePicker({
 							time: 'minute',
 						});
 					}}
-					options={createMinuteOptions(
-						appointments.timePickerPrecision
-					)}
-					defaultValue={
-						schedule[day].slots.list[index][type].minute ?? '00'
-					}
+					options={availableMinutes}
+					defaultValue={'00'}
 					noArrow
 				/>
 			</div>
@@ -166,6 +169,42 @@ function createMinuteOptions(precision = 30) {
 		}
 
 		options.push({
+			label: format(date, 'mm'),
+			value: format(date, 'mm'),
+		});
+	}
+
+	return options;
+}
+
+function createAllDayOptions(
+	precision: number = 60,
+	clockType: '12' | '24' = '24'
+) {
+	const options = [];
+
+	const range = new DateRange(
+		new Date(0, 0, 0, 0, 0),
+		new Date(0, 0, 0, 24, 0),
+		precision
+	);
+
+	for (const date of range) {
+		if (!date) {
+			continue;
+		}
+
+		const index = format(date, 'H');
+
+		if (!options[index]) {
+			options[index] = {
+				label: format(date, clockType === '24' ? 'HH' : 'h aa'),
+				value: format(date, 'H'),
+				hours: [],
+			};
+		}
+
+		options[index].hours.push({
 			label: format(date, 'mm'),
 			value: format(date, 'mm'),
 		});
