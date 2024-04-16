@@ -119,7 +119,6 @@ export default function OpeningHoursDayOfWeek({
 							<Toggle
 								name={`${day}.allDay`}
 								onChange={(allDay) => {
-									console.log(allDay);
 									updateWorkingHours({
 										...values,
 										allDay,
