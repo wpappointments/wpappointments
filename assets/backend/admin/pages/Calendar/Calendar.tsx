@@ -13,6 +13,7 @@ import AppointmentForm from '~/backend/admin/components/AppointmentForm/Appointm
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
+
 function getMonthName(month: number) {
 	const months = [
 		__('January', 'wpappointments'),
@@ -50,6 +51,9 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 	const firstDayOfCurrentMonthDate = new Date(year, monthIndex, 1);
 	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
 	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
+	const settings = useSelect(() => {
+		return select(store).getScheduleSettings();
+	}, []);
 
 	const days = [];
 
@@ -58,9 +62,25 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 		i < 44 - firstDayOfCurrentMonth;
 		i++
 	) {
+		const dayOfWeek = new Date(year, monthIndex, i)
+			.toLocaleDateString('en-US', { weekday: 'long' })
+			.toLowerCase();
+
+		let startHour = 0;
+		let startMinute = 0;
+
+		// todo: fix this TS error
+		// @ts-ignore
+		if (settings[dayOfWeek]) {
+			// @ts-ignore
+			startHour = settings[dayOfWeek].slots.list[0].start.hour;
+			// @ts-ignore
+			startMinute = settings[dayOfWeek].slots.list[0].start.minute;
+		}
+
 		days.push({
 			index: i,
-			start: new Date(year, monthIndex, i),
+			start: new Date(year, monthIndex, i, startHour, startMinute),
 			end: new Date(
 				new Date(year, monthIndex, i).setHours(23, 59, 59, 999)
 			),
@@ -110,7 +130,7 @@ export default function Calendar() {
 		getCalendarMonth(month, year),
 		appointments
 	);
-
+	const [defaultDate, setDefaultDate] = useState(new Date());
 	const daysOfWeek = [
 		__('Mon', 'wpappointments'),
 		__('Tue', 'wpappointments'),
@@ -285,6 +305,7 @@ export default function Calendar() {
 										))}
 										<Button
 											onClick={() => {
+												setDefaultDate(day.start);
 												openSlideOut({
 													id: 'appointment',
 													data: {
@@ -303,7 +324,7 @@ export default function Calendar() {
 				</div>
 
 				{isSlideoutOpen('view-appointment') && <AppointmentDetails />}
-				{isSlideoutOpen('appointment') && <AppointmentForm />}
+				{isSlideoutOpen('appointment') && <AppointmentForm defaultDate={defaultDate}/>}
 			</LayoutDefault>
 		</StateContextProvider>
 	);
