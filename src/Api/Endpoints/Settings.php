@@ -151,6 +151,19 @@ class Settings extends Controller {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					if ( $settings->$day->allDay ) {
+						$settings->$day->slots->list[0] = array(
+							'start' => array(
+								'hour'   => '00',
+								'minute' => '00',
+							),
+							'end'   => array(
+								'hour'   => '24',
+								'minute' => '00',
+							),
+						);
+					}
+
 					$test = wp_json_encode( $settings->$day );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
 					array_push( $schedule, $test );
