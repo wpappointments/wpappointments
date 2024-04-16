@@ -21,8 +21,8 @@ class Availability {
 	/**
 	 * Return all week slots availability
 	 *
-	 * @param string    $date_start Date in ISO 8601 format.
-	 * @param string    $date_end Date in ISO 8601 format.
+	 * @param string    $date_start Date in ISO 8601 format GMT timezone.
+	 * @param string    $date_end Date in ISO 8601 format GMT timezone.
 	 * @param string    $tz Timezone string.
 	 * @param \DateTime $now Now in ISO 8601 format.
 	 *
@@ -72,10 +72,10 @@ class Availability {
 
 		foreach ( $range as $slot ) {
 			$start = clone $slot;
-			$start->setTimezone( new \DateTimeZone( wp_timezone_string() ) );
+			$start->setTimezone( new \DateTimeZone( $timezone ) );
 			$end = clone $slot;
 			$end->add( new \DateInterval( 'PT' . $length . 'M' ) );
-			$end->setTimezone( new \DateTimeZone( wp_timezone_string() ) );
+			$end->setTimezone( new \DateTimeZone( $timezone ) );
 
 			$date_range = new \DatePeriod( $start, $interval, $end );
 
