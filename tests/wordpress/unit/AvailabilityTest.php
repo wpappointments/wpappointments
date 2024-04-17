@@ -247,7 +247,7 @@ test(
 	function () {
 		// Create 60 minutes long appointment at 9:00 on March 1st 2024.
 		$appointment = new \WPAppointments\Model\AppointmentPost();
-		$_appointment = $appointment->create(
+		$appointment->create(
 			'Noop',
 			array(
 				'timestamp'   => 1709283600, // March 1st 2024, 9:00 GMT.
