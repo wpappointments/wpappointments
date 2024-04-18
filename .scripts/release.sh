@@ -10,7 +10,7 @@ echo "Releasing version $version"
 pnpm build
 
 mv vendor vendor-temp
-pnpm composer install --no-dev
+pnpm composer install --no-dev > /dev/null 2>&1
 
 mkdir "wpappointments"
 

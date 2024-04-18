@@ -82,8 +82,8 @@ add_action( 'welcome_panel', function () {
                     <ul class="welcome-panel-list">
                         <li>🚫 No extensions available at this point, including: services, employees, locations or calendar sync</li>
                         <li>🚫 Admin calendar view - only month view</li>
-                        <li>🚫 Limited number of options in the frontent booking flow Gutenberg block</li>
-                        <li>🚫 No shortocode builder available yet. Only gutenberg block</li>
+                        <li>🚫 Limited number of options in the frontend booking flow Gutenberg block</li>
+                        <li>🚫 No shortcode builder available yet. Only gutenberg block</li>
                         <li>🚫 Email notifications are not yet editable or customizable</li>
                         <li>🚫 Only simple opening hours schedule available. No days off or holiday settings</li>
                         <li>🚫 No stats or reports available yet</li>
