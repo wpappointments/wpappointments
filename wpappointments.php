@@ -2,6 +2,9 @@
 /**
  * Plugin Name: WP Appointments
  * Version: 0.1.2
+ * Description: Next-gen appointment scheduling plugin for WordPress.
+ * Author: WP Appointments
+ * Author URI: https://wpappointments.com
  *
  * @package WPAppointments
  * @since 0.0.1
