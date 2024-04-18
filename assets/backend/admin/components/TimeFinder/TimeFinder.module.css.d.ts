@@ -13,6 +13,8 @@ declare const styles:
   & Readonly<{ "itemSelected": string }>
   & Readonly<{ "itemSelected": string }>
   & Readonly<{ "itemSelected": string }>
+  & Readonly<{ "itemTooltip": string }>
+  & Readonly<{ "itemTooltip": string }>
   & Readonly<{ "itemAvailable": string }>
   & Readonly<{ "itemAvailable": string }>
   & Readonly<{ "itemAvailable": string }>
