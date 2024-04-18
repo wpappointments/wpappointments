@@ -105,7 +105,7 @@ function AllSet() {
 						'wpappointments'
 					)}{' '}
 					<a
-						href="https://www.youtube.com/watch?v=0J2QdDbelmY"
+						href="https://wpappointments.com/"
 						target="_blank"
 					>
 						{__('Watch video', 'wpappointments')}
