@@ -17,7 +17,7 @@ export default function BookingFlowConfirmation() {
 			<p>
 				{__(
 					'Thank you for scheduling your appointment!',
-					'wpappointmetns'
+					'wpappointments'
 				)}
 			</p>
 			<p>

@@ -4,8 +4,9 @@ import { actions as availability } from './availability/availability';
 import { actions as customers } from './customers/customers';
 import { actions as notices } from './notices/notices';
 import { actions as settings } from './settings/settings';
-import { actions as appoitmentSlideoutActions } from './slideout/appointment/appointment';
+import { actions as appointmentSlideoutActions } from './slideout/appointment/appointment';
 import { actions as slideouts } from './slideout/slideout';
+
 
 export type BaseActions = typeof baseActions;
 export type FetchFromApiAction = BaseActions['fetchFromAPI'];
@@ -28,6 +29,6 @@ export default {
 	...slideouts,
 	...notices,
 	...availability,
-	...appoitmentSlideoutActions,
+	...appointmentSlideoutActions,
 	...customers,
 };
