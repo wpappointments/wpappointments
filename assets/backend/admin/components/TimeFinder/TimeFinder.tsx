@@ -382,7 +382,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 									<div className={styles.row} key={day.date}>
 										{[...day.day].map((slot, index) => {
 											return (
-												<div style={{ position: 'relative', flex: '1' }}>
 												<div
 													className={cn({
 														[styles.item]: true,
@@ -481,10 +480,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 														}
 													}}
 												>
-												</div>
-												<div className={styles.itemTooltip}>{formatTimeRangeFromSlotDate(
-													slot.dateString
-												)}</div>
 												</div>
 											);
 										})}

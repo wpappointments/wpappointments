@@ -79,19 +79,20 @@
 	font-weight: bold;
 }
 
-/* .item:hover::after {
+.item:hover::after {
 	content: attr( data-time );
 	position: absolute;
 	bottom: calc( 100% + 2px );
 	white-space: nowrap;
-	right: 0;
+	left: 0;
 	background-color: #383838;
 	color: #fff;
-	padding: 5px;
-	border-radius: 5px;
+	padding: 3px;
+	border-radius: 3px;
 	font-family: monospace;
 	font-weight: bold;
-} */
+	font-size: 9px;
+}
 
 .item-available {
 	background-color: #05d242;

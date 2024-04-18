@@ -9,6 +9,7 @@ declare const styles:
   & Readonly<{ "item": string }>
   & Readonly<{ "item": string }>
   & Readonly<{ "item": string }>
+  & Readonly<{ "item": string }>
   & Readonly<{ "itemSelected": string }>
   & Readonly<{ "itemSelected": string }>
   & Readonly<{ "itemSelected": string }>
