@@ -12,6 +12,7 @@ import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
+
 export type StartEndTimePickerProps = {
 	date: Date;
 };
@@ -83,18 +84,18 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 
 	const precision = timePickerPrecision || 30;
 	const length = defaultLength || 30;
+	const start = new Date(date);
+	start.setSeconds(0);
+	start.setMilliseconds(0);
 
 	useEffect(() => {
-		const start = new Date(date);
 		start.setHours(parseInt(timeHourStart));
 		start.setMinutes(parseInt(timeMinuteStart));
-		start.setSeconds(0);
-		start.setMilliseconds(0);
 
 		const available = checkAvailability(day, start, duration, precision);
 
 		setValue('available', available ? '1' : '0');
-	}, [day, date, timeHourStart, timeMinuteStart, duration, precision]);
+	}, [day, timeHourStart, timeMinuteStart, duration, precision]);
 
 	return (
 		<div>
@@ -156,7 +157,7 @@ function checkAvailability(
 	let slotCounter = 0;
 	let available = false;
 
-	const iterations = duration / precision;
+	const iterations = Math.ceil(duration / precision);
 
 	for (const slot of day) {
 		const slotDate = new Date(slot.dateString);
