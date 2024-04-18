@@ -1,14 +1,14 @@
-.tabs-conainer :global .components-tab-panel__tabs {
+.tabs-container :global .components-tab-panel__tabs {
 	background-color: #fff;
 	box-shadow: rgba( 0, 0, 0, 0.1 ) 0px 0px 0px 1px;
 	margin-bottom: 10px;
 }
 
-.tabs-conainer :global .components-tab-panel__tabs-item {
+.tabs-container :global .components-tab-panel__tabs-item {
 	border-bottom: 2px solid transparent;
 }
 
-.tabs-conainer :global .components-tab-panel__tabs-item.active-tab {
+.tabs-container :global .components-tab-panel__tabs-item.active-tab {
 	border-bottom-color: var(
 		--wp-components-color-accent,
 		var( --wp-admin-theme-color, #3858e9 )

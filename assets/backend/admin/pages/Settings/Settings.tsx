@@ -6,6 +6,7 @@ import ScheduleSettings from './Schedule/Schedule';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
+
 type Tab = {
 	name: string;
 	title: string;
@@ -24,9 +25,9 @@ const tabs = new Map<string, Tab>([
 		},
 	],
 	[
-		'appoinments',
+		'appointments',
 		{
-			name: 'appoinments',
+			name: 'appointments',
 			title: 'Appointments',
 			className: 'tab-appointments',
 			component: <AppointmentsSettings />,
@@ -47,7 +48,7 @@ export default function Settings() {
 	return (
 		<LayoutDefault title="Settings">
 			<TabPanel
-				className={styles.tabsConainer}
+				className={styles.tabsContainer}
 				activeClass="active-tab"
 				initialTabName={window.location.hash.replace('#', '')}
 				tabs={[...tabs.values()]}
