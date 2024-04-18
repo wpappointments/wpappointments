@@ -72,10 +72,10 @@ class Availability {
 
 		foreach ( $range as $slot ) {
 			$start = clone $slot;
-			$start->setTimezone( new \DateTimeZone( wp_timezone_string() ) );
+			$start->setTimezone( new \DateTimeZone( $timezone ) );
 			$end = clone $slot;
 			$end->add( new \DateInterval( 'PT' . $length . 'M' ) );
-			$end->setTimezone( new \DateTimeZone( wp_timezone_string() ) );
+			$end->setTimezone( new \DateTimeZone( $timezone ) );
 
 			$date_range = new \DatePeriod( $start, $interval, $end );
 
