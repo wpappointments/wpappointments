@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
 import { Button, ButtonGroup } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
@@ -356,7 +357,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 						className={styles.scrollable}
 						style={{
 							overflow: `${
-								hours === 'allDay' ? 'hidden' : 'auto'
+								hours === 'allDay' ? 'hidden' : 'scroll'
 							}`,
 						}}
 					>
@@ -478,7 +479,8 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 															);
 														}
 													}}
-												></div>
+												>
+												</div>
 											);
 										})}
 									</div>
