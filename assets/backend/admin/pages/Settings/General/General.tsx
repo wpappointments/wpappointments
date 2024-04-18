@@ -303,24 +303,10 @@ function FormFields() {
 									{
 										label: format(new Date(), 'dd/MM/yyyy'),
 										value: 'd/m/Y',
-									},
-									{ label: 'Custom', value: 'custom' },
+									}
 								]}
 							/>
 						</div>
-						{dateFormat === 'custom' && (
-							<Input
-								name="customDateFormat"
-								label={__(
-									'Custom date format',
-									'wpappointments'
-								)}
-								placeholder="Eg. Y-m-d"
-								rules={{
-									required: true,
-								}}
-							/>
-						)}
 						{dateFormat &&
 							dateFormatMap.get(dateFormat) &&
 							sprintf(
@@ -356,24 +342,10 @@ function FormFields() {
 									{
 										label: format(new Date(), 'HH:mm'),
 										value: 'H:i',
-									},
-									{ label: 'Custom', value: 'custom' },
+									}
 								]}
 							/>
 						</div>
-						{timeFormat === 'custom' && (
-							<Input
-								name="customTimeFormat"
-								label={__(
-									'Custom time format',
-									'wpappointments'
-								)}
-								placeholder="Eg. g:i a"
-								rules={{
-									required: true,
-								}}
-							/>
-						)}
 						{timeFormat &&
 							timeFormatMap.get(timeFormat) &&
 							sprintf(
