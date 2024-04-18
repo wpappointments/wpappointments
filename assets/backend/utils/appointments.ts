@@ -1,6 +1,7 @@
 import { addMinutes, differenceInMinutes } from 'date-fns';
 import { OpeningHoursSlot } from '~/backend/store/settings/settings.types';
 
+
 export function timeRangeContainsAnother(
 	timeRange: [Date, Date],
 	anotherRange: [Date, Date]
@@ -59,7 +60,7 @@ export function getRangeAvailableSlots(
 	const availableSlots = [];
 	const hourLongRange = [new Date(), addMinutes(new Date(), 60)];
 	const range = appointmentRange || hourLongRange;
-	const appoinmentLengthInMinutes = differenceInMinutes(range[1], range[0], {
+	const appointmentLengthInMinutes = differenceInMinutes(range[1], range[0], {
 		roundingMethod: 'ceil',
 	});
 
@@ -70,7 +71,7 @@ export function getRangeAvailableSlots(
 	midnightDate.setHours(0);
 	midnightDate.setMinutes(0);
 
-	const slotLenghtInMinutes = differenceInMinutes(slotEnd, slotStart, {
+	const slotLengthInMinutes = differenceInMinutes(slotEnd, slotStart, {
 		roundingMethod: 'ceil',
 	});
 
@@ -84,8 +85,8 @@ export function getRangeAvailableSlots(
 
 	for (
 		let i = slotStartMinutesFromMidnight;
-		i <= slotStartMinutesFromMidnight + slotLenghtInMinutes;
-		i += appoinmentLengthInMinutes
+		i <= slotStartMinutesFromMidnight + slotLengthInMinutes;
+		i += appointmentLengthInMinutes
 	) {
 		const hour = Math.floor(i / 60);
 		const minutes = Math.floor(i % 60);
@@ -99,7 +100,7 @@ export function getRangeAvailableSlots(
 		dateHour.setMilliseconds(0);
 
 		dateHourNext.setHours(hour);
-		dateHourNext.setMinutes(minutes + appoinmentLengthInMinutes);
+		dateHourNext.setMinutes(minutes + appointmentLengthInMinutes);
 		dateHourNext.setSeconds(0);
 		dateHourNext.setMilliseconds(0);
 
@@ -111,7 +112,7 @@ export function getRangeAvailableSlots(
 	if (extended) {
 		return maybeExtendSlotsToNextHour(
 			availableSlots,
-			appoinmentLengthInMinutes
+			appointmentLengthInMinutes
 		);
 	}
 

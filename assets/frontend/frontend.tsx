@@ -1,20 +1,11 @@
 import { __ } from '@wordpress/i18n';
-import {
-	Output,
-	array,
-	boolean,
-	date,
-	number,
-	object,
-	optional,
-	string,
-	union,
-} from 'valibot';
+import { Output, array, boolean, date, number, object, optional, string, union } from 'valibot';
 import cn from '~/backend/utils/cn';
 import BookingFlow from './components/BookingFlow/BookingFlow';
 import { BookingFlowContextProvider } from './context/BookingFlowContext';
 import styles from './frontend.module.css';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
+
 
 export const DaySlotSchema = object({
 	available: boolean(),
@@ -44,11 +35,11 @@ export type DaySlot = Output<typeof DaySlotSchema>;
 export type DayCalendar = Output<typeof DaySchema>;
 export type AvailabilityResponse = Output<typeof AvailabilityResponseSchema>;
 
-export type FronendAppProps = {
+export type FrontendAppProps = {
 	attributes: BookingFlowBlockAttributes;
 };
 
-export default function FrontendApp({ attributes }: FronendAppProps) {
+export default function FrontendApp({ attributes }: FrontendAppProps) {
 	const { alignment, width } = attributes;
 
 	return (
