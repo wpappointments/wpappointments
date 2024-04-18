@@ -190,6 +190,13 @@
 	justify-content: end;
 }
 
+.day-slots.button-group {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax(12rem, 1fr) );
+	align-items: center;
+	gap: 10px;
+}
+
 .day-slot {
 	position: relative;
 	height: 25px;
@@ -200,6 +207,15 @@
 	flex: 15px;
 	flex-grow: 0;
 	cursor: not-allowed;
+}
+
+.day-slot.is-button {
+	padding: 8px 4px;
+	height: auto;
+	font-size: 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 1px solid #e9e9e9;
 }
 
 .day-slot-available {
@@ -214,7 +230,17 @@
 	cursor: pointer;
 }
 
-.day-slot:hover::after {
+.day-slot.is-button.day-slot-available {
+	background-color: #defed2;
+	border: 1px solid #41c611;
+}
+
+.day-slot.is-button.day-slot-selected {
+	background-color: #6ff040;
+	border: 1px solid #308f0e;
+}
+
+.day-slot:not(.is-button):hover::after {
 	content: attr( data-time );
 	position: absolute;
 	bottom: calc( 100% + 5px );

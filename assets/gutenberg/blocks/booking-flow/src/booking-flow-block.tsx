@@ -2,6 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 import Edit from './edit';
 
+
 export type EditorFile = {
 	name: string;
 	contents: string;
@@ -12,6 +13,7 @@ export type BookingFlowBlockAttributes = {
 	alignment: 'Left' | 'Center' | 'Right';
 	width: 'Narrow' | 'Full';
 	trimUnavailable: boolean;
+	slotsAsButtons: boolean;
 };
 
 // @ts-ignore
