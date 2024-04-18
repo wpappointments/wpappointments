@@ -1,24 +1,16 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { addHours, addMinutes } from 'date-fns';
-import {
-	getRangesAvailableSlots,
-	timeRangesContainAnother,
-} from '~/backend/utils/appointments';
-import {
-	createTimeRange,
-	createTimeRangeFromMinutes,
-} from '~/backend/utils/datetime';
+import { addHours, format } from 'date-fns';
 import { formatTimeForPicker } from '~/backend/utils/format';
-import useSlideout from '~/backend/hooks/useSlideout';
-import { SettingsSchedule } from '~/backend/store/settings/settings.types';
+import { AvailabilityState } from '~/backend/store/availability/availability.types';
 import { store } from '~/backend/store/store';
+import { AppointmentFormFields } from '../../AppointmentForm/AppointmentForm';
 import Number from '../../FormField/Number/Number';
 import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';
-import Summary from '../Summary/Summary';
+import { useStateContext } from '~/backend/admin/context/StateContext';
 
 export type StartEndTimePickerProps = {
 	date: Date;
@@ -30,122 +22,82 @@ type Fields = {
 	duration: number;
 	datetime: string;
 	date: string;
+	available: string;
 };
 
-// TODO: use dat-fns locale for this
-const daysOfWeek = new Map<number, keyof SettingsSchedule>([
-	[0, 'sunday'],
-	[1, 'monday'],
-	[2, 'tuesday'],
-	[3, 'wednesday'],
-	[4, 'thursday'],
-	[5, 'friday'],
-	[6, 'saturday'],
-]);
-
-function test(date: Date, schedule: SettingsSchedule, length: number) {
-	const daySchedule = daysOfWeek.get(date.getDay());
-
-	if (!daySchedule) {
-		return;
-	}
-
-	const daySlots = schedule[daySchedule].slots.list;
-	const availableSlots = getRangesAvailableSlots(
-		daySlots,
-		date,
-		createTimeRangeFromMinutes(length),
-		true
-	);
-
-	const hours = new Set<string>();
-	const minutes = new Map<string, string[]>();
-	const availableRanges: [Date, Date][] = [];
-
-	for (const slots of availableSlots) {
-		slots.forEach((date, i) => {
-			const hour = formatTimeForPicker(date.getHours());
-			const minute = formatTimeForPicker(date.getMinutes());
-
-			if (i < slots.length - 1) {
-				hours.add(hour);
-
-				if (!minutes.has(hour)) {
-					minutes.set(hour, []);
-				}
-
-				minutes.get(hour)?.push(minute);
-			}
-
-			if (i === slots.length - 1) {
-				availableRanges.push([slots[0], slots[slots.length - 1]]);
-			}
-		});
-	}
-
-	return {
-		availableHours: hours,
-		availableMinutes: minutes,
-		availableRanges,
-	};
-}
-
 export default function TimePicker({ date }: StartEndTimePickerProps) {
-	const { setValue, watch } = useFormContext<Fields>();
-	const { closeCurrentSlideOut } = useSlideout();
+	const { watch } = useFormContext<AppointmentFormFields>();
 
-	const { appointments, general, schedule } = useSelect(() => {
-		return select(store).getAllSettings();
-	}, []);
-
-	const duration = watch('duration');
 	const timeHourStart = watch('timeHourStart');
 	const timeMinuteStart = watch('timeMinuteStart');
-
-	const start = new Date(date);
-	start.setHours(parseInt(timeHourStart));
-	start.setMinutes(parseInt(timeMinuteStart));
-	start.setSeconds(0);
-	start.setMilliseconds(0);
-
-	const timeHourEnd = formatTimeForPicker(
-		addMinutes(start, duration).getHours()
-	);
-	const timeMinuteEnd = formatTimeForPicker(
-		addMinutes(start, duration).getMinutes()
-	);
-
-	const { timePickerPrecision, defaultLength } = appointments;
-	const { clockType } = general;
-
-	const precision = timePickerPrecision || 15;
-	const length = defaultLength || 30;
-	const type = clockType || '24';
-
-	const { availableHours, availableMinutes, availableRanges } =
-		test(date, schedule, duration || length) || {};
-
-	const end = addMinutes(start, duration);
-
-	const isOutside = !timeRangesContainAnother(
-		availableRanges || [],
-		createTimeRange(start, end)
-	);
+	const duration = watch('duration');
 
 	const defaultStart = addHours(new Date(), 1);
 	defaultStart.setMinutes(0);
 	defaultStart.setSeconds(0);
 	defaultStart.setMilliseconds(0);
 
-	const defaultTimeHourEnd = formatTimeForPicker(
-		addMinutes(defaultStart, length).getHours()
-	);
-	const defaultTimeMinuteEnd = formatTimeForPicker(
-		addMinutes(defaultStart, length).getMinutes()
+	const { setValue } = useFormContext<Fields>();
+	const defaultHour = formatTimeForPicker(defaultStart.getHours());
+
+	useEffect(() => {
+		setValue('timeHourStart', defaultHour);
+		setValue('timeMinuteStart', '00');
+	}, []);
+
+	const { getSelector } = useStateContext();
+	const { currentMonth, currentYear } = useSelect((select) => {
+		return {
+			currentMonth: select(store).getCurrentMonth(),
+			currentYear: select(store).getCurrentYear(),
+		};
+	}, []);
+
+	const availability = useSelect(
+		(select) => {
+			return select(store).getAvailability(
+				currentMonth,
+				currentYear,
+				Intl.DateTimeFormat().resolvedOptions().timeZone,
+				getSelector('getAvailability')
+			);
+		},
+		[currentMonth, currentYear, date]
 	);
 
+	const { month } = availability;
+	const monthDay = month.find(
+		(day) => new Date(day.date).getDate() === date.getDate()
+	);
+
+	const day = monthDay?.day;
+	const hoursMap = createHoursMap(day);
+	const hours = createHourOptions(hoursMap);
+	const minutes = createMinuteOptions(hoursMap, timeHourStart);
+
+	const appointments = useSelect(() => {
+		return select(store).getAppointmentsSettings();
+	}, []);
+
+	const { timePickerPrecision, defaultLength } = appointments;
+
+	const precision = timePickerPrecision || 30;
+	const length = defaultLength || 30;
+
+	useEffect(() => {
+		const start = new Date(date);
+		start.setHours(parseInt(timeHourStart));
+		start.setMinutes(parseInt(timeMinuteStart));
+		start.setSeconds(0);
+		start.setMilliseconds(0);
+
+		const available = checkAvailability(day, start, duration, precision);
+
+		setValue('available', available ? '1' : '0');
+	}, [day, date, timeHourStart, timeMinuteStart, duration, precision]);
+
 	return (
-		<FormFieldSet>
+		<div>
 			<FormFieldSet horizontal>
 				<FormFieldSet horizontal legend="Start time">
 					<Select
@@ -157,7 +109,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 						rules={{
 							required: true,
 						}}
-						options={createHourOptions(availableHours, type)}
+						options={hours}
 						fullWidth
 					/>
 
@@ -168,11 +120,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 						rules={{
 							required: true,
 						}}
-						options={createMinuteOptions(
-							availableMinutes,
-							timeHourStart,
-							precision
-						)}
+						options={minutes}
 						fullWidth
 					/>
 				</FormFieldSet>
@@ -189,113 +137,113 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 					/>
 				</FormFieldSet>
 			</FormFieldSet>
-
-			{timeHourStart && timeMinuteStart && date && (
-				<Summary
-					date={date}
-					timeHourStart={timeHourStart}
-					timeMinuteStart={timeMinuteStart}
-					timeHourEnd={timeHourEnd || defaultTimeHourEnd}
-					timeMinuteEnd={timeMinuteEnd || defaultTimeMinuteEnd}
-					duration={duration || length}
-					isDateOutsideWorkingHours={isOutside}
-				/>
-			)}
-
-			<div style={{ marginTop: '20px' }}>
-				<Button
-					type="button"
-					variant="primary"
-					style={{
-						width: '100%',
-						justifyContent: 'center',
-						padding: '22px 0px',
-					}}
-					onClick={() => {
-						setValue('datetime', start.getTime().toString());
-						setValue('date', start.toISOString());
-						closeCurrentSlideOut();
-					}}
-				>
-					{isOutside
-						? __('Select time anyway', 'wpappointments')
-						: __('Select time', 'wpappointments')}
-				</Button>
-			</div>
-		</FormFieldSet>
-	);
+		</div>
+	)
 }
 
-export function createHourOptions(
-	availableHours: Set<string> | undefined,
-	clockType: '12' | '24' = '24',
-	minHour = 0
+type Hour = AvailabilityState['month'][0]['day'][0];
+
+function checkAvailability(
+	day: AvailabilityState['month'][0]['day'] | undefined,
+	date: Date,
+	duration: number,
+	precision: number
 ) {
+	if (!day) {
+		return false;
+	}
+
+	let slotCounter = 0;
+	let available = false;
+
+	const iterations = duration / precision;
+
+	for (const slot of day) {
+		const slotDate = new Date(slot.dateString);
+		const slotDateTime = slotDate.getTime();
+		const dateTime = date.getTime();
+
+		if (slotDateTime < dateTime) {
+			continue;
+		}
+
+		slotCounter++;
+
+		if (slotCounter > iterations) {
+			break;
+		}
+
+		if (!slot.available || !slot.inSchedule) {
+			available = false;
+			break;
+		}
+
+		available = true;
+	}
+
+	return available;
+}
+
+function createHoursMap(day: AvailabilityState['month'][0]['day'] | undefined) {
+	const hoursMap = new Map<string, Hour[]>();
+
+	if (!day) {
+		return hoursMap;
+	}
+
+	for (const hour of day) {
+		const key = format(new Date(hour.dateString), 'HH');
+
+		if (!hoursMap.has(key)) {
+			hoursMap.set(key, []);
+		}
+
+		hoursMap.get(key)?.push(hour);
+	}
+
+	return hoursMap;
+}
+
+function createHourOptions(hoursMap: Map<string, Hour[]>) {
 	const hours: {
 		label: string;
 		value: string;
 	}[] = [];
 
-	if (!availableHours) {
-		return hours;
-	}
-
-	const is24 = clockType === '24';
-
-	for (let i = minHour; i < 24; i++) {
-		let hour = i.toString().padStart(2, '0');
-		let label = hour;
-
-		if (!is24) {
-			if (i <= 12) {
-				label = i + ' am';
-			}
-
-			if (i > 12) {
-				label = i - 12 + ' pm';
-			}
-
-			if (i === 0) {
-				label = '12 pm';
-			}
-		}
+	for (const [hourLabel, hour] of hoursMap) {
+		const available = hour.some((hour) => hour.available);
 
 		hours.push({
-			label: availableHours.has(hour.toString())
-				? `⚈ ${label}`
-				: `⚆ ${label}`,
-			value: hour,
+			label: available ? `⚈ ${hourLabel}` : `⚆ ${hourLabel}`,
+			value: hourLabel,
 		});
-	}
-
-	if (!is24) {
-		hours.push(hours[0]);
-		hours.shift();
 	}
 
 	return hours;
 }
 
-export function createMinuteOptions(
-	availableMinutes: Map<string, string[]> | undefined,
-	currentHour: string,
-	precision: number = 30,
-	minMinute = 0
-) {
-	const minutes = [];
+function createMinuteOptions(hoursMap: Map<string, Hour[]>, currentHour: string) {
+	const minutes: {
+		label: string;
+		value: string;
+	}[] = [];
 
-	for (let i = minMinute; i < 60; i += precision) {
-		const minute = i.toString().padStart(2, '0');
+	const hour = hoursMap.get(currentHour);
+
+	if (!hour) {
+		return minutes;
+	}
+
+	for (const minute of hour) {
+		const minuteLabel = format(new Date(minute.dateString), 'mm');
+		const available = minute.available;
 
 		minutes.push({
-			label:
-				availableMinutes?.has(currentHour) &&
-				availableMinutes.get(currentHour)?.includes(minute)
-					? `⚈ ${minute}`
-					: `⚆ ${minute}`,
-			value: minute,
+			label: available ? `⚈ ${minuteLabel}` : `⚆ ${minuteLabel}`,
+			value: minuteLabel,
 		});
 	}
 
 	return minutes;
+
 }

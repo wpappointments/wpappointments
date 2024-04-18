@@ -9,7 +9,7 @@ namespace TestsPHP;
 
 use WPAppointments\Utils\Availability;
 
-uses( \TestsPHP\TestCase::class );
+uses( \TestsWP\TestCase::class );
 
 beforeEach(
 	function () {
@@ -305,5 +305,57 @@ test(
 		// Expect 14 available slots.
 		// 9:00 am to 5:00 pm is 16 slots, minus 2 booked slots.
 		expect( $available )->toHaveCount( 14 );
+	}
+);
+
+test(
+	'should create availability array - one day period - using only GMT timezone - 60 minutes default length - 30 minutes precision',
+	function() {
+		$settings = new \WPAppointments\Model\Settings();
+		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
+		$settings->update_setting( 'appointments', 'defaultLength', 60 );
+
+		$start_date = '2024-03-01T00:00:00.000Z';
+		$end_date   = '2024-03-01T23:59:59.000Z';
+
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime($start_date) );
+		$result = $result['slots'];
+
+		// Expect 48 slots (30 min precision).
+		expect( $result )->toBeArray();
+		expect( $result )->toHaveCount( 48 );
+
+		// First 18 slot should be unavailable.
+		expect( $result[0]['dateString'] )->toBe( '2024-03-01T00:00:00+00:00' );
+		expect( $result[0]['available'] )->toBeFalse();
+		expect( $result[17]['dateString'] )->toBe( '2024-03-01T08:30:00+00:00' );
+		expect( $result[17]['available'] )->toBeFalse();
+
+		// 9:00 am slot should be available.
+		expect( $result[18]['dateString'] )->toBe( '2024-03-01T09:00:00+00:00' );
+		expect( $result[18]['available'] )->toBeTrue();
+
+		// 4:00 pm slot should be available.
+		expect( $result[32]['dateString'] )->toBe( '2024-03-01T16:00:00+00:00' );
+		expect( $result[32]['available'] )->toBeTrue();
+		
+		// 4:30 pm slot should be unavailable.
+		expect( $result[33]['dateString'] )->toBe( '2024-03-01T16:30:00+00:00' );
+		expect( $result[33]['available'] )->toBeFalse();
+
+		// last slot should be unavailable.
+		expect( $result[47]['dateString'] )->toBe( '2024-03-01T23:30:00+00:00' );
+		expect( $result[47]['available'] )->toBeFalse();
+
+		$available = array_filter(
+			$result,
+			function ( $slot ) {
+				return true === $slot['available'];
+			}
+		);
+
+		// Expect 15 available slots.
+		// 9:00 am to 4:00 pm included.
+		expect( $available )->toHaveCount( 15 );
 	}
 );

@@ -40,6 +40,7 @@ export type AppointmentFormFields = {
 	duration: number;
 	customer: string;
 	customerId: number;
+	available: string;
 };
 
 type SubmitResponse = APIResponse<{

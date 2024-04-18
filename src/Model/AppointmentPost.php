@@ -246,7 +246,7 @@ class AppointmentPost {
 	 * @param array           $meta Appointment post meta.
 	 * @param object|int|null $customer Customer to assign to appointment or customer object to create customer.
 	 *
-	 * @return array|\WP_Error
+	 * @return object|\WP_Error
 	 */
 	public function create( $title = 'Appointment', $meta = array(), $customer = null ) {
 		if ( null !== $customer ) {
