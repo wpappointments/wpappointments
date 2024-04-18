@@ -65,6 +65,20 @@ export default function Edit({
 								setAttributes({ trimUnavailable })
 							}
 						/>
+						<ToggleControl
+							label={__(
+								'Display avaialble time slots as buttons',
+								'wpappointments'
+							)}
+							help={__(
+								'Shows the available time slots as buttons. Recommended if you have a lot of traffic from mobile devices',
+								'wpappointments'
+							)}
+							checked={attributes.slotsAsButtons}
+							onChange={(slotsAsButtons) =>
+								setAttributes({slotsAsButtons})
+							}
+						/>
 					</PanelBody>
 					<PanelBody title={__('Alignment', 'wpappointments')}>
 						<ButtonGroup>
