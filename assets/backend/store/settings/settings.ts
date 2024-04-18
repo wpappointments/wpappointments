@@ -20,11 +20,11 @@ function getDefaultOpeningHours(day: Day) {
 			list: [
 				{
 					start: {
-						hour: null,
+						hour: '09',
 						minute: null,
 					},
 					end: {
-						hour: null,
+						hour: '17',
 						minute: null,
 					},
 				},

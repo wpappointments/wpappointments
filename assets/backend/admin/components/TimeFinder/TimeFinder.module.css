@@ -1,11 +1,11 @@
 .wrapper {
 	display: flex;
-	gap: 10px;
 }
 
 .scrollable-wrapper {
 	position: relative;
 	flex: 1;
+	width: 100%;
 }
 
 .scrollable {
@@ -13,10 +13,10 @@
 	overscroll-behavior-x: contain;
 	position: relative;
 	width: 100%;
-	padding-left: 25px;
-	padding-right: 25px;
-	left: -25px;
-	right: -25px;
+	padding-left: 35px;
+	padding-right: 35px;
+	left: -35px;
+	right: -35px;
 }
 
 .rows {
@@ -42,6 +42,9 @@
 	align-items: center;
 	padding-bottom: 30px;
 	gap: 2px;
+	position: relative;
+	z-index: 1;
+	padding-right: 10px;
 }
 
 .item {
@@ -58,6 +61,24 @@
 	cursor: pointer;
 }
 
+.itemTooltip {
+	display: none;
+}
+
+.item:hover + .itemTooltip {
+	display: block;
+	position: absolute;
+	bottom: calc( 100% + 2px );
+	white-space: nowrap;
+	right: 0;
+	background-color: #383838;
+	color: #fff;
+	padding: 5px;
+	border-radius: 5px;
+	font-family: monospace;
+	font-weight: bold;
+}
+
 .item:hover::after {
 	content: attr( data-time );
 	position: absolute;
@@ -66,10 +87,11 @@
 	left: 0;
 	background-color: #383838;
 	color: #fff;
-	padding: 5px;
-	border-radius: 5px;
+	padding: 3px;
+	border-radius: 3px;
 	font-family: monospace;
 	font-weight: bold;
+	font-size: 9px;
 }
 
 .item-available {
@@ -97,7 +119,7 @@
 	position: relative;
 	flex: 1;
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 9px;
 	font-family: monospace;
 	left: -15px;
 	text-align: left;
@@ -123,7 +145,7 @@
 	font-family: monospace;
 	flex: 1;
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 9px;
 	text-align: left;
 	width: 100%;
 	display: flex;
@@ -131,6 +153,7 @@
 	align-items: center;
 	padding: 0 5px;
 	border-radius: 3px;
+	background-color: #fff;
 }
 
 .head-row-weekend {

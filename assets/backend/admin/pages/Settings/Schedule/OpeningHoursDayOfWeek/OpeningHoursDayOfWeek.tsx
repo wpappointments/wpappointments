@@ -165,6 +165,7 @@ export default function OpeningHoursDayOfWeek({
 									updateWorkingHoursTime={
 										updateWorkingHoursTime
 									}
+									minHour={slot.start.hour}
 								/>
 								{enabled && index > 0 && (
 									<Button

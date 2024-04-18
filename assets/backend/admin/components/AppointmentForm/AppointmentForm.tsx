@@ -312,6 +312,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 							timeHourEnd={timeHourEnd}
 							timeMinuteEnd={timeMinuteEnd}
 							duration={duration}
+							showAvailabilityWarning={false}
 							headerActions={
 								<Button
 									size="small"
