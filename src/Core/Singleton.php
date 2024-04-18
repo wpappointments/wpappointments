@@ -45,7 +45,7 @@ abstract class Singleton {
 	/**
 	 * Singletons should not be restorable from strings.
 	 *
-	 * @throws \Exception Thtows an exception when trying to unserialize a singleton.
+	 * @throws \Exception Throws an exception when trying to unserialize a singleton.
 	 */
 	public function __wakeup() {
 		throw new \Exception( 'Cannot unserialize a singleton.' );

@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'admin_body_class', __NAMESPACE__ . '\\body_class', 1000 );
 
 /**
- * Add custom body classes to all WP appoinemnts admin pages
+ * Add custom body classes to all WP appointments admin pages
  *
  * @param string $classes Body classes.
  *

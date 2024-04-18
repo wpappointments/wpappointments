@@ -27,7 +27,7 @@ function getMonthName(month: number) {
 		__('September', 'wpappointments'),
 		__('October', 'wpappointments'),
 		__('November', 'wpappointments'),
-		__('Decemeber', 'wpappointments'),
+		__('December', 'wpappointments'),
 	];
 
 	return months[month];

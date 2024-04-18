@@ -1,6 +1,6 @@
 # WP Appointments
 
-**Contributors:** dawidurbanski, kubitomakita, dartui, szaleq \
+**Contributors:** dawidurbanski, kubitomakita, dartui, szaleq, marcinkrzeminski \
 **Tags:** appointments, bookings, ecommerce, calendar, scheduling \
 **Requires at least:** 6.2 \
 **Tested up to:** 6.3 \
