@@ -10,6 +10,7 @@
 *assets/gutenberg/blocks/booking-flow/src/styles*
 *assets/gutenberg/blocks/booking-flow/src/*.tsx*
 *assets/styles*
+*coverage*
 *node_modules*
 *tests*
 *vendor-temp*
@@ -20,6 +21,7 @@
 .gitignore
 .lintstagedrc.mjs
 .phpcs.xml
+.phpunit.result.cache
 .prettierignore
 .prettierrc.js
 .stylelintrc.js

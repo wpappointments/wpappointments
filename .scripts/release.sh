@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -rf wpappointments.zip
+rm -rf wpappointments
+
 version=$(grep -o "Version: [0-9.]*" wpappointments.php | awk '{print $2}')
 
 echo "Releasing version $version"
@@ -7,7 +10,7 @@ echo "Releasing version $version"
 pnpm build
 
 mv vendor vendor-temp
-composer install --no-dev > /dev/null 2>&1
+pnpm composer install --no-dev
 
 mkdir "wpappointments"
 
