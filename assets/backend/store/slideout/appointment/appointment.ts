@@ -1,17 +1,13 @@
 import { produce } from 'immer';
 import { type State } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
-import {
-	MonthIndex,
-	AppointmentSlideoutState,
-	Year,
-} from './appointment.types';
+import { MonthIndex, AppointmentSlideoutState, Year } from './appointment.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
 export const DEFAULT_SLIDEOUT_STATE: AppointmentSlideoutState = {
-	curentMonth: 0,
-	currentYear: 2024,
+	currentMonth: new Date().getMonth() as MonthIndex,
+	currentYear: new Date().getFullYear() as Year,
 	selectedCustomer: null,
 };
 
@@ -46,7 +42,7 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 	switch (action.type) {
 		case 'SET_CURRENT_MONTH':
 			return produce(state, (draft) => {
-				draft.curentMonth = action.month;
+				draft.currentMonth = action.month;
 			});
 
 		case 'SET_CURRENT_YEAR':
@@ -66,7 +62,7 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 
 export const selectors = {
 	getCurrentMonth(state: State) {
-		return state.appointmentSlideout.curentMonth;
+		return state.appointmentSlideout.currentMonth;
 	},
 	getCurrentYear(state: State) {
 		return state.appointmentSlideout.currentYear;

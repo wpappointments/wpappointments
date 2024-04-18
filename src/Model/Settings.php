@@ -260,8 +260,23 @@ class Settings {
 	 * @return array
 	 */
 	public function get_setting( $category, $name = null ) {
-		$option = get_option( 'wpappointments_' . $category . '_' . $name );
+		$option = $this->get( 'wpappointments_' . $category . '_' . $name );
 
 		return $option;
+	}
+	
+	/**
+	 * Update setting
+	 * 
+	 * @param string $category Settings category ('general', 'schedules').
+	 * @param string $name Setting key.
+	 * @param mixed $value Setting value.
+	 * 
+	 * @return mixed
+	 */
+	public function update_setting( $category, $name, $value ) {
+		update_option( 'wpappointments_' . $category . '_' . $name, $value );
+
+		return $this->get_setting( $category, $name );
 	}
 }

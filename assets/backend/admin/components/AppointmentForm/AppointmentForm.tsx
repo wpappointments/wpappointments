@@ -28,6 +28,7 @@ import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { AppointmentSchema } from '~/backend/schemas';
 
+
 export type AppointmentFormFields = {
 	date: string;
 	datetime: string | null;
@@ -39,6 +40,7 @@ export type AppointmentFormFields = {
 	duration: number;
 	customer: string;
 	customerId: number;
+	available: string;
 };
 
 type SubmitResponse = APIResponse<{
@@ -88,6 +90,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const customer = watch('customer');
 
 	const defaultCustomer = customer ? JSON.parse(customer) : selectedCustomer;
+	const appointmentsSettings = useSelect(() => {
+		return select(store).getAppointmentsSettings();
+	}, []);
+	const { defaultLength } = appointmentsSettings;
 
 	const { currentMonth, currentYear } = useSelect(
 		(select) => {
@@ -104,7 +110,12 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			const result = safeParse(AppointmentSchema, currentAppointment);
 
 			if (result.issues) {
-				console.warn('Appointment data is invalid', result.issues);
+				const message = result.issues
+					.map((issue) => issue.message)
+					.join(' ');
+
+				console.warn('Appointment data is invalid', message);
+
 				return;
 			}
 
@@ -126,8 +137,18 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			setValue('duration', duration);
 			setValue('customer', JSON.stringify(customer));
 			setValue('customerId', customerId || 0);
+		} else if (defaultDate) {
+			const timeHourStart = formatTimeForPicker(defaultDate.getHours());
+			const timeMinuteStart = formatTimeForPicker(
+				defaultDate.getMinutes()
+			);
+			setValue('date', defaultDate?.toISOString());
+			setValue('datetime', defaultDate?.getTime().toString());
+			setValue('timeHourStart', timeHourStart);
+			setValue('timeMinuteStart', timeMinuteStart);
+			setValue('duration', defaultLength || 30);
 		}
-	}, [defaultDate, mode]);
+	}, [mode, defaultLength]);
 
 	const onSubmit = async (formData: AppointmentFormFields) => {
 		const date = new Date(formData.date);
@@ -269,7 +290,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 								Select time
 							</Button>
 						</FormFieldSet>
-
 						<Input
 							type="hidden"
 							name="datetime"

@@ -16,6 +16,7 @@
 }
 
 .summary-row-error {
-	background-color: #d52020;
-	color: #fff;
+	margin-top: 5px;
+	border: 1px solid #d52020;
+	color: #d52020;
 }

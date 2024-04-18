@@ -21,8 +21,8 @@ class Availability {
 	/**
 	 * Return all week slots availability
 	 *
-	 * @param string    $date_start Date in ISO 8601 format.
-	 * @param string    $date_end Date in ISO 8601 format.
+	 * @param string    $date_start Date in ISO 8601 format GMT timezone.
+	 * @param string    $date_end Date in ISO 8601 format GMT timezone.
 	 * @param string    $tz Timezone string.
 	 * @param \DateTime $now Now in ISO 8601 format.
 	 *
@@ -70,14 +70,17 @@ class Availability {
 
 		$slots = array();
 
+		$appointment_length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$appointment_length_interval = new \DateInterval( 'PT' . $appointment_length . 'M' );
+
 		foreach ( $range as $slot ) {
 			$start = clone $slot;
 			$start->setTimezone( new \DateTimeZone( $timezone ) );
 			$end = clone $slot;
-			$end->add( new \DateInterval( 'PT' . $length . 'M' ) );
+			$end->add( new \DateInterval( 'PT' . $appointment_length . 'M' ) );
 			$end->setTimezone( new \DateTimeZone( $timezone ) );
 
-			$date_range = new \DatePeriod( $start, $interval, $end );
+			$date_range = new \DatePeriod( $start, $appointment_length_interval, $end );
 
 			$weekday          = strtolower( $start->format( 'l' ) );
 			$schedule_slots   = $schedule->$weekday->slots->list;
