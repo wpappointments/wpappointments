@@ -61,11 +61,11 @@ class Plugin extends Core\Singleton {
 								'list' => array(
 									array(
 										'start' => array(
-											'hour'   => null,
+											'hour' => '09',
 											'minute' => null,
 										),
 										'end'   => array(
-											'hour'   => null,
+											'hour' => '17',
 											'minute' => null,
 										),
 									),
@@ -93,6 +93,7 @@ class Plugin extends Core\Singleton {
 
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
 		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
+		update_option( 'wpappointments_general_timezoneSiteDefault', 1 );
 	}
 
 	/**
