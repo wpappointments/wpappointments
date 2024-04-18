@@ -39,6 +39,8 @@ function ScheduleSettings() {
 	const onSubmit = async (data: ScheduleFormFields) => {
 		const days = Object.keys(data) as Array<keyof typeof data>;
 
+		console.log('data', data);
+
 		for (const day of days) {
 			if (!('slots' in data[day])) {
 				data[day].slots = {

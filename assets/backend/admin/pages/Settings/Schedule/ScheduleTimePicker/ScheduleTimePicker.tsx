@@ -68,7 +68,7 @@ export default function ScheduleTimePicker({
 					name={`${day}.slots.list.${index}.${type}.hour`}
 					onChange={handleMinuteChange}
 					options={allDayOptions}
-					defaultValue={'00'}
+					defaultValue={schedule[day].slots.list[index][type].hour}
 					noArrow
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
@@ -85,7 +85,7 @@ export default function ScheduleTimePicker({
 						});
 					}}
 					options={availableMinutes}
-					defaultValue={'00'}
+					defaultValue={schedule[day].slots.list[index][type].minute}
 					noArrow
 				/>
 			</div>
@@ -147,7 +147,7 @@ function createAllDayOptions(
 		if (!options[index]) {
 			options[index] = {
 				label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
-				value: format(date, 'H'),
+				value: format(date, 'HH'),
 				hours: [],
 			};
 		}

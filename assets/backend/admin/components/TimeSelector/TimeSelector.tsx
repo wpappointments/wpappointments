@@ -129,7 +129,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					/>
 				)}
 
-				<Input type="hidden" name="available" defaultValue="1" />
+				<Input type="text" name="available" defaultValue="1" />
 
 				<div style={{ marginTop: '20px' }}>
 					<Button
