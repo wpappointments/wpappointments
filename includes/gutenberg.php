@@ -26,3 +26,35 @@ add_action( 'init', __NAMESPACE__ . '\\blocks' );
 function blocks() {
 	register_block_type( WPAPPOINTMENTS_PLUGIN_DIR_PATH . 'assets/gutenberg/blocks/booking-flow/src' );
 }
+
+/**
+ * Register block category
+ *
+ * @param array $categories Block categories.
+ *
+ * @return array
+ */
+if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
+	add_filter( 'block_categories_all', __NAMESPACE__ . '\\register_category' );
+} else {
+	add_filter( 'block_categories', __NAMESPACE__ . '\\register_category' );
+}
+
+/**
+ * Register block category
+ *
+ * @param array $categories Block categories.
+ *
+ * @return array
+ */
+function register_category( $categories ) {
+	return array_merge(
+		array(
+			array(
+				'slug'  => 'wpappointments',
+				'title' => __( 'WP Appointments', 'wpappointments' ),
+			),
+		),
+		$categories
+	);
+}
