@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
 import { addHours, format } from 'date-fns';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import { AvailabilityState } from '~/backend/store/availability/availability.types';

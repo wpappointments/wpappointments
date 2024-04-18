@@ -5,6 +5,7 @@ import { Hooks } from '@wordpress/hooks';
 import 'little-state-machine';
 import type { AppointmentsApi } from '~/backend/api/appointments';
 
+
 declare global {
 	interface Window {
 		ReactDOM: ReactDOM & {
@@ -28,9 +29,14 @@ declare global {
 				timezones: string[];
 				startOfWeek: number;
 				siteTimezone: string;
-				formatMaps: Record<string, string>;
-				formats: Record<string, string>;
-				formatsJs: Record<string, string>;
+				formatMaps: Record< string, string >;
+				formats: Record< string, string >;
+				formatsJs: Record< string, string >;
+			};
+			settings: {
+				appointments: {
+					defaultLength: number;
+				};
 			};
 		};
 		wp: any;

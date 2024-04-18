@@ -48,12 +48,23 @@ declare const styles:
   & Readonly<{ "daySlots": string }>
   & Readonly<{ "daySlots": string }>
   & Readonly<{ "daySlots": string }>
+  & Readonly<{ "daySlots": string }>
   & Readonly<{ "center": string }>
   & Readonly<{ "right": string }>
+  & Readonly<{ "buttonGroup": string }>
   & Readonly<{ "daySlot": string }>
   & Readonly<{ "daySlot": string }>
+  & Readonly<{ "daySlot": string }>
+  & Readonly<{ "daySlot": string }>
+  & Readonly<{ "daySlot": string }>
+  & Readonly<{ "isButton": string }>
+  & Readonly<{ "isButton": string }>
+  & Readonly<{ "isButton": string }>
+  & Readonly<{ "isButton": string }>
   & Readonly<{ "daySlotAvailable": string }>
   & Readonly<{ "daySlotAvailable": string }>
+  & Readonly<{ "daySlotAvailable": string }>
+  & Readonly<{ "daySlotSelected": string }>
   & Readonly<{ "daySlotSelected": string }>
   & Readonly<{ "timeSlotHeader": string }>
   & Readonly<{ "error": string }>

@@ -20,6 +20,10 @@
 		"trimUnavailable": {
 			"type": "boolean",
 			"default": true
+		},
+		"slotsAsButtons": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"textdomain": "wpappointments",

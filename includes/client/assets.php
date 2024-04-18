@@ -42,6 +42,11 @@ function scripts() {
 				'url'       => esc_url_raw( trailingslashit( rest_url( WPAPPOINTMENTS_API_NAMESPACE ) ) ),
 			),
 			'date' => create_date_settings_array(),
+			'settings' => array(
+				'appointments' => array(
+					'defaultLength' => get_option( 'wpappointments_appointments_defaultLength', 30 ),
+				),
+			),
 		)
 	);
 }

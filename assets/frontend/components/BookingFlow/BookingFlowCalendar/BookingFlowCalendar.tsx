@@ -1,10 +1,12 @@
 import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { chevronLeft, chevronRight } from '@wordpress/icons';
-import { addDays, addYears, format } from 'date-fns';
+import { addDays, addMinutes, addYears, format } from 'date-fns';
 import cn from '~/backend/utils/cn';
+import { formatTime } from '~/backend/utils/i18n';
 import styles from './BookingFlowCalendar.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+
 
 export default function BookingFlowCalendar() {
 	const {
@@ -35,7 +37,11 @@ export default function BookingFlowCalendar() {
 		formState: { errors },
 	} = form;
 
-	const { alignment } = attributes;
+	const { alignment, slotsAsButtons } = attributes;
+	const {
+		wpappointments: { settings },
+	} = window;
+	const defaultLength = settings?.appointments?.defaultLength || 30;
 
 	const datetime = watch('datetime');
 	const currentMonth = format(viewing, 'LLLL');
@@ -200,6 +206,7 @@ export default function BookingFlowCalendar() {
 							[styles.daySlots]: true,
 							[styles.center]: alignment === 'Center',
 							[styles.right]: alignment === 'Right',
+							[styles.buttonGroup]: slotsAsButtons,
 						})}
 					>
 						{dayAvailability.map((slot, i) => (
@@ -219,6 +226,7 @@ export default function BookingFlowCalendar() {
 								type="button"
 								className={cn({
 									[styles.daySlot]: true,
+									[styles.isButton]: slotsAsButtons,
 									[styles.daySlotAvailable]: slot.available,
 									[styles.daySlotSelected]:
 										datetime &&
@@ -227,7 +235,13 @@ export default function BookingFlowCalendar() {
 										).toISOString() === datetime,
 								})}
 								data-time={slot.time}
-							></button>
+							>
+								{slotsAsButtons && (
+									<>
+										{slot.time} - {formatTime(addMinutes(slot.timestamp, defaultLength))}
+									</>
+								)}
+							</button>
 						))}
 					</div>
 					{datetime && (
