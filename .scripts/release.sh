@@ -13,7 +13,7 @@ mkdir "wpappointments"
 
 rsync -av --exclude=wpappointments --exclude-from=.zipignore . wpappointments
 
-zip -qr "wpappointments-$version.zip" wpappointments/* -x@.zipignore
+zip -qr "wpappointments.zip" wpappointments/* -x@.zipignore
 
 rm -rf "wpappointments"
 
