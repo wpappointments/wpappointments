@@ -22,6 +22,12 @@ type Props = {
 	}) => void;
 };
 
+type Option = {
+	label: string;
+	value: string;
+	hours?: { label: string; value: string }[];
+};
+
 export default function ScheduleTimePicker({
 	day,
 	index,
@@ -36,10 +42,7 @@ export default function ScheduleTimePicker({
 	const { schedule, general } = settings;
 	const { clockType } = general;
 	const [selectedHour, setSelectedHour] = useState<number>(0);
-	const [availableMinutes, setAvailableMinutes] = useState({
-		label: '00',
-		value: '00',
-	});
+	const [availableMinutes, setAvailableMinutes] = useState<Option[]>([]);
 
 	const allDayOptions = createAllDayOptions(
 		timePickerPrecision,
@@ -122,66 +125,11 @@ class DateRange {
 	}
 }
 
-function createHourOptions(
-	type: 'start' | 'end',
-	minHour: string | null,
-	clockType: '12' | '24' = '24'
-) {
-	const options = [];
-	let min = 0;
-
-	if (minHour && type === 'end') {
-		min = parseInt(minHour, 10);
-	}
-
-	const range = new DateRange(
-		new Date(0, 0, 0, min, 0),
-		new Date(0, 0, 0, 24, 0),
-		60
-	);
-
-	for (const date of range) {
-		if (!date) {
-			continue;
-		}
-
-		options.push({
-			label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
-			value: format(date, 'HH'),
-		});
-	}
-
-	return options;
-}
-
-function createMinuteOptions(precision = 30) {
-	const options = [];
-
-	const range = new DateRange(
-		new Date(0, 0, 0, 0, 0),
-		new Date(0, 0, 0, 0, 60),
-		precision
-	);
-
-	for (const date of range) {
-		if (!date) {
-			continue;
-		}
-
-		options.push({
-			label: format(date, 'mm'),
-			value: format(date, 'mm'),
-		});
-	}
-
-	return options;
-}
-
 function createAllDayOptions(
 	precision: number = 60,
 	clockType: '12' | '24' = '24'
 ) {
-	const options = [];
+	const options: Option[] = [];
 
 	const range = new DateRange(
 		new Date(0, 0, 0, 0, 0),
@@ -194,17 +142,23 @@ function createAllDayOptions(
 			continue;
 		}
 
-		const index = format(date, 'H');
+		const index = parseInt(format(date, 'H'));
 
 		if (!options[index]) {
 			options[index] = {
-				label: format(date, clockType === '24' ? 'HH' : 'h aa'),
+				label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
 				value: format(date, 'H'),
 				hours: [],
 			};
 		}
 
-		options[index].hours.push({
+		const hours = options[index].hours;
+
+		if (!hours) {
+			return options;
+		}
+
+		hours.push({
 			label: format(date, 'mm'),
 			value: format(date, 'mm'),
 		});
