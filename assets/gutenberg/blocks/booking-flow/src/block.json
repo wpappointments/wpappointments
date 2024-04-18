@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "wpappointments/booking-flow",
 	"category": "wpappointments",
-	"title": "Boooking Flow",
+	"title": "Booking Flow",
 	"attributes": {
 		"flowType": {
 			"type": "string",

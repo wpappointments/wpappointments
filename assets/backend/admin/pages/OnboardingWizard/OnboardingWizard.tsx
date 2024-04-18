@@ -101,7 +101,7 @@ function AllSet() {
 				<hr style={{ width: 80 }} />
 				<p className={styles.leadText}>
 					{__(
-						'For more information about the plugin please see this walktrough video:',
+						'For more information about the plugin please see this walkthrough video:',
 						'wpappointments'
 					)}{' '}
 					<a
@@ -173,7 +173,7 @@ function OnboardingWizardStep2({ setCurrentStep }: StepProps) {
 				</h1>
 				<p className={styles.leadText}>
 					{__(
-						'In the free version you can set up to one appointment. Sepcify the lenght and tell us in which intervals people can book.',
+						'In the free version you can set up to one appointment. Specify the length and tell us in which intervals people can book.',
 						'wpappointments'
 					)}
 				</p>

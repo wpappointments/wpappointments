@@ -115,7 +115,7 @@ export default function OpeningHoursDayOfWeek({
 					</div>
 					{enabled && (
 						<div className={styles.allDayLabel}>
-							<span>{__('All day', 'wpappointnents')}:</span>
+							<span>{__('All day', 'wpappointments')}:</span>
 							<Toggle
 								name={`${day}.allDay`}
 								onChange={(allDay) => {
