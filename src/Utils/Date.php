@@ -61,7 +61,7 @@ class Date {
 		$range_end      = $range->getEndDate();
 		$range_in_start = $range_in->getStartDate();
 		$range_in_end   = $range_in->getEndDate();
-		return $range_start < $range_in_end && $range_end > $range_in_start;
+		return $range_start >= $range_in_start && $range_end <= $range_in_end;
 	}
 
 	/**
