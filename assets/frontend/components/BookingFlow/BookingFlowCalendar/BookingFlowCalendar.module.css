@@ -190,6 +190,13 @@
 	justify-content: end;
 }
 
+.day-slots.button-group {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax(12rem, 1fr) );
+	align-items: center;
+	gap: 10px;
+}
+
 .day-slot {
 	position: relative;
 	height: 25px;
@@ -200,6 +207,14 @@
 	flex: 15px;
 	flex-grow: 0;
 	cursor: not-allowed;
+}
+
+.day-slot.is-button {
+	padding: 20px 10px;
+	height: auto;
+	font-size: 14px;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
 .day-slot-available {
@@ -214,7 +229,7 @@
 	cursor: pointer;
 }
 
-.day-slot:hover::after {
+.day-slot:not(.is-button):hover::after {
 	content: attr( data-time );
 	position: absolute;
 	bottom: calc( 100% + 5px );
