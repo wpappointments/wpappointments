@@ -25,7 +25,7 @@ class Customer extends Controller {
 	 */
 	public static function init() {
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/customer',
 			array(
 				array(
@@ -37,7 +37,7 @@ class Customer extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/customer',
 			array(
 				array(
@@ -49,7 +49,7 @@ class Customer extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/customer/(?P<id>\d+)',
 			array(
 				array(
@@ -61,7 +61,7 @@ class Customer extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/customer/(?P<id>\d+)',
 			array(
 				array(

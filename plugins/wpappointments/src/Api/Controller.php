@@ -16,7 +16,7 @@ use WPAppointments\Core\PluginInfo;
  * Endpoint controller
  */
 class Controller {
-	const ROUTE_NAMESPACE = PluginInfo::get_api_namespace();
+	const API_NAMESPACE = PluginInfo::API_NAMESPACE;
 
 	/**
 	 * Init method stub

@@ -26,7 +26,7 @@ class Appointment extends Controller {
 	 */
 	public static function init() {
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment',
 			array(
 				array(
@@ -40,7 +40,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment/upcoming',
 			array(
 				array(
@@ -54,7 +54,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment',
 			array(
 				array(
@@ -68,7 +68,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment-public',
 			array(
 				array(
@@ -80,7 +80,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment/(?P<id>\d+)',
 			array(
 				array(
@@ -94,7 +94,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment/(?P<id>\d+)/cancel',
 			array(
 				array(
@@ -108,7 +108,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment/(?P<id>\d+)',
 			array(
 				array(
@@ -122,7 +122,7 @@ class Appointment extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/appointment/(?P<id>\d+)/confirm',
 			array(
 				array(

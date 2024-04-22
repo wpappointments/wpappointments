@@ -23,7 +23,7 @@ class Ping extends Controller {
 	 */
 	public static function init() {
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/ping',
 			array(
 				array(
@@ -35,7 +35,7 @@ class Ping extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/ping-error',
 			array(
 				array(
