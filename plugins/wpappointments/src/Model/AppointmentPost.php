@@ -70,7 +70,7 @@ class AppointmentPost {
 			'appointments' => $appointments,
 			'totalItems'   => $query->found_posts,
 			'totalPages'   => ceil( $query->found_posts / $posts_per_page ),
-			'postPerPage'  => $posts_per_page,
+			'postsPerPage' => $posts_per_page,
 			'currentPage'  => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
 		);
 	}
