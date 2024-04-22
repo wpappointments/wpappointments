@@ -24,7 +24,7 @@ class Settings extends Controller {
 	 */
 	public static function init() {
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/settings',
 			array(
 				array(
@@ -38,7 +38,7 @@ class Settings extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/settings/(?P<category>\w+)',
 			array(
 				array(
@@ -52,7 +52,7 @@ class Settings extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/settings/(?P<category>\w+)',
 			array(
 				array(
@@ -66,7 +66,7 @@ class Settings extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/settings/(?P<category>\w+)/(?P<key>\w+)',
 			array(
 				array(

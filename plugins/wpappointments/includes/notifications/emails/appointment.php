@@ -6,8 +6,6 @@
  * @since 0.0.1
  */
 
-namespace WPAppointments\Notifications\Emails;
-
 use WPAppointments\Core\PluginInfo;
 use WPAppointments\Model\Settings;
 

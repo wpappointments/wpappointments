@@ -27,7 +27,7 @@ class TimeFinder extends Controller {
 	 */
 	public static function init() {
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/availability',
 			array(
 				array(
@@ -39,7 +39,7 @@ class TimeFinder extends Controller {
 		);
 
 		register_rest_route(
-			static::ROUTE_NAMESPACE,
+			static::API_NAMESPACE,
 			'/calendar-availability',
 			array(
 				array(
