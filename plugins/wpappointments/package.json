@@ -1,0 +1,51 @@
+{
+	"name": "@wpappointments/wpappointments",
+	"version": "0.0.1",
+	"description": "",
+	"scripts": {
+		"build": "pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
+		"build:fe": "pnpm css-types & wp-scripts build assets/frontend/frontend.tsx",
+		"dev": "pnpm css-types-watch & wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
+		"dev:hot": "pnpm css-types-watch & wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
+		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly",
+		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch"
+	},
+	"author": "",
+	"license": "GPL-3.0-only",
+	"devDependencies": {
+		"@svgr/webpack": "^8.1.0",
+		"@types/react": "^18.2.55",
+		"@types/react-dom": "^18.2.19",
+		"@types/wordpress__block-editor": "^11.5.10",
+		"@types/wordpress__blocks": "^12.5.13",
+		"@wordpress/scripts": "^27.2.0",
+		"happy-css-modules": "^2.1.2",
+		"postcss": "^8.4.35",
+		"sass": "^1.70.0",
+		"ts-jest": "^29.1.2",
+		"typescript": "^5.3.3",
+		"url-loader": "^4.1.1"
+	},
+	"dependencies": {
+		"@wordpress/api-fetch": "^6.48.0",
+		"@wordpress/block-editor": "^12.19.1",
+		"@wordpress/blocks": "^12.28.1",
+		"@wordpress/components": "^26.0.0",
+		"@wordpress/data": "^9.21.0",
+		"@wordpress/dataviews": "^0.7.0",
+		"@wordpress/date": "^4.51.0",
+		"@wordpress/element": "^5.28.0",
+		"@wordpress/hooks": "^3.51.0",
+		"@wordpress/i18n": "^4.51.0",
+		"@wordpress/icons": "^9.42.0",
+		"@wordpress/url": "^3.52.0",
+		"date-fns": "^3.3.1",
+		"immer": "^10.0.3",
+		"obj-str": "^1.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-hook-form": "^7.50.1",
+		"use-lilius": "^2.0.4",
+		"valibot": "^0.28.1"
+	}
+}

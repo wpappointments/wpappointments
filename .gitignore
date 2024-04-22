@@ -2,10 +2,12 @@ node_modules
 build
 coverage
 vendor
-wpappointments
-*.zip
-.phpunit.result.cache
-.DS_Store
 htaccess
-wp-includes
+cache
+.phpunit.cache
+.DS_Store
+.phpunit.result.cache
 .wp-env.override.json
+*.zip
+*.css.d.ts
+*.css.d.ts.map

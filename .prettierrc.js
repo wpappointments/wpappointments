@@ -1,6 +1,6 @@
 // Import the default config file and expose it in the project root.
 // Useful for editor integrations.
-const config = require( '@wordpress/prettier-config' );
+const config = require('@wordpress/prettier-config');
 
 /** @type {import("prettier").Config} */
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
 		'(.*).module.css',
 		'.svg',
 	],
-	plugins: [ '@trivago/prettier-plugin-sort-imports' ],
+	plugins: ['@trivago/prettier-plugin-sort-imports'],
 	overrides: [
 		{
 			files: [

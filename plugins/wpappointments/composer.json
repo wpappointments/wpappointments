@@ -1,0 +1,16 @@
+{
+	"name": "wpappointments/wpappointments",
+	"type": "wordpress-plugin",
+	"autoload": {
+		"psr-4": {
+			"WPAppointments\\": "src/",
+			"Tests": "tests/php/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Appsy sp. z o.o.",
+			"email": "contact@wpappointments.com"
+		}
+	]
+}
