@@ -13,7 +13,16 @@
 		<exclude-pattern>/src/*\.php</exclude-pattern>
 		<exclude-pattern>/tests/*\.php</exclude-pattern>
 	</rule>
+
 	<rule ref="WordPress-Core">
 		<exclude name="WordPress.DB.SlowDBQuery" />
 	</rule>
+
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="exact" value="true" />
+		</properties>
+	</rule>
+
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
 </ruleset>

@@ -1,7 +1,0 @@
-{
-	"config": {
-		"WPAPPOINTMENTS_DEBUG": true,
-		"WPAPPOINTMENTS_PURGE": false,
-		"WPAPPOINTMENTS_PURGE_WIZARD": false
-	}
-}
