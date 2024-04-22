@@ -1,32 +1,24 @@
 {
-	"name": "wpappointments/wpappointments",
-	"type": "wordpress-plugin",
+	"name": "root/monorepo",
+	"type": "project",
 	"autoload": {
 		"psr-4": {
-			"WPAppointments\\": "src/",
-			"TestsPHP\\": "tests/php/",
-			"TestsWP\\": "tests/wordpress/"
+			"WPAppointments\\": "plugins/wpappointments/src/",
+			"Tests\\": "plugins/wpappointments/tests/php/",
+			"TestTools\\": "tools/testing/phpunit/src/"
 		}
 	},
-	"authors": [
-		{
-			"name": "Appsy sp. z o.o.",
-			"email": "contact@wpappointments.com"
-		}
-	],
 	"require-dev": {
-		"wp-coding-standards/wpcs": "^3.0",
-		"wpreadme2markdown/wp2md": "^4.0",
 		"pestphp/pest": "^1.23",
-		"yoast/phpunit-polyfills": "^1.0",
 		"php-stubs/wordpress-tests-stubs": "^6.3",
-		"mockery/mockery": "^1.6",
-		"php-stubs/wordpress-stubs": "^6.4"
+		"php-stubs/wordpress-stubs": "^6.4",
+		"wp-coding-standards/wpcs": "^3.0",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"config": {
 		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"pestphp/pest-plugin": true
+			"pestphp/pest-plugin": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	}
 }

@@ -3,7 +3,7 @@ module.exports = {
 		'at-rule-empty-line-before': [
 			'always',
 			{
-				except: [ 'inside-block' ],
+				except: ['inside-block'],
 			},
 		],
 	},

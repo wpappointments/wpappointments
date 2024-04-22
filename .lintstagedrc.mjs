@@ -1,11 +1,21 @@
 import path from 'path';
 
-const format = ( absolutePaths ) => {
+const format = (absolutePaths) => {
 	const cwd = process.cwd();
-	const relativePaths = absolutePaths.map( ( file ) =>
-		path.relative( cwd, file )
+	const relativePaths = absolutePaths.map((file) =>
+		path.relative(cwd, file)
 	);
-	return `pnpm format ${ relativePaths.join( ' ' ) }`;
+
+	return `pnpm format:js ${relativePaths.join(' ')}`;
+};
+
+const formatPHP = (absolutePaths) => {
+	const cwd = process.cwd();
+	const relativePaths = absolutePaths.map((file) =>
+		path.relative(cwd, file)
+	);
+
+	return `pnpm format:php ${relativePaths.join(' ')}`;
 };
 
 export default {
@@ -14,11 +24,5 @@ export default {
 	'*.ts': format,
 	'*.tsx': format,
 	'*.css': format,
-	'*.php': ( absolutePaths ) => {
-		const cwd = process.cwd();
-		const relativePaths = absolutePaths.map( ( file ) =>
-			path.relative( cwd, file )
-		);
-		return `pnpm phpcs-fix ${ relativePaths.join( ' ' ) }`;
-	},
+	'*.php': formatPHP,
 };
