@@ -31,7 +31,9 @@ class Customer extends Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_customers' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
 				),
 			)
 		);
@@ -43,7 +45,9 @@ class Customer extends Controller {
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_customer' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
 				),
 			)
 		);
@@ -55,7 +59,9 @@ class Customer extends Controller {
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
 				),
 			)
 		);
@@ -67,7 +73,9 @@ class Customer extends Controller {
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete' ),
-					'permission_callback' => '__return_true',
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
 				),
 			)
 		);
@@ -119,14 +127,7 @@ class Customer extends Controller {
 		$user            = $model->create( $customer );
 
 		if ( is_wp_error( $user ) ) {
-			return self::response(
-				array(
-					'type' => 'error',
-					'data' => (object) array(
-						'message' => $user->get_error_message(),
-					),
-				)
-			);
+			return self::error( $user->get_error_message() );
 		}
 
 		return self::response(
@@ -156,10 +157,6 @@ class Customer extends Controller {
 	public static function delete( WP_REST_Request $request ) {
 		$model  = new ModelCustomer();
 		$result = $model->delete( $request->get_param( 'id' ) );
-
-		if ( is_wp_error( $result ) ) {
-			return self::error( $result->get_error_message() );
-		}
 
 		return self::response(
 			array(
@@ -193,14 +190,7 @@ class Customer extends Controller {
 		$user            = $model->update( $id, $customer );
 
 		if ( is_wp_error( $user ) ) {
-			return self::response(
-				array(
-					'type' => 'error',
-					'data' => (object) array(
-						'message' => $user->get_error_message(),
-					),
-				)
-			);
+			return self::error( $user->get_error_message() );
 		}
 
 		return self::response(
