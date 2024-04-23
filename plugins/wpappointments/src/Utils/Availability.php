@@ -101,8 +101,8 @@ class Availability {
 				}
 			}
 
-			$available = Date::date_ranges_contain_another_date_range( $date_range, $schedule_periods );
-			$booked    = Date::date_ranges_contain_another_date_range( $date_range, $range_appointments_periods );
+			$available = Date::date_range_overlaps_with_any_date_range( $date_range, $schedule_periods );
+			$booked    = Date::date_range_overlaps_with_any_date_range( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
 
 			array_push(

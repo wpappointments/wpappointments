@@ -149,7 +149,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 							closeCurrentSlideOut();
 						}}
 					>
-						{true
+						{available === '0'
 							? __('Select time anyway', 'wpappointments')
 							: __('Select time', 'wpappointments')}
 					</Button>
