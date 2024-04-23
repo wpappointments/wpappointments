@@ -4,7 +4,7 @@
 		"outDir": "build",
 		"module": "esnext",
 		"target": "esnext",
-		"lib": [ "esnext", "dom", "DOM.Iterable" ],
+		"lib": ["esnext", "dom", "DOM.Iterable"],
 		"sourceMap": true,
 		"allowJs": true,
 		"jsx": "react-jsx",
@@ -19,13 +19,13 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"paths": {
-			"~/backend/*": [ "./assets/backend/*" ],
-			"~/frontend/*": [ "./assets/frontend/*" ],
-			"~/blocks/*": [ "./assets/gutenberg/blocks/*" ],
-			"~/images/*": [ "./assets/images/*" ],
-			"global.module.css": [ "./assets/styles/global.module.css" ]
+			"~/backend/*": ["./assets/backend/*"],
+			"~/frontend/*": ["./assets/frontend/*"],
+			"~/blocks/*": ["./assets/gutenberg/blocks/*"],
+			"~/images/*": ["./assets/images/*"],
+			"global.module.css": ["./assets/styles/global.module.css"]
 		}
 	},
-	"include": [ "assets/**/*", "index.d.ts", "global.d.ts" ],
-	"exclude": [ "node_modules", "build", "vendor" ]
+	"include": ["assets/**/*", "index.d.ts", "global.d.ts"],
+	"exclude": ["node_modules", "build", "vendor"]
 }

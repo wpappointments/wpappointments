@@ -61,11 +61,11 @@ class Plugin extends Core\Singleton {
 								'list' => array(
 									array(
 										'start' => array(
-											'hour' => '09',
+											'hour'   => '09',
 											'minute' => null,
 										),
 										'end'   => array(
-											'hour' => '17',
+											'hour'   => '17',
 											'minute' => null,
 										),
 									),

@@ -303,7 +303,7 @@ function FormFields() {
 									{
 										label: format(new Date(), 'dd/MM/yyyy'),
 										value: 'd/m/Y',
-									}
+									},
 								]}
 							/>
 						</div>
@@ -342,7 +342,7 @@ function FormFields() {
 									{
 										label: format(new Date(), 'HH:mm'),
 										value: 'H:i',
-									}
+									},
 								]}
 							/>
 						</div>

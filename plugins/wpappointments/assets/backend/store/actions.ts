@@ -7,7 +7,6 @@ import { actions as settings } from './settings/settings';
 import { actions as appointmentSlideoutActions } from './slideout/appointment/appointment';
 import { actions as slideouts } from './slideout/slideout';
 
-
 export type BaseActions = typeof baseActions;
 export type FetchFromApiAction = BaseActions['fetchFromAPI'];
 export type FetchFromApiActionReturn = ReturnType<FetchFromApiAction>;

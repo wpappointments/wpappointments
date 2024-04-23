@@ -13,7 +13,6 @@ import AppointmentForm from '~/backend/admin/components/AppointmentForm/Appointm
 import { StateContextProvider } from '~/backend/admin/context/StateContext';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
-
 function getMonthName(month: number) {
 	const months = [
 		__('January', 'wpappointments'),
@@ -324,7 +323,9 @@ export default function Calendar() {
 				</div>
 
 				{isSlideoutOpen('view-appointment') && <AppointmentDetails />}
-				{isSlideoutOpen('appointment') && <AppointmentForm defaultDate={defaultDate}/>}
+				{isSlideoutOpen('appointment') && (
+					<AppointmentForm defaultDate={defaultDate} />
+				)}
 			</LayoutDefault>
 		</StateContextProvider>
 	);

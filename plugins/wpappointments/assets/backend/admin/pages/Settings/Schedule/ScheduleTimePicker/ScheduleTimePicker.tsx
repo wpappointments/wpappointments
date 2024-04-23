@@ -1,6 +1,9 @@
 import { useSelect, select } from '@wordpress/data';
 import { addMinutes, format } from 'date-fns';
-import { DayOpeningHours, SettingsSchedule } from '~/backend/store/settings/settings.types';
+import {
+	DayOpeningHours,
+	SettingsSchedule,
+} from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 import Select from '~/backend/admin/components/FormField/Select/Select';
@@ -89,7 +92,9 @@ export default function ScheduleTimePicker({
 							});
 						}}
 						options={minutes}
-						defaultValue={schedule[day].slots.list[index][type].minute}
+						defaultValue={
+							schedule[day].slots.list[index][type].minute
+						}
 						noArrow
 					/>
 				)}

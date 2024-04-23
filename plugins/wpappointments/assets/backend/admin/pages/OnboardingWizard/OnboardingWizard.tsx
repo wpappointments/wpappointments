@@ -104,10 +104,7 @@ function AllSet() {
 						'For more information about the plugin please see this walkthrough video:',
 						'wpappointments'
 					)}{' '}
-					<a
-						href="https://wpappointments.com/"
-						target="_blank"
-					>
+					<a href="https://wpappointments.com/" target="_blank">
 						{__('Watch video', 'wpappointments')}
 					</a>
 				</p>

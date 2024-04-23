@@ -25,10 +25,10 @@ class Schedule {
 	 * @return DatePeriod
 	 */
 	public static function convert_schedule_to_date_range( $schedule, $date ) {
-		$settings = new Settings();
+		$settings             = new Settings();
 		$use_default_timezone = $settings->get_setting( 'general', 'timezoneSiteDefault' );
-		$custom_timezone = $settings->get_setting( 'general', 'timezone' );
-		$timezone = $use_default_timezone ? wp_timezone_string() : $custom_timezone;
+		$custom_timezone      = $settings->get_setting( 'general', 'timezone' );
+		$timezone             = $use_default_timezone ? wp_timezone_string() : $custom_timezone;
 
 		$start = clone $date;
 		$start->setTimezone( new \DateTimeZone( $timezone ) );

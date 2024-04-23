@@ -29,7 +29,7 @@ beforeEach(
 		$settings->update_setting( 'general', 'timezoneSiteDefault', false );
 		$settings->update_setting( 'general', 'timezone', 'Europe/London' );
 
-		$make_slot        = function ( $day, $start, $end, $enabled = false, $all_day = false) {
+		$make_slot = function ( $day, $start, $end, $enabled = false, $all_day = false ) {
 			return (object) array(
 				'day'     => $day,
 				'enabled' => $enabled,
@@ -77,7 +77,7 @@ test(
 		$start_date = '2024-03-01T00:00:00.000Z';
 		$end_date   = '2024-03-01T23:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		expect( $result )->toBeArray();
@@ -113,7 +113,7 @@ test(
 		$end_date   = '2024-03-01T22:59:59.000Z';
 		$timezone   = 'Europe/Warsaw';
 
-		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		expect( $result )->toBeArray();
@@ -123,7 +123,7 @@ test(
 		expect( $result[0]['available'] )->toBeFalse();
 		expect( $result[19]['dateString'] )->toBe( '2024-03-01T09:30:00+01:00' );
 		expect( $result[19]['available'] )->toBeFalse();
-	
+
 		expect( $result[20]['dateString'] )->toBe( '2024-03-01T10:00:00+01:00' );
 		expect( $result[20]['available'] )->toBeTrue();
 		expect( $result[35]['dateString'] )->toBe( '2024-03-01T17:30:00+01:00' );
@@ -152,7 +152,7 @@ test(
 		$end_date   = '2024-03-02T07:59:59.000Z'; // GMT
 		$timezone   = 'America/Los_Angeles';
 
-		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		expect( $result )->toBeArray();
@@ -190,7 +190,7 @@ test(
 		$start_date = '2024-03-01T09:00:00.000Z';
 		$end_date   = '2024-03-01T09:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		expect( $result )->toBeArray();
@@ -262,7 +262,7 @@ test(
 		$start_date = '2024-03-01T00:00:00.000Z';
 		$end_date   = '2024-03-01T23:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		// Expect 48 slots (30 min precision).
@@ -310,7 +310,7 @@ test(
 
 test(
 	'should create availability array - one day period - using only GMT timezone - 60 minutes default length - 30 minutes precision',
-	function() {
+	function () {
 		$settings = new \WPAppointments\Model\Settings();
 		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
 		$settings->update_setting( 'appointments', 'defaultLength', 60 );
@@ -318,7 +318,7 @@ test(
 		$start_date = '2024-03-01T00:00:00.000Z';
 		$end_date   = '2024-03-01T23:59:59.000Z';
 
-		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime($start_date) );
+		$result = Availability::get_availability( $start_date, $end_date, '+00:00', new \DateTime( $start_date ) );
 		$result = $result['slots'];
 
 		// Expect 48 slots (30 min precision).
@@ -338,7 +338,7 @@ test(
 		// 4:00 pm slot should be available.
 		expect( $result[32]['dateString'] )->toBe( '2024-03-01T16:00:00+00:00' );
 		expect( $result[32]['available'] )->toBeTrue();
-		
+
 		// 4:30 pm slot should be unavailable.
 		expect( $result[33]['dateString'] )->toBe( '2024-03-01T16:30:00+00:00' );
 		expect( $result[33]['available'] )->toBeFalse();
