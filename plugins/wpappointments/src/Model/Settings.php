@@ -264,14 +264,14 @@ class Settings {
 
 		return $option;
 	}
-	
+
 	/**
 	 * Update setting
-	 * 
+	 *
 	 * @param string $category Settings category ('general', 'schedules').
 	 * @param string $name Setting key.
-	 * @param mixed $value Setting value.
-	 * 
+	 * @param mixed  $value Setting value.
+	 *
 	 * @return mixed
 	 */
 	public function update_setting( $category, $name, $value ) {

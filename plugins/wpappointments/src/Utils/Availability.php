@@ -70,7 +70,7 @@ class Availability {
 
 		$slots = array();
 
-		$appointment_length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+		$appointment_length          = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$appointment_length_interval = new \DateInterval( 'PT' . $appointment_length . 'M' );
 
 		foreach ( $range as $slot ) {

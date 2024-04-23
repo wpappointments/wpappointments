@@ -7,7 +7,6 @@ import { formatTime } from '~/backend/utils/i18n';
 import styles from './BookingFlowCalendar.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
-
 export default function BookingFlowCalendar() {
 	const {
 		lilius,
@@ -238,7 +237,13 @@ export default function BookingFlowCalendar() {
 							>
 								{slotsAsButtons && (
 									<>
-										{slot.time} - {formatTime(addMinutes(slot.timestamp, defaultLength))}
+										{slot.time} -{' '}
+										{formatTime(
+											addMinutes(
+												slot.timestamp,
+												defaultLength
+											)
+										)}
 									</>
 								)}
 							</button>
