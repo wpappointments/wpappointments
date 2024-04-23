@@ -76,7 +76,7 @@ export default function Edit({
 							)}
 							checked={attributes.slotsAsButtons}
 							onChange={(slotsAsButtons) =>
-								setAttributes({slotsAsButtons})
+								setAttributes({ slotsAsButtons })
 							}
 						/>
 					</PanelBody>

@@ -4,21 +4,20 @@ import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
 import { addDays, addMinutes } from 'date-fns';
+import { formatTimeForPicker } from '~/backend/utils/format';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { type AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
 import DatePicker from '../FormField/DatePicker/DatePicker';
+import Input from '../FormField/Input/Input';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import TimeFinder from '../TimeFinder/TimeFinder';
 import Summary from './Summary/Summary';
 import TimePicker from './TimePicker/TimePicker';
 import styles from './TimeSelector.module.css';
-import { formatTimeForPicker } from '~/backend/utils/format';
-import Input from '../FormField/Input/Input';
-
 
 export type TimeSelectorProps = {
 	mode: 'edit' | 'create';
@@ -26,9 +25,11 @@ export type TimeSelectorProps = {
 };
 
 export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
-	const { getValues, setValue, watch } = useFormContext<AppointmentFormFields>();
+	const { getValues, setValue, watch } =
+		useFormContext<AppointmentFormFields>();
 
-	const { openSlideOut, isSlideoutOpen, closeCurrentSlideOut } = useSlideout();
+	const { openSlideOut, isSlideoutOpen, closeCurrentSlideOut } =
+		useSlideout();
 	const dispatch = useDispatch(store);
 
 	const date = watch('date');
@@ -83,7 +84,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 							mode === 'edit' && appointment
 								? new Date(
 										appointment.timestamp * 1000
-								  ).toISOString()
+									).toISOString()
 								: new Date().toISOString()
 						}
 						isInvalidDate={(date) => {
@@ -117,17 +118,21 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 
 				{date && <TimePicker date={new Date(date)} />}
 
-				{timeHourStart && timeMinuteStart && timeHourEnd && timeMinuteEnd && date && (
-					<Summary
-						date={new Date(date)}
-						timeHourStart={timeHourStart}
-						timeMinuteStart={timeMinuteStart}
-						timeHourEnd={timeHourEnd}
-						timeMinuteEnd={timeMinuteEnd}
-						duration={duration}
-						showAvailabilityWarning={available === '0'}
-					/>
-				)}
+				{timeHourStart &&
+					timeMinuteStart &&
+					timeHourEnd &&
+					timeMinuteEnd &&
+					date && (
+						<Summary
+							date={new Date(date)}
+							timeHourStart={timeHourStart}
+							timeMinuteStart={timeMinuteStart}
+							timeHourEnd={timeHourEnd}
+							timeMinuteEnd={timeMinuteEnd}
+							duration={duration}
+							showAvailabilityWarning={available === '0'}
+						/>
+					)}
 
 				<Input type="hidden" name="available" defaultValue="1" />
 

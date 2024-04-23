@@ -5,7 +5,6 @@ import { Hooks } from '@wordpress/hooks';
 import 'little-state-machine';
 import type { AppointmentsApi } from '~/backend/api/appointments';
 
-
 declare global {
 	interface Window {
 		ReactDOM: ReactDOM & {
@@ -18,20 +17,20 @@ declare global {
 				namespace: string;
 				url: string;
 				nonce: string;
-				getAppointments: AppointmentsApi[ 'getAppointments' ];
-				getUpcomingAppointments: AppointmentsApi[ 'getUpcomingAppointments' ];
-				createAppointment: AppointmentsApi[ 'createAppointment' ];
-				updateAppointment: AppointmentsApi[ 'updateAppointment' ];
-				cancelAppointment: AppointmentsApi[ 'cancelAppointment' ];
-				deleteAppointment: AppointmentsApi[ 'deleteAppointment' ];
+				getAppointments: AppointmentsApi['getAppointments'];
+				getUpcomingAppointments: AppointmentsApi['getUpcomingAppointments'];
+				createAppointment: AppointmentsApi['createAppointment'];
+				updateAppointment: AppointmentsApi['updateAppointment'];
+				cancelAppointment: AppointmentsApi['cancelAppointment'];
+				deleteAppointment: AppointmentsApi['deleteAppointment'];
 			};
 			date: {
 				timezones: string[];
 				startOfWeek: number;
 				siteTimezone: string;
-				formatMaps: Record< string, string >;
-				formats: Record< string, string >;
-				formatsJs: Record< string, string >;
+				formatMaps: Record<string, string>;
+				formats: Record<string, string>;
+				formatsJs: Record<string, string>;
 			};
 			settings: {
 				appointments: {
@@ -52,6 +51,6 @@ declare module 'little-state-machine' {
 
 declare module 'react' {
 	interface CSSProperties {
-		[ key: `--${ string }` ]: string | number;
+		[key: `--${string}`]: string | number;
 	}
 }

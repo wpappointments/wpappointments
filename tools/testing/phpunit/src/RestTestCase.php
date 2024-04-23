@@ -13,7 +13,7 @@ use TestTools\Utils\RESTServer;
  * Abstract WordPress PHPUnit test case class
  */
 abstract class RestTestCase extends TestCase {
-  /**
+	/**
 	 * @var WP_REST_Server
 	 */
 	protected $server;
@@ -115,7 +115,7 @@ abstract class RestTestCase extends TestCase {
 
 	/**
 	 * Perform a DELETE REST request.
-	 * 
+	 *
 	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
 	 * @return array Result from the request.
