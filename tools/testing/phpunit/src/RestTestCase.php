@@ -100,4 +100,27 @@ abstract class RestTestCase extends TestCase {
 	public function do_rest_put_request( $url, $body_params = null, $query_params = null ) {
 		return $this->do_rest_request( $url, 'PUT', $body_params, $query_params );
 	}
+
+	/**
+	 * Perform a PATCH REST request.
+	 *
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param array|null $body_params Body parameters for the request, null if none are required.
+	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 * @return array Result from the request.
+	 */
+	public function do_rest_patch_request( $url, $body_params = null, $query_params = null ) {
+		return $this->do_rest_request( $url, 'PATCH', $body_params, $query_params );
+	}
+
+	/**
+	 * Perform a DELETE REST request.
+	 * 
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 * @return array Result from the request.
+	 */
+	public function do_rest_delete_request( $url, $query_params = null ) {
+		return $this->do_rest_request( $url, 'DELETE', null, $query_params );
+	}
 }
