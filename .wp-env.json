@@ -3,5 +3,10 @@
 	"mappings": {
 		"wp-content/wpappointments": "."
 	},
-	"plugins": ["./plugins/wpappointments"]
+	"plugins": ["./plugins/wpappointments"],
+	"env": {
+		"tests": {
+			"plugins": ["./plugins/wpappointments"]
+		}
+	}
 }
