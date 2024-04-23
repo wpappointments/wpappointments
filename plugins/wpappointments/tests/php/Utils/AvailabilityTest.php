@@ -1,6 +1,6 @@
 <?php
 /**
- * Date utility class
+ * Date utility class tests
  *
  * @package WPAppointments
  */

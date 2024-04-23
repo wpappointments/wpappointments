@@ -59,6 +59,7 @@ function render_globals_component() {
  */
 function redirect_to_wizard() {
 	$wizard_completed = get_option( 'wpappointments_wizard_completed' );
+
 	if ( ! $wizard_completed ) {
 		wp_safe_redirect( admin_url( 'admin.php?page=wpappointments-wizard' ) );
 		exit;
