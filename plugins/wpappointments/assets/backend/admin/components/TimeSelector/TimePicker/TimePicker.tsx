@@ -11,7 +11,6 @@ import Select from '../../FormField/Select/Select';
 import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
-
 export type StartEndTimePickerProps = {
 	date: Date;
 };
@@ -138,7 +137,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 				</FormFieldSet>
 			</FormFieldSet>
 		</div>
-	)
+	);
 }
 
 type Hour = AvailabilityState['month'][0]['day'][0];
@@ -222,7 +221,10 @@ function createHourOptions(hoursMap: Map<string, Hour[]>) {
 	return hours;
 }
 
-function createMinuteOptions(hoursMap: Map<string, Hour[]>, currentHour: string) {
+function createMinuteOptions(
+	hoursMap: Map<string, Hour[]>,
+	currentHour: string
+) {
 	const minutes: {
 		label: string;
 		value: string;
@@ -245,5 +247,4 @@ function createMinuteOptions(hoursMap: Map<string, Hour[]>, currentHour: string)
 	}
 
 	return minutes;
-
 }

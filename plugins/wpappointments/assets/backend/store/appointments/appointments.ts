@@ -126,7 +126,7 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 							? {
 									...appointment,
 									status: 'cancelled',
-							  }
+								}
 							: appointment
 				);
 			});
@@ -147,7 +147,7 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 							? {
 									...appointment,
 									status: 'confirmed',
-							  }
+								}
 							: appointment
 				);
 			});

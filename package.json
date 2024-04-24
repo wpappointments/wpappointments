@@ -17,7 +17,8 @@
 		"format:js": "wp-scripts format .",
 		"format:php": "wp-env run cli --env-cwd=wp-content/wpappointments bash ./.husky/phpcbf tools plugins",
 		"env": "wp-env",
-		"lerna": "lerna"
+		"lerna": "lerna",
+		"prepare": "pnpm install && husky"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
