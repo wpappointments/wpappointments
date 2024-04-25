@@ -32,7 +32,22 @@ namespace TestTools;
 expect()->extend(
 	'toBeOne',
 	function () {
-		return $this->toBe( 1 );
+		$this->toBe( 1 );
+		return $this;
+	}
+);
+
+expect()->extend(
+	'toBeTestCustomer',
+	function () {
+		$customer = $this->value;
+
+		expect( $customer )->toHaveKeys( array( 'name', 'email', 'phone' ) );
+		expect( $customer['name'] )->toEqual( 'John Doe' );
+		expect( $customer['email'] )->toEqual( 'john@example.com' );
+		expect( $customer['phone'] )->toEqual( '12345' );
+
+		return $this;
 	}
 );
 
