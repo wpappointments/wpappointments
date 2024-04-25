@@ -16,15 +16,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Create 5 customers.
-		$this->factory()->user->create_many(
-			5,
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$this->create_empty_customers( 5 );
 
 		// Make request.
 		$results = $this->do_rest_get_request( 'customer' );
@@ -34,11 +26,11 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 200, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'success', $data['type'] );
-		$this->assertCount( 5, $data['data']->customers );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 200 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'success' );
+		expect( $data['data']->customers )->toHaveCount( 5 );
 	}
 );
 
@@ -56,10 +48,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 401, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 401 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -67,15 +59,7 @@ test(
 	'GET wpappointments/v1/customer - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
-		wp_set_current_user( $user_id );
+		wp_set_current_user( $this->create_empty_customer() );
 
 		// Make request.
 		$results = $this->do_rest_get_request( 'customer' );
@@ -86,10 +70,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 403, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 403 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -115,14 +99,14 @@ test(
 		$response = $data['data'];
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 200, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'success', $data['type'] );
-		$this->assertEquals( 'Customer created successfully', $response->message );
-		$this->assertEquals( 'John Doe', $response->customer['name'] );
-		$this->assertEquals( 'john@example.com', $response->customer['email'] );
-		$this->assertEquals( '12345', $response->customer['phone'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 200 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'success' );
+		expect( $response->message )->toBe( 'Customer created successfully' );
+		expect( $response->customer['name'] )->toBe( 'John Doe' );
+		expect( $response->customer['email'] )->toBe( 'john@example.com' );
+		expect( $response->customer['phone'] )->toBe( '12345' );
 	}
 );
 
@@ -147,10 +131,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 401, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 401 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -158,15 +142,7 @@ test(
 	'POST wpappointments/v1/customer - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
-		wp_set_current_user( $user_id );
+		wp_set_current_user( $this->create_empty_customer() );
 
 		// Make request.
 		$results = $this->do_rest_post_request(
@@ -184,10 +160,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 403, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 403 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -212,11 +188,11 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 422, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'error', $data['type'] );
-		$this->assertEquals( 'Cannot create a user with an empty login name.', $data['message'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 422 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'error' );
+		expect( $data['message'] )->toBe( 'Cannot create a user with an empty login name.' );
 	}
 );
 
@@ -227,14 +203,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
@@ -244,11 +213,11 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 200, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'success', $data['type'] );
-		$this->assertEquals( 'Customer deleted successfully', $data['message'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 200 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'success' );
+		expect( $data['message'] )->toBe( 'Customer deleted successfully' );
 	}
 );
 
@@ -258,14 +227,7 @@ test(
 		// Try without setting the current user (logged out).
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
@@ -276,10 +238,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 401, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 401 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -287,25 +249,10 @@ test(
 	'DELETE wpappointments/v1/customer - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
-		wp_set_current_user( $user_id );
+		wp_set_current_user( $this->create_empty_customer() );
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
@@ -316,10 +263,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 403, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 403 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -330,14 +277,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_patch_request(
@@ -355,14 +295,12 @@ test(
 		$response = $data['data'];
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 200, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'success', $data['type'] );
-		$this->assertEquals( 'Customer updated successfully', $response->message );
-		$this->assertEquals( 'John Doe', $response->customer['name'] );
-		$this->assertEquals( 'john@example.com', $response->customer['email'] );
-		$this->assertEquals( '12345', $response->customer['phone'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 200 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'success' );
+		expect( $response->message )->toBe( 'Customer updated successfully' );
+		expect( $response->customer )->toBeTestCustomer();
 	}
 );
 
@@ -372,14 +310,7 @@ test(
 		// Try without setting the current user (logged out).
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_post_request(
@@ -397,10 +328,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 401, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 401 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -408,25 +339,10 @@ test(
 	'PATCH wpappointments/v1/customer - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
-		wp_set_current_user( $user_id );
+		wp_set_current_user( $this->create_empty_customer() );
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request.
 		$results = $this->do_rest_post_request(
@@ -444,10 +360,10 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertTrue( $is_error );
-		$this->assertEquals( 403, $status );
-		$this->assertEquals( 'rest_forbidden', $data['code'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $is_error )->toBeTrue();
+		expect( $status )->toBe( 403 );
+		expect( $data['code'] )->toBe( 'rest_forbidden' );
 	}
 );
 
@@ -458,14 +374,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Create a customer.
-		$user_id = $this->factory()->user->create(
-			array(
-				'role'       => 'wpa-customer',
-				'meta_input' => array(
-					'phone' => '12345',
-				),
-			)
-		);
+		$user_id = $this->create_default_customer();
 
 		// Make request with invalid user data.
 		$results = $this->do_rest_post_request(
@@ -482,10 +391,10 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		$this->assertInstanceOf( \WP_REST_Response::class, $results );
-		$this->assertEquals( 422, $status );
-		$this->assertIsArray( $data );
-		$this->assertEquals( 'error', $data['type'] );
-		$this->assertEquals( 'Cannot create a user with an empty login name.', $data['message'] );
+		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $status )->toBe( 422 );
+		expect( $data )->toBeArray();
+		expect( $data['type'] )->toBe( 'error' );
+		expect( $data['message'] )->toBe( 'Cannot create a user with an empty login name.' );
 	}
 );

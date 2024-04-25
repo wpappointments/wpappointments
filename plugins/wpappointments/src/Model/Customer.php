@@ -50,9 +50,7 @@ class Customer {
 			$meta    = get_user_meta( $user->ID );
 			$users[] = $this->prepare_user_entity(
 				$user,
-				array(
-					'phone' => $meta['phone'],
-				)
+				$meta
 			);
 		}
 
@@ -176,7 +174,7 @@ class Customer {
 			'id'      => $user->ID,
 			'name'    => $user->display_name,
 			'email'   => $user->user_email,
-			'phone'   => $meta['phone'],
+			'phone'   => $meta['phone'] ?? '',
 			'created' => $user->user_registered,
 			'actions' => (object) array(
 				'delete' => (object) array(
