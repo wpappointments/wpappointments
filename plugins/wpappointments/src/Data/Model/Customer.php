@@ -80,18 +80,10 @@ class Customer {
 	 * @return \WP_User|\WP_Error
 	 */
 	public function update( $customer ) {
-		$id = $this->user->ID;
+		$id = $this->validate_user_id( $this->user->ID );
 
-		$valid_id = $this->validate_user_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
-		}
-
-		$user = get_user_by( 'ID', $id );
-
-		if ( ! $user ) {
-			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
+		if ( is_wp_error( $id ) ) {
+			return $id;
 		}
 
 		$email = sanitize_text_field( wp_unslash( $customer['email'] ), true );
@@ -122,21 +114,19 @@ class Customer {
 	 * @return bool|\WP_Error
 	 */
 	public function delete() {
-		$id = $this->user->ID;
+		$id = $this->validate_user_id( $this->user->ID );
 
-		$valid_id = $this->validate_user_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
+		if ( is_wp_error( $id ) ) {
+			return $id;
 		}
 
 		$deleted = wp_delete_user( $id );
 
-		if ( $deleted ) {
-			return $id;
+		if ( ! $deleted ) {
+			return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
 		}
 
-		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+		return $deleted;
 	}
 
 	/**
