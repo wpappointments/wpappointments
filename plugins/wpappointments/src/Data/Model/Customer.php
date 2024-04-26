@@ -113,7 +113,7 @@ class Customer {
 
 		update_user_meta( $id, 'phone', $phone );
 
-		return get_user_by( 'id', $id );
+		return $this;
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Customer {
 		$deleted = wp_delete_user( $id );
 
 		if ( $deleted ) {
-			return true;
+			return $id;
 		}
 
 		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );

@@ -8,7 +8,6 @@
 
 namespace WPAppointments\Api\Endpoints;
 
-use stdClass;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
@@ -31,7 +30,7 @@ class CustomersController extends Controller {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( __CLASS__, 'get_all_customers' ),
+					'callback'            => array( __CLASS__, 'get_all' ),
 					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
@@ -89,7 +88,7 @@ class CustomersController extends Controller {
 	 *
 	 * @return \WP_REST_Response
 	 */
-	public static function get_all_customers( WP_REST_Request $request ) {
+	public static function get_all( WP_REST_Request $request ) {
 		$query   = $request->get_param( 'query' ) ?? array();
 		$results = CustomersQuery::all( $query );
 
@@ -140,6 +139,43 @@ class CustomersController extends Controller {
 	}
 
 	/**
+	 * Update a customer
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function update( WP_REST_Request $request ) {
+		$id    = $request->get_param( 'id' );
+		$name  = $request->get_param( 'name' );
+		$email = $request->get_param( 'email' );
+		$phone = $request->get_param( 'phone' );
+
+		$customer         = new Customer( $id );
+		$updated_customer = $customer->update(
+			array(
+				'name'  => $name,
+				'email' => $email,
+				'phone' => $phone,
+			)
+		);
+
+		if ( is_wp_error( $updated_customer ) ) {
+			return self::error( $updated_customer->get_error_message() );
+		}
+
+		return self::response(
+			array(
+				'type' => 'success',
+				'data' => (object) array(
+					'message'  => __( 'Customer updated successfully', 'wpappointments' ),
+					'customer' => $updated_customer->normalize( array( __CLASS__, 'normalize' ) ),
+				),
+			)
+		);
+	}
+
+	/**
 	 * Delete a customer
 	 *
 	 * @param \WP_REST_Request $request Request object.
@@ -156,49 +192,6 @@ class CustomersController extends Controller {
 				'message' => __( 'Customer deleted successfully', 'wpappointments' ),
 				'data'    => array(
 					'id' => $result,
-				),
-			)
-		);
-	}
-
-	/**
-	 * Update a customer
-	 *
-	 * @param WP_REST_Request $request Request object.
-	 *
-	 * @return WP_REST_Response
-	 */
-	public static function update( WP_REST_Request $request ) {
-		$id    = $request->get_param( 'id' );
-		$name  = $request->get_param( 'name' );
-		$email = $request->get_param( 'email' );
-		$phone = $request->get_param( 'phone' );
-
-		$customer = new Customer( $id );
-		$user     = $customer->update(
-			array(
-				'name'  => $name,
-				'email' => $email,
-				'phone' => $phone,
-			)
-		);
-
-		if ( is_wp_error( $user ) ) {
-			return self::error( $user->get_error_message() );
-		}
-
-		return self::response(
-			array(
-				'type' => 'success',
-				'data' => (object) array(
-					'message'  => __( 'Customer updated successfully', 'wpappointments' ),
-					'customer' => array(
-						'id'      => $user->ID,
-						'name'    => $name,
-						'email'   => $email,
-						'phone'   => $phone,
-						'created' => $user->user_registered,
-					),
 				),
 			)
 		);
