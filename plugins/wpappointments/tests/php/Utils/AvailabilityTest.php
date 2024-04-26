@@ -7,6 +7,8 @@
 
 namespace Tests\Utils;
 
+use WPAppointments\Data\Model\Appointment;
+use WPAppointments\Data\Model\Settings;
 use WPAppointments\Utils\Availability;
 
 uses( \TestTools\TestCase::class );
@@ -17,13 +19,13 @@ beforeEach(
 			array(
 				'post_title'  => 'Default Schedule',
 				'post_status' => 'publish',
-				'post_type'   => 'wpa_schedule',
+				'post_type'   => 'wpa-schedule',
 			)
 		);
 
 		update_option( 'wpappointments_default_scheduleId', $schedule_post_id );
 
-		$settings = new \WPAppointments\Model\Settings();
+		$settings = new Settings();
 		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
 		$settings->update_setting( 'appointments', 'defaultLength', 30 );
 		$settings->update_setting( 'general', 'timezoneSiteDefault', false );
@@ -246,7 +248,7 @@ test(
 	'Should create availability array - with appointment in - one day period - using only GMT timezone',
 	function () {
 		// Create 60 minutes long appointment at 9:00 on March 1st 2024.
-		$appointment = new \WPAppointments\Model\AppointmentPost();
+		$appointment = new Appointment();
 		$appointment->create(
 			'Noop',
 			array(
@@ -311,7 +313,7 @@ test(
 test(
 	'should create availability array - one day period - using only GMT timezone - 60 minutes default length - 30 minutes precision',
 	function () {
-		$settings = new \WPAppointments\Model\Settings();
+		$settings = new \WPAppointments\Data\Model\Settings();
 		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
 		$settings->update_setting( 'appointments', 'defaultLength', 60 );
 

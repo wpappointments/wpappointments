@@ -218,7 +218,7 @@ export const resolvers = {
 		Response
 	> {
 		const response = yield baseActions.fetchFromAPI(
-			addQueryArgs('appointment', {
+			addQueryArgs('appointments', {
 				query,
 			})
 		);

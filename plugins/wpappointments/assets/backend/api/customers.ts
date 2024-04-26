@@ -38,7 +38,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	async function createCustomer(data: CreateCustomerData) {
 		const [error, response] = await resolve<CreateResponse>(async () => {
 			const response = await apiFetch<CreateResponse>({
-				path: 'customer',
+				path: 'customers',
 				method: 'POST',
 				data,
 			});

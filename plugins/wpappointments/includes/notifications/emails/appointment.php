@@ -7,7 +7,7 @@
  */
 
 use WPAppointments\Core\PluginInfo;
-use WPAppointments\Model\Settings;
+use WPAppointments\Data\Model\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -35,7 +35,7 @@ export function appointmentsApi({
 
 	async function createAppointment(data: AppointmentData) {
 		const response = await apiFetch<Response>({
-			path: 'appointment',
+			path: 'appointments',
 			method: 'POST',
 			data,
 		});

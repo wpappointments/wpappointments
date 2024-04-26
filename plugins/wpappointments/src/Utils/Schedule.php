@@ -10,7 +10,7 @@ namespace WPAppointments\Utils;
 use DateTime;
 use DatePeriod;
 use DateInterval;
-use WPAppointments\Model\Settings;
+use WPAppointments\Data\Model\Settings;
 
 /**
  * Schedule utility class

@@ -7,10 +7,12 @@
 
 namespace Tests\Api;
 
+use WP_REST_Response;
+
 uses( \TestTools\RestTestCase::class );
 
 test(
-	'GET wpappointments/v1/customer - status 200',
+	'GET wpappointments/v1/customers - status 200',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
@@ -19,28 +21,28 @@ test(
 		$this->create_empty_customers( 5 );
 
 		// Make request.
-		$results = $this->do_rest_get_request( 'customer' );
+		$results = $this->do_rest_get_request( 'customers' );
 
 		// Check response.
 		$status = $results->get_status();
 		$data   = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
-		expect( $data['data']->customers )->toHaveCount( 5 );
+		expect( $data['data']['customers'] )->toHaveCount( 5 );
 	}
 );
 
 test(
-	'GET wpappointments/v1/customer - status 401 unauthorized',
+	'GET wpappointments/v1/customers - status 401 unauthorized',
 	function () {
 		// Try without setting the current user (logged out).
 
 		// Make request.
-		$results = $this->do_rest_get_request( 'customer' );
+		$results = $this->do_rest_get_request( 'customers' );
 
 		// Check response.
 		$is_error = $results->is_error();
@@ -48,7 +50,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 401 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -56,13 +58,13 @@ test(
 );
 
 test(
-	'GET wpappointments/v1/customer - status 403 forbidden',
+	'GET wpappointments/v1/customers - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
 		wp_set_current_user( $this->create_empty_customer() );
 
 		// Make request.
-		$results = $this->do_rest_get_request( 'customer' );
+		$results = $this->do_rest_get_request( 'customers' );
 
 		// Check response.
 		$is_error = $results->is_error();
@@ -70,7 +72,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 403 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -78,14 +80,14 @@ test(
 );
 
 test(
-	'POST wpappointments/v1/customer - status 200',
+	'POST wpappointments/v1/customers - status 200',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
 
 		// Make request.
 		$results = $this->do_rest_post_request(
-			'customer',
+			'customers',
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -99,7 +101,7 @@ test(
 		$response = $data['data'];
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
@@ -111,13 +113,13 @@ test(
 );
 
 test(
-	'POST wpappointments/v1/customer - status 401 unauthorized',
+	'POST wpappointments/v1/customers - status 401 unauthorized',
 	function () {
 		// Try without setting the current user (logged out).
 
 		// Make request.
 		$results = $this->do_rest_post_request(
-			'customer',
+			'customers',
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -131,7 +133,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 401 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -139,14 +141,14 @@ test(
 );
 
 test(
-	'POST wpappointments/v1/customer - status 403 forbidden',
+	'POST wpappointments/v1/customers - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
 		wp_set_current_user( $this->create_empty_customer() );
 
 		// Make request.
 		$results = $this->do_rest_post_request(
-			'customer',
+			'customers',
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -160,7 +162,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 403 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -168,14 +170,14 @@ test(
 );
 
 test(
-	'POST wpappointments/v1/customer - status 422 invalid data',
+	'POST wpappointments/v1/customers - status 422 invalid data',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
 
 		// Make request with invalid user data.
 		$results = $this->do_rest_post_request(
-			'customer',
+			'customers',
 			array(
 				'name'  => '',
 				'email' => '',
@@ -188,7 +190,7 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 422 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'error' );
@@ -197,7 +199,7 @@ test(
 );
 
 test(
-	'DELETE wpappointments/v1/customer - status 200',
+	'DELETE wpappointments/v1/customers - status 200',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
@@ -206,14 +208,14 @@ test(
 		$user_id = $this->create_default_customer();
 
 		// Make request.
-		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
+		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
 		// Check response.
 		$status = $results->get_status();
 		$data   = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
@@ -222,7 +224,7 @@ test(
 );
 
 test(
-	'DELETE wpappointments/v1/customer - status 401 unauthorized',
+	'DELETE wpappointments/v1/customers - status 401 unauthorized',
 	function () {
 		// Try without setting the current user (logged out).
 
@@ -230,7 +232,7 @@ test(
 		$user_id = $this->create_default_customer();
 
 		// Make request.
-		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
+		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
 		// Check response.
 		$is_error = $results->is_error();
@@ -238,7 +240,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 401 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -246,7 +248,7 @@ test(
 );
 
 test(
-	'DELETE wpappointments/v1/customer - status 403 forbidden',
+	'DELETE wpappointments/v1/customers - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
 		wp_set_current_user( $this->create_empty_customer() );
@@ -255,7 +257,7 @@ test(
 		$user_id = $this->create_default_customer();
 
 		// Make request.
-		$results = $this->do_rest_delete_request( 'customer/' . $user_id );
+		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
 		// Check response.
 		$is_error = $results->is_error();
@@ -263,7 +265,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 403 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -271,7 +273,7 @@ test(
 );
 
 test(
-	'PATCH wpappointments/v1/customer - status 200',
+	'PATCH wpappointments/v1/customers - status 200',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
@@ -281,7 +283,7 @@ test(
 
 		// Make request.
 		$results = $this->do_rest_patch_request(
-			'customer/' . $user_id,
+			'customers/' . $user_id,
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -295,7 +297,7 @@ test(
 		$response = $data['data'];
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
@@ -305,7 +307,7 @@ test(
 );
 
 test(
-	'PATCH wpappointments/v1/customer - status 401 unauthorized',
+	'PATCH wpappointments/v1/customers - status 401 unauthorized',
 	function () {
 		// Try without setting the current user (logged out).
 
@@ -314,7 +316,7 @@ test(
 
 		// Make request.
 		$results = $this->do_rest_post_request(
-			'customer/' . $user_id,
+			'customers/' . $user_id,
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -328,7 +330,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 401 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -336,7 +338,7 @@ test(
 );
 
 test(
-	'PATCH wpappointments/v1/customer - status 403 forbidden',
+	'PATCH wpappointments/v1/customers - status 403 forbidden',
 	function () {
 		// Log in as a customer role.
 		wp_set_current_user( $this->create_empty_customer() );
@@ -346,7 +348,7 @@ test(
 
 		// Make request.
 		$results = $this->do_rest_post_request(
-			'customer/' . $user_id,
+			'customers/' . $user_id,
 			array(
 				'name'  => 'John Doe',
 				'email' => 'john@example.com',
@@ -360,7 +362,7 @@ test(
 		$data     = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $is_error )->toBeTrue();
 		expect( $status )->toBe( 403 );
 		expect( $data['code'] )->toBe( 'rest_forbidden' );
@@ -368,7 +370,7 @@ test(
 );
 
 test(
-	'PATCH wpappointments/v1/customer - status 422 invalid data',
+	'PATCH wpappointments/v1/customers - status 422 invalid data',
 	function () {
 		// Log in as admin.
 		wp_set_current_user( 1 );
@@ -378,7 +380,7 @@ test(
 
 		// Make request with invalid user data.
 		$results = $this->do_rest_post_request(
-			'customer/' . $user_id,
+			'customers/' . $user_id,
 			array(
 				'name'  => '',
 				'email' => '',
@@ -391,7 +393,7 @@ test(
 		$data   = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( \WP_REST_Response::class );
+		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
 		expect( $status )->toBe( 422 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'error' );

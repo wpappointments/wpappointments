@@ -96,7 +96,7 @@ export const selectors = {
 
 export const controls = {
 	SET_CUSTOMERS() {
-		return apiFetch({ path: 'customer' });
+		return apiFetch({ path: 'customers' });
 	},
 };
 
@@ -110,7 +110,7 @@ export const resolvers = {
 		Response
 	> {
 		const response = yield baseActions.fetchFromAPI(
-			addQueryArgs('customer', {
+			addQueryArgs('customers', {
 				query,
 			})
 		);

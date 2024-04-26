@@ -41,7 +41,7 @@ class Plugin extends Core\Singleton {
 				array(
 					'post_title'  => 'Default Schedule',
 					'post_status' => 'publish',
-					'post_type'   => 'wpa_schedule',
+					'post_type'   => 'wpa-schedule',
 				)
 			);
 
@@ -84,7 +84,7 @@ class Plugin extends Core\Singleton {
 				array(
 					'post_title'  => 'Appointment',
 					'post_status' => 'publish',
-					'post_type'   => 'wpa_service',
+					'post_type'   => 'wpa-service',
 				)
 			);
 

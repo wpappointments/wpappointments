@@ -6,14 +6,12 @@
  * @since 0.0.1
  */
 
-namespace WPAppointments\Model;
-
-use WPAppointments\Core\PluginInfo;
+namespace WPAppointments\Data\Model;
 
 /**
  * Customer model class
  */
-class Customer {
+class CustomerCopy {
 	/**
 	 * Default query part for customers
 	 *
@@ -48,7 +46,7 @@ class Customer {
 
 		foreach ( $query->get_results() as $user ) {
 			$meta    = get_user_meta( $user->ID );
-			$users[] = $this->prepare_user_entity(
+			$users[] = $this->prepare_entity_for_rest_api_response(
 				$user,
 				$meta
 			);
@@ -169,29 +167,13 @@ class Customer {
 	 *
 	 * @return object
 	 */
-	protected function prepare_user_entity( $user, $meta ) {
+	public function prepare_entity_for_rest_api_response( $user, $meta ) {
 		return (object) array(
 			'id'      => $user->ID,
 			'name'    => $user->display_name,
 			'email'   => $user->user_email,
 			'phone'   => $meta['phone'] ?? '',
 			'created' => $user->user_registered,
-			'actions' => (object) array(
-				'delete' => (object) array(
-					'name'        => 'DeleteCustomer',
-					'label'       => 'Delete',
-					'method'      => 'DELETE',
-					'uri'         => rest_url( PluginInfo::get_api_namespace() . ' / customer / ' . $user->ID ),
-					'isDangerous' => true,
-				),
-				'edit'   => (object) array(
-					'name'        => 'EditCustomer',
-					'label'       => 'Edit',
-					'method'      => 'PUT',
-					'uri'         => rest_url( PluginInfo::get_api_namespace() . ' / customer / ' . $user->ID ),
-					'isDangerous' => false,
-				),
-			),
 		);
 	}
 

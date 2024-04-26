@@ -6,21 +6,19 @@
  * @since 0.0.1
  */
 
-namespace WPAppointments\Model;
-
-use WPAppointments\Core\PluginInfo;
+namespace WPAppointments\Data\Model;
 
 /**
  * Appointment model class
  */
-class AppointmentPost {
+class Appointment {
 	/**
 	 * Default query part for appointments
 	 *
 	 * @var array
 	 */
 	private $default_query_part = array(
-		'post_type'   => 'appointment',
+		'post_type'   => 'wpa-appointment',
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value',
 		'meta_key'    => 'timestamp',
@@ -242,9 +240,9 @@ class AppointmentPost {
 	/**
 	 * Create appointment
 	 *
-	 * @param string          $title Appointment title.
-	 * @param array           $meta Appointment post meta.
-	 * @param object|int|null $customer Customer to assign to appointment or customer object to create customer.
+	 * @param string         $title Appointment title.
+	 * @param array          $meta Appointment post meta.
+	 * @param array|int|null $customer Customer to assign to appointment or customer array to create customer.
 	 *
 	 * @return object|\WP_Error
 	 */
@@ -252,8 +250,10 @@ class AppointmentPost {
 		if ( null !== $customer ) {
 			$customer_id = $customer;
 
-			if ( is_object( $customer ) ) {
-				$customer_id = ( new Customer() )->create( $customer );
+			if ( is_array( $customer ) ) {
+				$customer       = new Customer( $customer );
+				$saved_customer = $customer->save();
+				$customer_id    = $saved_customer->user->ID;
 			}
 
 			$meta['customer_id'] = $customer_id;
@@ -261,7 +261,7 @@ class AppointmentPost {
 
 		$post_id = wp_insert_post(
 			array(
-				'post_type'   => 'appointment',
+				'post_type'   => 'wpa-appointment',
 				'post_status' => 'publish',
 				'post_title'  => $title,
 				'meta_input'  => $meta,
@@ -309,7 +309,7 @@ class AppointmentPost {
 
 		$data = array(
 			'ID'        => $valid_id,
-			'post_type' => 'appointment',
+			'post_type' => 'wpa-appointment',
 		);
 
 		if ( null !== $title ) {
@@ -504,22 +504,6 @@ class AppointmentPost {
 			'duration'   => (int) $duration,
 			'customerId' => (int) $customer_id,
 			'customer'   => $customer,
-			'actions'    => (object) array(
-				'delete' => (object) array(
-					'name'        => 'DeleteAppointment',
-					'label'       => 'Delete',
-					'method'      => 'DELETE',
-					'uri'         => rest_url( PluginInfo::get_api_namespace() . '/appointment/' . $post_id ),
-					'isDangerous' => true,
-				),
-				'edit'   => (object) array(
-					'name'        => 'EditAppointment',
-					'label'       => 'Edit',
-					'method'      => 'PUT',
-					'uri'         => rest_url( PluginInfo::get_api_namespace() . '/appointment/' . $post_id ),
-					'isDangerous' => false,
-				),
-			),
 		);
 	}
 

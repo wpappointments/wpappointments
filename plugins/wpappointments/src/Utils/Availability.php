@@ -7,12 +7,11 @@
 
 namespace WPAppointments\Utils;
 
-use WPAppointments\Model\Settings;
-
 use DateTime;
 use DatePeriod;
 use DateInterval;
-use WPAppointments\Model\AppointmentPost;
+use WPAppointments\Data\Model\Appointment;
+use WPAppointments\Data\Model\Settings;
 
 /**
  * Date utility class
@@ -45,7 +44,7 @@ class Availability {
 		$settings = new Settings();
 		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_scheduleId' ) );
 
-		$appointments       = new AppointmentPost();
+		$appointments       = new Appointment();
 		$range_appointments = $appointments->get_date_range_appointments(
 			(int) $range_start->getTimestamp(),
 			(int) $range_end->getTimestamp()

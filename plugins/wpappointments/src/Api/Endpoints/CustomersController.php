@@ -12,12 +12,13 @@ use stdClass;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
-use WPAppointments\Model\Customer as ModelCustomer;
+use WPAppointments\Data\Model\Customer;
+use WPAppointments\Data\Query\CustomersQuery;
 
 /**
- * Customer endpoint
+ * Customer endpoint class
  */
-class Customer extends Controller {
+class CustomersController extends Controller {
 	/**
 	 * Register all routes
 	 *
@@ -26,7 +27,7 @@ class Customer extends Controller {
 	public static function init() {
 		register_rest_route(
 			static::API_NAMESPACE,
-			'/customer',
+			'/customers',
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
@@ -40,11 +41,11 @@ class Customer extends Controller {
 
 		register_rest_route(
 			static::API_NAMESPACE,
-			'/customer',
+			'/customers',
 			array(
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( __CLASS__, 'create_customer' ),
+					'callback'            => array( __CLASS__, 'create' ),
 					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
@@ -54,7 +55,7 @@ class Customer extends Controller {
 
 		register_rest_route(
 			static::API_NAMESPACE,
-			'/customer/(?P<id>\d+)',
+			'/customers/(?P<id>\d+)',
 			array(
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
@@ -68,7 +69,7 @@ class Customer extends Controller {
 
 		register_rest_route(
 			static::API_NAMESPACE,
-			'/customer/(?P<id>\d+)',
+			'/customers/(?P<id>\d+)',
 			array(
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
@@ -89,20 +90,13 @@ class Customer extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_all_customers( WP_REST_Request $request ) {
-		$query    = $request->get_param( 'query' );
-		$customer = new ModelCustomer();
-		$results  = $customer->get_all( $query );
+		$query   = $request->get_param( 'query' ) ?? array();
+		$results = CustomersQuery::all( $query );
 
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) array(
-					'customers'    => $results->customers,
-					'totalItems'   => $results->totalItems,
-					'totalPages'   => $results->totalPages,
-					'postsPerPage' => $results->postsPerPage,
-					'currentPage'  => $results->currentPage,
-				),
+				'data' => self::paginated( $results ),
 			)
 		);
 	}
@@ -114,20 +108,24 @@ class Customer extends Controller {
 	 *
 	 * @return WP_REST_Response
 	 */
-	public static function create_customer( WP_REST_Request $request ) {
-		$name  = $request->get_param( 'name' );
-		$email = $request->get_param( 'email' );
-		$phone = $request->get_param( 'phone' );
+	public static function create( WP_REST_Request $request ) {
+		$name     = $request->get_param( 'name' );
+		$email    = $request->get_param( 'email' );
+		$phone    = $request->get_param( 'phone' );
+		$password = $request->get_param( 'password' );
 
-		$model           = new ModelCustomer();
-		$customer        = new stdClass();
-		$customer->email = $email;
-		$customer->name  = $name;
-		$customer->phone = $phone;
-		$user            = $model->create( $customer );
+		$customer       = new Customer(
+			array(
+				'name'     => $name,
+				'email'    => $email,
+				'phone'    => $phone,
+				'password' => $password,
+			)
+		);
+		$saved_customer = $customer->save();
 
-		if ( is_wp_error( $user ) ) {
-			return self::error( $user->get_error_message() );
+		if ( is_wp_error( $saved_customer ) ) {
+			return self::error( $saved_customer->get_error_message() );
 		}
 
 		return self::response(
@@ -135,13 +133,7 @@ class Customer extends Controller {
 				'type' => 'success',
 				'data' => (object) array(
 					'message'  => __( 'Customer created successfully', 'wpappointments' ),
-					'customer' => array(
-						'id'      => $user->ID,
-						'name'    => $name,
-						'email'   => $email,
-						'phone'   => $phone,
-						'created' => $user->user_registered,
-					),
+					'customer' => $saved_customer->normalize( array( __CLASS__, 'normalize' ) ),
 				),
 			)
 		);
@@ -155,8 +147,8 @@ class Customer extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function delete( WP_REST_Request $request ) {
-		$model  = new ModelCustomer();
-		$result = $model->delete( $request->get_param( 'id' ) );
+		$customer = new Customer( $request->get_param( 'id' ) );
+		$result   = $customer->delete();
 
 		return self::response(
 			array(
@@ -182,12 +174,14 @@ class Customer extends Controller {
 		$email = $request->get_param( 'email' );
 		$phone = $request->get_param( 'phone' );
 
-		$model           = new ModelCustomer();
-		$customer        = new stdClass();
-		$customer->email = $email;
-		$customer->name  = $name;
-		$customer->phone = $phone;
-		$user            = $model->update( $id, $customer );
+		$customer = new Customer( $id );
+		$user     = $customer->update(
+			array(
+				'name'  => $name,
+				'email' => $email,
+				'phone' => $phone,
+			)
+		);
 
 		if ( is_wp_error( $user ) ) {
 			return self::error( $user->get_error_message() );
@@ -207,6 +201,43 @@ class Customer extends Controller {
 					),
 				),
 			)
+		);
+	}
+
+	/**
+	 * Prepare entity for API endpoint response
+	 *
+	 * @param \WP_User $user
+	 *
+	 * @return object
+	 */
+	public static function normalize( $user ) {
+		$phone = get_user_meta( $user->ID, 'phone', true );
+
+		return array(
+			'id'      => $user->ID,
+			'name'    => $user->display_name,
+			'email'   => $user->user_email,
+			'phone'   => $phone,
+			'created' => $user->user_registered,
+			'updated' => $user->user_registered,
+		);
+	}
+
+	/**
+	 * Paginate results
+	 *
+	 * @param array $results
+	 *
+	 * @return array
+	 */
+	public static function paginated( $results ) {
+		return array(
+			'customers'    => $results['customers'],
+			'totalItems'   => $results['total_items'],
+			'totalPages'   => $results['total_pages'],
+			'postsPerPage' => $results['posts_per_page'],
+			'currentPage'  => $results['current_page'],
 		);
 	}
 }
