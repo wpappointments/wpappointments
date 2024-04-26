@@ -106,9 +106,7 @@ test(
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
 		expect( $response->message )->toBe( 'Customer created successfully' );
-		expect( $response->customer['name'] )->toBe( 'John Doe' );
-		expect( $response->customer['email'] )->toBe( 'john@example.com' );
-		expect( $response->customer['phone'] )->toBe( '12345' );
+		expect( $response->customer )->toBeTestCustomer();
 	}
 );
 
