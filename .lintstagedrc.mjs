@@ -18,7 +18,6 @@ const php = (absolutePaths) => {
 	const relativePaths = absolutePaths
 		.map((file) => path.relative(cwd, file))
 		.filter((file) => !file.startsWith('.mu-plugins'));
-	console.log(relativePaths);
 
 	if (relativePaths.length === 0) {
 		return [
