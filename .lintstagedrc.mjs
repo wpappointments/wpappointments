@@ -17,7 +17,7 @@ const php = (absolutePaths) => {
 	const relativePaths = absolutePaths.map((file) =>
 		path.relative(cwd, file)
 	);
-
+	console.log(relativePaths);
 	return [
 		'pnpm echo 1'
 	];
