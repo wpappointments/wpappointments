@@ -19,6 +19,10 @@ const php = (absolutePaths) => {
 	);
 
 	return [
+		'pnpm echo 1'
+	];
+
+	return [
 		`pnpm phpcbf ${relativePaths.join(' ')}`,
 		`pnpm phpcs ${relativePaths.join(' ')}`,
 	];

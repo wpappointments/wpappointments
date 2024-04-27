@@ -17,7 +17,7 @@
 
 	<exclude-pattern>*/vendor/*\.php</exclude-pattern>
 	<exclude-pattern>*/build/*\.php</exclude-pattern>
-	<exclude-pattern>*/.mu-plugins/*\.php</exclude-pattern>
+	<exclude-pattern>.mu-plugins/*\.php</exclude-pattern>
 
 	<!--
 	We deliberately exclude the src folder from the WordPress.Files.FileName rule
