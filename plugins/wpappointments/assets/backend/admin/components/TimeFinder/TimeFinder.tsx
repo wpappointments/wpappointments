@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
 import { Button, ButtonGroup } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';

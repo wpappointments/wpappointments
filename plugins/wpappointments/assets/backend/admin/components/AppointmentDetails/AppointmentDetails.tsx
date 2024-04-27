@@ -84,6 +84,7 @@ export default function AppointmentDetails() {
 					timeHourEnd={timeHourEnd}
 					timeMinuteEnd={timeMinuteEnd}
 					duration={duration}
+					showAvailabilityWarning={false}
 				/>
 				{customer && <SummaryCustomer customer={customer} />}
 			</div>

@@ -20,10 +20,9 @@ class Api extends Core\Singleton {
 	 * @return void
 	 */
 	public function init() {
-		Endpoints\Ping::init();
-		Endpoints\Appointment::init();
-		Endpoints\Settings::init();
-		Endpoints\TimeFinder::init();
-		Endpoints\Customer::init();
+		Endpoints\AppointmentsController::init();
+		Endpoints\AvailabilityController::init();
+		Endpoints\CustomersController::init();
+		Endpoints\SettingsController::init();
 	}
 }

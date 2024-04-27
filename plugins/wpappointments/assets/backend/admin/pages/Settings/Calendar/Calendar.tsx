@@ -8,7 +8,8 @@ import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
 
-type Fields = {};
+// Any for now. Replace with actual type.
+type Fields = any;
 
 export default withForm(function CalendarSettings() {
 	// use below to set values

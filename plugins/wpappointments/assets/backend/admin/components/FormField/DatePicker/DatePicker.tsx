@@ -12,7 +12,6 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { DateTimePickerProps } from '@wordpress/components/build-types/date-time/types';
-import { __ } from '@wordpress/i18n';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';
 import WPDatePicker from '../WPDatePicker/WPDatePicker';
@@ -34,7 +33,6 @@ export type FormFieldError<TFields extends FieldValues> =
 	| undefined;
 
 export default function DatePicker<TFields extends FieldValues>({
-	label,
 	name,
 	rules,
 	defaultValue,

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Snackbar } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
 import cn from '~/backend/utils/cn';
 import { Toast } from '~/backend/store/notices/notices.types';
 import { store } from '~/backend/store/store';

@@ -8,7 +8,8 @@
 		"dev": "pnpm css-types-watch & wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
 		"dev:hot": "pnpm css-types-watch & wp-scripts start assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx --hot",
 		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly",
-		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch"
+		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch",
+		"check-types": "tsc --noEmit"
 	},
 	"author": "",
 	"license": "GPL-3.0-only",

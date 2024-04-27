@@ -29,7 +29,8 @@
 			"request": "launch",
 			"port": 9003,
 			"pathMappings": {
-				"/var/www/html/wp-content/wpappointments": "${workspaceFolder}"
+				"/var/www/html/wp-content/wpappointments": "${workspaceFolder}",
+				"/var/www/html/wp-content/plugins/wpappointments/": "${workspaceFolder}/plugins/wpappointments/"
 			}
 		}
 	],

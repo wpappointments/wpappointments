@@ -40,6 +40,8 @@ abstract class TestCase extends \WP_UnitTestCase {
 
 	/**
 	 * Create many new default customers
+	 *
+	 * @param int $count Number of customers to create.
 	 */
 	protected function create_empty_customers( $count = 10 ) {
 		return $this->factory()->user->create_many(

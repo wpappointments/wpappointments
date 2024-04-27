@@ -7,6 +7,8 @@
 
 namespace Tests\Utils;
 
+use WPAppointments\Data\Model\Appointment;
+use WPAppointments\Data\Model\Settings;
 use WPAppointments\Utils\Availability;
 
 uses( \TestTools\TestCase::class );
@@ -17,31 +19,31 @@ beforeEach(
 			array(
 				'post_title'  => 'Default Schedule',
 				'post_status' => 'publish',
-				'post_type'   => 'wpa_schedule',
+				'post_type'   => 'wpa-schedule',
 			)
 		);
 
 		update_option( 'wpappointments_default_scheduleId', $schedule_post_id );
 
-		$settings = new \WPAppointments\Model\Settings();
+		$settings = new Settings();
 		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
 		$settings->update_setting( 'appointments', 'defaultLength', 30 );
 		$settings->update_setting( 'general', 'timezoneSiteDefault', false );
 		$settings->update_setting( 'general', 'timezone', 'Europe/London' );
 
 		$make_slot = function ( $day, $start, $end, $enabled = false, $all_day = false ) {
-			return (object) array(
+			return array(
 				'day'     => $day,
 				'enabled' => $enabled,
 				'allDay'  => $all_day,
-				'slots'   => (object) array(
+				'slots'   => array(
 					'list' => array(
-						(object) array(
-							'start' => (object) array(
+						array(
+							'start' => array(
 								'hour'   => explode( ':', $start )[0],
 								'minute' => explode( ':', $start )[1],
 							),
-							'end'   => (object) array(
+							'end'   => array(
 								'hour'   => explode( ':', $end )[0],
 								'minute' => explode( ':', $end )[1],
 							),
@@ -51,8 +53,8 @@ beforeEach(
 			);
 		};
 
-		// GMT +0:00
-		$settings = (object) array(
+		// GMT +0:00.
+		$settings = array(
 			'monday'    => $make_slot( 'monday', '09:00', '17:00' ),
 			'tuesday'   => $make_slot( 'tuesday', '09:00', '17:00' ),
 			'wednesday' => $make_slot( 'wednesday', '09:00', '17:00' ),
@@ -64,7 +66,7 @@ beforeEach(
 
 		if ( $schedule_post_id ) {
 			foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-				$schedule = wp_json_encode( $settings->$day );
+				$schedule = wp_json_encode( $settings[ $day ] );
 				update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $schedule );
 			}
 		}
@@ -148,8 +150,8 @@ test(
 test(
 	'Should create availability array - one day period - -0800 timezone',
 	function () {
-		$start_date = '2024-03-01T08:00:00.000Z'; // GMT
-		$end_date   = '2024-03-02T07:59:59.000Z'; // GMT
+		$start_date = '2024-03-01T08:00:00.000Z'; // GMT.
+		$end_date   = '2024-03-02T07:59:59.000Z'; // GMT.
 		$timezone   = 'America/Los_Angeles';
 
 		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime( $start_date ) );
@@ -246,7 +248,7 @@ test(
 	'Should create availability array - with appointment in - one day period - using only GMT timezone',
 	function () {
 		// Create 60 minutes long appointment at 9:00 on March 1st 2024.
-		$appointment = new \WPAppointments\Model\AppointmentPost();
+		$appointment = new Appointment();
 		$appointment->create(
 			'Noop',
 			array(
@@ -311,7 +313,7 @@ test(
 test(
 	'should create availability array - one day period - using only GMT timezone - 60 minutes default length - 30 minutes precision',
 	function () {
-		$settings = new \WPAppointments\Model\Settings();
+		$settings = new \WPAppointments\Data\Model\Settings();
 		$settings->update_setting( 'appointments', 'timePickerPrecision', 30 );
 		$settings->update_setting( 'appointments', 'defaultLength', 60 );
 

@@ -37,7 +37,7 @@ export default function FormFieldSet({
 			{...restProps}
 		>
 			{legend && <legend>{legend}</legend>}
-			<div className={styles.fields + ' ' + rest.fieldsClassName}>
+			<div className={styles.fields + ' ' + fieldsClassName}>
 				{children}
 			</div>
 		</fieldset>

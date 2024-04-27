@@ -41,7 +41,7 @@ class Plugin extends Core\Singleton {
 				array(
 					'post_title'  => 'Default Schedule',
 					'post_status' => 'publish',
-					'post_type'   => 'wpa_schedule',
+					'post_type'   => 'wpa-schedule',
 				)
 			);
 
@@ -71,6 +71,7 @@ class Plugin extends Core\Singleton {
 									),
 								),
 							),
+							'allDay'  => false,
 						)
 					)
 				);
@@ -84,7 +85,7 @@ class Plugin extends Core\Singleton {
 				array(
 					'post_title'  => 'Appointment',
 					'post_status' => 'publish',
-					'post_type'   => 'wpa_service',
+					'post_type'   => 'wpa-service',
 				)
 			);
 
@@ -102,6 +103,7 @@ class Plugin extends Core\Singleton {
 	 * @return void
 	 */
 	public function on_plugin_deactivation() {
+		// @phpcs:ignore
 		/** @disregard P1011 because this constant is defined through wp-env config */
 		if ( defined( 'WPAPPOINTMENTS_PURGE' ) && WPAPPOINTMENTS_PURGE ) {
 			$this->delete_schedule_post();
@@ -122,6 +124,7 @@ class Plugin extends Core\Singleton {
 			delete_option( 'wpappointments_general_dateFormat' );
 		}
 
+		// @phpcs:ignore
 		/** @disregard P1011 because this constant is defined through wp-env config */
 		if ( defined( 'WPAPPOINTMENTS_PURGE_WIZARD' ) && WPAPPOINTMENTS_PURGE_WIZARD ) {
 			delete_option( 'wpappointments_wizard_completed' );

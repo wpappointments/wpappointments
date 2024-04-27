@@ -23,8 +23,9 @@ class RESTServer extends \WP_REST_Server {
 	/**
 	 * Allow calling protected methods from tests
 	 *
-	 * @param string $method Method to call
-	 * @param array  $args Arguments to pass to the method
+	 * @param string $method Method to call.
+	 * @param array  $args Arguments to pass to the method.
+	 *
 	 * @return mixed
 	 */
 	public function __call( $method, $args ) {
@@ -33,6 +34,10 @@ class RESTServer extends \WP_REST_Server {
 
 	/**
 	 * Call dispatch() with the rest_post_dispatch filter
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
 	 */
 	public function dispatch( $request ) {
 		$result = parent::dispatch( $request );

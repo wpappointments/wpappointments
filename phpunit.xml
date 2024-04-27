@@ -6,13 +6,13 @@
 >
     <testsuites>
         <testsuite name="wordpress">
-            <directory suffix="Test.php">plugins</directory>
+            <directory suffix="Test.php">plugins/wpappointments</directory>
             <!-- <directory suffix="Test.php">premium/plugins</directory> -->
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">plugins/*/src</directory>
+            <directory suffix=".php">plugins/wpappointments/src</directory>
             <!-- <directory suffix=".php">premium/plugins/*/src</directory> -->
         </include>
     </coverage>

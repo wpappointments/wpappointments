@@ -7,7 +7,7 @@
  */
 
 use WPAppointments\Core\PluginInfo;
-use WPAppointments\Model\Settings;
+use WPAppointments\Data\Model\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,8 +29,8 @@ function send_appointment_created_admin_email( $appointment ) {
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -55,12 +55,12 @@ function send_appointment_created_customer_email( $appointment ) {
 	$formats = get_date_formats();
 
 	wp_mail(
-		$appointment->customer->email,
+		$appointment['customer']['email'],
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmation: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -93,8 +93,8 @@ function send_appointment_updated_admin_email( $new_appointment, $previous_appoi
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Updated: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $new_appointment->timestamp ),
-			wp_date( $formats['time'], $new_appointment->timestamp )
+			wp_date( $formats['date'], $new_appointment['timestamp'] ),
+			wp_date( $formats['time'], $new_appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $new_appointment, $previous_appointment )
 	);
@@ -120,12 +120,12 @@ function send_appointment_updated_customer_email( $new_appointment, $previous_ap
 	$formats = get_date_formats();
 
 	wp_mail(
-		$new_appointment->customer->email,
+		$new_appointment['customer']['email'],
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Updated: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $new_appointment->timestamp ),
-			wp_date( $formats['time'], $new_appointment->timestamp )
+			wp_date( $formats['date'], $new_appointment['timestamp'] ),
+			wp_date( $formats['time'], $new_appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $new_appointment, $previous_appointment )
 	);
@@ -156,8 +156,8 @@ function send_appointment_cancelled_admin_email( $appointment ) {
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -182,12 +182,12 @@ function send_appointment_cancelled_customer_email( $appointment ) {
 	$formats = get_date_formats();
 
 	wp_mail(
-		$appointment->customer->email,
+		$appointment['customer']['email'],
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Cancelled: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -218,8 +218,8 @@ function send_appointment_confirmed_admin_email( $appointment ) {
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -244,12 +244,12 @@ function send_appointment_confirmed_customer_email( $appointment ) {
 	$formats = get_date_formats();
 
 	wp_mail(
-		$appointment->customer->email,
+		$appointment['customer']['email'],
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment Confirmed: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -281,8 +281,8 @@ function send_appointment_noshow_admin_email( $content, $appointment ) {
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment No-Show: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -308,12 +308,12 @@ function send_appointment_noshow_email( $content, $appointment ) {
 	$formats = get_date_formats();
 
 	wp_mail(
-		$appointment->customer->email,
+		$appointment['customer']['email'],
 		sprintf(
 		/* translators: %1$s: Date, %2$s: Time */
 			__( 'Appointment No-Show: %1$s at %2$s', 'wpappointments' ),
-			wp_date( $formats['date'], $appointment->timestamp ),
-			wp_date( $formats['time'], $appointment->timestamp )
+			wp_date( $formats['date'], $appointment['timestamp'] ),
+			wp_date( $formats['time'], $appointment['timestamp'] )
 		),
 		evaluate_merge_tag( $content, $appointment )
 	);
@@ -340,13 +340,13 @@ function evaluate_merge_tag( $content, $new_appointment, $previous_appointment =
 	$settings = new Settings();
 
 	$tags = array(
-		'{customer_name}'    => $new_appointment->customer->name,
-		'{previous_date}'    => $previous_appointment ? wp_date( $formats['date'], $previous_appointment->timestamp ) : '',
-		'{previous_time}'    => $previous_appointment ? wp_date( $formats['time'], $previous_appointment->timestamp ) : '',
-		'{date}'             => wp_date( $formats['date'], $new_appointment->timestamp ),
-		'{time}'             => wp_date( $formats['time'], $new_appointment->timestamp ),
-		'{previous_status}'  => $previous_appointment ? strtoupper( $previous_appointment->status ) : '',
-		'{status}'           => strtoupper( $new_appointment->status ),
+		'{customer_name}'    => $new_appointment['customer']['name'],
+		'{previous_date}'    => $previous_appointment ? wp_date( $formats['date'], $previous_appointment['timestamp'] ) : '',
+		'{previous_time}'    => $previous_appointment ? wp_date( $formats['time'], $previous_appointment['timestamp'] ) : '',
+		'{date}'             => wp_date( $formats['date'], $new_appointment['timestamp'] ),
+		'{time}'             => wp_date( $formats['time'], $new_appointment['timestamp'] ),
+		'{previous_status}'  => $previous_appointment ? strtoupper( $previous_appointment['status'] ) : '',
+		'{status}'           => strtoupper( $new_appointment['status'] ),
 		'{admin_first_name}' => $settings->get_setting( 'general', 'firstName' ),
 		'{admin_last_name}'  => $settings->get_setting( 'general', 'lastName' ),
 		'{admin_email}'      => $settings->get_setting( 'general', 'email' ),

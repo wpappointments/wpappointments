@@ -109,12 +109,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			const result = safeParse(AppointmentSchema, currentAppointment);
 
 			if (result.issues) {
-				const message = result.issues
-					.map((issue) => issue.message)
-					.join(' ');
-
-				console.warn('Appointment data is invalid', message);
-
+				console.error('Appointment data is invalid', result.issues);
 				return;
 			}
 

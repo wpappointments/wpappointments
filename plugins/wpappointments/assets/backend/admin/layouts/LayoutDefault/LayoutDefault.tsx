@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import styles from './LayoutDefault.module.css';
 import Toaster from '~/backend/admin/components/Toaster/Toaster';
 

@@ -57,6 +57,15 @@ class PluginInfo extends Singleton {
 	const PLUGIN_DIR_URL = WPAPPOINTMENTS_DIR_URL;
 
 	/**
+	 * Plugin available post types
+	 */
+	const POST_TYPES = array(
+		'appointment' => 'wpa-appointment',
+		'schedule'    => 'wpa-schedule',
+		'service'     => 'wpa-service',
+	);
+
+	/**
 	 * Get plugin version
 	 *
 	 * @return string

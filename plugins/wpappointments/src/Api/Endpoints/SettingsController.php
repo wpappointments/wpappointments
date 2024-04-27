@@ -11,12 +11,12 @@ namespace WPAppointments\Api\Endpoints;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
-use WPAppointments\Model\Settings as SettingsModel;
+use WPAppointments\Data\Model\Settings;
 
 /**
- * Settings endpoint
+ * Settings endpoint class
  */
-class Settings extends Controller {
+class SettingsController extends Controller {
 	/**
 	 * Register all routes
 	 *
@@ -83,12 +83,10 @@ class Settings extends Controller {
 	/**
 	 * Get all settings
 	 *
-	 * @param WP_REST_Request $request Request object.
-	 *
 	 * @return WP_REST_Response
 	 */
-	public static function get_all_settings( WP_REST_Request $request ) {
-		$settings = new SettingsModel();
+	public static function get_all_settings() {
+		$settings = new Settings();
 		$settings = $settings->get_all();
 
 		return self::response(
@@ -112,7 +110,7 @@ class Settings extends Controller {
 		$params   = $request->get_url_params();
 		$category = $params['category'];
 
-		$settings = new SettingsModel();
+		$settings = new Settings();
 		$settings = $settings->get_all_by_category( $category );
 
 		return self::response(
@@ -135,12 +133,12 @@ class Settings extends Controller {
 	public static function update_settings( WP_REST_Request $request ) {
 		$params   = $request->get_url_params();
 		$category = $params['category'];
-		$settings = json_decode( $request->get_body() );
+		$settings = $request->get_json_params();
 
 		$schedule = array();
 
 		if ( 'schedule' !== $category ) {
-			$settings_model = new SettingsModel();
+			$settings_model = new Settings();
 			$result         = $settings_model->update( $category, $settings );
 
 			if ( is_wp_error( $result ) ) {
@@ -151,8 +149,8 @@ class Settings extends Controller {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					if ( $settings->$day->allDay ) {
-						$settings->$day->slots->list[0] = array(
+					if ( $settings[ $day ]['allDay'] ) {
+						$settings[ $day ]['slots']['list'][0] = array(
 							'start' => array(
 								'hour'   => '00',
 								'minute' => '00',
@@ -164,7 +162,7 @@ class Settings extends Controller {
 						);
 					}
 
-					$test = wp_json_encode( $settings->$day );
+					$test = wp_json_encode( $settings[ $day ] );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
 					array_push( $schedule, $test );
 				}

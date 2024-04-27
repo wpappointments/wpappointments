@@ -60,4 +60,4 @@ export type DayOpeningHours = {
 	};
 };
 
-export type SettingsCalendar = {};
+export type SettingsCalendar = any;

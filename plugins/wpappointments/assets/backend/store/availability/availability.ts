@@ -35,9 +35,13 @@ export const reducer = (state = DEFAULT_AVAILABILITY_STATE, action: Action) => {
 export const selectors = {
 	getAvailability(
 		state: State,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentMonth: number,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentYear: number,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		timezone: string,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		_: number
 	) {
 		return state.availability;

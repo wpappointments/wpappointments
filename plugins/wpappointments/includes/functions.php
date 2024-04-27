@@ -1,7 +1,18 @@
 <?php
 /**
- * Include functions files
+ * Plugin functions file
+ *
+ * Require all plugin files here
+ *
+ * @package WPAppointments
+ * @since 0.0.1
  */
+
+namespace WPAppointments;
+
+// exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
 require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/client.php';

@@ -1,7 +1,15 @@
 {
 	"phpVersion": "8.2",
 	"mappings": {
-		"wp-content/wpappointments": "."
+		"wp-content/.husky": "./.husky",
+		"wp-content/.phpcs.xml": "./.phpcs.xml",
+		"wp-content/composer.json": "./composer.json",
+		"wp-content/phpunit.xml": "./phpunit.xml",
+		"wp-content/coverage": "./coverage",
+		"wp-content/tools": "./tools",
+		"wp-content/vendor": "./vendor",
+		"wp-content/plugins/wpappointments": "./plugins/wpappointments",
+		"wp-content/mu-plugins": "./.mu-plugins"
 	},
 	"plugins": ["./plugins/wpappointments"]
 }

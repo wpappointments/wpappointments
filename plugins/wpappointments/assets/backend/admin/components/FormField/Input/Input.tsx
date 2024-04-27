@@ -10,7 +10,6 @@ import {
 	RegisterOptions,
 	useFormContext,
 } from 'react-hook-form';
-import { __ } from '@wordpress/i18n';
 import { InputControl } from '~/backend/utils/experimental';
 import { getGenericInputErrorMessage } from '~/backend/utils/forms';
 import FormField from '../FormField';

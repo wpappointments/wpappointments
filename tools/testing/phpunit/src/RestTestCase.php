@@ -14,6 +14,8 @@ use TestTools\Utils\RESTServer;
  */
 abstract class RestTestCase extends TestCase {
 	/**
+	 * REST server instance.
+	 *
 	 * @var WP_REST_Server
 	 */
 	protected $server;
@@ -44,10 +46,11 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param string     $verb HTTP verb for the request, default is GET.
 	 * @param array|null $body_params Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return array Result from the request.
 	 */
 	public function do_rest_request( $url, $verb = 'GET', $body_params = null, $query_params = null ) {
@@ -69,8 +72,9 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a GET REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return WP_REST_Response The response for the request.
 	 */
 	public function do_rest_get_request( $url, $query_params = null ) {
@@ -80,9 +84,10 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a POST REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param array|null $body_params Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return array Result from the request.
 	 */
 	public function do_rest_post_request( $url, $body_params = null, $query_params = null ) {
@@ -92,9 +97,10 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a PUT REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param array|null $body_params Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return array Result from the request.
 	 */
 	public function do_rest_put_request( $url, $body_params = null, $query_params = null ) {
@@ -104,9 +110,10 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a PATCH REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param array|null $body_params Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return array Result from the request.
 	 */
 	public function do_rest_patch_request( $url, $body_params = null, $query_params = null ) {
@@ -116,8 +123,9 @@ abstract class RestTestCase extends TestCase {
 	/**
 	 * Perform a DELETE REST request.
 	 *
-	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wc/v3/'.
+	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
+	 *
 	 * @return array Result from the request.
 	 */
 	public function do_rest_delete_request( $url, $query_params = null ) {

@@ -29,3 +29,5 @@ export const store = createReduxStore('wpappointments', {
 	actions,
 	controls,
 });
+
+export { actions, selectors, resolvers, controls };
