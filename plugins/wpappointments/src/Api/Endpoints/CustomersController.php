@@ -130,7 +130,7 @@ class CustomersController extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) array(
+				'data' => array(
 					'message'  => __( 'Customer created successfully', 'wpappointments' ),
 					'customer' => $saved_customer->normalize( array( __CLASS__, 'normalize' ) ),
 				),
@@ -167,7 +167,7 @@ class CustomersController extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) array(
+				'data' => array(
 					'message'  => __( 'Customer updated successfully', 'wpappointments' ),
 					'customer' => $updated_customer->normalize( array( __CLASS__, 'normalize' ) ),
 				),

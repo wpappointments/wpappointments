@@ -159,7 +159,7 @@ class Appointment {
 			);
 		}
 
-		return (object) array(
+		return array(
 			'appointments' => $appointments,
 			'postCount'    => $query->post_count,
 			'foundPosts'   => $query->found_posts,
@@ -230,7 +230,7 @@ class Appointment {
 			);
 		}
 
-		return (object) array(
+		return array(
 			'appointments' => $appointments,
 			'postCount'    => $query->post_count,
 			'foundPosts'   => $query->found_posts,
@@ -330,7 +330,7 @@ class Appointment {
 
 		$new_appointment = $this->prepare_appointment_entity( $post_id, $meta );
 
-		if ( 'pending' === $new_appointment->status ) {
+		if ( 'pending' === $new_appointment['status'] ) {
 			do_action(
 				'wpappointments_appointment_updated',
 				$new_appointment,
@@ -338,7 +338,7 @@ class Appointment {
 			);
 		} else {
 			do_action(
-				'wpappointments_appointment_' . $new_appointment->status,
+				'wpappointments_appointment_' . $new_appointment['status'],
 				$new_appointment,
 				$current_appointment
 			);
@@ -493,7 +493,7 @@ class Appointment {
 		$customer = $meta['customer'] ?? null;
 
 		if ( is_string( $customer ) ) {
-			$customer = json_decode( $customer );
+			$customer = json_decode( $customer, true );
 		}
 
 		return array(

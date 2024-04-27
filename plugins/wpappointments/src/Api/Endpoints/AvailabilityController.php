@@ -70,7 +70,7 @@ class AvailabilityController extends Controller {
 			array(
 				'type' => 'success',
 				'data' => array(
-					'availability' => (object) array(
+					'availability' => array(
 						'month' => $availability,
 					),
 				),
@@ -96,7 +96,7 @@ class AvailabilityController extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) array(
+				'data' => array(
 					'availability' => $availability,
 				),
 			)

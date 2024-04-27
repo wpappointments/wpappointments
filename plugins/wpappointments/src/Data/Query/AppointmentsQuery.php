@@ -103,7 +103,7 @@ class AppointmentsQuery {
 			$customer = json_decode( $customer );
 		}
 
-		return (object) array(
+		return array(
 			'id'         => $post_id,
 			'service'    => get_the_title( $post_id ),
 			'timestamp'  => (int) $timestamp,

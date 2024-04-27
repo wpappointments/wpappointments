@@ -179,9 +179,9 @@ class AppointmentsController extends Controller {
 			array(
 				'type' => 'success',
 				'data' => array(
-					'appointments' => $results->appointments,
-					'postCount'    => $results->post_count,
-					'foundPosts'   => $results->found_posts,
+					'appointments' => $results['appointments'],
+					'postCount'    => $results['post_count'],
+					'foundPosts'   => $results['found_posts'],
 					'query'        => $query,
 				),
 			)

@@ -6,22 +6,43 @@ import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { useSchedule } from '~/backend/hooks/useSchedule';
+import { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from '../OnboardingWizard.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 
+
 type Fields = {
-	defaultLength: number;
-	timePickerPrecision: number;
-	serviceName: string;
-	defaultStatus: 'confirmed' | 'pending';
+	monday: DayOpeningHours;
+	tuesday: DayOpeningHours;
+	wednesday: DayOpeningHours;
+	thursday: DayOpeningHours;
+	friday: DayOpeningHours;
+	saturday: DayOpeningHours;
+	sunday: DayOpeningHours;
 };
 
 type Response = APIResponse<{
 	data: Fields;
 	message: string;
 }>;
+
+function normalizeSchedule(schedule: Fields) {
+	const normalizedSchedule: Fields = {} as Fields;
+
+	for (const [day, data] of Object.entries(schedule)) {
+		const normalized = { ...data } as DayOpeningHours;
+
+		if (!normalized?.allDay) {
+			normalized.allDay = false;
+		}
+
+		normalizedSchedule[day as keyof Fields] = normalized;
+	}
+
+	return normalizedSchedule;
+}
 
 function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 	const dispatch = useDispatch(store);
@@ -33,7 +54,9 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 
 	useFillFormValues(settings);
 
-	const onSubmit = async (data: Fields) => {
+	const onSubmit = async (rawData: Fields) => {
+		const data = normalizeSchedule(rawData);
+
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
 				path: 'settings/schedule',
@@ -55,7 +78,7 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response.data.message) {
-			dispatch.setPluginSettings({ appointments: data });
+			dispatch.setPluginSettings({ schedule: data });
 			onSuccess();
 		}
 	};

@@ -19,7 +19,7 @@ class Schedule {
 	/**
 	 * Create date range
 	 *
-	 * @param object   $schedule Schedule.
+	 * @param array    $schedule Schedule.
 	 * @param DateTime $date Date day of the date range.
 	 *
 	 * @return DatePeriod
@@ -32,11 +32,11 @@ class Schedule {
 
 		$start = clone $date;
 		$start->setTimezone( new \DateTimeZone( $timezone ) );
-		$start->setTime( (int) $schedule->start->hour, (int) $schedule->start->minute );
+		$start->setTime( (int) $schedule['start']['hour'], (int) $schedule['start']['minute'] );
 
 		$end = clone $date;
 		$end->setTimezone( new \DateTimeZone( $timezone ) );
-		$end->setTime( (int) $schedule->end->hour, (int) $schedule->end->minute );
+		$end->setTime( (int) $schedule['end']['hour'], (int) $schedule['end']['minute'] );
 
 		$interval = new DateInterval( 'PT30M' );
 		$period   = new DatePeriod( $start, $interval, $end );

@@ -183,7 +183,7 @@ class Settings {
 				}
 			}
 
-			$schedule = (object) $hours;
+			$schedule = $hours;
 		}
 
 		return $schedule;

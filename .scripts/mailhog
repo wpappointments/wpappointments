@@ -1,13 +1,19 @@
 #!/bin/bash
 COMMAND=$1
-IN=$(pnpm run -s wp-env install-path)
+IN=$(pnpm run -s env install-path)
 arrIN=(${IN//// })
 
 if [ "$COMMAND" == "start" ]; then
   docker run -d -h mailhog -p 8025:8025 -p 1025:1025 --network="${arrIN[3]}_default" --name="${arrIN[3]}_mailhog" mailhog/mailhog
+  echo ""
+  echo "Mailhog instance started at http://localhost:8025"
+  echo ""
 fi
 
 if [ "$COMMAND" == "stop" ]; then
   docker stop "${arrIN[3]}_mailhog"
   docker rm "${arrIN[3]}_mailhog"
+  echo ""
+  echo "✔ Mailhog instance stopped"
+  echo ""
 fi

@@ -71,6 +71,7 @@ class Plugin extends Core\Singleton {
 									),
 								),
 							),
+							'allDay'  => false,
 						)
 					)
 				);

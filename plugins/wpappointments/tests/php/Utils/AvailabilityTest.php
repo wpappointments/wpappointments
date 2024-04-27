@@ -54,7 +54,7 @@ beforeEach(
 		};
 
 		// GMT +0:00.
-		$settings = (object) array(
+		$settings = array(
 			'monday'    => $make_slot( 'monday', '09:00', '17:00' ),
 			'tuesday'   => $make_slot( 'tuesday', '09:00', '17:00' ),
 			'wednesday' => $make_slot( 'wednesday', '09:00', '17:00' ),
@@ -66,7 +66,7 @@ beforeEach(
 
 		if ( $schedule_post_id ) {
 			foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-				$schedule = wp_json_encode( $settings->$day );
+				$schedule = wp_json_encode( $settings[ $day ] );
 				update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $schedule );
 			}
 		}

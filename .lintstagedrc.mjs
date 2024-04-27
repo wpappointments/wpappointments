@@ -7,8 +7,8 @@ const js = (absolutePaths) => {
 	);
 
 	return [
-		`pnpm format:js ${relativePaths.join(' ')}`,
-		`pnpm lint:js ${relativePaths.join(' ')}`,
+		`wp-scripts lint-js ${relativePaths.join(' ')}`,
+		`wp-scripts lint-js ${relativePaths.join(' ')}`,
 	];
 };
 
@@ -19,8 +19,8 @@ const php = (absolutePaths) => {
 	);
 
 	return [
-		`pnpm format:php ${relativePaths.join(' ')}`,
-		`pnpm lint:php ${relativePaths.join(' ')}`,
+		`pnpm phpcbf ${relativePaths.join(' ')}`,
+		`pnpm phpcs ${relativePaths.join(' ')}`,
 	];
 };
 

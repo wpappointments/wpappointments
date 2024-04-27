@@ -89,7 +89,7 @@ export default function Select<TFields extends FieldValues>({
 								onChange(e);
 							}
 						}}
-						value={value}
+						value={value ?? ''}
 						size="__unstable-large"
 						id={name}
 						options={options}

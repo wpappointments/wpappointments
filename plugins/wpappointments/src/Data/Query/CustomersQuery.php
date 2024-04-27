@@ -53,18 +53,18 @@ class CustomersQuery {
 			$users[] = self::normalize( $user );
 		}
 
-		return self::paginated( $users, $user_query );
+		return self::paginated( $user_query, $users );
 	}
 
 	/**
 	 * Create paginated response
 	 *
-	 * @param array         $users Users array.
 	 * @param WP_User_Query $query Query params.
+	 * @param array         $users Users array.
 	 *
 	 * @return object
 	 */
-	public static function paginated( $users = array(), $query ) {
+	public static function paginated( $query, $users = array() ) {
 		$posts_per_page = (int) $query->get( 'number' ) ?? 10;
 		$paged          = (int) $query->get( 'paged' ) ?? 1;
 		$total          = $query->get_total();

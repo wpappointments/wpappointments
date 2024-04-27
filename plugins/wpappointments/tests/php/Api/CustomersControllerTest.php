@@ -105,8 +105,8 @@ test(
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
-		expect( $response->message )->toBe( 'Customer created successfully' );
-		expect( $response->customer )->toBeTestCustomer();
+		expect( $response['message'] )->toBe( 'Customer created successfully' );
+		expect( $response['customer'] )->toBeTestCustomer();
 	}
 );
 
@@ -299,8 +299,8 @@ test(
 		expect( $status )->toBe( 200 );
 		expect( $data )->toBeArray();
 		expect( $data['type'] )->toBe( 'success' );
-		expect( $response->message )->toBe( 'Customer updated successfully' );
-		expect( $response->customer )->toBeTestCustomer();
+		expect( $response['message'] )->toBe( 'Customer updated successfully' );
+		expect( $response['customer'] )->toBeTestCustomer();
 	}
 );
 

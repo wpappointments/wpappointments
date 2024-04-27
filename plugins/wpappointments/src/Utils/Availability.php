@@ -49,19 +49,19 @@ class Availability {
 			(int) $range_start->getTimestamp(),
 			(int) $range_end->getTimestamp()
 		);
-		$range_appointments = $range_appointments->appointments;
+		$range_appointments = $range_appointments['appointments'];
 
 		$range_appointments_periods = array();
 
 		if ( count( $range_appointments ) > 0 ) {
 			foreach ( $range_appointments as $appointment ) {
 				$start_date = new DateTime();
-				$start_date->setTimestamp( $appointment->timestamp );
+				$start_date->setTimestamp( $appointment['timestamp'] );
 				$end_date = new DateTime();
-				$end_date->setTimestamp( $appointment->timestamp + $appointment->duration * 60 );
+				$end_date->setTimestamp( $appointment['timestamp'] + $appointment['duration'] * 60 );
 				$range_appointments_periods[] = new DatePeriod(
 					$start_date,
-					new DateInterval( 'PT' . $appointment->duration . 'M' ),
+					new DateInterval( 'PT' . $appointment['duration'] . 'M' ),
 					$end_date
 				);
 			}
@@ -198,7 +198,7 @@ class Availability {
 				}
 			);
 
-			$days[] = (object) array(
+			$days[] = array(
 				'date'           => $day->format( 'c' ),
 				'day'            => $slots,
 				'available'      => count( $available_slots ) > 0,
@@ -274,7 +274,7 @@ class Availability {
 					}
 				) : array();
 
-				$week_availability[] = (object) array(
+				$week_availability[] = array(
 					'date'           => $day_date->format( 'c' ),
 					'day'            => $slots,
 					'available'      => count( $available_slots ) > 0,
