@@ -89,6 +89,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 };
 
 export const selectors = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getCustomers(state: State, _?: Query) {
 		return state.customers;
 	},
@@ -96,7 +97,7 @@ export const selectors = {
 
 export const controls = {
 	SET_CUSTOMERS() {
-		return apiFetch({ path: 'customer' });
+		return apiFetch({ path: 'customers' });
 	},
 };
 
@@ -110,7 +111,7 @@ export const resolvers = {
 		Response
 	> {
 		const response = yield baseActions.fetchFromAPI(
-			addQueryArgs('customer', {
+			addQueryArgs('customers', {
 				query,
 			})
 		);

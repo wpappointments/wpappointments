@@ -6,9 +6,7 @@
  * @since 0.0.1
  */
 
-namespace WPAppointments\Model;
-
-use WPAppointments\Core;
+namespace WPAppointments\Data\Model;
 
 const DAY_OPENING_OPTIONS = array(
 	'enabled',
@@ -112,11 +110,12 @@ class Settings {
 	 * @return array|\WP_Error
 	 */
 	public function update( $category, $settings = array() ) {
-		$_category = $category ? $category . '_' : '';
+		$category_exists = array_key_exists( $category, $this->settings );
+		$category        = $category ? sprintf( '%s_', $category ) : '';
 
-		if ( true === array_key_exists( $category, $this->settings ) ) {
+		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
-				update_option( 'wpappointments_' . $_category . $key, $value );
+				update_option( 'wpappointments_' . $category . $key, $value );
 			}
 
 			return $this->get_all();
@@ -180,11 +179,11 @@ class Settings {
 				$meta = get_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, true );
 
 				if ( $meta ) {
-					$hours[ $day ] = json_decode( $meta );
+					$hours[ $day ] = json_decode( $meta, true );
 				}
 			}
 
-			$schedule = (object) $hours;
+			$schedule = $hours;
 		}
 
 		return $schedule;

@@ -4,7 +4,6 @@ import {
 	number,
 	object,
 	optional,
-	record,
 	string,
 	union,
 } from 'valibot';
@@ -23,7 +22,6 @@ export const CustomerSchema = object({
 	email: optional(string()),
 	phone: optional(string()),
 	created: optional(string()),
-	actions: optional(record(ApiActionSchema)),
 });
 
 export const AppointmentSchema = object({
@@ -39,5 +37,4 @@ export const AppointmentSchema = object({
 	]),
 	customer: CustomerSchema,
 	customerId: optional(number()),
-	actions: record(ApiActionSchema),
 });

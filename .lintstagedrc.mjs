@@ -1,28 +1,37 @@
 import path from 'path';
 
-const format = (absolutePaths) => {
+
+const js = (absolutePaths) => {
 	const cwd = process.cwd();
 	const relativePaths = absolutePaths.map((file) =>
 		path.relative(cwd, file)
 	);
 
-	return `pnpm format:js ${relativePaths.join(' ')}`;
+	return [
+		`wp-scripts lint-js ${relativePaths.join(' ')}`,
+		`wp-scripts lint-js ${relativePaths.join(' ')}`,
+	];
 };
 
-const formatPHP = (absolutePaths) => {
+const php = (absolutePaths) => {
 	const cwd = process.cwd();
-	const relativePaths = absolutePaths.map((file) =>
-		path.relative(cwd, file)
-	);
+	const relativePaths = absolutePaths
+		.map((file) => path.relative(cwd, file))
+		.filter((file) => !file.startsWith('.mu-plugins'));
 
-	return `pnpm format:php ${relativePaths.join(' ')}`;
+	if (relativePaths.length === 0) {
+		return [
+			'pnpm echo 1'
+		];
+	}
+
+	return [
+		`pnpm phpcbf ${relativePaths.join(' ')}`,
+		`pnpm phpcs ${relativePaths.join(' ')}`,
+	];
 };
 
 export default {
-	'*.js': format,
-	'*.json': format,
-	'*.ts': format,
-	'*.tsx': format,
-	'*.css': format,
-	'*.php': formatPHP,
+	'*.{js,ts,tsx,json,css}': js,
+	'*.php': php,
 };

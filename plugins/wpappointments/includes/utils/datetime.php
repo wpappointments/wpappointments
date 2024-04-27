@@ -6,7 +6,7 @@
  * @since 0.0.1
  */
 
-use WPAppointments\Model\Settings;
+use WPAppointments\Data\Model\Settings;
 
 /**
  * Create date settings array

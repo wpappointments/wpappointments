@@ -1,6 +1,6 @@
 <?php
 /**
- * Time finder controller
+ * Availability controller
  *
  * @package WPAppointments
  * @since 0.0.1
@@ -12,14 +12,11 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Utils\Availability;
-use WPAppointments\Utils\Date;
-use WPAppointments\Utils\Schedule;
-use WPAppointments\Model\Settings;
 
 /**
- * TimeFinder endpoint
+ * Availability endpoint class
  */
-class TimeFinder extends Controller {
+class AvailabilityController extends Controller {
 	/**
 	 * Register all routes
 	 *
@@ -73,7 +70,7 @@ class TimeFinder extends Controller {
 			array(
 				'type' => 'success',
 				'data' => array(
-					'availability' => (object) array(
+					'availability' => array(
 						'month' => $availability,
 					),
 				),
@@ -99,7 +96,7 @@ class TimeFinder extends Controller {
 		return self::response(
 			array(
 				'type' => 'success',
-				'data' => (object) array(
+				'data' => array(
 					'availability' => $availability,
 				),
 			)

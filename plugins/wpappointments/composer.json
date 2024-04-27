@@ -4,7 +4,7 @@
 	"autoload": {
 		"psr-4": {
 			"WPAppointments\\": "src/",
-			"Tests": "tests/php/"
+			"Tests\\": "tests/php/"
 		}
 	},
 	"authors": [

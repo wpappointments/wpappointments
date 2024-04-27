@@ -3,6 +3,7 @@ import 'react';
 import { createRoot } from 'react-dom/client';
 import { Hooks } from '@wordpress/hooks';
 import 'little-state-machine';
+import { actions, selectors } from '~/backend/store/store';
 import type { AppointmentsApi } from '~/backend/api/appointments';
 
 declare global {
@@ -38,9 +39,31 @@ declare global {
 				};
 			};
 		};
-		wp: any;
+		wp: WordPressGlobal;
 	}
 }
+
+type OmitState<Params extends unknown[]> = Params extends []
+	? []
+	: // eslint-disable-next-line @typescript-eslint/no-unused-vars
+		Params extends [infer _, ...infer Rest]
+		? Rest
+		: never;
+
+type SelectorsWithState = typeof selectors;
+type SelectorsWithoutState<Selector extends keyof SelectorsWithState> = {
+	[key in Selector]: (
+		...arg: OmitState<Parameters<SelectorsWithState[key]>>
+	) => ReturnType<SelectorsWithState[key]>;
+};
+type Selectors = SelectorsWithoutState<keyof SelectorsWithState>;
+
+type WordPressGlobal = {
+	data: {
+		dispatch: (namespace: string) => typeof actions;
+		select: (namespace: string) => Selectors;
+	};
+};
 
 declare module 'little-state-machine' {
 	interface GlobalState {
