@@ -10,6 +10,9 @@ namespace WPAppointments\Api;
 
 use WPAppointments\Core;
 
+
+
+
 /**
  * REST Api class
  */
