@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-pnpm run env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage
