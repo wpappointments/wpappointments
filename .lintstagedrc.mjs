@@ -1,5 +1,6 @@
 import path from 'path';
 
+
 const js = (absolutePaths) => {
 	const cwd = process.cwd();
 	const relativePaths = absolutePaths.map((file) =>
@@ -14,9 +15,9 @@ const js = (absolutePaths) => {
 
 const php = (absolutePaths) => {
 	const cwd = process.cwd();
-	const relativePaths = absolutePaths.map((file) =>
-		path.relative(cwd, file)
-	);
+	const relativePaths = absolutePaths
+		.map((file) => path.relative(cwd, file))
+		.filter((file) => !file.startsWith('.mu-plugins'));
 	console.log(relativePaths);
 	return [
 		'pnpm echo 1'

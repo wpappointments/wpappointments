@@ -5,7 +5,6 @@
  * License: GPL2
  */
 
-
 add_filter( 'wp_mail_from', function() {
   return 'contact@wpappointments.com';
 } );
