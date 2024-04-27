@@ -32,18 +32,18 @@ beforeEach(
 		$settings->update_setting( 'general', 'timezone', 'Europe/London' );
 
 		$make_slot = function ( $day, $start, $end, $enabled = false, $all_day = false ) {
-			return (object) array(
+			return array(
 				'day'     => $day,
 				'enabled' => $enabled,
 				'allDay'  => $all_day,
-				'slots'   => (object) array(
+				'slots'   => array(
 					'list' => array(
-						(object) array(
-							'start' => (object) array(
+						array(
+							'start' => array(
 								'hour'   => explode( ':', $start )[0],
 								'minute' => explode( ':', $start )[1],
 							),
-							'end'   => (object) array(
+							'end'   => array(
 								'hour'   => explode( ':', $end )[0],
 								'minute' => explode( ':', $end )[1],
 							),
@@ -53,7 +53,7 @@ beforeEach(
 			);
 		};
 
-		// GMT +0:00
+		// GMT +0:00.
 		$settings = (object) array(
 			'monday'    => $make_slot( 'monday', '09:00', '17:00' ),
 			'tuesday'   => $make_slot( 'tuesday', '09:00', '17:00' ),
@@ -150,8 +150,8 @@ test(
 test(
 	'Should create availability array - one day period - -0800 timezone',
 	function () {
-		$start_date = '2024-03-01T08:00:00.000Z'; // GMT
-		$end_date   = '2024-03-02T07:59:59.000Z'; // GMT
+		$start_date = '2024-03-01T08:00:00.000Z'; // GMT.
+		$end_date   = '2024-03-02T07:59:59.000Z'; // GMT.
 		$timezone   = 'America/Los_Angeles';
 
 		$result = Availability::get_availability( $start_date, $end_date, $timezone, new \DateTime( $start_date ) );

@@ -45,7 +45,8 @@ declare global {
 
 type OmitState<Params extends unknown[]> = Params extends []
 	? []
-	: Params extends [infer _, ...infer Rest]
+	: // eslint-disable-next-line @typescript-eslint/no-unused-vars
+		Params extends [infer _, ...infer Rest]
 		? Rest
 		: never;
 

@@ -1,28 +1,30 @@
 import path from 'path';
 
-const format = (absolutePaths) => {
+const js = (absolutePaths) => {
 	const cwd = process.cwd();
 	const relativePaths = absolutePaths.map((file) =>
 		path.relative(cwd, file)
 	);
 
-	return `pnpm format:js ${relativePaths.join(' ')}`;
+	return [
+		`pnpm format:js ${relativePaths.join(' ')}`,
+		`pnpm lint:js ${relativePaths.join(' ')}`,
+	];
 };
 
-const formatPHP = (absolutePaths) => {
+const php = (absolutePaths) => {
 	const cwd = process.cwd();
 	const relativePaths = absolutePaths.map((file) =>
 		path.relative(cwd, file)
 	);
 
-	return `pnpm format:php ${relativePaths.join(' ')}`;
+	return [
+		`pnpm format:php ${relativePaths.join(' ')}`,
+		`pnpm lint:php ${relativePaths.join(' ')}`,
+	];
 };
 
 export default {
-	'*.js': format,
-	'*.json': format,
-	'*.ts': format,
-	'*.tsx': format,
-	'*.css': format,
-	'*.php': formatPHP,
+	'*.{js,ts,tsx,json,css}': js,
+	'*.php': php,
 };

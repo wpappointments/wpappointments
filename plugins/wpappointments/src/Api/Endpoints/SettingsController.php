@@ -83,8 +83,6 @@ class SettingsController extends Controller {
 	/**
 	 * Get all settings
 	 *
-	 * @param WP_REST_Request $request Request object.
-	 *
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_settings() {
@@ -135,7 +133,7 @@ class SettingsController extends Controller {
 	public static function update_settings( WP_REST_Request $request ) {
 		$params   = $request->get_url_params();
 		$category = $params['category'];
-		$settings = json_decode( $request->get_body() );
+		$settings = $request->get_json_params();
 
 		$schedule = array();
 
@@ -151,8 +149,8 @@ class SettingsController extends Controller {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					if ( $settings->$day->allDay ) {
-						$settings->$day->slots->list[0] = array(
+					if ( $settings[ $day ]['allDay'] ) {
+						$settings[ $day ]['slots']['list'][0] = array(
 							'start' => array(
 								'hour'   => '00',
 								'minute' => '00',
@@ -164,7 +162,7 @@ class SettingsController extends Controller {
 						);
 					}
 
-					$test = wp_json_encode( $settings->$day );
+					$test = wp_json_encode( $settings[ $day ] );
 					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $test );
 					array_push( $schedule, $test );
 				}

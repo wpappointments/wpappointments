@@ -152,11 +152,11 @@ class AppointmentsController extends Controller {
 			array(
 				'type' => 'success',
 				'data' => array(
-					'appointments' => $results->appointments,
-					'totalItems'   => $results->totalItems,
-					'totalPages'   => $results->totalPages,
-					'postsPerPage' => $results->postsPerPage,
-					'currentPage'  => $results->currentPage,
+					'appointments' => $results['appointments'],
+					'totalItems'   => $results['totalItems'],
+					'totalPages'   => $results['totalPages'],
+					'postsPerPage' => $results['postsPerPage'],
+					'currentPage'  => $results['currentPage'],
 					'query'        => $query,
 				),
 			)

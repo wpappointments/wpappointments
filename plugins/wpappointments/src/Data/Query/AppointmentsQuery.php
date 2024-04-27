@@ -1,25 +1,46 @@
 <?php
+/**
+ * Appointments query class file
+ *
+ * @package WPAppointments
+ * @since 0.2.0
+ */
 
 namespace WPAppointments\Data\Query;
 
 use WP_Query;
 
-class AppointmentsQuery extends Query {
+/**
+ * Appointments query class
+ */
+class AppointmentsQuery {
+	/**
+	 * Post type
+	 *
+	 * @var string
+	 */
+	const POST_TYPE = 'wpa-appointment';
+
 	/**
 		* Default query part for appointments
 		*
 		* @var array
 		*/
 	const DEFAULT_QUERY_PART = array(
-		'post_type'   => 'wpa-appointment',
+		'post_type'   => self::POST_TYPE,
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value',
 		'meta_key'    => 'timestamp',
 		'order'       => 'ASC',
 	);
 
-	const POST_TYPE = 'wpa-appointment';
-
+	/**
+	 * Get all appointments
+	 *
+	 * @param array $query Query params.
+	 *
+	 * @return array
+	 */
 	public static function all( $query ) {
 		$appointments   = array();
 		$posts_per_page = $query['posts_per_page'] ?? 10;
@@ -31,7 +52,7 @@ class AppointmentsQuery extends Query {
 			)
 		);
 
-		$query = new \WP_Query(
+		$query = new WP_Query(
 			array_merge(
 				$default_query,
 				(array) $query
@@ -40,7 +61,7 @@ class AppointmentsQuery extends Query {
 
 		foreach ( $query->posts as $post ) {
 			$meta           = get_post_meta( $post->ID );
-			$appointments[] = self::prepare_entity(
+			$appointments[] = self::normalize(
 				$post->ID,
 				array(
 					'status'      => $meta['status'][0],
@@ -69,7 +90,7 @@ class AppointmentsQuery extends Query {
 	 *
 	 * @return AppointmentInterface
 	 */
-	protected static function prepare_entity( $post_id, $meta ) {
+	protected static function normalize( $post_id, $meta ) {
 		$length      = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$timestamp   = $meta['timestamp'];
 		$status      = $meta['status'];

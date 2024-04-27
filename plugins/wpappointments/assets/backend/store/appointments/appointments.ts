@@ -151,12 +151,14 @@ export const reducer = (state = DEFAULT_APPOINTMENTS_STATE, action: Action) => {
 							: appointment
 				);
 			});
+
 		default:
 			return state;
 	}
 };
 
 export const selectors = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getAppointments(state: State, _?: Query) {
 		return state.appointments;
 	},

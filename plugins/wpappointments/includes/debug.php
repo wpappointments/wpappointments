@@ -6,9 +6,12 @@
  * @since 0.0.1
  */
 
+namespace WPAppointments;
+
 add_action(
 	'init',
 	function () {
+		// @phpcs:ignore
 		/** @disregard P1011 because this constant is defined through wp-env config */
 		if ( defined( 'WPAPPOINTMENTS_DEBUG' ) && WPAPPOINTMENTS_DEBUG ) {
 			register_post_type(

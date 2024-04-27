@@ -82,9 +82,9 @@ class Availability {
 			$date_range = new \DatePeriod( $start, $appointment_length_interval, $end );
 
 			$weekday          = strtolower( $start->format( 'l' ) );
-			$schedule_slots   = $schedule->$weekday->slots->list;
-			$schedule_enabled = $schedule->$weekday->enabled;
-			$schedule_all_day = $schedule->$weekday->allDay;
+			$schedule_slots   = $schedule[ $weekday ]['slots']['list'];
+			$schedule_enabled = $schedule[ $weekday ]['enabled'];
+			$schedule_all_day = $schedule[ $weekday ]['allDay'];
 
 			$schedule_periods = array();
 

@@ -1,11 +1,25 @@
 <?php
+/**
+ * Customers query class file
+ *
+ * @package WPAppointments
+ * @since 0.2.0
+ */
 
 namespace WPAppointments\Data\Query;
 
 use WP_User_Query;
 
-class CustomersQuery extends Query {
-	const POST_TYPE = 'wpa-appointment';
+/**
+ * Customers query class
+ */
+class CustomersQuery {
+	/**
+	 * User role
+	 *
+	 * @var string
+	 */
+	const ROLE = 'wpa-customer';
 
 	/**
 		* Default query part for appointments
@@ -13,13 +27,18 @@ class CustomersQuery extends Query {
 		* @var array
 		*/
 	const DEFAULT_QUERY_PART = array(
-		'role'    => 'wpa-customer',
+		'role'    => self::ROLE,
 		'number'  => 10,
 		'paged'   => 1,
 		'orderby' => 'registered',
 		'order'   => 'DESC',
 	);
 
+	/**
+	 * Get all customers
+	 *
+	 * @param array $query Query params.
+	 */
 	public static function all( $query = array() ) {
 		$user_query = new WP_User_Query(
 			array_merge(
@@ -46,10 +65,10 @@ class CustomersQuery extends Query {
 	 * @return object
 	 */
 	public static function paginated( $users = array(), $query ) {
-		$posts_per_page = $query->get_query_var( 'number' ) ?: 10;
-		$paged          = $query->get_query_var( 'paged' ) ?: 1;
-		$total          = $query->total_users ?? 0;
-		$pages          = ceil( $total / $posts_per_page );
+		$posts_per_page = (int) $query->get( 'number' ) ?? 10;
+		$paged          = (int) $query->get( 'paged' ) ?? 1;
+		$total          = $query->get_total();
+		$pages          = (int) ceil( $total / $posts_per_page );
 
 		return array(
 			'customers'      => $users,

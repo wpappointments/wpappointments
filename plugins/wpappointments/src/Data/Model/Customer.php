@@ -39,9 +39,6 @@ class Customer {
 	/**
 	 * Save new customer user in database
 	 *
-	 * @param object $customer_data Customer data object.
-	 * @param string $password Customer password in plain text.
-	 *
 	 * @return \WP_User|\WP_Error
 	 */
 	public function save() {
@@ -74,7 +71,6 @@ class Customer {
 	/**
 	 * Update customer
 	 *
-	 * @param int    $id       Customer ID.
 	 * @param object $customer Customer data object.
 	 *
 	 * @return \WP_User|\WP_Error

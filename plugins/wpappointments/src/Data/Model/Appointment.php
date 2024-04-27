@@ -64,7 +64,7 @@ class Appointment {
 			);
 		}
 
-		return (object) array(
+		return array(
 			'appointments' => $appointments,
 			'totalItems'   => $query->found_posts,
 			'totalPages'   => ceil( $query->found_posts / $posts_per_page ),
@@ -496,7 +496,7 @@ class Appointment {
 			$customer = json_decode( $customer );
 		}
 
-		return (object) array(
+		return array(
 			'id'         => $post_id,
 			'service'    => get_the_title( $post_id ),
 			'timestamp'  => (int) $timestamp,

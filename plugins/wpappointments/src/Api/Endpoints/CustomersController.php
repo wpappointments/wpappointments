@@ -200,7 +200,7 @@ class CustomersController extends Controller {
 	/**
 	 * Prepare entity for API endpoint response
 	 *
-	 * @param \WP_User $user
+	 * @param \WP_User $user User object.
 	 *
 	 * @return object
 	 */
@@ -220,7 +220,7 @@ class CustomersController extends Controller {
 	/**
 	 * Paginate results
 	 *
-	 * @param array $results
+	 * @param array $results Results array.
 	 *
 	 * @return array
 	 */

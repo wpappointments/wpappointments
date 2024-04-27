@@ -89,6 +89,7 @@ export const reducer = (state = DEFAULT_CUSTOMERS_STATE, action: Action) => {
 };
 
 export const selectors = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getCustomers(state: State, _?: Query) {
 		return state.customers;
 	},

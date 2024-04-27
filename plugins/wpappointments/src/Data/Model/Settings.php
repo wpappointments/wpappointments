@@ -179,7 +179,7 @@ class Settings {
 				$meta = get_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, true );
 
 				if ( $meta ) {
-					$hours[ $day ] = json_decode( $meta );
+					$hours[ $day ] = json_decode( $meta, true );
 				}
 			}
 
