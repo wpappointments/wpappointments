@@ -22,6 +22,7 @@ export function appointmentsApi({
 }: {
 	invalidateCache?: (selector: string) => void;
 }) {
+	const apiPath = 'appointments';
 	const dispatch = window.wp.data.dispatch('wpappointments');
 	const select = window.wp.data.select('wpappointments');
 
@@ -64,7 +65,7 @@ export function appointmentsApi({
 
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
-				path: `appointment/${id}`,
+				path: `${apiPath}/${id}`,
 				method: 'PUT',
 				data,
 			});
@@ -106,7 +107,7 @@ export function appointmentsApi({
 
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
-				path: `appointment/${id}/cancel`,
+				path: `${apiPath}/${id}/cancel`,
 				method: 'PUT',
 			});
 
@@ -144,7 +145,7 @@ export function appointmentsApi({
 
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
-				path: `appointment/${id}`,
+				path: `${apiPath}/${id}`,
 				method: 'DELETE',
 			});
 
@@ -182,7 +183,7 @@ export function appointmentsApi({
 
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
-				path: `appointment/${id}/confirm`,
+				path: `${apiPath}/${id}/confirm`,
 				method: 'PUT',
 			});
 
@@ -215,7 +216,6 @@ export function appointmentsApi({
 
 	function handleError(error: Error, message: string) {
 		displayErrorToast(`${message}: ${getErrorMessage(error)}`);
-
 		console.error('Error: ' + getErrorMessage(error));
 	}
 

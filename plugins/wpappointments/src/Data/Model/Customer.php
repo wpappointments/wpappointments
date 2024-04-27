@@ -114,6 +114,8 @@ class Customer {
 	 * @return bool|\WP_Error
 	 */
 	public function delete() {
+		require_once ABSPATH . 'wp-admin/includes/user.php';
+
 		$id = $this->validate_user_id( $this->user->ID );
 
 		if ( is_wp_error( $id ) ) {
@@ -126,7 +128,7 @@ class Customer {
 			return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
 		}
 
-		return $deleted;
+		return $id;
 	}
 
 	/**

@@ -10,7 +10,8 @@ export type UpdateCustomerData = Pick<
 	Customer,
 	'id' | 'name' | 'email' | 'phone'
 >;
-type CreateCustomerData = Pick<Customer, 'name' | 'email' | 'phone'>;
+
+export type CreateCustomerData = Pick<Customer, 'name' | 'email' | 'phone'>;
 
 type UpdateResponse = APIResponse<{
 	customer: UpdateCustomerData;
@@ -22,11 +23,16 @@ type CreateResponse = APIResponse<{
 	message: string;
 }>;
 
+type DeleteResponse = APIResponse<{
+	id: number;
+}>;
+
 export type CustomersApiOptions = {
 	invalidateCache?: (selector: string) => void;
 };
 
 export function customersApi(options?: CustomersApiOptions) {
+	const apiPath = 'customers';
 	const { invalidateCache } = options || {};
 	const dispatch = window.wp.data.dispatch('wpappointments');
 	const select = window.wp.data.select('wpappointments');
@@ -38,7 +44,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	async function createCustomer(data: CreateCustomerData) {
 		const [error, response] = await resolve<CreateResponse>(async () => {
 			const response = await apiFetch<CreateResponse>({
-				path: 'customers',
+				path: apiPath,
 				method: 'POST',
 				data,
 			});
@@ -81,7 +87,7 @@ export function customersApi(options?: CustomersApiOptions) {
 	async function updateCustomer(data: UpdateCustomerData) {
 		const [error, response] = await resolve<UpdateResponse>(async () => {
 			return await apiFetch<UpdateResponse>({
-				path: `customer/${data.id}`,
+				path: `${apiPath}/${data.id}`,
 				method: 'POST',
 				data,
 			});
@@ -124,9 +130,9 @@ export function customersApi(options?: CustomersApiOptions) {
 			return;
 		}
 
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
-				path: `customer/${id}`,
+		const [error, response] = await resolve<DeleteResponse>(async () => {
+			const response = await apiFetch<DeleteResponse>({
+				path: `${apiPath}/${id}`,
 				method: 'DELETE',
 			});
 
@@ -155,7 +161,6 @@ export function customersApi(options?: CustomersApiOptions) {
 
 	function handleError(error: Error, message: string) {
 		displayErrorToast(`${message}: ${getErrorMessage(error)}`);
-
 		console.error('Error: ' + getErrorMessage(error));
 	}
 
