@@ -19,9 +19,12 @@ const php = (absolutePaths) => {
 		.map((file) => path.relative(cwd, file))
 		.filter((file) => !file.startsWith('.mu-plugins'));
 	console.log(relativePaths);
-	return [
-		'pnpm echo 1'
-	];
+
+	if (relativePaths.length === 0) {
+		return [
+			'pnpm echo 1'
+		];
+	}
 
 	return [
 		`pnpm phpcbf ${relativePaths.join(' ')}`,
