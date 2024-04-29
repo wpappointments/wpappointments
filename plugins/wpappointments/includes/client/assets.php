@@ -28,7 +28,7 @@ function scripts() {
 
 	wp_enqueue_script(
 		'wpappointments-client-js',
-		PluginInfo::get_plugin_dir_url() . '/build/index.tsx.js',
+		PluginInfo::get_plugin_dir_url() . 'build/index.tsx.js',
 		$client_deps['dependencies'] + apply_filters( 'wpappointments_client_js_dependencies', array() ),
 		$client_deps['version'],
 		true

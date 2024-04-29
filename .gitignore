@@ -4,6 +4,7 @@ coverage
 vendor
 htaccess
 cache
+.chrome
 .phpunit.cache
 .DS_Store
 .phpunit.result.cache
