@@ -9,7 +9,8 @@
 		"wp-content/tools": "./tools",
 		"wp-content/vendor": "./vendor",
 		"wp-content/plugins/wpappointments": "./plugins/wpappointments",
+		"wp-content/plugins/other-plugin": "./plugins/other-plugin",
 		"wp-content/mu-plugins": "./.mu-plugins"
 	},
-	"plugins": ["./plugins/wpappointments"]
+	"plugins": ["./plugins/wpappointments", "./plugins/other-plugin"]
 }

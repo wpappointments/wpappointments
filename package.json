@@ -2,6 +2,7 @@
 	"name": "root",
 	"private": true,
 	"scripts": {
+		"open": "bash .scripts/open",
 		"build": "lerna run build",
 		"dev": "pnpm start && pnpm -C plugins/wpappointments dev:hot",
 		"start": "pnpm run start:wp && pnpm run start:mailhog",

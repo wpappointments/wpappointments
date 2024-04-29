@@ -8,8 +8,9 @@ const js = (absolutePaths) => {
 	);
 
 	return [
+		`wp-scripts format ${relativePaths.join(' ')}`,
 		`wp-scripts lint-js ${relativePaths.join(' ')}`,
-		`wp-scripts lint-js ${relativePaths.join(' ')}`,
+		`lerna run check-types`,
 	];
 };
 

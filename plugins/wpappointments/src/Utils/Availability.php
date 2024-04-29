@@ -41,8 +41,9 @@ class Availability {
 		$interval = new \DateInterval( 'PT' . $length . 'M' );
 		$range    = new \DatePeriod( $range_start, $interval, $range_end );
 
-		$settings = new Settings();
-		$schedule = $settings->get_default_schedule( get_option( 'wpappointments_default_scheduleId' ) );
+		$settings                 = new Settings();
+		$default_schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
+		$schedule                 = $settings->get_default_schedule( $default_schedule_post_id );
 
 		$appointments       = new Appointment();
 		$range_appointments = $appointments->get_date_range_appointments(

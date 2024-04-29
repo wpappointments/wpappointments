@@ -14,5 +14,13 @@ $element = sprintf(
 printf(
 	'<div %s>%s</div>',
 	esc_attr( get_block_wrapper_attributes() ),
-	esc_html( $element )
+	wp_kses(
+		$element,
+		array(
+			'div' => array(
+				'class'           => array(),
+				'data-attributes' => array(),
+			),
+		)
+	)
 );
