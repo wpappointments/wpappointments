@@ -90,12 +90,10 @@ class SettingsController extends Controller {
 		$settings = $settings->get_all();
 
 		return self::response(
+			__( 'Settings fetched successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'settings' => $settings,
-				),
-			)
+				'settings' => $settings,
+			),
 		);
 	}
 
@@ -114,12 +112,10 @@ class SettingsController extends Controller {
 		$settings = $settings->get_all_by_category( $category );
 
 		return self::response(
+			__( 'Settings in category fetched successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'settings' => $settings,
-				),
-			)
+				'settings' => $settings,
+			),
 		);
 	}
 
@@ -142,7 +138,7 @@ class SettingsController extends Controller {
 			$result         = $settings_model->update( $category, $settings );
 
 			if ( is_wp_error( $result ) ) {
-				return self::error( $result->get_error_message() );
+				return self::error( $result );
 			}
 		} else {
 			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
@@ -170,12 +166,7 @@ class SettingsController extends Controller {
 		}
 
 		return self::response(
-			array(
-				'type' => 'success',
-				'data' => array(
-					'message' => __( 'Settings updated successfully', 'wpappointments' ),
-				),
-			)
+			__( 'Settings updated successfully', 'wpappointments' ),
 		);
 	}
 }

@@ -66,15 +66,17 @@ class AvailabilityController extends Controller {
 			$timezone
 		);
 
+		if ( is_wp_error( $availability ) ) {
+			return self::error( $availability );
+		}
+
 		return self::response(
+			__( 'Month availability fetched successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'availability' => array(
-						'month' => $availability,
-					),
+				'availability' => array(
+					'month' => $availability,
 				),
-			)
+			),
 		);
 	}
 
@@ -93,13 +95,15 @@ class AvailabilityController extends Controller {
 
 		$availability = Availability::get_month_calendar_availability( $calendar, $timezone, $trim );
 
+		if ( is_wp_error( $availability ) ) {
+			return self::error( $availability );
+		}
+
 		return self::response(
+			__( 'Calendar availability fetched successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'availability' => $availability,
-				),
-			)
+				'availability' => $availability,
+			),
 		);
 	}
 }

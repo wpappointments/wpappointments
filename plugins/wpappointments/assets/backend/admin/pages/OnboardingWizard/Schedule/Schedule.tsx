@@ -12,7 +12,6 @@ import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek
 import styles from '../OnboardingWizard.module.css';
 import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 
-
 type Fields = {
 	monday: DayOpeningHours;
 	tuesday: DayOpeningHours;

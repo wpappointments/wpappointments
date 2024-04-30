@@ -77,6 +77,27 @@ expect()->extend(
 	}
 );
 
+expect()->extend(
+	'toBeAvailabilityMonth',
+	function () {
+		$month = $this->value;
+
+		expect( $month )->toBeArray();
+
+		foreach ( $month as $week ) {
+			foreach ( $week as $day ) {
+				expect( $day )->toBeAvailabilityDay();
+
+				foreach ( $day['day'] as $slot ) {
+					expect( $slot )->toBeAvailabilitySlot();
+				}
+			}
+		}
+
+		return $this;
+	}
+);
+
 beforeEach(
 	function () {
 		$schedule_post_id = wp_insert_post(
@@ -154,19 +175,195 @@ test(
 		);
 
 		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
+		$data = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
+		expect( $results )->toBeSuccess();
 		expect( $data['data'] )->toHaveKey( 'availability' );
 		expect( $data['data']['availability'] )->toHaveKey( 'month' );
 		expect( $data['data']['availability']['month'] )->toBeAvailabilityMonthArray();
 	}
 );
+
+test(
+	'GET wpappointments/v1/availability - status 422 - missing month',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentYear' => 2024,
+				'timezone'    => 'UTC',
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'missing_month' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/availability - status 422 - missing year',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentMonth' => 1,
+				'timezone'     => 'UTC',
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'missing_year' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/availability - status 422 - missing timezone',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentMonth' => 1,
+				'currentYear'  => 2024,
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'missing_timezone' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/availability - status 422 - non-numerical year',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentMonth' => 1,
+				'currentYear'  => 'a word',
+				'timezone'     => 'UTC',
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'year_not_numeric' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/availability - status 422 - non-numerical month',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentMonth' => 'a word',
+				'currentYear'  => 2024,
+				'timezone'     => 'UTC',
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'invalid_month' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/availability - status 422 - invalid month',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'availability',
+			array(
+				'currentMonth' => 13,
+				'currentYear'  => 2024,
+				'timezone'     => 'UTC',
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'invalid_month' );
+	}
+);
+
+/**
+ * Helper function to create a valid calendar input.
+ *
+ * @return string
+ */
+function make_valid_calendar_input() {
+	return wp_json_encode(
+		array(
+			array(
+				'2024-01-28T00:00:00+00:00',
+				'2024-01-29T00:00:00+00:00',
+				'2024-01-30T00:00:00+00:00',
+				'2024-01-31T00:00:00+00:00',
+				'2024-02-01T00:00:00+00:00',
+				'2024-02-02T00:00:00+00:00',
+				'2024-02-03T00:00:00+00:00',
+			),
+			array(
+				'2024-02-04T00:00:00+00:00',
+				'2024-02-05T00:00:00+00:00',
+				'2024-02-06T00:00:00+00:00',
+				'2024-02-07T00:00:00+00:00',
+				'2024-02-08T00:00:00+00:00',
+				'2024-02-09T00:00:00+00:00',
+				'2024-02-10T00:00:00+00:00',
+			),
+			array(
+				'2024-02-11T00:00:00+00:00',
+				'2024-02-12T00:00:00+00:00',
+				'2024-02-13T00:00:00+00:00',
+				'2024-02-14T00:00:00+00:00',
+				'2024-02-15T00:00:00+00:00',
+				'2024-02-16T00:00:00+00:00',
+				'2024-02-17T00:00:00+00:00',
+			),
+			array(
+				'2024-02-18T00:00:00+00:00',
+				'2024-02-19T00:00:00+00:00',
+				'2024-02-20T00:00:00+00:00',
+				'2024-02-21T00:00:00+00:00',
+				'2024-02-22T00:00:00+00:00',
+				'2024-02-23T00:00:00+00:00',
+				'2024-02-24T00:00:00+00:00',
+			),
+			array(
+				'2024-02-25T00:00:00+00:00',
+				'2024-02-26T00:00:00+00:00',
+				'2024-02-27T00:00:00+00:00',
+				'2024-02-28T00:00:00+00:00',
+				'2024-02-29T00:00:00+00:00',
+				'2024-03-01T00:00:00+00:00',
+				'2024-03-02T00:00:00+00:00',
+			),
+		)
+	);
+}
 
 test(
 	'GET wpappointments/v1/calendar-availability - status 200',
@@ -178,23 +375,92 @@ test(
 		$results = $this->do_rest_get_request(
 			'calendar-availability',
 			array(
-				'currentMonth' => 1,
-				'currentYear'  => 2024,
-				'timezone'     => 'UTC',
+				'calendar' => make_valid_calendar_input(),
+				'timezone' => 'UTC',
+				'trim'     => true,
 			)
 		);
 
 		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
+		$data = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
+		expect( $results )->toBeSuccess();
 		expect( $data['data'] )->toHaveKey( 'availability' );
-		expect( $data['data']['availability'] )->toHaveKey( 'month' );
-		expect( $data['data']['availability']['month'] )->toBeAvailabilityMonthArray();
+		expect( $data['data']['availability'] )->toHaveLength( 5 );
+		expect( $data['data']['availability'] )->toBeAvailabilityMonth();
+	}
+);
+
+test(
+	'GET wpappointments/v1/calendar-availability - status 422 - missing calendar',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'calendar-availability',
+			array(
+				'timezone' => 'UTC',
+				'trim'     => true,
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'missing_calendar' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/calendar-availability - status 422 - missing timezone',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'calendar-availability',
+			array(
+				'calendar' => make_valid_calendar_input(),
+				'trim'     => true,
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'missing_timezone' );
+	}
+);
+
+test(
+	'GET wpappointments/v1/calendar-availability - status 422 - invalid calendar payload',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		// Make request.
+		$results = $this->do_rest_get_request(
+			'calendar-availability',
+			array(
+				'calendar' => wp_json_encode(
+					array(
+						array(
+							'2024-01-28T00:00:00+00:00',
+							'2024-01-29T00:00:00+00:00',
+							'2024-01-30T00:00:00+00:00',
+							'2024-01-31T00:00:00+00:00',
+							'2024-02-01T00:00:00+00:00',
+							'2024-02-02T00:00:00+00:00',
+							'2024-02-03T00:00:00+00:00',
+						),
+					)
+				),
+				'timezone' => 'UTC',
+				'trim'     => true,
+			)
+		);
+
+		// Assert response data.
+		expect( $results )->toBeError( 422, 'invalid_calendar' );
 	}
 );
