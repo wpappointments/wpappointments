@@ -7,7 +7,6 @@
 
 namespace Tests\Api;
 
-use WP_REST_Response;
 use WPAppointments\Data\Model\Settings;
 
 uses( \TestTools\RestTestCase::class );

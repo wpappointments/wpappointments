@@ -25,7 +25,7 @@ class Controller {
 	 */
 	public static function init() {
 		return new WP_Error(
-			'invalid-method',
+			'invalid_method',
 			sprintf(
 				"Method '%s' not implemented. Must be overridden in subclass.",
 				__METHOD__

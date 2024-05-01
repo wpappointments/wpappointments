@@ -24,8 +24,7 @@ test(
 		$results = $this->do_rest_get_request( 'customers' );
 
 		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
+		$data = $results->get_data();
 
 		// Assert response data.
 		expect( $results )->toBeSuccess();

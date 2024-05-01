@@ -48,12 +48,12 @@ abstract class RestTestCase extends TestCase {
 	 *
 	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
 	 * @param string     $verb HTTP verb for the request, default is GET.
-	 * @param array|null $body_params Body parameters for the request, null if none are required.
+	 * @param array|null $body Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
 	 *
 	 * @return array Result from the request.
 	 */
-	public function do_rest_request( $url, $verb = 'GET', $body_params = null, $query_params = null ) {
+	public function do_rest_request( $url, $verb = 'GET', $body = null, $query_params = null ) {
 		if ( '/' !== $url[0] ) {
 			$url = '/wpappointments/v1/' . $url;
 		}
@@ -62,8 +62,10 @@ abstract class RestTestCase extends TestCase {
 		if ( ! is_null( $query_params ) ) {
 			$request->set_query_params( $query_params );
 		}
-		if ( ! is_null( $body_params ) ) {
-			$request->set_body_params( $body_params );
+		if ( ! is_null( $body ) ) {
+			$request->set_header( 'Content-Type', 'application/json' );
+			$request->set_body( wp_json_encode( $body ) );
+			$request->get_json_params();
 		}
 
 		return $this->server->dispatch( $request );
@@ -85,39 +87,39 @@ abstract class RestTestCase extends TestCase {
 	 * Perform a POST REST request.
 	 *
 	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
-	 * @param array|null $body_params Body parameters for the request, null if none are required.
+	 * @param array|null $body Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
 	 *
 	 * @return array Result from the request.
 	 */
-	public function do_rest_post_request( $url, $body_params = null, $query_params = null ) {
-		return $this->do_rest_request( $url, 'POST', $body_params, $query_params );
+	public function do_rest_post_request( $url, $body = null, $query_params = null ) {
+		return $this->do_rest_request( $url, 'POST', $body, $query_params );
 	}
 
 	/**
 	 * Perform a PUT REST request.
 	 *
 	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
-	 * @param array|null $body_params Body parameters for the request, null if none are required.
+	 * @param array|null $body Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
 	 *
 	 * @return array Result from the request.
 	 */
-	public function do_rest_put_request( $url, $body_params = null, $query_params = null ) {
-		return $this->do_rest_request( $url, 'PUT', $body_params, $query_params );
+	public function do_rest_put_request( $url, $body = null, $query_params = null ) {
+		return $this->do_rest_request( $url, 'PUT', $body, $query_params );
 	}
 
 	/**
 	 * Perform a PATCH REST request.
 	 *
 	 * @param string     $url The endpopint url, if it doesn't start with '/' it'll be prepended with '/wpappointments/v1/'.
-	 * @param array|null $body_params Body parameters for the request, null if none are required.
+	 * @param array|null $body Body parameters for the request, null if none are required.
 	 * @param array|null $query_params Query string parameters for the request, null if none are required.
 	 *
 	 * @return array Result from the request.
 	 */
-	public function do_rest_patch_request( $url, $body_params = null, $query_params = null ) {
-		return $this->do_rest_request( $url, 'PATCH', $body_params, $query_params );
+	public function do_rest_patch_request( $url, $body = null, $query_params = null ) {
+		return $this->do_rest_request( $url, 'PATCH', $body, $query_params );
 	}
 
 	/**
