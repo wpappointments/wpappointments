@@ -5,9 +5,7 @@
  * @package WPAppointments
  */
 
-namespace Tests\Api;
-
-use WP_REST_Response;
+namespace Tests\Api\Endpoints;
 
 uses( \TestTools\RestTestCase::class );
 
@@ -40,16 +38,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_get_request( 'customers' );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -62,16 +52,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_get_request( 'customers' );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -98,7 +80,7 @@ test(
 		expect( $results )->toBeSuccess();
 		expect( $data )->toHaveKey( 'data' );
 		expect( $data['data'] )->toHaveKey( 'customer' );
-		expect( $data['data']['customer'] )->toBeTestCustomer();
+		expect( $data['data']['customer'] )->toBeCustomer();
 	}
 );
 
@@ -117,16 +99,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -146,16 +120,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -208,16 +174,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -233,16 +191,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -271,7 +221,7 @@ test(
 
 		// Assert response data.
 		expect( $results )->toBeSuccess();
-		expect( $response['customer'] )->toBeTestCustomer();
+		expect( $response['customer'] )->toBeCustomer();
 	}
 );
 
@@ -293,16 +243,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -325,16 +267,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 

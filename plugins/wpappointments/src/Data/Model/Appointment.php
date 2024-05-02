@@ -8,10 +8,26 @@
 
 namespace WPAppointments\Data\Model;
 
+use WP_Post;
+
 /**
  * Appointment model class
  */
 class Appointment {
+	/**
+	 * Appointment title
+	 *
+	 * @var \WP_Post|null
+	 */
+	public $appointment = null;
+
+	/**
+	 * Default query part for appointments
+	 *
+	 * @var array
+	 */
+	public $appointment_data = array();
+
 	/**
 	 * Default query part for appointments
 	 *
@@ -26,144 +42,18 @@ class Appointment {
 	);
 
 	/**
-	 * Get all appointments
+	 * Appointment model constructor
 	 *
-	 * @param array $query Query params.
-	 *
-	 * @return object
+	 * @param WP_User|int|array $appointment Appointment post object or appointment ID or appointment data array.
 	 */
-	public function get_all( $query ) {
-		$appointments   = array();
-		$posts_per_page = $query['posts_per_page'] ?? 10;
-		$default_query  = array_merge(
-			$this->default_query_part,
-			array(
-				'posts_per_page' => - 1,
-				'meta_query'     => array(),
-			)
-		);
-
-		$query = new \WP_Query(
-			array_merge(
-				$default_query,
-				(array) $query
-			)
-		);
-
-		foreach ( $query->posts as $post ) {
-			$meta           = get_post_meta( $post->ID );
-			$appointments[] = $this->prepare_appointment_entity(
-				$post->ID,
-				array(
-					'status'      => $meta['status'][0],
-					'timestamp'   => $meta['timestamp'][0],
-					'customer_id' => $meta['customer_id'][0],
-					'customer'    => $meta['customer'][0],
-					'duration'    => $meta['duration'][0],
-				)
-			);
+	public function __construct( $appointment = null ) {
+		if ( is_numeric( $appointment ) ) {
+			$this->appointment = get_post( $appointment );
+		} elseif ( $appointment instanceof WP_Post ) {
+			$this->appointment = $appointment;
+		} elseif ( is_array( $appointment ) ) {
+			$this->appointment_data = $appointment;
 		}
-
-		return array(
-			'appointments' => $appointments,
-			'totalItems'   => $query->found_posts,
-			'totalPages'   => ceil( $query->found_posts / $posts_per_page ),
-			'postsPerPage' => $posts_per_page,
-			'currentPage'  => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
-		);
-	}
-
-	/**
-	 * Get upcoming appointments
-	 *
-	 * @param array $query Query params.
-	 *
-	 * @return object
-	 */
-	public function get_upcoming( $query ) {
-		$date_query = array(
-			array(
-				'key'     => 'timestamp',
-				'value'   => time(),
-				'compare' => '>=',
-			),
-			array(
-				'key'     => 'timestamp',
-				'value'   => time() + 60 * 60 * 24 * 7,
-				'compare' => '<=',
-			),
-		);
-
-		if ( isset( $query['period'] ) ) {
-			$period = $query['period'];
-
-			if ( 'month' === $period ) {
-				$date_query[1]['value'] = time() + 60 * 60 * 24 * 30;
-			}
-
-			if ( 'year' === $period ) {
-				$date_query[1]['value'] = time() + 60 * 60 * 24 * 365;
-			}
-
-			if ( 'all' === $period ) {
-				unset( $date_query[1] );
-			}
-		}
-
-		$status = 'confirmed';
-
-		if ( isset( $query['status'] ) ) {
-			$status = $query['status'];
-		}
-
-		$status_query = '' === $status ? array() : array(
-			'key'     => 'status',
-			'value'   => $status,
-			'compare' => '=',
-		);
-
-		$default_query = array_merge(
-			$this->default_query_part,
-			array(
-				'posts_per_page' => 10,
-				'meta_query'     => array_merge(
-					array(
-						'relation' => 'AND',
-						$status_query,
-					),
-					$date_query
-				),
-			),
-		);
-
-		$query = new \WP_Query(
-			array_merge(
-				$default_query,
-				(array) $query
-			)
-		);
-
-		$appointments = array();
-
-		foreach ( $query->posts as $post ) {
-			$meta           = get_post_meta( $post->ID );
-			$appointments[] = $this->prepare_appointment_entity(
-				$post->ID,
-				array(
-					'status'      => $meta['status'][0],
-					'timestamp'   => $meta['timestamp'][0],
-					'customer_id' => $meta['customer_id'][0],
-					'customer'    => $meta['customer'][0],
-					'duration'    => $meta['duration'][0],
-				)
-			);
-		}
-
-		return array(
-			'appointments' => $appointments,
-			'postCount'    => $query->post_count,
-			'foundPosts'   => $query->found_posts,
-		);
 	}
 
 	/**
@@ -240,23 +130,28 @@ class Appointment {
 	/**
 	 * Create appointment
 	 *
-	 * @param string         $title Appointment title.
-	 * @param array          $meta Appointment post meta.
-	 * @param array|int|null $customer Customer to assign to appointment or customer array to create customer.
-	 *
 	 * @return object|\WP_Error
 	 */
-	public function create( $title = 'Appointment', $meta = array(), $customer = null ) {
-		if ( null !== $customer ) {
-			$customer_id = $customer;
+	public function save() {
+		$create_account = $this->appointment_data['createAccount'] ?? false;
+		$password       = $this->appointment_data['password'] ?? null;
+		$customer       = $this->appointment_data['customer'] ?? null;
+		$title          = $this->appointment_data['title'] ?? null;
+		$meta           = $this->appointment_data['meta'] ?? array();
 
-			if ( is_array( $customer ) ) {
+		if ( $password ) {
+			$customer['password'] = $password;
+		}
+
+		if ( null !== $customer ) {
+			$meta['customer'] = $customer;
+
+			if ( is_array( $customer ) && $create_account ) {
 				$customer       = new Customer( $customer );
 				$saved_customer = $customer->save();
-				$customer_id    = $saved_customer->user->ID;
-			}
 
-			$meta['customer_id'] = $customer_id;
+				$meta['customer_id'] = $saved_customer->user->ID;
+			}
 		}
 
 		$post_id = wp_insert_post(
@@ -269,12 +164,6 @@ class Appointment {
 			true
 		);
 
-		if ( is_wp_error( $post_id ) ) {
-			do_action( 'wpappointments_appointment_create_error', $post_id );
-
-			return $post_id;
-		}
-
 		$appointment = $this->prepare_appointment_entity( $post_id, $meta );
 
 		do_action( 'wpappointments_appointment_created', $appointment );
@@ -285,13 +174,20 @@ class Appointment {
 	/**
 	 * Update appointment
 	 *
-	 * @param int    $id Appointment ID.
-	 * @param string $title Appointment title.
-	 * @param array  $meta Appointment post meta.
+	 * @param array $data Appointment update data.
 	 *
 	 * @return array|\WP_Error
 	 */
-	public function update( $id, $title = null, $meta = array() ) {
+	public function update( $data ) {
+		$id       = $this->appointment->ID ?? -1;
+		$title    = $data['title'] ?? null;
+		$meta     = $data['meta'] ?? array();
+		$customer = $data['customer'] ?? null;
+
+		if ( null !== $customer ) {
+			$meta['customer'] = $customer;
+		}
+
 		$valid_id = $this->validate_post_id( $id );
 
 		if ( is_wp_error( $valid_id ) ) {
@@ -338,7 +234,7 @@ class Appointment {
 			);
 		} else {
 			do_action(
-				'wpappointments_appointment_' . $new_appointment['status'],
+				"wpappointments_appointment_{$new_appointment['status']}",
 				$new_appointment,
 				$current_appointment
 			);
@@ -350,11 +246,11 @@ class Appointment {
 	/**
 	 * Cancel appointment
 	 *
-	 * @param int $id Appointment ID.
-	 *
 	 * @return array|\WP_Error
 	 */
-	public function cancel( $id ) {
+	public function cancel() {
+		$id = $this->appointment->ID ?? -1;
+
 		$valid_id = $this->validate_post_id( $id );
 
 		if ( is_wp_error( $valid_id ) ) {
@@ -377,17 +273,17 @@ class Appointment {
 
 		do_action( 'wpappointments_appointment_cancelled', $this->prepare_appointment_entity( $valid_id, $meta ) );
 
-		return $cancelled;
+		return $valid_id;
 	}
 
 	/**
 	 * Confirm appointment
 	 *
-	 * @param int $id Appointment ID.
-	 *
 	 * @return int|\WP_Error
 	 */
-	public function confirm( $id ) {
+	public function confirm() {
+		$id = $this->appointment->ID ?? -1;
+
 		$valid_id = $this->validate_post_id( $id );
 
 		if ( is_wp_error( $valid_id ) ) {
@@ -410,7 +306,7 @@ class Appointment {
 
 		do_action( 'wpappointments_appointment_confirmed', $this->prepare_appointment_entity( $valid_id, $meta ) );
 
-		return $confirmed;
+		return $valid_id;
 	}
 
 	/**
@@ -449,11 +345,11 @@ class Appointment {
 	/**
 	 * Delete appointment
 	 *
-	 * @param int $id Appointment ID.
-	 *
 	 * @return int|\WP_Error
 	 */
-	public function delete( $id ) {
+	public function delete() {
+		$id = $this->appointment->ID ?? -1;
+
 		$valid_id = $this->validate_post_id( $id );
 
 		if ( is_wp_error( $valid_id ) ) {
@@ -463,7 +359,10 @@ class Appointment {
 		$status = get_post_meta( $id, 'status', true );
 
 		if ( 'cancelled' !== $status ) {
-			return new \WP_Error( 'error', __( 'Appointment must be cancelled before deleting', 'wpappointments' ) );
+			return new \WP_Error(
+				'deleting_not_cancelled_appointment',
+				__( 'Appointment must be cancelled before deleting', 'wpappointments' )
+			);
 		}
 
 		$deleted = wp_delete_post( $id, true );
@@ -472,7 +371,10 @@ class Appointment {
 			return $deleted->ID;
 		}
 
-		return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+		return new \WP_Error(
+			'deleting_appointment_unknown_error',
+			__( 'Could not delete appointment', 'wpappointments' )
+		);
 	}
 
 	/**
@@ -489,8 +391,7 @@ class Appointment {
 		$status      = $meta['status'];
 		$duration    = $meta['duration'] ?? $length;
 		$customer_id = $meta['customer_id'] ?? 0;
-
-		$customer = $meta['customer'] ?? null;
+		$customer    = $meta['customer'] ?? null;
 
 		if ( is_string( $customer ) ) {
 			$customer = json_decode( $customer, true );
@@ -542,11 +443,11 @@ class Appointment {
 	 */
 	protected function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
-			return new \WP_Error( 'error', __( 'Appointment ID is required', 'wpappointments' ) );
+			return new \WP_Error( 'appointment_id_required', __( 'Appointment ID is required', 'wpappointments' ) );
 		}
 
 		if ( ! get_post( $post_id ) ) {
-			return new \WP_Error( 'error', __( 'Appointment not found', 'wpappointments' ) );
+			return new \WP_Error( 'appointment_not_found', __( 'Appointment not found', 'wpappointments' ) );
 		}
 
 		return $post_id;

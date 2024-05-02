@@ -94,7 +94,7 @@ class CustomersController extends Controller {
 
 		return self::response(
 			__( 'Customers fetched successfully', 'wpappointments' ),
-			self::paginated( $results )
+			self::paginated( 'customers', $results )
 		);
 	}
 
@@ -203,23 +203,6 @@ class CustomersController extends Controller {
 			'phone'   => $phone,
 			'created' => $user->user_registered,
 			'updated' => $user->user_registered,
-		);
-	}
-
-	/**
-	 * Paginate results
-	 *
-	 * @param array $results Results array.
-	 *
-	 * @return array
-	 */
-	public static function paginated( $results ) {
-		return array(
-			'customers'    => $results['customers'],
-			'totalItems'   => $results['total_items'],
-			'totalPages'   => $results['total_pages'],
-			'postsPerPage' => $results['posts_per_page'],
-			'currentPage'  => $results['current_page'],
 		);
 	}
 }

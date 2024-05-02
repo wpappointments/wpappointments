@@ -45,7 +45,7 @@ class Customer {
 		$email    = sanitize_text_field( wp_unslash( $this->user['email'] ), true );
 		$name     = sanitize_user( wp_unslash( $this->user['name'] ), true );
 		$phone    = sanitize_text_field( $this->user['phone'], true );
-		$password = $this->user['password'];
+		$password = $this->user['password'] ?? wp_generate_password();
 
 		$saved_user_id = wp_insert_user(
 			array(

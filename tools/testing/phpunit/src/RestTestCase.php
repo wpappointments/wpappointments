@@ -7,6 +7,7 @@
 
 namespace TestTools;
 
+use TestTools\Factory\FactoryForAppointment;
 use TestTools\Utils\RESTServer;
 
 /**

@@ -14,6 +14,7 @@ use WPAppointments\Api\Controller;
 use WPAppointments\Data\Model\Appointment;
 use WPAppointments\Data\Model\Customer;
 use WPAppointments\Data\Model\Settings;
+use WPAppointments\Data\Query\AppointmentsQuery;
 
 /**
  * Appointment endpoint class
@@ -153,20 +154,12 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_all_appointments( WP_REST_Request $request ) {
-		$query       = $request->get_param( 'query' );
-		$appointment = new Appointment();
-		$results     = $appointment->get_all( $query );
+		$query   = $request->get_param( 'query' );
+		$results = AppointmentsQuery::all( $query );
 
 		return self::response(
 			__( 'Appointments fetched successfully', 'wpappointments' ),
-			array(
-				'appointments' => $results['appointments'],
-				'totalItems'   => $results['totalItems'],
-				'totalPages'   => $results['totalPages'],
-				'postsPerPage' => $results['postsPerPage'],
-				'currentPage'  => $results['currentPage'],
-				'query'        => $query,
-			)
+			self::paginated( 'appointments', $results )
 		);
 	}
 
@@ -178,18 +171,12 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function get_upcoming_appointments( WP_REST_Request $request ) {
-		$query       = $request->get_param( 'query' );
-		$appointment = new Appointment();
-		$results     = $appointment->get_upcoming( $query );
+		$query   = $request->get_param( 'query' );
+		$results = AppointmentsQuery::upcoming( $query );
 
 		return self::response(
 			__( 'Upcoming appointments fetched successfully', 'wpappointments' ),
-			array(
-				'appointments' => $results['appointments'],
-				'postCount'    => $results['post_count'],
-				'foundPosts'   => $results['found_posts'],
-				'query'        => $query,
-			)
+			self::paginated( 'appointments', $results )
 		);
 	}
 
@@ -210,22 +197,24 @@ class AppointmentsController extends Controller {
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
-		$appointment_post = new Appointment();
-		$appointment      = $appointment_post->create(
-			$service,
+		$appointment       = new Appointment(
 			array(
-				'timestamp'   => $date,
-				'duration'    => $duration,
-				'customer'    => $customer,
-				'customer_id' => $customer_id,
-				'status'      => $status,
+				'title'    => $service,
+				'customer' => $customer,
+				'meta'     => array(
+					'timestamp'   => $date,
+					'duration'    => $duration,
+					'customer_id' => $customer_id,
+					'status'      => $status,
+				),
 			)
 		);
+		$saved_appointment = $appointment->save();
 
 		return self::response(
 			__( 'Appointment created successfully', 'wpappointments' ),
 			array(
-				'appointment' => $appointment,
+				'appointment' => $saved_appointment,
 			),
 		);
 	}
@@ -246,40 +235,33 @@ class AppointmentsController extends Controller {
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
 		$settings = new Settings();
-		$duration = $settings->get_setting( 'appointments', 'defaultLength' );
 
-		$customer_id = null;
+		$default_duration = $settings->get_setting( 'appointments', 'defaultLength' );
+		$duration         = $default_duration ? $default_duration : 60;
 
-		if ( $create_account ) {
-			$customer_data = $customer;
+		$default_status  = $settings->get_setting( 'appointments', 'defaultStatus' );
+		$status          = $default_status ? $default_status : 'confirmed';
+		$default_service = $settings->get_default_service();
 
-			if ( $password ) {
-				$customer_data['password'] = $password;
-			}
-
-			$customer       = new Customer( $customer_data );
-			$saved_customer = $customer->save();
-			$customer_id    = $saved_customer->user->ID;
-		}
-
-		$status = $settings->get_setting( 'appointments', 'defaultStatus' ) ?? 'confirmed';
-
-		$appointment_post = new Appointment();
-		$appointment      = $appointment_post->create(
-			__( 'Appointment', 'wpappointments' ),
+		$appointment       = new Appointment(
 			array(
-				'timestamp'   => $date,
-				'duration'    => $duration,
-				'customer'    => wp_json_encode( (object) $customer, JSON_UNESCAPED_UNICODE ),
-				'customer_id' => $customer_id,
-				'status'      => $status,
+				'title'         => $default_service->post_name ?? __( 'Appointment', 'wpappointments' ),
+				'customer'      => $customer,
+				'createAccount' => $create_account,
+				'password'      => $password,
+				'meta'          => array(
+					'timestamp' => $date,
+					'duration'  => $duration,
+					'status'    => $status,
+				),
 			)
 		);
+		$saved_appointment = $appointment->save();
 
 		return self::response(
 			__( 'Appointment created successfully', 'wpappointments' ),
 			array(
-				'appointment' => $appointment,
+				'appointment' => $saved_appointment,
 			),
 		);
 	}
@@ -292,8 +274,8 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$date        = $request->get_param( 'date' );
 		$id          = $request->get_param( 'id' );
+		$date        = $request->get_param( 'date' );
 		$service     = $request->get_param( 'service' );
 		$duration    = $request->get_param( 'duration' );
 		$status      = $request->get_param( 'status' );
@@ -302,27 +284,28 @@ class AppointmentsController extends Controller {
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
-		$appointment_post = new Appointment();
-		$appointment      = $appointment_post->update(
-			$id,
-			$service,
+		$appointment         = new Appointment( $id );
+		$updated_appointment = $appointment->update(
 			array(
-				'timestamp'   => $date,
-				'duration'    => $duration,
-				'customer'    => $customer,
-				'customer_id' => $customer_id,
-				'status'      => $status,
+				'title'    => $service,
+				'customer' => $customer,
+				'meta'     => array(
+					'timestamp'   => $date,
+					'duration'    => $duration,
+					'customer_id' => $customer_id,
+					'status'      => $status,
+				),
 			)
 		);
 
-		if ( is_wp_error( $appointment ) ) {
-			return self::error( $appointment );
+		if ( is_wp_error( $updated_appointment ) ) {
+			return self::error( $updated_appointment );
 		}
 
 		return self::response(
 			__( 'Appointment updated successfully', 'wpappointments' ),
 			array(
-				'appointment' => $appointment,
+				'appointment' => $updated_appointment,
 			),
 		);
 	}
@@ -337,8 +320,8 @@ class AppointmentsController extends Controller {
 	public static function cancel_appointment( WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$appointment_post = new Appointment();
-		$cancelled        = $appointment_post->cancel( $id );
+		$appointment_post = new Appointment( $id );
+		$cancelled        = $appointment_post->cancel();
 
 		if ( is_wp_error( $cancelled ) ) {
 			return self::error( $cancelled );
@@ -362,8 +345,8 @@ class AppointmentsController extends Controller {
 	public static function delete_appointment( WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$appointment_post = new Appointment();
-		$deleted          = $appointment_post->delete( $id );
+		$appointment_post = new Appointment( $id );
+		$deleted          = $appointment_post->delete();
 
 		if ( is_wp_error( $deleted ) ) {
 			return self::error( $deleted );
@@ -387,8 +370,8 @@ class AppointmentsController extends Controller {
 	public static function confirm_appointment( WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$appointment_post = new Appointment();
-		$confirmed        = $appointment_post->confirm( $id );
+		$appointment_post = new Appointment( $id );
+		$confirmed        = $appointment_post->confirm();
 
 		if ( is_wp_error( $confirmed ) ) {
 			return self::error( $confirmed );

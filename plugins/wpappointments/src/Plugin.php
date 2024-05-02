@@ -122,6 +122,19 @@ class Plugin extends Core\Singleton {
 			delete_option( 'wpappointments_general_clockType' );
 			delete_option( 'wpappointments_general_timeFormat' );
 			delete_option( 'wpappointments_general_dateFormat' );
+
+			$query = new \WP_Query(
+				array(
+					'post_type'      => 'wpa-appointment',
+					'posts_per_page' => -1,
+				)
+			);
+
+			$ids = wp_list_pluck( $query->posts, 'ID' );
+
+			foreach ( $ids as $id ) {
+				wp_delete_post( $id, true );
+			}
 		}
 
 		// @phpcs:ignore

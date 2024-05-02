@@ -5,7 +5,7 @@
  * @package WPAppointments
  */
 
-namespace Tests\Api;
+namespace Tests\Api\Endpoints;
 
 use WPAppointments\Data\Model\Settings;
 

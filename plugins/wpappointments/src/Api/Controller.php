@@ -79,4 +79,22 @@ class Controller {
 
 		return $response;
 	}
+
+	/**
+	 * Paginate results
+	 *
+	 * @param string $type Type of results (like customers, appointments etc).
+	 * @param array  $results Results array.
+	 *
+	 * @return array
+	 */
+	public static function paginated( $type, $results ) {
+		return array(
+			$type          => $results[ $type ],
+			'totalItems'   => $results['total_items'],
+			'totalPages'   => $results['total_pages'],
+			'postsPerPage' => $results['posts_per_page'],
+			'currentPage'  => $results['current_page'],
+		);
+	}
 }
