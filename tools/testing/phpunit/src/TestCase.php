@@ -7,12 +7,31 @@
 
 namespace TestTools;
 
+use TestTools\Factory\BaseFactory;
+
 /**
  * Abstract WordPress PHPUnit test case class
  */
 abstract class TestCase extends \WP_UnitTestCase {
 	/**
+	 * Override the default factory to use our own.
+	 *
+	 * @return Factory|null Factory instance.
+	 */
+	protected static function factory() {
+		static $factory = null;
+
+		if ( ! $factory ) {
+			$factory = new BaseFactory();
+		}
+
+		return $factory;
+	}
+
+	/**
 	 * Create new default customer
+	 *
+	 * @return int
 	 */
 	protected function create_default_customer() {
 		return $this->factory()->user->create(
@@ -29,6 +48,8 @@ abstract class TestCase extends \WP_UnitTestCase {
 
 	/**
 	 * Create new default customer
+	 *
+	 * @return int
 	 */
 	protected function create_empty_customer() {
 		return $this->factory()->user->create(
@@ -50,5 +71,28 @@ abstract class TestCase extends \WP_UnitTestCase {
 				'role' => 'wpa-customer',
 			)
 		);
+	}
+
+	/**
+	 * Create new appointment
+	 *
+	 * @param array $args Appointment data.
+	 *
+	 * @return int
+	 */
+	protected function create_appointment( $args = array() ) {
+		return $this->factory()->appointment->create( $args );
+	}
+
+	/**
+	 * Create new appointment
+	 *
+	 * @param int   $count Number of appointments to create.
+	 * @param array $args Appointment data.
+	 *
+	 * @return int[]
+	 */
+	protected function create_appointments( $count = 10, $args = array() ) {
+		return $this->factory()->appointment->create_many( $count, $args );
 	}
 }

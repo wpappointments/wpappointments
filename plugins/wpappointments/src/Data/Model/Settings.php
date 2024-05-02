@@ -8,6 +8,8 @@
 
 namespace WPAppointments\Data\Model;
 
+use WP_Post;
+
 const DAY_OPENING_OPTIONS = array(
 	'enabled',
 	'startTime' => array(
@@ -113,12 +115,44 @@ class Settings {
 		$category_exists = array_key_exists( $category, $this->settings );
 		$category        = $category ? sprintf( '%s_', $category ) : '';
 
+		$schedule = array();
+
+		if ( 'schedule' === $category ) {
+			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
+
+			if ( $schedule_post_id ) {
+				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					if ( $settings[ $day ]['allDay'] ) {
+						$settings[ $day ]['slots']['list'][0] = array(
+							'start' => array(
+								'hour'   => '00',
+								'minute' => '00',
+							),
+							'end'   => array(
+								'hour'   => '24',
+								'minute' => '00',
+							),
+						);
+					}
+
+					$day_schedule = wp_json_encode( $settings[ $day ] );
+					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $day_schedule );
+					array_push( $schedule, $day_schedule );
+				}
+			}
+
+			return $schedule;
+		}
+
+		$updated = array();
+
 		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
 				update_option( 'wpappointments_' . $category . $key, $value );
+				$updated[ $key ] = $value;
 			}
 
-			return $this->get_all();
+			return $updated;
 		}
 
 		return new \WP_Error( 'invalid_category', 'Invalid category' );
@@ -152,12 +186,18 @@ class Settings {
 			}
 		}
 
-		$schedule             = $this->get_default_schedule( get_option( 'wpappointments_default_scheduleId' ) );
-		$settings['schedule'] = $schedule;
+		$schedule = $this->get_default_schedule();
 
-		$service                                 = $this->get_default_service( get_option( 'wpappointments_defaultServiceId' ) );
-		$settings['appointments']['service']     = $service;
-		$settings['appointments']['serviceName'] = $service->post_title;
+		if ( $schedule ) {
+			$settings['schedule'] = $schedule;
+		}
+
+		$service = $this->get_default_service();
+
+		if ( is_a( $service, '\WP_Post' ) ) {
+			$settings['appointments']['service']     = $service;
+			$settings['appointments']['serviceName'] = $service->post_title;
+		}
 
 		return $settings;
 	}
@@ -165,12 +205,11 @@ class Settings {
 	/**
 	 * Get default schedule settings
 	 *
-	 * @param int $schedule_post_id Default schedule post ID.
-	 *
 	 * @return null|\WP_Post
 	 */
-	public function get_default_schedule( $schedule_post_id ) {
-		$schedule = null;
+	public function get_default_schedule() {
+		$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
+		$schedule         = null;
 
 		if ( $schedule_post_id ) {
 			$hours = array();
@@ -192,12 +231,11 @@ class Settings {
 	/**
 	 * Get default service settings
 	 *
-	 * @param string $service_post_id Default service post ID.
-	 *
 	 * @return null|\WP_Post
 	 */
-	public function get_default_service( $service_post_id ) {
-		$service = null;
+	public function get_default_service() {
+		$service_post_id = get_option( 'wpappointments_defaultServiceId' );
+		$service         = null;
 
 		if ( $service_post_id ) {
 			$service = get_post( $service_post_id );
@@ -222,6 +260,10 @@ class Settings {
 				$type   = $option['type'];
 				$option = get_option( 'wpappointments_' . $category . '_' . $name );
 
+				if ( ! $option ) {
+					continue;
+				}
+
 				if ( 'number' === $type ) {
 					$option = intval( $option );
 				}
@@ -230,9 +272,7 @@ class Settings {
 					$option = filter_var( $option, FILTER_VALIDATE_BOOLEAN );
 				}
 
-				if ( $option ) {
-					$settings[ $name ] = $option;
-				}
+				$settings[ $name ] = $option;
 			}
 		}
 

@@ -57,6 +57,24 @@ class CustomersQuery {
 	}
 
 	/**
+	 * Normalize user object
+	 *
+	 * @param WP_User $user User object.
+	 *
+	 * @return array
+	 */
+	public static function normalize( $user ) {
+		return array(
+			'id'      => $user->ID,
+			'name'    => $user->display_name,
+			'email'   => $user->user_email,
+			'phone'   => get_user_meta( $user->ID, 'phone', true ),
+			'created' => $user->user_registered,
+			'updated' => $user->user_registered,
+		);
+	}
+
+	/**
 	 * Create paginated response
 	 *
 	 * @param WP_User_Query $query Query params.
@@ -76,24 +94,6 @@ class CustomersQuery {
 			'total_pages'    => $pages,
 			'posts_per_page' => $posts_per_page,
 			'current_page'   => $paged,
-		);
-	}
-
-	/**
-	 * Normalize user object
-	 *
-	 * @param WP_User $user User object.
-	 *
-	 * @return array
-	 */
-	public static function normalize( $user ) {
-		return array(
-			'id'      => $user->ID,
-			'name'    => $user->display_name,
-			'email'   => $user->user_email,
-			'phone'   => get_user_meta( $user->ID, 'phone', true ),
-			'created' => $user->user_registered,
-			'updated' => $user->user_registered,
 		);
 	}
 }

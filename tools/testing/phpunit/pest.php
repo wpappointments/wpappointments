@@ -8,6 +8,8 @@
 
 namespace TestTools;
 
+use WP_REST_Response;
+
 /**
  * --------------------------------------------------------------------------
  * Test Case
@@ -30,22 +32,50 @@ namespace TestTools;
  * to assert different things. Of course, you may extend the Expectation API at any time.
  */
 expect()->extend(
-	'toBeOne',
-	function () {
-		$this->toBe( 1 );
+	'toBeError',
+	function ( $status, $code ) {
+		$response = $this->value;
+
+		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
+		expect( $response->get_status() )->toBe( $status );
+
+		$data = $response->get_data();
+
+		expect( $data )->toBeArray();
+		expect( $data['code'] )->toBe( $code );
+
+		expect( $data['data'] )->toBeArray();
+		expect( $data['data']['status'] )->toBe( $status );
+
 		return $this;
 	}
 );
 
 expect()->extend(
-	'toBeTestCustomer',
+	'toBeSuccess',
+	function () {
+		$response = $this->value;
+
+		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
+
+		$data = $response->get_data();
+
+		expect( $data )->toBeArray();
+		expect( $data['status'] )->toBe( 'success' );
+
+		return $this;
+	}
+);
+
+expect()->extend(
+	'toBeCustomer',
 	function () {
 		$customer = $this->value;
 
 		expect( $customer )->toHaveKeys( array( 'name', 'email', 'phone' ) );
-		expect( $customer['name'] )->toEqual( 'John Doe' );
-		expect( $customer['email'] )->toEqual( 'john@example.com' );
-		expect( $customer['phone'] )->toEqual( '12345' );
+		expect( $customer['name'] )->toBeString();
+		expect( $customer['email'] )->toBeString();
+		expect( $customer['phone'] )->toBeString();
 
 		return $this;
 	}

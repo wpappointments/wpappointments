@@ -47,7 +47,7 @@ class AppointmentsQuery {
 		$default_query  = array_merge(
 			self::DEFAULT_QUERY_PART,
 			array(
-				'posts_per_page' => - 1,
+				'posts_per_page' => $posts_per_page,
 				'meta_query'     => array(),
 			)
 		);
@@ -58,6 +58,72 @@ class AppointmentsQuery {
 				(array) $query
 			)
 		);
+
+		foreach ( $query->posts as $post ) {
+			$appointments[] = self::normalize(
+				$post->ID,
+				array(
+					'status'      => get_post_meta( $post->ID, 'status', true ),
+					'timestamp'   => get_post_meta( $post->ID, 'timestamp', true ),
+					'customer_id' => get_post_meta( $post->ID, 'customer_id', true ),
+					'customer'    => get_post_meta( $post->ID, 'customer', true ),
+					'duration'    => get_post_meta( $post->ID, 'duration', true ),
+				)
+			);
+		}
+
+		return self::paginated( $query, $appointments );
+	}
+
+	/**
+	 * Get upcoming appointments
+	 *
+	 * @param array $query Query params.
+	 *
+	 * @return array
+	 */
+	public static function upcoming( $query ) {
+		$date_query = array(
+			array(
+				'key'     => 'timestamp',
+				'value'   => time(),
+				'compare' => '>=',
+			),
+			array(
+				'key'     => 'timestamp',
+				'value'   => time() + 60 * 60 * 24 * 7,
+				'compare' => '<=',
+			),
+		);
+
+		$status_query = array(
+			'key'     => 'status',
+			'value'   => 'confirmed',
+			'compare' => '=',
+		);
+
+		$default_query = array_merge(
+			self::DEFAULT_QUERY_PART,
+			array(
+				'posts_per_page' => 10,
+				'meta_query'     => array_merge(
+					array(
+						'relation' => 'AND',
+						$status_query,
+					),
+					$date_query
+				),
+			),
+		);
+
+		$query = new \WP_Query(
+			array_merge(
+				$default_query,
+				$query ?? array()
+			)
+		);
+
+		$appointments = array();
 
 		foreach ( $query->posts as $post ) {
 			$meta           = get_post_meta( $post->ID );
@@ -73,13 +139,7 @@ class AppointmentsQuery {
 			);
 		}
 
-		return array(
-			'appointments' => $appointments,
-			'totalItems'   => $query->found_posts,
-			'totalPages'   => ceil( $query->found_posts / $posts_per_page ),
-			'postsPerPage' => $posts_per_page,
-			'currentPage'  => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
-		);
+		return self::paginated( $query, $appointments );
 	}
 
 	/**
@@ -111,6 +171,29 @@ class AppointmentsQuery {
 			'duration'   => (int) $duration,
 			'customerId' => (int) $customer_id,
 			'customer'   => $customer,
+		);
+	}
+
+	/**
+	 * Create paginated response
+	 *
+	 * @param WP_User_Query $query Query params.
+	 * @param array         $appointments Appointments array.
+	 *
+	 * @return object
+	 */
+	public static function paginated( $query, $appointments = array() ) {
+		$posts_per_page = (int) $query->get( 'posts_per_page' ) ?? 10;
+		$paged          = (int) $query->get( 'paged' ) ?? 1;
+		$total          = $query->found_posts;
+		$pages          = (int) ceil( $total / $posts_per_page );
+
+		return array(
+			'appointments'   => $appointments,
+			'total_items'    => $total,
+			'total_pages'    => $pages,
+			'posts_per_page' => $posts_per_page,
+			'current_page'   => $paged,
 		);
 	}
 }

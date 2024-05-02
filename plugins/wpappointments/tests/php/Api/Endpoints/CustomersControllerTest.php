@@ -5,9 +5,7 @@
  * @package WPAppointments
  */
 
-namespace Tests\Api;
-
-use WP_REST_Response;
+namespace Tests\Api\Endpoints;
 
 uses( \TestTools\RestTestCase::class );
 
@@ -24,14 +22,10 @@ test(
 		$results = $this->do_rest_get_request( 'customers' );
 
 		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
+		$data = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
+		expect( $results )->toBeSuccess();
 		expect( $data['data']['customers'] )->toHaveCount( 5 );
 	}
 );
@@ -44,16 +38,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_get_request( 'customers' );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -66,16 +52,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_get_request( 'customers' );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -96,17 +74,13 @@ test(
 		);
 
 		// Check response.
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-		$response = $data['data'];
+		$data = $results->get_data();
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
-		expect( $response['message'] )->toBe( 'Customer created successfully' );
-		expect( $response['customer'] )->toBeTestCustomer();
+		expect( $results )->toBeSuccess();
+		expect( $data )->toHaveKey( 'data' );
+		expect( $data['data'] )->toHaveKey( 'customer' );
+		expect( $data['data']['customer'] )->toBeCustomer();
 	}
 );
 
@@ -125,16 +99,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -154,16 +120,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -183,16 +141,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 422 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'error' );
-		expect( $data['message'] )->toBe( 'Cannot create a user with an empty login name.' );
+		expect( $results )->toBeError( 422, 'empty_user_login' );
 	}
 );
 
@@ -208,16 +158,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
-		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
-		expect( $data['message'] )->toBe( 'Customer deleted successfully' );
+		expect( $results )->toBeSuccess();
 	}
 );
 
@@ -232,16 +174,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -257,16 +191,8 @@ test(
 		// Make request.
 		$results = $this->do_rest_delete_request( 'customers/' . $user_id );
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -290,17 +216,12 @@ test(
 		);
 
 		// Check response.
-		$status   = $results->get_status();
 		$data     = $results->get_data();
 		$response = $data['data'];
 
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 200 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'success' );
-		expect( $response['message'] )->toBe( 'Customer updated successfully' );
-		expect( $response['customer'] )->toBeTestCustomer();
+		expect( $results )->toBeSuccess();
+		expect( $response['customer'] )->toBeCustomer();
 	}
 );
 
@@ -322,16 +243,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 401 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 401, 'rest_forbidden' );
 	}
 );
 
@@ -354,16 +267,8 @@ test(
 			)
 		);
 
-		// Check response.
-		$is_error = $results->is_error();
-		$status   = $results->get_status();
-		$data     = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $is_error )->toBeTrue();
-		expect( $status )->toBe( 403 );
-		expect( $data['code'] )->toBe( 'rest_forbidden' );
+		expect( $results )->toBeError( 403, 'rest_forbidden' );
 	}
 );
 
@@ -386,15 +291,7 @@ test(
 			)
 		);
 
-		// Check response.
-		$status = $results->get_status();
-		$data   = $results->get_data();
-
 		// Assert response data.
-		expect( $results )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $status )->toBe( 422 );
-		expect( $data )->toBeArray();
-		expect( $data['type'] )->toBe( 'error' );
-		expect( $data['message'] )->toBe( 'Cannot create a user with an empty login name.' );
+		expect( $results )->toBeError( 422, 'empty_user_login' );
 	}
 );
