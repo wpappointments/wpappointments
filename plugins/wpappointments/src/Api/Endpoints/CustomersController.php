@@ -93,10 +93,8 @@ class CustomersController extends Controller {
 		$results = CustomersQuery::all( $query );
 
 		return self::response(
-			array(
-				'type' => 'success',
-				'data' => self::paginated( $results ),
-			)
+			__( 'Customers fetched successfully', 'wpappointments' ),
+			self::paginated( 'customers', $results )
 		);
 	}
 
@@ -124,17 +122,14 @@ class CustomersController extends Controller {
 		$saved_customer = $customer->save();
 
 		if ( is_wp_error( $saved_customer ) ) {
-			return self::error( $saved_customer->get_error_message() );
+			return self::error( $saved_customer );
 		}
 
 		return self::response(
+			__( 'Customer created successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'message'  => __( 'Customer created successfully', 'wpappointments' ),
-					'customer' => $saved_customer->normalize( array( __CLASS__, 'normalize' ) ),
-				),
-			)
+				'customer' => $saved_customer->normalize( array( __CLASS__, 'normalize' ) ),
+			),
 		);
 	}
 
@@ -161,17 +156,14 @@ class CustomersController extends Controller {
 		);
 
 		if ( is_wp_error( $updated_customer ) ) {
-			return self::error( $updated_customer->get_error_message() );
+			return self::error( $updated_customer );
 		}
 
 		return self::response(
+			__( 'Customer updated successfully', 'wpappointments' ),
 			array(
-				'type' => 'success',
-				'data' => array(
-					'message'  => __( 'Customer updated successfully', 'wpappointments' ),
-					'customer' => $updated_customer->normalize( array( __CLASS__, 'normalize' ) ),
-				),
-			)
+				'customer' => $updated_customer->normalize( array( __CLASS__, 'normalize' ) ),
+			),
 		);
 	}
 
@@ -184,16 +176,13 @@ class CustomersController extends Controller {
 	 */
 	public static function delete( WP_REST_Request $request ) {
 		$customer = new Customer( $request->get_param( 'id' ) );
-		$result   = $customer->delete();
+		$deleted  = $customer->delete();
 
 		return self::response(
+			__( 'Customer deleted successfully', 'wpappointments' ),
 			array(
-				'type'    => 'success',
-				'message' => __( 'Customer deleted successfully', 'wpappointments' ),
-				'data'    => array(
-					'id' => $result,
-				),
-			)
+				'id' => $deleted,
+			),
 		);
 	}
 
@@ -214,23 +203,6 @@ class CustomersController extends Controller {
 			'phone'   => $phone,
 			'created' => $user->user_registered,
 			'updated' => $user->user_registered,
-		);
-	}
-
-	/**
-	 * Paginate results
-	 *
-	 * @param array $results Results array.
-	 *
-	 * @return array
-	 */
-	public static function paginated( $results ) {
-		return array(
-			'customers'    => $results['customers'],
-			'totalItems'   => $results['total_items'],
-			'totalPages'   => $results['total_pages'],
-			'postsPerPage' => $results['posts_per_page'],
-			'currentPage'  => $results['current_page'],
 		);
 	}
 }

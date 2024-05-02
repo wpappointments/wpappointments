@@ -23,6 +23,7 @@
 			"port": 9003,
 			"pathMappings": {
 				"/var/www/html/wp-content/wpappointments": "${workspaceFolder}",
+				"/var/www/html/wp-content/tools": "${workspaceFolder}/tools",
 				"/var/www/html/wp-content/plugins/wpappointments/": "${workspaceFolder}/plugins/wpappointments/",
 				"/var/www/html/wp-content/plugins/other-plugin/": "${workspaceFolder}/plugins/other-plugin/"
 			}

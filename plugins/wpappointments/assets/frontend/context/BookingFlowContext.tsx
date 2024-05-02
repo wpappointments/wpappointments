@@ -134,7 +134,7 @@ export function BookingFlowContextProvider({
 
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
-				path: 'appointment-public',
+				path: 'public/appointments',
 				method: 'POST',
 				data: {
 					customer,
@@ -152,11 +152,11 @@ export function BookingFlowContextProvider({
 		}
 
 		if (response) {
-			if (response.type === 'success') {
+			if (response.status === 'success') {
 				setFormSuccess(true);
 			}
 
-			if (response.type === 'error' && response.message) {
+			if (response.status === 'error' && response.message) {
 				setFormError(response.message);
 			}
 		}

@@ -56,7 +56,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			handleError(error, 'Error creating customer');
 		}
 
-		if (response && response.type === 'error') {
+		if (response && response.status === 'error') {
 			const error: Error = {
 				type: 'error',
 				message: response?.data?.message || 'Unknown error',
@@ -66,7 +66,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			handleError(error, 'Error creating customer');
 		}
 
-		if (response && response.type === 'success') {
+		if (response && response.status === 'success') {
 			const { data: responseData } = response;
 			const { customer } = responseData;
 
@@ -97,7 +97,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			handleError(error, 'Error updating customer');
 		}
 
-		if (response && response.type === 'error') {
+		if (response && response.status === 'error') {
 			const error: Error = {
 				type: 'error',
 				message: response?.data?.message || 'Unknown error',
@@ -107,7 +107,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			handleError(error, 'Error updating customer');
 		}
 
-		if (response && response.type === 'success') {
+		if (response && response.status === 'success') {
 			const { data: responseData } = response;
 			const { customer } = responseData;
 

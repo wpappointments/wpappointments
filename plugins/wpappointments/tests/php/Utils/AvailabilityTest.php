@@ -248,17 +248,23 @@ test(
 	'Should create availability array - with appointment in - one day period - using only GMT timezone',
 	function () {
 		// Create 60 minutes long appointment at 9:00 on March 1st 2024.
-		$appointment = new Appointment();
-		$appointment->create(
-			'Noop',
+		$appointment = new Appointment(
 			array(
-				'timestamp'   => 1709283600, // March 1st 2024, 9:00 GMT.
-				'duration'    => 60,
-				'customer'    => '{"name":"Noop","email":"noop@noop.com","phone":"+1 (000) 000-0000"}',
-				'customer_id' => 0,
-				'status'      => 'confirmed',
+				'title'    => 'Test Appointment',
+				'customer' => array(
+					'name'  => 'Test Customer',
+					'email' => 'test@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'meta'     => array(
+					'timestamp'   => 1709283600, // March 1st 2024, 9:00 GMT.
+					'duration'    => 60,
+					'customer_id' => 0,
+					'status'      => 'confirmed',
+				),
 			)
 		);
+		$appointment->save();
 
 		// Get availability for March 1st 2024.
 		$start_date = '2024-03-01T00:00:00.000Z';

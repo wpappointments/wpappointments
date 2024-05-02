@@ -10,6 +10,7 @@ namespace WPAppointments\Utils;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use WP_Error;
 use WPAppointments\Data\Model\Appointment;
 use WPAppointments\Data\Model\Settings;
 
@@ -160,9 +161,32 @@ class Availability {
 	 * @param string $current_year Current year.
 	 * @param string $timezone Timezone string.
 	 *
-	 * @return object[] $days
+	 * @return object[]|\WP_Error $days
 	 */
 	public static function get_month_days_availability( $current_month, $current_year, $timezone ) {
+		if ( ! $current_month ) {
+			return new WP_Error( 'missing_month', __( 'Month is required', 'wpappointments' ) );
+		}
+
+		if ( ! $current_year ) {
+			return new WP_Error( 'missing_year', __( 'Year is required', 'wpappointments' ) );
+		}
+
+		if ( ! $timezone ) {
+			return new WP_Error( 'missing_timezone', __( 'Timezone is required', 'wpappointments' ) );
+		}
+
+		if ( ! is_numeric( $current_year ) ) {
+			return new WP_Error( 'year_not_numeric', __( 'Year must be numeric', 'wpappointments' ) );
+		}
+
+		$is_month_numeric = is_numeric( $current_month );
+		$is_month_valid   = (int) $current_month >= 1 && (int) $current_month <= 12;
+
+		if ( ! $is_month_numeric || ! $is_month_valid ) {
+			return new WP_Error( 'invalid_month', 'Month and year must be numeric and be between 1 and 12' );
+		}
+
 		$first_day = new DateTime( $current_year . '-' . $current_month . '-01' );
 		$first_day->setTimezone( new \DateTimeZone( $timezone ) );
 
@@ -220,28 +244,38 @@ class Availability {
 	 *
 	 *     Calendar array shape is a two dimensional array of date strings grouped by week. For example:
 	 *
-	 *     [
+	 *      [
 	 *       [
 	 *          '2024-01-29T00:00:00+00:00',
 	 *          '2024-01-30T00:00:00+00:00',
 	 *          '2024-01-31T00:00:00+00:00',
 	 *          '2024-02-01T00:00:00+00:00',
-	 *            '2024-02-02T00:00:00+00:00',
-	 *            '2024-02-03T01:00:00+00:00',
-	 *            '2024-02-04T01:00:00+00:00',
+	 *                  ...
 	 *       ],
 	 *       [
-	 *            '2024-02-05T00:00:00+00:00',
-	 *            '2024-02-06T00:00:00+00:00',
-	 *            '2024-02-07T00:00:00+00:00',
-	 *            ...
+	 *          '2024-02-05T00:00:00+00:00',
+	 *          '2024-02-06T00:00:00+00:00',
+	 *          '2024-02-07T00:00:00+00:00',
+	 *          ...
 	 *       ],
 	 *       ...
 	 *     ].
 	 *
-	 * @return object[][] $calendar
+	 * @return object[][]|\WP_Error $calendar
 	 */
 	public static function get_month_calendar_availability( $calendar, $timezone, $trim = false ) {
+		if ( ! $calendar ) {
+			return new WP_Error( 'missing_calendar', __( 'Calendar is required', 'wpappointments' ) );
+		}
+
+		if ( ! $timezone ) {
+			return new WP_Error( 'missing_timezone', __( 'Timezone is required', 'wpappointments' ) );
+		}
+
+		if ( ! self::is_calendar_valid( $calendar ) ) {
+			return new WP_Error( 'invalid_calendar', 'Invalid calendar shape. It needs to be an array of length 5 or 6. Each array of exact length 7' );
+		}
+
 		$availability = array();
 
 		foreach ( $calendar as $week ) {
@@ -288,5 +322,40 @@ class Availability {
 		}
 
 		return $availability;
+	}
+
+	/**
+	 * Check if calendar is valid
+	 *
+	 * @param string[][] $calendar Calendar array.
+	 *
+	 * @return bool
+	 */
+	private static function is_calendar_valid( $calendar ) {
+		if ( ! is_array( $calendar ) ) {
+			return false;
+		}
+
+		if ( count( $calendar ) !== 5 && count( $calendar ) !== 6 ) {
+			return false;
+		}
+
+		foreach ( $calendar as $week ) {
+			if ( ! is_array( $week ) ) {
+				return false;
+			}
+
+			if ( count( $week ) !== 7 ) {
+				return false;
+			}
+
+			foreach ( $week as $day ) {
+				if ( ! is_string( $day ) ) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

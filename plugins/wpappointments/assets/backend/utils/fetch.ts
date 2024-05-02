@@ -2,7 +2,7 @@ import wpApiFetch, { APIFetchOptions } from '@wordpress/api-fetch';
 
 export type APIResponse<T> = {
 	data: T;
-	type: 'success' | 'error';
+	status: 'success' | 'error';
 	message?: string;
 };
 

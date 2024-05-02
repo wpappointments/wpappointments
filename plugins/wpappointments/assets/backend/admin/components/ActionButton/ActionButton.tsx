@@ -60,11 +60,11 @@ function handleAction<T>(
 
 		const { data } = response;
 
-		if (onSuccess && response.type === 'success') {
+		if (onSuccess && response.status === 'success') {
 			onSuccess(data);
 		}
 
-		if (onError && response.type === 'error') {
+		if (onError && response.status === 'error') {
 			onError(data);
 		}
 	};
