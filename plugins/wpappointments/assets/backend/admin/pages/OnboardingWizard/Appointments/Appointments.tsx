@@ -55,7 +55,7 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 			return;
 		}
 
-		if (response.data.message) {
+		if (response.message) {
 			dispatch.setPluginSettings({ appointments: data });
 			onSuccess();
 		}

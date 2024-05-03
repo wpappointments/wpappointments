@@ -37,9 +37,7 @@ export default function BookingFlowCalendar() {
 	} = form;
 
 	const { alignment, slotsAsButtons } = attributes;
-	const {
-		wpappointments: { settings },
-	} = window;
+	const { settings } = window.wpappointments;
 	const defaultLength = settings?.appointments?.defaultLength || 30;
 
 	const datetime = watch('datetime');

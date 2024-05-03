@@ -143,6 +143,54 @@ class AppointmentsQuery {
 	}
 
 	/**
+	 * Get date range appointments
+	 *
+	 * @param \DateTimeImmutable $start_date Start date.
+	 * @param \DateTimeImmutable $end_date End date.
+	 *
+	 * @return object
+	 */
+	public static function get_date_range_appointments( $start_date, $end_date ) {
+		$query = new \WP_Query(
+			array_merge(
+				self::DEFAULT_QUERY_PART,
+				array(
+					'posts_per_page' => - 1,
+					'meta_query'     => array(
+						'relation' => 'AND',
+						array(
+							'key'     => 'timestamp',
+							'value'   => $start_date,
+							'compare' => '>=',
+						),
+						array(
+							'key'     => 'timestamp',
+							'value'   => $end_date,
+							'compare' => '<=',
+						),
+					),
+				)
+			)
+		);
+
+		$appointments = array();
+
+		foreach ( $query->posts as $post ) {
+			$meta           = get_post_meta( $post->ID );
+			$appointments[] = self::normalize(
+				$post->ID,
+				array(
+					'status'    => $meta['status'][0],
+					'timestamp' => $meta['timestamp'][0],
+					'duration'  => $meta['duration'][0],
+				)
+			);
+		}
+
+		return self::paginated( $query, $appointments );
+	}
+
+	/**
 	 * Prepare appointment entity
 	 *
 	 * @param int   $post_id Post ID.

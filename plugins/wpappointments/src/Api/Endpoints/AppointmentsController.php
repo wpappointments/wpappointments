@@ -245,14 +245,15 @@ class AppointmentsController extends Controller {
 
 		$appointment       = new Appointment(
 			array(
-				'title'         => $default_service->post_name ?? __( 'Appointment', 'wpappointments' ),
-				'customer'      => $customer,
-				'createAccount' => $create_account,
-				'password'      => $password,
-				'meta'          => array(
-					'timestamp' => $date,
-					'duration'  => $duration,
-					'status'    => $status,
+				'title'          => $default_service->post_title ?? __( 'Appointment', 'wpappointments' ),
+				'customer'       => $customer,
+				'create_account' => $create_account,
+				'password'       => $password,
+				'meta'           => array(
+					'timestamp'  => $date,
+					'duration'   => $duration,
+					'status'     => $status,
+					'service_id' => $default_service->ID ?? null,
 				),
 			)
 		);

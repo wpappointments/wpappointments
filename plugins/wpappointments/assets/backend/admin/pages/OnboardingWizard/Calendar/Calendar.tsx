@@ -53,7 +53,7 @@ function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 			return;
 		}
 
-		if (response.data.message) {
+		if (response.message) {
 			dispatch.setPluginSettings({ general: data });
 			onSuccess();
 		}

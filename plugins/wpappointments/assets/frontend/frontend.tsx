@@ -33,7 +33,8 @@ export const DaySchema = object({
 });
 
 export const AvailabilityResponseSchema = object({
-	type: union([string('success'), string('error')]),
+	status: union([string('success'), string('error')]),
+	message: optional(string()),
 	data: object({
 		availability: array(array(DaySchema)),
 	}),
