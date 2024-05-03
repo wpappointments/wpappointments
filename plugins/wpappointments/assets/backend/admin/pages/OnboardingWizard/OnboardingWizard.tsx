@@ -78,7 +78,6 @@ function Welcome({ setCurrentStep }: StepProps) {
 					height: 'auto',
 				}}
 				onClick={() => {
-					console.log('clicked');
 					setCurrentStep(1);
 				}}
 			>
