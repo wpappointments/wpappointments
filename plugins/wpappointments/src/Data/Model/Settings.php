@@ -150,6 +150,37 @@ class Settings {
 
 		$updated = array();
 
+		$schedule = array();
+
+		if ( 'schedule' === $category ) {
+			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
+
+			if ( $schedule_post_id ) {
+				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					if ( $settings[ $day ]['allDay'] ) {
+						$settings[ $day ]['slots']['list'][0] = array(
+							'start' => array(
+								'hour'   => '00',
+								'minute' => '00',
+							),
+							'end'   => array(
+								'hour'   => '24',
+								'minute' => '00',
+							),
+						);
+					}
+
+					$day_schedule = wp_json_encode( $settings[ $day ] );
+					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $day_schedule );
+					array_push( $schedule, $day_schedule );
+				}
+			}
+
+			return $schedule;
+		}
+
+		$updated = array();
+
 		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
 				if ( 'serviceName' === $key ) {
