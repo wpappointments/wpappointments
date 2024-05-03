@@ -88,6 +88,10 @@ class Settings {
 		),
 		'appointments' => array(
 			array(
+				'name' => 'serviceName',
+				'type' => 'string',
+			),
+			array(
 				'name' => 'defaultLength',
 				'type' => 'number',
 			),
@@ -101,6 +105,7 @@ class Settings {
 			),
 		),
 		'calendar'     => array(),
+		'schedule'     => array(),
 	);
 
 	/**
@@ -113,7 +118,37 @@ class Settings {
 	 */
 	public function update( $category, $settings = array() ) {
 		$category_exists = array_key_exists( $category, $this->settings );
-		$category        = $category ? sprintf( '%s_', $category ) : '';
+
+		$schedule = array();
+
+		if ( 'schedule' === $category ) {
+			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
+
+			if ( $schedule_post_id ) {
+				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					if ( $settings[ $day ]['allDay'] ) {
+						$settings[ $day ]['slots']['list'][0] = array(
+							'start' => array(
+								'hour'   => '00',
+								'minute' => '00',
+							),
+							'end'   => array(
+								'hour'   => '24',
+								'minute' => '00',
+							),
+						);
+					}
+
+					$day_schedule = wp_json_encode( $settings[ $day ] );
+					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $day_schedule );
+					array_push( $schedule, $day_schedule );
+				}
+			}
+
+			return $schedule;
+		}
+
+		$updated = array();
 
 		$schedule = array();
 
@@ -148,7 +183,23 @@ class Settings {
 
 		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
-				update_option( 'wpappointments_' . $category . $key, $value );
+				if ( 'serviceName' === $key ) {
+					$service_post_id = get_option( 'wpappointments_defaultServiceId' );
+
+					if ( $service_post_id ) {
+						wp_update_post(
+							array(
+								'ID'         => $service_post_id,
+								'post_title' => $value,
+							)
+						);
+					}
+
+					$updated[ $key ] = $value;
+					continue;
+				}
+
+				update_option( 'wpappointments_' . $category . '_' . $key, $value );
 				$updated[ $key ] = $value;
 			}
 

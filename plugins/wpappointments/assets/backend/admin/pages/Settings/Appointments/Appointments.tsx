@@ -61,9 +61,9 @@ export default withForm(function AppointmentsSettings() {
 			return;
 		}
 
-		if (response.data.message) {
+		if (response.message) {
 			dispatch.setPluginSettings({ appointments: data });
-			displaySuccessToast(response.data.message);
+			displaySuccessToast(response.message);
 		}
 	};
 

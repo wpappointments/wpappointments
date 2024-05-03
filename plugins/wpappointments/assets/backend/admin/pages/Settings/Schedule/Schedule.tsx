@@ -78,9 +78,9 @@ function ScheduleSettings() {
 			return;
 		}
 
-		if (response.data.message) {
+		if (response.message) {
 			dispatch.setPluginSettings({ schedule: data });
-			displaySuccessToast(response.data.message);
+			displaySuccessToast(response.message);
 		}
 	};
 
