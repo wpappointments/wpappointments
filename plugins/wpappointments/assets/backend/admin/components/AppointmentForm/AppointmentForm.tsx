@@ -92,7 +92,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const appointmentsSettings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
 	}, []);
-	const { defaultLength } = appointmentsSettings;
+	const { defaultLength, serviceName, serviceId } = appointmentsSettings;
 
 	const { currentMonth, currentYear } = useSelect(
 		(select) => {
@@ -218,10 +218,14 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			? __('Edit Appointment', 'wpappointments')
 			: __('Create New Appointment', 'wpappointments');
 
+	const defaultServiceName = serviceName || 'Appointment';
+
 	return (
 		<SlideOut title={title} id="appointment">
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
+					{defaultServiceName}
+					{serviceId?.toString() || 'none'}
 					<Select
 						name="service"
 						label="Service"
@@ -231,11 +235,16 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						defaultValue={
 							mode === 'edit' && currentAppointment
 								? currentAppointment?.service
-								: 'Appointment'
+								: defaultServiceName
 						}
 						readOnly={true}
 						options={[
-							{ label: 'Appointment', value: 'appointment' },
+							{
+								label: defaultServiceName,
+								value:
+									serviceId?.toString() ||
+									defaultServiceName.toLowerCase(),
+							},
 						]}
 					/>
 

@@ -29,19 +29,6 @@ class Appointment {
 	public $appointment_data = array();
 
 	/**
-	 * Default query part for appointments
-	 *
-	 * @var array
-	 */
-	private $default_query_part = array(
-		'post_type'   => 'wpa-appointment',
-		'post_status' => 'publish',
-		'orderby'     => 'meta_value',
-		'meta_key'    => 'timestamp',
-		'order'       => 'ASC',
-	);
-
-	/**
 	 * Appointment model constructor
 	 *
 	 * @param WP_User|int|array $appointment Appointment post object or appointment ID or appointment data array.
@@ -57,83 +44,12 @@ class Appointment {
 	}
 
 	/**
-	 * Get day appointments
-	 *
-	 * @param \DateTimeImmutable $date Date.
-	 *
-	 * @return object
-	 */
-	public function get_day_appointments( $date ) {
-		$day_start = $date;
-		$day_start->setTime( 0, 0, 0 );
-		$day_start = (int) $day_start->getTimestamp();
-
-		$day_end = $date;
-		$day_end->setTime( 23, 59, 59 );
-		$day_end = (int) $day_end->getTimestamp();
-
-		return $this->get_date_range_appointments( $day_start, $day_end );
-	}
-
-	/**
-	 * Get date range appointments
-	 *
-	 * @param \DateTimeImmutable $start_date Start date.
-	 * @param \DateTimeImmutable $end_date End date.
-	 *
-	 * @return object
-	 */
-	public function get_date_range_appointments( $start_date, $end_date ) {
-		$query = new \WP_Query(
-			array_merge(
-				$this->default_query_part,
-				array(
-					'posts_per_page' => - 1,
-					'meta_query'     => array(
-						'relation' => 'AND',
-						array(
-							'key'     => 'timestamp',
-							'value'   => $start_date,
-							'compare' => '>=',
-						),
-						array(
-							'key'     => 'timestamp',
-							'value'   => $end_date,
-							'compare' => '<=',
-						),
-					),
-				)
-			)
-		);
-
-		$appointments = array();
-
-		foreach ( $query->posts as $post ) {
-			$meta           = get_post_meta( $post->ID );
-			$appointments[] = $this->prepare_appointment_entity(
-				$post->ID,
-				array(
-					'status'    => $meta['status'][0],
-					'timestamp' => $meta['timestamp'][0],
-					'duration'  => $meta['duration'][0],
-				)
-			);
-		}
-
-		return array(
-			'appointments' => $appointments,
-			'postCount'    => $query->post_count,
-			'foundPosts'   => $query->found_posts,
-		);
-	}
-
-	/**
 	 * Create appointment
 	 *
 	 * @return object|\WP_Error
 	 */
 	public function save() {
-		$create_account = $this->appointment_data['createAccount'] ?? false;
+		$create_account = $this->appointment_data['create_account'] ?? false;
 		$password       = $this->appointment_data['password'] ?? null;
 		$customer       = $this->appointment_data['customer'] ?? null;
 		$title          = $this->appointment_data['title'] ?? null;

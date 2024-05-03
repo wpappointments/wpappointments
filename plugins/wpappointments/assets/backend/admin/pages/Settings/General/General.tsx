@@ -75,9 +75,9 @@ function GeneralSettings() {
 			return;
 		}
 
-		if (response.data.message) {
+		if (response.message) {
 			dispatch.setPluginSettings({ general: data });
-			displaySuccessToast(response.data.message);
+			displaySuccessToast(response.message);
 		}
 	};
 

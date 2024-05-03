@@ -94,35 +94,32 @@ export function BookingFlowContextProvider({
 	}, [selected, calendarWithAvailability]);
 
 	useEffect(() => {
-		apiFetch({
-			path: addQueryArgs('calendar-availability', {
-				calendar: JSON.stringify(calendar[0]),
-				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-				trim: attributes.trimUnavailable,
-			}),
-		})
-			.then((data) => {
-				const parsed = safeParse(AvailabilityResponseSchema, data);
-				const { output, success } = parsed;
-
-				if (!success) {
-					console.error(
-						'Failed to parse availability response',
-						parsed
-					);
-					setAvailabilityLoading(false);
-					return;
-				}
-
-				const { data: response } = output;
-				const { availability } = response;
-
-				setCalendarWithAvailability([availability]);
-				setAvailabilityLoading(false);
-			})
-			.catch((error) => {
-				console.error('Failed to fetch availability', error);
+		async function fetchAvailability() {
+			const data = await apiFetch({
+				path: addQueryArgs('calendar-availability', {
+					calendar: JSON.stringify(calendar[0]),
+					timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+					trim: attributes.trimUnavailable,
+				}),
 			});
+
+			const parsed = safeParse(AvailabilityResponseSchema, data);
+			const { output, success } = parsed;
+
+			if (!success) {
+				console.error('Failed to parse availability response', parsed);
+				setAvailabilityLoading(false);
+				return;
+			}
+
+			const { data: response } = output;
+			const { availability } = response;
+
+			setCalendarWithAvailability([availability]);
+			setAvailabilityLoading(false);
+		}
+
+		fetchAvailability();
 	}, [viewing.getMonth(), attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
