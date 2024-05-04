@@ -95,8 +95,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const duration = watch('duration');
 	const customer = watch('customer');
 
-	console.log('customer', customer);
-
 	const defaultCustomer = customer || selectedCustomer;
 	const appointmentsSettings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
