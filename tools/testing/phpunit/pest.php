@@ -8,6 +8,7 @@
 
 namespace TestTools;
 
+use WP_Error;
 use WP_REST_Response;
 
 /**
@@ -46,6 +47,18 @@ expect()->extend(
 
 		expect( $data['data'] )->toBeArray();
 		expect( $data['data']['status'] )->toBe( $status );
+
+		return $this;
+	}
+);
+
+expect()->extend(
+	'toBeWPError',
+	function ( $code ) {
+		$response = $this->value;
+
+		expect( $response )->toBeInstanceOf( WP_Error::class );
+		expect( $response->get_error_code() )->toBe( $code );
 
 		return $this;
 	}

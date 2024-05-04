@@ -12,7 +12,6 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
 use WPAppointments\Data\Model\Appointment;
-use WPAppointments\Data\Model\Customer;
 use WPAppointments\Data\Model\Settings;
 use WPAppointments\Data\Query\AppointmentsQuery;
 
@@ -214,7 +213,7 @@ class AppointmentsController extends Controller {
 		return self::response(
 			__( 'Appointment created successfully', 'wpappointments' ),
 			array(
-				'appointment' => $saved_appointment,
+				'appointment' => $saved_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
 		);
 	}
@@ -262,7 +261,7 @@ class AppointmentsController extends Controller {
 		return self::response(
 			__( 'Appointment created successfully', 'wpappointments' ),
 			array(
-				'appointment' => $saved_appointment,
+				'appointment' => $saved_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
 		);
 	}
@@ -306,7 +305,7 @@ class AppointmentsController extends Controller {
 		return self::response(
 			__( 'Appointment updated successfully', 'wpappointments' ),
 			array(
-				'appointment' => $updated_appointment,
+				'appointment' => $updated_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
 		);
 	}
@@ -383,6 +382,33 @@ class AppointmentsController extends Controller {
 			array(
 				'appointmentId' => $confirmed,
 			),
+		);
+	}
+
+	/**
+	 * Default normalizer
+	 *
+	 * @param WP_Post $appointment Appointment post object.
+	 *
+	 * @return array
+	 */
+	public static function normalize( $appointment ) {
+		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
+
+		$timestamp   = get_post_meta( $appointment->ID, 'timestamp', true );
+		$status      = get_post_meta( $appointment->ID, 'status', true );
+		$duration    = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
+		$customer_id = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
+		$customer    = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
+
+		return array(
+			'id'         => $appointment->ID,
+			'service'    => $appointment->post_title,
+			'status'     => $status,
+			'timestamp'  => (int) $timestamp,
+			'duration'   => (int) $duration,
+			'customerId' => (int) $customer_id,
+			'customer'   => $customer,
 		);
 	}
 }

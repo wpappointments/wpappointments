@@ -39,7 +39,7 @@ class Customer {
 	/**
 	 * Save new customer user in database
 	 *
-	 * @return \WP_User|\WP_Error
+	 * @return Customer|\WP_Error
 	 */
 	public function save() {
 		$email    = sanitize_text_field( wp_unslash( $this->user['email'] ), true );
@@ -73,7 +73,7 @@ class Customer {
 	 *
 	 * @param object $customer Customer data object.
 	 *
-	 * @return \WP_User|\WP_Error
+	 * @return Customer|\WP_Error
 	 */
 	public function update( $customer ) {
 		$id = $this->validate_user_id( $this->user->ID );
@@ -121,7 +121,7 @@ class Customer {
 		$deleted = wp_delete_user( $id );
 
 		if ( ! $deleted ) {
-			return new \WP_Error( 'error', __( 'Could not delete appointment', 'wpappointments' ) );
+			return new \WP_Error( 'cannot_delete_appointment', __( 'Could not delete appointment', 'wpappointments' ) );
 		}
 
 		return $id;
@@ -130,12 +130,36 @@ class Customer {
 	/**
 	 * Normalize user object
 	 *
-	 * @param callable $normalizer Normalizer function.
+	 * @param callable|null $normalizer Normalizer function.
 	 *
 	 * @return mixed
 	 */
-	public function normalize( $normalizer ) {
+	public function normalize( $normalizer = null ) {
+		if ( ! $normalizer ) {
+			$normalizer = array( __CLASS__, 'default_normalizer' );
+		}
+
 		return call_user_func( $normalizer, $this->user );
+	}
+
+	/**
+	 * Default normalizer
+	 *
+	 * @param WP_User $user User object.
+	 *
+	 * @return array
+	 */
+	public static function default_normalizer( $user ) {
+		$phone = get_user_meta( $user->ID, 'phone', true );
+
+		return array(
+			'id'      => $user->ID,
+			'name'    => $user->display_name,
+			'email'   => $user->user_email,
+			'phone'   => $phone,
+			'created' => $user->user_registered,
+			'updated' => $user->user_registered,
+		);
 	}
 
 	/**
@@ -147,11 +171,11 @@ class Customer {
 	 */
 	protected function validate_user_id( $user_id ) {
 		if ( ! $user_id ) {
-			return new \WP_Error( 'error', __( 'User ID is required', 'wpappointments' ) );
+			return new \WP_Error( 'missing_user_id', __( 'User ID is required', 'wpappointments' ) );
 		}
 
 		if ( ! get_user_by( 'ID', $user_id ) ) {
-			return new \WP_Error( 'error', __( 'User not found', 'wpappointments' ) );
+			return new \WP_Error( 'user_not_found', __( 'User not found', 'wpappointments' ) );
 		}
 
 		return $user_id;

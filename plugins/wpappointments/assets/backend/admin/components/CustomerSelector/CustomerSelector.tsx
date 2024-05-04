@@ -53,7 +53,10 @@ export default function CustomerSelector() {
 		);
 
 		if (selectedCustomer) {
-			setValue('customer', JSON.stringify(selectedCustomer));
+			setValue('customer.name', selectedCustomer.name);
+			setValue('customer.email', selectedCustomer.email || '');
+			setValue('customer.phone', selectedCustomer.phone || '');
+			setValue('customer.created', selectedCustomer.created || '');
 			setValue('customerId', id);
 			dispatch.setSelectedCustomer(selectedCustomer);
 			closeCurrentSlideOut();

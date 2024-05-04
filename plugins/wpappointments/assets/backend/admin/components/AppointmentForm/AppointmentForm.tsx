@@ -37,7 +37,14 @@ export type AppointmentFormFields = {
 	timeMinuteStart: string;
 	timeType: 'am' | 'pm';
 	duration: number;
-	customer: string;
+	customer: {
+		id: number;
+		name: string;
+		email: string;
+		phone: string;
+		created: string;
+		updated: string;
+	};
 	customerId: number;
 	available: string;
 };
@@ -88,7 +95,9 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const duration = watch('duration');
 	const customer = watch('customer');
 
-	const defaultCustomer = customer ? JSON.parse(customer) : selectedCustomer;
+	console.log('customer', customer);
+
+	const defaultCustomer = customer || selectedCustomer;
 	const appointmentsSettings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
 	}, []);
@@ -129,7 +138,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			setValue('timeHourStart', timeHourStart);
 			setValue('timeMinuteStart', timeMinuteStart);
 			setValue('duration', duration);
-			setValue('customer', JSON.stringify(customer));
+			setValue('customer.name', customer.name);
+			setValue('customer.email', customer.email || '');
+			setValue('customer.phone', customer.phone || '');
+			setValue('customer.created', customer.created || '');
 			setValue('customerId', customerId || 0);
 		} else if (defaultDate) {
 			const timeHourStart = formatTimeForPicker(defaultDate.getHours());
@@ -189,7 +201,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			dispatch.clearSelectedCustomer();
 			setValue('datetime', null);
 			setValue('customerId', 0);
-			setValue('customer', '');
+			setValue('customer.name', '');
+			setValue('customer.email', '');
+			setValue('customer.phone', '');
+			setValue('customer.created', '');
 		}
 	};
 
@@ -224,8 +239,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		<SlideOut title={title} id="appointment">
 			<HtmlForm onSubmit={onSubmit}>
 				<FormFieldSet>
-					{defaultServiceName}
-					{serviceId?.toString() || 'none'}
 					<Select
 						name="service"
 						label="Service"
@@ -336,7 +349,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 						legend={__('Customer', 'wpappointments')}
 						style={{
 							display:
-								selectedCustomer || defaultCustomer
+								selectedCustomer || defaultCustomer?.name
 									? 'none'
 									: 'block',
 						}}
@@ -378,14 +391,35 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 						<Input
 							type="hidden"
-							name="customer"
+							name="customer[name]"
+							rules={{
+								required: true,
+							}}
+						/>
+						<Input
+							type="hidden"
+							name="customer[email]"
+							rules={{
+								required: true,
+							}}
+						/>
+						<Input
+							type="hidden"
+							name="customer[phone]"
+							rules={{
+								required: true,
+							}}
+						/>
+						<Input
+							type="hidden"
+							name="customer[created]"
 							rules={{
 								required: true,
 							}}
 						/>
 					</FormFieldSet>
 
-					{defaultCustomer && (
+					{defaultCustomer?.name && (
 						<CustomerSummary
 							customer={defaultCustomer}
 							headerActions={
@@ -410,7 +444,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 										onClick={() => {
 											dispatch.clearSelectedCustomer();
 											setValue('customerId', 0);
-											setValue('customer', '');
+											setValue('customer.name', '');
+											setValue('customer.email', '');
+											setValue('customer.phone', '');
+											setValue('customer.created', '');
 										}}
 									>
 										{__('Clear', 'wpappointments')}
@@ -446,7 +483,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					<CustomerCreate
 						onSubmitSuccess={(data: Customer) => {
 							setValue('customerId', 0);
-							setValue('customer', JSON.stringify(data));
+							setValue('customer.name', data.name);
+							setValue('customer.email', data.email || '');
+							setValue('customer.phone', data.phone || '');
+							setValue('customer.created', data.created || '');
 						}}
 					/>
 				)}
