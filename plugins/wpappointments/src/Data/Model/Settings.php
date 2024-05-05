@@ -210,7 +210,7 @@ class Settings {
 			return $updated;
 		}
 
-		return new \WP_Error( 'invalid_category', 'Invalid category' );
+		return new \WP_Error( 'unknown_settings_error', 'Unknown error while saving settings' );
 	}
 
 	/**

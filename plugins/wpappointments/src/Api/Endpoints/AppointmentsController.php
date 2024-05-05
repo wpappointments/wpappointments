@@ -408,7 +408,7 @@ class AppointmentsController extends Controller {
 			'timestamp'  => (int) $timestamp,
 			'duration'   => (int) $duration,
 			'customerId' => (int) $customer_id,
-			'customer'   => $customer,
+			'customer'   => maybe_unserialize( $customer ),
 		);
 	}
 }

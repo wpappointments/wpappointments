@@ -247,6 +247,6 @@ test(
 		);
 
 		// Assert response data.
-		expect( $results )->toBeError( 422, 'invalid_category' );
+		expect( $results )->toBeError( 422, 'invalid_settings_category' );
 	}
 );

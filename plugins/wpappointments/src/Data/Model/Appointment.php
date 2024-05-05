@@ -103,6 +103,10 @@ class Appointment {
 	 * @return Appointment|\WP_Error
 	 */
 	public function update( $data ) {
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
 		$id       = $this->appointment->ID;
 		$title    = $data['title'] ?? null;
 		$meta     = $data['meta'] ?? array();
@@ -157,6 +161,10 @@ class Appointment {
 	 * @return array|\WP_Error
 	 */
 	public function cancel() {
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
 		$id = $this->appointment->ID;
 
 		$cancelled = update_post_meta( $id, 'status', 'cancelled' );
@@ -179,6 +187,10 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function confirm() {
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
 		$id = $this->appointment->ID;
 
 		$confirmed = update_post_meta( $id, 'status', 'confirmed' );
@@ -201,6 +213,10 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function delete() {
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
 		$id = $this->appointment->ID;
 
 		$status = get_post_meta( $id, 'status', true );
@@ -264,7 +280,7 @@ class Appointment {
 			'timestamp'   => (int) $timestamp,
 			'duration'    => (int) $duration,
 			'customer_id' => (int) $customer_id,
-			'customer'    => $customer,
+			'customer'    => maybe_unserialize( $customer ),
 		);
 	}
 
