@@ -181,6 +181,81 @@ test(
 	}
 );
 
+test(
+	'Appointment model - save method - with customer - error - customer login exists',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_created',
+			function () {
+				$counter = get_option( 'wpappointments_appointment_created_hook_fired', 0 );
+				update_option( 'wpappointments_appointment_created_hook_fired', $counter + 1 );
+			}
+		);
+
+		// Create a new appointment model object.
+		$appointment = $this->create_appointment(
+			array(
+				'create_account' => true,
+				'password'       => 'password123',
+				'customer'       => array(
+					'email' => 'john@example.com',
+					'name'  => 'John Doe',
+					'phone' => '12345',
+				),
+				'meta'           => array(
+					'status' => 'confirmed',
+				),
+			)
+		);
+
+		$id       = $appointment->appointment->ID;
+		$customer = $appointment->appointment_data['customer'];
+
+		// Check the appointment object.
+		expect( $appointment )->toBeInstanceOf( Appointment::class );
+		expect( get_post( $id ) )->toBeInstanceOf( WP_Post::class );
+
+		// Check the customer user.
+		expect( $customer )->toBeArray();
+		expect( $customer['email'] )->toBeString();
+		expect( $customer['name'] )->toBeString();
+		expect( $customer['phone'] )->toBeString();
+
+		// Check the action fired.
+		expect( get_option( 'wpappointments_appointment_created_hook_fired' ) )->toBe( 1 );
+
+		// Create a new appointment model object with the same customer email.
+		$appointment = $this->create_appointment(
+			array(
+				'create_account' => true,
+				'password'       => 'password123',
+				'customer'       => array(
+					'email' => 'john@example.com',
+					'name'  => 'John Doe',
+					'phone' => '12345',
+				),
+				'meta'           => array(
+					'status' => 'confirmed',
+				),
+			)
+		);
+
+		// Expect the appointment to be saved normally.
+		expect( $appointment )->toBeInstanceOf( Appointment::class );
+		expect( get_post( $id ) )->toBeInstanceOf( WP_Post::class );
+
+		// Check the customer user.
+		expect( $customer )->toBeArray();
+		expect( $customer['email'] )->toBeString();
+		expect( $customer['name'] )->toBeString();
+		expect( $customer['phone'] )->toBeString();
+
+		// Check the action fired.
+		expect( get_option( 'wpappointments_appointment_created_hook_fired' ) )->toBe( 2 );
+	}
+);
+
 // Update method tests.
 test(
 	'Appointment model - update method - confirmed -> pending',

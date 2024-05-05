@@ -73,7 +73,16 @@ class Appointment {
 				$customer       = new Customer( $customer );
 				$saved_customer = $customer->save();
 
-				$meta['customer_id'] = $saved_customer->get_user()->ID;
+				if ( is_wp_error( $saved_customer ) ) {
+					$code = $saved_customer->get_error_code();
+
+					if ( 'existing_user_login' === $code ) {
+						$user                = get_user_by( 'login', $customer->get_user()['email'] );
+						$meta['customer_id'] = $user->ID;
+					}
+				} else {
+					$meta['customer_id'] = $saved_customer->get_user()->ID;
+				}
 			}
 		}
 
