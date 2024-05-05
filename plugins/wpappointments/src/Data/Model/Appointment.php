@@ -23,7 +23,7 @@ class Appointment {
 	public $appointment;
 
 	/**
-	 * Default query part for appointments
+	 * Appointment data array
 	 *
 	 * @var array
 	 */
@@ -45,8 +45,7 @@ class Appointment {
 			if ( is_wp_error( $valid_id ) ) {
 				$this->appointment = $valid_id;
 			} else {
-				$appointment_post  = get_post( $valid_id );
-				$this->appointment = $appointment_post;
+				$this->appointment = get_post( $valid_id );
 			}
 		}
 	}
@@ -68,13 +67,13 @@ class Appointment {
 		}
 
 		if ( null !== $customer ) {
-			$meta['customer'] = $customer;
+			$meta['customer'] = maybe_serialize( $customer );
 
 			if ( is_array( $customer ) && $create_account ) {
 				$customer       = new Customer( $customer );
 				$saved_customer = $customer->save();
 
-				$meta['customer_id'] = $saved_customer->user->ID;
+				$meta['customer_id'] = $saved_customer->get_user()->ID;
 			}
 		}
 
@@ -104,10 +103,6 @@ class Appointment {
 	 * @return Appointment|\WP_Error
 	 */
 	public function update( $data ) {
-		if ( is_wp_error( $this->appointment ) ) {
-			return $this->appointment;
-		}
-
 		$id       = $this->appointment->ID;
 		$title    = $data['title'] ?? null;
 		$meta     = $data['meta'] ?? array();
@@ -134,8 +129,10 @@ class Appointment {
 			update_post_meta( $id, $key, $value );
 		}
 
-		$this->appointment = get_post( $id );
-		$new_appointment   = $this->normalize();
+		$this->appointment      = get_post( $id );
+		$this->appointment_data = $meta;
+
+		$new_appointment = $this->normalize();
 
 		if ( 'pending' === $new_appointment['status'] ) {
 			do_action(
@@ -160,10 +157,6 @@ class Appointment {
 	 * @return array|\WP_Error
 	 */
 	public function cancel() {
-		if ( is_wp_error( $this->appointment ) ) {
-			return $this->appointment;
-		}
-
 		$id = $this->appointment->ID;
 
 		$cancelled = update_post_meta( $id, 'status', 'cancelled' );
@@ -186,10 +179,6 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function confirm() {
-		if ( is_wp_error( $this->appointment ) ) {
-			return $this->appointment;
-		}
-
 		$id = $this->appointment->ID;
 
 		$confirmed = update_post_meta( $id, 'status', 'confirmed' );
@@ -212,10 +201,6 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function delete() {
-		if ( is_wp_error( $this->appointment ) ) {
-			return $this->appointment;
-		}
-
 		$id = $this->appointment->ID;
 
 		$status = get_post_meta( $id, 'status', true );

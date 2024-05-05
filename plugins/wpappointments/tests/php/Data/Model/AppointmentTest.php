@@ -1,25 +1,49 @@
 <?php
 /**
- * Test Appointment model
+ * Appointment model -
  *
  * @package WPAppointments
  */
 
 namespace Tests\Data\Model;
 
+use WP_Error;
 use WP_Post;
 use WPAppointments\Data\Model\Appointment;
 
-uses( \TestTools\TestCase::class );
+uses( \TestTools\TestCase::class )->group( 'model' );
+
+// Constructor tests.
+test(
+	'Appointment model - constructor',
+	function () {
+		// Manually create a appointment without modal class.
+		$appointment_id = wp_insert_post(
+			array(
+				'post_title'   => 'Test appointment',
+				'post_content' => 'Test appointment content',
+				'post_status'  => 'publish',
+				'post_type'    => 'wpa-appointment',
+			)
+		);
+
+		// Create a new appointment model object.
+		$appointment = new Appointment( $appointment_id );
+
+		// Check the appointment object.
+		expect( $appointment )->toBeInstanceOf( Appointment::class );
+		expect( $appointment->appointment )->toBeInstanceOf( WP_Post::class );
+	}
+);
 
 test(
-	'Test Appointment model constructor',
+	'Appointment model - constructor - error - appointment not found',
 	function () {
 		// Create a new appointment model object.
 		$appointment = new Appointment( 1 );
 
 		// Check the appointment object.
-		expect( $appointment->appointment )->toBeInstanceOf( \WP_Error::class );
+		expect( $appointment->appointment )->toBeInstanceOf( WP_Error::class );
 		expect( $appointment->appointment->get_error_code() )->toBe( 'appointment_not_found' );
 		expect( $appointment->appointment_data )->toBeArray();
 		expect( $appointment->appointment_data )->toBeEmpty();
@@ -27,7 +51,7 @@ test(
 );
 
 test(
-	'Test Appointment model constructor with invalid appointment parameter',
+	'Appointment model - constructor with invalid appointment parameter',
 	function () {
 		// Create a new appointment model object.
 		$appointment = new Appointment( null );
@@ -38,7 +62,7 @@ test(
 );
 
 test(
-	'Test Appointment model constructor with WP_Post object',
+	'Appointment model - constructor with WP_Post object',
 	function () {
 		// Create a new appointment post object.
 		$appointment = $this->create_appointment(
@@ -62,7 +86,7 @@ test(
 );
 
 test(
-	'Test Appointment model constructor with appointment data array',
+	'Appointment model - constructor with appointment data array',
 	function () {
 		// Create a new appointment model object.
 		$appointment = new Appointment(
@@ -78,8 +102,9 @@ test(
 	}
 );
 
+// Save method tests.
 test(
-	'Test Appointment model save method',
+	'Appointment model - save method',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -98,14 +123,11 @@ test(
 			)
 		);
 
-		// Save the appointment.
-		$saved = $appointment->save();
-
-		$id       = $saved->appointment->ID;
-		$customer = $saved->appointment_data['customer'];
+		$id       = $appointment->appointment->ID;
+		$customer = $appointment->appointment_data['customer'];
 
 		// Check the appointment object.
-		expect( $saved )->toBeInstanceOf( Appointment::class );
+		expect( $appointment )->toBeInstanceOf( Appointment::class );
 		expect( get_post( $id ) )->toBeInstanceOf( WP_Post::class );
 
 		// Check the customer user.
@@ -120,7 +142,48 @@ test(
 );
 
 test(
-	'Test Appointment model update method - confirmed -> pending',
+	'Appointment model - save method - with customer',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_created',
+			function () {
+				update_option( 'wpappointments_appointment_created_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object.
+		$appointment = $this->create_appointment(
+			array(
+				'create_account' => true,
+				'password'       => 'password123',
+				'meta'           => array(
+					'status' => 'confirmed',
+				),
+			)
+		);
+
+		$id       = $appointment->appointment->ID;
+		$customer = $appointment->appointment_data['customer'];
+
+		// Check the appointment object.
+		expect( $appointment )->toBeInstanceOf( Appointment::class );
+		expect( get_post( $id ) )->toBeInstanceOf( WP_Post::class );
+
+		// Check the customer user.
+		expect( $customer )->toBeArray();
+		expect( $customer['email'] )->toBeString();
+		expect( $customer['name'] )->toBeString();
+		expect( $customer['phone'] )->toBeString();
+
+		// Check the action fired.
+		expect( get_option( 'wpappointments_appointment_created_hook_fired' ) )->toBe( 1 );
+	}
+);
+
+// Update method tests.
+test(
+	'Appointment model - update method - confirmed -> pending',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -163,7 +226,7 @@ test(
 );
 
 test(
-	'Test Appointment model update method - pending -> confirmed',
+	'Appointment model - update method - pending -> confirmed',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -206,7 +269,63 @@ test(
 );
 
 test(
-	'Test Appointment model cancel method',
+	'Appointment model - update method - with customer - pending -> confirmed',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_confirmed',
+			function () {
+				update_option( 'wpappointments_appointment_confirmed_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object.
+		$appointment = $this->create_appointment(
+			array(
+				'meta' => array(
+					'status' => 'pending',
+				),
+			)
+		);
+
+		// Update the appointment.
+		$updated = $appointment->update(
+			array(
+				'title'    => 'New title',
+				'customer' => array(
+					'email' => 'updated@example.com',
+					'name'  => 'Updated User',
+					'phone' => '+1 (000) 123-4567',
+				),
+				'meta'     => array(
+					'status' => 'confirmed',
+				),
+			)
+		);
+
+		$id       = $updated->appointment->ID;
+		$customer = $updated->appointment_data['customer'];
+
+		// Check the appointment object.
+		expect( $updated )->toBeInstanceOf( Appointment::class );
+		expect( get_post( $id ) )->toBeInstanceOf( WP_Post::class );
+		expect( get_post( $id )->post_title )->toBe( 'New title' );
+		expect( get_post_meta( $id, 'status', true ) )->toBe( 'confirmed' );
+
+		// Check the customer user.
+		expect( $customer )->toBeArray();
+		expect( $customer['email'] )->toBe( 'updated@example.com' );
+		expect( $customer['name'] )->toBe( 'Updated User' );
+		expect( $customer['phone'] )->toBe( '+1 (000) 123-4567' );
+
+		// Check the action fired.
+		expect( get_option( 'wpappointments_appointment_confirmed_hook_fired' ) )->toBe( 1 );
+	}
+);
+
+// Cancel method tests.
+test(
+	'Appointment model - cancel method',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -239,7 +358,7 @@ test(
 );
 
 test(
-	'Test Appointment model cancel method - error - already cancelled',
+	'Appointment model - cancel method - error - already cancelled',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -269,8 +388,9 @@ test(
 	}
 );
 
+// Confirm method tests.
 test(
-	'Test Appointment model confirm method',
+	'Appointment model - confirm method',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -303,7 +423,7 @@ test(
 );
 
 test(
-	'Test Appointment model cancel method - error - already confirmed',
+	'Appointment model - confirm method - error - already confirmed',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -333,8 +453,9 @@ test(
 	}
 );
 
+// Delete method tests.
 test(
-	'Test Appointment model delete method',
+	'Appointment model - delete method',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -367,7 +488,7 @@ test(
 );
 
 test(
-	'Test Appointment model delete method - error - not cancelled',
+	'Appointment model - delete method - error - not cancelled',
 	function () {
 		// Prepare action hook spy.
 		add_action(
@@ -398,7 +519,7 @@ test(
 );
 
 test(
-	'Test Appointment model delete method - error - cant delete appointment',
+	'Appointment model - delete method - error - cant delete appointment',
 	function () {
 		// Prepare action hook spy.
 		add_action(

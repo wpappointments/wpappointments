@@ -7,7 +7,7 @@
 
 namespace Tests\Api\Endpoints;
 
-uses( \TestTools\RestTestCase::class );
+uses( \TestTools\RestTestCase::class )->group( 'api' );
 
 test(
 	'GET wpappointments/v1/customers - status 200',

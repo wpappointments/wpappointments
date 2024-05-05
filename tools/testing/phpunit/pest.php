@@ -33,48 +33,12 @@ use WP_REST_Response;
  * to assert different things. Of course, you may extend the Expectation API at any time.
  */
 expect()->extend(
-	'toBeError',
-	function ( $status, $code ) {
-		$response = $this->value;
-
-		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
-		expect( $response->get_status() )->toBe( $status );
-
-		$data = $response->get_data();
-
-		expect( $data )->toBeArray();
-		expect( $data['code'] )->toBe( $code );
-
-		expect( $data['data'] )->toBeArray();
-		expect( $data['data']['status'] )->toBe( $status );
-
-		return $this;
-	}
-);
-
-expect()->extend(
 	'toBeWPError',
 	function ( $code ) {
 		$response = $this->value;
 
 		expect( $response )->toBeInstanceOf( WP_Error::class );
 		expect( $response->get_error_code() )->toBe( $code );
-
-		return $this;
-	}
-);
-
-expect()->extend(
-	'toBeSuccess',
-	function () {
-		$response = $this->value;
-
-		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
-
-		$data = $response->get_data();
-
-		expect( $data )->toBeArray();
-		expect( $data['status'] )->toBe( 'success' );
 
 		return $this;
 	}

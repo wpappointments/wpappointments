@@ -11,7 +11,7 @@ use WPAppointments\Data\Model\Appointment;
 use WPAppointments\Data\Model\Settings;
 use WPAppointments\Utils\Availability;
 
-uses( \TestTools\TestCase::class );
+uses( \TestTools\TestCase::class )->group( 'utils' );
 
 beforeEach(
 	function () {

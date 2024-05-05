@@ -119,6 +119,10 @@ class Settings {
 	public function update( $category, $settings = array() ) {
 		$category_exists = array_key_exists( $category, $this->settings );
 
+		if ( ! $category_exists ) {
+			return new \WP_Error( 'invalid_settings_category', 'Invalid settings category' );
+		}
+
 		$schedule = array();
 
 		if ( 'schedule' === $category ) {

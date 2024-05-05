@@ -9,7 +9,7 @@ namespace Tests\Api\Endpoints;
 
 use WPAppointments\Data\Model\Settings;
 
-uses( \TestTools\RestTestCase::class );
+uses( \TestTools\RestTestCase::class )->group( 'api' );
 
 beforeEach(
 	function () {
