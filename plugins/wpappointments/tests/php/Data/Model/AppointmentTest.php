@@ -323,6 +323,35 @@ test(
 	}
 );
 
+test(
+	'Appointment model - update method - error - invalid appointment id',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_updated',
+			function () {
+				update_option( 'wpappointments_appointment_updated_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object with invalid id.
+		$appointment = new Appointment( 999999 );
+
+		// Update the appointment.
+		$updated = $appointment->update(
+			array(
+				'title' => 'New title',
+			)
+		);
+
+		// Check the appointment object.
+		expect( $updated )->toBeWPError( 'appointment_not_found' );
+
+		// Check the action did not fire.
+		expect( get_option( 'wpappointments_appointment_updated_hook_fired' ) )->toBeFalse();
+	}
+);
+
 // Cancel method tests.
 test(
 	'Appointment model - cancel method',
@@ -388,6 +417,31 @@ test(
 	}
 );
 
+test(
+	'Appointment model - cancel method - error - invalid appointment id',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_cancelled',
+			function () {
+				update_option( 'wpappointments_appointment_cancelled_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object with invalid id.
+		$appointment = new Appointment( 999999 );
+
+		// Update the appointment.
+		$updated = $appointment->cancel();
+
+		// Check the appointment object.
+		expect( $updated )->toBeWPError( 'appointment_not_found' );
+
+		// Check the action did not fire.
+		expect( get_option( 'wpappointments_appointment_cancelled_hook_fired' ) )->toBeFalse();
+	}
+);
+
 // Confirm method tests.
 test(
 	'Appointment model - confirm method',
@@ -447,6 +501,31 @@ test(
 
 		// Check the appointment object.
 		expect( $confirmed )->toBeWPError( 'appointment_already_confirmed' );
+
+		// Check the action did not fire.
+		expect( get_option( 'wpappointments_appointment_confirmed_hook_fired' ) )->toBeFalse();
+	}
+);
+
+test(
+	'Appointment model - confirm method - error - invalid appointment id',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_confirmed',
+			function () {
+				update_option( 'wpappointments_appointment_confirmed_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object with invalid id.
+		$appointment = new Appointment( 999999 );
+
+		// Update the appointment.
+		$updated = $appointment->confirm();
+
+		// Check the appointment object.
+		expect( $updated )->toBeWPError( 'appointment_not_found' );
 
 		// Check the action did not fire.
 		expect( get_option( 'wpappointments_appointment_confirmed_hook_fired' ) )->toBeFalse();
@@ -546,6 +625,31 @@ test(
 
 		// Check the appointment object.
 		expect( $deleted )->toBeWPError( 'appointment_not_found' );
+
+		// Check the action did not fire.
+		expect( get_option( 'wpappointments_appointment_deleted_hook_fired' ) )->toBeFalse();
+	}
+);
+
+test(
+	'Appointment model - delete method - error - invalid appointment id',
+	function () {
+		// Prepare action hook spy.
+		add_action(
+			'wpappointments_appointment_deleted',
+			function () {
+				update_option( 'wpappointments_appointment_deleted_hook_fired', 1 );
+			}
+		);
+
+		// Create a new appointment model object with invalid id.
+		$appointment = new Appointment( 999999 );
+
+		// Update the appointment.
+		$updated = $appointment->delete();
+
+		// Check the appointment object.
+		expect( $updated )->toBeWPError( 'appointment_not_found' );
 
 		// Check the action did not fire.
 		expect( get_option( 'wpappointments_appointment_deleted_hook_fired' ) )->toBeFalse();
