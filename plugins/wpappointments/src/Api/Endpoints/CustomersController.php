@@ -128,7 +128,7 @@ class CustomersController extends Controller {
 		return self::response(
 			__( 'Customer created successfully', 'wpappointments' ),
 			array(
-				'customer' => $saved_customer->normalize( array( __CLASS__, 'normalize' ) ),
+				'customer' => $saved_customer->normalize(),
 			),
 		);
 	}
@@ -162,7 +162,7 @@ class CustomersController extends Controller {
 		return self::response(
 			__( 'Customer updated successfully', 'wpappointments' ),
 			array(
-				'customer' => $updated_customer->normalize( array( __CLASS__, 'normalize' ) ),
+				'customer' => $updated_customer->normalize(),
 			),
 		);
 	}
@@ -183,26 +183,6 @@ class CustomersController extends Controller {
 			array(
 				'id' => $deleted,
 			),
-		);
-	}
-
-	/**
-	 * Prepare entity for API endpoint response
-	 *
-	 * @param \WP_User $user User object.
-	 *
-	 * @return object
-	 */
-	public static function normalize( $user ) {
-		$phone = get_user_meta( $user->ID, 'phone', true );
-
-		return array(
-			'id'      => $user->ID,
-			'name'    => $user->display_name,
-			'email'   => $user->user_email,
-			'phone'   => $phone,
-			'created' => $user->user_registered,
-			'updated' => $user->user_registered,
 		);
 	}
 }

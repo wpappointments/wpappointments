@@ -119,6 +119,10 @@ class Settings {
 	public function update( $category, $settings = array() ) {
 		$category_exists = array_key_exists( $category, $this->settings );
 
+		if ( ! $category_exists ) {
+			return new \WP_Error( 'invalid_settings_category', 'Invalid settings category' );
+		}
+
 		$schedule = array();
 
 		if ( 'schedule' === $category ) {
@@ -206,7 +210,7 @@ class Settings {
 			return $updated;
 		}
 
-		return new \WP_Error( 'invalid_category', 'Invalid category' );
+		return new \WP_Error( 'unknown_settings_error', 'Unknown error while saving settings' );
 	}
 
 	/**

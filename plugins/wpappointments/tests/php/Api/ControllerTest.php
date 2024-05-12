@@ -7,7 +7,45 @@
 
 namespace Tests\Api;
 
-uses( \TestTools\TestCase::class );
+use WP_REST_Response;
+
+uses( \TestTools\TestCase::class )->group( 'api' );
+
+expect()->extend(
+	'toBeError',
+	function ( $status, $code ) {
+		$response = $this->value;
+
+		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
+		expect( $response->get_status() )->toBe( $status );
+
+		$data = $response->get_data();
+
+		expect( $data )->toBeArray();
+		expect( $data['code'] )->toBe( $code );
+
+		expect( $data['data'] )->toBeArray();
+		expect( $data['data']['status'] )->toBe( $status );
+
+		return $this;
+	}
+);
+
+expect()->extend(
+	'toBeSuccess',
+	function () {
+		$response = $this->value;
+
+		expect( $response )->toBeInstanceOf( WP_REST_Response::class );
+
+		$data = $response->get_data();
+
+		expect( $data )->toBeArray();
+		expect( $data['status'] )->toBe( 'success' );
+
+		return $this;
+	}
+);
 
 test(
 	'Test invalid Controller class without init method',

@@ -208,7 +208,7 @@ class AppointmentsQuery {
 		$customer = $meta['customer'] ?? null;
 
 		if ( is_string( $customer ) ) {
-			$customer = json_decode( $customer );
+			$customer = maybe_unserialize( $customer );
 		}
 
 		return array(

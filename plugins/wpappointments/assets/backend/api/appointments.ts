@@ -8,7 +8,12 @@ import { Appointment } from '~/backend/types';
 
 type AppointmentData = {
 	service: string;
-	customer: string;
+	customer: {
+		name: string;
+		email: string;
+		phone: string;
+		created: string;
+	};
 	customerId: number;
 };
 

@@ -73,16 +73,22 @@ class AppointmentFactory extends WP_UnitTest_Factory_For_Thing {
 			$appointments_meta = wp_parse_args( $args['meta'], $appointments_meta );
 		}
 
-		$appointments_data = array(
-			'title'    => $args['post_title'],
-			'meta'     => $appointments_meta,
-			'customer' => $customer_data,
+		if ( isset( $args['customer'] ) ) {
+			$customer_data = wp_parse_args( $args['customer'], $customer_data );
+		}
+
+		$appointment_data = array(
+			'title'          => $args['post_title'],
+			'meta'           => $appointments_meta,
+			'customer'       => $customer_data,
+			'create_account' => $args['create_account'] ?? false,
+			'password'       => $args['password'] ?? false,
 		);
 
-		$appointments = new Appointment( $appointments_data );
-		$saved_id     = $appointments->save();
+		$appointment = new Appointment( $appointment_data );
+		$saved       = $appointment->save();
 
-		return $saved_id;
+		return $saved;
 	}
 
 	/**
