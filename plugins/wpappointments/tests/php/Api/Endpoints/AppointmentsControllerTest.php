@@ -7,7 +7,7 @@
 
 namespace Tests\Api\Endpoints;
 
-uses( \TestTools\RestTestCase::class );
+uses( \TestTools\RestTestCase::class )->group( 'api' );
 
 expect()->extend(
 	'toBeAppointment',
@@ -382,11 +382,10 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
 		$results = $this->do_rest_patch_request(
-			"appointments/$id",
+			"appointments/{$appointment->appointment->ID}",
 			array(
 				'date'     => time() + 3600,
 				'status'   => 'confirmed',
@@ -422,11 +421,10 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
 		$results = $this->do_rest_patch_request(
-			"appointments/$id",
+			"appointments/{$appointment->appointment->ID}",
 			array(
 				'date'     => time() + 3600,
 				'status'   => 'confirmed',
@@ -457,11 +455,10 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
 		$results = $this->do_rest_patch_request(
-			"appointments/$id",
+			"appointments/{$appointment->appointment->ID}",
 			array(
 				'date'     => time() + 3600,
 				'status'   => 'confirmed',
@@ -485,7 +482,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Make request.
-		$results = $this->do_rest_patch_request( 'appointments/0', array() );
+		$results = $this->do_rest_patch_request( 'appointments/999999999', array() );
 
 		// Assert response data.
 		expect( $results )->toBeError( 422, 'appointment_not_found' );
@@ -506,10 +503,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/cancel" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/cancel" );
 
 		// Check response.
 		$data = $results->get_data();
@@ -535,10 +531,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/cancel" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/cancel" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 401, 'rest_forbidden' );
@@ -559,10 +554,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/cancel" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/cancel" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 403, 'rest_forbidden' );
@@ -576,7 +570,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Make request.
-		$results = $this->do_rest_patch_request( 'appointments/0/cancel', array() );
+		$results = $this->do_rest_patch_request( 'appointments/999999999/cancel', array() );
 
 		// Assert response data.
 		expect( $results )->toBeError( 422, 'appointment_not_found' );
@@ -597,10 +591,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/confirm" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/confirm" );
 
 		// Check response.
 		$data = $results->get_data();
@@ -626,10 +619,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/confirm" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/confirm" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 401, 'rest_forbidden' );
@@ -650,10 +642,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_patch_request( "appointments/$id/confirm" );
+		$results = $this->do_rest_patch_request( "appointments/{$appointment->appointment->ID}/confirm" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 403, 'rest_forbidden' );
@@ -667,7 +658,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Make request.
-		$results = $this->do_rest_patch_request( 'appointments/0/confirm', array() );
+		$results = $this->do_rest_patch_request( 'appointments/999999999/confirm', array() );
 
 		// Assert response data.
 		expect( $results )->toBeError( 422, 'appointment_not_found' );
@@ -688,10 +679,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_delete_request( "appointments/$id" );
+		$results = $this->do_rest_delete_request( "appointments/{$appointment->appointment->ID}" );
 
 		// Check response.
 		$data = $results->get_data();
@@ -718,13 +708,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_delete_request( "appointments/$id" );
-
-		// Check response.
-		$data = $results->get_data();
+		$results = $this->do_rest_delete_request( "appointments/{$appointment->appointment->ID}" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 422, 'deleting_not_cancelled_appointment' );
@@ -744,10 +730,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_delete_request( "appointments/$id" );
+		$results = $this->do_rest_delete_request( "appointments/{$appointment->appointment->ID}" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 401, 'rest_forbidden' );
@@ -768,10 +753,9 @@ test(
 				),
 			)
 		);
-		$id          = $appointment['id'];
 
 		// Make request.
-		$results = $this->do_rest_delete_request( "appointments/$id" );
+		$results = $this->do_rest_delete_request( "appointments/{$appointment->appointment->ID}" );
 
 		// Assert response data.
 		expect( $results )->toBeError( 403, 'rest_forbidden' );
@@ -785,7 +769,7 @@ test(
 		wp_set_current_user( 1 );
 
 		// Make request.
-		$results = $this->do_rest_delete_request( 'appointments/0', array() );
+		$results = $this->do_rest_delete_request( 'appointments/999999999', array() );
 
 		// Assert response data.
 		expect( $results )->toBeError( 422, 'appointment_not_found' );

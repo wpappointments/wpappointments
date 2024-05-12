@@ -8,6 +8,7 @@
 
 namespace WPAppointments\Data\Model;
 
+use WP_Error;
 use WP_Post;
 
 /**
@@ -17,12 +18,12 @@ class Appointment {
 	/**
 	 * Appointment title
 	 *
-	 * @var \WP_Post|null
+	 * @var \WP_Post|\WP_Error
 	 */
-	public $appointment = null;
+	public $appointment;
 
 	/**
-	 * Default query part for appointments
+	 * Appointment data array
 	 *
 	 * @var array
 	 */
@@ -33,20 +34,26 @@ class Appointment {
 	 *
 	 * @param WP_User|int|array $appointment Appointment post object or appointment ID or appointment data array.
 	 */
-	public function __construct( $appointment = null ) {
-		if ( is_numeric( $appointment ) ) {
-			$this->appointment = get_post( $appointment );
-		} elseif ( $appointment instanceof WP_Post ) {
+	public function __construct( $appointment ) {
+		if ( $appointment instanceof WP_Post ) {
 			$this->appointment = $appointment;
 		} elseif ( is_array( $appointment ) ) {
 			$this->appointment_data = $appointment;
+		} else {
+			$valid_id = $this->validate_post_id( $appointment );
+
+			if ( is_wp_error( $valid_id ) ) {
+				$this->appointment = $valid_id;
+			} else {
+				$this->appointment = get_post( $valid_id );
+			}
 		}
 	}
 
 	/**
 	 * Create appointment
 	 *
-	 * @return object|\WP_Error
+	 * @return Appointment|\WP_Error
 	 */
 	public function save() {
 		$create_account = $this->appointment_data['create_account'] ?? false;
@@ -60,13 +67,22 @@ class Appointment {
 		}
 
 		if ( null !== $customer ) {
-			$meta['customer'] = $customer;
+			$meta['customer'] = maybe_serialize( $customer );
 
 			if ( is_array( $customer ) && $create_account ) {
 				$customer       = new Customer( $customer );
 				$saved_customer = $customer->save();
 
-				$meta['customer_id'] = $saved_customer->user->ID;
+				if ( is_wp_error( $saved_customer ) ) {
+					$code = $saved_customer->get_error_code();
+
+					if ( 'existing_user_login' === $code ) {
+						$user                = get_user_by( 'login', $customer->get_user()['email'] );
+						$meta['customer_id'] = $user->ID;
+					}
+				} else {
+					$meta['customer_id'] = $saved_customer->get_user()->ID;
+				}
 			}
 		}
 
@@ -80,11 +96,12 @@ class Appointment {
 			true
 		);
 
-		$appointment = $this->prepare_appointment_entity( $post_id, $meta );
+		$this->appointment = get_post( $post_id );
+		$appointment       = $this->normalize();
 
 		do_action( 'wpappointments_appointment_created', $appointment );
 
-		return $appointment;
+		return $this;
 	}
 
 	/**
@@ -92,10 +109,14 @@ class Appointment {
 	 *
 	 * @param array $data Appointment update data.
 	 *
-	 * @return array|\WP_Error
+	 * @return Appointment|\WP_Error
 	 */
 	public function update( $data ) {
-		$id       = $this->appointment->ID ?? -1;
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
+		$id       = $this->appointment->ID;
 		$title    = $data['title'] ?? null;
 		$meta     = $data['meta'] ?? array();
 		$customer = $data['customer'] ?? null;
@@ -104,23 +125,10 @@ class Appointment {
 			$meta['customer'] = $customer;
 		}
 
-		$valid_id = $this->validate_post_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
-		}
-
-		$current_appointment_meta = array(
-			'status'      => get_post_meta( $valid_id, 'status', true ),
-			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
-			'duration'    => get_post_meta( $valid_id, 'duration', true ),
-			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
-			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		);
-		$current_appointment      = $this->prepare_appointment_entity( $valid_id, $current_appointment_meta );
+		$current_appointment = $this->normalize();
 
 		$data = array(
-			'ID'        => $valid_id,
+			'ID'        => $id,
 			'post_type' => 'wpa-appointment',
 		);
 
@@ -128,19 +136,16 @@ class Appointment {
 			$data['post_title'] = $title;
 		}
 
-		$post_id = wp_update_post( $data, true );
-
-		if ( is_wp_error( $post_id ) ) {
-			do_action( 'wpappointments_appointment_update_error', $post_id );
-
-			return $post_id;
-		}
+		wp_update_post( $data, true );
 
 		foreach ( $meta as $key => $value ) {
-			update_post_meta( $post_id, $key, $value );
+			update_post_meta( $id, $key, $value );
 		}
 
-		$new_appointment = $this->prepare_appointment_entity( $post_id, $meta );
+		$this->appointment      = get_post( $id );
+		$this->appointment_data = $meta;
+
+		$new_appointment = $this->normalize();
 
 		if ( 'pending' === $new_appointment['status'] ) {
 			do_action(
@@ -156,7 +161,7 @@ class Appointment {
 			);
 		}
 
-		return $new_appointment;
+		return $this;
 	}
 
 	/**
@@ -165,31 +170,24 @@ class Appointment {
 	 * @return array|\WP_Error
 	 */
 	public function cancel() {
-		$id = $this->appointment->ID ?? -1;
-
-		$valid_id = $this->validate_post_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
 		}
 
-		$meta = array(
-			'status'      => get_post_meta( $valid_id, 'status', true ),
-			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
-			'duration'    => get_post_meta( $valid_id, 'duration', true ),
-			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
-			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		);
+		$id = $this->appointment->ID;
 
-		$cancelled = update_post_meta( $valid_id, 'status', 'cancelled' );
+		$cancelled = update_post_meta( $id, 'status', 'cancelled' );
 
 		if ( ! $cancelled ) {
-			return new \WP_Error( 'error', __( 'Appointment is already cancelled', 'wpappointments' ) );
+			return new \WP_Error(
+				'appointment_already_cancelled',
+				__( 'Appointment is already cancelled', 'wpappointments' )
+			);
 		}
 
-		do_action( 'wpappointments_appointment_cancelled', $this->prepare_appointment_entity( $valid_id, $meta ) );
+		do_action( 'wpappointments_appointment_cancelled', $this->normalize() );
 
-		return $valid_id;
+		return $id;
 	}
 
 	/**
@@ -198,64 +196,24 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function confirm() {
-		$id = $this->appointment->ID ?? -1;
-
-		$valid_id = $this->validate_post_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
 		}
 
-		$meta = array(
-			'status'      => get_post_meta( $valid_id, 'status', true ),
-			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
-			'duration'    => get_post_meta( $valid_id, 'duration', true ),
-			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
-			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		);
+		$id = $this->appointment->ID;
 
-		$confirmed = update_post_meta( $valid_id, 'status', 'confirmed' );
+		$confirmed = update_post_meta( $id, 'status', 'confirmed' );
 
 		if ( ! $confirmed ) {
-			return new \WP_Error( 'error', __( 'Appointment is already confirmed', 'wpappointments' ) );
+			return new \WP_Error(
+				'appointment_already_confirmed',
+				__( 'Appointment is already confirmed', 'wpappointments' )
+			);
 		}
 
-		do_action( 'wpappointments_appointment_confirmed', $this->prepare_appointment_entity( $valid_id, $meta ) );
+		do_action( 'wpappointments_appointment_confirmed', $this->normalize() );
 
-		return $valid_id;
-	}
-
-	/**
-	 * Mark appointment as no show
-	 *
-	 * @param int $id Appointment ID.
-	 *
-	 * @return int|\WP_Error
-	 */
-	public function no_show( $id ) {
-		$valid_id = $this->validate_post_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
-		}
-
-		$meta = array(
-			'status'      => get_post_meta( $valid_id, 'status', true ),
-			'timestamp'   => get_post_meta( $valid_id, 'timestamp', true ),
-			'duration'    => get_post_meta( $valid_id, 'duration', true ),
-			'customer_id' => get_post_meta( $valid_id, 'customer_id', true ),
-			'customer'    => get_post_meta( $valid_id, 'customer', true ),
-		);
-
-		$no_show = update_post_meta( $valid_id, 'status', 'no_show' );
-
-		if ( ! $no_show ) {
-			return new \WP_Error( 'error', __( 'Appointment is already marked as no show', 'wpappointments' ) );
-		}
-
-		do_action( 'wpappointments_appointment_no_show', $this->prepare_appointment_entity( $valid_id, $meta ) );
-
-		return $no_show;
+		return $id;
 	}
 
 	/**
@@ -264,15 +222,20 @@ class Appointment {
 	 * @return int|\WP_Error
 	 */
 	public function delete() {
-		$id = $this->appointment->ID ?? -1;
-
-		$valid_id = $this->validate_post_id( $id );
-
-		if ( is_wp_error( $valid_id ) ) {
-			return $valid_id;
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
 		}
 
+		$id = $this->appointment->ID;
+
 		$status = get_post_meta( $id, 'status', true );
+
+		if ( ! $status ) {
+			return new \WP_Error(
+				'appointment_not_found',
+				__( 'Appointment not found', 'wpappointments' )
+			);
+		}
 
 		if ( 'cancelled' !== $status ) {
 			return new \WP_Error(
@@ -283,70 +246,50 @@ class Appointment {
 
 		$deleted = wp_delete_post( $id, true );
 
-		if ( $deleted ) {
-			return $deleted->ID;
-		}
+		do_action( 'wpappointments_appointment_deleted', $this->normalize() );
 
-		return new \WP_Error(
-			'deleting_appointment_unknown_error',
-			__( 'Could not delete appointment', 'wpappointments' )
-		);
+		return $deleted->ID;
 	}
 
 	/**
-	 * Prepare appointment entity
+	 * Normalize user object
 	 *
-	 * @param int   $post_id Post ID.
-	 * @param array $meta Post meta.
+	 * @param callable|null $normalizer Normalizer function.
 	 *
-	 * @return object
+	 * @return mixed
 	 */
-	protected function prepare_appointment_entity( $post_id, $meta ) {
-		$length      = (int) get_option( 'wpappointments_appointments_defaultLength' );
-		$timestamp   = $meta['timestamp'];
-		$status      = $meta['status'];
-		$duration    = $meta['duration'] ?? $length;
-		$customer_id = $meta['customer_id'] ?? 0;
-		$customer    = $meta['customer'] ?? null;
-
-		if ( is_string( $customer ) ) {
-			$customer = json_decode( $customer, true );
+	public function normalize( $normalizer = null ) {
+		if ( ! $normalizer ) {
+			$normalizer = array( __CLASS__, 'default_normalizer' );
 		}
 
-		return array(
-			'id'         => $post_id,
-			'service'    => get_the_title( $post_id ),
-			'timestamp'  => (int) $timestamp,
-			'status'     => $status,
-			'duration'   => (int) $duration,
-			'customerId' => (int) $customer_id,
-			'customer'   => $customer,
-		);
+		return call_user_func( $normalizer, $this->appointment );
 	}
 
 	/**
-	 * Parse timestamp
+	 * Default normalizer
 	 *
-	 * @param int $timestamp Timestamp.
+	 * @param WP_Post $appointment Appointment post object.
 	 *
 	 * @return array
 	 */
-	protected function parse_datetime( $timestamp ) {
-		$is_today    = gmdate( 'Ymd' ) === gmdate( 'Ymd', $timestamp );
-		$is_tomorrow = gmdate( 'Ymd', strtotime( 'tomorrow' ) ) === gmdate( 'Ymd', $timestamp );
+	public static function default_normalizer( $appointment ) {
+		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
-		$time = wp_date( 'H:i', $timestamp );
-		$date = wp_date( 'D, F jS, Y', $timestamp );
-
-		if ( $is_today ) {
-			$date = __( 'Today', 'wpappointments' );
-		} elseif ( $is_tomorrow ) {
-			$date = __( 'Tomorrow', 'wpappointments' );
-		}
+		$timestamp   = get_post_meta( $appointment->ID, 'timestamp', true );
+		$status      = get_post_meta( $appointment->ID, 'status', true );
+		$duration    = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
+		$customer_id = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
+		$customer    = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
 
 		return array(
-			'date' => $date,
-			'time' => $time,
+			'id'          => $appointment->ID,
+			'service'     => $appointment->post_title,
+			'status'      => $status,
+			'timestamp'   => (int) $timestamp,
+			'duration'    => (int) $duration,
+			'customer_id' => (int) $customer_id,
+			'customer'    => maybe_unserialize( $customer ),
 		);
 	}
 

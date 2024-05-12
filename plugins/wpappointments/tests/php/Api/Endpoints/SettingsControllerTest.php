@@ -9,7 +9,7 @@ namespace Tests\Api\Endpoints;
 
 use WPAppointments\Data\Model\Settings;
 
-uses( \TestTools\RestTestCase::class );
+uses( \TestTools\RestTestCase::class )->group( 'api' );
 
 beforeEach(
 	function () {
@@ -247,6 +247,6 @@ test(
 		);
 
 		// Assert response data.
-		expect( $results )->toBeError( 422, 'invalid_category' );
+		expect( $results )->toBeError( 422, 'invalid_settings_category' );
 	}
 );
