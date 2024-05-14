@@ -34,6 +34,7 @@ expect()->extend(
 		expect( $service_data )->toBeArray();
 		expect( $service_data )->toHaveKeys(
 			array(
+				'id',
 				'title',
 				'duration',
 			)

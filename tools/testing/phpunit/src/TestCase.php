@@ -145,6 +145,6 @@ abstract class TestCase extends \WP_UnitTestCase {
 	 * @return int
 	 */
 	protected function get_hook_executions_count( $hook_name ) {
-		return get_transient( $hook_name . '_executions_count' ) || 0;
+		return get_transient( $hook_name . '_executions_count' ) ?? 0;
 	}
 }
