@@ -16,6 +16,18 @@ use WPAppointments\Core\PluginInfo;
  * Service model class
  */
 class Service {
+	const FIELDS = array(
+		'name',
+		'active',
+		'attributes',
+		'variants',
+		'category',
+		'description',
+		'image',
+		'created',
+		'updated',
+	);
+
 	/**
 	 * Service post
 	 *
@@ -39,15 +51,19 @@ class Service {
 		if ( $service instanceof WP_Post ) {
 			$this->service = $service;
 		} elseif ( is_array( $service ) ) {
-			$this->service_data = $service;
+			$this->parse_service_data( $service );
+		} elseif ( is_int( $service ) || is_string( $service ) ) {
+			$this->parse_service_from_id( $service );
+		} elseif ( is_null( $service ) ) {
+			$this->service = new WP_Error(
+				'service_cannot_be_null',
+				__( 'Service value passed to a service model constructor cannot be null. Expected array, int, string or WP_Post but received null', 'wpappointments' )
+			);
 		} else {
-			$valid_id = $this->validate_post_id( $service );
-
-			if ( is_wp_error( $valid_id ) ) {
-				$this->service = $valid_id;
-			} else {
-				$this->service = get_post( $valid_id );
-			}
+			$this->service = new WP_Error(
+				'service_invalid_type',
+				__( 'Service value passed to a service model constructor is invalid. Expected array, int, string or WP_Post', 'wpappointments' )
+			);
 		}
 	}
 
@@ -61,7 +77,7 @@ class Service {
 		$default_service_name = $settings->get_setting( 'appointments', 'serviceName' );
 		$default_duration     = $settings->get_setting( 'appointments', 'defaultLength' );
 
-		$title    = $this->service_data['title'] ?? $default_service_name;
+		$title    = $this->service_data['name'] ?? $default_service_name;
 		$duration = $this->service_data['duration'] ?? $default_duration;
 
 		$post_id = wp_insert_post(
@@ -98,26 +114,63 @@ class Service {
 			$normalizer = array( __CLASS__, 'default_normalizer' );
 		}
 
-		return call_user_func( $normalizer, $this->service );
+		return call_user_func( $normalizer, $this );
 	}
 
 	/**
 	 * Default normalizer
 	 *
-	 * @param WP_Post $service Service post object.
+	 * @param Service $data Service model object.
 	 *
 	 * @return array
 	 */
-	public static function default_normalizer( $service ) {
-		$duration = get_post_meta( $service->ID, 'duration', true );
+	public static function default_normalizer( $data ) {
+		return $data;
+	}
 
-		return array(
-			'id'       => $service->ID,
-			'name'     => $service->post_title,
-			'duration' => $duration,
-			'created'  => $service->post_date_gmt,
-			'updated'  => $service->post_modified_gmt,
+	/**
+	 * Parse service data
+	 *
+	 * @param array $service Service data.
+	 */
+	private function parse_service_data( $service ) {
+		$data = $this->validate_service_data( $service );
+
+		if ( is_wp_error( $data ) ) {
+			$this->service = $data;
+			return;
+		}
+
+		$service_data = wp_parse_args(
+			$data,
+			array(
+				'active'      => true,
+				'attributes'  => array(),
+				'variants'    => array(),
+				'category'    => '',
+				'description' => '',
+				'image'       => '',
+				'created'     => time(),
+				'updated'     => time(),
+			)
 		);
+
+		$this->service_data = $service_data;
+	}
+
+	/**
+	 * Parse service from ID
+	 *
+	 * @param int $id Service ID.
+	 */
+	private function parse_service_from_id( $id ) {
+		$valid_id = $this->validate_post_id( $id );
+
+		if ( is_wp_error( $valid_id ) ) {
+			$this->service = $valid_id;
+		} else {
+			$this->service = get_post( $valid_id );
+		}
 	}
 
 	/**
@@ -127,7 +180,7 @@ class Service {
 	 *
 	 * @return int|WP_Error
 	 */
-	protected function validate_post_id( $post_id ) {
+	private function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
 			return new WP_Error( 'service_id_required', __( 'Service ID is required', 'wpappointments' ) );
 		}
@@ -137,5 +190,24 @@ class Service {
 		}
 
 		return $post_id;
+	}
+
+	/**
+	 * Validate service data
+	 *
+	 * @param array $data Service data.
+	 *
+	 * @return array|WP_Error
+	 */
+	private function validate_service_data( $data ) {
+		if ( ! isset( $data['name'] ) ) {
+			return new WP_Error( 'service_name_required', __( 'Service name is required', 'wpappointments' ) );
+		}
+
+		if ( ! isset( $data['duration'] ) ) {
+			return new WP_Error( 'service_duration_required', __( 'Service duration is required', 'wpappointments' ) );
+		}
+
+		return $data;
 	}
 }

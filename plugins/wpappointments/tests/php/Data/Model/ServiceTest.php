@@ -7,6 +7,7 @@
 
 namespace Tests\Data\Model;
 
+use stdClass;
 use WP_Error;
 use WP_Post;
 use WPAppointments\Data\Model\Service;
@@ -32,17 +33,17 @@ expect()->extend(
 		$service_data = $this->value;
 
 		expect( $service_data )->toBeArray();
-		expect( $service_data )->toHaveKeys(
-			array(
-				'id',
-				'title',
-				'duration',
-			)
-		);
+		expect( $service_data )->toHaveKeys( Service::FIELDS );
 
 		expect( $service_data['id'] )->toBeInt();
-		expect( $service_data['title'] )->toBe( $data['title'] );
-		expect( $service_data['duration'] )->toBe( $data['duration'] );
+		expect( $service_data['name'] )->toBe( $data['name'] ?? 'Appointment' );
+		expect( $service_data['duration'] )->toBe( $data['duration'] ?? 60 );
+		expect( $service_data['active'] )->toBe( $data['active'] ?? true );
+		expect( $service_data['attributes'] )->toBe( $data['attributes'] ?? array() );
+		expect( $service_data['variants'] )->toBe( $data['variants'] ?? array() );
+		expect( $service_data['category'] )->toBe( $data['category'] ?? '' );
+		expect( $service_data['description'] )->toBe( $data['description'] ?? '' );
+		expect( $service_data['image'] )->toBe( $data['image'] ?? '' );
 
 		return $this;
 	}
@@ -92,7 +93,7 @@ test(
 		$service = new Service( null );
 
 		// Check the service object.
-		expect( $service->service )->toBeWPError( 'service_id_required' );
+		expect( $service->service )->toBeWPError( 'service_cannot_be_null' );
 	}
 )->only();
 
@@ -119,6 +120,7 @@ test(
 		// Create a new service model object.
 		$service = new Service(
 			array(
+				'name'     => 'Service name',
 				'duration' => 60,
 			)
 		);
@@ -126,7 +128,59 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeNull();
 		expect( $service->service_data )->toBeArray();
-		expect( $service->service_data )->toBe( array( 'duration' => 60 ) );
+		expect( $service->service_data['duration'] )->toBe( 60 );
+	}
+)->only();
+
+test(
+	'Service model - constructor with invalid service data array',
+	function () {
+		// Create a new service model object.
+		$service = new Service( new stdClass() );
+
+		// Check the service object.
+		expect( $service->service )->toBeWPError( 'service_invalid_type' );
+	}
+)->only();
+
+test(
+	'Service model - constructor with invalid service data array - missing name',
+	function () {
+		// Create a new service model object.
+		$service = new Service(
+			array(
+				'duration' => 60,
+			)
+		);
+
+		// Check the service object.
+		expect( $service->service )->toBeWPError( 'service_name_required' );
+	}
+)->only();
+
+test(
+	'Service model - constructor with invalid service data array - missing duration',
+	function () {
+		// Create a new service model object.
+		$service = new Service(
+			array(
+				'name' => 'Service name',
+			)
+		);
+
+		// Check the service object.
+		expect( $service->service )->toBeWPError( 'service_duration_required' );
+	}
+)->only();
+
+test(
+	'Service model - constructor with missing service id',
+	function () {
+		// Create a new service model object.
+		$service = new Service( 0 );
+
+		// Check the service object.
+		expect( $service->service )->toBeWPError( 'service_id_required' );
 	}
 )->only();
 
@@ -138,7 +192,7 @@ test(
 		$this->spy_hook( 'wpappointments_service_created' );
 
 		$data = array(
-			'title'    => 'Service name',
+			'name'     => 'Service name',
 			'duration' => 60,
 		);
 
