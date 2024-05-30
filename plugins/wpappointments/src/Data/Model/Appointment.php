@@ -16,7 +16,7 @@ use WP_Post;
  */
 class Appointment {
 	/**
-	 * Appointment title
+	 * Appointment post
 	 *
 	 * @var \WP_Post|\WP_Error
 	 */
@@ -32,7 +32,7 @@ class Appointment {
 	/**
 	 * Appointment model constructor
 	 *
-	 * @param WP_User|int|array $appointment Appointment post object or appointment ID or appointment data array.
+	 * @param WP_Post|int|array $appointment Appointment post object or appointment ID or appointment data array.
 	 */
 	public function __construct( $appointment ) {
 		if ( $appointment instanceof WP_Post ) {

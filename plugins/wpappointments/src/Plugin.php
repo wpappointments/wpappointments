@@ -8,6 +8,8 @@
 
 namespace WPAppointments;
 
+use WPAppointments\Core\PluginInfo;
+
 /**
  * Main plugin class.
  * Handle all plugin initialization, activation and deactivation.
@@ -85,7 +87,7 @@ class Plugin extends Core\Singleton {
 				array(
 					'post_title'  => 'Appointment',
 					'post_status' => 'publish',
-					'post_type'   => 'wpa-service',
+					'post_type'   => PluginInfo::POST_TYPES['service'],
 				)
 			);
 
