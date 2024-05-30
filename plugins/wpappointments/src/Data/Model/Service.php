@@ -80,14 +80,21 @@ class Service {
 		$title    = $this->service_data['name'] ?? $default_service_name;
 		$duration = $this->service_data['duration'] ?? $default_duration;
 
+		$meta = wp_parse_args(
+			$this->service_data,
+			array(
+				'duration' => $duration,
+			)
+		);
+
+		unset( $meta['name'] );
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => PluginInfo::POST_TYPES['service'],
 				'post_status' => 'publish',
 				'post_title'  => $title,
-				'meta_input'  => array(
-					'duration' => $duration,
-				),
+				'meta_input'  => $meta,
 			),
 			true
 		);
@@ -100,6 +107,75 @@ class Service {
 		do_action( 'wpappointments_service_created', $service );
 
 		return $this;
+	}
+
+	/**
+	 * Update service
+	 *
+	 * @param array $data Service update data.
+	 *
+	 * @return Service|WP_Error
+	 */
+	public function update( $data ) {
+		if ( is_wp_error( $this->service ) ) {
+			return $this->service;
+		}
+
+		if ( ! $this->service ) {
+			return new WP_Error(
+				'service_object_expected',
+				__( 'Service not found. You have to instantiate Service class with a service object', 'wpappointments' )
+			);
+		}
+
+		$id   = $this->service->ID;
+		$name = $data['name'] ?? null;
+
+		wp_update_post(
+			array(
+				'ID'         => $id,
+				'post_title' => $name,
+				'meta_input' => $data,
+			),
+			true
+		);
+
+		$this->parse_service_data( $data );
+		$this->service = get_post( $id );
+		$service       = $this->normalize();
+
+		do_action( 'wpappointments_service_updated', $service );
+
+		return $this;
+	}
+
+	/**
+	 * Delete service
+	 *
+	 * @return Service|WP_Error
+	 */
+	public function delete() {
+		if ( is_wp_error( $this->service ) ) {
+			return $this->service;
+		}
+
+		if ( ! $this->service ) {
+			return new WP_Error(
+				'service_object_expected',
+				__( 'Service not found. You have to instantiate Service class with a service object', 'wpappointments' )
+			);
+		}
+
+		$id = $this->service->ID;
+
+		$deleted = wp_delete_post( $id, true );
+
+		$this->service      = null;
+		$this->service_data = array();
+
+		do_action( 'wpappointments_service_deleted', $id );
+
+		return $deleted->ID;
 	}
 
 	/**
@@ -131,10 +207,10 @@ class Service {
 	/**
 	 * Parse service data
 	 *
-	 * @param array $service Service data.
+	 * @param array $service_data Service data.
 	 */
-	private function parse_service_data( $service ) {
-		$data = $this->validate_service_data( $service );
+	private function parse_service_data( $service_data ) {
+		$data = $this->validate_service_data( $service_data );
 
 		if ( is_wp_error( $data ) ) {
 			$this->service = $data;

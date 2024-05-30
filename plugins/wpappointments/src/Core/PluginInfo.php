@@ -8,8 +8,6 @@
 
 namespace WPAppointments\Core;
 
-use WPAppointments\Plugin;
-
 /**
  * Stores plugin information
  */
@@ -60,9 +58,10 @@ class PluginInfo extends Singleton {
 	 * Plugin available post types
 	 */
 	const POST_TYPES = array(
-		'appointment' => 'wpa-appointment',
-		'schedule'    => 'wpa-schedule',
-		'service'     => 'wpa-service',
+		'appointment'     => 'wpa-appointment',
+		'schedule'        => 'wpa-schedule',
+		'service'         => 'wpa-service',
+		'service-variant' => 'wpa-service-variant',
 	);
 
 	/**

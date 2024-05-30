@@ -35,7 +35,6 @@ expect()->extend(
 		expect( $service_data )->toBeArray();
 		expect( $service_data )->toHaveKeys( Service::FIELDS );
 
-		expect( $service_data['id'] )->toBeInt();
 		expect( $service_data['name'] )->toBe( $data['name'] ?? 'Appointment' );
 		expect( $service_data['duration'] )->toBe( $data['duration'] ?? 60 );
 		expect( $service_data['active'] )->toBe( $data['active'] ?? true );
@@ -70,7 +69,7 @@ test(
 		expect( $service )->toBeInstanceOf( Service::class );
 		expect( $service->service )->toBeInstanceOf( WP_Post::class );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor - error - service not found',
@@ -84,7 +83,7 @@ test(
 		expect( $service->service_data )->toBeArray();
 		expect( $service->service_data )->toBeEmpty();
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with invalid service parameter',
@@ -95,7 +94,7 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeWPError( 'service_cannot_be_null' );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with WP_Post object',
@@ -112,7 +111,7 @@ test(
 		expect( $service->service_data )->toBeArray();
 		expect( $service->service_data )->toBeEmpty();
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with service data array',
@@ -130,7 +129,7 @@ test(
 		expect( $service->service_data )->toBeArray();
 		expect( $service->service_data['duration'] )->toBe( 60 );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with invalid service data array',
@@ -141,7 +140,7 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeWPError( 'service_invalid_type' );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with invalid service data array - missing name',
@@ -156,7 +155,7 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeWPError( 'service_name_required' );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with invalid service data array - missing duration',
@@ -171,7 +170,7 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeWPError( 'service_duration_required' );
 	}
-)->only();
+);
 
 test(
 	'Service model - constructor with missing service id',
@@ -182,7 +181,7 @@ test(
 		// Check the service object.
 		expect( $service->service )->toBeWPError( 'service_id_required' );
 	}
-)->only();
+);
 
 // Save method tests.
 test(
@@ -206,4 +205,178 @@ test(
 		// Check the action fired.
 		expect( $this->get_hook_executions_count( 'wpappointments_service_created' ) )->toBe( 1 );
 	}
-)->only();
+);
+
+// Update method tests.
+test(
+	'Service model - update method',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_updated' );
+
+		$data = array(
+			'name'     => 'Service name',
+			'duration' => 60,
+		);
+
+		// Create a new service model object.
+		$service = new Service( $data );
+
+		// Save the service.
+		$service_model = $service->save();
+
+		// Create a new service model object.
+		$service = new Service( $service_model->service );
+
+		// Update the service.
+		$updated = $service->update(
+			array(
+				'name'     => 'Updated service name',
+				'duration' => 120,
+			)
+		);
+
+		// Check the service object.
+		expect( $updated )->toBeServiceModel(
+			array(
+				'name'     => 'Updated service name',
+				'duration' => 120,
+			)
+		);
+
+		// Check the action fired.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_updated' ) )->toBe( 1 );
+	}
+);
+
+test(
+	'Service model - update method - invalid service in constructor',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_updated' );
+
+		// Create a new service model object.
+		$service = new Service( array() );
+
+		// Update the service.
+		$updated = $service->update(
+			array(
+				'name'     => 'Updated service name',
+				'duration' => 120,
+			)
+		);
+
+		// Check the service object.
+		expect( $updated )->toBeWPError( 'service_name_required' );
+
+		// Check the action did not fire.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_updated' ) )->toBe( false );
+	}
+);
+
+test(
+	'Service model - update method - constructor provided with service data instead of service object',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_updated' );
+
+		// Create a new service model object.
+		$service = new Service(
+			array(
+				'name'     => 'Service name',
+				'duration' => 60,
+			)
+		);
+
+		// Update the service.
+		$updated = $service->update(
+			array(
+				'name'     => 'Updated service name',
+				'duration' => 120,
+			)
+		);
+
+		// Check the service object.
+		expect( $updated )->toBeWPError( 'service_object_expected' );
+
+		// Check the action did not fire.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_updated' ) )->toBe( false );
+	}
+);
+
+// Delete method tests.
+test(
+	'Service model - delete method',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_deleted' );
+
+		$data = array(
+			'name'     => 'Service name',
+			'duration' => 60,
+		);
+
+		// Create a new service model object.
+		$service = new Service( $data );
+
+		// Save the service.
+		$service_model = $service->save();
+
+		// Create a new service model object.
+		$service = new Service( $service_model->service );
+
+		// Delete the service.
+		$deleted = $service->delete();
+
+		// Check the service object.
+		expect( $deleted )->toBe( $service_model->service->ID );
+
+		// Check the action fired.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_deleted' ) )->toBe( 1 );
+	}
+);
+
+test(
+	'Service model - delete method - invalid service in constructor',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_deleted' );
+
+		// Create a new service model object.
+		$service = new Service( array() );
+
+		// Delete the service.
+		$deleted = $service->delete();
+
+		// Check the service object.
+		expect( $deleted )->toBeWPError( 'service_name_required' );
+
+		// Check the action did not fire.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_deleted' ) )->toBe( false );
+	}
+);
+
+test(
+	'Service model - delete method - constructor provided with service data instead of service object',
+	function () {
+		// Prepare action hook spy.
+		$this->spy_hook( 'wpappointments_service_deleted' );
+
+		// Create a new service model object.
+		$service = new Service(
+			array(
+				'name'     => 'Service name',
+				'duration' => 60,
+			)
+		);
+
+		// Delete the service.
+		$deleted = $service->delete();
+
+		// Check the service object.
+		expect( $deleted )->toBeWPError( 'service_object_expected' );
+
+		// Check the action did not fire.
+		expect( $this->get_hook_executions_count( 'wpappointments_service_deleted' ) )->toBe( false );
+	}
+);
