@@ -15,11 +15,18 @@ use WP_UnitTest_Factory;
  */
 class BaseFactory extends WP_UnitTest_Factory {
 	/**
-	 * Generates post fixtures for use in tests.
+	 * Generates appointment fixtures for use in tests.
 	 *
 	 * @var AppointmentFactory
 	 */
 	public $appointment;
+
+	/**
+	 * Generates service fixtures for use in tests.
+	 *
+	 * @var ServiceFactory
+	 */
+	public $service;
 
 	/**
 	 * Constructor.
@@ -28,5 +35,6 @@ class BaseFactory extends WP_UnitTest_Factory {
 		parent::__construct();
 
 		$this->appointment = new AppointmentFactory( $this );
+		$this->service     = new ServiceFactory( $this );
 	}
 }

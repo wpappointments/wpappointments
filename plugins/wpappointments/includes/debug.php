@@ -8,6 +8,8 @@
 
 namespace WPAppointments;
 
+use WPAppointments\Core\PluginInfo;
+
 add_action(
 	'init',
 	function () {
@@ -15,7 +17,7 @@ add_action(
 		/** @disregard P1011 because this constant is defined through wp-env config */
 		if ( defined( 'WPAPPOINTMENTS_DEBUG' ) && WPAPPOINTMENTS_DEBUG ) {
 			register_post_type(
-				'wpa-appointment',
+				PluginInfo::POST_TYPES['appointment'],
 				array(
 					'label'    => 'Appointments',
 					'public'   => true,
@@ -23,7 +25,7 @@ add_action(
 				)
 			);
 			register_post_type(
-				'wpa-schedule',
+				PluginInfo::POST_TYPES['schedule'],
 				array(
 					'label'    => 'Schedules',
 					'public'   => true,
@@ -31,7 +33,7 @@ add_action(
 				)
 			);
 			register_post_type(
-				'wpa-service',
+				PluginInfo::POST_TYPES['service'],
 				array(
 					'label'    => 'Services',
 					'public'   => true,

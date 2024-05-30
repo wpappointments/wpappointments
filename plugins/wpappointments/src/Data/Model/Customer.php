@@ -8,7 +8,6 @@
 
 namespace WPAppointments\Data\Model;
 
-use WP;
 use WP_Error;
 use WP_User;
 
