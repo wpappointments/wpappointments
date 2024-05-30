@@ -14,6 +14,7 @@ const pages = new Map<string, React.JSX.Element>();
 pages.set('dashboard', <Dashboard />);
 pages.set('calendar', <Calendar />);
 pages.set('customers', <Customers />);
+pages.set('services', <Customers />);
 pages.set('settings', <Settings />);
 pages.set('wizard', <OnboardingWizard />);
 
