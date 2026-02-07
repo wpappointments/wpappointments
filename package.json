@@ -2,6 +2,7 @@
 	"name": "root",
 	"private": true,
 	"scripts": {
+		"prestart": "CI=true pnpm install && composer install --working-dir=plugins/wpappointments && pnpm run build",
 		"open": "bash .scripts/open",
 		"build": "lerna run build",
 		"dev": "pnpm start && pnpm -C plugins/wpappointments dev:hot",
@@ -23,7 +24,7 @@
 		"phpcbf": "wp-env run cli --env-cwd=wp-content bash ./.husky/phpcbf",
 		"env": "wp-env",
 		"lerna": "lerna",
-		"prepare": "pnpm install && husky",
+		"prepare": "husky",
 		"check-types": "lerna run check-types",
 		"dump-autoload": "wp-env run cli --env-cwd=wp-content composer dump-autoload && wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer dump-autoload",
 		"test": "wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage"
