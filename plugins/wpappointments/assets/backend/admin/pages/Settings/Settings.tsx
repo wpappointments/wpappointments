@@ -3,6 +3,7 @@ import { TabPanel } from '@wordpress/components';
 import AppointmentsSettings from './Appointments/Appointments';
 import GeneralSettings from './General/General';
 import ScheduleSettings from './Schedule/Schedule';
+import ServicesSettings from './Services/Services';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
@@ -39,6 +40,15 @@ const tabs = new Map<string, Tab>([
 			title: 'Schedule',
 			className: 'tab-schedule',
 			component: <ScheduleSettings />,
+		},
+	],
+	[
+		'services',
+		{
+			name: 'services',
+			title: 'Services',
+			className: 'tab-services',
+			component: <ServicesSettings />,
 		},
 	],
 ]);

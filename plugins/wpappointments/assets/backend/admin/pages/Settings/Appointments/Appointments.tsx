@@ -80,9 +80,6 @@ export default withForm(function AppointmentsSettings() {
 							name="serviceName"
 							label="Service Name"
 							placeholder="Appointment"
-							rules={{
-								required: true,
-							}}
 						/>
 
 						<Input
@@ -90,9 +87,6 @@ export default withForm(function AppointmentsSettings() {
 							name="defaultLength"
 							label="Default appointment length (in minutes)"
 							placeholder=""
-							rules={{
-								required: true,
-							}}
 						/>
 
 						<Input
@@ -101,7 +95,6 @@ export default withForm(function AppointmentsSettings() {
 							label="Time picker precision (in minutes)"
 							placeholder=""
 							rules={{
-								required: true,
 								min: 1,
 								max: 60 * 24,
 							}}
@@ -117,9 +110,6 @@ export default withForm(function AppointmentsSettings() {
 								'Default appointment status',
 								'wpappointments'
 							)}
-							rules={{
-								required: true,
-							}}
 							help={__(
 								'Default status for appointments created by your clients. You can change the status of each appointment individually.',
 								'wpappointments'

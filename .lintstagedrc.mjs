@@ -6,12 +6,18 @@ const js = (absolutePaths) => {
 	const relativePaths = absolutePaths.map((file) =>
 		path.relative(cwd, file)
 	);
+	const jsRelativePaths = relativePaths.filter((file) => !file.endsWith('.css'));
 
-	return [
+	const commands = [
 		`wp-scripts format ${relativePaths.join(' ')}`,
-		`wp-scripts lint-js ${relativePaths.join(' ')}`,
 		`lerna run check-types`,
 	];
+
+	if (jsRelativePaths.length > 0) {
+		commands.splice(1, 0, `wp-scripts lint-js ${jsRelativePaths.join(' ')}`);
+	}
+
+	return commands;
 };
 
 const php = (absolutePaths) => {
