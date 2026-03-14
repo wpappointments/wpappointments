@@ -15,6 +15,30 @@ use WPAppointments\Core\Singleton;
  */
 class Notifications extends Singleton {
 	/**
+	 * Default subjects per event
+	 *
+	 * @var array
+	 */
+	private static $default_subjects = array(
+		'created'   => 'New appointment booked',
+		'updated'   => 'Appointment updated',
+		'confirmed' => 'Appointment confirmed',
+		'cancelled' => 'Appointment cancelled',
+	);
+
+	/**
+	 * Default customer-facing subjects per event
+	 *
+	 * @var array
+	 */
+	private static $default_customer_subjects = array(
+		'created'   => 'Your appointment has been booked',
+		'updated'   => 'Your appointment has been updated',
+		'confirmed' => 'Your appointment is confirmed',
+		'cancelled' => 'Your appointment has been cancelled',
+	);
+
+	/**
 	 * Register notification hooks
 	 */
 	public function __construct() {
@@ -32,16 +56,7 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	public function on_created( $appointment ) {
-		$this->send_to_admin(
-			__( 'New appointment booked', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'A new appointment has been booked.', 'wpappointments' ) )
-		);
-
-		$this->send_to_customer(
-			$appointment,
-			__( 'Your appointment has been booked', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'Your appointment has been successfully booked.', 'wpappointments' ) )
-		);
+		$this->dispatch( 'created', $appointment, __( 'A new appointment has been booked.', 'wpappointments' ) );
 	}
 
 	/**
@@ -53,37 +68,19 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	public function on_updated( $appointment, $old_appointment ) {
-		$this->send_to_admin(
-			__( 'Appointment updated', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'An appointment has been updated.', 'wpappointments' ) )
-		);
-
-		$this->send_to_customer(
-			$appointment,
-			__( 'Your appointment has been updated', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'Your appointment has been updated.', 'wpappointments' ) )
-		);
+		$this->dispatch( 'updated', $appointment, __( 'An appointment has been updated.', 'wpappointments' ) );
 	}
 
 	/**
 	 * Send notification when appointment is confirmed
 	 *
-	 * @param array $appointment     Confirmed appointment data.
-	 * @param array $old_appointment Previous appointment data (may be null for direct confirms).
+	 * @param array      $appointment     Confirmed appointment data.
+	 * @param array|null $old_appointment Previous appointment data.
 	 *
 	 * @return void
 	 */
 	public function on_confirmed( $appointment, $old_appointment = null ) {
-		$this->send_to_admin(
-			__( 'Appointment confirmed', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'An appointment has been confirmed.', 'wpappointments' ) )
-		);
-
-		$this->send_to_customer(
-			$appointment,
-			__( 'Your appointment is confirmed', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'Your appointment has been confirmed.', 'wpappointments' ) )
-		);
+		$this->dispatch( 'confirmed', $appointment, __( 'An appointment has been confirmed.', 'wpappointments' ) );
 	}
 
 	/**
@@ -94,16 +91,102 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	public function on_cancelled( $appointment ) {
-		$this->send_to_admin(
-			__( 'Appointment cancelled', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'An appointment has been cancelled.', 'wpappointments' ) )
+		$this->dispatch( 'cancelled', $appointment, __( 'An appointment has been cancelled.', 'wpappointments' ) );
+	}
+
+	/**
+	 * Dispatch notifications for a given event, respecting user settings
+	 *
+	 * @param string $event       Event key (created|updated|confirmed|cancelled).
+	 * @param array  $appointment Normalized appointment data.
+	 * @param string $intro       Default intro sentence for the email body.
+	 *
+	 * @return void
+	 */
+	private function dispatch( $event, $appointment, $intro ) {
+		$config = $this->get_event_config( $event );
+
+		if ( ! $config['enabled'] ) {
+			return;
+		}
+
+		$body = $config['body'] ? $this->interpolate( $config['body'], $appointment ) : $this->build_message( $appointment, $intro );
+
+		if ( $config['sendToAdmin'] ) {
+			$subject = $config['subject'] ? $config['subject'] : self::$default_subjects[ $event ];
+			$this->send_to_admin( $subject, $body );
+		}
+
+		if ( $config['sendToCustomer'] ) {
+			$subject = $config['subject'] ? $config['subject'] : self::$default_customer_subjects[ $event ];
+			$this->send_to_customer( $appointment, $subject, $body );
+		}
+
+		$custom_recipients = array_filter( array_map( 'trim', explode( ',', $config['customRecipients'] ) ) );
+
+		foreach ( $custom_recipients as $recipient ) {
+			if ( is_email( $recipient ) ) {
+				$subject = $config['subject'] ? $config['subject'] : self::$default_subjects[ $event ];
+				$this->send( $recipient, $subject, $body );
+			}
+		}
+	}
+
+	/**
+	 * Get notification config for a specific event, with defaults
+	 *
+	 * @param string $event Event key.
+	 *
+	 * @return array
+	 */
+	private function get_event_config( $event ) {
+		$stored = get_option( 'wpappointments_notifications_' . $event, array() );
+
+		$defaults = array(
+			'enabled'          => true,
+			'sendToAdmin'      => true,
+			'sendToCustomer'   => true,
+			'customRecipients' => '',
+			'subject'          => '',
+			'body'             => '',
 		);
 
-		$this->send_to_customer(
-			$appointment,
-			__( 'Your appointment has been cancelled', 'wpappointments' ),
-			$this->build_message( $appointment, __( 'Your appointment has been cancelled.', 'wpappointments' ) )
+		if ( ! is_array( $stored ) ) {
+			return $defaults;
+		}
+
+		return array_merge( $defaults, $stored );
+	}
+
+	/**
+	 * Replace template variables in a string with appointment data
+	 *
+	 * Supported variables: {service}, {status}, {date}, {duration}, {customer_name}, {id}
+	 *
+	 * @param string $template    Template string with {variable} placeholders.
+	 * @param array  $appointment Normalized appointment data.
+	 *
+	 * @return string Interpolated string.
+	 */
+	private function interpolate( $template, $appointment ) {
+		$date_format = get_option( 'wpappointments_general_dateFormat' );
+		$time_format = get_option( 'wpappointments_general_timeFormat' );
+		$date_format = $date_format ? $date_format : 'd/m/Y';
+		$time_format = $time_format ? $time_format : 'H:i';
+
+		$timestamp = absint( $appointment['timestamp'] ?? 0 );
+		$date_time = $timestamp ? wp_date( $date_format . ' ' . $time_format, $timestamp ) : '—';
+
+		$replacements = array(
+			'{id}'            => absint( $appointment['id'] ?? 0 ),
+			'{service}'       => $appointment['service'] ?? '',
+			'{status}'        => ucfirst( $appointment['status'] ?? '' ),
+			'{date}'          => $date_time,
+			'{duration}'      => absint( $appointment['duration'] ?? 0 ),
+			'{customer_name}' => $this->get_customer_name( $appointment ),
 		);
+
+		return str_replace( array_keys( $replacements ), array_values( $replacements ), $template );
 	}
 
 	/**
@@ -160,9 +243,9 @@ class Notifications extends Singleton {
 		/**
 		 * Filters the email headers for WP Appointments notifications.
 		 *
-		 * @param array  $headers     Email headers.
-		 * @param string $to          Recipient email.
-		 * @param string $subject     Email subject.
+		 * @param array  $headers Email headers.
+		 * @param string $to      Recipient email.
+		 * @param string $subject Email subject.
 		 */
 		$headers = apply_filters( 'wpappointments_notification_headers', $headers, $to, $subject );
 
@@ -195,16 +278,19 @@ class Notifications extends Singleton {
 		$appointment_id = absint( $appointment['id'] ?? 0 );
 		$customer_name  = esc_html( $this->get_customer_name( $appointment ) );
 
-		$raw_date_format = get_option( 'wpappointments_general_dateFormat' );
-		$raw_time_format = get_option( 'wpappointments_general_timeFormat' );
+		$date_format     = get_option( 'wpappointments_general_dateFormat' );
+		$time_format     = get_option( 'wpappointments_general_timeFormat' );
+		$date_format     = $date_format ? $date_format : 'd/m/Y';
+		$time_format     = $time_format ? $time_format : 'H:i';
+		$raw_date_format = $date_format;
+		$raw_time_format = $time_format;
 		$date_format     = $raw_date_format ? $raw_date_format : 'd/m/Y';
 		$time_format     = $raw_time_format ? $raw_time_format : 'H:i';
 
 		$timestamp = absint( $appointment['timestamp'] ?? 0 );
 		$date_time = $timestamp ? wp_date( $date_format . ' ' . $time_format, $timestamp ) : '—';
 
-		$duration = absint( $appointment['duration'] ?? 0 );
-
+		$duration  = absint( $appointment['duration'] ?? 0 );
 		$site_name = esc_html( get_bloginfo( 'name' ) );
 
 		$message  = '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">';

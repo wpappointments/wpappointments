@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
 import AppointmentsSettings from './Appointments/Appointments';
 import GeneralSettings from './General/General';
+import NotificationsSettings from './Notifications/Notifications';
 import ScheduleSettings from './Schedule/Schedule';
 import styles from './Settings.module.css';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
@@ -39,6 +40,15 @@ const tabs = new Map<string, Tab>([
 			title: 'Schedule',
 			className: 'tab-schedule',
 			component: <ScheduleSettings />,
+		},
+	],
+	[
+		'notifications',
+		{
+			name: 'notifications',
+			title: 'Notifications',
+			className: 'tab-notifications',
+			component: <NotificationsSettings />,
 		},
 	],
 ]);
