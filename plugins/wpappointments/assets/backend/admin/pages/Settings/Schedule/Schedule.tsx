@@ -40,8 +40,9 @@ function ScheduleSettings() {
 		const days = Object.keys(data) as Array<keyof typeof data>;
 
 		for (const day of days) {
-			if (!('slots' in data[day])) {
-				data[day].slots = {
+			const dayData = data[day];
+			if (!('slots' in dayData)) {
+				(dayData as DayOpeningHours).slots = {
 					list: [
 						{
 							start: {
