@@ -4,6 +4,7 @@ import { controls as appointments } from './appointments/appointments';
 import { controls as availability } from './availability/availability';
 import { controls as customers } from './customers/customers';
 import { controls as notices } from './notices/notices';
+import { controls as services } from './services/services';
 import { controls as settings } from './settings/settings';
 import { controls as slideouts } from './slideout/slideout';
 
@@ -31,4 +32,5 @@ export default {
 	...notices,
 	...availability,
 	...customers,
+	...services,
 };
