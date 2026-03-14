@@ -12,3 +12,4 @@ cache
 *.zip
 *.css.d.ts
 *.css.d.ts.map
+.claude/
