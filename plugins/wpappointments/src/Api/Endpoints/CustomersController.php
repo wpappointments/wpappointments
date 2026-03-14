@@ -11,6 +11,7 @@ namespace WPAppointments\Api\Endpoints;
 use WP_REST_Server;
 use WP_REST_Request;
 use WPAppointments\Api\Controller;
+use WPAppointments\Core\Capabilities;
 use WPAppointments\Data\Model\Customer;
 use WPAppointments\Data\Query\CustomersQuery;
 
@@ -32,7 +33,7 @@ class CustomersController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( Capabilities::MANAGE_CUSTOMERS );
 					},
 				),
 			)
@@ -46,7 +47,7 @@ class CustomersController extends Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( Capabilities::MANAGE_CUSTOMERS );
 					},
 				),
 			)
@@ -60,7 +61,7 @@ class CustomersController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( Capabilities::MANAGE_CUSTOMERS );
 					},
 				),
 			)
@@ -74,7 +75,7 @@ class CustomersController extends Controller {
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( Capabilities::MANAGE_CUSTOMERS );
 					},
 				),
 			)
