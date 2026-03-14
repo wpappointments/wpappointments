@@ -130,46 +130,31 @@ class Settings {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					if ( $settings[ $day ]['allDay'] ) {
-						$settings[ $day ]['slots']['list'][0] = array(
-							'start' => array(
-								'hour'   => '00',
-								'minute' => '00',
-							),
-							'end'   => array(
-								'hour'   => '24',
-								'minute' => '00',
-							),
-						);
+					$slots = $settings[ $day ]['slots']['list'] ?? array();
+					$is_manual_24h = false;
+
+					if ( ! empty( $slots ) ) {
+						$first_slot = $slots[0];
+						$is_start_zero = '00' === $first_slot['start']['hour'] && '00' === $first_slot['start']['minute'];
+						$is_end_full = ( '24' === $first_slot['end']['hour'] || '00' === $first_slot['end']['hour'] ) && '00' === $first_slot['end']['minute'];
+						
+						if ( $is_start_zero && $is_end_full && 1 === count( $slots ) ) {
+							$is_manual_24h = true;
+						}
 					}
 
-					$day_schedule = wp_json_encode( $settings[ $day ] );
-					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $day_schedule );
-					array_push( $schedule, $day_schedule );
-				}
-			}
-
-			return $schedule;
-		}
-
-		$updated = array();
-
-		$schedule = array();
-
-		if ( 'schedule' === $category ) {
-			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
-
-			if ( $schedule_post_id ) {
-				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					if ( $settings[ $day ]['allDay'] ) {
-						$settings[ $day ]['slots']['list'][0] = array(
-							'start' => array(
-								'hour'   => '00',
-								'minute' => '00',
-							),
-							'end'   => array(
-								'hour'   => '24',
-								'minute' => '00',
+					if ( $settings[ $day ]['allDay'] || $is_manual_24h ) {
+						$settings[ $day ]['allDay'] = true;
+						$settings[ $day ]['slots']['list'] = array(
+							array(
+								'start' => array(
+									'hour'   => '00',
+									'minute' => '00',
+								),
+								'end'   => array(
+									'hour'   => '24',
+									'minute' => '00',
+								),
 							),
 						);
 					}

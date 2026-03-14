@@ -38,3 +38,11 @@ export const AppointmentSchema = object({
 	customer: CustomerSchema,
 	customerId: optional(number()),
 });
+
+export const ServiceSchema = object({
+	id: optional(number()),
+	name: string(),
+	duration: optional(number()),
+	description: optional(string()),
+	active: optional(boolean()),
+});

@@ -66,6 +66,20 @@ export default function SlideOut({
 	}, []);
 
 	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				closeCurrentSlideOut(onClose);
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
+
+	useEffect(() => {
 		if (closingSlideout) {
 			setIsOpen(false);
 		}
