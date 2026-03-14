@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-pnpm lint:staged
+# Ensure node is on PATH when Git runs from IDE (e.g. Cursor)
+export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+[ -s "$HOME/.local/share/fnm/fnm.sh" ] && . "$HOME/.local/share/fnm/fnm.sh"
+[ -f "$(dirname "$0")/../.nvmrc" ] && cd "$(dirname "$0")/.." && nvm use 2>/dev/null || true
+lint-staged --concurrent=false --no-stash
