@@ -40,6 +40,18 @@
 
 ---
 
+## Official public release
+
+**Product is ready for general availability (GA) when Phases 1–3 are complete:**
+
+- Free core stable: tests, permissions, notifications, booking flow v1.
+- Services complete in core: REST, Admin UI, wizard, active/inactive; schedule (days off/holidays) and shortcode or Gutenberg options in place.
+- Addon platform defined; at least one premium addon (Locations or Employees) available; docs state what is free vs premium and how to install addons.
+
+Everything after this point (Phase 4 onwards) is post-launch: sync, integrations, further addons, monetisation depth.
+
+---
+
 ## Phase 4 – Calendar sync and integrations (paid / mixed)
 
 - Sync addons: 2-way CalDAV, 2-way Office 365 Outlook (premium).
@@ -67,7 +79,8 @@
 3. Tests (#265–#267) and permission system (#262).
 4. Update welcome panel and docs to current free feature set.
 5. Addon registration in core; first premium addon (Locations or Employees).
-6. Prioritise Discussions (Webhooks, WooCommerce, CalDAV/Outlook, Polish payments) and implement.
+6. **→ Steps 1–5 = scope for official public release (GA).**
+7. Prioritise Discussions (Webhooks, WooCommerce, CalDAV/Outlook, Polish payments) and implement (post-launch).
 
 ---
 
