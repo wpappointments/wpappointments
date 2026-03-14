@@ -6,12 +6,13 @@ import Calendar from './Calendar/Calendar';
 import General from './General/General';
 import styles from './OnboardingWizard.module.css';
 import Schedule from './Schedule/Schedule';
+import ServicesStep from './Services/Services';
 import gutenbergBlock from '~/images/gutenberg-block.png';
 import logoIcon from '~/images/icons/logo-icon.svg';
 
 export function OnboardingWizard() {
 	const [currentStep, setCurrentStep] = useState(0);
-	const totalSteps = 5;
+	const totalSteps = 6;
 
 	return (
 		<div className={styles.wizard}>
@@ -46,7 +47,10 @@ export function OnboardingWizard() {
 				{currentStep === 4 && (
 					<OnboardingWizardStep4 setCurrentStep={setCurrentStep} />
 				)}
-				{currentStep === 5 && <AllSet />}
+				{currentStep === 5 && (
+					<OnboardingWizardStep5 setCurrentStep={setCurrentStep} />
+				)}
+				{currentStep === 6 && <AllSet />}
 			</div>
 		</div>
 	);
@@ -219,6 +223,29 @@ function OnboardingWizardStep4({ setCurrentStep }: StepProps) {
 				</p>
 			</div>
 			<Schedule
+				onSuccess={() => {
+					setCurrentStep((prev) => prev + 1);
+				}}
+			/>
+		</div>
+	);
+}
+
+function OnboardingWizardStep5({ setCurrentStep }: StepProps) {
+	return (
+		<div style={{ margin: '40px auto' }}>
+			<div className={styles.stepHeader}>
+				<h1 className={styles.title}>
+					{__('Set up your services', 'wpappointments')}
+				</h1>
+				<p className={styles.leadText}>
+					{__(
+						'Add the services you offer. You can add as many as you need and manage them later from the Services page.',
+						'wpappointments'
+					)}
+				</p>
+			</div>
+			<ServicesStep
 				onSuccess={() => {
 					setCurrentStep((prev) => prev + 1);
 				}}
