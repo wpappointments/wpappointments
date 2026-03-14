@@ -32,7 +32,7 @@ class Settings {
 	 * @var array
 	 */
 	public $settings = array(
-		'general'      => array(
+		'general'       => array(
 			array(
 				'name' => 'firstName',
 				'type' => 'string',
@@ -86,7 +86,7 @@ class Settings {
 				'type' => 'string',
 			),
 		),
-		'appointments' => array(
+		'appointments'  => array(
 			array(
 				'name' => 'serviceName',
 				'type' => 'string',
@@ -104,8 +104,26 @@ class Settings {
 				'type' => 'string',
 			),
 		),
-		'calendar'     => array(),
-		'schedule'     => array(),
+		'calendar'      => array(),
+		'schedule'      => array(),
+		'notifications' => array(
+			array(
+				'name' => 'created',
+				'type' => 'array',
+			),
+			array(
+				'name' => 'updated',
+				'type' => 'array',
+			),
+			array(
+				'name' => 'confirmed',
+				'type' => 'array',
+			),
+			array(
+				'name' => 'cancelled',
+				'type' => 'array',
+			),
+		),
 	);
 
 	/**
@@ -130,21 +148,21 @@ class Settings {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					$slots = $settings[ $day ]['slots']['list'] ?? array();
+					$slots         = $settings[ $day ]['slots']['list'] ?? array();
 					$is_manual_24h = false;
 
 					if ( ! empty( $slots ) ) {
-						$first_slot = $slots[0];
+						$first_slot    = $slots[0];
 						$is_start_zero = '00' === $first_slot['start']['hour'] && '00' === $first_slot['start']['minute'];
-						$is_end_full = ( '24' === $first_slot['end']['hour'] || '00' === $first_slot['end']['hour'] ) && '00' === $first_slot['end']['minute'];
-						
+						$is_end_full   = ( '24' === $first_slot['end']['hour'] || '00' === $first_slot['end']['hour'] ) && '00' === $first_slot['end']['minute'];
+
 						if ( $is_start_zero && $is_end_full && 1 === count( $slots ) ) {
 							$is_manual_24h = true;
 						}
 					}
 
 					if ( $settings[ $day ]['allDay'] || $is_manual_24h ) {
-						$settings[ $day ]['allDay'] = true;
+						$settings[ $day ]['allDay']        = true;
 						$settings[ $day ]['slots']['list'] = array(
 							array(
 								'start' => array(
@@ -218,6 +236,10 @@ class Settings {
 
 				if ( 'boolean' === $type ) {
 					$option = filter_var( $option, FILTER_VALIDATE_BOOLEAN );
+				}
+
+				if ( 'array' === $type && ! is_array( $option ) ) {
+					continue;
 				}
 
 				if ( $option ) {
@@ -300,7 +322,11 @@ class Settings {
 				$type   = $option['type'];
 				$option = get_option( 'wpappointments_' . $category . '_' . $name );
 
-				if ( ! $option ) {
+				if ( 'array' === $type ) {
+					if ( ! is_array( $option ) ) {
+						continue;
+					}
+				} elseif ( ! $option ) {
 					continue;
 				}
 

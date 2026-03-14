@@ -3,6 +3,7 @@ export type SettingsState = {
 	schedule: SettingsSchedule;
 	appointments: SettingsAppointments;
 	calendar: SettingsCalendar;
+	notifications: Partial<SettingsNotifications>;
 };
 
 export type SettingsSchedule = {
@@ -61,3 +62,19 @@ export type DayOpeningHours = {
 };
 
 export type SettingsCalendar = any;
+
+export type NotificationEvent = {
+	enabled: boolean;
+	sendToAdmin: boolean;
+	sendToCustomer: boolean;
+	customRecipients: string;
+	subject: string;
+	body: string;
+};
+
+export type SettingsNotifications = {
+	created: NotificationEvent;
+	updated: NotificationEvent;
+	confirmed: NotificationEvent;
+	cancelled: NotificationEvent;
+};
