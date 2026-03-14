@@ -108,18 +108,12 @@ function FormFields() {
 						name="firstName"
 						label="First name"
 						placeholder="Eg. John"
-						rules={{
-							required: true,
-						}}
 					/>
 
 					<Input
 						name="lastName"
 						label="Last name"
 						placeholder="Eg. Doe"
-						rules={{
-							required: true,
-						}}
 					/>
 
 					<Input
@@ -127,9 +121,6 @@ function FormFields() {
 						label="Email"
 						type="email"
 						placeholder="example@example.com"
-						rules={{
-							required: true,
-						}}
 					/>
 
 					<Input

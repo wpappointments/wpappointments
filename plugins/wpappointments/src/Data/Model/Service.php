@@ -201,7 +201,27 @@ class Service {
 	 * @return array
 	 */
 	public static function default_normalizer( $data ) {
-		return $data;
+		$post = $data->service;
+
+		if ( is_wp_error( $post ) || ! $post ) {
+			return array();
+		}
+
+		$id   = $post->ID;
+		$meta = get_post_meta( $id );
+
+		$normalized_meta = array();
+
+		foreach ( $meta as $key => $value ) {
+			$normalized_meta[ $key ] = maybe_unserialize( $value[0] );
+		}
+
+		return array(
+			'id'      => $id,
+			'name'    => $post->post_title,
+			'content' => $post->post_content,
+			'meta'    => $normalized_meta,
+		);
 	}
 
 	/**
