@@ -1,66 +1,168 @@
 import { __ } from '@wordpress/i18n';
+import { missingId } from '~/backend/utils/api';
+import { Error, getErrorMessage } from '~/backend/utils/error';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
-import { displaySuccessToast } from '~/backend/utils/toast';
+import resolve from '~/backend/utils/resolve';
+import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Service } from '~/backend/types';
 
-type Response = APIResponse<{
-	services?: Service[];
-	service?: Service;
-	total?: number;
+export type UpdateServiceData = Pick<
+	Service,
+	'id' | 'name' | 'duration' | 'description' | 'active'
+>;
+
+export type CreateServiceData = Pick<
+	Service,
+	'name' | 'duration' | 'description' | 'active'
+>;
+
+type UpdateResponse = APIResponse<{
+	service: Service;
 	message: string;
 }>;
 
-export function servicesApi() {
+type CreateResponse = APIResponse<{
+	service: Service;
+	message: string;
+}>;
+
+type DeleteResponse = APIResponse<{
+	serviceId: number;
+}>;
+
+export type ServicesApiOptions = {
+	invalidateCache?: (selector: string) => void;
+};
+
+export function servicesApi(options?: ServicesApiOptions) {
 	const apiPath = 'services';
+	const { invalidateCache } = options || {};
+	const dispatch = window.wp.data.dispatch('wpappointments');
+	const select = window.wp.data.select('wpappointments');
 
 	async function getServices() {
-		const response = await apiFetch<Response>({
-			path: apiPath,
-			method: 'GET',
-		});
-
-		return response.data;
+		return select.getServices();
 	}
 
-	async function createService(data: Partial<Service>) {
-		const response = await apiFetch<Response>({
-			path: apiPath,
-			method: 'POST',
-			data,
+	async function createService(data: CreateServiceData) {
+		const [error, response] = await resolve<CreateResponse>(async () => {
+			return await apiFetch<CreateResponse>({
+				path: apiPath,
+				method: 'POST',
+				data,
+			});
 		});
 
-		displaySuccessToast(
-			__('Service created successfully', 'wpappointments')
-		);
+		if (error) {
+			handleError(error, 'Error creating service');
+		}
 
-		return response.data;
+		if (response && response.status === 'error') {
+			const err: Error = {
+				type: 'error',
+				message: response?.data?.message || 'Unknown error',
+				data: [],
+			};
+
+			handleError(err, 'Error creating service');
+		}
+
+		if (response && response.status === 'success') {
+			const { data: responseData } = response;
+			const { service } = responseData;
+
+			dispatch.createService(service);
+
+			displaySuccessToast(
+				__('Service created successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getServices');
+			}
+		}
+
+		return response;
 	}
 
-	async function updateService(id: number, data: Partial<Service>) {
-		const response = await apiFetch<Response>({
-			path: `${apiPath}/${id}`,
-			method: 'PUT',
-			data,
+	async function updateService(data: UpdateServiceData) {
+		const [error, response] = await resolve<UpdateResponse>(async () => {
+			return await apiFetch<UpdateResponse>({
+				path: `${apiPath}/${data.id}`,
+				method: 'POST',
+				data,
+			});
 		});
 
-		displaySuccessToast(
-			__('Service updated successfully', 'wpappointments')
-		);
+		if (error) {
+			handleError(error, 'Error updating service');
+		}
 
-		return response.data;
+		if (response && response.status === 'error') {
+			const err: Error = {
+				type: 'error',
+				message: response?.data?.message || 'Unknown error',
+				data: [],
+			};
+
+			handleError(err, 'Error updating service');
+		}
+
+		if (response && response.status === 'success') {
+			const { data: responseData } = response;
+			const { service } = responseData;
+
+			dispatch.updateService(service);
+
+			displaySuccessToast(
+				__('Service updated successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getServices');
+			}
+		}
+
+		return response;
 	}
 
 	async function deleteService(id: number) {
-		const response = await apiFetch<Response>({
-			path: `${apiPath}/${id}`,
-			method: 'DELETE',
+		if (missingId(id, 'Cannot delete service')) {
+			return;
+		}
+
+		const [error, response] = await resolve<DeleteResponse>(async () => {
+			const response = await apiFetch<DeleteResponse>({
+				path: `${apiPath}/${id}`,
+				method: 'DELETE',
+			});
+
+			dispatch.deleteService(id);
+
+			return response;
 		});
 
-		displaySuccessToast(
-			__('Service deleted successfully', 'wpappointments')
-		);
+		if (error) {
+			handleError(error, __('Cannot delete service', 'wpappointments'));
+			return;
+		}
 
-		return response.data;
+		if (response) {
+			displaySuccessToast(
+				__('Service deleted successfully', 'wpappointments')
+			);
+
+			if (invalidateCache) {
+				invalidateCache('getServices');
+			}
+		}
+
+		return response;
+	}
+
+	function handleError(error: Error, message: string) {
+		displayErrorToast(`${message}: ${getErrorMessage(error)}`);
+		console.error('Error: ' + getErrorMessage(error));
 	}
 
 	const functions = {
@@ -69,6 +171,11 @@ export function servicesApi() {
 		updateService,
 		deleteService,
 	} as const;
+
+	window.wpappointments.api = {
+		...window.wpappointments.api,
+		...functions,
+	};
 
 	return functions;
 }
