@@ -92,6 +92,12 @@
 	font-family: monospace;
 	font-weight: bold;
 	font-size: 9px;
+	z-index: 10;
+}
+
+.item:nth-last-child(-n+10):hover::after {
+	left: auto;
+	right: 0;
 }
 
 .item-available {

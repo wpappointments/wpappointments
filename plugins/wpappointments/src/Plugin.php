@@ -16,6 +16,13 @@ use WPAppointments\Core\PluginInfo;
  */
 class Plugin extends Core\Singleton {
 	/**
+	 * Main plugin class.
+	 * Handle all plugin initialization, activation and deactivation.
+	 */
+	public function __construct() {
+		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
+	}
+	/**
 	 * Get instance of a class by key
 	 *
 	 * @param string $key Class key.
@@ -97,6 +104,25 @@ class Plugin extends Core\Singleton {
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
 		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
 		update_option( 'wpappointments_general_timezoneSiteDefault', 1 );
+
+		$this->register_capabilities();
+	}
+
+	/**
+	 * Register custom capabilities
+	 *
+	 * @return void
+	 */
+	private function register_capabilities() {
+		$role = get_role( 'administrator' );
+
+		if ( ! $role ) {
+			return;
+		}
+
+		foreach ( Core\Capabilities::all() as $cap ) {
+			$role->add_cap( $cap );
+		}
 	}
 
 	/**
