@@ -6,6 +6,7 @@ import { OnboardingWizard } from './admin/pages/OnboardingWizard/OnboardingWizar
 import Calendar from '~/backend/admin/pages/Calendar/Calendar';
 import Customers from '~/backend/admin/pages/Customers/Customers';
 import Dashboard from '~/backend/admin/pages/Dashboard/Dashboard';
+import Services from '~/backend/admin/pages/Services/Services';
 import Settings from '~/backend/admin/pages/Settings/Settings';
 
 window.wpappointments.hooks = createHooks();
@@ -14,6 +15,7 @@ const pages = new Map<string, React.JSX.Element>();
 pages.set('dashboard', <Dashboard />);
 pages.set('calendar', <Calendar />);
 pages.set('customers', <Customers />);
+pages.set('services', <Services />);
 pages.set('settings', <Settings />);
 pages.set('wizard', <OnboardingWizard />);
 
