@@ -21,6 +21,7 @@ class Plugin extends Core\Singleton {
 	 */
 	public function __construct() {
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
+		Notifications\Notifications::get_instance();
 	}
 	/**
 	 * Get instance of a class by key
