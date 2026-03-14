@@ -56,6 +56,7 @@ export const DEFAULT_SETTINGS_STATE: SettingsState = {
 		defaultStatus: 'confirmed',
 	},
 	calendar: {},
+	notifications: {},
 };
 
 export const actions = {
@@ -110,6 +111,10 @@ export const reducer = (state = DEFAULT_SETTINGS_STATE, action: Action) => {
 				draft.appointments = {
 					...draft.appointments,
 					...action.settings.appointments,
+				};
+				draft.notifications = {
+					...draft.notifications,
+					...action.settings.notifications,
 				};
 			});
 
@@ -189,6 +194,9 @@ export const selectors = {
 	getCalendarSettings(state: State) {
 		return state.settings.calendar;
 	},
+	getNotificationsSettings(state: State) {
+		return state.settings.notifications;
+	},
 };
 
 export const controls = {
@@ -214,4 +222,5 @@ export const resolvers = {
 	getScheduleSettings: getSettings,
 	getAppointmentsSettings: getSettings,
 	getCalendarSettings: getSettings,
+	getNotificationsSettings: getSettings,
 };
