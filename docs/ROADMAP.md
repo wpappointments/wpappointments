@@ -164,6 +164,10 @@
 
 > [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/7)
 
+> **Gate:** Premium addons will NOT be linked from core until Milestone 1 (Stabilize Core) and Milestone 2 (Services & Booking Foundations) are fully stable. Scaffolding exists in `wpappointments/wpappointments-premium` but integration is blocked until free core is production-ready.
+>
+> Premium addon stubs deployed: Employees, Locations, Payments — each with dependency check, capability registration via `wpappointments_capabilities` filter, and admin notice for missing core.
+
 ### Epic: Addon Registration Platform (#286) — `wpappointments/wpappointments` (core)
 
 | # | Task | Status |
