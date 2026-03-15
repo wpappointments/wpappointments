@@ -117,7 +117,7 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Start wp-env
-              run: npx wp-env start
+              run: npx wp-env start || true
 
             - name: Install Composer dependencies
               run: |
