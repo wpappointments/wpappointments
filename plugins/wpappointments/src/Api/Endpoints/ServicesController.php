@@ -71,10 +71,19 @@ class ServicesController extends Controller {
 	/**
 	 * Get all services
 	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
 	 * @return WP_REST_Response
 	 */
-	public static function get_all_services() {
-		$results = ServicesQuery::all();
+	public static function get_all_services( WP_REST_Request $request ) {
+		$query = array();
+
+		$active = $request->get_param( 'active' );
+		if ( null !== $active ) {
+			$query['active'] = filter_var( $active, FILTER_VALIDATE_BOOLEAN );
+		}
+
+		$results = ServicesQuery::all( $query );
 
 		return self::response(
 			__( 'Services fetched successfully', 'wpappointments' ),

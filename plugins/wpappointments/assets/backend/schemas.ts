@@ -45,4 +45,7 @@ export const ServiceSchema = object({
 	duration: optional(number()),
 	description: optional(string()),
 	active: optional(boolean()),
+	price: optional(number()),
+	category: optional(string()),
+	image: optional(string()),
 });

@@ -29,11 +29,33 @@ class ServicesQuery {
 			'post_status'    => 'publish',
 		);
 
+		if ( isset( $query['active'] ) ) {
+			$args['meta_query'] = array(
+				array(
+					'key'     => 'active',
+					'value'   => $query['active'] ? '1' : '0',
+					'compare' => '=',
+				),
+			);
+		}
+
 		$services = new WP_Query( $args );
 
 		return array(
 			'services' => $services->posts,
 			'total'    => $services->found_posts,
 		);
+	}
+
+	/**
+	 * Get only active services
+	 *
+	 * @param array $query Query parameters.
+	 *
+	 * @return array
+	 */
+	public static function active( $query = array() ) {
+		$query['active'] = true;
+		return self::all( $query );
 	}
 }

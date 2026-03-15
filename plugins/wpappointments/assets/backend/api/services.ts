@@ -8,12 +8,12 @@ import { Service } from '~/backend/types';
 
 export type UpdateServiceData = Pick<
 	Service,
-	'id' | 'name' | 'duration' | 'description' | 'active'
+	'id' | 'name' | 'duration' | 'description' | 'active' | 'price'
 >;
 
 export type CreateServiceData = Pick<
 	Service,
-	'name' | 'duration' | 'description' | 'active'
+	'name' | 'duration' | 'description' | 'active' | 'price'
 >;
 
 type UpdateResponse = APIResponse<{

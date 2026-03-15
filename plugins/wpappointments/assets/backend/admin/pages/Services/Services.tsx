@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Card, CardHeader } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Icon, info, edit, trash } from '@wordpress/icons';
+import { Icon, edit, trash, update } from '@wordpress/icons';
 import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
@@ -39,7 +39,9 @@ function ServicesTable() {
 		null
 	);
 	const { invalidate, getSelector } = useStateContext();
-	const { deleteService } = servicesApi({ invalidateCache: invalidate });
+	const { deleteService, updateService } = servicesApi({
+		invalidateCache: invalidate,
+	});
 	const [filters, setFilters] = useState<Fields>({ paged: 1, number: 10 });
 
 	const { services, totalItems, totalPages, currentPage } = useSelect(() => {
@@ -99,10 +101,28 @@ function ServicesTable() {
 			enableHiding: false,
 		},
 		{
+			id: 'price',
+			header: __('Price', 'wpappointments'),
+			render: ({ item }: { item: Service }) => (
+				<span>
+					{item.price && item.price > 0
+						? `${item.price}`
+						: __('Free', 'wpappointments')}
+				</span>
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
 			id: 'active',
 			header: __('Status', 'wpappointments'),
 			render: ({ item }: { item: Service }) => (
-				<span>
+				<span
+					style={{
+						color: item.active ? colors.green : colors.gray,
+						fontWeight: 600,
+					}}
+				>
 					{item.active
 						? __('Active', 'wpappointments')
 						: __('Inactive', 'wpappointments')}
@@ -113,13 +133,24 @@ function ServicesTable() {
 		},
 	];
 
+	const toggleServiceActive = async (item: Service) => {
+		if (item.id) {
+			await updateService({
+				id: item.id,
+				name: item.name,
+				duration: item.duration ?? 30,
+				active: !item.active,
+			});
+		}
+	};
+
 	const actions: Action[] = [
 		{
-			id: 'view',
-			icon: <Icon icon={info} color={colors.blue} />,
+			id: 'toggle-active',
+			icon: <Icon icon={update} color={colors.gray} />,
 			isPrimary: true,
-			label: __('View service details', 'wpappointments'),
-			callback: (item: Service) => editService(item),
+			label: __('Toggle active/inactive', 'wpappointments'),
+			callback: (item: Service) => toggleServiceActive(item),
 		},
 		{
 			id: 'edit',

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -6,6 +7,7 @@ import useSlideout from '~/backend/hooks/useSlideout';
 import { Service } from '~/backend/types';
 import { HtmlForm, withForm } from '../Form/Form';
 import Input from '../FormField/Input/Input';
+import Toggle from '../FormField/Toggle/Toggle';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
 import {
@@ -20,6 +22,7 @@ export type ServiceFormData = {
 	duration: number;
 	description?: string;
 	active?: boolean;
+	price?: number;
 };
 
 type ServiceCreateProps = {
@@ -39,6 +42,10 @@ export default withForm(function ServiceCreate({
 		useFillFormValues(selectedService);
 	}
 
+	const [isActive, setIsActive] = useState<boolean>(
+		selectedService?.active ?? true
+	);
+
 	const onSubmit: SubmitHandler<ServiceFormData> = async (formData) => {
 		const { createService, updateService } = servicesApi({
 			invalidateCache,
@@ -48,6 +55,7 @@ export default withForm(function ServiceCreate({
 			const updateData: UpdateServiceData = {
 				...formData,
 				id: selectedService.id,
+				price: formData.price ? Number(formData.price) : 0,
 			};
 
 			const response = await updateService(updateData);
@@ -65,6 +73,7 @@ export default withForm(function ServiceCreate({
 				duration: formData.duration,
 				description: formData.description,
 				active: formData.active ?? true,
+				price: formData.price ? Number(formData.price) : 0,
 			};
 
 			const response = await createService(createData);
@@ -107,8 +116,19 @@ export default withForm(function ServiceCreate({
 						rules={{ required: true, min: 1 }}
 					/>
 					<Input
+						name="price"
+						label={__('Price', 'wpappointments')}
+						type="number"
+					/>
+					<Input
 						name="description"
 						label={__('Description', 'wpappointments')}
+					/>
+					<Toggle
+						name="active"
+						label={__('Active', 'wpappointments')}
+						defaultChecked={isActive}
+						onChange={(value: boolean) => setIsActive(value)}
 					/>
 				</FormFieldSet>
 				<Button

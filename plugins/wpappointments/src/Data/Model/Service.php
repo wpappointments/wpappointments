@@ -24,6 +24,7 @@ class Service {
 		'category',
 		'description',
 		'image',
+		'price',
 		'created',
 		'updated',
 	);
@@ -216,11 +217,24 @@ class Service {
 			$normalized_meta[ $key ] = maybe_unserialize( $value[0] );
 		}
 
+		$active      = isset( $normalized_meta['active'] ) ? (bool) $normalized_meta['active'] : true;
+		$duration    = isset( $normalized_meta['duration'] ) ? (int) $normalized_meta['duration'] : 30;
+		$description = $normalized_meta['description'] ?? '';
+		$price       = isset( $normalized_meta['price'] ) ? (float) $normalized_meta['price'] : 0;
+		$category    = $normalized_meta['category'] ?? '';
+		$image       = $normalized_meta['image'] ?? '';
+
 		return array(
-			'id'      => $id,
-			'name'    => $post->post_title,
-			'content' => $post->post_content,
-			'meta'    => $normalized_meta,
+			'id'          => $id,
+			'name'        => $post->post_title,
+			'content'     => $post->post_content,
+			'active'      => $active,
+			'duration'    => $duration,
+			'description' => $description,
+			'price'       => $price,
+			'category'    => $category,
+			'image'       => $image,
+			'meta'        => $normalized_meta,
 		);
 	}
 
@@ -246,6 +260,7 @@ class Service {
 				'category'    => '',
 				'description' => '',
 				'image'       => '',
+				'price'       => 0,
 				'created'     => time(),
 				'updated'     => time(),
 			)
