@@ -63,6 +63,9 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Generate CSS type declarations
+              run: pnpm -C plugins/wpappointments css-types
+
             - name: Lint JS
               run: pnpm lint:js
 
@@ -99,29 +102,30 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Set up PHP
-              uses: shivammathur/setup-php@v2
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
               with:
-                  php-version: '8.2'
-                  tools: composer:v2
-                  coverage: xdebug
+                  version: 9
 
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
               with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock', 'plugins/wpappointments/composer.lock') }}
-                  restore-keys: ${{ runner.os }}-composer-
+                  node-version: '20'
+                  cache: 'pnpm'
 
-            - name: Install root Composer dependencies
-              run: composer install --no-interaction --prefer-dist
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-            - name: Install plugin Composer dependencies
-              run: composer install --no-interaction --prefer-dist --working-dir=plugins/wpappointments
+            - name: Start wp-env
+              run: npx wp-env start
+
+            - name: Install Composer dependencies
+              run: |
+                  npx wp-env run cli --env-cwd=wp-content composer install
+                  npx wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer install
+
+            - name: Activate plugins
+              run: npx wp-env run cli wp plugin activate wpappointments other-plugin
 
             - name: Run Pest tests
-              run: ./vendor/bin/pest
+              run: npx wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest
