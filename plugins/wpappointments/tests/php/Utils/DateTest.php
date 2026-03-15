@@ -26,10 +26,9 @@ test(
 			new \DateTime( '2024-03-14 11:30:00' )
 		);
 
-		// Current implementation returns true only if range1 is fully inside range2
-		// Wait, look at Date.php: $range_start >= $range_in_start && $range_end <= $range_in_end;
+		// Current implementation returns true only if range1 is fully inside range2.
+		// Look at Date.php: $range_start >= $range_in_start && $range_end <= $range_in_end.
 		// So it checks if range1 is INSIDE range2.
-		
 		$inner = new \DatePeriod(
 			new \DateTime( '2024-03-14 10:15:00' ),
 			new \DateInterval( 'PT30M' ),

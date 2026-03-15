@@ -96,6 +96,19 @@ jobs:
   test-php:
     name: PHP Tests (Pest)
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
       - uses: actions/checkout@v4
 
@@ -105,6 +118,7 @@ jobs:
           php-version: '8.2'
           tools: composer:v2
           coverage: xdebug
+          extensions: mysqli
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -123,5 +137,38 @@ jobs:
       - name: Install plugin Composer dependencies
         run: composer install --no-interaction --prefer-dist --working-dir=plugins/wpappointments
 
+      - name: Install WordPress test suite
+        run: |
+          WP_TESTS_DIR=/tmp/wordpress-tests-lib
+          WP_CORE_DIR=/tmp/wordpress
+          mkdir -p $WP_TESTS_DIR $WP_CORE_DIR
+
+          # Download WordPress.
+          curl -sL https://wordpress.org/latest.tar.gz | tar xz --strip-components=1 -C $WP_CORE_DIR
+
+          # Download test suite.
+          svn co --quiet https://develop.svn.wordpress.org/tags/$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')/tests/phpunit/includes/ $WP_TESTS_DIR/includes
+          svn co --quiet https://develop.svn.wordpress.org/tags/$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')/tests/phpunit/data/ $WP_TESTS_DIR/data
+
+          # Create wp-tests-config.php.
+          cat > $WP_TESTS_DIR/wp-tests-config.php <<WPCONFIG
+          <?php
+          define( 'ABSPATH', '$WP_CORE_DIR/' );
+          define( 'DB_NAME', 'wordpress_test' );
+          define( 'DB_USER', 'root' );
+          define( 'DB_PASSWORD', 'root' );
+          define( 'DB_HOST', '127.0.0.1' );
+          define( 'DB_CHARSET', 'utf8' );
+          define( 'DB_COLLATE', '' );
+          \$table_prefix = 'wptests_';
+          define( 'WP_TESTS_DOMAIN', 'example.org' );
+          define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+          define( 'WP_TESTS_TITLE', 'Test Blog' );
+          define( 'WP_PHP_BINARY', 'php' );
+          define( 'WPLANG', '' );
+          WPCONFIG
+
       - name: Run Pest tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
         run: ./vendor/bin/pest
