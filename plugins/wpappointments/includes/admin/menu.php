@@ -59,6 +59,15 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
+		__( 'Entities', 'wpappointments' ),
+		__( 'Entities', 'wpappointments' ),
+		'activate_plugins',
+		'wpappointments-entities',
+		__NAMESPACE__ . '\\entities_page'
+	);
+
+	add_submenu_page(
+		'wpappointments',
 		__( 'Settings', 'wpappointments' ),
 		__( 'Settings', 'wpappointments' ),
 		'activate_plugins',
@@ -110,6 +119,15 @@ function customers_page() {
  */
 function services_page() {
 	echo '<div id="wpappointments-admin" data-page="services"></div>';
+}
+
+/**
+ * Create entities admin page
+ *
+ * @return void
+ */
+function entities_page() {
+	echo '<div id="wpappointments-admin" data-page="entities"></div>';
 }
 
 /**
