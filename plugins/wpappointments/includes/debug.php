@@ -14,6 +14,6 @@ use WPAppointments\Core\PluginInfo;
 add_action(
 	'init',
 	function () {
-		// Existing debug init logic if any (none currently besides post types)
+		// Existing debug init logic if any (none currently besides post types).
 	}
 );
