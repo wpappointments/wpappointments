@@ -141,7 +141,7 @@ jobs:
         run: |
           WP_TESTS_DIR=/tmp/wordpress-tests-lib
           WP_CORE_DIR=/tmp/wordpress
-          mkdir -p $WP_TESTS_DIR $WP_CORE_DIR
+          mkdir -p $WP_TESTS_DIR $WP_CORE_DIR /tmp/wp-develop
 
           WP_VERSION=$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')
 
@@ -169,7 +169,7 @@ jobs:
           define( 'WP_TESTS_TITLE', 'Test Blog' );
           define( 'WP_PHP_BINARY', 'php' );
           define( 'WPLANG', '' );
-          WPCONFIG
+WPCONFIG
 
       - name: Run Pest tests
         env:
