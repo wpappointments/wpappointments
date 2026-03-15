@@ -2,7 +2,6 @@
 	"name": "root",
 	"private": true,
 	"scripts": {
-		"prestart": "CI=true pnpm install && composer install --working-dir=plugins/wpappointments && pnpm run build",
 		"open": "bash .scripts/open",
 		"build": "lerna run build",
 		"dev": "pnpm start && pnpm -C plugins/wpappointments dev:hot",
@@ -13,6 +12,7 @@
 		"stop:wp": "wp-env stop",
 		"stop:mailhog": "bash .scripts/mailhog stop",
 		"clean": "wp-env clean all",
+		"destroy": "wp-env destroy",
 		"lint:staged": "lint-staged --concurrent=false",
 		"lint": "pnpm run lint:js && pnpm run lint:php",
 		"lint:js": "wp-scripts lint-js .",
@@ -25,8 +25,9 @@
 		"env": "wp-env",
 		"lerna": "lerna",
 		"prepare": "husky",
+		"initialize": "pnpm install && pnpm run start:wp; wp-env run cli --env-cwd=wp-content composer install && pnpm run dump-autoload && wp-env run cli wp plugin activate wpappointments other-plugin && pnpm run build",
 		"check-types": "lerna run check-types",
-		"dump-autoload": "wp-env run cli --env-cwd=wp-content composer dump-autoload && wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer dump-autoload",
+		"dump-autoload": "wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer dump-autoload",
 		"test": "wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage"
 	},
 	"devDependencies": {
