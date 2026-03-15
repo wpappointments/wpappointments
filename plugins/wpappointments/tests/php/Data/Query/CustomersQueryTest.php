@@ -15,8 +15,9 @@ test(
 	'CustomersQuery::all',
 	function () {
 		// Create some test customers (users).
-		$this->factory()->user->create( array( 'role' => 'subscriber' ) );
-		$this->factory()->user->create( array( 'role' => 'subscriber' ) );
+		add_role( 'wpa-customer', 'Customer' );
+		$this->factory()->user->create( array( 'role' => 'wpa-customer' ) );
+		$this->factory()->user->create( array( 'role' => 'wpa-customer' ) );
 
 		$results = CustomersQuery::all();
 

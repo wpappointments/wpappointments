@@ -390,8 +390,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 															!slot.available &&
 															slot.timestamp >=
 																Date.now(),
-														[styles.itemSelected]:
-															false,
+														[styles.itemSelected]: false,
 													})}
 													key={
 														slot.dateString +
