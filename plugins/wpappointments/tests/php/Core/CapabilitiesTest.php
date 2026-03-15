@@ -54,8 +54,11 @@ test(
 );
 
 test(
-	'Administrator role has all capabilities assigned',
+	'Administrator role has all capabilities assigned after activation',
 	function () {
+		$plugin = \WPAppointments\Plugin::get_instance();
+		$plugin->on_plugin_activation();
+
 		$role = get_role( 'administrator' );
 
 		expect( $role )->not->toBeNull();
