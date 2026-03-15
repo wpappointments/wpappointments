@@ -2,6 +2,7 @@ import { APIFetchOptions } from '@wordpress/api-fetch';
 import { actions as appointments } from './appointments/appointments';
 import { actions as availability } from './availability/availability';
 import { actions as customers } from './customers/customers';
+import { actions as entities } from './entities/entities';
 import { actions as notices } from './notices/notices';
 import { actions as services } from './services/services';
 import { actions as settings } from './settings/settings';
@@ -31,5 +32,6 @@ export default {
 	...availability,
 	...appointmentSlideoutActions,
 	...customers,
+	...entities,
 	...services,
 };

@@ -4,6 +4,7 @@ import { AppointmentsState } from './appointments/appointments.types';
 import { AvailabilityState } from './availability/availability.types';
 import controls from './controls';
 import { CustomersState } from './customers/customers.types';
+import { EntitiesState } from './entities/entities.types';
 import { NoticesState } from './notices/notices.types';
 import reducers from './reducers';
 import resolvers from './resolvers';
@@ -21,6 +22,7 @@ export type State = {
 	availability: AvailabilityState;
 	appointmentSlideout: AppointmentSlideoutState;
 	customers: CustomersState;
+	entities: EntitiesState;
 	services: ServicesState;
 };
 

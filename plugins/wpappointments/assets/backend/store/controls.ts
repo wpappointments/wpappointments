@@ -3,6 +3,7 @@ import apiFetch from '~/backend/utils/fetch';
 import { controls as appointments } from './appointments/appointments';
 import { controls as availability } from './availability/availability';
 import { controls as customers } from './customers/customers';
+import { controls as entities } from './entities/entities';
 import { controls as notices } from './notices/notices';
 import { controls as services } from './services/services';
 import { controls as settings } from './settings/settings';
@@ -32,5 +33,6 @@ export default {
 	...notices,
 	...availability,
 	...customers,
+	...entities,
 	...services,
 };
