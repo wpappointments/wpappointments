@@ -96,9 +96,9 @@
 | 1 | ~~Services REST API (CRUD endpoints)~~ | Done |
 | 2 | ~~Services admin list UI~~ | Done |
 | 3 | ~~Services in onboarding wizard~~ | Done |
-| 4 | Active/inactive toggle with filtering | |
+| 4 | ~~Active/inactive toggle with filtering~~ | Done — Toggle action in Services table, active meta_query filter in ServicesQuery, REST param |
 | 5 | Service duration configuration (variable durations) | |
-| 6 | Service pricing (basic price field, display in booking flow) | |
+| 6 | ~~Service pricing (basic price field, display in booking flow)~~ | Done — Price field in Service model/normalizer, admin form, table column |
 | 7 | Service categories/grouping | |
 | 8 | Service image/icon support | |
 | 9 | Service description display in booking flow | |
@@ -131,13 +131,13 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | Design entity schema: CPT `wpa-bookable-entity` with meta for type, properties, capacity | |
-| 2 | Entity CRUD REST API endpoints | |
-| 3 | Entity-Service relationships (which services can be booked on which entity) | |
-| 4 | Entity availability/schedule (own opening hours, overrides) | |
+| 1 | ~~Design entity schema: CPT `wpa-entity` with meta for type, properties, capacity~~ | Done — Registered hierarchical CPT with `page-attributes` support, `wpa_manage_entities` capability, Entity Model with nesting via `post_parent` |
+| 2 | ~~Entity CRUD REST API endpoints~~ | Done — Full REST controller: GET/POST /entities, GET/PUT/DELETE /entities/{id}, GET /entities/tree, GET /entities/{id}/children, GET/PUT /entities/{id}/services |
+| 3 | ~~Entity-Service relationships (which services can be booked on which entity)~~ | Done — Many-to-many via `service_ids` / `entity_ids` post meta with bidirectional sync |
+| 4 | ~~Entity availability/schedule (own schedule, inheritable)~~ | Done — `schedule_mode` (inherit/own), `schedule_id` meta; `get_effective_schedule_id()` walks hierarchy to global default |
 | 5 | Entity properties system (custom attributes: location, capacity, type, etc.) | |
-| 6 | Nested entities support (e.g. restaurant → tables, marina → parking spots → boat slips) | |
-| 7 | Entity query builder with filtering (by type, location, availability) | |
+| 6 | ~~Nested entities support (e.g. restaurant → tables → seats)~~ | Done — Hierarchical CPT, `tree()` query, depth/childrenCount in normalizer, ancestor traversal |
+| 7 | ~~Entity query builder with filtering (by type, parent, active status)~~ | Done — `EntitiesQuery` with `all()`, `active()`, `roots()`, `children()`, `tree()`, `ancestors()` |
 | 8 | Migration path from current flat appointment model to entity-based | |
 | 9 | Entity admin UI (list, create, edit, assign services) | |
 | 10 | Entity selection in booking flow (choose entity → choose time) | |

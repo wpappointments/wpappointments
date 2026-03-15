@@ -41,6 +41,13 @@ class Capabilities {
 	const MANAGE_CUSTOMERS = 'wpa_manage_customers';
 
 	/**
+	 * Manage entities capability
+	 *
+	 * @var string
+	 */
+	const MANAGE_ENTITIES = 'wpa_manage_entities';
+
+	/**
 	 * Get all capabilities
 	 *
 	 * Filterable via 'wpappointments_capabilities' to allow extensions to add
@@ -54,6 +61,7 @@ class Capabilities {
 			self::MANAGE_SETTINGS,
 			self::MANAGE_SERVICES,
 			self::MANAGE_CUSTOMERS,
+			self::MANAGE_ENTITIES,
 		);
 
 		return apply_filters( 'wpappointments_capabilities', $capabilities );
