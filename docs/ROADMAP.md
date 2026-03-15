@@ -1,107 +1,242 @@
-# WP Appointments – Long-term development plan
+# WP Appointments – Development Roadmap
+
+> Updated: 2026-03-15 (based on founder meeting and Must Have discussions analysis)
 
 ## Current state
 
 - **Product model:** Free core (open-source) + paid addons (premium repo: `wpappointments-premium` submodule).
 - **Core (free):** Appointments, Schedules, Customers, Settings, basic Notifications; REST API (Appointments, Availability, Customers, Settings, **Services**); CPTs: `wpa-appointment`, `wpa-schedule`, `wpa-service`. Capabilities are filterable for extensions.
-- **Gaps** (welcome panel): admin calendar month-only, limited Gutenberg block, no shortcode builder, non-editable emails, simple opening hours only, no stats/reports. Extension features (Locations, Employees, sync) planned as addons.
-- **Links:** [Issues](https://github.com/wpappointments/wpappointments/issues?q=is%3Aissue+is%3Aopen), [Discussions](https://github.com/wpappointments/wpappointments/discussions).
+- **Gaps:** admin calendar month-only, limited Gutenberg block, no shortcode builder, non-editable emails, simple opening hours only, no stats/reports. Extension features (Locations, Employees, sync) planned as addons.
+- **Links:** [Milestones](https://github.com/wpappointments/wpappointments/milestones), [Project Board](https://github.com/orgs/wpappointments/projects/6), [Must Have Discussions](https://github.com/wpappointments/wpappointments/discussions?discussions_q=is%3Aopen+label%3A%22%5Bidea%5D+Must+have%22)
 
 ---
 
-## Phase 1 – Stabilize free core
+## Key business decisions (2026-03-15)
 
-- Tests: Playwright setup + first test (#267); tests for Queries, Utils, Core, Plugin (#265, #266).
-- Robust permission system (#262).
-- Notifications: simple email notifications (#42); option to customise template, edit email contents, email settings (#44).
-- Booking flow v1 (#45) and Epic free version (#39) clearly defined.
+| Feature | Free / Premium | Rationale |
+|---------|---------------|-----------|
+| Calendar sync (Gmail, Outlook, CalDAV) | **Free** | cal.com offers this free; competitive necessity |
+| Webhooks | **Free** | Charging for webhooks is unacceptable |
+| CLI & MCP server | **Free** | Core extensibility tool |
+| Payments & WooCommerce | **Premium** | "If you make money, you pay us" |
+| Employees | **Premium** | First premium addon |
+| Locations | **Premium** | First premium addon |
+| Custom fields, advanced features | **Premium** | Revenue drivers |
+| Pricing model | Single tier ~$99/year | All premium addons included (WooCommerce-like model) |
+
+**Lesson from WPDesk/Flexible Shipping:** Don't give too much for free — it's hard to monetize later.
+
+---
+
+## Milestone 1: Stabilize Free Core
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/4)
+
+| Epic | Issue |
+|------|-------|
+| Testing & Quality Assurance | #283 |
+| Permission System | #285 |
+| Email Notifications | #287 |
+| Booking Flow v1 | #290 |
 
 **Outcome:** Solid, test-covered free core; clear free vs paid scope.
 
 ---
 
-## Phase 2 – Complete Services in core (free)
+## Milestone 2: Services & Booking Foundations
 
-- Services: REST completeness (#248), Admin list UI (#249), active/inactive (#252), better wizard (#256).
-- Shortcode builder and/or more Gutenberg block options.
-- Schedule: days off, holidays; edge cases beyond simple opening hours.
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/5)
 
-**Outcome:** Services fully usable in free plugin; welcome/docs updated.
+| Epic | Issue |
+|------|-------|
+| Complete Services | #295 |
+| Schedule Improvements | #299 |
 
----
-
-## Phase 3 – Addon platform and first paid addons
-
-- Addon API: how premium plugins register (hooks, `wpappointments_capabilities`, optional addon registry in core). Core stays dependency-free from premium.
-- Premium repo: first addons — **Locations**, **Employees** (assign appointments to staff; manual assignment option).
-- Docs: what is free, what is premium, how to install addons.
-
-**Outcome:** Clear free vs paid boundary; Locations and/or Employees as paid addons.
+**Outcome:** Services fully usable in free plugin. Gaps, lead times, days off, holidays working.
 
 ---
 
-## Official public release
+## Milestone 3: Bookable Entities & Data Model
 
-**Product is ready for general availability (GA) when Phases 1–3 are complete:**
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/6)
 
-- Free core stable: tests, permissions, notifications, booking flow v1.
-- Services complete in core: REST, Admin UI, wizard, active/inactive; schedule (days off/holidays) and shortcode or Gutenberg options in place.
-- Addon platform defined; at least one premium addon (Locations or Employees) available; docs state what is free vs premium and how to install addons.
+| Epic | Issue |
+|------|-------|
+| Bookable Entities Data Model | #282 |
+| Extensible Gutenberg Block | #284 |
 
-Everything after this point (Phase 4 onwards) is post-launch: sync, integrations, further addons, monetisation depth.
+**This is THE most important feature.** Bookable entities are the core abstraction enabling all use cases: time slots, rooms, tables, parking spots, lockers, hotel rooms, yoga classes, etc. Every addon builds on this foundation.
 
----
-
-## Phase 4 – Calendar sync and integrations (paid / mixed)
-
-- Sync addons: 2-way CalDAV, 2-way Office 365 Outlook (premium).
-- Integrations (by demand): Webhooks, WooCommerce, Polish payment gateways; optionally Tidio, Platformly, Blocksy, Gutenberg expansion.
-- Status UX (e.g. traffic light) if it fits.
-
-**Outcome:** Sync and main integrations as addons or documented integration points.
+**Outcome:** Flexible data model that supports any booking use case. Gutenberg block extensible by addons.
 
 ---
 
-## Phase 5 – Monetisation and product depth
+## Milestone 4: Addon Platform & First Premium Addons
 
-- Revenue addons: Invoicing, Coupon codes, Cart, Bulk discounts, Variable pricing. Decide premium vs core-with-limits.
-- Advanced: Multisite, multiple employees per appointment, simultaneous services, Ajax where it helps UX.
-- Analytics: stats/reports — free basic vs premium detailed.
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/7)
 
-**Outcome:** Clear premium feature set and pricing; roadmap for further addons.
+| Epic | Issue |
+|------|-------|
+| Addon Registration Platform | #286 |
+| Extension: Employees (Premium) | #288 |
+| Extension: Locations (Premium) | #293 |
 
----
-
-## Next steps (order)
-
-1. Complete Services (#248, #249, #252, #256).
-2. Email notifications (#42, #44) and booking flow v1 (#45).
-3. Tests (#265–#267) and permission system (#262).
-4. Update welcome panel and docs to current free feature set.
-5. Addon registration in core; first premium addon (Locations or Employees).
-6. **→ Steps 1–5 = scope for official public release (GA).**
-7. Prioritise Discussions (Webhooks, WooCommerce, CalDAV/Outlook, Polish payments) and implement (post-launch).
+**Outcome:** Clear free vs paid boundary. Addon API defined. Employees and Locations as first premium addons ready for sale.
 
 ---
 
-## Diagram (high level)
+## Milestone 5: GA Release & wordpress.org Submission ⭐
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/8)
+
+| Epic | Issue |
+|------|-------|
+| GA Release & wordpress.org Submission | #298 |
+
+**This is the critical moment.** Submit to wordpress.org free plugin repo. Free core fully functional:
+- Booking flow, services, bookable entities, notifications, Gutenberg block
+- Tests, permissions, documentation
+- At least Employees + Locations premium addons ready for sale
+
+**Everything after this point is post-launch.**
+
+---
+
+## Milestone 6: Calendar Sync (Free)
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/9)
+
+| Epic | Issue |
+|------|-------|
+| 2-way Calendar Sync | #289 |
+
+Gmail, Outlook, CalDAV — all **free**. 2-way sync with multi-calendar support.
+
+---
+
+## Milestone 7: Payments & WooCommerce (Premium)
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/10)
+
+| Epic | Issue |
+|------|-------|
+| Payments & WooCommerce Integration | #291 |
+
+WooCommerce integration solves all payment gateways: services become WC products, bookings become WC orders. Stripe, PayU, Przelewy24 — all via WooCommerce.
+
+---
+
+## Milestone 8: Page Builder Integrations
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/11)
+
+| Epic | Issue |
+|------|-------|
+| Page Builder Integrations | #292 |
+
+Elementor, Bricks Builder, Divi, extended Gutenberg blocks.
+
+---
+
+## Milestone 9: Advanced Booking Features (Premium)
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/12)
+
+| Epic | Issue |
+|------|-------|
+| Events & Group Bookings | #294 |
+| Advanced Booking Features | #296 |
+
+Multiday, waitlist, custom fields, cart, predefined booking flows, send-to-customer links.
+
+---
+
+## Milestone 10: CLI, MCP & Automation
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/13)
+
+| Epic | Issue |
+|------|-------|
+| CLI, MCP Server & Automation | #297 |
+
+WP-CLI + MCP server (extensible by addons). Webhooks (free). Zapier/Make.com. ElevenLabs voice booking.
+
+Each addon extends the CLI with its own commands via hooks — same pattern as UI extensions.
+
+---
+
+## Milestone 11: Monetization Depth
+
+> [GitHub Milestone](https://github.com/wpappointments/wpappointments/milestone/14)
+
+| Epic | Issue |
+|------|-------|
+| Monetization & Advanced Premium | #300 |
+
+Variable pricing, invoicing, credit system, agency addon, whitelabel, multisite, analytics.
+
+---
+
+## Diagram
 
 ```mermaid
-flowchart LR
-  subgraph core [Free core]
-    A[Appointments]
-    B[Schedules]
-    C[Services]
-    D[Customers]
-    E[Notifications]
-    F[Booking flow]
+flowchart TD
+  subgraph M1 [Milestone 1: Stabilize Core]
+    A1[Tests] --> A2[Permissions]
+    A2 --> A3[Notifications]
+    A3 --> A4[Booking Flow v1]
   end
-  subgraph addons [Paid addons]
-    G[Locations]
-    H[Employees]
-    I[CalDAV/Outlook]
-    J[WooCommerce/Payments]
-    K[Webhooks/Integrations]
+  subgraph M2 [Milestone 2: Services]
+    B1[Complete Services]
+    B2[Schedule: days off, gaps, lead times]
   end
-  core --> addons
+  subgraph M3 [Milestone 3: Bookable Entities]
+    C1[Entity Data Model]
+    C2[Extensible Gutenberg Block]
+  end
+  subgraph M4 [Milestone 4: Addon Platform]
+    D1[Addon API]
+    D2[Employees - Premium]
+    D3[Locations - Premium]
+  end
+  M5[⭐ Milestone 5: GA + wordpress.org]
+  subgraph post [Post-launch]
+    M6[Calendar Sync - Free]
+    M7[Payments & WooCommerce - Premium]
+    M8[Page Builders]
+    M9[Advanced Booking - Premium]
+    M10[CLI & MCP]
+    M11[Monetization Depth]
+  end
+
+  M1 --> M2 --> M3 --> M4 --> M5
+  M5 --> post
 ```
+
+## Free vs Premium summary
+
+### Free core
+- Appointments, Schedules, Services, Customers
+- Booking flow (Gutenberg block + shortcode)
+- Bookable entities (core data model)
+- Email notifications (customizable templates)
+- Calendar sync (Gmail, Outlook, CalDAV)
+- Webhooks
+- CLI & MCP server
+- Basic analytics
+
+### Premium (~$99/year, all addons)
+- Employees (staff management, assignment)
+- Locations (multi-location)
+- Payments & WooCommerce
+- Custom fields
+- Events & group bookings
+- Multiday appointments
+- Waitlist
+- Cart & predefined booking flows
+- Coupon codes, bulk discounts, gift cards
+- Variable pricing, invoicing, credit system
+- Page builder integrations (Elementor, Bricks, Divi)
+- Agency addon, whitelabel
+- Zapier, Make.com integrations
+- Advanced analytics
