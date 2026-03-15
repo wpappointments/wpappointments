@@ -143,24 +143,27 @@ jobs:
           WP_CORE_DIR=/tmp/wordpress
           mkdir -p $WP_TESTS_DIR $WP_CORE_DIR
 
+          WP_VERSION=$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')
+
           # Download WordPress.
           curl -sL https://wordpress.org/latest.tar.gz | tar xz --strip-components=1 -C $WP_CORE_DIR
 
-          # Download test suite.
-          svn co --quiet https://develop.svn.wordpress.org/tags/$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')/tests/phpunit/includes/ $WP_TESTS_DIR/includes
-          svn co --quiet https://develop.svn.wordpress.org/tags/$(curl -s https://api.wordpress.org/core/version-check/1.7/ | jq -r '.offers[0].version')/tests/phpunit/data/ $WP_TESTS_DIR/data
+          # Download test suite via GitHub mirror (no svn needed).
+          curl -sL "https://github.com/WordPress/wordpress-develop/archive/refs/tags/${WP_VERSION}.tar.gz" | tar xz --strip-components=1 -C /tmp/wp-develop
+          cp -r /tmp/wp-develop/tests/phpunit/includes $WP_TESTS_DIR/includes
+          cp -r /tmp/wp-develop/tests/phpunit/data $WP_TESTS_DIR/data
 
           # Create wp-tests-config.php.
-          cat > $WP_TESTS_DIR/wp-tests-config.php <<WPCONFIG
+          cat > $WP_TESTS_DIR/wp-tests-config.php <<'WPCONFIG'
           <?php
-          define( 'ABSPATH', '$WP_CORE_DIR/' );
+          define( 'ABSPATH', '/tmp/wordpress/' );
           define( 'DB_NAME', 'wordpress_test' );
           define( 'DB_USER', 'root' );
           define( 'DB_PASSWORD', 'root' );
           define( 'DB_HOST', '127.0.0.1' );
           define( 'DB_CHARSET', 'utf8' );
           define( 'DB_COLLATE', '' );
-          \$table_prefix = 'wptests_';
+          $table_prefix = 'wptests_';
           define( 'WP_TESTS_DOMAIN', 'example.org' );
           define( 'WP_TESTS_EMAIL', 'admin@example.org' );
           define( 'WP_TESTS_TITLE', 'Test Blog' );
