@@ -116,15 +116,13 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Start wp-env
-              run: npx wp-env start || true
-
             - name: Create vendor directories
               run: |
                   mkdir -p vendor
                   mkdir -p plugins/wpappointments/vendor
-                  chmod 777 vendor
-                  chmod 777 plugins/wpappointments/vendor
+
+            - name: Start wp-env
+              run: npx wp-env start || true
 
             - name: Install Composer dependencies
               run: |
