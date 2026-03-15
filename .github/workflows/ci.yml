@@ -123,6 +123,8 @@ jobs:
               run: |
                   mkdir -p vendor
                   mkdir -p plugins/wpappointments/vendor
+                  chmod 777 vendor
+                  chmod 777 plugins/wpappointments/vendor
 
             - name: Install Composer dependencies
               run: |
