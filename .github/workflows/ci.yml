@@ -119,6 +119,11 @@ jobs:
             - name: Start wp-env
               run: npx wp-env start || true
 
+            - name: Create vendor directories
+              run: |
+                  mkdir -p vendor
+                  mkdir -p plugins/wpappointments/vendor
+
             - name: Install Composer dependencies
               run: |
                   npx wp-env run cli --env-cwd=wp-content composer install
