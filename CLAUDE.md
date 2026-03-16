@@ -57,9 +57,29 @@ After adding new PHP classes, run dump-autoload for PSR-4 to pick them up.
 ### Monorepo Structure
 - `plugins/wpappointments/` — Main plugin (all core code lives here)
 - `plugins/other-plugin/` — Dev/test helper plugin
-- `premium/` — Git submodule for premium add-ons
+- `premium/` — Git submodule for premium add-ons (`wpappointments/wpappointments-premium`, private)
+- `.claude/` — Git submodule for Claude Code workspace (`wpappointments/claude`, private)
 - `tools/testing/` — Shared test bootstrap and utilities
 - `packages/` — Node packages workspace (currently empty)
+
+### Private Submodules
+
+`premium/` and `.claude/` are private git submodules. Not required for building or contributing — only for internal team members.
+
+```bash
+git submodule update --init --recursive   # Initialize all submodules (first time)
+git submodule update                      # Sync to the commit the main repo points to
+git submodule update --remote             # Pull latest from submodule remotes
+```
+
+Pushing submodule changes requires two steps — push the submodule itself, then update the pointer in the main repo:
+
+```bash
+cd .claude && git add -A && git commit -m "msg" && git push origin main && cd ..
+git add .claude && git commit -m "Update .claude submodule"
+```
+
+The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/thoughts`, `/epic`, `/breakdown`, `/develop`). See `.claude/README.md` for full workflow docs.
 
 ### PHP Backend (`plugins/wpappointments/src/`)
 - **Namespace:** `WPAppointments\` with PSR-4 autoloading
