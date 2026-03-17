@@ -34,6 +34,8 @@ function scripts() {
 		'date' => create_date_settings_array(),
 	);
 
+	wp_enqueue_media();
+
 	wp_enqueue_style(
 		'wpappointments-admin-css',
 		PluginInfo::get_plugin_dir_url() . '/admin.css',

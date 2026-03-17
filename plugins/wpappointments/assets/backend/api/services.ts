@@ -8,13 +8,17 @@ import { Service } from '~/backend/types';
 
 export type UpdateServiceData = Pick<
 	Service,
-	'id' | 'name' | 'duration' | 'description' | 'active' | 'price'
->;
+	'id' | 'name' | 'duration' | 'description' | 'active' | 'price' | 'image'
+> & {
+	category?: number | null;
+};
 
 export type CreateServiceData = Pick<
 	Service,
-	'name' | 'duration' | 'description' | 'active' | 'price'
->;
+	'name' | 'duration' | 'description' | 'active' | 'price' | 'image'
+> & {
+	category?: number | null;
+};
 
 type UpdateResponse = APIResponse<{
 	service: Service;

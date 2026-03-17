@@ -83,6 +83,11 @@ class ServicesController extends Controller {
 			$query['active'] = filter_var( $active, FILTER_VALIDATE_BOOLEAN );
 		}
 
+		$category = $request->get_param( 'category' );
+		if ( $category ) {
+			$query['category'] = sanitize_text_field( $category );
+		}
+
 		$results = ServicesQuery::all( $query );
 
 		return self::response(

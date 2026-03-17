@@ -66,6 +66,13 @@ class PluginInfo extends Singleton {
 	);
 
 	/**
+	 * Plugin available taxonomies
+	 */
+	const TAXONOMIES = array(
+		'service-category' => 'wpa-service-category',
+	);
+
+	/**
 	 * Get plugin version
 	 *
 	 * @return string

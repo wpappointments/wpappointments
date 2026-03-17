@@ -58,11 +58,29 @@ type SelectorsWithoutState<Selector extends keyof SelectorsWithState> = {
 };
 type Selectors = SelectorsWithoutState<keyof SelectorsWithState>;
 
+type WpMediaFrame = {
+	open: () => void;
+	on: (event: string, callback: () => void) => void;
+	state: () => {
+		get: (key: string) => {
+			first: () => {
+				toJSON: () => { id: number; url: string; filename: string };
+			};
+		};
+	};
+};
+
 type WordPressGlobal = {
 	data: {
 		dispatch: (namespace: string) => typeof actions;
 		select: (namespace: string) => Selectors;
 	};
+	media: (options: {
+		title?: string;
+		button?: { text?: string };
+		multiple?: boolean;
+		library?: { type?: string };
+	}) => WpMediaFrame;
 };
 
 declare module 'little-state-machine' {

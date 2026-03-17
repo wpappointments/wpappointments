@@ -13,7 +13,7 @@ namespace WPAppointments\Core;
  */
 class PostTypes {
 	/**
-	 * Register all custom post types
+	 * Register all custom post types and taxonomies
 	 *
 	 * @return void
 	 */
@@ -22,6 +22,7 @@ class PostTypes {
 		self::register_schedule_post_type();
 		self::register_service_post_type();
 		self::register_entity_post_type();
+		self::register_service_category_taxonomy();
 	}
 
 	/**
@@ -98,6 +99,34 @@ class PostTypes {
 				'supports'            => array( 'title', 'custom-fields' ),
 				'exclude_from_search' => true,
 				'publicly_queryable'  => false,
+			)
+		);
+	}
+
+	/**
+	 * Register service category taxonomy
+	 *
+	 * @return void
+	 */
+	private static function register_service_category_taxonomy() {
+		register_taxonomy(
+			PluginInfo::TAXONOMIES['service-category'],
+			PluginInfo::POST_TYPES['service'],
+			array(
+				'label'             => __( 'Service Categories', 'wpappointments' ),
+				'labels'            => array(
+					'name'          => __( 'Service Categories', 'wpappointments' ),
+					'singular_name' => __( 'Service Category', 'wpappointments' ),
+					'add_new_item'  => __( 'Add New Service Category', 'wpappointments' ),
+					'new_item_name' => __( 'New Service Category Name', 'wpappointments' ),
+				),
+				'public'            => false,
+				'show_ui'           => false,
+				'show_in_rest'      => true,
+				'hierarchical'      => false,
+				'rewrite'           => false,
+				'query_var'         => false,
+				'show_admin_column' => false,
 			)
 		);
 	}

@@ -92,6 +92,19 @@ function ServicesTable() {
 			enableHiding: false,
 		},
 		{
+			id: 'category',
+			header: __('Category', 'wpappointments'),
+			render: ({ item }: { item: Service }) => (
+				<span>
+					{item.category && typeof item.category === 'object'
+						? item.category.name
+						: '—'}
+				</span>
+			),
+			enableSorting: false,
+			enableHiding: true,
+		},
+		{
 			id: 'duration',
 			header: __('Duration (min)', 'wpappointments'),
 			render: ({ item }: { item: Service }) => (

@@ -39,6 +39,16 @@ class ServicesQuery {
 			);
 		}
 
+		if ( ! empty( $query['category'] ) ) {
+			$args['tax_query'] = array(
+				array(
+					'taxonomy' => PluginInfo::TAXONOMIES['service-category'],
+					'field'    => is_numeric( $query['category'] ) ? 'term_id' : 'slug',
+					'terms'    => $query['category'],
+				),
+			);
+		}
+
 		$services = new WP_Query( $args );
 
 		return array(
