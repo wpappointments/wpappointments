@@ -20,8 +20,6 @@ class PostTypes {
 	public static function register() {
 		self::register_appointment_post_type();
 		self::register_schedule_post_type();
-		self::register_service_post_type();
-		self::register_entity_post_type();
 		self::register_bookable_post_type();
 		self::register_bookable_variant_post_type();
 	}
@@ -79,99 +77,6 @@ class PostTypes {
 	}
 
 	/**
-	 * Register service post type
-	 *
-	 * @return void
-	 */
-	private static function register_service_post_type() {
-		register_post_type(
-			PluginInfo::POST_TYPES['service'],
-			array(
-				'label'               => __( 'Services', 'wpappointments' ),
-				'public'              => false,
-				'show_ui'             => true,
-				'show_in_menu'        => false,
-				'show_in_rest'        => true,
-				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
-				'hierarchical'        => false,
-				'rewrite'             => false,
-				'query_var'           => false,
-				'supports'            => array( 'title', 'custom-fields' ),
-				'exclude_from_search' => true,
-				'publicly_queryable'  => false,
-			)
-		);
-	}
-
-	/**
-	 * Register entity post type
-	 *
-	 * Entities are bookable resources (rooms, tables, equipment, etc.)
-	 * that support hierarchical nesting (e.g., restaurant → table → seat).
-	 *
-	 * @return void
-	 */
-	private static function register_entity_post_type() {
-		register_post_type(
-			PluginInfo::POST_TYPES['entity'],
-			array(
-				'label'               => __( 'Entities', 'wpappointments' ),
-				'public'              => false,
-				'show_ui'             => true,
-				'show_in_menu'        => false,
-				'show_in_rest'        => true,
-				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
-				'hierarchical'        => true,
-				'rewrite'             => false,
-				'query_var'           => false,
-				'supports'            => array( 'title', 'custom-fields', 'page-attributes' ),
-				'exclude_from_search' => true,
-				'publicly_queryable'  => false,
-			)
-		);
-	}
-
-	/**
-	 * Register bookable entity post type
-	 *
-	 * Bookable entities are the abstract base for all bookable resources.
-	 * Concrete types (services, tables, rooms) are registered by plugins
-	 * via the bookable type registration API.
-	 *
-	 * @return void
-	 */
-	/**
-	 * Register bookable variant post type
-	 *
-	 * Variants are the actual bookable units. Every bookable entity has at
-	 * least one variant. Variants link to their parent entity via post_parent.
-	 *
-	 * @return void
-	 */
-	private static function register_bookable_variant_post_type() {
-		register_post_type(
-			PluginInfo::POST_TYPES['bookable-variant'],
-			array(
-				'label'               => __( 'Bookable Variants', 'wpappointments' ),
-				'public'              => false,
-				'show_ui'             => true,
-				'show_in_menu'        => false,
-				'show_in_rest'        => true,
-				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
-				'hierarchical'        => false,
-				'rewrite'             => false,
-				'query_var'           => false,
-				'supports'            => array( 'title', 'custom-fields' ),
-				'exclude_from_search' => true,
-				'publicly_queryable'  => false,
-			)
-		);
-	}
-
-	/**
 	 * Register bookable entity post type
 	 *
 	 * Bookable entities are the abstract base for all bookable resources.
@@ -185,6 +90,35 @@ class PostTypes {
 			PluginInfo::POST_TYPES['bookable'],
 			array(
 				'label'               => __( 'Bookables', 'wpappointments' ),
+				'public'              => false,
+				'show_ui'             => true,
+				'show_in_menu'        => false,
+				'show_in_rest'        => true,
+				'capability_type'     => 'post',
+				'map_meta_cap'        => true,
+				'hierarchical'        => false,
+				'rewrite'             => false,
+				'query_var'           => false,
+				'supports'            => array( 'title', 'custom-fields' ),
+				'exclude_from_search' => true,
+				'publicly_queryable'  => false,
+			)
+		);
+	}
+
+	/**
+	 * Register bookable variant post type
+	 *
+	 * Variants are the actual bookable units. Every bookable entity has at
+	 * least one variant. Variants link to their parent entity via post_parent.
+	 *
+	 * @return void
+	 */
+	private static function register_bookable_variant_post_type() {
+		register_post_type(
+			PluginInfo::POST_TYPES['bookable-variant'],
+			array(
+				'label'               => __( 'Bookable Variants', 'wpappointments' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,

@@ -24,8 +24,6 @@ class Api extends Core\Singleton {
 		Endpoints\AvailabilityController::init();
 		Endpoints\CustomersController::init();
 		Endpoints\SettingsController::init();
-		Endpoints\ServicesController::init();
-		Endpoints\EntitiesController::init();
 		Endpoints\BookablesController::init();
 		Endpoints\VariantsController::init();
 		Endpoints\BookableAvailabilityController::init();
