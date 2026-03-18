@@ -21,6 +21,7 @@ class Plugin extends Core\Singleton {
 	 */
 	public function __construct() {
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
+		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
 		Notifications\Notifications::get_instance();
 	}
 	/**

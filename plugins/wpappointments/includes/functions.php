@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/utils.php';
 require_once __DIR__ . '/../src/Bookable/functions.php';
+require_once __DIR__ . '/../src/Availability/functions.php';
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/client.php';
 require_once __DIR__ . '/notifications.php';
