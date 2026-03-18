@@ -36,13 +36,21 @@ class BaseFactory extends WP_UnitTest_Factory {
 	public $bookable;
 
 	/**
+	 * Generates bookable variant fixtures for use in tests.
+	 *
+	 * @var BookableVariantFactory
+	 */
+	public $bookable_variant;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		$this->appointment = new AppointmentFactory( $this );
-		$this->service     = new ServiceFactory( $this );
-		$this->bookable    = new BookableFactory( $this );
+		$this->appointment      = new AppointmentFactory( $this );
+		$this->service          = new ServiceFactory( $this );
+		$this->bookable         = new BookableFactory( $this );
+		$this->bookable_variant = new BookableVariantFactory( $this );
 	}
 }

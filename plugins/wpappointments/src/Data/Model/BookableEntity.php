@@ -207,6 +207,9 @@ class BookableEntity {
 
 		$id = $this->bookable->ID;
 
+		// Cascade delete all variants.
+		BookableVariant::delete_all_for_entity( $id );
+
 		$deleted = wp_delete_post( $id, true );
 
 		do_action( 'wpappointments_bookable_deleted', $id );

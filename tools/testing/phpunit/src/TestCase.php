@@ -143,6 +143,29 @@ abstract class TestCase extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Create new bookable variant
+	 *
+	 * @param array $args Bookable variant data.
+	 *
+	 * @return int
+	 */
+	protected function create_variant( $args = array() ) {
+		return $this->factory()->bookable_variant->create( $args );
+	}
+
+	/**
+	 * Create many new bookable variants
+	 *
+	 * @param int   $count Number of variants to create.
+	 * @param array $args Bookable variant data.
+	 *
+	 * @return int[]
+	 */
+	protected function create_variants( $count = 10, $args = array() ) {
+		return $this->factory()->bookable_variant->create_many( $count, $args );
+	}
+
+	/**
 	 * Spy on a hook by counting its executions
 	 *
 	 * @param string $hook_name Hook name.
