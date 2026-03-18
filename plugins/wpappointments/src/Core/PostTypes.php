@@ -122,11 +122,17 @@ class PostTypes {
 				),
 				'public'            => false,
 				'show_ui'           => false,
-				'show_in_rest'      => true,
+				'show_in_rest'      => false,
 				'hierarchical'      => false,
 				'rewrite'           => false,
 				'query_var'         => false,
 				'show_admin_column' => false,
+				'capabilities'      => array(
+					'manage_terms' => Capabilities::MANAGE_SERVICES,
+					'edit_terms'   => Capabilities::MANAGE_SERVICES,
+					'delete_terms' => Capabilities::MANAGE_SERVICES,
+					'assign_terms' => Capabilities::MANAGE_SERVICES,
+				),
 			)
 		);
 	}

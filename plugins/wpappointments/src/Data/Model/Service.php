@@ -104,6 +104,11 @@ class Service {
 			true
 		);
 
+		if ( is_wp_error( $post_id ) ) {
+			$this->service = $post_id;
+			return $post_id;
+		}
+
 		if ( $category ) {
 			self::set_service_category( (int) $post_id, $category );
 		}
@@ -144,7 +149,7 @@ class Service {
 		$meta = $data;
 		unset( $meta['category'] );
 
-		wp_update_post(
+		$updated = wp_update_post(
 			array(
 				'ID'         => $id,
 				'post_title' => $name,
@@ -152,6 +157,10 @@ class Service {
 			),
 			true
 		);
+
+		if ( is_wp_error( $updated ) ) {
+			return $updated;
+		}
 
 		if ( null !== $category ) {
 			self::set_service_category( $id, $category );
@@ -273,6 +282,7 @@ class Service {
 			'price'       => $price,
 			'category'    => $category,
 			'image'       => $image,
+			'imageId'     => is_numeric( $image_raw ) ? (int) $image_raw : 0,
 			'meta'        => $normalized_meta,
 		);
 	}
@@ -297,8 +307,8 @@ class Service {
 			$term = get_term( (int) $category, $taxonomy );
 			if ( $term && ! is_wp_error( $term ) ) {
 				wp_set_post_terms( $post_id, array( $term->term_id ), $taxonomy );
-				return;
 			}
+			return;
 		}
 
 		$term = get_term_by( 'name', $category, $taxonomy );

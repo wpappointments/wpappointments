@@ -56,6 +56,7 @@ export const ServiceSchema = object({
 	price: optional(number()),
 	category: optional(union([ServiceCategorySchema, literal('')])),
 	image: optional(string()),
+	imageId: optional(number()),
 });
 
 export const EntitySchema = object({

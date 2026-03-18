@@ -55,11 +55,12 @@ export default withForm(function ServiceCreate({
 		selectedService?.image ?? ''
 	);
 	const [imageId, setImageId] = useState<string>(
-		selectedService?.image ?? ''
+		selectedService?.imageId ? String(selectedService.imageId) : ''
 	);
 
 	const [newCategoryName, setNewCategoryName] = useState('');
 	const [showNewCategory, setShowNewCategory] = useState(false);
+	const [prevCategoryId, setPrevCategoryId] = useState<string>('');
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
 		selectedService?.category?.id ? String(selectedService.category.id) : ''
 	);
@@ -82,6 +83,7 @@ export default withForm(function ServiceCreate({
 
 	const handleCategoryChange = (value: string) => {
 		if (value === '__new__') {
+			setPrevCategoryId(selectedCategoryId);
 			setShowNewCategory(true);
 			setSelectedCategoryId('');
 		} else {
@@ -256,6 +258,7 @@ export default withForm(function ServiceCreate({
 									onClick={() => {
 										setShowNewCategory(false);
 										setNewCategoryName('');
+										setSelectedCategoryId(prevCategoryId);
 									}}
 								>
 									{__('Cancel', 'wpappointments')}

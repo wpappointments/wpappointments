@@ -119,12 +119,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 		}
 
 		const [error, response] = await resolve<DeleteResponse>(async () => {
-			const res = await apiFetch<DeleteResponse>({
+			return await apiFetch<DeleteResponse>({
 				path: `${apiPath}/${id}`,
 				method: 'DELETE',
 			});
-			dispatch.deleteServiceCategory(id);
-			return res;
 		});
 
 		if (error) {
@@ -135,7 +133,8 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 			return;
 		}
 
-		if (response) {
+		if (response && response.status === 'success') {
+			dispatch.deleteServiceCategory(id);
 			displaySuccessToast(
 				__('Service category deleted successfully', 'wpappointments')
 			);

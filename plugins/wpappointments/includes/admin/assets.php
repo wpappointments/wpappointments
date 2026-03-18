@@ -34,8 +34,6 @@ function scripts() {
 		'date' => create_date_settings_array(),
 	);
 
-	wp_enqueue_media();
-
 	wp_enqueue_style(
 		'wpappointments-admin-css',
 		PluginInfo::get_plugin_dir_url() . '/admin.css',
@@ -67,6 +65,10 @@ function scripts() {
 	);
 
 	$screen = get_current_screen();
+
+	if ( str_contains( $screen->id, 'wpappointments' ) ) {
+		wp_enqueue_media();
+	}
 
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
 		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
