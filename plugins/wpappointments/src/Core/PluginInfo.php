@@ -58,11 +58,13 @@ class PluginInfo extends Singleton {
 	 * Plugin available post types
 	 */
 	const POST_TYPES = array(
-		'appointment'     => 'wpa-appointment',
-		'schedule'        => 'wpa-schedule',
-		'service'         => 'wpa-service',
-		'service-variant' => 'wpa-service-variant',
-		'entity'          => 'wpa-entity',
+		'appointment'      => 'wpa-appointment',
+		'schedule'         => 'wpa-schedule',
+		'service'          => 'wpa-service',
+		'service-variant'  => 'wpa-service-variant',
+		'entity'           => 'wpa-entity',
+		'bookable'         => 'wpa-bookable',
+		'bookable-variant' => 'wpa-bookable-variant',
 	);
 
 	/**

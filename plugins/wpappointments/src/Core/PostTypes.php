@@ -22,6 +22,7 @@ class PostTypes {
 		self::register_schedule_post_type();
 		self::register_service_post_type();
 		self::register_entity_post_type();
+		self::register_bookable_post_type();
 	}
 
 	/**
@@ -125,6 +126,36 @@ class PostTypes {
 				'rewrite'             => false,
 				'query_var'           => false,
 				'supports'            => array( 'title', 'custom-fields', 'page-attributes' ),
+				'exclude_from_search' => true,
+				'publicly_queryable'  => false,
+			)
+		);
+	}
+
+	/**
+	 * Register bookable entity post type
+	 *
+	 * Bookable entities are the abstract base for all bookable resources.
+	 * Concrete types (services, tables, rooms) are registered by plugins
+	 * via the bookable type registration API.
+	 *
+	 * @return void
+	 */
+	private static function register_bookable_post_type() {
+		register_post_type(
+			PluginInfo::POST_TYPES['bookable'],
+			array(
+				'label'               => __( 'Bookables', 'wpappointments' ),
+				'public'              => false,
+				'show_ui'             => true,
+				'show_in_menu'        => false,
+				'show_in_rest'        => true,
+				'capability_type'     => 'post',
+				'map_meta_cap'        => true,
+				'hierarchical'        => false,
+				'rewrite'             => false,
+				'query_var'           => false,
+				'supports'            => array( 'title', 'custom-fields' ),
 				'exclude_from_search' => true,
 				'publicly_queryable'  => false,
 			)

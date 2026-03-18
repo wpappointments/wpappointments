@@ -120,6 +120,29 @@ abstract class TestCase extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Create new bookable entity
+	 *
+	 * @param array $args Bookable entity data.
+	 *
+	 * @return int
+	 */
+	protected function create_bookable( $args = array() ) {
+		return $this->factory()->bookable->create( $args );
+	}
+
+	/**
+	 * Create many new bookable entities
+	 *
+	 * @param int   $count Number of bookable entities to create.
+	 * @param array $args Bookable entity data.
+	 *
+	 * @return int[]
+	 */
+	protected function create_bookables( $count = 10, $args = array() ) {
+		return $this->factory()->bookable->create_many( $count, $args );
+	}
+
+	/**
 	 * Spy on a hook by counting its executions
 	 *
 	 * @param string $hook_name Hook name.

@@ -48,6 +48,13 @@ class Capabilities {
 	const MANAGE_ENTITIES = 'wpa_manage_entities';
 
 	/**
+	 * Manage bookables capability
+	 *
+	 * @var string
+	 */
+	const MANAGE_BOOKABLES = 'wpa_manage_bookables';
+
+	/**
 	 * Get all capabilities
 	 *
 	 * Filterable via 'wpappointments_capabilities' to allow extensions to add
@@ -62,6 +69,7 @@ class Capabilities {
 			self::MANAGE_SERVICES,
 			self::MANAGE_CUSTOMERS,
 			self::MANAGE_ENTITIES,
+			self::MANAGE_BOOKABLES,
 		);
 
 		return apply_filters( 'wpappointments_capabilities', $capabilities );

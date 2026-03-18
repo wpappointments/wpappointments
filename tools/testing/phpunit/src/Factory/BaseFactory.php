@@ -29,6 +29,13 @@ class BaseFactory extends WP_UnitTest_Factory {
 	public $service;
 
 	/**
+	 * Generates bookable entity fixtures for use in tests.
+	 *
+	 * @var BookableFactory
+	 */
+	public $bookable;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -36,5 +43,6 @@ class BaseFactory extends WP_UnitTest_Factory {
 
 		$this->appointment = new AppointmentFactory( $this );
 		$this->service     = new ServiceFactory( $this );
+		$this->bookable    = new BookableFactory( $this );
 	}
 }
