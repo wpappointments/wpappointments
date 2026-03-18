@@ -11,6 +11,7 @@ namespace WPAppointments\Admin;
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );
+add_action( 'admin_menu', __NAMESPACE__ . '\\bookable_type_menus', 20 );
 
 /**
  * Add main plugin admin menu
@@ -146,4 +147,16 @@ function settings_page() {
  */
 function wizard_page() {
 	echo '<div id="wpappointments-admin" data-page="wizard"></div>';
+}
+
+/**
+ * Register admin menus for bookable type pages
+ *
+ * Runs after the main menu is registered (priority 20) so bookable
+ * type submenu items appear after core pages.
+ *
+ * @return void
+ */
+function bookable_type_menus() {
+	\WPAppointments\Bookable\BookableAdminPages::get_instance()->register_menus();
 }
