@@ -191,13 +191,21 @@ export default function Calendar() {
 		'calendar.actions',
 		[
 			<div className={styles.pagination}>
-				<Button variant="secondary" onClick={switchToPreviousMonth}>
+				<Button
+					variant="secondary"
+					onClick={switchToPreviousMonth}
+					aria-label={__('Previous month', 'wpappointments')}
+				>
 					&lsaquo;
 				</Button>
 				<Button variant="secondary" onClick={switchToToday}>
 					{__('today', 'wpappointments')}
 				</Button>
-				<Button variant="secondary" onClick={switchToNextMonth}>
+				<Button
+					variant="secondary"
+					onClick={switchToNextMonth}
+					aria-label={__('Next month', 'wpappointments')}
+				>
 					&rsaquo;
 				</Button>
 			</div>,
@@ -280,7 +288,8 @@ export default function Calendar() {
 									</div>
 									<div className={styles.events}>
 										{day.appointments.map((appointment) => (
-											<div
+											<button
+												type="button"
 												key={appointment.id}
 												className={cn({
 													[styles.event]: true,
@@ -300,7 +309,10 @@ export default function Calendar() {
 												}}
 											>
 												{appointment.service}
-											</div>
+												<span className="screen-reader-text">
+													{` (${appointment.status})`}
+												</span>
+											</button>
 										))}
 										<Button
 											onClick={() => {

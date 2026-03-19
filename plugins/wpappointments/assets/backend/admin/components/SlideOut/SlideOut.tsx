@@ -1,5 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Button } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+import { close as closeIcon } from '@wordpress/icons';
 import cn from '~/backend/utils/cn';
 import useSlideout from '~/backend/hooks/useSlideout';
 import styles from './SlideOut.module.css';
@@ -57,12 +60,17 @@ export default function SlideOut({
 	};
 
 	const [isOpen, setIsOpen] = useState(false);
+	const slideOutRef = useRef<HTMLDivElement>(null);
 	const showHeader = title || headerRightSlot;
+	const titleId = `slideout-title-${id}`;
 
 	const portalContainer = document.getElementById('slideout-container');
 
 	useEffect(() => {
 		setIsOpen(shouldRenderSlideOut());
+		if (shouldRenderSlideOut() && slideOutRef.current) {
+			slideOutRef.current.focus();
+		}
 	}, []);
 
 	useEffect(() => {
@@ -106,6 +114,11 @@ export default function SlideOut({
 			data-id={id}
 		>
 			<div
+				ref={slideOutRef}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={title ? titleId : undefined}
+				tabIndex={-1}
 				className={cn({
 					[styles.slideOut]: true,
 					[styles.slideOutOpen]: isOpen,
@@ -115,8 +128,21 @@ export default function SlideOut({
 			>
 				{showHeader && (
 					<div className={styles.header}>
-						<h2>{title}</h2>
-						{headerRightSlot}
+						<h2 id={titleId}>{title}</h2>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								gap: 8,
+							}}
+						>
+							{headerRightSlot}
+							<Button
+								icon={closeIcon}
+								label={__('Close', 'wpappointments')}
+								onClick={() => closeCurrentSlideOut(onClose)}
+							/>
+						</div>
 					</div>
 				)}
 				<div className={styles.content}>{children}</div>
