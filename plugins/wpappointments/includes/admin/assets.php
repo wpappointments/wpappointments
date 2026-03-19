@@ -72,7 +72,7 @@ function scripts() {
 
 		wp_register_script(
 			'wpappointments-shared-js',
-			PluginInfo::get_plugin_dir_url() . 'build/index.ts.js',
+			PluginInfo::get_plugin_dir_url() . 'build/index.tsx.js',
 			array_merge( $shared_deps['dependencies'], array( 'wpappointments-admin-js' ) ),
 			$shared_deps['version'],
 			true
@@ -83,7 +83,10 @@ function scripts() {
 
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		wp_enqueue_media();
-		wp_enqueue_script( 'wpappointments-shared-js' );
+
+		if ( wp_script_is( 'wpappointments-shared-js', 'registered' ) ) {
+			wp_enqueue_script( 'wpappointments-shared-js' );
+		}
 	}
 
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
