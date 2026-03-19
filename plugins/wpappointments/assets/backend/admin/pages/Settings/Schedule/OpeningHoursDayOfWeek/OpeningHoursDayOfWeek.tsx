@@ -3,14 +3,14 @@ import { Button, Dashicon } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { Toggle } from '@wpappointments/components';
 import { produce } from 'immer';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import { ScheduleFormFields } from '../Schedule';
 import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
-import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
 
 export default function OpeningHoursDayOfWeek({
 	values,

@@ -6,23 +6,26 @@ import {
 	CardFooter,
 	CardHeader,
 } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { getSettings } from '@wordpress/date';
 import { __, sprintf } from '@wordpress/i18n';
+import {
+	Checkbox,
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	Radio,
+	Select,
+	withForm,
+} from '@wpappointments/components';
+import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import { format } from 'date-fns';
-import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import { dateFormatMap, timeFormatMap } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import Checkbox from '~/backend/admin/components/FormField/Checkbox/Checkbox';
-import Input from '~/backend/admin/components/FormField/Input/Input';
-import Radio from '~/backend/admin/components/FormField/Radio/Radio';
-import Select from '~/backend/admin/components/FormField/Select/Select';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
 
 type Fields = {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { HtmlForm, withForm } from '@wpappointments/components';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
@@ -10,7 +11,6 @@ import { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from '../OnboardingWizard.module.css';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 
 type Fields = {
 	monday: DayOpeningHours;

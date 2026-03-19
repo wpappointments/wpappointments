@@ -13,6 +13,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button, Card, CardHeader, Spinner } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
+import { Icon, edit, trash } from '@wordpress/icons';
 import {
 	useSlideout,
 	fetchBookables,
@@ -139,6 +140,7 @@ export default function BookableListPage({
 	const actions: Action[] = [
 		{
 			id: 'edit',
+			icon: <Icon icon={edit} />,
 			isPrimary: true,
 			label: __('Edit', 'wpappointments'),
 			callback: (item) => {
@@ -147,6 +149,7 @@ export default function BookableListPage({
 		},
 		{
 			id: 'delete',
+			icon: <Icon icon={trash} />,
 			isPrimary: true,
 			isDestructive: true,
 			label: __('Delete', 'wpappointments'),

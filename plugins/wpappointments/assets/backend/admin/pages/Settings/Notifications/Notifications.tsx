@@ -11,12 +11,12 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Text } from '~/backend/utils/experimental';
+import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import type {
 	NotificationEvent,
 	SettingsNotifications,

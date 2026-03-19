@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import styles from '../BookingFlow.module.css';
 import BookingFlowCalendar from '../BookingFlowCalendar/BookingFlowCalendar';
 import BookingFlowConfirmation from '../BookingFlowConfirmation/BookingFlowConfirmation';

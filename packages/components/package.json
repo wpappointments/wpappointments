@@ -17,12 +17,18 @@
 	},
 	"devDependencies": {
 		"@types/react": "*",
+		"@types/react-dom": "*",
+		"@wordpress/date": "*",
 		"@wordpress/element": "*",
-		"@wordpress/icons": "*"
+		"@wordpress/icons": "*",
+		"date-fns": "*",
+		"use-lilius": "*"
 	},
 	"peerDependencies": {
 		"@wordpress/components": "*",
+		"@wordpress/data": "*",
 		"@wordpress/i18n": "*",
-		"react": "^18.0.0"
+		"react": "^18.0.0",
+		"react-hook-form": "*"
 	}
 }

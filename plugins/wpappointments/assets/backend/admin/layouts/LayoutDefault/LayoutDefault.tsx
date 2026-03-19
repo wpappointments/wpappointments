@@ -1,6 +1,5 @@
+import { SlideoutRenderer, Toaster } from '@wpappointments/components';
 import styles from './LayoutDefault.module.css';
-import SlideoutRenderer from '~/backend/admin/components/SlideOut/SlideoutRenderer';
-import Toaster from '~/backend/admin/components/Toaster/Toaster';
 
 type Props = {
 	title: string;

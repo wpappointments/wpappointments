@@ -44,6 +44,9 @@ importers:
       '@wordpress/components':
         specifier: '*'
         version: 26.0.6(@babel/helper-module-imports@7.28.6)(@babel/types@7.29.0)(@types/react@18.3.27)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@wordpress/data':
+        specifier: '*'
+        version: 9.28.0(react@18.3.1)
       '@wordpress/i18n':
         specifier: '*'
         version: 4.58.0
@@ -56,16 +59,31 @@ importers:
       react:
         specifier: ^18.0.0
         version: 18.3.1
+      react-hook-form:
+        specifier: '*'
+        version: 7.71.1(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: '*'
         version: 18.3.27
+      '@types/react-dom':
+        specifier: '*'
+        version: 18.3.7(@types/react@18.3.27)
+      '@wordpress/date':
+        specifier: '*'
+        version: 4.58.0
       '@wordpress/element':
         specifier: '*'
         version: 5.35.0
       '@wordpress/icons':
         specifier: '*'
         version: 9.49.0
+      date-fns:
+        specifier: '*'
+        version: 3.6.0
+      use-lilius:
+        specifier: '*'
+        version: 2.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/data:
     dependencies:

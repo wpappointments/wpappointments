@@ -1,7 +1,7 @@
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { fromUnixTime } from 'date-fns';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDateRelative } from '~/backend/utils/i18n';
 import { Appointment } from '~/backend/types';

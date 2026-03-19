@@ -2,15 +2,18 @@ import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import {
+	Checkbox,
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	SlideOut,
+	withForm,
+} from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
-import { HtmlForm, withForm } from '../Form/Form';
-import Checkbox from '../FormField/Checkbox/Checkbox';
-import Input from '../FormField/Input/Input';
-import FormFieldSet from '../FormFieldSet/FormFieldSet';
-import SlideOut from '../SlideOut/SlideOut';
 import { customersApi, UpdateCustomerData } from '~/backend/api/customers';
 
 export type CustomerFormData = {

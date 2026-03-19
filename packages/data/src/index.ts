@@ -65,6 +65,10 @@ export {
 // Toast Utilities
 export { displaySuccessToast, displayErrorToast } from './toast';
 
+// Fetch Utility
+export { default as apiFetch } from './fetch';
+export type { APIResponse } from './fetch';
+
 // Slideout Content (for SlideoutRenderer in core)
 export {
 	getSlideoutContent,
