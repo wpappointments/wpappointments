@@ -40,12 +40,27 @@ class CustomersQuery {
 	 * @param array $query Query params.
 	 */
 	public static function all( $query = array() ) {
-		$user_query = new WP_User_Query(
-			array_merge(
-				self::DEFAULT_QUERY_PART,
-				$query
-			)
-		);
+		$query = is_array( $query ) ? $query : array();
+
+		$args = self::DEFAULT_QUERY_PART;
+
+		if ( isset( $query['paged'] ) ) {
+			$args['paged'] = absint( $query['paged'] );
+		}
+
+		if ( isset( $query['number'] ) ) {
+			$args['number'] = absint( $query['number'] );
+		}
+
+		if ( ! empty( $query['search'] ) ) {
+			$args['search']         = '*' . sanitize_text_field( $query['search'] ) . '*';
+			$args['search_columns'] = array( 'user_login', 'user_email', 'display_name' );
+		}
+
+		// Hardcode role — never allow user input to override this.
+		$args['role'] = self::ROLE;
+
+		$user_query = new WP_User_Query( $args );
 
 		$users = array();
 
