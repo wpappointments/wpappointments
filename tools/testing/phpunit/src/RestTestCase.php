@@ -9,6 +9,7 @@ namespace TestTools;
 
 use TestTools\Factory\FactoryForAppointment;
 use TestTools\Utils\RESTServer;
+use WPAppointments\Core\Capabilities;
 
 /**
  * Abstract WordPress PHPUnit test case class
@@ -27,10 +28,32 @@ abstract class RestTestCase extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		$this->register_capabilities();
+
 		global $wp_rest_server;
 		$wp_rest_server = new RESTServer();
 		$this->server   = $wp_rest_server;
 		do_action( 'rest_api_init' );
+	}
+
+	/**
+	 * Register custom capabilities for the administrator role.
+	 *
+	 * In the test environment the plugin activation hook is not fired,
+	 * so custom capabilities must be added manually before each test.
+	 *
+	 * @return void
+	 */
+	private function register_capabilities() {
+		$role = get_role( 'administrator' );
+
+		if ( ! $role ) {
+			return;
+		}
+
+		foreach ( Capabilities::all() as $cap ) {
+			$role->add_cap( $cap );
+		}
 	}
 
 	/**
