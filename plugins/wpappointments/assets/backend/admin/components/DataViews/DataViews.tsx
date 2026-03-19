@@ -1,9 +1,9 @@
-import { Appointment, Customer } from '~/backend/types';
 import styles from './DataViews.module.css';
 import DataViewsBody from './DataViewsBody';
 import DataViewsFooter from './DataViewsFooter';
 import DataViewsHeader from './DataViewsHeader';
 import {
+	CollectionItem,
 	View,
 	Field,
 	Action,
@@ -15,7 +15,7 @@ export type DataViewsProps = {
 	onChangeView: (view: View) => void;
 	fields: Field[];
 	actions: Action[];
-	data: Appointment[] | Customer[];
+	data: CollectionItem[];
 	paginationInfo: PaginationInfo;
 };
 

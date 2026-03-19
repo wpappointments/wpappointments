@@ -67,3 +67,6 @@ export {
 	getRegisteredBookableTypes,
 	hasBookableType,
 } from './registry';
+
+// Generic List Page (auto-generated from column config)
+export { default as BookableListPage } from './BookableListPage';
