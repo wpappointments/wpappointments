@@ -72,3 +72,7 @@ export {
 
 // Generic List Page (auto-generated from column config)
 export { default as BookableListPage } from './BookableListPage';
+
+// Default Form and Slideout Content
+export { default as BookableDefaultForm } from './BookableDefaultForm';
+export { default as BookableSlideoutContent } from './BookableSlideoutContent';

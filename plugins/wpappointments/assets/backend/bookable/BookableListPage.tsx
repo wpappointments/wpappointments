@@ -14,6 +14,7 @@ import { Button, Card, CardHeader, Spinner } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import useSlideout from '~/backend/hooks/useSlideout';
+import BookableSlideoutContent from './BookableSlideoutContent';
 import { fetchBookables, deleteBookable } from './api';
 import type { BookableEntity, BookableTypeColumn } from './types';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
@@ -101,14 +102,15 @@ export default function BookableListPage({
 			id: createSlideoutId,
 			title: addNewLabel,
 			content: (
-				<BookableSlideoutPlaceholder
+				<BookableSlideoutContent
 					entity={null}
 					type={type}
-					label={label}
+					slideoutId={createSlideoutId}
+					onAfterSave={load}
 				/>
 			),
 		});
-	}, [createSlideoutId, openSlideOut, addNewLabel, type, label]);
+	}, [createSlideoutId, openSlideOut, addNewLabel, type, load]);
 
 	const handleEdit = useCallback(
 		(entity: BookableEntity) => {
@@ -117,15 +119,16 @@ export default function BookableListPage({
 				title: editLabel,
 				data: { entityId: entity.id },
 				content: (
-					<BookableSlideoutPlaceholder
+					<BookableSlideoutContent
 						entity={entity}
 						type={type}
-						label={label}
+						slideoutId={editSlideoutId}
+						onAfterSave={load}
 					/>
 				),
 			});
 		},
-		[editSlideoutId, editLabel, openSlideOut, type, label]
+		[editSlideoutId, editLabel, openSlideOut, type, load]
 	);
 
 	// Build DataViews fields from column config.
@@ -207,92 +210,6 @@ export default function BookableListPage({
 				/>
 			</CardBody>
 		</Card>
-	);
-}
-
-/**
- * Placeholder content for the bookable slideout.
- * Will be replaced by the default form component in task-03.
- */
-function BookableSlideoutPlaceholder({
-	entity,
-	type,
-	label,
-}: {
-	entity: BookableEntity | null;
-	type: string;
-	label: string;
-}) {
-	const { openSlideOut } = useSlideout();
-
-	const handleTestNesting = () => {
-		openSlideOut({
-			id: `bookable-nested-test-${type}-${Date.now()}`,
-			parentId: entity
-				? `bookable-edit-${type}`
-				: `bookable-create-${type}`,
-			title: 'Nested Slideout Test',
-			content: (
-				<div style={{ padding: '16px' }}>
-					<p>
-						This is a nested slideout opened from inside the {label}{' '}
-						slideout.
-					</p>
-					<p>Nesting works correctly!</p>
-				</div>
-			),
-		});
-	};
-
-	if (entity) {
-		return (
-			<div style={{ padding: '16px' }}>
-				<p>
-					{/* translators: %s: entity name */}
-					{sprintf(
-						__(
-							'Edit form for "%s" will appear here.',
-							'wpappointments'
-						),
-						entity.name
-					)}
-				</p>
-				<p>
-					<strong>{__('Type:', 'wpappointments')}</strong> {type}
-					<br />
-					<strong>{__('ID:', 'wpappointments')}</strong> {entity.id}
-					<br />
-					<strong>{__('Name:', 'wpappointments')}</strong>{' '}
-					{entity.name}
-					<br />
-					<strong>{__('Status:', 'wpappointments')}</strong>{' '}
-					{entity.active
-						? __('Active', 'wpappointments')
-						: __('Inactive', 'wpappointments')}
-				</p>
-				<Button variant="secondary" onClick={handleTestNesting}>
-					Test Nested Slideout
-				</Button>
-			</div>
-		);
-	}
-
-	return (
-		<div style={{ padding: '16px' }}>
-			<p>
-				{/* translators: %s: bookable type label */}
-				{sprintf(
-					__(
-						'Create new %s form will appear here.',
-						'wpappointments'
-					),
-					label
-				)}
-			</p>
-			<Button variant="secondary" onClick={handleTestNesting}>
-				Test Nested Slideout
-			</Button>
-		</div>
 	);
 }
 

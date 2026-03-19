@@ -42,7 +42,7 @@ export async function fetchBookables(params?: {
 	if (params?.paged) queryParams.set('paged', String(params.paged));
 
 	const query = queryParams.toString();
-	const path = `/bookables${query ? `?${query}` : ''}`;
+	const path = `bookables${query ? `?${query}` : ''}`;
 
 	const [error, result] = await resolve<
 		ApiResponse<{
@@ -64,7 +64,7 @@ export async function fetchBookables(params?: {
 export async function fetchBookable(id: number) {
 	const [error, result] = await resolve<
 		ApiResponse<{ bookable: BookableEntity }>
-	>(() => apiFetch({ path: `/bookables/${id}` }));
+	>(() => apiFetch({ path: `bookables/${id}` }));
 
 	if (error) return { error };
 	return { data: result?.data?.bookable };
@@ -99,7 +99,7 @@ export async function updateBookable(
 		ApiResponse<{ bookable: BookableEntity }>
 	>(() =>
 		apiFetch({
-			path: `/bookables/${id}`,
+			path: `bookables/${id}`,
 			method: 'POST',
 			data,
 		})
@@ -115,7 +115,7 @@ export async function updateBookable(
 export async function deleteBookable(id: number) {
 	const [error, result] = await resolve<ApiResponse<{ id: number }>>(() =>
 		apiFetch({
-			path: `/bookables/${id}`,
+			path: `bookables/${id}`,
 			method: 'DELETE',
 		})
 	);
@@ -136,7 +136,7 @@ export async function fetchVariants(entityId: number) {
 			postsPerPage: number;
 			currentPage: number;
 		}>
-	>(() => apiFetch({ path: `/bookables/${entityId}/variants` }));
+	>(() => apiFetch({ path: `bookables/${entityId}/variants` }));
 
 	if (error) return { error };
 	return { data: result?.data };
@@ -148,7 +148,7 @@ export async function fetchVariants(entityId: number) {
 export async function fetchVariant(entityId: number, variantId: number) {
 	const [error, result] = await resolve<
 		ApiResponse<{ variant: BookableVariant }>
-	>(() => apiFetch({ path: `/bookables/${entityId}/variants/${variantId}` }));
+	>(() => apiFetch({ path: `bookables/${entityId}/variants/${variantId}` }));
 
 	if (error) return { error };
 	return { data: result?.data?.variant };
@@ -165,7 +165,7 @@ export async function createVariant(
 		ApiResponse<{ variant: BookableVariant }>
 	>(() =>
 		apiFetch({
-			path: `/bookables/${entityId}/variants`,
+			path: `bookables/${entityId}/variants`,
 			method: 'POST',
 			data,
 		})
@@ -187,7 +187,7 @@ export async function updateVariant(
 		ApiResponse<{ variant: BookableVariant }>
 	>(() =>
 		apiFetch({
-			path: `/bookables/${entityId}/variants/${variantId}`,
+			path: `bookables/${entityId}/variants/${variantId}`,
 			method: 'POST',
 			data,
 		})
@@ -203,7 +203,7 @@ export async function updateVariant(
 export async function deleteVariant(entityId: number, variantId: number) {
 	const [error, result] = await resolve<ApiResponse<{ id: number }>>(() =>
 		apiFetch({
-			path: `/bookables/${entityId}/variants/${variantId}`,
+			path: `bookables/${entityId}/variants/${variantId}`,
 			method: 'DELETE',
 		})
 	);
@@ -220,7 +220,7 @@ export async function generateVariants(entityId: number) {
 		ApiResponse<{ variants: BookableVariant[] }>
 	>(() =>
 		apiFetch({
-			path: `/bookables/${entityId}/variants/generate`,
+			path: `bookables/${entityId}/variants/generate`,
 			method: 'POST',
 		})
 	);
@@ -243,7 +243,7 @@ export async function fetchVariantAvailability(
 	if (dateRange?.endDate) queryParams.set('end_date', dateRange.endDate);
 
 	const query = queryParams.toString();
-	const path = `/bookable-availability/${variantId}${query ? `?${query}` : ''}`;
+	const path = `bookable-availability/${variantId}${query ? `?${query}` : ''}`;
 
 	const [error, result] = await resolve<
 		ApiResponse<{ availability: AvailabilityData }>
@@ -267,7 +267,7 @@ export async function fetchEntityAvailability(
 	if (dateRange?.endDate) queryParams.set('end_date', dateRange.endDate);
 
 	const query = queryParams.toString();
-	const path = `/bookables/${entityId}/availability${query ? `?${query}` : ''}`;
+	const path = `bookables/${entityId}/availability${query ? `?${query}` : ''}`;
 
 	const [error, result] = await resolve<
 		ApiResponse<{
@@ -288,7 +288,7 @@ export async function fetchEntityAvailability(
 export async function fetchBookableTypes() {
 	const [error, result] = await resolve<
 		ApiResponse<{ types: BookableTypeInfo[] }>
-	>(() => apiFetch({ path: '/bookable-types' }));
+	>(() => apiFetch({ path: 'bookable-types' }));
 
 	if (error) return { error };
 	return { data: result?.data?.types };
