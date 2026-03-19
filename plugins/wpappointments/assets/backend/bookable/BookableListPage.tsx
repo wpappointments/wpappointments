@@ -223,6 +223,27 @@ function BookableSlideoutPlaceholder({
 	type: string;
 	label: string;
 }) {
+	const { openSlideOut } = useSlideout();
+
+	const handleTestNesting = () => {
+		openSlideOut({
+			id: `bookable-nested-test-${type}-${Date.now()}`,
+			parentId: entity
+				? `bookable-edit-${type}`
+				: `bookable-create-${type}`,
+			title: 'Nested Slideout Test',
+			content: (
+				<div style={{ padding: '16px' }}>
+					<p>
+						This is a nested slideout opened from inside the {label}{' '}
+						slideout.
+					</p>
+					<p>Nesting works correctly!</p>
+				</div>
+			),
+		});
+	};
+
 	if (entity) {
 		return (
 			<div style={{ padding: '16px' }}>
@@ -249,6 +270,9 @@ function BookableSlideoutPlaceholder({
 						? __('Active', 'wpappointments')
 						: __('Inactive', 'wpappointments')}
 				</p>
+				<Button variant="secondary" onClick={handleTestNesting}>
+					Test Nested Slideout
+				</Button>
 			</div>
 		);
 	}
@@ -265,6 +289,9 @@ function BookableSlideoutPlaceholder({
 					label
 				)}
 			</p>
+			<Button variant="secondary" onClick={handleTestNesting}>
+				Test Nested Slideout
+			</Button>
 		</div>
 	);
 }
