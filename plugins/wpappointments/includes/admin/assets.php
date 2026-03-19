@@ -64,10 +64,26 @@ function scripts() {
 		array_merge( $api, $date )
 	);
 
+	// Register shared components script for addon plugins.
+	$shared_asset = PluginInfo::get_plugin_dir_path() . '/build/index.ts.asset.php';
+
+	if ( file_exists( $shared_asset ) ) {
+		$shared_deps = require $shared_asset;
+
+		wp_register_script(
+			'wpappointments-shared-js',
+			PluginInfo::get_plugin_dir_url() . 'build/index.ts.js',
+			array_merge( $shared_deps['dependencies'], array( 'wpappointments-admin-js' ) ),
+			$shared_deps['version'],
+			true
+		);
+	}
+
 	$screen = get_current_screen();
 
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		wp_enqueue_media();
+		wp_enqueue_script( 'wpappointments-shared-js' );
 	}
 
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
