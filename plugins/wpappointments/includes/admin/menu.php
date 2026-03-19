@@ -27,7 +27,7 @@ function menu() {
 	add_menu_page(
 		__( 'WP Appointments', 'wpappointments' ),
 		__( 'Appointments', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments',
 		__NAMESPACE__ . '\\admin_page',
 		$icon,
@@ -38,7 +38,7 @@ function menu() {
 		'wpappointments',
 		__( 'Calendar', 'wpappointments' ),
 		__( 'Calendar', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-calendar',
 		__NAMESPACE__ . '\\calendar_page'
 	);
@@ -47,7 +47,7 @@ function menu() {
 		'wpappointments',
 		__( 'Customers', 'wpappointments' ),
 		__( 'Customers', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-customers',
 		__NAMESPACE__ . '\customers_page'
 	);
@@ -56,7 +56,7 @@ function menu() {
 		'wpappointments',
 		__( 'Services', 'wpappointments' ),
 		__( 'Services', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-services',
 		__NAMESPACE__ . '\\services_page'
 	);
@@ -65,7 +65,7 @@ function menu() {
 		'wpappointments',
 		__( 'Entities', 'wpappointments' ),
 		__( 'Entities', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-entities',
 		__NAMESPACE__ . '\\entities_page'
 	);
@@ -74,7 +74,7 @@ function menu() {
 		'wpappointments',
 		__( 'Settings', 'wpappointments' ),
 		__( 'Settings', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-settings',
 		__NAMESPACE__ . '\\settings_page'
 	);
@@ -83,7 +83,7 @@ function menu() {
 		'noexistingpageslug',
 		__( 'Wizard', 'wpappointments' ),
 		__( 'Wizard', 'wpappointments' ),
-		'activate_plugins',
+		'manage_options',
 		'wpappointments-wizard',
 		__NAMESPACE__ . '\\wizard_page'
 	);
