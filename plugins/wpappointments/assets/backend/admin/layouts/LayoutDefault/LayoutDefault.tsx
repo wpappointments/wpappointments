@@ -1,4 +1,5 @@
 import styles from './LayoutDefault.module.css';
+import SlideoutRenderer from '~/backend/admin/components/SlideOut/SlideoutRenderer';
 import Toaster from '~/backend/admin/components/Toaster/Toaster';
 
 type Props = {
@@ -15,6 +16,7 @@ export default function LayoutDefault({ title, children }: Props) {
 			<div className={styles.layoutContent}>{children}</div>
 			<Toaster />
 			<div id="slideout-container"></div>
+			<SlideoutRenderer />
 		</div>
 	);
 }

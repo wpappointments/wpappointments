@@ -23,7 +23,6 @@ import type {
 	Action,
 	View,
 } from '~/backend/admin/components/DataViews/types';
-import SlideOut from '~/backend/admin/components/SlideOut/SlideOut';
 import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 import globalStyles from 'global.module.css';
 
@@ -51,7 +50,6 @@ export default function BookableListPage({
 	const [loading, setLoading] = useState(true);
 	const [totalItems, setTotalItems] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
-	const [editEntity, setEditEntity] = useState<BookableEntity | null>(null);
 	const [view, setView] = useState<View>({
 		type: 'table',
 		layout: {},
@@ -63,7 +61,12 @@ export default function BookableListPage({
 	const createSlideoutId = `bookable-create-${type}`;
 	const editSlideoutId = `bookable-edit-${type}`;
 
-	const { openSlideOut, isSlideoutOpen } = useSlideout();
+	const { openSlideOut } = useSlideout();
+
+	/* translators: %s: bookable type label */
+	const addNewLabel = sprintf(__('Add New %s', 'wpappointments'), label);
+	/* translators: %s: bookable type label */
+	const editLabel = sprintf(__('Edit %s', 'wpappointments'), label);
 
 	const load = useCallback(async () => {
 		setLoading(true);
@@ -94,21 +97,35 @@ export default function BookableListPage({
 	);
 
 	const handleCreate = useCallback(() => {
-		setEditEntity(null);
 		openSlideOut({
 			id: createSlideoutId,
+			title: addNewLabel,
+			content: (
+				<BookableSlideoutPlaceholder
+					entity={null}
+					type={type}
+					label={label}
+				/>
+			),
 		});
-	}, [createSlideoutId, openSlideOut]);
+	}, [createSlideoutId, openSlideOut, addNewLabel, type, label]);
 
 	const handleEdit = useCallback(
 		(entity: BookableEntity) => {
-			setEditEntity(entity);
 			openSlideOut({
 				id: editSlideoutId,
+				title: editLabel,
 				data: { entityId: entity.id },
+				content: (
+					<BookableSlideoutPlaceholder
+						entity={entity}
+						type={type}
+						label={label}
+					/>
+				),
 			});
 		},
-		[editSlideoutId, openSlideOut]
+		[editSlideoutId, editLabel, openSlideOut, type, label]
 	);
 
 	// Build DataViews fields from column config.
@@ -138,11 +155,6 @@ export default function BookableListPage({
 		},
 	];
 
-	/* translators: %s: bookable type label */
-	const addNewLabel = sprintf(__('Add New %s', 'wpappointments'), label);
-	/* translators: %s: bookable type label */
-	const editLabel = sprintf(__('Edit %s', 'wpappointments'), label);
-
 	const addNewButton = (
 		<Button variant="primary" onClick={handleCreate}>
 			{__('Add New', 'wpappointments')}
@@ -162,70 +174,39 @@ export default function BookableListPage({
 
 	if (entities.length === 0) {
 		return (
-			<>
-				<Card className={globalStyles.card}>
-					<CardHeader>
-						<Text size="title">{label}</Text>
-						{addNewButton}
-					</CardHeader>
-					<CardBody>
-						<TableFullEmpty>
-							<p>{__('No items found.', 'wpappointments')}</p>
-						</TableFullEmpty>
-					</CardBody>
-				</Card>
-				{isSlideoutOpen(createSlideoutId) && (
-					<SlideOut id={createSlideoutId} title={addNewLabel}>
-						<BookableSlideoutPlaceholder
-							entity={null}
-							type={type}
-							label={label}
-						/>
-					</SlideOut>
-				)}
-			</>
-		);
-	}
-
-	return (
-		<>
 			<Card className={globalStyles.card}>
 				<CardHeader>
 					<Text size="title">{label}</Text>
 					{addNewButton}
 				</CardHeader>
 				<CardBody>
-					<DataViews
-						view={view}
-						onChangeView={(newView: View) => {
-							setView(newView);
-						}}
-						fields={fields}
-						actions={actions}
-						data={entities as Record<string, unknown>[]}
-						paginationInfo={{ totalItems, totalPages }}
-					/>
+					<TableFullEmpty>
+						<p>{__('No items found.', 'wpappointments')}</p>
+					</TableFullEmpty>
 				</CardBody>
 			</Card>
-			{isSlideoutOpen(createSlideoutId) && (
-				<SlideOut id={createSlideoutId} title={addNewLabel}>
-					<BookableSlideoutPlaceholder
-						entity={null}
-						type={type}
-						label={label}
-					/>
-				</SlideOut>
-			)}
-			{isSlideoutOpen(editSlideoutId) && (
-				<SlideOut id={editSlideoutId} title={editLabel}>
-					<BookableSlideoutPlaceholder
-						entity={editEntity}
-						type={type}
-						label={label}
-					/>
-				</SlideOut>
-			)}
-		</>
+		);
+	}
+
+	return (
+		<Card className={globalStyles.card}>
+			<CardHeader>
+				<Text size="title">{label}</Text>
+				{addNewButton}
+			</CardHeader>
+			<CardBody>
+				<DataViews
+					view={view}
+					onChangeView={(newView: View) => {
+						setView(newView);
+					}}
+					fields={fields}
+					actions={actions}
+					data={entities as Record<string, unknown>[]}
+					paginationInfo={{ totalItems, totalPages }}
+				/>
+			</CardBody>
+		</Card>
 	);
 }
 

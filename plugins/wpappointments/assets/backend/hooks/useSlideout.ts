@@ -1,9 +1,19 @@
+import type { ReactNode } from 'react';
 import { select, useDispatch, useSelect } from '@wordpress/data';
+import {
+	setSlideoutContent,
+	removeSlideoutContent,
+} from '~/backend/store/slideout/slideout-content';
 import { Slideout } from '~/backend/store/slideout/slideout.types';
 import { store } from '~/backend/store/store';
 
 type UseSlideoutProps = {
 	id?: string;
+};
+
+export type OpenSlideOutOptions = Slideout & {
+	title?: string;
+	content?: ReactNode;
 };
 
 export default function useSlideout(props?: UseSlideoutProps) {
@@ -23,7 +33,13 @@ export default function useSlideout(props?: UseSlideoutProps) {
 		};
 	}, []);
 
-	const openSlideOut = (slideout: Slideout) => {
+	const openSlideOut = (options: OpenSlideOutOptions) => {
+		const { title, content, ...slideout } = options;
+
+		if (title || content) {
+			setSlideoutContent(slideout.id, { title, content });
+		}
+
 		slideout.level = openSlideouts.length + 1;
 		dispatch.openSlideout(slideout);
 	};
@@ -33,6 +49,7 @@ export default function useSlideout(props?: UseSlideoutProps) {
 
 		setTimeout(() => {
 			dispatch.removeSlideout();
+			removeSlideoutContent(id);
 		}, 200);
 
 		if (id && callback) {
