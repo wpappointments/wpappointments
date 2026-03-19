@@ -1,8 +1,8 @@
-import { Error } from './error';
+import type { Error as AppError } from './error';
 
 export default async function resolve<T>(
 	callback: () => Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
-): Promise<[Error | null, T | null]> {
+): Promise<[AppError | null, T | null]> {
 	try {
 		const response = await callback();
 		return [null, response];
@@ -10,9 +10,12 @@ export default async function resolve<T>(
 		return [
 			{
 				type: 'error',
-				message: error instanceof Error ? error.message : String(error),
+				message:
+					error instanceof globalThis.Error
+						? error.message
+						: String(error),
 				data: error,
-			} as Error,
+			} as AppError,
 			null,
 		];
 	}
