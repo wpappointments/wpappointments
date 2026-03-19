@@ -30,6 +30,7 @@
  */
 const wpaExternals = {
 	'@wpappointments/components': ['wpappointments', 'components'],
+	'@wpappointments/data': ['wpappointments', 'data'],
 	'@wpappointments/hooks': ['wpappointments', 'hooks'],
 	'@wpappointments/api': ['wpappointments', 'api'],
 };
@@ -41,6 +42,7 @@ const wpaExternals = {
  */
 const wpaDependencyMapping = {
 	'@wpappointments/components': 'wpappointments-shared-js',
+	'@wpappointments/data': 'wpappointments-data-js',
 	'@wpappointments/hooks': 'wpappointments-admin-js',
 	'@wpappointments/api': 'wpappointments-shared-js',
 };
