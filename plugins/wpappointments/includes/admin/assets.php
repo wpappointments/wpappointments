@@ -64,6 +64,12 @@ function scripts() {
 		array_merge( $api, $date )
 	);
 
+	wp_set_script_translations(
+		'wpappointments-admin-js',
+		'wpappointments',
+		PluginInfo::get_plugin_dir_path() . '/languages'
+	);
+
 	// Register shared components script for addon plugins.
 	$shared_asset = PluginInfo::get_plugin_dir_path() . '/build/index.tsx.asset.php';
 
