@@ -16,11 +16,12 @@ export default function FormField({
 }: Props) {
 	return (
 		<div
-			className={cn({
-				[styles.field]: true,
-				[className || '']: true,
-				[styles.fieldFullWidth]: isFullWidth,
-			})}
+			className={
+				cn({
+					[styles.field]: true,
+					[styles.fieldFullWidth]: isFullWidth,
+				}) + (className ? ` ${className}` : '')
+			}
 			style={style}
 		>
 			{children}

@@ -7,6 +7,13 @@ export default async function resolve<T>(
 		const response = await callback();
 		return [null, response];
 	} catch (error) {
-		return [error, null];
+		return [
+			{
+				type: 'error',
+				message: error instanceof Error ? error.message : String(error),
+				data: error,
+			} as Error,
+			null,
+		];
 	}
 }

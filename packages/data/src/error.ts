@@ -1,7 +1,7 @@
 export type Error = {
 	type: 'error';
 	message: string;
-	data: unknown[];
+	data: unknown;
 };
 
 export function getErrorMessage(error: Error) {

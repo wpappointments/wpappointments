@@ -11,7 +11,7 @@ import {
 	trash,
 } from '@wordpress/icons';
 import { DataViews, TableFullEmpty } from '@wpappointments/components';
-import type { Action } from '@wpappointments/components';
+import type { Action, View } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from 'obj-str';
@@ -32,13 +32,7 @@ type Fields = {
 	posts_per_page: number;
 };
 
-type View = {
-	type: 'table';
-	layout: object;
-	hiddenFields: [];
-	perPage: number;
-	page: number;
-};
+// View type imported from @wpappointments/components via DataViews
 
 export default function AppointmentsTableFull() {
 	const { openSlideOut } = useSlideout({

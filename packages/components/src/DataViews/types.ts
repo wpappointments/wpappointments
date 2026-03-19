@@ -1,15 +1,17 @@
 import type { ReactNode } from 'react';
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 
-export type CollectionItem = Record<string, unknown>;
+export type CollectionItem = Record<string, unknown> & {
+	id?: string | number;
+};
 
 export type View = {
 	type: 'table';
 	layout: object;
-	hiddenFields: [];
+	hiddenFields: string[];
 	perPage: number;
 	page: number;
-	options?: [];
+	options?: unknown[];
 };
 
 export type Field = {

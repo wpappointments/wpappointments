@@ -12,15 +12,16 @@
  * @package WPAppointments
  * @since 0.4.0
  */
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { getSlideoutContent } from '@wpappointments/data';
 import SlideOut from './SlideOut';
 
 const STORE_NAME = 'wpappointments';
 
 export default function SlideoutRenderer() {
-	const openSlideouts = useSelect(() => {
-		return select(STORE_NAME).getSlideouts();
+	const openSlideouts = useSelect((select) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return (select(STORE_NAME) as any).getSlideouts();
 	}, []);
 
 	return (

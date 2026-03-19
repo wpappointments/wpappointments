@@ -33,7 +33,7 @@ export {
 } from './hooks';
 
 // Slideout Hook
-export { default as useSlideout } from './useSlideout';
+export { useSlideout } from './useSlideout';
 export type { OpenSlideOutOptions } from './useSlideout';
 
 // API Client

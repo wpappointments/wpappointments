@@ -78,7 +78,7 @@ export async function createBookable(data: Partial<BookableEntity>) {
 		ApiResponse<{ bookable: BookableEntity }>
 	>(() =>
 		apiFetch({
-			path: '/bookables',
+			path: 'bookables',
 			method: 'POST',
 			data,
 		})

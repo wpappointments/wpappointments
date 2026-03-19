@@ -15,7 +15,7 @@ type DataViewFooterProps = {
 	paginationInfo: PaginationInfo;
 };
 
-export default function DataViewFooterProps({
+export default function DataViewsFooter({
 	view,
 	onChangeView,
 	fields,
@@ -42,6 +42,7 @@ export default function DataViewFooterProps({
 							</label>
 							<select
 								id="posts-per-page"
+								value={String(view.perPage)}
 								onChange={(event) => {
 									onChangeView({
 										...view,
@@ -57,91 +58,87 @@ export default function DataViewFooterProps({
 								<option value="100">100</option>
 							</select>
 						</HStack>
-						{paginationInfo && (
-							<HStack expanded={false} spacing={6} justify="end">
-								<HStack
-									justify="flex-start"
-									expanded={false}
-									spacing={2}
-								>
-									{createInterpolateElement(
-										sprintf(
-											// translators: %s: Total number of pages.
-											_x(
-												'Page <CurrenPageControl /> of %s',
-												'paging'
-											),
-											totalPages
+						<HStack expanded={false} spacing={6} justify="end">
+							<HStack
+								justify="flex-start"
+								expanded={false}
+								spacing={2}
+							>
+								{createInterpolateElement(
+									sprintf(
+										// translators: %s: Total number of pages.
+										_x(
+											'Page <CurrenPageControl /> of %s',
+											'paging'
 										),
-										{
-											CurrenPageControl: (
-												<SelectControl
-													aria-label={__(
-														'Current page'
-													)}
-													value={view.page.toString()}
-													options={Array.from(
-														Array(totalPages)
-													).map((_, i) => {
-														const page = i + 1;
-														return {
-															value: page.toString(),
-															label: page.toString(),
-														};
-													})}
-													onChange={(newValue) => {
-														onChangeView({
-															...view,
-															page: +newValue,
-														});
-													}}
-													size={'compact'}
-													__nextHasNoMarginBottom
-												/>
-											),
-										}
-									)}
-								</HStack>
-								<HStack expanded={false} spacing={1}>
-									<Button
-										onClick={() =>
-											onChangeView({
-												...view,
-												page: view.page - 1,
-											})
-										}
-										disabled={view.page === 1}
-										__experimentalIsFocusable
-										label={__(
-											'Previous page',
-											'wpappointments'
-										)}
-										icon={chevronLeft}
-										showTooltip
-										size="compact"
-										tooltipPosition="top"
-									/>
-									<Button
-										onClick={() =>
-											onChangeView({
-												...view,
-												page: view.page + 1,
-											})
-										}
-										disabled={view.page >= totalPages}
-										__experimentalIsFocusable
-										label={__(
-											'Next page',
-											'wpappointments'
-										)}
-										icon={chevronRight}
-										showTooltip
-										size="compact"
-										tooltipPosition="top"
-									/>
-								</HStack>
+										totalPages
+									),
+									{
+										CurrenPageControl: (
+											<SelectControl
+												aria-label={__(
+													'Current page',
+													'wpappointments'
+												)}
+												value={view.page.toString()}
+												options={Array.from(
+													Array(totalPages)
+												).map((_, i) => {
+													const page = i + 1;
+													return {
+														value: page.toString(),
+														label: page.toString(),
+													};
+												})}
+												onChange={(newValue) => {
+													onChangeView({
+														...view,
+														page: +newValue,
+													});
+												}}
+												size={'compact'}
+												__nextHasNoMarginBottom
+											/>
+										),
+									}
+								)}
 							</HStack>
-						)}
+							<HStack expanded={false} spacing={1}>
+								<Button
+									onClick={() =>
+										onChangeView({
+											...view,
+											page: view.page - 1,
+										})
+									}
+									disabled={view.page === 1}
+									__experimentalIsFocusable
+									label={__(
+										'Previous page',
+										'wpappointments'
+									)}
+									icon={chevronLeft}
+									showTooltip
+									size="compact"
+									tooltipPosition="top"
+								/>
+								<Button
+									onClick={() =>
+										onChangeView({
+											...view,
+											page: view.page + 1,
+										})
+									}
+									disabled={view.page >= totalPages}
+									__experimentalIsFocusable
+									label={__('Next page', 'wpappointments')}
+									icon={chevronRight}
+									showTooltip
+									size="compact"
+									tooltipPosition="top"
+								/>
+							</HStack>
+						</HStack>
 					</HStack>
 				</td>
 			</tr>

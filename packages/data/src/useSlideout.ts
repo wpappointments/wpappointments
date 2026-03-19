@@ -20,7 +20,7 @@ export type OpenSlideOutOptions = Slideout & {
 	content?: ReactNode;
 };
 
-export default function useSlideout(props?: UseSlideoutProps) {
+export function useSlideout(props?: UseSlideoutProps) {
 	const { id } = props || {};
 	const dispatch = useDispatch(STORE_NAME);
 	const {
@@ -36,7 +36,7 @@ export default function useSlideout(props?: UseSlideoutProps) {
 			closingSlideout: storeSelect.getClosingSlideout(id),
 			closingSlideouts: storeSelect.getAllClosingSlideouts(),
 		};
-	}, []);
+	}, [id]);
 
 	const openSlideOut = (options: OpenSlideOutOptions) => {
 		const { title, content, ...slideout } = options;
@@ -63,6 +63,7 @@ export default function useSlideout(props?: UseSlideoutProps) {
 	};
 
 	const closeCurrentSlideOut = (callback?: (id: string) => void) => {
+		if (!currentSlideout) return;
 		closeSlideOut(currentSlideout.id, callback);
 	};
 

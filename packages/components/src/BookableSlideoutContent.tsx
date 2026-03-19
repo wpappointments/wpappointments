@@ -138,7 +138,6 @@ export default function BookableSlideoutContent({
 			entity={entity}
 			typeInfo={typeInfo}
 			onSave={onSave}
-			onCancel={onCancel}
 		/>
 	);
 }

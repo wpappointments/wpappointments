@@ -35,7 +35,6 @@ type BookableDefaultFormProps = {
 	entity: BookableEntity | null;
 	typeInfo: BookableTypeInfo;
 	onSave: (data: Record<string, unknown>) => Promise<void>;
-	onCancel: () => void;
 };
 
 type FormErrors = Record<string, string>;
@@ -187,14 +186,18 @@ export default function BookableDefaultForm({
 
 		setSubmitting(true);
 
-		await onSave({
-			name,
-			description,
-			active,
-			...meta,
-		});
-
-		setSubmitting(false);
+		try {
+			await onSave({
+				name,
+				description,
+				active,
+				...meta,
+			});
+		} catch (err) {
+			// Let the caller handle the error; just ensure UI resets.
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -361,7 +364,9 @@ function FieldControl({
 					<NumberControl
 						value={value as number}
 						onChange={(val: string | undefined) => {
-							onChange(val !== undefined ? Number(val) : '');
+							onChange(
+								val !== undefined ? Number(val) : undefined
+							);
 						}}
 						min={field.validation?.min}
 						max={field.validation?.max}

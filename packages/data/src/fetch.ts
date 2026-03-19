@@ -7,7 +7,7 @@ export type APIResponse<T> = {
 };
 
 export default function apiFetch<T>(options: APIFetchOptions): Promise<T> {
-	const fetchOptions = options;
+	const fetchOptions = { ...options };
 
 	if (options.path) {
 		fetchOptions.path = window.wpappointments.api.namespace + options.path;

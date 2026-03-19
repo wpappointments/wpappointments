@@ -93,11 +93,11 @@ class BookableTypesController extends Controller {
 				'required' => $config['required'] ?? false,
 			);
 
-			if ( ! empty( $config['placeholder'] ) ) {
+			if ( isset( $config['placeholder'] ) && '' !== $config['placeholder'] ) {
 				$field['placeholder'] = $config['placeholder'];
 			}
 
-			if ( ! empty( $config['help'] ) ) {
+			if ( isset( $config['help'] ) && '' !== $config['help'] ) {
 				$field['help'] = $config['help'];
 			}
 

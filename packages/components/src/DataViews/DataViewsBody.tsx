@@ -15,7 +15,14 @@ export default function DataViewsBody({
 	return (
 		<tbody>
 			{data.map((item, index) => (
-				<tr key={(item as { id?: number }).id ?? index}>
+				<tr
+					key={
+						typeof item.id === 'string' ||
+						typeof item.id === 'number'
+							? item.id
+							: index
+					}
+				>
 					{fields.map((field) => (
 						<td key={field.id}>{field.render({ item })}</td>
 					))}

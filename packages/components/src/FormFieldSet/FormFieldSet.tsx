@@ -16,28 +16,32 @@ export default function FormFieldSet({
 	legend,
 	horizontal = false,
 	horizontalCenter = false,
+	fieldsClassName,
 	...rest
 }: Props) {
-	const { fieldsClassName, ...restProps } = rest;
-
 	return (
 		<fieldset
 			name={name}
-			className={
+			className={[
 				cn({
 					[styles.fieldset]: true,
 					[styles.fieldsetHorizontal]: horizontal,
 					[styles.fieldsetHorizontalCenter]: horizontalCenter,
 					[styles.fieldsetHasLegend]: !!legend,
 					[styles.fieldsetFill]: true,
-				}) +
-				' ' +
-				rest.className
-			}
-			{...restProps}
+				}),
+				rest.className,
+			]
+				.filter(Boolean)
+				.join(' ')}
+			{...rest}
 		>
 			{legend && <legend>{legend}</legend>}
-			<div className={styles.fields + ' ' + fieldsClassName}>
+			<div
+				className={[styles.fields, fieldsClassName]
+					.filter(Boolean)
+					.join(' ')}
+			>
 				{children}
 			</div>
 		</fieldset>

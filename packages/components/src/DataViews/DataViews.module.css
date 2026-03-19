@@ -20,7 +20,7 @@
 	width: 100px;
 }
 
-.data-views tbody td button:not(:first-child) {
+.data-views tbody td:last-child button:not(:first-child) {
 	opacity: 0;
 	transition: opacity 0.2s ease;
 }
