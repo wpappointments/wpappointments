@@ -34,7 +34,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 		});
 
 		if (error) {
-			handleError(error, 'Error fetching service categories');
+			handleError(
+				error,
+				__('Error fetching service categories', 'wpappointments')
+			);
 			return [];
 		}
 
@@ -51,7 +54,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 		});
 
 		if (error) {
-			handleError(error, 'Error creating service category');
+			handleError(
+				error,
+				__('Error creating service category', 'wpappointments')
+			);
 		}
 
 		if (response && response.status === 'error') {
@@ -60,7 +66,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 				message: response?.data?.message || 'Unknown error',
 				data: [],
 			};
-			handleError(err, 'Error creating service category');
+			handleError(
+				err,
+				__('Error creating service category', 'wpappointments')
+			);
 		}
 
 		if (response && response.status === 'success') {
@@ -87,7 +96,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 		});
 
 		if (error) {
-			handleError(error, 'Error updating service category');
+			handleError(
+				error,
+				__('Error updating service category', 'wpappointments')
+			);
 		}
 
 		if (response && response.status === 'error') {
@@ -96,7 +108,10 @@ export function serviceCategoriesApi(options?: ServiceCategoriesApiOptions) {
 				message: response?.data?.message || 'Unknown error',
 				data: [],
 			};
-			handleError(err, 'Error updating service category');
+			handleError(
+				err,
+				__('Error updating service category', 'wpappointments')
+			);
 		}
 
 		if (response && response.status === 'success') {

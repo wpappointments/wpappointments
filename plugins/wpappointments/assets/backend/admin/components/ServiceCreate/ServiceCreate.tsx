@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { Button, SelectControl } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import useSlideout from '~/backend/hooks/useSlideout';
@@ -65,8 +65,8 @@ export default withForm(function ServiceCreate({
 		selectedService?.category?.id ? String(selectedService.category.id) : ''
 	);
 
-	const categories: ServiceCategory[] = useSelect(() => {
-		return select(store).getServiceCategories() ?? [];
+	const categories: ServiceCategory[] = useSelect((selectStore) => {
+		return selectStore(store).getServiceCategories() ?? [];
 	}, []);
 
 	const categoryOptions = [
@@ -237,6 +237,10 @@ export default withForm(function ServiceCreate({
 								<input
 									type="text"
 									className="components-text-control__input"
+									aria-label={__(
+										'New category name',
+										'wpappointments'
+									)}
 									placeholder={__(
 										'New category name',
 										'wpappointments'
