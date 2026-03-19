@@ -1,9 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 import { useLilius } from 'use-lilius';
 import { safeParse } from 'valibot';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { applyFilters, doAction } from '~/backend/utils/hooks';
 import { formatTime, getWeekDays } from '~/backend/utils/i18n';
 import resolve from '~/backend/utils/resolve';
 import { Appointment, Customer } from '~/backend/types';
@@ -129,28 +131,36 @@ export function BookingFlowContextProvider({
 			phone: data.phone,
 		};
 
+		const appointmentData = applyFilters(
+			'wpappointments.bookingFlow.appointmentData',
+			{
+				customer,
+				date: data.datetime,
+				createAccount: data.account,
+				password: data.password,
+			},
+			data
+		);
+
+		doAction('wpappointments.bookingFlow.beforeSubmit', appointmentData);
+
 		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+			return await apiFetch<Response>({
 				path: 'public/appointments',
 				method: 'POST',
-				data: {
-					customer,
-					date: data.datetime,
-					createAccount: data.account,
-					password: data.password,
-				},
+				data: appointmentData,
 			});
-
-			return response;
 		});
 
 		if (error) {
-			setFormError('Error creating appointment');
+			setFormError(__('Error creating appointment', 'wpappointments'));
+			doAction('wpappointments.bookingFlow.submitError', error);
 		}
 
 		if (response) {
 			if (response.status === 'success') {
 				setFormSuccess(true);
+				doAction('wpappointments.bookingFlow.submitSuccess', response);
 			}
 
 			if (response.status === 'error' && response.message) {
