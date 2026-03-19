@@ -188,8 +188,21 @@ class Settings {
 
 		$updated = array();
 
+		// Build list of allowed setting names for this category.
+		$allowed_keys = array_map(
+			function ( $option ) {
+				return $option['name'];
+			},
+			$this->settings[ $category ]
+		);
+
 		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
+				// Skip keys not defined in the settings schema.
+				if ( ! in_array( $key, $allowed_keys, true ) ) {
+					continue;
+				}
+
 				if ( 'serviceName' === $key ) {
 					$service_post_id = get_option( 'wpappointments_defaultServiceId' );
 

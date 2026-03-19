@@ -91,6 +91,10 @@ class Entity {
 		unset( $meta['name'] );
 		unset( $meta['parent_id'] );
 
+		// Filter meta against allowed fields to prevent mass assignment.
+		$allowed_meta_keys = array_diff( self::FIELDS, array( 'name' ) );
+		$meta              = array_intersect_key( $meta, array_flip( $allowed_meta_keys ) );
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => PluginInfo::POST_TYPES['entity'],
@@ -159,6 +163,10 @@ class Entity {
 		$meta = $data;
 		unset( $meta['name'] );
 		unset( $meta['parent_id'] );
+
+		// Filter meta against allowed fields to prevent mass assignment.
+		$allowed_meta_keys = array_diff( self::FIELDS, array( 'name' ) );
+		$meta              = array_intersect_key( $meta, array_flip( $allowed_meta_keys ) );
 
 		$post_data['meta_input'] = $meta;
 

@@ -58,7 +58,15 @@ class AvailabilityController extends Controller {
 	public static function availability( WP_REST_Request $request ) {
 		$month    = $request->get_param( 'currentMonth' );
 		$year     = $request->get_param( 'currentYear' );
-		$timezone = $request->get_param( 'timezone' );
+		$timezone = sanitize_text_field( (string) $request->get_param( 'timezone' ) );
+
+		if ( is_numeric( $month ) ) {
+			$month = (int) $month;
+		}
+
+		if ( is_numeric( $year ) ) {
+			$year = (int) $year;
+		}
 
 		$availability = Availability::get_month_days_availability(
 			$month,
@@ -88,10 +96,21 @@ class AvailabilityController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function calendar_availability( WP_REST_Request $request ) {
-		$calendar = $request->get_param( 'calendar' );
-		$timezone = $request->get_param( 'timezone' );
-		$trim     = $request->get_param( 'trim' ) === 'true' ? true : false;
-		$calendar = json_decode( $calendar );
+		$calendar_raw = $request->get_param( 'calendar' );
+		$timezone     = sanitize_text_field( (string) $request->get_param( 'timezone' ) );
+		$trim         = $request->get_param( 'trim' ) === 'true' ? true : false;
+
+		if ( null !== $calendar_raw ) {
+			$calendar = json_decode( $calendar_raw );
+
+			if ( null === $calendar ) {
+				return self::error(
+					new \WP_Error( 'invalid_calendar', __( 'Invalid calendar data', 'wpappointments' ) )
+				);
+			}
+		} else {
+			$calendar = null;
+		}
 
 		$availability = Availability::get_month_calendar_availability( $calendar, $timezone, $trim );
 

@@ -94,6 +94,10 @@ class Service {
 		$category = $meta['category'] ?? null;
 		unset( $meta['category'] );
 
+		// Filter meta against allowed fields to prevent mass assignment.
+		$allowed_meta_keys = array_diff( self::FIELDS, array( 'name', 'category' ) );
+		$meta              = array_intersect_key( $meta, array_flip( $allowed_meta_keys ) );
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => PluginInfo::POST_TYPES['service'],
@@ -148,6 +152,11 @@ class Service {
 
 		$meta = $data;
 		unset( $meta['category'] );
+		unset( $meta['name'] );
+
+		// Filter meta against allowed fields to prevent mass assignment.
+		$allowed_meta_keys = array_diff( self::FIELDS, array( 'name', 'category' ) );
+		$meta              = array_intersect_key( $meta, array_flip( $allowed_meta_keys ) );
 
 		$updated = wp_update_post(
 			array(
@@ -381,8 +390,14 @@ class Service {
 			return new WP_Error( 'service_id_required', __( 'Service ID is required', 'wpappointments' ) );
 		}
 
-		if ( ! get_post( $post_id ) ) {
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
 			return new WP_Error( 'service_not_found', __( 'Service not found', 'wpappointments' ) );
+		}
+
+		if ( PluginInfo::POST_TYPES['service'] !== $post->post_type ) {
+			return new WP_Error( 'service_invalid_type', __( 'Post is not a service', 'wpappointments' ) );
 		}
 
 		return $post_id;

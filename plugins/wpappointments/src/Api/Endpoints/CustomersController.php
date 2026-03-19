@@ -107,9 +107,9 @@ class CustomersController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create( WP_REST_Request $request ) {
-		$name     = $request->get_param( 'name' );
-		$email    = $request->get_param( 'email' );
-		$phone    = $request->get_param( 'phone' );
+		$name     = sanitize_text_field( $request->get_param( 'name' ) );
+		$email    = sanitize_email( $request->get_param( 'email' ) );
+		$phone    = sanitize_text_field( $request->get_param( 'phone' ) );
 		$password = $request->get_param( 'password' );
 
 		$customer       = new Customer(
@@ -142,10 +142,10 @@ class CustomersController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update( WP_REST_Request $request ) {
-		$id    = $request->get_param( 'id' );
-		$name  = $request->get_param( 'name' );
-		$email = $request->get_param( 'email' );
-		$phone = $request->get_param( 'phone' );
+		$id    = absint( $request->get_param( 'id' ) );
+		$name  = sanitize_text_field( $request->get_param( 'name' ) );
+		$email = sanitize_email( $request->get_param( 'email' ) );
+		$phone = sanitize_text_field( $request->get_param( 'phone' ) );
 
 		$customer         = new Customer( $id );
 		$updated_customer = $customer->update(
