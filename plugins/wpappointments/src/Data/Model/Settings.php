@@ -138,7 +138,7 @@ class Settings {
 		$category_exists = array_key_exists( $category, $this->settings );
 
 		if ( ! $category_exists ) {
-			return new \WP_Error( 'invalid_settings_category', 'Invalid settings category' );
+			return new \WP_Error( 'invalid_settings_category', __( 'Invalid settings category', 'wpappointments' ) );
 		}
 
 		$schedule = array();
@@ -226,7 +226,7 @@ class Settings {
 			return $updated;
 		}
 
-		return new \WP_Error( 'unknown_settings_error', 'Unknown error while saving settings' );
+		return new \WP_Error( 'unknown_settings_error', __( 'Unknown error while saving settings', 'wpappointments' ) );
 	}
 
 	/**

@@ -1,10 +1,17 @@
 <?php
 /**
  * Plugin Name: WP Appointments
- * Version: 0.1.2
- * Description: Next-gen appointment scheduling for WordPress.
- * Author: WP Appointments
- * Author URI: https://wpappointments.com
+ * Plugin URI:  https://wpappointments.com
+ * Version:     0.1.2
+ * Description: Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support.
+ * Author:      WP Appointments
+ * Author URI:  https://wpappointments.com
+ * License:     GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: wpappointments
+ * Domain Path: /languages
+ * Requires at least: 6.4
+ * Requires PHP: 8.2
  *
  * @package WPAppointments
  * @since 0.0.1
