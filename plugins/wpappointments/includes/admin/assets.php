@@ -65,7 +65,7 @@ function scripts() {
 	);
 
 	// Register shared components script for addon plugins.
-	$shared_asset = PluginInfo::get_plugin_dir_path() . '/build/index.ts.asset.php';
+	$shared_asset = PluginInfo::get_plugin_dir_path() . '/build/index.tsx.asset.php';
 
 	if ( file_exists( $shared_asset ) ) {
 		$shared_deps = require $shared_asset;

@@ -8,9 +8,13 @@
 
 namespace WPAppointments\Admin;
 
+use WPAppointments\Admin\BookableTypeAdminPage;
+
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );
+add_action( 'admin_menu', array( BookableTypeAdminPage::class, 'register_menus' ), 20 );
+add_action( 'admin_enqueue_scripts', array( BookableTypeAdminPage::class, 'enqueue_addon_scripts' ) );
 
 /**
  * Add main plugin admin menu
