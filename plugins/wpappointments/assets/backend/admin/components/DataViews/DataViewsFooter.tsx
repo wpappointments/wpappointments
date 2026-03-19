@@ -77,7 +77,8 @@ export default function DataViewFooterProps({
 											CurrenPageControl: (
 												<SelectControl
 													aria-label={__(
-														'Current page'
+														'Current page',
+														'wpappointments'
 													)}
 													value={view.page.toString()}
 													options={Array.from(
