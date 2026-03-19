@@ -1,8 +1,8 @@
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BookableListPage } from '@wpappointments/components';
+import { getBookableType } from '@wpappointments/data';
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
-import BookableListPage from '~/backend/bookable/BookableListPage';
-import { getBookableType } from '~/backend/bookable/registry';
 
 export function render(elements: Map<string, React.JSX.Element>): void {
 	const domElement = document.getElementById('wpappointments-admin');

@@ -1,0 +1,18 @@
+.empty {
+	text-align: center;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.empty-icon {
+	font-size: 24px;
+	color: #bcbcbc;
+	width: min(80px, 50vw);
+	height: min(80px, 50vw);
+	vertical-align: middle;
+	fill: currentColor;
+	overflow: hidden;
+}

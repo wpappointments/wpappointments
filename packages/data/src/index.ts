@@ -1,14 +1,14 @@
 /**
- * Bookable Extension API — re-exports from packages
+ * @wpappointments/data
  *
- * This file re-exports from @wpappointments/data and @wpappointments/components
- * so existing internal imports from '~/backend/bookable' continue to work.
+ * Hooks, API functions, utilities, and type registry for
+ * WP Appointments plugin extensions.
  *
  * @package WPAppointments
  * @since 0.4.0
  */
 
-// Data (types, hooks, API, registry)
+// Types
 export type {
 	BookableEntity,
 	BookableAttribute,
@@ -22,13 +22,22 @@ export type {
 	PaginatedResponse,
 	BookableTypeRegistration,
 	BookableTypeColumn,
-} from '@wpappointments/data';
+} from './types';
 
+// React Hooks
 export {
 	useBookableEntities,
 	useBookableVariants,
 	useEffectiveAvailability,
 	useBookableEntity,
+} from './hooks';
+
+// Slideout Hook
+export { default as useSlideout } from './useSlideout';
+export type { OpenSlideOutOptions } from './useSlideout';
+
+// API Client
+export {
 	fetchBookables,
 	fetchBookable,
 	createBookable,
@@ -43,15 +52,23 @@ export {
 	fetchVariantAvailability,
 	fetchEntityAvailability,
 	fetchBookableTypes,
+} from './api';
+
+// JS-side Type Registry
+export {
 	registerBookableType,
 	getBookableType,
 	getRegisteredBookableTypes,
 	hasBookableType,
-} from '@wpappointments/data';
+} from './registry';
 
-// Components
+// Toast Utilities
+export { displaySuccessToast, displayErrorToast } from './toast';
+
+// Slideout Content (for SlideoutRenderer in core)
 export {
-	BookableListPage,
-	BookableDefaultForm,
-	BookableSlideoutContent,
-} from '@wpappointments/components';
+	getSlideoutContent,
+	setSlideoutContent,
+	removeSlideoutContent,
+} from './slideout-content';
+export type { SlideoutContent } from './slideout-content';

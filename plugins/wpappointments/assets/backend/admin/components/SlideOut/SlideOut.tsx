@@ -51,8 +51,10 @@ export default function SlideOut({
 		}
 
 		return (
-			openSlideouts.find((slideout) => slideout.parentId === id) !==
-				undefined || currentSlideout.id === id
+			openSlideouts.find(
+				(slideout: { parentId?: string | null }) =>
+					slideout.parentId === id
+			) !== undefined || currentSlideout.id === id
 		);
 	};
 
