@@ -53,7 +53,8 @@ class BookableTypesController extends Controller {
 		$response = array();
 
 		foreach ( $types as $slug => $handler ) {
-			$fields      = $handler->get_fields();
+			$raw_fields  = $handler->get_fields();
+			$fields      = self::serialize_fields( $raw_fields );
 			$overridable = $handler->get_variant_overridable_fields();
 			$response[]  = array(
 				'slug'               => $slug,
@@ -67,5 +68,50 @@ class BookableTypesController extends Controller {
 			__( 'Bookable types fetched successfully', 'wpappointments' ),
 			array( 'types' => $response )
 		);
+	}
+
+	/**
+	 * Serialize field definitions into a flat array with name embedded
+	 *
+	 * Converts the keyed field array from get_fields() into a sequential
+	 * array where each entry includes a 'name' property. Applies defaults
+	 * for optional schema properties.
+	 *
+	 * @param array $raw_fields Keyed field definitions from handler.
+	 *
+	 * @return array Sequential array of field schemas.
+	 */
+	private static function serialize_fields( $raw_fields ) {
+		$fields = array();
+
+		foreach ( $raw_fields as $name => $config ) {
+			$field = array(
+				'name'     => $name,
+				'type'     => $config['type'] ?? 'text',
+				'label'    => $config['label'] ?? $name,
+				'default'  => $config['default'] ?? null,
+				'required' => $config['required'] ?? false,
+			);
+
+			if ( ! empty( $config['placeholder'] ) ) {
+				$field['placeholder'] = $config['placeholder'];
+			}
+
+			if ( ! empty( $config['help'] ) ) {
+				$field['help'] = $config['help'];
+			}
+
+			if ( ! empty( $config['options'] ) ) {
+				$field['options'] = $config['options'];
+			}
+
+			if ( ! empty( $config['validation'] ) ) {
+				$field['validation'] = $config['validation'];
+			}
+
+			$fields[] = $field;
+		}
+
+		return $fields;
 	}
 }

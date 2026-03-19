@@ -38,8 +38,18 @@ class StubTableHandler extends AbstractBookableTypeHandler {
 	 */
 	public function get_fields() {
 		return array(
-			'seats'   => array( 'default' => 4 ),
-			'section' => array( 'default' => '' ),
+			'seats'   => array(
+				'type'       => 'number',
+				'label'      => 'Seats',
+				'default'    => 4,
+				'required'   => true,
+				'validation' => array( 'min' => 1 ),
+			),
+			'section' => array(
+				'type'    => 'text',
+				'label'   => 'Section',
+				'default' => '',
+			),
 		);
 	}
 }

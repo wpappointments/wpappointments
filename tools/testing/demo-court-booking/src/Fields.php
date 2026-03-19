@@ -29,10 +29,52 @@ class Fields {
 	 */
 	public static function get_definitions() {
 		return array(
-			'surface_type' => array( 'default' => 'hard' ),
-			'indoor'       => array( 'default' => false ),
-			'lighting'     => array( 'default' => false ),
-			'max_players'  => array( 'default' => 4 ),
+			'surface_type' => array(
+				'type'     => 'select',
+				'label'    => 'Surface Type',
+				'default'  => 'hard',
+				'required' => true,
+				'options'  => array(
+					array(
+						'value' => 'hard',
+						'label' => 'Hard Court',
+					),
+					array(
+						'value' => 'clay',
+						'label' => 'Clay',
+					),
+					array(
+						'value' => 'grass',
+						'label' => 'Grass',
+					),
+					array(
+						'value' => 'artificial',
+						'label' => 'Artificial',
+					),
+				),
+			),
+			'indoor'       => array(
+				'type'    => 'toggle',
+				'label'   => 'Indoor',
+				'default' => false,
+				'help'    => 'Whether the court is indoors.',
+			),
+			'lighting'     => array(
+				'type'    => 'toggle',
+				'label'   => 'Lighting',
+				'default' => false,
+				'help'    => 'Whether the court has floodlights.',
+			),
+			'max_players'  => array(
+				'type'       => 'number',
+				'label'      => 'Max Players',
+				'default'    => 4,
+				'required'   => true,
+				'validation' => array(
+					'min' => 1,
+					'max' => 20,
+				),
+			),
 		);
 	}
 }

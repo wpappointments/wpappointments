@@ -37,8 +37,31 @@ test(
 		expect( $data['data']['types'] )->toHaveCount( 1 );
 		expect( $data['data']['types'][0]['slug'] )->toBe( 'service' );
 		expect( $data['data']['types'][0]['label'] )->toBe( 'Service' );
-		expect( $data['data']['types'][0]['fields'] )->toHaveKeys( array( 'duration', 'price', 'category' ) );
 		expect( $data['data']['types'][0]['variantOverridable'] )->toBe( array( 'duration', 'price' ) );
+
+		// Fields are serialized as a sequential array with name embedded.
+		$fields = $data['data']['types'][0]['fields'];
+		expect( $fields )->toHaveCount( 3 );
+
+		// Duration field — number with validation.
+		expect( $fields[0]['name'] )->toBe( 'duration' );
+		expect( $fields[0]['type'] )->toBe( 'number' );
+		expect( $fields[0]['label'] )->toBe( 'Duration (min)' );
+		expect( $fields[0]['default'] )->toBe( 60 );
+		expect( $fields[0]['required'] )->toBeTrue();
+		expect( $fields[0]['validation'] )->toBe( array( 'min' => 1 ) );
+
+		// Price field — number without validation.
+		expect( $fields[1]['name'] )->toBe( 'price' );
+		expect( $fields[1]['type'] )->toBe( 'number' );
+		expect( $fields[1]['default'] )->toBe( 0 );
+		expect( $fields[1]['required'] )->toBeFalse();
+
+		// Category field — select with options.
+		expect( $fields[2]['name'] )->toBe( 'category' );
+		expect( $fields[2]['type'] )->toBe( 'select' );
+		expect( $fields[2]['options'] )->toHaveCount( 2 );
+		expect( $fields[2]['options'][0]['value'] )->toBe( 'massage' );
 	}
 );
 
