@@ -16,7 +16,9 @@ export function render(elements: Map<string, React.JSX.Element>): void {
 	const component = elements.get(page);
 
 	if (!component) {
-		throw new Error(`Could not find component for page "${page}"`);
+		// Page not found in core registry — likely an addon page.
+		// Addon plugins mount their own React app via mountAddonPage().
+		return;
 	}
 
 	createRoot(domElement).render(component);

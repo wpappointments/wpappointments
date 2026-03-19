@@ -13,6 +13,7 @@ declare global {
 		};
 		wpappointments: {
 			hooks: Hooks;
+			components: Record<string, unknown>;
 			api: {
 				root: string;
 				namespace: string;
