@@ -18,6 +18,7 @@ import {
 	positionRight,
 	stretchFullWidth,
 } from '@wordpress/icons';
+import { applyFilters } from '~/backend/utils/hooks';
 import type { BookingFlowBlockAttributes } from './booking-flow-block';
 import BookingFlow from '~/frontend/frontend';
 
@@ -143,6 +144,12 @@ export default function Edit({
 						</ButtonGroup>
 					</PanelBody>
 				</Panel>
+				{applyFilters<React.JSX.Element | null>(
+					'wpappointments.bookingFlow.inspectorControls',
+					null,
+					attributes,
+					setAttributes
+				)}
 			</InspectorControls>
 		</div>
 	);
