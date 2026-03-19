@@ -50,15 +50,15 @@ class BookableTypeRegistry extends Singleton {
 			);
 		}
 
-		$handler = new $handler_class();
-
-		if ( ! $handler instanceof AbstractBookableTypeHandler ) {
+		if ( ! is_subclass_of( $handler_class, AbstractBookableTypeHandler::class ) ) {
 			return new WP_Error(
 				'bookable_type_handler_invalid',
 				/* translators: %s: handler class name */
 				sprintf( __( 'Bookable type handler "%s" must extend AbstractBookableTypeHandler', 'wpappointments' ), $handler_class )
 			);
 		}
+
+		$handler = new $handler_class();
 
 		$this->types[ $slug ] = $handler;
 

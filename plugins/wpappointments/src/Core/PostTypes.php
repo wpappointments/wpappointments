@@ -134,15 +134,6 @@ class PostTypes {
 	}
 
 	/**
-	 * Register bookable entity post type
-	 *
-	 * Bookable entities are the abstract base for all bookable resources.
-	 * Concrete types (services, tables, rooms) are registered by plugins
-	 * via the bookable type registration API.
-	 *
-	 * @return void
-	 */
-	/**
 	 * Register bookable variant post type
 	 *
 	 * Variants are the actual bookable units. Every bookable entity has at
@@ -161,6 +152,15 @@ class PostTypes {
 				'show_in_rest'        => true,
 				'capability_type'     => 'post',
 				'map_meta_cap'        => true,
+				'capabilities'        => array(
+					'edit_post'          => 'wpa_manage_bookables',
+					'read_post'          => 'wpa_manage_bookables',
+					'delete_post'        => 'wpa_manage_bookables',
+					'edit_posts'         => 'wpa_manage_bookables',
+					'edit_others_posts'  => 'wpa_manage_bookables',
+					'publish_posts'      => 'wpa_manage_bookables',
+					'read_private_posts' => 'wpa_manage_bookables',
+				),
 				'hierarchical'        => false,
 				'rewrite'             => false,
 				'query_var'           => false,
@@ -191,6 +191,15 @@ class PostTypes {
 				'show_in_rest'        => true,
 				'capability_type'     => 'post',
 				'map_meta_cap'        => true,
+				'capabilities'        => array(
+					'edit_post'          => 'wpa_manage_bookables',
+					'read_post'          => 'wpa_manage_bookables',
+					'delete_post'        => 'wpa_manage_bookables',
+					'edit_posts'         => 'wpa_manage_bookables',
+					'edit_others_posts'  => 'wpa_manage_bookables',
+					'publish_posts'      => 'wpa_manage_bookables',
+					'read_private_posts' => 'wpa_manage_bookables',
+				),
 				'hierarchical'        => false,
 				'rewrite'             => false,
 				'query_var'           => false,
