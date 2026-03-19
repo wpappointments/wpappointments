@@ -177,7 +177,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 		if (error) {
 			displayErrorToast(
-				__('Something went wrong while submitting the form.')
+				__(
+					'Something went wrong while submitting the form.',
+					'wpappointments'
+				)
 			);
 
 			console.error(
@@ -231,7 +234,8 @@ export default withForm<FormProps>(function AppointmentFormFields({
 			? __('Edit Appointment', 'wpappointments')
 			: __('Create New Appointment', 'wpappointments');
 
-	const defaultServiceName = serviceName || 'Appointment';
+	const defaultServiceName =
+		serviceName || __('Appointment', 'wpappointments');
 
 	return (
 		<SlideOut title={title} id="appointment">

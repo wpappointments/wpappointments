@@ -72,7 +72,7 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response === null) {
-			setError('Error saving settings');
+			setError(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 

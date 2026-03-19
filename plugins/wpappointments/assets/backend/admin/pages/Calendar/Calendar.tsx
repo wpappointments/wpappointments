@@ -214,7 +214,7 @@ export default function Calendar() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Calendar">
+			<LayoutDefault title={__('Calendar', 'wpappointments')}>
 				<h1>
 					<strong>{getMonthName(month)}</strong> {year}
 				</h1>

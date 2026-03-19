@@ -185,7 +185,7 @@ export default function NotificationsSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast('Error saving settings');
+			displayErrorToast(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 

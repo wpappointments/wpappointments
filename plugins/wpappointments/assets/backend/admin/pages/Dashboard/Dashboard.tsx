@@ -22,7 +22,7 @@ export default function Dashboard() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Dashboard">
+			<LayoutDefault title={__('Dashboard', 'wpappointments')}>
 				<div className={styles.header}>
 					<DashboardStats />
 					<UpcomingAppointments openSlideOut={openSlideOut} />
@@ -128,7 +128,7 @@ function DashboardStats() {
 				<img
 					src={statsPlaceholder}
 					className={styles.statsPlaceholderImage}
-					alt="Dashboard stats placeholder"
+					alt={__('Dashboard stats placeholder', 'wpappointments')}
 				/>
 			</CardBody>
 		</Card>

@@ -1,5 +1,6 @@
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch from '~/backend/utils/fetch';
 import { store } from '~/backend/store/store';
@@ -35,14 +36,16 @@ export default withForm(function CalendarSettings() {
 		<HtmlForm onSubmit={onSubmit}>
 			<Card className={globalStyles.card}>
 				<CardHeader>
-					<Text size="title">Calendar settings</Text>
+					<Text size="title">
+						{__('Calendar settings', 'wpappointments')}
+					</Text>
 				</CardHeader>
 				<CardBody>
 					<FormFieldSet>
-						No fields here yet
+						{__('No fields here yet', 'wpappointments')}
 						<div className={formStyles.formActions}>
 							<Button type="submit" variant="primary">
-								Save changes
+								{__('Save changes', 'wpappointments')}
 							</Button>
 						</div>
 					</FormFieldSet>

@@ -181,7 +181,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	}, [scrollableRef]);
 
 	if (!month) {
-		return <div>Loading...</div>;
+		return <div>{__('Loading...', 'wpappointments')}</div>;
 	}
 
 	const daysInMonth = getDaysInMonth(

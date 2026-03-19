@@ -62,7 +62,10 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					horizontalCenter
 					fieldsClassName={styles.findTime}
 				>
-					Having trouble finding available time slot?{' '}
+					{__(
+						'Having trouble finding available time slot?',
+						'wpappointments'
+					)}{' '}
 					<Button
 						icon={calendar}
 						onClick={() => {
@@ -76,10 +79,13 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					</Button>
 				</FormFieldSet>
 
-				<FormFieldSet legend="Select day" style={{ maxWidth: '300px' }}>
+				<FormFieldSet
+					legend={__('Select day', 'wpappointments')}
+					style={{ maxWidth: '300px' }}
+				>
 					<DatePicker
 						name="date"
-						label="Date"
+						label={__('Date', 'wpappointments')}
 						defaultValue={
 							mode === 'edit' && appointment
 								? new Date(

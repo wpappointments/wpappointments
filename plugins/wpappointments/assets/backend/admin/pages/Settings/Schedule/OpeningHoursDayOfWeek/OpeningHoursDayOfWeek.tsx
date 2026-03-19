@@ -202,7 +202,7 @@ export default function OpeningHoursDayOfWeek({
 								alignItems: 'center',
 							}}
 						>
-							Not available
+							{__('Not available', 'wpappointments')}
 						</div>
 					)}
 				</div>
@@ -243,7 +243,7 @@ export default function OpeningHoursDayOfWeek({
 							}
 						}}
 					>
-						Copy to all days
+						{__('Copy to all days', 'wpappointments')}
 					</Button>
 				</div>
 			)}

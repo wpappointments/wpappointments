@@ -6,6 +6,7 @@ import {
 	CardHeader,
 } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { Text } from '~/backend/utils/experimental';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
@@ -75,7 +76,7 @@ function ScheduleSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast('Error saving settings');
+			displayErrorToast(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -89,7 +90,9 @@ function ScheduleSettings() {
 		<HtmlForm onSubmit={onSubmit}>
 			<Card className={globalStyles.card}>
 				<CardHeader>
-					<Text size="title">Working hours</Text>
+					<Text size="title">
+						{__('Working hours', 'wpappointments')}
+					</Text>
 				</CardHeader>
 				<CardBody>
 					{Object.values(schedule).map((daySettings, index) => (
@@ -103,7 +106,7 @@ function ScheduleSettings() {
 				</CardBody>
 				<CardFooter>
 					<Button type="submit" variant="primary">
-						Save changes
+						{__('Save changes', 'wpappointments')}
 					</Button>
 				</CardFooter>
 			</Card>
