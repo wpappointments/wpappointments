@@ -22,6 +22,7 @@ class Plugin extends Core\Singleton {
 	public function __construct() {
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
+		add_action( 'admin_init', array( $this, 'maybe_run_migration' ) );
 		Notifications\Notifications::get_instance();
 	}
 	/**
@@ -124,6 +125,20 @@ class Plugin extends Core\Singleton {
 
 		foreach ( Core\Capabilities::all() as $cap ) {
 			$role->add_cap( $cap );
+		}
+	}
+
+	/**
+	 * Run data migration if needed
+	 *
+	 * Migrates Entity + Service data to unified BookableEntity model.
+	 * Runs on admin_init, idempotent.
+	 *
+	 * @return void
+	 */
+	public function maybe_run_migration() {
+		if ( Data\Migration\BookableMigration::needs_migration() ) {
+			Data\Migration\BookableMigration::run();
 		}
 	}
 
