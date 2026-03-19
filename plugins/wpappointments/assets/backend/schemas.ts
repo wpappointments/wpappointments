@@ -51,6 +51,52 @@ export const ServiceSchema = object({
 	image: optional(string()),
 });
 
+export const BookableEntitySchema = object({
+	id: optional(number()),
+	name: string(),
+	active: optional(boolean()),
+	description: optional(string()),
+	type: optional(string()),
+	image: optional(string()),
+	imageId: optional(number()),
+	scheduleId: optional(number()),
+	bufferBefore: optional(number()),
+	bufferAfter: optional(number()),
+	minLeadTime: optional(number()),
+	maxLeadTime: optional(number()),
+	duration: optional(number()),
+	attributes: optional(
+		array(
+			object({
+				name: string(),
+				values: array(string()),
+			})
+		)
+	),
+});
+
+export const BookableVariantSchema = object({
+	id: optional(number()),
+	parentId: optional(number()),
+	name: optional(string()),
+	active: optional(boolean()),
+	attributeValues: optional(object({})),
+	overrides: optional(array(string())),
+	duration: optional(number()),
+	scheduleId: optional(number()),
+	bufferBefore: optional(number()),
+	bufferAfter: optional(number()),
+	minLeadTime: optional(number()),
+	maxLeadTime: optional(number()),
+});
+
+export const BookableTypeSchema = object({
+	slug: string(),
+	label: string(),
+	fields: optional(object({})),
+	variantOverridableFields: optional(array(string())),
+});
+
 export const EntitySchema = object({
 	id: optional(number()),
 	name: string(),

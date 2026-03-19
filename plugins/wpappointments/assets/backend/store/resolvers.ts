@@ -1,5 +1,6 @@
 import { resolvers as appointments } from './appointments/appointments';
 import { resolvers as availability } from './availability/availability';
+import { resolvers as bookables } from './bookables/bookables';
 import { resolvers as customers } from './customers/customers';
 import { resolvers as entities } from './entities/entities';
 import { resolvers as notices } from './notices/notices';
@@ -16,4 +17,5 @@ export default {
 	...customers,
 	...entities,
 	...services,
+	...bookables,
 };

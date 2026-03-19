@@ -2,6 +2,7 @@ import { combineReducers, createReduxStore } from '@wordpress/data';
 import actions from './actions';
 import { AppointmentsState } from './appointments/appointments.types';
 import { AvailabilityState } from './availability/availability.types';
+import { BookablesState } from './bookables/bookables.types';
 import controls from './controls';
 import { CustomersState } from './customers/customers.types';
 import { EntitiesState } from './entities/entities.types';
@@ -24,6 +25,7 @@ export type State = {
 	customers: CustomersState;
 	entities: EntitiesState;
 	services: ServicesState;
+	bookables: BookablesState;
 };
 
 export const store = createReduxStore('wpappointments', {

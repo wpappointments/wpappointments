@@ -1,5 +1,6 @@
 import { reducer as appointments } from './appointments/appointments';
 import { reducer as availability } from './availability/availability';
+import { reducer as bookables } from './bookables/bookables';
 import { reducer as customers } from './customers/customers';
 import { reducer as entities } from './entities/entities';
 import { reducer as notices } from './notices/notices';
@@ -18,4 +19,5 @@ export default {
 	customers,
 	entities,
 	services,
+	bookables,
 };
