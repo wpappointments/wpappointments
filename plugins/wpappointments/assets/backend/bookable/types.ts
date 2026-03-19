@@ -78,7 +78,36 @@ export type TimeRange = {
  * Bookable type field definition (from handler's get_fields())
  */
 export type BookableTypeField = {
-	default: unknown;
+	/** Field name / meta key */
+	name: string;
+	/** Field type — determines which control renders in the default form */
+	type:
+		| 'text'
+		| 'select'
+		| 'toggle'
+		| 'number'
+		| 'textarea'
+		| 'date'
+		| 'custom';
+	/** Display label */
+	label: string;
+	/** Placeholder text (for text/textarea/number) */
+	placeholder?: string;
+	/** Help text displayed below the field */
+	help?: string;
+	/** Whether the field is required */
+	required?: boolean;
+	/** Default value */
+	default?: unknown;
+	/** Options for select fields */
+	options?: Array<{ value: string; label: string }>;
+	/** Validation rules */
+	validation?: {
+		min?: number;
+		max?: number;
+		minLength?: number;
+		maxLength?: number;
+	};
 };
 
 /**
@@ -87,7 +116,7 @@ export type BookableTypeField = {
 export type BookableTypeInfo = {
 	slug: string;
 	label: string;
-	fields: Record<string, BookableTypeField>;
+	fields: BookableTypeField[];
 	variantOverridable: string[];
 };
 
@@ -102,6 +131,36 @@ export type PaginatedResponse<T> = {
 } & T;
 
 /**
+ * Props passed to a custom editComponent by the slideout system
+ */
+export type BookableEditComponentProps = {
+	/** Entity being edited (null = create mode) */
+	entity: BookableEntity | null;
+	/** Type info including field schemas from PHP */
+	typeInfo: BookableTypeInfo;
+	/** Submit handler — plugin passes data, core handles REST call + slideout lifecycle */
+	onSave: (data: Record<string, unknown>) => Promise<void>;
+	/** Cancel handler — closes the slideout */
+	onCancel: () => void;
+};
+
+/**
+ * Props passed to a custom field control in the default form
+ */
+export type CustomFieldProps = {
+	/** Field name (matches meta key) */
+	name: string;
+	/** Display label */
+	label: string;
+	/** Current field value */
+	value: unknown;
+	/** Update the field value */
+	onChange: (value: unknown) => void;
+	/** Full field definition from PHP schema */
+	fieldDef: BookableTypeField;
+};
+
+/**
  * Configuration for registering a bookable type on the JS side
  */
 export type BookableTypeRegistration = {
@@ -111,18 +170,12 @@ export type BookableTypeRegistration = {
 	label: string;
 	/** React component for the list/management page */
 	listComponent?: React.ComponentType;
-	/** React component for the edit form */
-	editComponent?: React.ComponentType<{ entity: BookableEntity }>;
+	/** Custom edit component — replaces default form, rendered inside core slideout */
+	editComponent?: React.ComponentType<BookableEditComponentProps>;
 	/** Custom column definitions for DataViews */
 	columns?: BookableTypeColumn[];
-	/** Custom field renderers for the edit form */
-	fieldRenderers?: Record<
-		string,
-		React.ComponentType<{
-			value: unknown;
-			onChange: (value: unknown) => void;
-		}>
-	>;
+	/** Custom field controls for 'custom' type fields in the default form */
+	fieldControls?: Record<string, React.ComponentType<CustomFieldProps>>;
 };
 
 /**

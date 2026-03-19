@@ -29,6 +29,8 @@ export type {
 	TimeRange,
 	BookableTypeField,
 	BookableTypeInfo,
+	BookableEditComponentProps,
+	CustomFieldProps,
 	PaginatedResponse,
 	BookableTypeRegistration,
 	BookableTypeColumn,

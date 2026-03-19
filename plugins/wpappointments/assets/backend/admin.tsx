@@ -1,6 +1,7 @@
 import { register } from '@wordpress/data';
 import { createHooks } from '@wordpress/hooks';
 import { render } from '~/backend/utils/dom';
+import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { OnboardingWizard } from './admin/pages/OnboardingWizard/OnboardingWizard';
 import CardBody from '~/backend/admin/components/CardBody/CardBody';
@@ -25,6 +26,7 @@ window.wpappointments.hooks = createHooks();
 	DataViews,
 	TableFullEmpty,
 	BookableListPage,
+	useSlideout,
 };
 
 const pages = new Map<string, React.JSX.Element>();
