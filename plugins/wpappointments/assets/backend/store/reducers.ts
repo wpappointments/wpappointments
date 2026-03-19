@@ -3,6 +3,7 @@ import { reducer as availability } from './availability/availability';
 import { reducer as customers } from './customers/customers';
 import { reducer as entities } from './entities/entities';
 import { reducer as notices } from './notices/notices';
+import { reducer as serviceCategories } from './service-categories/service-categories';
 import { reducer as services } from './services/services';
 import { reducer as settings } from './settings/settings';
 import { reducer as appointmentSlideout } from './slideout/appointment/appointment';
@@ -18,4 +19,5 @@ export default {
 	customers,
 	entities,
 	services,
+	serviceCategories,
 };

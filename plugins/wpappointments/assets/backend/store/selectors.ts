@@ -3,6 +3,7 @@ import { selectors as availability } from './availability/availability';
 import { selectors as customers } from './customers/customers';
 import { selectors as entities } from './entities/entities';
 import { selectors as notices } from './notices/notices';
+import { selectors as serviceCategories } from './service-categories/service-categories';
 import { selectors as services } from './services/services';
 import { selectors as settings } from './settings/settings';
 import { selectors as appointmentSlideoutSelectors } from './slideout/appointment/appointment';
@@ -18,4 +19,5 @@ export default {
 	...customers,
 	...entities,
 	...services,
+	...serviceCategories,
 };

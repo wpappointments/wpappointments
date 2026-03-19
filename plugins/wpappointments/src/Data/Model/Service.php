@@ -10,6 +10,7 @@ namespace WPAppointments\Data\Model;
 
 use WP_Error;
 use WP_Post;
+use WP_Term;
 use WPAppointments\Core\PluginInfo;
 
 /**
@@ -90,6 +91,9 @@ class Service {
 
 		unset( $meta['name'] );
 
+		$category = $meta['category'] ?? null;
+		unset( $meta['category'] );
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => PluginInfo::POST_TYPES['service'],
@@ -99,6 +103,15 @@ class Service {
 			),
 			true
 		);
+
+		if ( is_wp_error( $post_id ) ) {
+			$this->service = $post_id;
+			return $post_id;
+		}
+
+		if ( $category ) {
+			self::set_service_category( (int) $post_id, $category );
+		}
 
 		$this->service_data['id'] = $post_id;
 
@@ -129,17 +142,29 @@ class Service {
 			);
 		}
 
-		$id   = $this->service->ID;
-		$name = $data['name'] ?? null;
+		$id       = $this->service->ID;
+		$name     = $data['name'] ?? null;
+		$category = $data['category'] ?? null;
 
-		wp_update_post(
+		$meta = $data;
+		unset( $meta['category'] );
+
+		$updated = wp_update_post(
 			array(
 				'ID'         => $id,
 				'post_title' => $name,
-				'meta_input' => $data,
+				'meta_input' => $meta,
 			),
 			true
 		);
+
+		if ( is_wp_error( $updated ) ) {
+			return $updated;
+		}
+
+		if ( null !== $category ) {
+			self::set_service_category( $id, $category );
+		}
 
 		$this->parse_service_data( $data );
 		$this->service = get_post( $id );
@@ -221,8 +246,31 @@ class Service {
 		$duration    = isset( $normalized_meta['duration'] ) ? (int) $normalized_meta['duration'] : 30;
 		$description = $normalized_meta['description'] ?? '';
 		$price       = isset( $normalized_meta['price'] ) ? (float) $normalized_meta['price'] : 0;
-		$category    = $normalized_meta['category'] ?? '';
-		$image       = $normalized_meta['image'] ?? '';
+		$image_raw   = $normalized_meta['image'] ?? '';
+		$image       = '';
+
+		if ( ! empty( $image_raw ) ) {
+			if ( is_numeric( $image_raw ) ) {
+				$image_url = wp_get_attachment_url( (int) $image_raw );
+				if ( false !== $image_url ) {
+					$image = $image_url;
+				}
+			} else {
+				$image = $image_raw;
+			}
+		}
+
+		$category_terms = wp_get_post_terms( $id, PluginInfo::TAXONOMIES['service-category'] );
+		$category       = '';
+
+		if ( ! is_wp_error( $category_terms ) && ! empty( $category_terms ) ) {
+			$first_term = $category_terms[0];
+			$category   = array(
+				'id'   => $first_term->term_id,
+				'name' => $first_term->name,
+				'slug' => $first_term->slug,
+			);
+		}
 
 		return array(
 			'id'          => $id,
@@ -234,8 +282,45 @@ class Service {
 			'price'       => $price,
 			'category'    => $category,
 			'image'       => $image,
+			'imageId'     => is_numeric( $image_raw ) ? (int) $image_raw : 0,
 			'meta'        => $normalized_meta,
 		);
+	}
+
+	/**
+	 * Set service category term by name or term ID
+	 *
+	 * @param int        $post_id  Service post ID.
+	 * @param string|int $category Category name or term ID.
+	 *
+	 * @return void
+	 */
+	private static function set_service_category( $post_id, $category ) {
+		$taxonomy = PluginInfo::TAXONOMIES['service-category'];
+
+		if ( empty( $category ) ) {
+			wp_set_post_terms( $post_id, array(), $taxonomy );
+			return;
+		}
+
+		if ( is_numeric( $category ) ) {
+			$term = get_term( (int) $category, $taxonomy );
+			if ( $term && ! is_wp_error( $term ) ) {
+				wp_set_post_terms( $post_id, array( $term->term_id ), $taxonomy );
+			}
+			return;
+		}
+
+		$term = get_term_by( 'name', $category, $taxonomy );
+
+		if ( ! $term ) {
+			$result = wp_insert_term( $category, $taxonomy );
+			if ( ! is_wp_error( $result ) ) {
+				wp_set_post_terms( $post_id, array( $result['term_id'] ), $taxonomy );
+			}
+		} else {
+			wp_set_post_terms( $post_id, array( $term->term_id ), $taxonomy );
+		}
 	}
 
 	/**

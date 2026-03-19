@@ -66,6 +66,10 @@ function scripts() {
 
 	$screen = get_current_screen();
 
+	if ( str_contains( $screen->id, 'wpappointments' ) ) {
+		wp_enqueue_media();
+	}
+
 	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
 		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
 			return;

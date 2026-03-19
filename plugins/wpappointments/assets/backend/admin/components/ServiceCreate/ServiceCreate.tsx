@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { Button } from '@wordpress/components';
+import { Button, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import useSlideout from '~/backend/hooks/useSlideout';
-import { Service } from '~/backend/types';
+import { store } from '~/backend/store/store';
+import { Service, ServiceCategory } from '~/backend/types';
 import { HtmlForm, withForm } from '../Form/Form';
 import Input from '../FormField/Input/Input';
 import Toggle from '../FormField/Toggle/Toggle';
 import FormFieldSet from '../FormFieldSet/FormFieldSet';
 import SlideOut from '../SlideOut/SlideOut';
+import { serviceCategoriesApi } from '~/backend/api/service-categories';
 import {
 	servicesApi,
 	CreateServiceData,
@@ -23,6 +26,8 @@ export type ServiceFormData = {
 	description?: string;
 	active?: boolean;
 	price?: number;
+	categoryId?: string;
+	image?: string;
 };
 
 type ServiceCreateProps = {
@@ -46,16 +51,101 @@ export default withForm(function ServiceCreate({
 		selectedService?.active ?? true
 	);
 
+	const [imageUrl, setImageUrl] = useState<string>(
+		selectedService?.image ?? ''
+	);
+	const [imageId, setImageId] = useState<string>(
+		selectedService?.imageId ? String(selectedService.imageId) : ''
+	);
+
+	const [newCategoryName, setNewCategoryName] = useState('');
+	const [showNewCategory, setShowNewCategory] = useState(false);
+	const [prevCategoryId, setPrevCategoryId] = useState<string>('');
+	const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+		selectedService?.category?.id ? String(selectedService.category.id) : ''
+	);
+
+	const categories: ServiceCategory[] = useSelect((selectStore) => {
+		return selectStore(store).getServiceCategories() ?? [];
+	}, []);
+
+	const categoryOptions = [
+		{ label: __('— No category —', 'wpappointments'), value: '' },
+		...categories.map((cat) => ({
+			label: cat.name,
+			value: String(cat.id),
+		})),
+		{
+			label: __('+ Add new category', 'wpappointments'),
+			value: '__new__',
+		},
+	];
+
+	const handleCategoryChange = (value: string) => {
+		if (value === '__new__') {
+			setPrevCategoryId(selectedCategoryId);
+			setShowNewCategory(true);
+			setSelectedCategoryId('');
+		} else {
+			setShowNewCategory(false);
+			setSelectedCategoryId(value);
+		}
+	};
+
+	const handleAddNewCategory = async () => {
+		if (!newCategoryName.trim()) {
+			return;
+		}
+		const { createServiceCategory } = serviceCategoriesApi({
+			invalidateCache,
+		});
+		const response = await createServiceCategory({
+			name: newCategoryName.trim(),
+		});
+		if (response && response.status === 'success') {
+			const { category } = response.data;
+			setSelectedCategoryId(String(category.id));
+			setNewCategoryName('');
+			setShowNewCategory(false);
+		}
+	};
+
+	const openMediaPicker = () => {
+		const frame = window.wp.media({
+			title: __('Select Service Image', 'wpappointments'),
+			button: { text: __('Use this image', 'wpappointments') },
+			multiple: false,
+			library: { type: 'image' },
+		});
+
+		frame.on('select', () => {
+			const attachment = frame.state().get('selection').first().toJSON();
+			setImageUrl(attachment.url);
+			setImageId(String(attachment.id));
+		});
+
+		frame.open();
+	};
+
+	const clearImage = () => {
+		setImageUrl('');
+		setImageId('');
+	};
+
 	const onSubmit: SubmitHandler<ServiceFormData> = async (formData) => {
 		const { createService, updateService } = servicesApi({
 			invalidateCache,
 		});
+
+		const category = selectedCategoryId || null;
 
 		if (mode === 'edit' && selectedService?.id) {
 			const updateData: UpdateServiceData = {
 				...formData,
 				id: selectedService.id,
 				price: formData.price ? Number(formData.price) : 0,
+				category: category ? Number(category) : null,
+				image: imageId || '',
 			};
 
 			const response = await updateService(updateData);
@@ -74,6 +164,8 @@ export default withForm(function ServiceCreate({
 				description: formData.description,
 				active: formData.active ?? true,
 				price: formData.price ? Number(formData.price) : 0,
+				category: category ? Number(category) : null,
+				image: imageId || '',
 			};
 
 			const response = await createService(createData);
@@ -124,6 +216,102 @@ export default withForm(function ServiceCreate({
 						name="description"
 						label={__('Description', 'wpappointments')}
 					/>
+					<div>
+						<SelectControl
+							label={__('Category', 'wpappointments')}
+							value={
+								showNewCategory ? '__new__' : selectedCategoryId
+							}
+							options={categoryOptions}
+							onChange={handleCategoryChange}
+							size="__unstable-large"
+						/>
+						{showNewCategory && (
+							<div
+								style={{
+									display: 'flex',
+									gap: 8,
+									marginTop: 4,
+								}}
+							>
+								<input
+									type="text"
+									className="components-text-control__input"
+									aria-label={__(
+										'New category name',
+										'wpappointments'
+									)}
+									placeholder={__(
+										'New category name',
+										'wpappointments'
+									)}
+									value={newCategoryName}
+									onChange={(e) =>
+										setNewCategoryName(e.target.value)
+									}
+									style={{ flex: 1 }}
+								/>
+								<Button
+									variant="secondary"
+									onClick={handleAddNewCategory}
+								>
+									{__('Add', 'wpappointments')}
+								</Button>
+								<Button
+									variant="tertiary"
+									onClick={() => {
+										setShowNewCategory(false);
+										setNewCategoryName('');
+										setSelectedCategoryId(prevCategoryId);
+									}}
+								>
+									{__('Cancel', 'wpappointments')}
+								</Button>
+							</div>
+						)}
+					</div>
+					<div>
+						<p
+							style={{
+								marginBottom: 4,
+								fontSize: 11,
+								fontWeight: 500,
+								textTransform: 'uppercase',
+							}}
+						>
+							{__('Image', 'wpappointments')}
+						</p>
+						{imageUrl ? (
+							<div style={{ marginBottom: 8 }}>
+								<img
+									src={imageUrl}
+									alt=""
+									style={{
+										maxWidth: '100%',
+										maxHeight: 120,
+										display: 'block',
+										marginBottom: 8,
+										borderRadius: 4,
+									}}
+								/>
+								<Button
+									variant="secondary"
+									isDestructive
+									onClick={clearImage}
+									size="small"
+								>
+									{__('Remove image', 'wpappointments')}
+								</Button>
+							</div>
+						) : (
+							<Button
+								variant="secondary"
+								onClick={openMediaPicker}
+							>
+								{__('Select image', 'wpappointments')}
+							</Button>
+						)}
+					</div>
 					<Toggle
 						name="active"
 						label={__('Active', 'wpappointments')}

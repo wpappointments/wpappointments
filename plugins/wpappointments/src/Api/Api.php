@@ -25,6 +25,7 @@ class Api extends Core\Singleton {
 		Endpoints\CustomersController::init();
 		Endpoints\SettingsController::init();
 		Endpoints\ServicesController::init();
+		Endpoints\ServiceCategoriesController::init();
 		Endpoints\EntitiesController::init();
 	}
 }

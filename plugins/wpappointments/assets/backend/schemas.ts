@@ -40,6 +40,13 @@ export const AppointmentSchema = object({
 	customerId: optional(number()),
 });
 
+export const ServiceCategorySchema = object({
+	id: number(),
+	name: string(),
+	slug: string(),
+	count: optional(number()),
+});
+
 export const ServiceSchema = object({
 	id: optional(number()),
 	name: string(),
@@ -47,8 +54,9 @@ export const ServiceSchema = object({
 	description: optional(string()),
 	active: optional(boolean()),
 	price: optional(number()),
-	category: optional(string()),
+	category: optional(union([ServiceCategorySchema, literal('')])),
 	image: optional(string()),
+	imageId: optional(number()),
 });
 
 export const EntitySchema = object({
