@@ -85,21 +85,6 @@ function scripts() {
 		);
 	}
 
-	// Register data package script for addon plugins.
-	$data_asset = PluginInfo::get_plugin_dir_path() . '/build/data.ts.asset.php';
-
-	if ( file_exists( $data_asset ) ) {
-		$data_deps = require $data_asset;
-
-		wp_register_script(
-			'wpappointments-data-js',
-			PluginInfo::get_plugin_dir_url() . 'build/data.ts.js',
-			array_merge( $data_deps['dependencies'], array( 'wpappointments-admin-js' ) ),
-			$data_deps['version'],
-			true
-		);
-	}
-
 	$screen = get_current_screen();
 
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
@@ -107,10 +92,6 @@ function scripts() {
 
 		if ( wp_script_is( 'wpappointments-shared-js', 'registered' ) ) {
 			wp_enqueue_script( 'wpappointments-shared-js' );
-		}
-
-		if ( wp_script_is( 'wpappointments-data-js', 'registered' ) ) {
-			wp_enqueue_script( 'wpappointments-data-js' );
 		}
 	}
 
