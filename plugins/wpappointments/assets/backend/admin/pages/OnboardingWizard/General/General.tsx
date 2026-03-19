@@ -50,7 +50,7 @@ function GeneralSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response === null) {
-			setError('Error saving settings');
+			setError(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -75,7 +75,7 @@ function FormFields() {
 				<Input
 					name="firstName"
 					label={__('First name', 'wpappointments')}
-					placeholder="Eg. John"
+					placeholder={__('Eg. John', 'wpappointments')}
 					rules={{
 						required: true,
 					}}
@@ -84,7 +84,7 @@ function FormFields() {
 				<Input
 					name="lastName"
 					label={__('Last name', 'wpappointments')}
-					placeholder="Eg. Doe"
+					placeholder={__('Eg. Doe', 'wpappointments')}
 					rules={{
 						required: true,
 					}}
@@ -103,7 +103,7 @@ function FormFields() {
 				<Input
 					name="phoneNumber"
 					label={__('Phone number', 'wpappointments')}
-					placeholder="Eg. +1992334211"
+					placeholder={__('Eg. +1992334211', 'wpappointments')}
 				/>
 			</FormFieldSet>
 			<Button

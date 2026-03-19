@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { addHours, format } from 'date-fns';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import { AvailabilityState } from '~/backend/store/availability/availability.types';
@@ -98,10 +99,13 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 	return (
 		<div>
 			<FormFieldSet horizontal>
-				<FormFieldSet horizontal legend="Start time">
+				<FormFieldSet
+					horizontal
+					legend={__('Start time', 'wpappointments')}
+				>
 					<Select
 						name="timeHourStart"
-						label="Hour"
+						label={__('Hour', 'wpappointments')}
 						defaultValue={formatTimeForPicker(
 							defaultStart.getHours()
 						)}
@@ -114,7 +118,7 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 
 					<Select
 						name="timeMinuteStart"
-						label="Minute"
+						label={__('Minute', 'wpappointments')}
 						defaultValue="00"
 						rules={{
 							required: true,
@@ -123,10 +127,13 @@ export default function TimePicker({ date }: StartEndTimePickerProps) {
 						fullWidth
 					/>
 				</FormFieldSet>
-				<FormFieldSet horizontal={true} legend="Duration">
+				<FormFieldSet
+					horizontal={true}
+					legend={__('Duration', 'wpappointments')}
+				>
 					<Number
 						name="duration"
-						label="Minutes"
+						label={__('Minutes', 'wpappointments')}
 						defaultValue={length}
 						min={precision}
 						step={precision}

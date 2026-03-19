@@ -13,7 +13,7 @@ export default function Customers() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Customers">
+			<LayoutDefault title={__('Customers', 'wpappointments')}>
 				<Card className={globalStyles.card}>
 					<CardHeader>
 						<Text size="title">

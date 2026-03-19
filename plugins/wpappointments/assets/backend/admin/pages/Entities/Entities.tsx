@@ -249,7 +249,7 @@ export default function Entities() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Entities">
+			<LayoutDefault title={__('Entities', 'wpappointments')}>
 				<Card className={globalStyles.card}>
 					<CardHeader>
 						<Text size="title">

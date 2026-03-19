@@ -71,7 +71,7 @@ function GeneralSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast('Error saving settings');
+			displayErrorToast(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -106,27 +106,27 @@ function FormFields() {
 				<FormFieldSet>
 					<Input
 						name="firstName"
-						label="First name"
-						placeholder="Eg. John"
+						label={__('First name', 'wpappointments')}
+						placeholder={__('Eg. John', 'wpappointments')}
 					/>
 
 					<Input
 						name="lastName"
-						label="Last name"
-						placeholder="Eg. Doe"
+						label={__('Last name', 'wpappointments')}
+						placeholder={__('Eg. Doe', 'wpappointments')}
 					/>
 
 					<Input
 						name="email"
-						label="Email"
+						label={__('Email', 'wpappointments')}
 						type="email"
 						placeholder="example@example.com"
 					/>
 
 					<Input
 						name="phoneNumber"
-						label="Phone number"
-						placeholder="Eg. +1992334211"
+						label={__('Phone number', 'wpappointments')}
+						placeholder={__('Eg. +1992334211', 'wpappointments')}
 					/>
 				</FormFieldSet>
 			</CardBody>
@@ -137,7 +137,7 @@ function FormFields() {
 				<FormFieldSet>
 					<Select
 						name="startOfWeek"
-						label="Week starts on"
+						label={__('Week starts on', 'wpappointments')}
 						rules={{
 							required: true,
 						}}
@@ -184,27 +184,36 @@ function FormFields() {
 				<FormFieldSet style={{ marginBottom: 15 }}>
 					<Select
 						name="clockType"
-						label="Clock type"
+						label={__('Clock type', 'wpappointments')}
 						rules={{
 							required: true,
 						}}
 						options={[
-							{ label: '12 hours', value: '12' },
-							{ label: '24 hours', value: '24' },
+							{
+								label: __('12 hours', 'wpappointments'),
+								value: '12',
+							},
+							{
+								label: __('24 hours', 'wpappointments'),
+								value: '24',
+							},
 						]}
 					/>
 				</FormFieldSet>
 				<FormFieldSet style={{ marginBottom: 25 }}>
 					<Checkbox
 						name="timezoneSiteDefault"
-						label="Use site default timezone"
+						label={__(
+							'Use site default timezone',
+							'wpappointments'
+						)}
 						defaultValue={false}
 					/>
 					{!timezoneSiteDefault && (
 						<div>
 							<Select
 								name="timezone"
-								label="Timezone"
+								label={__('Timezone', 'wpappointments')}
 								rules={{
 									required: true,
 								}}
@@ -365,7 +374,7 @@ function FormFields() {
 			</CardBody>
 			<CardFooter>
 				<Button type="submit" variant="primary">
-					Save changes
+					{__('Save changes', 'wpappointments')}
 				</Button>
 			</CardFooter>
 		</Card>

@@ -230,7 +230,7 @@ export default function Services() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title="Services">
+			<LayoutDefault title={__('Services', 'wpappointments')}>
 				<Card className={globalStyles.card}>
 					<CardHeader>
 						<Text size="title">

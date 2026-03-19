@@ -1,7 +1,8 @@
+import { __ } from '@wordpress/i18n';
 import cn from '~/backend/utils/cn';
 import styles from './SubmitButton.module.css';
 
-export default function SubmitButton({ label = 'Book' }) {
+export default function SubmitButton({ label = __('Book', 'wpappointments') }) {
 	return (
 		<button
 			type="submit"

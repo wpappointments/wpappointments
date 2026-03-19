@@ -57,7 +57,7 @@ export default withForm(function AppointmentsSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast('Error saving settings');
+			displayErrorToast(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -71,28 +71,36 @@ export default withForm(function AppointmentsSettings() {
 		<HtmlForm onSubmit={onSubmit}>
 			<Card className={globalStyles.card}>
 				<CardHeader>
-					<Text size="title">Appointments Settings</Text>
+					<Text size="title">
+						{__('Appointments Settings', 'wpappointments')}
+					</Text>
 				</CardHeader>
 				<CardBody>
 					<FormFieldSet>
 						<Input
 							type="text"
 							name="serviceName"
-							label="Service Name"
-							placeholder="Appointment"
+							label={__('Service Name', 'wpappointments')}
+							placeholder={__('Appointment', 'wpappointments')}
 						/>
 
 						<Input
 							type="number"
 							name="defaultLength"
-							label="Default appointment length (in minutes)"
+							label={__(
+								'Default appointment length (in minutes)',
+								'wpappointments'
+							)}
 							placeholder=""
 						/>
 
 						<Input
 							type="number"
 							name="timePickerPrecision"
-							label="Time picker precision (in minutes)"
+							label={__(
+								'Time picker precision (in minutes)',
+								'wpappointments'
+							)}
 							placeholder=""
 							rules={{
 								min: 1,
@@ -103,8 +111,14 @@ export default withForm(function AppointmentsSettings() {
 							name="defaultStatus"
 							defaultValue={settings.defaultStatus || 'confirmed'}
 							options={[
-								{ label: 'Confirmed', value: 'confirmed' },
-								{ label: 'Pending', value: 'pending' },
+								{
+									label: __('Confirmed', 'wpappointments'),
+									value: 'confirmed',
+								},
+								{
+									label: __('Pending', 'wpappointments'),
+									value: 'pending',
+								},
 							]}
 							label={__(
 								'Default appointment status',
@@ -119,7 +133,7 @@ export default withForm(function AppointmentsSettings() {
 				</CardBody>
 				<CardFooter>
 					<Button type="submit" variant="primary">
-						Save changes
+						{__('Save changes', 'wpappointments')}
 					</Button>
 				</CardFooter>
 			</Card>

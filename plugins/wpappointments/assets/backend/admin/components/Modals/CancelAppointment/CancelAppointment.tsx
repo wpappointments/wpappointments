@@ -13,7 +13,7 @@ export default function CancelAppointment({
 }: Props) {
 	return (
 		<Modal
-			title="Cancel appointment?"
+			title={__('Cancel appointment?', 'wpappointments')}
 			onRequestClose={closeModal}
 			className={styles.modal}
 		>

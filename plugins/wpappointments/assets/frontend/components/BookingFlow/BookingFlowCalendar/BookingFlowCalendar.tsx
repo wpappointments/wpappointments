@@ -249,7 +249,9 @@ export default function BookingFlowCalendar() {
 					</div>
 					{datetime && (
 						<div>
-							<span>Selected time:</span>{' '}
+							<span>
+								{__('Selected time:', 'wpappointments')}
+							</span>{' '}
 							<strong>
 								{format(new Date(datetime), 'LLLL do, HH:mm')}
 							</strong>
