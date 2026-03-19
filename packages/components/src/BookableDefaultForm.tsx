@@ -12,13 +12,14 @@
 import { useState } from 'react';
 import {
 	Button,
-	TextControl,
-	TextareaControl,
 	SelectControl,
 	ToggleControl,
-	BaseControl,
+	TextareaControl,
 } from '@wordpress/components';
-import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import {
+	__experimentalInputControl as InputControl,
+	__experimentalNumberControl as NumberControl,
+} from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { getBookableType } from '@wpappointments/data';
 import type {
@@ -27,6 +28,7 @@ import type {
 	BookableTypeField,
 	CustomFieldProps,
 } from '@wpappointments/data';
+import FormField, { formFieldStyles } from './FormField/FormField';
 import FormFieldSet from './FormFieldSet/FormFieldSet';
 
 type BookableDefaultFormProps = {
@@ -64,11 +66,20 @@ export default function BookableDefaultForm({
 
 	const setMetaField = (fieldName: string, value: unknown) => {
 		setMeta((prev) => ({ ...prev, [fieldName]: value }));
-		// Clear error when field changes.
 		if (errors[fieldName]) {
 			setErrors((prev) => {
 				const next = { ...prev };
 				delete next[fieldName];
+				return next;
+			});
+		}
+	};
+
+	const clearNameError = () => {
+		if (errors.name) {
+			setErrors((prev) => {
+				const next = { ...prev };
+				delete next.name;
 				return next;
 			});
 		}
@@ -190,37 +201,50 @@ export default function BookableDefaultForm({
 		<form onSubmit={handleSubmit}>
 			<FormFieldSet>
 				{/* Core fields */}
-				<TextControl
-					label={__('Name', 'wpappointments')}
-					value={name}
-					onChange={(val: string) => {
-						setName(val);
-						if (errors.name) {
-							setErrors((prev) => {
-								const next = { ...prev };
-								delete next.name;
-								return next;
-							});
-						}
-					}}
-					required
-					help={errors.name}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{__('Name', 'wpappointments')}*
+					</label>
+					<InputControl
+						value={name}
+						onChange={(val: string | undefined) => {
+							setName(val ?? '');
+							clearNameError();
+						}}
+						size="__unstable-large"
+					/>
+					{errors.name && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: 'red',
+							}}
+						>
+							{errors.name}
+						</p>
+					)}
+				</FormField>
 
-				<TextareaControl
-					label={__('Description', 'wpappointments')}
-					value={description}
-					onChange={setDescription}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{__('Description', 'wpappointments')}
+					</label>
+					<TextareaControl
+						value={description}
+						onChange={setDescription}
+						__nextHasNoMarginBottom
+					/>
+				</FormField>
 
-				<ToggleControl
-					label={__('Active', 'wpappointments')}
-					checked={active}
-					onChange={setActive}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<ToggleControl
+						label={__('Active', 'wpappointments')}
+						checked={active}
+						onChange={setActive}
+						__nextHasNoMarginBottom
+					/>
+				</FormField>
 
 				{/* Type-specific fields */}
 				{typeInfo.fields.map((field) => (
@@ -256,7 +280,8 @@ export default function BookableDefaultForm({
 }
 
 /**
- * Renders the appropriate WP control for a field schema entry
+ * Renders the appropriate WP control for a field schema entry,
+ * using the same FormField wrapper and styling as the rest of the app.
  */
 function FieldControl({
 	field,
@@ -271,85 +296,154 @@ function FieldControl({
 	error?: string;
 	typeSlug: string;
 }) {
-	const helpText = error || field.help;
-
 	switch (field.type) {
 		case 'text':
 			return (
-				<TextControl
-					label={field.label}
-					value={String(value ?? '')}
-					onChange={onChange}
-					placeholder={field.placeholder}
-					required={field.required}
-					help={helpText}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{field.label}
+						{field.required && '*'}
+					</label>
+					<InputControl
+						placeholder={field.placeholder}
+						onChange={onChange}
+						value={String(value ?? '')}
+						size="__unstable-large"
+					/>
+					{(error || field.help) && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: error ? 'red' : undefined,
+							}}
+						>
+							{error || field.help}
+						</p>
+					)}
+				</FormField>
 			);
 
 		case 'textarea':
 			return (
-				<TextareaControl
-					label={field.label}
-					value={String(value ?? '')}
-					onChange={onChange}
-					placeholder={field.placeholder}
-					required={field.required}
-					help={helpText}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{field.label}
+						{field.required && '*'}
+					</label>
+					<TextareaControl
+						value={String(value ?? '')}
+						onChange={onChange}
+						placeholder={field.placeholder}
+						__nextHasNoMarginBottom
+					/>
+					{error && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: 'red',
+							}}
+						>
+							{error}
+						</p>
+					)}
+				</FormField>
 			);
 
 		case 'number':
 			return (
-				<NumberControl
-					label={field.label}
-					value={value as number}
-					onChange={(val: string | undefined) => {
-						onChange(val !== undefined ? Number(val) : '');
-					}}
-					min={field.validation?.min}
-					max={field.validation?.max}
-					required={field.required}
-					help={helpText}
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{field.label}
+						{field.required && '*'}
+					</label>
+					<NumberControl
+						value={value as number}
+						onChange={(val: string | undefined) => {
+							onChange(val !== undefined ? Number(val) : '');
+						}}
+						min={field.validation?.min}
+						max={field.validation?.max}
+						size="__unstable-large"
+					/>
+					{(error || field.help) && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: error ? 'red' : undefined,
+							}}
+						>
+							{error || field.help}
+						</p>
+					)}
+				</FormField>
 			);
 
 		case 'select':
 			return (
-				<SelectControl
-					label={field.label}
-					value={String(value ?? '')}
-					onChange={onChange}
-					options={[
-						...(field.required
-							? []
-							: [
-									{
-										value: '',
-										label: __(
-											'— Select —',
-											'wpappointments'
-										),
-									},
-								]),
-						...(field.options ?? []),
-					]}
-					help={helpText}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{field.label}
+						{field.required && '*'}
+					</label>
+					<SelectControl
+						value={String(value ?? '')}
+						onChange={onChange}
+						options={[
+							...(field.required
+								? []
+								: [
+										{
+											value: '',
+											label: __(
+												'— Select —',
+												'wpappointments'
+											),
+										},
+									]),
+							...(field.options ?? []),
+						]}
+						size="__unstable-large"
+						__nextHasNoMarginBottom
+					/>
+					{(error || field.help) && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: error ? 'red' : undefined,
+							}}
+						>
+							{error || field.help}
+						</p>
+					)}
+				</FormField>
 			);
 
 		case 'toggle':
 			return (
-				<BaseControl help={helpText} __nextHasNoMarginBottom>
+				<FormField>
 					<ToggleControl
 						label={field.label}
 						checked={Boolean(value)}
 						onChange={onChange}
 						__nextHasNoMarginBottom
 					/>
-				</BaseControl>
+					{(error || field.help) && (
+						<p
+							style={{
+								marginTop: 0,
+								marginBottom: 0,
+								color: error ? 'red' : undefined,
+								fontSize: '12px',
+							}}
+						>
+							{error || field.help}
+						</p>
+					)}
+				</FormField>
 			);
 
 		case 'custom': {
@@ -377,13 +471,16 @@ function FieldControl({
 
 		default:
 			return (
-				<TextControl
-					label={field.label}
-					value={String(value ?? '')}
-					onChange={onChange}
-					help={helpText}
-					__nextHasNoMarginBottom
-				/>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{field.label}
+					</label>
+					<InputControl
+						onChange={onChange}
+						value={String(value ?? '')}
+						size="__unstable-large"
+					/>
+				</FormField>
 			);
 	}
 }

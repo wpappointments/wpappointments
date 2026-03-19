@@ -19,6 +19,7 @@ export type {
 } from './DataViews/types';
 export { default as TableFullEmpty } from './TableFullEmpty/TableFullEmpty';
 export { default as FormFieldSet } from './FormFieldSet/FormFieldSet';
+export { default as FormField, formFieldStyles } from './FormField/FormField';
 
 // Bookable CRUD components
 export { default as BookableListPage } from './BookableListPage';
