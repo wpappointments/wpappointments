@@ -808,6 +808,16 @@ class BookableVariant {
 			return;
 		}
 
+		// Track which overridable fields were explicitly provided in the
+		// raw input so save() can persist intentional zero/empty overrides.
+		$explicit_overrides = array();
+
+		foreach ( self::OVERRIDABLE_CORE_FIELDS as $field ) {
+			if ( array_key_exists( $field, $data ) ) {
+				$explicit_overrides[] = $field;
+			}
+		}
+
 		$this->variant_data = wp_parse_args(
 			$data,
 			array(
@@ -824,6 +834,13 @@ class BookableVariant {
 				'updated'          => time(),
 			)
 		);
+
+		if ( ! empty( $explicit_overrides ) ) {
+			$existing = $this->variant_data[ self::OVERRIDE_TRACKING_KEY ] ?? array();
+			$this->variant_data[ self::OVERRIDE_TRACKING_KEY ] = array_values(
+				array_unique( array_merge( $existing, $explicit_overrides ) )
+			);
+		}
 	}
 
 	/**
