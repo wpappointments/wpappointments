@@ -51,7 +51,8 @@ test(
 		$data    = $results->get_data();
 
 		expect( $results )->toBeSuccess();
-		expect( $data['data']['variants'] )->toHaveCount( 2 );
+		// 2 manually created + 1 default variant from entity save.
+		expect( $data['data']['variants'] )->toHaveCount( 3 );
 	}
 );
 

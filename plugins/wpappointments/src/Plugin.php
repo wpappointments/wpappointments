@@ -20,10 +20,24 @@ class Plugin extends Core\Singleton {
 	 * Handle all plugin initialization, activation and deactivation.
 	 */
 	public function __construct() {
+		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Migration\BookableMigration', 'maybe_run' ), 99 );
 		Notifications\Notifications::get_instance();
+	}
+
+	/**
+	 * Load plugin text domain for translations
+	 *
+	 * @return void
+	 */
+	public function load_textdomain() {
+		load_plugin_textdomain(
+			'wpappointments',
+			false,
+			dirname( plugin_basename( Core\PluginInfo::PLUGIN_FILE ) ) . '/languages'
+		);
 	}
 	/**
 	 * Get instance of a class by key

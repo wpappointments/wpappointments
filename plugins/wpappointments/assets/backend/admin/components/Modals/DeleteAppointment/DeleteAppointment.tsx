@@ -13,7 +13,7 @@ export default function DeleteAppointmentModal({
 }: Props) {
 	return (
 		<Modal
-			title="Delete appointment?"
+			title={__('Delete appointment?', 'wpappointments')}
 			onRequestClose={closeModal}
 			className={styles.modal}
 		>

@@ -13,7 +13,7 @@ namespace WPAppointments\Core;
  */
 class PostTypes {
 	/**
-	 * Register all custom post types
+	 * Register all custom post types and taxonomies
 	 *
 	 * @return void
 	 */

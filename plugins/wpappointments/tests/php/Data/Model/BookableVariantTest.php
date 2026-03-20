@@ -111,9 +111,10 @@ test(
 test(
 	'BookableVariant model - save method',
 	function () {
-		$this->spy_hook( 'wpappointments_variant_created' );
-
 		$entity_id = create_test_bookable();
+
+		// Spy after entity creation so the default variant hook is not counted.
+		$this->spy_hook( 'wpappointments_variant_created' );
 
 		$variant = new BookableVariant(
 			array(
@@ -599,7 +600,8 @@ test(
 
 		$count = BookableVariant::delete_all_for_entity( $entity_id );
 
-		expect( $count )->toBe( 3 );
+		// 3 manually created + 1 default variant from entity save.
+		expect( $count )->toBe( 4 );
 
 		$remaining = get_children(
 			array(

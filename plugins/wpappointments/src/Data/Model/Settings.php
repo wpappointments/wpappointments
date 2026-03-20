@@ -138,7 +138,7 @@ class Settings {
 		$category_exists = array_key_exists( $category, $this->settings );
 
 		if ( ! $category_exists ) {
-			return new \WP_Error( 'invalid_settings_category', 'Invalid settings category' );
+			return new \WP_Error( 'invalid_settings_category', __( 'Invalid settings category', 'wpappointments' ) );
 		}
 
 		$schedule = array();
@@ -188,8 +188,21 @@ class Settings {
 
 		$updated = array();
 
+		// Build list of allowed setting names for this category.
+		$allowed_keys = array_map(
+			function ( $option ) {
+				return $option['name'];
+			},
+			$this->settings[ $category ]
+		);
+
 		if ( $category_exists ) {
 			foreach ( $settings as $key => $value ) {
+				// Skip keys not defined in the settings schema.
+				if ( ! in_array( $key, $allowed_keys, true ) ) {
+					continue;
+				}
+
 				if ( 'serviceName' === $key ) {
 					$service_post_id = get_option( 'wpappointments_defaultServiceId' );
 
@@ -213,7 +226,7 @@ class Settings {
 			return $updated;
 		}
 
-		return new \WP_Error( 'unknown_settings_error', 'Unknown error while saving settings' );
+		return new \WP_Error( 'unknown_settings_error', __( 'Unknown error while saving settings', 'wpappointments' ) );
 	}
 
 	/**

@@ -85,7 +85,10 @@ export default withForm(function CustomerCreate({
 		closeCurrentSlideOut();
 	};
 
-	const submitText = mode === 'create' ? 'Create' : 'Update';
+	const submitText =
+		mode === 'create'
+			? __('Create', 'wpappointments')
+			: __('Update', 'wpappointments');
 	const title =
 		mode === 'create'
 			? __('New Customer', 'wpappointments')
@@ -97,15 +100,19 @@ export default withForm(function CustomerCreate({
 				<FormFieldSet>
 					<Input
 						name="name"
-						label="Name"
+						label={__('Name', 'wpappointments')}
 						rules={{ required: true }}
 					/>
-					<Input name="email" label="Email" type="email" />
-					<Input name="phone" label="Phone" />
+					<Input
+						name="email"
+						label={__('Email', 'wpappointments')}
+						type="email"
+					/>
+					<Input name="phone" label={__('Phone', 'wpappointments')} />
 					{mode === 'create' && (
 						<Checkbox
 							name="createAccount"
-							label="Create account"
+							label={__('Create account', 'wpappointments')}
 							defaultValue={true}
 							style={{
 								display:

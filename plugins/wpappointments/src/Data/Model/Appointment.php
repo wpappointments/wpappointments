@@ -305,8 +305,14 @@ class Appointment {
 			return new \WP_Error( 'appointment_id_required', __( 'Appointment ID is required', 'wpappointments' ) );
 		}
 
-		if ( ! get_post( $post_id ) ) {
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
 			return new \WP_Error( 'appointment_not_found', __( 'Appointment not found', 'wpappointments' ) );
+		}
+
+		if ( 'wpa-appointment' !== $post->post_type ) {
+			return new \WP_Error( 'appointment_invalid_type', __( 'Post is not an appointment', 'wpappointments' ) );
 		}
 
 		return $post_id;

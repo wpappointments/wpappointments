@@ -52,7 +52,7 @@ function CalendarSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response === null) {
-			setError('Error saving settings');
+			setError(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -114,13 +114,19 @@ function FormFields() {
 				/>
 				<Select
 					name="clockType"
-					label="Clock type"
+					label={__('Clock type', 'wpappointments')}
 					rules={{
 						required: true,
 					}}
 					options={[
-						{ label: '12 hours', value: '12' },
-						{ label: '24 hours', value: '24' },
+						{
+							label: __('12 hours', 'wpappointments'),
+							value: '12',
+						},
+						{
+							label: __('24 hours', 'wpappointments'),
+							value: '24',
+						},
 					]}
 				/>
 			</FormFieldSet>

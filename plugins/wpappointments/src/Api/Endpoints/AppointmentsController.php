@@ -190,12 +190,12 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$date        = $request->get_param( 'date' );
-		$service     = $request->get_param( 'service' );
-		$duration    = $request->get_param( 'duration' );
+		$date        = sanitize_text_field( $request->get_param( 'date' ) );
+		$service     = sanitize_text_field( $request->get_param( 'service' ) );
+		$duration    = (int) $request->get_param( 'duration' );
 		$customer    = $request->get_param( 'customer' );
-		$customer_id = $request->get_param( 'customerId' );
-		$status      = $request->get_param( 'status' );
+		$customer_id = absint( $request->get_param( 'customerId' ) );
+		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -229,9 +229,9 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
-		$date           = $request->get_param( 'date' );
+		$date           = sanitize_text_field( $request->get_param( 'date' ) );
 		$customer       = $request->get_param( 'customer' );
-		$create_account = $request->get_param( 'createAccount' );
+		$create_account = (bool) $request->get_param( 'createAccount' );
 		$password       = $request->get_param( 'password' );
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
@@ -277,13 +277,13 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$id          = $request->get_param( 'id' );
-		$date        = $request->get_param( 'date' );
-		$service     = $request->get_param( 'service' );
-		$duration    = $request->get_param( 'duration' );
-		$status      = $request->get_param( 'status' );
+		$id          = absint( $request->get_param( 'id' ) );
+		$date        = sanitize_text_field( $request->get_param( 'date' ) );
+		$service     = sanitize_text_field( $request->get_param( 'service' ) );
+		$duration    = (int) $request->get_param( 'duration' );
+		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 		$customer    = $request->get_param( 'customer' );
-		$customer_id = $request->get_param( 'customerId' );
+		$customer_id = absint( $request->get_param( 'customerId' ) );
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 

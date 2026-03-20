@@ -28,7 +28,7 @@ export function OnboardingWizard() {
 					variant="link"
 					href="/wp-admin/admin-post.php?action=wpappointments_wizard_complete"
 				>
-					Skip guided setup
+					{__('Skip guided setup', 'wpappointments')}
 				</Button>
 			</div>
 			<div className={styles.wizardContent}>
@@ -65,11 +65,14 @@ function Welcome({ setCurrentStep }: StepProps) {
 	return (
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>Welcome to WP Appointments!</h1>
+				<h1 className={styles.title}>
+					{__('Welcome to WP Appointments!', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
-					It's great to have you here! We'll be guiding you through
-					the setup process - first, answer a few questions to tailor
-					your experience.
+					{__(
+						"It's great to have you here! We'll be guiding you through the setup process - first, answer a few questions to tailor your experience.",
+						'wpappointments'
+					)}
 				</p>
 			</div>
 			<Button
@@ -95,7 +98,9 @@ function AllSet() {
 	return (
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
-				<h1 className={styles.title}>All set!</h1>
+				<h1 className={styles.title}>
+					{__('All set!', 'wpappointments')}
+				</h1>
 				<p className={styles.leadText}>
 					{__(
 						"You're good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.",
@@ -122,7 +127,10 @@ function AllSet() {
 				<img
 					src={gutenbergBlock}
 					className={styles.gutenbergBlockImage}
-					alt="Gutenberg block inserting visual guide"
+					alt={__(
+						'Gutenberg block inserting visual guide',
+						'wpappointments'
+					)}
 				/>
 			</div>
 			<Button

@@ -104,7 +104,9 @@ function TableRow({ row, view }: TableRowProps) {
 				{formatDateRelative(dateStart, new Date())}
 				{userDiffTimezone && ` (${userDiffTimezone})`}
 			</td>
-			<td>{duration} min</td>
+			<td>
+				{duration} {__('min', 'wpappointments')}
+			</td>
 		</tr>
 	);
 }

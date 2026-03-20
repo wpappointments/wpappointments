@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import AppointmentsSettings from './Appointments/Appointments';
 import GeneralSettings from './General/General';
 import NotificationsSettings from './Notifications/Notifications';
@@ -19,7 +20,7 @@ const tabs = new Map<string, Tab>([
 		'general',
 		{
 			name: 'general',
-			title: 'General settings',
+			title: __('General settings', 'wpappointments'),
 			className: 'tab-general',
 			component: <GeneralSettings />,
 		},
@@ -28,7 +29,7 @@ const tabs = new Map<string, Tab>([
 		'appointments',
 		{
 			name: 'appointments',
-			title: 'Appointments',
+			title: __('Appointments', 'wpappointments'),
 			className: 'tab-appointments',
 			component: <AppointmentsSettings />,
 		},
@@ -37,7 +38,7 @@ const tabs = new Map<string, Tab>([
 		'schedule',
 		{
 			name: 'schedule',
-			title: 'Schedule',
+			title: __('Schedule', 'wpappointments'),
 			className: 'tab-schedule',
 			component: <ScheduleSettings />,
 		},
@@ -46,7 +47,7 @@ const tabs = new Map<string, Tab>([
 		'notifications',
 		{
 			name: 'notifications',
-			title: 'Notifications',
+			title: __('Notifications', 'wpappointments'),
 			className: 'tab-notifications',
 			component: <NotificationsSettings />,
 		},
@@ -55,7 +56,7 @@ const tabs = new Map<string, Tab>([
 
 export default function Settings() {
 	return (
-		<LayoutDefault title="Settings">
+		<LayoutDefault title={__('Settings', 'wpappointments')}>
 			<TabPanel
 				className={styles.tabsContainer}
 				activeClass="active-tab"

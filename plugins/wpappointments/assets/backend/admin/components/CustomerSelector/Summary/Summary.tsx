@@ -24,7 +24,7 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 						<span>
 							{customer.email && (
 								<>
-									mail:{' '}
+									{__('mail:', 'wpappointments')}{' '}
 									<a
 										href={`mailto:${customer.email}`}
 										target="_blank"
@@ -36,7 +36,7 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 							)}
 							{customer.phone && (
 								<>
-									phone:{' '}
+									{__('phone:', 'wpappointments')}{' '}
 									<a href={`tel:${customer.phone}`}>
 										{customer.phone}
 									</a>

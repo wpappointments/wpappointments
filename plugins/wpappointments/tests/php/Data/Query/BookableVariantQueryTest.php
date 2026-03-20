@@ -32,8 +32,9 @@ test(
 
 		$result = BookableVariantQuery::by_entity( $entity_id );
 
-		expect( $result['variants'] )->toBeEmpty();
-		expect( $result['total_items'] )->toBe( 0 );
+		// Entity save auto-creates one default variant.
+		expect( $result['variants'] )->toHaveCount( 1 );
+		expect( $result['total_items'] )->toBe( 1 );
 	}
 );
 
@@ -48,8 +49,9 @@ test(
 
 		$result = BookableVariantQuery::by_entity( $entity_id );
 
-		expect( $result['variants'] )->toHaveCount( 3 );
-		expect( $result['total_items'] )->toBe( 3 );
+		// 3 manually created + 1 default variant from entity save.
+		expect( $result['variants'] )->toHaveCount( 4 );
+		expect( $result['total_items'] )->toBe( 4 );
 	}
 );
 
@@ -66,8 +68,9 @@ test(
 		$result_a = BookableVariantQuery::by_entity( $entity_a );
 		$result_b = BookableVariantQuery::by_entity( $entity_b );
 
-		expect( $result_a['variants'] )->toHaveCount( 2 );
-		expect( $result_b['variants'] )->toHaveCount( 1 );
+		// +1 default variant per entity from entity save.
+		expect( $result_a['variants'] )->toHaveCount( 3 );
+		expect( $result_b['variants'] )->toHaveCount( 2 );
 	}
 );
 
@@ -97,7 +100,8 @@ test(
 
 		$result = BookableVariantQuery::active( $entity_id );
 
-		expect( $result['variants'] )->toHaveCount( 2 );
+		// 2 manually created active + 1 default variant from entity save.
+		expect( $result['variants'] )->toHaveCount( 3 );
 	}
 );
 

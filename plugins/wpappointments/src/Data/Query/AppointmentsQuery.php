@@ -43,21 +43,49 @@ class AppointmentsQuery {
 	 */
 	public static function all( $query ) {
 		$appointments   = array();
-		$posts_per_page = $query['posts_per_page'] ?? 10;
-		$default_query  = array_merge(
+		$query          = is_array( $query ) ? $query : array();
+		$posts_per_page = isset( $query['posts_per_page'] ) ? absint( $query['posts_per_page'] ) : 10;
+		$paged          = isset( $query['paged'] ) ? absint( $query['paged'] ) : 1;
+
+		$args = array_merge(
 			self::DEFAULT_QUERY_PART,
 			array(
 				'posts_per_page' => $posts_per_page,
+				'paged'          => $paged,
 				'meta_query'     => array(),
 			)
 		);
 
-		$query = new WP_Query(
-			array_merge(
-				$default_query,
-				(array) $query
-			)
-		);
+		if ( ! empty( $query['status'] ) ) {
+			$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
+			$status           = sanitize_text_field( $query['status'] );
+
+			if ( in_array( $status, $allowed_statuses, true ) ) {
+				$args['meta_query'][] = array(
+					'key'     => 'status',
+					'value'   => $status,
+					'compare' => '=',
+				);
+			}
+		}
+
+		if ( ! empty( $query['date_from'] ) ) {
+			$args['meta_query'][] = array(
+				'key'     => 'timestamp',
+				'value'   => (int) $query['date_from'],
+				'compare' => '>=',
+			);
+		}
+
+		if ( ! empty( $query['date_to'] ) ) {
+			$args['meta_query'][] = array(
+				'key'     => 'timestamp',
+				'value'   => (int) $query['date_to'],
+				'compare' => '<=',
+			);
+		}
+
+		$query = new WP_Query( $args );
 
 		foreach ( $query->posts as $post ) {
 			$appointments[] = self::normalize(
@@ -83,6 +111,10 @@ class AppointmentsQuery {
 	 * @return array
 	 */
 	public static function upcoming( $query ) {
+		$query          = is_array( $query ) ? $query : array();
+		$posts_per_page = isset( $query['posts_per_page'] ) ? absint( $query['posts_per_page'] ) : 10;
+		$paged          = isset( $query['paged'] ) ? absint( $query['paged'] ) : 1;
+
 		$date_query = array(
 			array(
 				'key'     => 'timestamp',
@@ -102,10 +134,11 @@ class AppointmentsQuery {
 			'compare' => '=',
 		);
 
-		$default_query = array_merge(
+		$args = array_merge(
 			self::DEFAULT_QUERY_PART,
 			array(
-				'posts_per_page' => 10,
+				'posts_per_page' => $posts_per_page,
+				'paged'          => $paged,
 				'meta_query'     => array_merge(
 					array(
 						'relation' => 'AND',
@@ -116,12 +149,7 @@ class AppointmentsQuery {
 			),
 		);
 
-		$query = new \WP_Query(
-			array_merge(
-				$default_query,
-				$query ?? array()
-			)
-		);
+		$query = new \WP_Query( $args );
 
 		$appointments = array();
 

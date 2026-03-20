@@ -54,7 +54,7 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response === null) {
-			setError('Error saving settings');
+			setError(__('Error saving settings', 'wpappointments'));
 			return;
 		}
 
@@ -79,8 +79,8 @@ function FormFields() {
 				<Input
 					type="text"
 					name="serviceName"
-					label="Service Name"
-					placeholder="Appointment"
+					label={__('Service Name', 'wpappointments')}
+					placeholder={__('Appointment', 'wpappointments')}
 					rules={{
 						required: true,
 					}}
@@ -93,7 +93,10 @@ function FormFields() {
 				<Input
 					type="number"
 					name="defaultLength"
-					label="Default appointment length (in minutes)"
+					label={__(
+						'Default appointment length (in minutes)',
+						'wpappointments'
+					)}
 					placeholder=""
 					rules={{
 						required: true,
@@ -103,7 +106,10 @@ function FormFields() {
 				<Input
 					type="number"
 					name="timePickerPrecision"
-					label="Time picker precision (in minutes)"
+					label={__(
+						'Time picker precision (in minutes)',
+						'wpappointments'
+					)}
 					placeholder=""
 					rules={{
 						required: true,
@@ -120,8 +126,14 @@ function FormFields() {
 					name="defaultStatus"
 					defaultValue="confirmed"
 					options={[
-						{ label: 'Confirmed', value: 'confirmed' },
-						{ label: 'Pending', value: 'pending' },
+						{
+							label: __('Confirmed', 'wpappointments'),
+							value: 'confirmed',
+						},
+						{
+							label: __('Pending', 'wpappointments'),
+							value: 'pending',
+						},
 					]}
 					label={__('Default appointment status', 'wpappointments')}
 					rules={{
