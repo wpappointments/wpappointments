@@ -95,7 +95,7 @@ class PostTypes {
 				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
+				'map_meta_cap'        => false,
 				'capabilities'        => array(
 					'edit_post'          => 'wpa_manage_bookables',
 					'read_post'          => 'wpa_manage_bookables',
