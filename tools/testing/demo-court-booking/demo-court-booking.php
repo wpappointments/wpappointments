@@ -101,18 +101,23 @@ add_action(
 			15
 		);
 
-		// Enqueue admin assets and add as core admin dependency.
+		// Register early (priority 5) so the handle exists when the core
+		// plugin reads wpappointments_admin_js_dependencies at priority 10.
+		add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\register_admin_assets', 5 );
 		add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 		add_filter( 'wpappointments_admin_js_dependencies', __NAMESPACE__ . '\\add_admin_dependency' );
 	}
 );
 
 /**
- * Enqueue demo court booking admin script
+ * Register demo court booking admin script
+ *
+ * Runs at priority 5 so the handle is available before the core plugin
+ * collects dependencies at priority 10.
  *
  * @return void
  */
-function enqueue_admin_assets() {
+function register_admin_assets() {
 	$build_path = DEMO_COURT_BOOKING_DIR_PATH . 'build/';
 	$build_url  = plugin_dir_url( DEMO_COURT_BOOKING_FILE ) . 'build/';
 
@@ -129,7 +134,14 @@ function enqueue_admin_assets() {
 		$asset['version'],
 		true
 	);
+}
 
+/**
+ * Enqueue demo court booking admin script on relevant pages
+ *
+ * @return void
+ */
+function enqueue_admin_assets() {
 	$screen = get_current_screen();
 
 	if ( $screen && str_contains( $screen->id, 'wpappointments' ) ) {
