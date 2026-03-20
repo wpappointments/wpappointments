@@ -148,7 +148,9 @@ function enqueue_admin_assets() {
  * @return array
  */
 function add_admin_dependency( $deps ) {
-	$deps[] = 'demo-court-booking-admin';
+	if ( wp_script_is( 'demo-court-booking-admin', 'registered' ) ) {
+		$deps[] = 'demo-court-booking-admin';
+	}
 	return $deps;
 }
 
@@ -221,11 +223,16 @@ function activate() {
 			continue;
 		}
 
-		$entity_id    = $result->bookable->ID;
-		$seeded_ids[] = $entity_id;
+		$entity_id = $result->bookable->ID;
 
-		// Generate variants from the attribute matrix (or default variant for simple courts).
+		// Retrieve generated variants (already created by save()).
 		$variants = BookableVariant::generate_from_matrix( $entity_id );
+
+		if ( is_wp_error( $variants ) ) {
+			continue;
+		}
+
+		$seeded_ids[] = $entity_id;
 
 		// Apply variant-level overrides for specific courts.
 		if ( 'Center Court' === $court_data['name'] && is_array( $variants ) ) {
@@ -261,18 +268,31 @@ register_activation_hook( DEMO_COURT_BOOKING_FILE, __NAMESPACE__ . '\\activate' 
  * Clean up sample courts on deactivation
  */
 function deactivate() {
+	if ( ! class_exists( BookableEntity::class ) ) {
+		return;
+	}
+
 	$seeded_ids = get_option( 'demo_court_booking_seeded_ids', array() );
+	$failed_ids = array();
 
 	foreach ( $seeded_ids as $post_id ) {
 		// Delete entity via model — cascades to variants.
 		$entity = new BookableEntity( (int) $post_id );
 
 		if ( ! is_wp_error( $entity->bookable ) && $entity->bookable ) {
-			$entity->delete();
+			$result = $entity->delete();
+
+			if ( is_wp_error( $result ) ) {
+				$failed_ids[] = $post_id;
+			}
 		}
 	}
 
-	delete_option( 'demo_court_booking_seeded_ids' );
+	if ( empty( $failed_ids ) ) {
+		delete_option( 'demo_court_booking_seeded_ids' );
+	} else {
+		update_option( 'demo_court_booking_seeded_ids', $failed_ids );
+	}
 }
 
 register_deactivation_hook( DEMO_COURT_BOOKING_FILE, __NAMESPACE__ . '\\deactivate' );

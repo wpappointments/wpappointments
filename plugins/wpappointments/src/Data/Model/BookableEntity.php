@@ -138,7 +138,12 @@ class BookableEntity {
 		$this->bookable_data['id'] = $post_id;
 		$this->bookable            = get_post( $post_id );
 
-		BookableVariant::generate_from_matrix( $post_id );
+		$variants_result = BookableVariant::generate_from_matrix( $post_id );
+
+		if ( is_wp_error( $variants_result ) ) {
+			wp_delete_post( $post_id, true );
+			return $variants_result;
+		}
 
 		$bookable = $this->normalize();
 
@@ -207,6 +212,15 @@ class BookableEntity {
 				'bookable_update_failed',
 				__( 'Failed to update bookable entity', 'wpappointments' )
 			);
+		}
+
+		// Sync variants when attributes have changed.
+		if ( array_key_exists( 'attributes', $data ) ) {
+			$variants_result = BookableVariant::generate_from_matrix( $id );
+
+			if ( is_wp_error( $variants_result ) ) {
+				return $variants_result;
+			}
 		}
 
 		$this->parse_bookable_data( $data );
