@@ -32,7 +32,7 @@ class BookableQuery {
 		);
 
 		if ( isset( $query['paged'] ) ) {
-			$args['paged'] = (int) $query['paged'];
+			$args['paged'] = max( 1, (int) $query['paged'] );
 		}
 
 		$meta_query = array();
