@@ -77,6 +77,13 @@ class BookableVariant {
 	 */
 	public function __construct( $variant ) {
 		if ( $variant instanceof WP_Post ) {
+			if ( PluginInfo::POST_TYPES['bookable-variant'] !== $variant->post_type ) {
+				$this->variant = new WP_Error(
+					'variant_invalid_post_type',
+					__( 'Post is not a bookable variant. Expected post_type wpa-bookable-variant', 'wpappointments' )
+				);
+				return;
+			}
 			$this->variant = $variant;
 		} elseif ( is_array( $variant ) ) {
 			$this->parse_variant_data( $variant );
@@ -133,9 +140,15 @@ class BookableVariant {
 			'updated'          => $this->variant_data['updated'] ?? time(),
 		);
 
-		// Only add inheritable fields if explicitly provided with non-default values.
+		// Only add inheritable fields if explicitly provided.
+		// Use the _overrides tracking key to detect intentional overrides
+		// (including zero values), otherwise skip default/unset values.
+		$overrides = $this->variant_data[ self::OVERRIDE_TRACKING_KEY ] ?? array();
+
 		foreach ( self::OVERRIDABLE_CORE_FIELDS as $field ) {
-			if ( isset( $this->variant_data[ $field ] ) && 0 !== $this->variant_data[ $field ] && '' !== $this->variant_data[ $field ] ) {
+			if ( in_array( $field, $overrides, true ) ) {
+				$meta[ $field ] = $this->variant_data[ $field ] ?? 0;
+			} elseif ( isset( $this->variant_data[ $field ] ) && 0 !== $this->variant_data[ $field ] && '' !== $this->variant_data[ $field ] ) {
 				$meta[ $field ] = $this->variant_data[ $field ];
 			}
 		}
@@ -202,7 +215,18 @@ class BookableVariant {
 
 		$post_data['meta_input'] = $meta;
 
-		wp_update_post( $post_data, true );
+		$result = wp_update_post( $post_data, true );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		if ( 0 === $result ) {
+			return new WP_Error(
+				'variant_update_failed',
+				__( 'Failed to update bookable variant', 'wpappointments' )
+			);
+		}
 
 		$this->parse_variant_data( $data );
 		$this->variant = get_post( $id );
@@ -234,6 +258,13 @@ class BookableVariant {
 		$id = $this->variant->ID;
 
 		$deleted = wp_delete_post( $id, true );
+
+		if ( ! $deleted ) {
+			return new WP_Error(
+				'variant_delete_failed',
+				__( 'Failed to delete bookable variant', 'wpappointments' )
+			);
+		}
 
 		do_action( 'wpappointments_variant_deleted', $id );
 
@@ -456,6 +487,17 @@ class BookableVariant {
 			'meta'            => $normalized_meta,
 		);
 
+		// Include type-specific effective fields in the normalized output.
+		if ( $handler ) {
+			$type_overridable = $handler->get_variant_overridable_fields();
+
+			foreach ( $type_overridable as $field ) {
+				if ( ! isset( $normalized[ $field ] ) && isset( $effective[ $field ] ) ) {
+					$normalized[ $field ] = $effective[ $field ];
+				}
+			}
+		}
+
 		return $normalized;
 	}
 
@@ -521,8 +563,16 @@ class BookableVariant {
 			$combo_key = self::get_combination_key( $combo );
 
 			if ( isset( $existing[ $combo_key ] ) ) {
-				// Variant already exists — keep it.
-				$variants[] = new BookableVariant( $existing[ $combo_key ] );
+				$existing_post = $existing[ $combo_key ];
+
+				// Reactivate if previously deactivated.
+				$is_active = get_post_meta( $existing_post->ID, 'active', true );
+
+				if ( ! $is_active ) {
+					update_post_meta( $existing_post->ID, 'active', true );
+				}
+
+				$variants[] = new BookableVariant( $existing_post );
 				unset( $existing[ $combo_key ] );
 			} else {
 				// Create new variant.

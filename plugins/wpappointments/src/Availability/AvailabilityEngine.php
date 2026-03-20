@@ -12,8 +12,6 @@
 
 namespace WPAppointments\Availability;
 
-use WPAppointments\Core\PluginInfo;
-
 /**
  * Availability engine class
  *

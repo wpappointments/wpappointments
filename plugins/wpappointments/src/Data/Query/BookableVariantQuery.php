@@ -85,7 +85,7 @@ class BookableVariantQuery {
 	 * @return \WP_Post|null
 	 */
 	public static function by_attributes( $entity_id, $attribute_values ) {
-		$result   = self::by_entity( $entity_id );
+		$result   = self::active( $entity_id );
 		$variants = $result['variants'];
 
 		// Sort the target for comparison.
