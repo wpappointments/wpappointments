@@ -581,9 +581,11 @@ class BookableVariant {
 
 				$saved = $variant_model->save();
 
-				if ( ! is_wp_error( $saved ) ) {
-					$variants[] = $saved;
+				if ( is_wp_error( $saved ) ) {
+					return $saved;
 				}
+
+				$variants[] = $saved;
 			}
 		}
 
