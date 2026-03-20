@@ -138,6 +138,8 @@ class BookableEntity {
 		$this->bookable_data['id'] = $post_id;
 		$this->bookable            = get_post( $post_id );
 
+		BookableVariant::generate_from_matrix( $post_id );
+
 		$bookable = $this->normalize();
 
 		do_action( 'wpappointments_bookable_created', $bookable );
