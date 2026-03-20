@@ -487,15 +487,10 @@ class BookableVariant {
 			'meta'            => $normalized_meta,
 		);
 
-		// Include type-specific effective fields in the normalized output.
+		// Include type-specific effective fields in the normalized output,
+		// converting snake_case keys to camelCase via the handler normalizer.
 		if ( $handler ) {
-			$type_overridable = $handler->get_variant_overridable_fields();
-
-			foreach ( $type_overridable as $field ) {
-				if ( ! isset( $normalized[ $field ] ) && isset( $effective[ $field ] ) ) {
-					$normalized[ $field ] = $effective[ $field ];
-				}
-			}
+			$normalized = $handler->normalize( $normalized, $effective );
 		}
 
 		return $normalized;
