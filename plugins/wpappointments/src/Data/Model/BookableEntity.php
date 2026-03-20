@@ -60,6 +60,13 @@ class BookableEntity {
 	 */
 	public function __construct( $bookable ) {
 		if ( $bookable instanceof WP_Post ) {
+			if ( PluginInfo::POST_TYPES['bookable'] !== $bookable->post_type ) {
+				$this->bookable = new WP_Error(
+					'bookable_invalid_post_type',
+					__( 'Post is not a bookable entity. Expected post_type wpa-bookable', 'wpappointments' )
+				);
+				return;
+			}
 			$this->bookable = $bookable;
 		} elseif ( is_array( $bookable ) ) {
 			$this->parse_bookable_data( $bookable );
@@ -84,6 +91,17 @@ class BookableEntity {
 	 * @return BookableEntity|WP_Error
 	 */
 	public function save() {
+		if ( is_wp_error( $this->bookable ) ) {
+			return $this->bookable;
+		}
+
+		if ( $this->bookable instanceof WP_Post ) {
+			return new WP_Error(
+				'bookable_already_persisted',
+				__( 'This bookable entity is already persisted. Use update() instead', 'wpappointments' )
+			);
+		}
+
 		$title = $this->bookable_data['name'] ?? '';
 		$type  = $this->bookable_data['type'] ?? '';
 
@@ -119,6 +137,8 @@ class BookableEntity {
 
 		$this->bookable_data['id'] = $post_id;
 		$this->bookable            = get_post( $post_id );
+
+		BookableVariant::generate_from_matrix( $post_id );
 
 		$bookable = $this->normalize();
 
@@ -176,7 +196,18 @@ class BookableEntity {
 
 		$post_data['meta_input'] = $meta;
 
-		wp_update_post( $post_data, true );
+		$result = wp_update_post( $post_data, true );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		if ( 0 === $result ) {
+			return new WP_Error(
+				'bookable_update_failed',
+				__( 'Failed to update bookable entity', 'wpappointments' )
+			);
+		}
 
 		$this->parse_bookable_data( $data );
 		$this->bookable = get_post( $id );
@@ -211,6 +242,13 @@ class BookableEntity {
 		BookableVariant::delete_all_for_entity( $id );
 
 		$deleted = wp_delete_post( $id, true );
+
+		if ( ! $deleted ) {
+			return new WP_Error(
+				'bookable_delete_failed',
+				__( 'Failed to delete bookable entity', 'wpappointments' )
+			);
+		}
 
 		do_action( 'wpappointments_bookable_deleted', $id );
 
@@ -378,7 +416,7 @@ class BookableEntity {
 	 * @return array|WP_Error
 	 */
 	private function validate_bookable_data( $data ) {
-		if ( ! isset( $data['name'] ) ) {
+		if ( ! isset( $data['name'] ) || '' === trim( $data['name'] ) ) {
 			return new WP_Error( 'bookable_name_required', __( 'Bookable name is required', 'wpappointments' ) );
 		}
 

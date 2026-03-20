@@ -113,12 +113,6 @@ add_action(
  * @return void
  */
 function enqueue_admin_assets() {
-	$screen = get_current_screen();
-
-	if ( ! $screen || ! str_contains( $screen->id, 'wpappointments' ) ) {
-		return;
-	}
-
 	$build_path = DEMO_COURT_BOOKING_DIR_PATH . 'build/';
 	$build_url  = plugin_dir_url( DEMO_COURT_BOOKING_FILE ) . 'build/';
 
@@ -128,13 +122,19 @@ function enqueue_admin_assets() {
 
 	$asset = require $build_path . 'admin.tsx.asset.php';
 
-	wp_enqueue_script(
+	wp_register_script(
 		'demo-court-booking-admin',
 		$build_url . 'admin.tsx.js',
 		$asset['dependencies'],
 		$asset['version'],
 		true
 	);
+
+	$screen = get_current_screen();
+
+	if ( $screen && str_contains( $screen->id, 'wpappointments' ) ) {
+		wp_enqueue_script( 'demo-court-booking-admin' );
+	}
 }
 
 /**

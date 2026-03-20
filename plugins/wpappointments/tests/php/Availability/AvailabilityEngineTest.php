@@ -976,17 +976,18 @@ test(
 			)
 		);
 
-		add_filter(
-			'wpa_effective_availability',
-			function ( $availability ) {
-				// Add a custom key to prove the filter was applied.
-				$availability['filtered'] = true;
-				return $availability;
-			}
-		);
+		$callback = function ( $availability ) {
+			// Add a custom key to prove the filter was applied.
+			$availability['filtered'] = true;
+			return $availability;
+		};
+
+		add_filter( 'wpa_effective_availability', $callback, 10 );
 
 		$result = AvailabilityEngine::get_effective_availability( $ids['variant_id'] );
 
 		expect( $result['filtered'] )->toBeTrue();
+
+		remove_filter( 'wpa_effective_availability', $callback, 10 );
 	}
 );

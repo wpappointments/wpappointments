@@ -182,12 +182,23 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_variant( $request ) {
+		$entity_id  = (int) $request->get_param( 'entity_id' );
 		$variant_id = (int) $request->get_param( 'variant_id' );
 
 		$model = new BookableVariant( $variant_id );
 
 		if ( is_wp_error( $model->variant ) ) {
 			return self::error( $model->variant );
+		}
+
+		if ( $model->variant->post_parent !== $entity_id ) {
+			return self::error(
+				new WP_Error(
+					'rest_invalid_parent',
+					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					array( 'status' => 404 )
+				)
+			);
 		}
 
 		return self::response(
@@ -204,10 +215,26 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function update_variant( $request ) {
+		$entity_id  = (int) $request->get_param( 'entity_id' );
 		$variant_id = (int) $request->get_param( 'variant_id' );
 		$data       = $request->get_json_params();
 
-		$model   = new BookableVariant( $variant_id );
+		$model = new BookableVariant( $variant_id );
+
+		if ( is_wp_error( $model->variant ) ) {
+			return self::error( $model->variant );
+		}
+
+		if ( $model->variant->post_parent !== $entity_id ) {
+			return self::error(
+				new WP_Error(
+					'rest_invalid_parent',
+					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					array( 'status' => 404 )
+				)
+			);
+		}
+
 		$updated = $model->update( $data );
 
 		if ( is_wp_error( $updated ) ) {
@@ -228,9 +255,25 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function delete_variant( $request ) {
+		$entity_id  = (int) $request->get_param( 'entity_id' );
 		$variant_id = (int) $request->get_param( 'variant_id' );
 
-		$model   = new BookableVariant( $variant_id );
+		$model = new BookableVariant( $variant_id );
+
+		if ( is_wp_error( $model->variant ) ) {
+			return self::error( $model->variant );
+		}
+
+		if ( $model->variant->post_parent !== $entity_id ) {
+			return self::error(
+				new WP_Error(
+					'rest_invalid_parent',
+					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					array( 'status' => 404 )
+				)
+			);
+		}
+
 		$deleted = $model->delete();
 
 		if ( is_wp_error( $deleted ) ) {

@@ -155,7 +155,16 @@ export default function BookableListPage({
 			label: __('Delete', 'wpappointments'),
 			callback: (item) => {
 				const entity = item as BookableEntity;
-				if (entity.id) {
+				if (
+					entity.id &&
+					// eslint-disable-next-line no-alert
+					window.confirm(
+						__(
+							'Are you sure you want to delete this item?',
+							'wpappointments'
+						)
+					)
+				) {
 					handleDelete(entity.id);
 				}
 			},
