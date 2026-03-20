@@ -57,7 +57,7 @@ export function useSlideout(props?: UseSlideoutProps) {
 		dispatch.closeSlideout(id);
 
 		setTimeout(() => {
-			dispatch.removeSlideout();
+			dispatch.removeSlideout(id);
 			removeSlideoutContent(id);
 		}, 200);
 
