@@ -1,3 +1,4 @@
+import cn from 'obj-str';
 import {
 	Output,
 	array,
@@ -9,7 +10,6 @@ import {
 	string,
 	union,
 } from 'valibot';
-import cn from '~/backend/utils/cn';
 import BookingFlow from './components/BookingFlow/BookingFlow';
 import { BookingFlowContextProvider } from './context/BookingFlowContext';
 import styles from './frontend.module.css';

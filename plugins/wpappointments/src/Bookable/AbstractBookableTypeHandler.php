@@ -33,14 +33,37 @@ abstract class AbstractBookableTypeHandler {
 	/**
 	 * Get additional meta fields for this type
 	 *
-	 * Returns an array of field definitions. Each field has a key (meta key)
-	 * and a default value used when the field is not set.
+	 * Returns an array of field definitions keyed by meta key. Each field
+	 * supports the following properties:
+	 *
+	 * - `type`        (string)  Field type: text|select|toggle|number|textarea|date|custom.
+	 * - `label`       (string)  Display label for the field.
+	 * - `default`     (mixed)   Default value when the field is not set.
+	 * - `required`    (bool)    Whether the field is required. Default false.
+	 * - `placeholder` (string)  Placeholder text (text/textarea/number).
+	 * - `help`        (string)  Help text displayed below the field.
+	 * - `options`     (array)   Options for select fields: array of ['value' => '', 'label' => ''].
+	 * - `validation`  (array)   Validation rules: min, max (number), minLength, maxLength (text).
 	 *
 	 * Example:
 	 * ```php
 	 * return array(
-	 *     'duration' => array( 'default' => 60 ),
-	 *     'price'    => array( 'default' => 0 ),
+	 *     'duration' => array(
+	 *         'type'       => 'number',
+	 *         'label'      => 'Duration (min)',
+	 *         'default'    => 60,
+	 *         'required'   => true,
+	 *         'validation' => array( 'min' => 1 ),
+	 *     ),
+	 *     'category' => array(
+	 *         'type'    => 'select',
+	 *         'label'   => 'Category',
+	 *         'default' => '',
+	 *         'options' => array(
+	 *             array( 'value' => 'massage', 'label' => 'Massage' ),
+	 *             array( 'value' => 'facial',  'label' => 'Facial' ),
+	 *         ),
+	 *     ),
 	 * );
 	 * ```
 	 *

@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import styles from '../OnboardingWizard.module.css';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import Input from '~/backend/admin/components/FormField/Input/Input';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
+import {
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	withForm,
+} from '@wpappointments/components';
 import {
 	fetchBookables,
 	createBookable,
 	deleteBookable,
-	type BookableEntity,
-} from '~/backend/bookable';
+} from '@wpappointments/data';
+import type { BookableEntity } from '@wpappointments/data';
+import styles from '../OnboardingWizard.module.css';
 
 type ServiceFormData = {
 	name: string;

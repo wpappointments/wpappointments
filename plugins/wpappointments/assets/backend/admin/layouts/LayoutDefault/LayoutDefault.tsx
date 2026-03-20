@@ -1,5 +1,5 @@
+import { SlideoutRenderer, Toaster } from '@wpappointments/components';
 import styles from './LayoutDefault.module.css';
-import Toaster from '~/backend/admin/components/Toaster/Toaster';
 
 type Props = {
 	title: string;
@@ -15,6 +15,7 @@ export default function LayoutDefault({ title, children }: Props) {
 			<div className={styles.layoutContent}>{children}</div>
 			<Toaster />
 			<div id="slideout-container"></div>
+			<SlideoutRenderer />
 		</div>
 	);
 }

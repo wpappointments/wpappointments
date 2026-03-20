@@ -197,6 +197,28 @@ test(
 	}
 );
 
+// Field schema tests.
+test(
+	'BookableTypeRegistry - handler get_fields includes full schema properties',
+	function () {
+		BookableTypeRegistry::get_instance()->register( 'service', StubServiceHandler::class );
+		$handler = BookableTypeRegistry::get_instance()->get( 'service' );
+
+		$fields = $handler->get_fields();
+
+		// Duration has type, label, required, and validation.
+		expect( $fields['duration']['type'] )->toBe( 'number' );
+		expect( $fields['duration']['label'] )->toBe( 'Duration (min)' );
+		expect( $fields['duration']['required'] )->toBeTrue();
+		expect( $fields['duration']['validation'] )->toBe( array( 'min' => 1 ) );
+
+		// Category has options for select type.
+		expect( $fields['category']['type'] )->toBe( 'select' );
+		expect( $fields['category']['options'] )->toHaveCount( 2 );
+		expect( $fields['category']['options'][0]['value'] )->toBe( 'massage' );
+	}
+);
+
 // Validation tests.
 test(
 	'BookableTypeRegistry - handler validate passes valid data',

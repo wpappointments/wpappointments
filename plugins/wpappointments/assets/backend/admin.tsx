@@ -1,33 +1,25 @@
 import { register } from '@wordpress/data';
 import { createHooks } from '@wordpress/hooks';
+import * as components from '@wpappointments/components';
+import * as data from '@wpappointments/data';
+import type { BookableTypeRegistration } from '@wpappointments/data';
 import { render } from '~/backend/utils/dom';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { OnboardingWizard } from './admin/pages/OnboardingWizard/OnboardingWizard';
-import CardBody from '~/backend/admin/components/CardBody/CardBody';
-import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
-// Export core UI components for external plugins.
 import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 import Calendar from '~/backend/admin/pages/Calendar/Calendar';
 import Customers from '~/backend/admin/pages/Customers/Customers';
 import Dashboard from '~/backend/admin/pages/Dashboard/Dashboard';
 import Settings from '~/backend/admin/pages/Settings/Settings';
-import BookableListPage from '~/backend/bookable/BookableListPage';
-import { registerBookableType } from '~/backend/bookable/registry';
-import type { BookableTypeRegistration } from '~/backend/bookable/types';
 
 window.wpappointments.hooks = createHooks();
 
-// Expose core components so external plugins can build native-looking UIs.
+// Expose packages on window for external plugin consumption via externals.
 (window.wpappointments as Record<string, unknown>).components = {
+	...components,
 	LayoutDefault,
-	CardBody,
-	DataViews,
-	TableFullEmpty,
-	BookableListPage,
-	useSlideout,
 };
+(window.wpappointments as Record<string, unknown>).data = data;
 
 const pages = new Map<string, React.JSX.Element>();
 pages.set('dashboard', <Dashboard />);
@@ -43,7 +35,7 @@ const pending = (window.wpappointments as Record<string, unknown>)
 	?._pendingBookableTypes as BookableTypeRegistration[] | undefined;
 
 if (Array.isArray(pending)) {
-	pending.forEach((config) => registerBookableType(config));
+	pending.forEach((config) => data.registerBookableType(config));
 }
 
 register(store);

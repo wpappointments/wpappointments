@@ -1,8 +1,8 @@
 import { Button, Card, CardHeader } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Text } from '~/backend/utils/experimental';
-import useSlideout from '~/backend/hooks/useSlideout';
-import CardBody from '~/backend/admin/components/CardBody/CardBody';
+import { CardBody } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import CustomerCreate from '~/backend/admin/components/CustomerCreate/CustomerCreate';
 import CustomersTable from '~/backend/admin/components/CustomersTable/CustomersTable';
 import { StateContextProvider } from '~/backend/admin/context/StateContext';

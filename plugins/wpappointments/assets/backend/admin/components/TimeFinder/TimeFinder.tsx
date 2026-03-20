@@ -4,14 +4,14 @@ import { Button, ButtonGroup } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
+import { SlideOut } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import { formatTime } from '~/backend/utils/i18n';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
-import SlideOut from '../SlideOut/SlideOut';
 import styles from './TimeFinder.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 

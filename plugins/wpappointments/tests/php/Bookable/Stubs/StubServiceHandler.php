@@ -39,9 +39,33 @@ class StubServiceHandler extends AbstractBookableTypeHandler {
 	 */
 	public function get_fields() {
 		return array(
-			'duration' => array( 'default' => 60 ),
-			'price'    => array( 'default' => 0 ),
-			'category' => array( 'default' => '' ),
+			'duration' => array(
+				'type'       => 'number',
+				'label'      => 'Duration (min)',
+				'default'    => 60,
+				'required'   => true,
+				'validation' => array( 'min' => 1 ),
+			),
+			'price'    => array(
+				'type'    => 'number',
+				'label'   => 'Price',
+				'default' => 0,
+			),
+			'category' => array(
+				'type'    => 'select',
+				'label'   => 'Category',
+				'default' => '',
+				'options' => array(
+					array(
+						'value' => 'massage',
+						'label' => 'Massage',
+					),
+					array(
+						'value' => 'facial',
+						'label' => 'Facial',
+					),
+				),
+			),
 		);
 	}
 

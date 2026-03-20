@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { __experimentalInputControl as InputControl } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { InputControl } from '~/backend/utils/experimental';
-import useSlideout from '~/backend/hooks/useSlideout';
+import { SlideOut } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import { store } from '~/backend/store/store';
 import { AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
-import SlideOut from '../SlideOut/SlideOut';
 import styles from './CustomerSelector.module.css';
 
 export default function CustomerSelector() {

@@ -6,5 +6,11 @@ module.exports = {
 				except: ['inside-block'],
 			},
 		],
+		'selector-pseudo-class-no-unknown': [
+			true,
+			{
+				ignorePseudoClasses: ['global'],
+			},
+		],
 	},
 };
