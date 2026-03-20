@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { IconProps } from '@wordpress/icons/build-types/icon';
 import { Appointment, Customer } from '~/backend/types';
 
-export type CollectionItem = Appointment | Customer;
+export type CollectionItem = Appointment | Customer | Record<string, unknown>;
 
 export type View = {
 	type: 'table';
@@ -17,6 +17,8 @@ export type Field = {
 	id: string;
 	header: string;
 	render: (args: { item: CollectionItem }) => ReactNode;
+	enableSorting?: boolean;
+	enableHiding?: boolean;
 };
 
 export type Action = {

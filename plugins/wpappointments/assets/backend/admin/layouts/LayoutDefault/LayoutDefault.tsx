@@ -3,7 +3,7 @@ import Toaster from '~/backend/admin/components/Toaster/Toaster';
 
 type Props = {
 	title: string;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 };
 
 export default function LayoutDefault({ title, children }: Props) {

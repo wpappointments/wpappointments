@@ -22,6 +22,7 @@ class Plugin extends Core\Singleton {
 	public function __construct() {
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
+		add_action( 'init', array( 'WPAppointments\Migration\BookableMigration', 'maybe_run' ), 99 );
 		Notifications\Notifications::get_instance();
 	}
 	/**
@@ -87,20 +88,6 @@ class Plugin extends Core\Singleton {
 					)
 				);
 			}
-		}
-
-		$default_service = get_option( 'wpappointments_defaultServiceId' );
-
-		if ( ! $default_service ) {
-			$post_id = wp_insert_post(
-				array(
-					'post_title'  => 'Appointment',
-					'post_status' => 'publish',
-					'post_type'   => PluginInfo::POST_TYPES['service'],
-				)
-			);
-
-			update_option( 'wpappointments_defaultServiceId', $post_id );
 		}
 
 		update_option( 'wpappointments_appointments_defaultLength', 30 );

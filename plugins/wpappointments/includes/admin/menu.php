@@ -11,6 +11,7 @@ namespace WPAppointments\Admin;
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );
+add_action( 'admin_menu', __NAMESPACE__ . '\\bookable_type_menus', 20 );
 
 /**
  * Add main plugin admin menu
@@ -46,24 +47,6 @@ function menu() {
 		'activate_plugins',
 		'wpappointments-customers',
 		__NAMESPACE__ . '\customers_page'
-	);
-
-	add_submenu_page(
-		'wpappointments',
-		__( 'Services', 'wpappointments' ),
-		__( 'Services', 'wpappointments' ),
-		'activate_plugins',
-		'wpappointments-services',
-		__NAMESPACE__ . '\\services_page'
-	);
-
-	add_submenu_page(
-		'wpappointments',
-		__( 'Entities', 'wpappointments' ),
-		__( 'Entities', 'wpappointments' ),
-		'activate_plugins',
-		'wpappointments-entities',
-		__NAMESPACE__ . '\\entities_page'
 	);
 
 	add_submenu_page(
@@ -113,24 +96,6 @@ function customers_page() {
 }
 
 /**
- * Create services admin page
- *
- * @return void
- */
-function services_page() {
-	echo '<div id="wpappointments-admin" data-page="services"></div>';
-}
-
-/**
- * Create entities admin page
- *
- * @return void
- */
-function entities_page() {
-	echo '<div id="wpappointments-admin" data-page="entities"></div>';
-}
-
-/**
  * Create settings admin page
  *
  * @return void
@@ -146,4 +111,16 @@ function settings_page() {
  */
 function wizard_page() {
 	echo '<div id="wpappointments-admin" data-page="wizard"></div>';
+}
+
+/**
+ * Register admin menus for bookable type pages
+ *
+ * Runs after the main menu is registered (priority 20) so bookable
+ * type submenu items appear after core pages.
+ *
+ * @return void
+ */
+function bookable_type_menus() {
+	\WPAppointments\Bookable\BookableAdminPages::get_instance()->register_menus();
 }
