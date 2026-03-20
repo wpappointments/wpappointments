@@ -54,19 +54,23 @@ function handleAction<T>(
 	const { uri, method } = action;
 
 	return async () => {
-		const response = await apiFetch<APIResponse<T>>({
-			url: uri,
-			method,
-		});
+		try {
+			const response = await apiFetch<APIResponse<T>>({
+				url: uri,
+				method,
+			});
 
-		const { data } = response;
+			const { data } = response;
 
-		if (onSuccess && response.status === 'success') {
-			onSuccess(data);
-		}
+			if (onSuccess && response.status === 'success') {
+				onSuccess(data);
+			}
 
-		if (onError && response.status === 'error') {
-			onError(data);
+			if (onError && response.status === 'error') {
+				onError(data);
+			}
+		} catch (error) {
+			onError?.(error as T);
 		}
 	};
 }

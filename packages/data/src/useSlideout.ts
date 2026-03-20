@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { setSlideoutContent, removeSlideoutContent } from './slideout-content';
 
 const STORE_NAME = 'wpappointments';
@@ -28,15 +28,19 @@ export function useSlideout(props?: UseSlideoutProps) {
 		currentSlideout,
 		closingSlideout,
 		closingSlideouts,
-	} = useSelect(() => {
-		const storeSelect = select(STORE_NAME);
-		return {
-			openSlideouts: storeSelect.getSlideouts(),
-			currentSlideout: storeSelect.getCurrentSlideout(),
-			closingSlideout: storeSelect.getClosingSlideout(id),
-			closingSlideouts: storeSelect.getAllClosingSlideouts(),
-		};
-	}, [id]);
+	} = useSelect(
+		(select) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const storeSelect = select(STORE_NAME) as any;
+			return {
+				openSlideouts: storeSelect.getSlideouts(),
+				currentSlideout: storeSelect.getCurrentSlideout(),
+				closingSlideout: storeSelect.getClosingSlideout(id),
+				closingSlideouts: storeSelect.getAllClosingSlideouts(),
+			};
+		},
+		[id]
+	);
 
 	const openSlideOut = (options: OpenSlideOutOptions) => {
 		const { title, content, ...slideout } = options;
@@ -62,9 +66,13 @@ export function useSlideout(props?: UseSlideoutProps) {
 		}
 	};
 
+	const scopedCurrentSlideout = id
+		? openSlideouts.find((s: Slideout) => s.id === id)
+		: currentSlideout;
+
 	const closeCurrentSlideOut = (callback?: (id: string) => void) => {
-		if (!currentSlideout) return;
-		closeSlideOut(currentSlideout.id, callback);
+		if (!scopedCurrentSlideout) return;
+		closeSlideOut(scopedCurrentSlideout.id, callback);
 	};
 
 	const isSlideoutOpen = (id: string) => {
@@ -73,9 +81,7 @@ export function useSlideout(props?: UseSlideoutProps) {
 
 	return {
 		openSlideouts,
-		currentSlideout: id
-			? openSlideouts.find((s: Slideout) => s.id === id)
-			: currentSlideout,
+		currentSlideout: scopedCurrentSlideout,
 		closingSlideout,
 		closingSlideouts,
 		openSlideOut,

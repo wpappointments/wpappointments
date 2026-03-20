@@ -94,6 +94,14 @@ export default function BookableDefaultForm({
 		for (const field of typeInfo.fields) {
 			const value = meta[field.name];
 
+			// Skip validation for unregistered custom fields
+			if (
+				field.type === 'custom' &&
+				!getBookableType(typeInfo.slug)?.fieldControls?.[field.name]
+			) {
+				continue;
+			}
+
 			if (
 				field.required &&
 				(value === '' || value === null || value === undefined)

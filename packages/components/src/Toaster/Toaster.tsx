@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Snackbar } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import cn from 'obj-str';
 import styles from './Toaster.module.css';
 
@@ -13,8 +13,9 @@ type Toast = {
 };
 
 export default function Toaster() {
-	const toasts = useSelect(() => {
-		return select(STORE_NAME).getToasts();
+	const toasts = useSelect((select) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return (select(STORE_NAME) as any).getToasts();
 	}, []);
 
 	return (
