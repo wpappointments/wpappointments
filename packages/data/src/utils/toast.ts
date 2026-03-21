@@ -1,5 +1,5 @@
 import { dispatch } from '@wordpress/data';
-import randomId from './random';
+import randomId from './randomId';
 
 const STORE_NAME = 'wpappointments';
 

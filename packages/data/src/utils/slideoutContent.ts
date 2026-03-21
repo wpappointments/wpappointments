@@ -1,13 +1,3 @@
-/**
- * Slideout content registry
- *
- * Stores React elements (title, content) outside Redux since they aren't
- * serializable. The Redux store tracks open/close state; this registry
- * holds the renderable content for each slideout ID.
- *
- * @package WPAppointments
- * @since 0.4.0
- */
 import type { ReactNode } from 'react';
 
 export type SlideoutContent = {
