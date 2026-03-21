@@ -1,13 +1,3 @@
-/**
- * @wpappointments/data
- *
- * Hooks, API functions, utilities, and type registry for
- * WP Appointments plugin extensions.
- *
- * @package WPAppointments
- * @since 0.4.0
- */
-
 // Types
 export type {
 	BookableEntity,
@@ -30,11 +20,9 @@ export {
 	useBookableVariants,
 	useEffectiveAvailability,
 	useBookableEntity,
+	useSlideout,
 } from './hooks';
-
-// Slideout Hook
-export { useSlideout } from './useSlideout';
-export type { OpenSlideOutOptions } from './useSlideout';
+export type { OpenSlideOutOptions } from './hooks';
 
 // API Client
 export {
@@ -62,17 +50,14 @@ export {
 	hasBookableType,
 } from './registry';
 
-// Toast Utilities
-export { displaySuccessToast, displayErrorToast } from './toast';
+// Utilities
+export { displaySuccessToast, displayErrorToast, apiFetch } from './utils';
+export type { APIResponse } from './utils';
 
-// Fetch Utility
-export { default as apiFetch } from './fetch';
-export type { APIResponse } from './fetch';
-
-// Slideout Content (for SlideoutRenderer in core)
+// Slideout Content
 export {
 	getSlideoutContent,
 	setSlideoutContent,
 	removeSlideoutContent,
-} from './slideout-content';
-export type { SlideoutContent } from './slideout-content';
+} from './utils';
+export type { SlideoutContent } from './utils';

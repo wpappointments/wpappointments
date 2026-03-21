@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { setSlideoutContent, removeSlideoutContent } from './slideout-content';
+import {
+	setSlideoutContent,
+	removeSlideoutContent,
+} from '../utils/slideoutContent';
 
 const STORE_NAME = 'wpappointments';
 
