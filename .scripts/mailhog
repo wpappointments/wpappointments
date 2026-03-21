@@ -4,10 +4,25 @@ IN=$(pnpm run -s env install-path)
 arrIN=(${IN//// })
 
 if [ "$COMMAND" == "start" ]; then
-  docker run -d -h mailhog -p 8025:8025 -p 1025:1025 --network="${arrIN[3]}_default" --name="${arrIN[3]}_mailhog" mailhog/mailhog
-  echo ""
-  echo "Mailhog instance started at http://localhost:8025"
-  echo ""
+  CONTAINER_NAME="${arrIN[3]}_mailhog"
+  NETWORK="${arrIN[3]}_default"
+
+  if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    echo ""
+    echo "Mailhog is already running at http://localhost:8025"
+    echo ""
+  elif docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    docker rm -f "$CONTAINER_NAME" > /dev/null 2>&1
+    docker run -d -h mailhog -p 8025:8025 -p 1025:1025 --network="$NETWORK" --name="$CONTAINER_NAME" mailhog/mailhog
+    echo ""
+    echo "Mailhog instance started at http://localhost:8025"
+    echo ""
+  else
+    docker run -d -h mailhog -p 8025:8025 -p 1025:1025 --network="$NETWORK" --name="$CONTAINER_NAME" mailhog/mailhog
+    echo ""
+    echo "Mailhog instance started at http://localhost:8025"
+    echo ""
+  fi
 fi
 
 if [ "$COMMAND" == "stop" ]; then
