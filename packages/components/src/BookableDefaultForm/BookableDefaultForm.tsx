@@ -28,8 +28,10 @@ import type {
 	BookableTypeField,
 	CustomFieldProps,
 } from '@wpappointments/data';
-import FormField, { formFieldStyles } from './FormField/FormField';
-import FormFieldSet from './FormFieldSet/FormFieldSet';
+import BookableField from '../BookableField/BookableField';
+import FieldMessages from '../FieldMessages/FieldMessages';
+import FormField, { formFieldStyles } from '../FormField/FormField';
+import FormFieldSet from '../FormFieldSet/FormFieldSet';
 
 type BookableDefaultFormProps = {
 	entity: BookableEntity | null;
@@ -224,17 +226,7 @@ export default function BookableDefaultForm({
 						}}
 						size="__unstable-large"
 					/>
-					{errors.name && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: 'red',
-							}}
-						>
-							{errors.name}
-						</p>
-					)}
+					<FieldMessages error={errors.name} />
 				</FormField>
 
 				<FormField>
@@ -290,212 +282,133 @@ export default function BookableDefaultForm({
 	);
 }
 
-/**
- * Renders the appropriate WP control for a field schema entry,
- * using the same FormField wrapper and styling as the rest of the app.
- */
-function FieldControl({
-	field,
-	value,
-	onChange,
-	error,
-	typeSlug,
-}: {
+type FieldControlProps = {
 	field: BookableTypeField;
 	value: unknown;
 	onChange: (value: unknown) => void;
 	error?: string;
 	typeSlug: string;
-}) {
-	switch (field.type) {
-		case 'text':
-			return (
-				<FormField>
-					<label className={formFieldStyles.fieldLabel}>
-						{field.label}
-						{field.required && '*'}
-					</label>
-					<InputControl
-						placeholder={field.placeholder}
-						onChange={onChange}
-						value={String(value ?? '')}
-						size="__unstable-large"
-					/>
-					{(error || field.help) && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: error ? 'red' : undefined,
-							}}
-						>
-							{error || field.help}
-						</p>
-					)}
-				</FormField>
-			);
+};
 
-		case 'textarea':
-			return (
-				<FormField>
-					<label className={formFieldStyles.fieldLabel}>
-						{field.label}
-						{field.required && '*'}
-					</label>
-					<TextareaControl
-						value={String(value ?? '')}
-						onChange={onChange}
-						placeholder={field.placeholder}
-						__nextHasNoMarginBottom
-					/>
-					{error && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: 'red',
-							}}
-						>
-							{error}
-						</p>
-					)}
-				</FormField>
-			);
+function TextField({ field, value, onChange, error }: FieldControlProps) {
+	return (
+		<BookableField field={field} error={error}>
+			<InputControl
+				placeholder={field.placeholder}
+				onChange={onChange}
+				value={String(value ?? '')}
+				size="__unstable-large"
+			/>
+		</BookableField>
+	);
+}
 
-		case 'number':
-			return (
-				<FormField>
-					<label className={formFieldStyles.fieldLabel}>
-						{field.label}
-						{field.required && '*'}
-					</label>
-					<NumberControl
-						value={value as number}
-						onChange={(val: string | undefined) => {
-							onChange(
-								val !== undefined && val !== ''
-									? Number(val)
-									: undefined
-							);
-						}}
-						min={field.validation?.min}
-						max={field.validation?.max}
-						size="__unstable-large"
-					/>
-					{(error || field.help) && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: error ? 'red' : undefined,
-							}}
-						>
-							{error || field.help}
-						</p>
-					)}
-				</FormField>
-			);
+function TextareaField({ field, value, onChange, error }: FieldControlProps) {
+	return (
+		<BookableField field={field} error={error}>
+			<TextareaControl
+				value={String(value ?? '')}
+				onChange={onChange}
+				placeholder={field.placeholder}
+				__nextHasNoMarginBottom
+			/>
+		</BookableField>
+	);
+}
 
-		case 'select':
-			return (
-				<FormField>
-					<label className={formFieldStyles.fieldLabel}>
-						{field.label}
-						{field.required && '*'}
-					</label>
-					<SelectControl
-						value={String(value ?? '')}
-						onChange={onChange}
-						options={[
-							...(field.required
-								? []
-								: [
-										{
-											value: '',
-											label: __(
-												'— Select —',
-												'wpappointments'
-											),
-										},
-									]),
-							...(field.options ?? []),
-						]}
-						size="__unstable-large"
-						__nextHasNoMarginBottom
-					/>
-					{(error || field.help) && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: error ? 'red' : undefined,
-							}}
-						>
-							{error || field.help}
-						</p>
-					)}
-				</FormField>
-			);
+function NumberField({ field, value, onChange, error }: FieldControlProps) {
+	return (
+		<BookableField field={field} error={error}>
+			<NumberControl
+				value={value as number}
+				onChange={(val: string | undefined) => {
+					onChange(
+						val !== undefined && val !== ''
+							? Number(val)
+							: undefined
+					);
+				}}
+				min={field.validation?.min}
+				max={field.validation?.max}
+				size="__unstable-large"
+			/>
+		</BookableField>
+	);
+}
 
-		case 'toggle':
-			return (
-				<FormField>
-					<ToggleControl
-						label={field.label}
-						checked={Boolean(value)}
-						onChange={onChange}
-						__nextHasNoMarginBottom
-					/>
-					{(error || field.help) && (
-						<p
-							style={{
-								marginTop: 0,
-								marginBottom: 0,
-								color: error ? 'red' : undefined,
-								fontSize: '12px',
-							}}
-						>
-							{error || field.help}
-						</p>
-					)}
-				</FormField>
-			);
+function SelectField({ field, value, onChange, error }: FieldControlProps) {
+	return (
+		<BookableField field={field} error={error}>
+			<SelectControl
+				value={String(value ?? '')}
+				onChange={onChange}
+				options={[
+					...(field.required
+						? []
+						: [
+								{
+									value: '',
+									label: __('— Select —', 'wpappointments'),
+								},
+							]),
+					...(field.options ?? []),
+				]}
+				size="__unstable-large"
+				__nextHasNoMarginBottom
+			/>
+		</BookableField>
+	);
+}
 
-		case 'custom': {
-			const registration = getBookableType(typeSlug);
-			const CustomControl = registration?.fieldControls?.[field.name];
+function ToggleField({ field, value, onChange, error }: FieldControlProps) {
+	return (
+		<BookableField field={field} error={error} showLabel={false}>
+			<ToggleControl
+				label={field.label}
+				checked={Boolean(value)}
+				onChange={onChange}
+				__nextHasNoMarginBottom
+			/>
+		</BookableField>
+	);
+}
 
-			if (!CustomControl) {
-				// eslint-disable-next-line no-console
-				console.warn(
-					`[WP Appointments] No fieldControl registered for custom field "${field.name}" on type "${typeSlug}". Skipping.`
-				);
-				return null;
-			}
+function CustomField({ field, value, onChange, typeSlug }: FieldControlProps) {
+	const registration = getBookableType(typeSlug);
+	const CustomControl = registration?.fieldControls?.[field.name];
 
-			const customProps: CustomFieldProps = {
-				name: field.name,
-				label: field.label,
-				value,
-				onChange,
-				fieldDef: field,
-			};
-
-			return <CustomControl {...customProps} />;
-		}
-
-		default:
-			return (
-				<FormField>
-					<label className={formFieldStyles.fieldLabel}>
-						{field.label}
-					</label>
-					<InputControl
-						onChange={onChange}
-						value={String(value ?? '')}
-						size="__unstable-large"
-					/>
-				</FormField>
-			);
+	if (!CustomControl) {
+		// eslint-disable-next-line no-console
+		console.warn(
+			`[WP Appointments] No fieldControl registered for custom field "${field.name}" on type "${typeSlug}". Skipping.`
+		);
+		return null;
 	}
+
+	const customProps: CustomFieldProps = {
+		name: field.name,
+		label: field.label,
+		value,
+		onChange,
+		fieldDef: field,
+	};
+
+	return <CustomControl {...customProps} />;
+}
+
+const fieldComponentMap = new Map<
+	string,
+	React.ComponentType<FieldControlProps>
+>([
+	['text', TextField],
+	['textarea', TextareaField],
+	['number', NumberField],
+	['select', SelectField],
+	['toggle', ToggleField],
+	['custom', CustomField],
+]);
+
+function FieldControl(props: FieldControlProps) {
+	const Component = fieldComponentMap.get(props.field.type) ?? TextField;
+	return <Component {...props} />;
 }

@@ -21,7 +21,7 @@ import {
 	getBookableType,
 } from '@wpappointments/data';
 import type { BookableEntity, BookableTypeInfo } from '@wpappointments/data';
-import BookableDefaultForm from './BookableDefaultForm';
+import BookableDefaultForm from '../BookableDefaultForm/BookableDefaultForm';
 
 type BookableSlideoutContentProps = {
 	entity: BookableEntity | null;

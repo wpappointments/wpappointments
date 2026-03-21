@@ -15,3 +15,15 @@
 .field-full-width {
 	flex: 1;
 }
+
+.field-message {
+	margin: 5px 0;
+}
+
+.field-error {
+	color: red;
+}
+
+.field-help {
+	font-size: 12px;
+}

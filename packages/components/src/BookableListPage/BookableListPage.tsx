@@ -10,8 +10,7 @@
  * @since 0.4.0
  */
 import { useState, useEffect, useCallback } from 'react';
-import { Button, Card, CardHeader, Spinner } from '@wordpress/components';
-import { __experimentalText as Text } from '@wordpress/components';
+import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { Icon, edit, trash } from '@wordpress/icons';
 import {
@@ -20,11 +19,11 @@ import {
 	deleteBookable,
 } from '@wpappointments/data';
 import type { BookableEntity, BookableTypeColumn } from '@wpappointments/data';
-import BookableSlideoutContent from './BookableSlideoutContent';
-import CardBody from './CardBody/CardBody';
-import { DataViews } from './DataViews/DataViews';
-import type { Field, Action, View } from './DataViews/types';
-import TableFullEmpty from './TableFullEmpty/TableFullEmpty';
+import BookableSlideoutContent from '../BookableSlideoutContent/BookableSlideoutContent';
+import { DataViews } from '../DataViews/DataViews';
+import type { Field, Action, View } from '../DataViews/types';
+import { HeaderActionsFill } from '../SlotFill/HeaderActions';
+import TableFullEmpty from '../TableFullEmpty/TableFullEmpty';
 
 type BookableListPageProps = {
 	/** Bookable type slug */
@@ -33,8 +32,6 @@ type BookableListPageProps = {
 	label: string;
 	/** Column definitions from type registration */
 	columns?: BookableTypeColumn[];
-	/** Optional CSS class for the card wrapper */
-	className?: string;
 };
 
 const COLORS = {
@@ -47,7 +44,6 @@ export default function BookableListPage({
 	type,
 	label,
 	columns,
-	className,
 }: BookableListPageProps) {
 	const [entities, setEntities] = useState<BookableEntity[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -171,58 +167,49 @@ export default function BookableListPage({
 		},
 	];
 
-	const addNewButton = (
-		<Button variant="primary" onClick={handleCreate}>
-			{__('Add New', 'wpappointments')}
-		</Button>
+	const headerActions = (
+		<HeaderActionsFill>
+			<Button variant="primary" onClick={handleCreate}>
+				{__('Add New', 'wpappointments')}
+			</Button>
+		</HeaderActionsFill>
 	);
 
 	if (loading) {
 		return (
-			<Card className={className}>
-				<CardBody>
-					{/* @ts-expect-error -- WP Spinner component types issue */}
-					<Spinner />
-				</CardBody>
-			</Card>
+			<>
+				{headerActions}
+				{/* @ts-expect-error -- WP Spinner component types issue */}
+				<Spinner />
+			</>
 		);
 	}
 
 	if (entities.length === 0) {
 		return (
-			<Card className={className}>
-				<CardHeader>
-					<Text size="title">{label}</Text>
-					{addNewButton}
-				</CardHeader>
-				<CardBody>
-					<TableFullEmpty>
-						<p>{__('No items found.', 'wpappointments')}</p>
-					</TableFullEmpty>
-				</CardBody>
-			</Card>
+			<>
+				{headerActions}
+				<TableFullEmpty>
+					<p>{__('No items found.', 'wpappointments')}</p>
+				</TableFullEmpty>
+			</>
 		);
 	}
 
 	return (
-		<Card className={className}>
-			<CardHeader>
-				<Text size="title">{label}</Text>
-				{addNewButton}
-			</CardHeader>
-			<CardBody>
-				<DataViews
-					view={view}
-					onChangeView={(newView: View) => {
-						setView(newView);
-					}}
-					fields={fields}
-					actions={actions}
-					data={entities as Record<string, unknown>[]}
-					paginationInfo={{ totalItems, totalPages }}
-				/>
-			</CardBody>
-		</Card>
+		<>
+			{headerActions}
+			<DataViews
+				view={view}
+				onChangeView={(newView: View) => {
+					setView(newView);
+				}}
+				fields={fields}
+				actions={actions}
+				data={entities as Record<string, unknown>[]}
+				paginationInfo={{ totalItems, totalPages }}
+			/>
+		</>
 	);
 }
 

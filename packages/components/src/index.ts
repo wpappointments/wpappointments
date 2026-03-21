@@ -56,7 +56,12 @@ export { default as ActionButton } from './ActionButton/ActionButton';
 // Modals
 export { default as DeleteModal } from './DeleteModal/DeleteModal';
 
+// SlotFill
+export { HeaderActionsSlot, HeaderActionsFill } from './SlotFill/HeaderActions';
+
 // Bookable CRUD components
-export { default as BookableListPage } from './BookableListPage';
-export { default as BookableDefaultForm } from './BookableDefaultForm';
-export { default as BookableSlideoutContent } from './BookableSlideoutContent';
+export { default as BookableListPage } from './BookableListPage/BookableListPage';
+export { default as BookableDefaultForm } from './BookableDefaultForm/BookableDefaultForm';
+export { default as BookableField } from './BookableField/BookableField';
+export { default as FieldMessages } from './FieldMessages/FieldMessages';
+export { default as BookableSlideoutContent } from './BookableSlideoutContent/BookableSlideoutContent';
