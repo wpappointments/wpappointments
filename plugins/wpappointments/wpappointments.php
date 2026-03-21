@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Appointments
  * Plugin URI:  https://wpappointments.com
- * Version:     0.1.2
+ * Version:     0.2.0
  * Description: Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support.
  * Author:      WP Appointments
  * Author URI:  https://wpappointments.com
