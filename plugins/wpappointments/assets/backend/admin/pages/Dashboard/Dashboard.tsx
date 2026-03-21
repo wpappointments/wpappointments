@@ -4,7 +4,6 @@ import { select, useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { CardBody } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
-import { Slideout } from '~/backend/store/slideout/slideout.types';
 import { store } from '~/backend/store/store';
 import AppointmentsTableMinimal from '../../components/AppointmentsTableMinimal/AppointmentsTableMinimal';
 import styles from './Dashboard.module.css';
@@ -17,42 +16,17 @@ import statsPlaceholder from '~/images/stats-placeholder.png';
 import globalStyles from 'global.module.css';
 
 export default function Dashboard() {
-	// @todo refactor - move to each component
-	const { openSlideOut, isSlideoutOpen } = useSlideout();
+	const { isSlideoutOpen } = useSlideout();
 
 	return (
 		<StateContextProvider>
 			<LayoutDefault title={__('Dashboard', 'wpappointments')}>
 				<div className={styles.header}>
 					<DashboardStats />
-					<UpcomingAppointments openSlideOut={openSlideOut} />
+					<UpcomingAppointments />
 				</div>
 				<div>
-					<Card className={globalStyles.card}>
-						<CardHeader>
-							<div className={styles.upcomingTitleWrapper}>
-								<Text size="title">
-									{__('All Appointments', 'wpappointments')}
-								</Text>
-							</div>
-							<Button
-								variant="primary"
-								onClick={() => {
-									openSlideOut({
-										id: 'appointment',
-										data: {
-											mode: 'create',
-										},
-									});
-								}}
-							>
-								{__('Create New Appointment', 'wpappointments')}
-							</Button>
-						</CardHeader>
-						<CardBody>
-							<DashboardAppointments />
-						</CardBody>
-					</Card>
+					<DashboardAppointments />
 				</div>
 
 				{isSlideoutOpen('view-appointment') && <AppointmentDetails />}
@@ -63,14 +37,41 @@ export default function Dashboard() {
 }
 
 function DashboardAppointments() {
-	return <AppointmentsTableFull />;
+	const { openSlideOut } = useSlideout();
+
+	return (
+		<Card className={globalStyles.card}>
+			<CardHeader>
+				<div className={styles.upcomingTitleWrapper}>
+					<Text size="subheadline">
+						{__('All Appointments', 'wpappointments')}
+					</Text>
+				</div>
+				<Button
+					variant="primary"
+					size="compact"
+					onClick={() => {
+						openSlideOut({
+							id: 'appointment',
+							data: {
+								mode: 'create',
+							},
+						});
+					}}
+				>
+					{__('New Appointment', 'wpappointments')}
+				</Button>
+			</CardHeader>
+			<CardBody>
+				<AppointmentsTableFull />
+			</CardBody>
+		</Card>
+	);
 }
 
-function UpcomingAppointments({
-	openSlideOut,
-}: {
-	openSlideOut: (slideout: Slideout) => void;
-}) {
+function UpcomingAppointments() {
+	const { openSlideOut } = useSlideout();
+
 	const appointments = useSelect(() => {
 		return select(store).getUpcomingAppointments({
 			posts_per_page: 10,
@@ -82,7 +83,7 @@ function UpcomingAppointments({
 	return (
 		<Card className={globalStyles.card}>
 			<CardHeader>
-				<Text size="title">
+				<Text size="subheadline">
 					{__('Upcoming Appointments', 'wpappointments')}
 				</Text>
 			</CardHeader>
@@ -115,14 +116,14 @@ function DashboardStats() {
 	return (
 		<Card className={globalStyles.card}>
 			<CardHeader>
-				<Text size="title">
+				<Text size="subheadline">
 					{/* translators: 1 admin area user name */}
 					{sprintf(
 						__('Hello %s!', 'wpappointments'),
 						settings.firstName
 					)}
 				</Text>
-				<span>{new Date().toDateString()}</span>
+				<Text size="subheadline">{new Date().toDateString()}</Text>
 			</CardHeader>
 			<CardBody style={{ padding: 0 }}>
 				<img
