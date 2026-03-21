@@ -1,6 +1,7 @@
 {
 	"name": "@wpappointments/wpappointments",
 	"version": "0.0.1",
+	"private": true,
 	"description": "",
 	"scripts": {
 		"build": "pnpm css-types & wp-scripts build assets/backend/admin.tsx assets/backend/index.tsx assets/backend/globals.tsx assets/frontend/frontend.tsx assets/shared/index.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block.tsx assets/gutenberg/blocks/booking-flow/src/booking-flow-block-view.tsx",
