@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Service } from '~/backend/types';
+import {
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	withForm,
+} from '@wpappointments/components';
+import {
+	fetchBookables,
+	createBookable,
+	deleteBookable,
+} from '@wpappointments/data';
+import type { BookableEntity } from '@wpappointments/data';
 import styles from '../OnboardingWizard.module.css';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import Input from '~/backend/admin/components/FormField/Input/Input';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
-import { servicesApi, CreateServiceData } from '~/backend/api/services';
 
 type ServiceFormData = {
 	name: string;
@@ -17,19 +24,21 @@ type ServicesProps = {
 	onSuccess: () => void;
 };
 
-function AddServiceForm({ onAdd }: { onAdd: (service: Service) => void }) {
+function AddServiceForm({
+	onAdd,
+}: {
+	onAdd: (service: BookableEntity) => void;
+}) {
 	const onSubmit = async (data: ServiceFormData) => {
-		const { createService } = servicesApi();
-		const serviceData: CreateServiceData = {
+		const result = await createBookable({
 			name: data.name,
+			type: 'service',
 			duration: Number(data.duration),
 			active: true,
-		};
+		});
 
-		const response = await createService(serviceData);
-
-		if (response && response.status === 'success') {
-			onAdd(response.data.service as Service);
+		if (result.data) {
+			onAdd(result.data);
 		}
 	};
 
@@ -59,28 +68,28 @@ function AddServiceForm({ onAdd }: { onAdd: (service: Service) => void }) {
 const AddServiceFormWithForm = withForm(AddServiceForm);
 
 function ServicesStep({ onSuccess }: ServicesProps) {
-	const [services, setServices] = useState<Service[]>([]);
+	const [services, setServices] = useState<BookableEntity[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		const { getServices } = servicesApi();
-
 		setIsLoading(true);
 
-		Promise.resolve(getServices()).then((result: any) => {
-			setServices(result?.services || []);
+		fetchBookables({ type: 'service' }).then((result) => {
+			setServices(result?.data?.bookables || []);
 			setIsLoading(false);
 		});
 	}, []);
 
-	const handleAdd = (service: Service) => {
+	const handleAdd = (service: BookableEntity) => {
 		setServices((prev) => [...prev, service]);
 	};
 
 	const handleDelete = async (id: number) => {
-		const { deleteService } = servicesApi();
-		await deleteService(id);
-		setServices((prev) => prev.filter((s) => s.id !== id));
+		const result = await deleteBookable(id);
+
+		if (!result.error) {
+			setServices((prev) => prev.filter((s) => s.id !== id));
+		}
 	};
 
 	return (
@@ -105,7 +114,7 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 						{services.map((service) => (
 							<tr key={service.id}>
 								<td>{service.name}</td>
-								<td>{service.duration ?? '—'}</td>
+								<td>{(service.duration as number) ?? '—'}</td>
 								<td>
 									<Button
 										variant="link"

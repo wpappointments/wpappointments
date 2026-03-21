@@ -2,14 +2,16 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import {
+	NumberField as Number,
+	Select,
+	FormFieldSet,
+} from '@wpappointments/components';
 import { addHours, format } from 'date-fns';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import { AvailabilityState } from '~/backend/store/availability/availability.types';
 import { store } from '~/backend/store/store';
 import { AppointmentFormFields } from '../../AppointmentForm/AppointmentForm';
-import Number from '../../FormField/Number/Number';
-import Select from '../../FormField/Select/Select';
-import FormFieldSet from '../../FormFieldSet/FormFieldSet';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
 export type StartEndTimePickerProps = {

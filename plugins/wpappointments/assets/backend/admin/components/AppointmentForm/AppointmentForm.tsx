@@ -3,23 +3,26 @@ import { Button, ButtonGroup } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import {
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	Select,
+	SlideOut,
+	withForm,
+} from '@wpappointments/components';
+import { displayErrorToast } from '@wpappointments/data';
+import { useSlideout } from '@wpappointments/data';
 import { addMinutes } from 'date-fns';
 import { safeParse } from 'valibot';
 import { APIResponse } from '~/backend/utils/fetch';
 import { formatTimeForPicker } from '~/backend/utils/format';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast } from '~/backend/utils/toast';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Customer, Appointment } from '~/backend/types';
 import CustomerCreate from '../CustomerCreate/CustomerCreate';
 import CustomerSelector from '../CustomerSelector/CustomerSelector';
 import CustomerSummary from '../CustomerSelector/Summary/Summary';
-import { HtmlForm, withForm } from '../Form/Form';
-import Input from '../FormField/Input/Input';
-import Select from '../FormField/Select/Select';
-import FormFieldSet from '../FormFieldSet/FormFieldSet';
-import SlideOut from '../SlideOut/SlideOut';
 import Summary from '../TimeSelector/Summary/Summary';
 import TimeSelector from '../TimeSelector/TimeSelector';
 import styles from './AppointmentForm.module.css';

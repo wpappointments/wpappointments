@@ -2,7 +2,7 @@ import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { chevronLeft, chevronRight } from '@wordpress/icons';
 import { addDays, addMinutes, addYears, format } from 'date-fns';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import { formatTime } from '~/backend/utils/i18n';
 import styles from './BookingFlowCalendar.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';

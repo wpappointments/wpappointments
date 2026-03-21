@@ -10,18 +10,17 @@ import {
 	info,
 	trash,
 } from '@wordpress/icons';
+import { DataViews, TableFullEmpty } from '@wpappointments/components';
+import type { Action, View } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import { addMinutes, fromUnixTime } from 'date-fns';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDate, formatTime } from '~/backend/utils/i18n';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetails';
 import styles from './AppointmentsTableFull.module.css';
-import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import { Action } from '~/backend/admin/components/DataViews/types';
-import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
 import { COLORS as colors } from '~/backend/constants';
@@ -33,13 +32,7 @@ type Fields = {
 	posts_per_page: number;
 };
 
-type View = {
-	type: 'table';
-	layout: object;
-	hiddenFields: [];
-	perPage: number;
-	page: number;
-};
+// View type imported from @wpappointments/components via DataViews
 
 export default function AppointmentsTableFull() {
 	const { openSlideOut } = useSlideout({

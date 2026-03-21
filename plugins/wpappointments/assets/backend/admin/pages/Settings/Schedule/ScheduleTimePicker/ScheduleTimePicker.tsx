@@ -1,4 +1,5 @@
 import { useSelect, select } from '@wordpress/data';
+import { Select } from '@wpappointments/components';
 import { addMinutes, format } from 'date-fns';
 import {
 	DayOpeningHours,
@@ -6,7 +7,6 @@ import {
 } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
-import Select from '~/backend/admin/components/FormField/Select/Select';
 
 type Props = {
 	day: keyof SettingsSchedule;

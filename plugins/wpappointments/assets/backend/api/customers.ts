@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
+import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import { missingId } from '~/backend/utils/api';
 import { Error, getErrorMessage } from '~/backend/utils/error';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { Customer } from '~/backend/types';
 
 export type UpdateCustomerData = Pick<

@@ -22,9 +22,10 @@ export const actions = {
 			slideoutId,
 		} as const;
 	},
-	removeSlideout() {
+	removeSlideout(slideoutId: string) {
 		return {
 			type: 'REMOVE_CLOSING_SLIDEOUT',
+			slideoutId,
 		} as const;
 	},
 };
@@ -48,13 +49,12 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 
 		case 'REMOVE_CLOSING_SLIDEOUT':
 			return produce(state, (draft) => {
-				const removed = draft.slideoutsToClose.pop();
-
-				if (removed) {
-					draft.slideouts = draft.slideouts.filter(
-						(slideout) => slideout.id !== removed.id
-					);
-				}
+				draft.slideoutsToClose = draft.slideoutsToClose.filter(
+					(slideout) => slideout.id !== action.slideoutId
+				);
+				draft.slideouts = draft.slideouts.filter(
+					(slideout) => slideout.id !== action.slideoutId
+				);
 			});
 
 		default:

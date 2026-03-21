@@ -5,17 +5,17 @@ import {
 	CardFooter,
 	CardHeader,
 } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Text } from '~/backend/utils/experimental';
+import { HtmlForm, withForm } from '@wpappointments/components';
+import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import { displayErrorToast, displaySuccessToast } from '~/backend/utils/toast';
 import { useSchedule } from '~/backend/hooks/useSchedule';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
 import globalStyles from 'global.module.css';
 
 export type ScheduleFormFields = {

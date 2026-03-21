@@ -3,14 +3,16 @@ import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, info, edit, trash } from '@wordpress/icons';
+import {
+	DataViews,
+	DeleteModal,
+	TableFullEmpty,
+} from '@wpappointments/components';
+import type { Action } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
 import { formatDate } from '~/backend/utils/i18n';
-import useSlideout from '~/backend/hooks/useSlideout';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
-import { Action } from '../DataViews/types';
-import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import DeleteCustomerModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
-import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
 import { COLORS as colors } from '~/backend/constants';
@@ -29,22 +31,22 @@ type View = {
 };
 
 type CustomerDetailsModalsProps = {
-	deleteAppointment: () => Promise<void>;
+	deleteCustomer: () => Promise<void>;
 	closeModal: () => void;
 };
 
 export function CustomerDetailsModals({
-	deleteAppointment,
+	deleteCustomer,
 	closeModal,
 }: CustomerDetailsModalsProps) {
 	return (
-		<DeleteCustomerModal
+		<DeleteModal
 			title={__('Delete Customer', 'wpappointments')}
 			message={__(
 				'Are you sure you want to delete this customer? This action cannot be undone.',
 				'wpappointments'
 			)}
-			onConfirmClick={deleteAppointment}
+			onConfirmClick={deleteCustomer}
 			closeModal={closeModal}
 		/>
 	);
@@ -237,7 +239,7 @@ export default function CustomersTable() {
 			/>
 			{customerModal && (
 				<CustomerDetailsModals
-					deleteAppointment={async () => {
+					deleteCustomer={async () => {
 						if (!deleteCustomer) {
 							return;
 						}

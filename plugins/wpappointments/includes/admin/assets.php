@@ -53,15 +53,19 @@ function scripts() {
 	wp_enqueue_script(
 		'wpappointments-admin-js',
 		PluginInfo::get_plugin_dir_url() . 'build/admin.tsx.js',
-		$admin_deps['dependencies'] + apply_filters( 'wpappointments_admin_js_dependencies', array() ),
+		array_merge( $admin_deps['dependencies'], apply_filters( 'wpappointments_admin_js_dependencies', array() ) ),
 		$admin_deps['version'],
 		true
 	);
 
-	wp_localize_script(
+	// Use wp_add_inline_script instead of wp_localize_script to avoid
+	// overwriting window.wpappointments (which external plugins may have
+	// already written to, e.g., _pendingBookableTypes).
+	$localize_data = wp_json_encode( array_merge( $api, $date ) );
+	wp_add_inline_script(
 		'wpappointments-admin-js',
-		'wpappointments',
-		array_merge( $api, $date )
+		'window.wpappointments = Object.assign(window.wpappointments || {}, ' . $localize_data . ');',
+		'before'
 	);
 
 	wp_set_script_translations(
@@ -110,10 +114,11 @@ function scripts() {
 			true
 		);
 
-		wp_localize_script(
+		$globals_data = wp_json_encode( $api );
+		wp_add_inline_script(
 			'wpappointments-globals-js',
-			'wpappointments',
-			$api
+			'window.wpappointments = Object.assign(window.wpappointments || {}, ' . $globals_data . ');',
+			'before'
 		);
 	}
 }

@@ -1,0 +1,104 @@
+.slide-out {
+	position: absolute;
+	background-color: #fff;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: min(100%, 700px);
+	transform: translateX(100px);
+	transition:
+		transform 0.2s ease-in-out,
+		width 0.2s ease-in-out,
+		right 0.1s ease-in-out;
+	z-index: 1;
+	cursor: auto;
+	pointer-events: unset;
+	border-right: 1px solid #e5e5e5;
+	display: flex;
+	flex-direction: column;
+}
+
+.slide-out-open {
+	transform: translateX(
+		calc(calc(var(--total-levels) - var(--nesting-level)) * -80px)
+	);
+}
+
+.slide-out-overlay {
+	position: fixed;
+	top: 32px;
+	left: 160px;
+	bottom: 0;
+	right: 0;
+	z-index: calc(1001 + var(--nesting-level));
+	background-color: rgba(0, 0, 0, 0.5);
+	overflow-x: hidden;
+	transition:
+		opacity 0.1s ease-in-out,
+		right 0.2s ease-in-out;
+	opacity: 0;
+	cursor: pointer;
+	pointer-events: none;
+}
+
+.slide-out-overlay-open {
+	opacity: 1;
+	pointer-events: auto;
+	transition:
+		opacity 0.2s ease-in-out,
+		right 0.1s ease-in-out;
+}
+
+.slide-out-wide {
+	width: calc(100% - calc(80px * var(--nesting-level)));
+}
+
+.slide-out .slide-out-overlay {
+	top: 0;
+}
+
+:global(.folded) .slide-out-overlay {
+	left: 36px;
+}
+
+@media only screen and (max-width: 960px) {
+	:global(.auto-fold) .slide-out-overlay {
+		left: 36px;
+	}
+}
+
+@media screen and (max-width: 782px) {
+	.slide-out-overlay,
+	:global(.folded) .slide-out-overlay,
+	:global(.auto-fold) .slide-out-overlay {
+		top: 46px;
+		left: 0;
+	}
+
+	:global(.folded) .slide-out .slide-out-overlay,
+	:global(.auto-fold) .slide-out .slide-out-overlay {
+		top: 0;
+	}
+}
+
+.header {
+	border-bottom: 1px solid #e5e5e5;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-left: var(--wpappointments-main-gap);
+	padding-right: var(--wpappointments-main-gap);
+	height: var(--wpappointments-layout-header-height);
+}
+
+.header > h2 {
+	font-weight: 600;
+	font-size: 14px;
+	margin: 0;
+}
+
+.content {
+	flex: 1;
+	padding: var(--wpappointments-main-gap);
+	overflow: auto;
+}

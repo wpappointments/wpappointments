@@ -48,7 +48,7 @@ class Capabilities {
 	const MANAGE_ENTITIES = 'wpa_manage_entities';
 
 	/**
-	 * Manage bookable entities capability
+	 * Manage bookables capability
 	 *
 	 * @var string
 	 */

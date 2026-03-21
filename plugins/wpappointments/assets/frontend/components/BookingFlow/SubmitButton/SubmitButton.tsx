@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import cn from '~/backend/utils/cn';
+import cn from 'obj-str';
 import styles from './SubmitButton.module.css';
 
 export default function SubmitButton({ label = __('Book', 'wpappointments') }) {

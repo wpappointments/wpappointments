@@ -1,0 +1,22 @@
+{
+	"name": "@wpappointments/data",
+	"version": "0.1.0-alpha.0",
+	"description": "Hooks, API functions, and utilities for WP Appointments plugin extensions",
+	"main": "src/index.ts",
+	"types": "src/index.ts",
+	"files": [
+		"src"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "GPL-2.0-or-later",
+	"devDependencies": {
+		"@types/react": "*"
+	},
+	"peerDependencies": {
+		"@wordpress/api-fetch": "*",
+		"@wordpress/data": "*",
+		"react": "^18.0.0"
+	}
+}

@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import {
+	FormFieldSet,
+	HtmlForm,
+	Input,
+	Select,
+	withForm,
+} from '@wpappointments/components';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import styles from '../OnboardingWizard.module.css';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import Input from '~/backend/admin/components/FormField/Input/Input';
-import Select from '~/backend/admin/components/FormField/Select/Select';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 
 type Fields = {
 	defaultLength: number;

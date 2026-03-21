@@ -1,12 +1,11 @@
 import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Text } from '~/backend/utils/experimental';
+import { FormFieldSet, HtmlForm, withForm } from '@wpappointments/components';
 import apiFetch from '~/backend/utils/fetch';
 import { store } from '~/backend/store/store';
 import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
 import globalStyles from 'global.module.css';
 
 // Any for now. Replace with actual type.

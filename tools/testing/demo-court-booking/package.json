@@ -1,0 +1,17 @@
+{
+	"name": "demo-court-booking",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Demo Court Booking plugin for testing bookable entity abstraction",
+	"scripts": {
+		"build": "wp-scripts build assets/admin.tsx --output-path=build",
+		"dev": "wp-scripts start assets/admin.tsx --output-path=build"
+	},
+	"dependencies": {
+		"@wpappointments/components": "workspace:*",
+		"@wpappointments/data": "workspace:*"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "*"
+	}
+}

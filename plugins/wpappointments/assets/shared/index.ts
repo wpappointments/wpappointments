@@ -9,22 +9,24 @@
  *   const { DataViews, SlideOut, useSlideout } = window.wpappointments.components;
  */
 // Components
-// Hooks utilities
+import {
+	CardBody,
+	DataViews,
+	HtmlForm,
+	withForm,
+	Input,
+	Toggle,
+	FormFieldSet,
+	DeleteModal,
+	SlideOut,
+	TableFullEmpty,
+} from '@wpappointments/components';
+// Hooks & utilities
+import { useSlideout } from '@wpappointments/data';
 import { applyFilters, doAction } from '~/backend/utils/hooks';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
-// Hooks
-import useSlideout from '~/backend/hooks/useSlideout';
 // Store
 import { store } from '~/backend/store/store';
-import CardBody from '~/backend/admin/components/CardBody/CardBody';
-import { DataViews } from '~/backend/admin/components/DataViews/DataViews';
-import { HtmlForm, withForm } from '~/backend/admin/components/Form/Form';
-import Input from '~/backend/admin/components/FormField/Input/Input';
-import Toggle from '~/backend/admin/components/FormField/Toggle/Toggle';
-import FormFieldSet from '~/backend/admin/components/FormFieldSet/FormFieldSet';
-import DeleteModal from '~/backend/admin/components/Modals/DeleteModal/DeleteModal';
-import SlideOut from '~/backend/admin/components/SlideOut/SlideOut';
-import TableFullEmpty from '~/backend/admin/components/TableFullEmpty/TableFullEmpty';
 // State context
 import {
 	StateContextProvider,

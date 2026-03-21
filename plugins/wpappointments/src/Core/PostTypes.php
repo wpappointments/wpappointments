@@ -20,9 +20,8 @@ class PostTypes {
 	public static function register() {
 		self::register_appointment_post_type();
 		self::register_schedule_post_type();
-		self::register_service_post_type();
-		self::register_entity_post_type();
-		self::register_service_category_taxonomy();
+		self::register_bookable_post_type();
+		self::register_bookable_variant_post_type();
 	}
 
 	/**
@@ -78,21 +77,34 @@ class PostTypes {
 	}
 
 	/**
-	 * Register service post type
+	 * Register bookable entity post type
+	 *
+	 * Bookable entities are the abstract base for all bookable resources.
+	 * Concrete types (services, tables, rooms) are registered by plugins
+	 * via the bookable type registration API.
 	 *
 	 * @return void
 	 */
-	private static function register_service_post_type() {
+	private static function register_bookable_post_type() {
 		register_post_type(
-			PluginInfo::POST_TYPES['service'],
+			PluginInfo::POST_TYPES['bookable'],
 			array(
-				'label'               => __( 'Services', 'wpappointments' ),
+				'label'               => __( 'Bookables', 'wpappointments' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
+				'map_meta_cap'        => false,
+				'capabilities'        => array(
+					'edit_post'          => 'wpa_manage_bookables',
+					'read_post'          => 'wpa_manage_bookables',
+					'delete_post'        => 'wpa_manage_bookables',
+					'edit_posts'         => 'wpa_manage_bookables',
+					'edit_others_posts'  => 'wpa_manage_bookables',
+					'publish_posts'      => 'wpa_manage_bookables',
+					'read_private_posts' => 'wpa_manage_bookables',
+				),
 				'hierarchical'        => false,
 				'rewrite'             => false,
 				'query_var'           => false,
@@ -104,62 +116,37 @@ class PostTypes {
 	}
 
 	/**
-	 * Register service category taxonomy
+	 * Register bookable variant post type
+	 *
+	 * Variants are the actual bookable units. Every bookable entity has at
+	 * least one variant. Variants link to their parent entity via post_parent.
 	 *
 	 * @return void
 	 */
-	private static function register_service_category_taxonomy() {
-		register_taxonomy(
-			PluginInfo::TAXONOMIES['service-category'],
-			PluginInfo::POST_TYPES['service'],
-			array(
-				'label'             => __( 'Service Categories', 'wpappointments' ),
-				'labels'            => array(
-					'name'          => __( 'Service Categories', 'wpappointments' ),
-					'singular_name' => __( 'Service Category', 'wpappointments' ),
-					'add_new_item'  => __( 'Add New Service Category', 'wpappointments' ),
-					'new_item_name' => __( 'New Service Category Name', 'wpappointments' ),
-				),
-				'public'            => false,
-				'show_ui'           => false,
-				'show_in_rest'      => false,
-				'hierarchical'      => false,
-				'rewrite'           => false,
-				'query_var'         => false,
-				'show_admin_column' => false,
-				'capabilities'      => array(
-					'manage_terms' => Capabilities::MANAGE_SERVICES,
-					'edit_terms'   => Capabilities::MANAGE_SERVICES,
-					'delete_terms' => Capabilities::MANAGE_SERVICES,
-					'assign_terms' => Capabilities::MANAGE_SERVICES,
-				),
-			)
-		);
-	}
-
-	/**
-	 * Register entity post type
-	 *
-	 * Entities are bookable resources (rooms, tables, equipment, etc.)
-	 * that support hierarchical nesting (e.g., restaurant → table → seat).
-	 *
-	 * @return void
-	 */
-	private static function register_entity_post_type() {
+	private static function register_bookable_variant_post_type() {
 		register_post_type(
-			PluginInfo::POST_TYPES['entity'],
+			PluginInfo::POST_TYPES['bookable-variant'],
 			array(
-				'label'               => __( 'Entities', 'wpappointments' ),
+				'label'               => __( 'Bookable Variants', 'wpappointments' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
 				'show_in_rest'        => true,
 				'capability_type'     => 'post',
-				'map_meta_cap'        => true,
-				'hierarchical'        => true,
+				'map_meta_cap'        => false,
+				'capabilities'        => array(
+					'edit_post'          => 'wpa_manage_bookables',
+					'read_post'          => 'wpa_manage_bookables',
+					'delete_post'        => 'wpa_manage_bookables',
+					'edit_posts'         => 'wpa_manage_bookables',
+					'edit_others_posts'  => 'wpa_manage_bookables',
+					'publish_posts'      => 'wpa_manage_bookables',
+					'read_private_posts' => 'wpa_manage_bookables',
+				),
+				'hierarchical'        => false,
 				'rewrite'             => false,
 				'query_var'           => false,
-				'supports'            => array( 'title', 'custom-fields', 'page-attributes' ),
+				'supports'            => array( 'title', 'custom-fields' ),
 				'exclude_from_search' => true,
 				'publicly_queryable'  => false,
 			)
