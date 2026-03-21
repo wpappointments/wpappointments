@@ -16,6 +16,16 @@ use WPAppointments\Core\PluginInfo;
  */
 class BookableQuery {
 	/**
+	 * Allowed orderby values for WP_Query
+	 */
+	const ALLOWED_ORDERBY = array( 'date', 'title', 'modified', 'ID', 'menu_order' );
+
+	/**
+	 * Allowed order directions
+	 */
+	const ALLOWED_ORDER = array( 'ASC', 'DESC' );
+
+	/**
 	 * Get all bookable entities
 	 *
 	 * @param array $query Query parameters.
@@ -23,12 +33,15 @@ class BookableQuery {
 	 * @return array
 	 */
 	public static function all( $query = array() ) {
+		$orderby = $query['orderby'] ?? 'date';
+		$order   = strtoupper( $query['order'] ?? 'DESC' );
+
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['bookable'],
 			'posts_per_page' => $query['postsPerPage'] ?? -1,
 			'post_status'    => 'publish',
-			'orderby'        => $query['orderby'] ?? 'date',
-			'order'          => $query['order'] ?? 'DESC',
+			'orderby'        => in_array( $orderby, self::ALLOWED_ORDERBY, true ) ? $orderby : 'date',
+			'order'          => in_array( $order, self::ALLOWED_ORDER, true ) ? $order : 'DESC',
 		);
 
 		if ( isset( $query['paged'] ) ) {

@@ -16,6 +16,16 @@ use WPAppointments\Core\PluginInfo;
  */
 class BookableVariantQuery {
 	/**
+	 * Allowed orderby values for WP_Query
+	 */
+	const ALLOWED_ORDERBY = array( 'date', 'title', 'modified', 'ID', 'menu_order' );
+
+	/**
+	 * Allowed order directions
+	 */
+	const ALLOWED_ORDER = array( 'ASC', 'DESC' );
+
+	/**
 	 * Get all variants for a bookable entity
 	 *
 	 * @param int   $entity_id Bookable entity post ID.
@@ -24,13 +34,16 @@ class BookableVariantQuery {
 	 * @return array
 	 */
 	public static function by_entity( $entity_id, $query = array() ) {
+		$orderby = $query['orderby'] ?? 'date';
+		$order   = strtoupper( $query['order'] ?? 'ASC' );
+
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['bookable-variant'],
 			'posts_per_page' => $query['postsPerPage'] ?? -1,
 			'post_status'    => 'publish',
 			'post_parent'    => (int) $entity_id,
-			'orderby'        => $query['orderby'] ?? 'date',
-			'order'          => $query['order'] ?? 'ASC',
+			'orderby'        => in_array( $orderby, self::ALLOWED_ORDERBY, true ) ? $orderby : 'date',
+			'order'          => in_array( $order, self::ALLOWED_ORDER, true ) ? $order : 'ASC',
 		);
 
 		if ( isset( $query['paged'] ) ) {

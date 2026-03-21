@@ -192,10 +192,24 @@ class AppointmentsController extends Controller {
 	public static function create_appointment( WP_REST_Request $request ) {
 		$date        = sanitize_text_field( $request->get_param( 'date' ) );
 		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = (int) $request->get_param( 'duration' );
+		$duration    = absint( $request->get_param( 'duration' ) );
 		$customer    = $request->get_param( 'customer' );
 		$customer_id = absint( $request->get_param( 'customerId' ) );
 		$status      = sanitize_text_field( $request->get_param( 'status' ) );
+
+		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
+
+		if ( ! in_array( $status, $allowed_statuses, true ) ) {
+			return self::error(
+				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
+		if ( $duration < 1 ) {
+			return self::error(
+				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -247,9 +261,10 @@ class AppointmentsController extends Controller {
 		$default_duration = $settings->get_setting( 'appointments', 'defaultLength' );
 		$duration         = $default_duration ? $default_duration : 60;
 
-		$default_status  = $settings->get_setting( 'appointments', 'defaultStatus' );
-		$status          = $default_status ? $default_status : 'confirmed';
-		$default_service = $settings->get_default_service();
+		$default_status   = $settings->get_setting( 'appointments', 'defaultStatus' );
+		$allowed_statuses = array( 'pending', 'confirmed' );
+		$status           = in_array( $default_status, $allowed_statuses, true ) ? $default_status : 'confirmed';
+		$default_service  = $settings->get_default_service();
 
 		$appointment       = new Appointment(
 			array(
@@ -286,10 +301,24 @@ class AppointmentsController extends Controller {
 		$id          = absint( $request->get_param( 'id' ) );
 		$date        = sanitize_text_field( $request->get_param( 'date' ) );
 		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = (int) $request->get_param( 'duration' );
+		$duration    = absint( $request->get_param( 'duration' ) );
 		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 		$customer    = $request->get_param( 'customer' );
 		$customer_id = absint( $request->get_param( 'customerId' ) );
+
+		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
+
+		if ( $status && ! in_array( $status, $allowed_statuses, true ) ) {
+			return self::error(
+				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
+		if ( null !== $request->get_param( 'duration' ) && $duration < 1 ) {
+			return self::error(
+				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 

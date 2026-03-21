@@ -54,12 +54,14 @@ class Settings {
 				'type' => 'string',
 			),
 			array(
-				'name' => 'startOfWeek',
-				'type' => 'string',
+				'name'    => 'startOfWeek',
+				'type'    => 'string',
+				'allowed' => array( '0', '1', '2', '3', '4', '5', '6' ),
 			),
 			array(
-				'name' => 'clockType',
-				'type' => 'string',
+				'name'    => 'clockType',
+				'type'    => 'string',
+				'allowed' => array( '12h', '24h' ),
 			),
 			array(
 				'name' => 'timezoneSiteDefault',
@@ -70,12 +72,14 @@ class Settings {
 				'type' => 'string',
 			),
 			array(
-				'name' => 'dateFormat',
-				'type' => 'string',
+				'name'    => 'dateFormat',
+				'type'    => 'string',
+				'allowed' => array( 'F j, Y', 'Y-m-d', 'm/d/Y', 'd/m/Y' ),
 			),
 			array(
-				'name' => 'timeFormat',
-				'type' => 'string',
+				'name'    => 'timeFormat',
+				'type'    => 'string',
+				'allowed' => array( 'g:i a', 'g:i A', 'H:i' ),
 			),
 			array(
 				'name' => 'customDateFormat',
@@ -94,14 +98,19 @@ class Settings {
 			array(
 				'name' => 'defaultLength',
 				'type' => 'number',
+				'min'  => 1,
+				'max'  => 1440,
 			),
 			array(
 				'name' => 'timePickerPrecision',
 				'type' => 'number',
+				'min'  => 1,
+				'max'  => 60,
 			),
 			array(
-				'name' => 'defaultStatus',
-				'type' => 'string',
+				'name'    => 'defaultStatus',
+				'type'    => 'string',
+				'allowed' => array( 'pending', 'confirmed' ),
 			),
 		),
 		'calendar'      => array(),
@@ -217,11 +226,16 @@ class Settings {
 					continue;
 				}
 
-				// Sanitize value based on schema type.
+				// Sanitize and validate value based on schema type.
 				$option_def = $this->get_option_definition( $category, $key );
 
 				if ( $option_def ) {
 					$value = self::sanitize_setting_value( $value, $option_def );
+
+					// Skip values that failed safelist validation.
+					if ( null === $value ) {
+						continue;
+					}
 				}
 
 				if ( 'serviceName' === $key ) {
@@ -454,10 +468,27 @@ class Settings {
 
 		switch ( $type ) {
 			case 'string':
-				return sanitize_text_field( (string) $value );
+				$value = sanitize_text_field( (string) $value );
+
+				// Validate against allowed values safelist.
+				if ( isset( $option_def['allowed'] ) && ! in_array( $value, $option_def['allowed'], true ) ) {
+					return null;
+				}
+
+				return $value;
 
 			case 'number':
-				return intval( $value );
+				$value = intval( $value );
+
+				if ( isset( $option_def['min'] ) && $value < $option_def['min'] ) {
+					return $option_def['min'];
+				}
+
+				if ( isset( $option_def['max'] ) && $value > $option_def['max'] ) {
+					return $option_def['max'];
+				}
+
+				return $value;
 
 			case 'boolean':
 				return rest_sanitize_boolean( $value );
