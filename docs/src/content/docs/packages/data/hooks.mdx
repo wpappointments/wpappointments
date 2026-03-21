@@ -1,0 +1,55 @@
+---
+title: Hooks
+description: React hooks for data fetching and state management.
+---
+
+## useBookableEntities
+
+Fetch a list of bookable entities by type.
+
+```tsx
+const { entities, isLoading, error, pagination } = useBookableEntities('court');
+```
+
+**Parameters:**
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `type` | `string` | Bookable type slug |
+
+**Returns:** `{ entities: BookableEntity[], isLoading: boolean, error: Error | null, pagination: PaginationInfo }`
+
+## useBookableEntity
+
+Fetch a single bookable entity by ID.
+
+```tsx
+const { entity, isLoading } = useBookableEntity(42);
+```
+
+## useBookableVariants
+
+Fetch variants for a bookable entity.
+
+```tsx
+const { variants, isLoading } = useBookableVariants(entityId);
+```
+
+## useEffectiveAvailability
+
+Get computed availability for an entity or variant, accounting for all layers.
+
+```tsx
+const { availability, isLoading } = useEffectiveAvailability({
+    entityId: 42,
+    startDate: '2026-03-21',
+    endDate: '2026-03-28',
+});
+```
+
+## useSlideout
+
+Manage slideout panel state.
+
+```tsx
+const { isOpen, content, open, close } = useSlideout();
+```

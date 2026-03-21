@@ -1,0 +1,56 @@
+---
+title: Getting Started
+description: Set up a development environment for WP Appointments.
+---
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 10+
+- Docker (for wp-env)
+- PHP 8.2+ (for IDE support)
+
+## Clone and Setup
+
+```bash
+git clone https://github.com/wpappointments/wpappointments.git
+cd wpappointments
+pnpm run initialize
+```
+
+This installs dependencies, starts a WordPress environment, and builds all packages.
+
+## Development Server
+
+```bash
+pnpm run dev
+```
+
+Opens a WordPress site at `http://localhost:8888` with hot reload. Admin credentials: `admin` / `password`.
+
+## Project Structure
+
+```
+wpappointments/
+├── packages/
+│   ├── components/     # @wpappointments/components
+│   └── data/           # @wpappointments/data
+├── plugins/
+│   └── wpappointments/ # Main plugin
+├── premium/            # Premium addons (private submodule)
+└── tools/testing/      # Test utilities and demo plugins
+```
+
+## Running Tests
+
+```bash
+pnpm test                                    # PHP tests (Pest)
+pnpm -C plugins/wpappointments test:e2e      # Playwright E2E
+```
+
+## Linting
+
+```bash
+pnpm run lint        # JS + PHP
+pnpm run check-types # TypeScript
+```

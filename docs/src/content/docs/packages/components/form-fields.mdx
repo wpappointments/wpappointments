@@ -1,0 +1,47 @@
+---
+title: Form Fields
+description: Form components with React Hook Form integration.
+---
+
+Form components integrate with React Hook Form for validation and state management.
+
+## HtmlForm
+
+Wrapper that provides form context:
+
+```tsx
+import { HtmlForm, Input, Select } from '@wpappointments/components';
+
+<HtmlForm onSubmit={handleSubmit}>
+    <Input name="title" label="Title" required />
+    <Select
+        name="status"
+        label="Status"
+        options={[
+            { value: 'active', label: 'Active' },
+            { value: 'inactive', label: 'Inactive' },
+        ]}
+    />
+</HtmlForm>
+```
+
+## Available Fields
+
+| Component | Purpose |
+|-----------|---------|
+| `Input` | Text input |
+| `NumberField` | Numeric input |
+| `Select` | Dropdown select |
+| `Toggle` | On/off switch |
+| `Checkbox` | Checkbox input |
+| `Radio` | Radio button group |
+| `DatePicker` | Date selection |
+| `WPDatePicker` | WordPress-styled date picker |
+
+## FormField Wrapper
+
+All field components are wrapped in `FormField` which handles:
+- Label rendering
+- Error message display
+- Help text
+- Required indicator

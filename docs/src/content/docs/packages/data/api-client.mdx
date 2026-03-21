@@ -1,0 +1,54 @@
+---
+title: API Client
+description: Direct API functions for CRUD operations.
+---
+
+API functions for cases where you need lower-level control than hooks provide.
+
+## Bookables
+
+```tsx
+import {
+    fetchBookables,
+    createBookable,
+    updateBookable,
+    deleteBookable,
+} from '@wpappointments/data';
+
+// List
+const { data, totalItems } = await fetchBookables({ type: 'court', page: 1 });
+
+// Create
+const court = await createBookable({
+    type: 'court',
+    title: 'Court 1',
+    meta: { surface: 'hard', indoor: true },
+});
+
+// Update
+await updateBookable(court.id, { title: 'Court 1 (Renovated)' });
+
+// Delete
+await deleteBookable(court.id);
+```
+
+## Variants
+
+```tsx
+import { fetchVariants, fetchVariantAvailability } from '@wpappointments/data';
+
+const variants = await fetchVariants(entityId);
+const availability = await fetchVariantAvailability(variantId, {
+    startDate: '2026-03-21',
+    endDate: '2026-03-28',
+});
+```
+
+## Bookable Types
+
+```tsx
+import { fetchBookableTypes } from '@wpappointments/data';
+
+const types = await fetchBookableTypes();
+// [{ slug: 'service', label: 'Service' }, { slug: 'court', label: 'Court' }]
+```

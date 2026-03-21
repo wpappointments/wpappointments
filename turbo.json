@@ -12,6 +12,29 @@
 		"dev": {
 			"cache": false,
 			"persistent": true
+		},
+		"docs:generate": {
+			"dependsOn": ["^build"],
+			"outputs": [
+				"docs/src/content/docs/packages/components/reference/**",
+				"docs/src/content/docs/packages/data/reference/**",
+				"docs/src/content/docs/developers/hooks/actions.mdx",
+				"docs/src/content/docs/developers/hooks/filters.mdx"
+			],
+			"inputs": [
+				"packages/components/src/**",
+				"packages/data/src/**",
+				"plugins/wpappointments/src/**/*.php"
+			]
+		},
+		"docs:dev": {
+			"dependsOn": ["docs:generate"],
+			"cache": false,
+			"persistent": true
+		},
+		"docs:build": {
+			"dependsOn": ["docs:generate"],
+			"outputs": ["docs/dist/**"]
 		}
 	}
 }

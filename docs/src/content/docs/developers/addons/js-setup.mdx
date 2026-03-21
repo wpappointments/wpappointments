@@ -1,0 +1,77 @@
+---
+title: JavaScript Setup
+description: Build admin UI for your addon using shared WP Appointments packages.
+sidebar:
+  order: 3
+---
+
+WP Appointments provides two npm packages for building addon admin UIs:
+
+## Packages
+
+| Package | Purpose |
+|---------|---------|
+| `@wpappointments/components` | React UI components (forms, tables, slideouts, etc.) |
+| `@wpappointments/data` | Hooks, API functions, type registry, utilities |
+
+## Installation
+
+```bash
+npm install @wpappointments/components @wpappointments/data
+```
+
+## Webpack Configuration
+
+Use the WordPress scripts webpack config as a base:
+
+```js
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+
+module.exports = {
+    ...defaultConfig,
+    entry: {
+        admin: './assets/admin.tsx',
+    },
+};
+```
+
+## Example: Custom Admin Page
+
+```tsx
+import { BookableListPage } from '@wpappointments/components';
+import { useBookableEntities } from '@wpappointments/data';
+
+export function CourtsPage() {
+    const { entities, isLoading } = useBookableEntities('court');
+
+    return (
+        <BookableListPage
+            type="court"
+            entities={entities}
+            isLoading={isLoading}
+        />
+    );
+}
+```
+
+## Enqueuing
+
+Register your admin script with WordPress and declare WP Appointments as a dependency:
+
+```php
+add_action('admin_enqueue_scripts', function (string $hook) {
+    if (!str_contains($hook, 'my-addon')) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'my-addon-admin',
+        plugin_dir_url(__FILE__) . 'build/admin.js',
+        ['wpappointments-admin'],
+        '1.0.0',
+        true
+    );
+});
+```
+
+See the [@wpappointments/components](/packages/components/) and [@wpappointments/data](/packages/data/) package docs for full API reference.

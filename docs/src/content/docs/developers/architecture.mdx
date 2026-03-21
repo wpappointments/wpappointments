@@ -1,0 +1,73 @@
+---
+title: Architecture
+description: How WP Appointments is structured internally.
+---
+
+## Overview
+
+WP Appointments is a monorepo with a WordPress plugin at its core and shared npm packages for the frontend.
+
+## PHP Backend
+
+**Namespace:** `WPAppointments\` with PSR-4 autoloading.
+
+| Directory | Purpose |
+|-----------|---------|
+| `src/Api/Endpoints/` | REST controllers extending base `Controller` |
+| `src/Core/` | Plugin bootstrap, post types, capabilities, `Singleton` base class |
+| `src/Data/Model/` | Data models: Appointment, Customer, BookableEntity, BookableVariant |
+| `src/Data/Query/` | Query classes for fetching/filtering posts |
+| `src/Bookable/` | Bookable type registry and abstract handler |
+| `src/Availability/` | Layered availability engine and layer registry |
+| `src/Notifications/` | Email notification system |
+| `src/Utils/` | Date, Schedule, Availability helpers |
+
+### Custom Post Types
+
+| CPT | Slug |
+|-----|------|
+| Appointment | `wpa-appointment` |
+| Schedule | `wpa-schedule` |
+| Service | `wpa-service` |
+| Entity | `wpa-entity` |
+
+### Key Patterns
+
+- **Singleton pattern** — most core classes extend `Core\Singleton`
+- **Bookable Type Registry** — addons register handlers via `BookableTypeRegistry::register()`
+- **Availability Layers** — addons register layers via `AvailabilityLayerRegistry::register()`
+- **Capabilities** — filterable: `wpa_manage_appointments`, `wpa_manage_customers`, etc.
+
+## TypeScript Frontend
+
+| Directory | Purpose |
+|-----------|---------|
+| `assets/backend/` | React admin UI (Dashboard, Calendar, Customers, Settings) |
+| `assets/backend/store/` | `@wordpress/data` Redux store |
+| `assets/backend/api/` | API client functions using `@wordpress/api-fetch` |
+| `assets/frontend/` | Customer-facing booking flow |
+| `assets/gutenberg/blocks/` | Booking Flow Gutenberg block |
+
+### State Management
+
+Uses `@wordpress/data` Redux stores. Actions, reducers, selectors, and resolvers follow the WordPress data package patterns.
+
+### Form Handling
+
+React Hook Form with Valibot schemas for validation. CSS Modules with camelCase exports.
+
+## REST API
+
+Namespace: `/wpappointments/v1/`
+
+All responses use a standardized envelope with pagination:
+
+```json
+{
+  "data": [...],
+  "totalItems": 50,
+  "totalPages": 5,
+  "postsPerPage": 10,
+  "currentPage": 1
+}
+```

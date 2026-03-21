@@ -1,0 +1,88 @@
+---
+title: Registering a Bookable Type
+description: How to register a custom bookable entity type in your addon.
+sidebar:
+  order: 1
+---
+
+Custom bookable types let you define entirely new categories of bookable entities beyond the built-in Service type.
+
+## PHP Handler
+
+Extend `AbstractBookableTypeHandler` and implement the required methods:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace MyAddon;
+
+use WPAppointments\Bookable\AbstractBookableTypeHandler;
+
+class CourtType extends AbstractBookableTypeHandler
+{
+    public function get_type_slug(): string
+    {
+        return 'court';
+    }
+
+    public function get_type_label(): string
+    {
+        return __('Court', 'my-addon');
+    }
+
+    public function get_type_label_plural(): string
+    {
+        return __('Courts', 'my-addon');
+    }
+
+    public function get_admin_columns(): array
+    {
+        return [
+            'surface' => __('Surface', 'my-addon'),
+            'indoor'  => __('Indoor/Outdoor', 'my-addon'),
+        ];
+    }
+
+    public function get_fields(): array
+    {
+        return [
+            [
+                'name'    => 'surface',
+                'label'   => __('Surface Type', 'my-addon'),
+                'type'    => 'select',
+                'options' => ['hard', 'clay', 'grass'],
+            ],
+            [
+                'name'  => 'indoor',
+                'label' => __('Indoor', 'my-addon'),
+                'type'  => 'toggle',
+            ],
+        ];
+    }
+}
+```
+
+## Registration
+
+Register your type in the plugin bootstrap:
+
+```php
+add_action('init', function () {
+    if (function_exists('wpappointments_register_bookable_type')) {
+        wpappointments_register_bookable_type(new CourtType());
+    }
+});
+```
+
+## What Registration Provides
+
+Once registered, your bookable type automatically gets:
+
+- Admin menu page under WP Appointments
+- REST API endpoints (`/wpappointments/v1/bookables?type=court`)
+- DataViews table with your custom columns
+- Create/edit form with your custom fields
+- Variant support
+- Availability engine integration
