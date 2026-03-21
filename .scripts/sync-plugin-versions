@@ -1,0 +1,38 @@
+#!/bin/bash
+# Syncs version from package.json into PHP plugin header, readme.txt, and PluginInfo constant.
+# Runs automatically after `changeset version` via the version-packages script.
+
+set -e
+
+sync_plugin() {
+	local plugin_dir="$1"
+	local version
+	version=$(node -p "require('./$plugin_dir/package.json').version")
+
+	echo "Syncing $plugin_dir to version $version"
+
+	# Plugin header: Version: X.X.X (find the main PHP file with Plugin Name header)
+	local main_php
+	main_php=$(grep -rl "Plugin Name:" "$plugin_dir"/*.php 2>/dev/null | head -1)
+	if [ -n "$main_php" ]; then
+		sed -i '' "s/^\( \* Version: *\).*/\1$version/" "$main_php"
+	fi
+
+	# readme.txt: Stable tag: X.X.X
+	if [ -f "$plugin_dir/readme.txt" ]; then
+		sed -i '' "s/^\(Stable tag: *\).*/\1$version/" "$plugin_dir/readme.txt"
+	fi
+
+	# PluginInfo.php: const VERSION = 'X.X.X'
+	local plugin_info="$plugin_dir/src/Core/PluginInfo.php"
+	if [ -f "$plugin_info" ]; then
+		sed -i '' "s/^\(	const VERSION = '\)[^']*'/\1$version'/" "$plugin_info"
+	fi
+}
+
+for plugin_dir in plugins/*/; do
+	plugin_dir="${plugin_dir%/}"
+	if [ -f "$plugin_dir/package.json" ]; then
+		sync_plugin "$plugin_dir"
+	fi
+done

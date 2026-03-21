@@ -5,10 +5,12 @@
 		{ "repo": "wpappointments/wpappointments" }
 	],
 	"commit": false,
-	"fixed": [],
+	"fixed": [
+		["@wpappointments/wpappointments", "@wpappointments/other-plugin"]
+	],
 	"linked": [],
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": ["@wpappointments/wpappointments"]
+	"ignore": []
 }

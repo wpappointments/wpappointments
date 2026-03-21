@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Package plugins
+        run: |
+          for plugin_dir in plugins/*/; do
+            plugin_dir="${plugin_dir%/}"
+            plugin_name=$(basename "$plugin_dir")
+
+            # Skip plugins without a .zipignore (not releasable)
+            if [ ! -f "$plugin_dir/.zipignore" ]; then
+              continue
+            fi
+
+            echo "Packaging $plugin_name..."
+            cd "$plugin_dir"
+
+            if [ -d vendor ]; then
+              mv vendor vendor-temp
+              composer install --no-dev --no-interaction --prefer-dist
+            fi
+
+            mkdir "$plugin_name"
+            rsync -av --exclude="$plugin_name" --exclude-from=.zipignore . "$plugin_name"
+            zip -qr "$plugin_name.zip" "$plugin_name"/* -x@.zipignore
+            rm -rf "$plugin_name"
+
+            if [ -d vendor-temp ]; then
+              rm -rf vendor
+              mv vendor-temp vendor
+            fi
+
+            cd "$GITHUB_WORKSPACE"
+          done
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          zip_files=$(find plugins -name "*.zip" -maxdepth 2)
+          gh release create "${{ github.ref_name }}" \
+            $zip_files \
+            --title "${{ github.ref_name }}" \
+            --generate-notes

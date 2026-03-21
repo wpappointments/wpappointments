@@ -25,7 +25,7 @@
 		"phpcbf": "wp-env run cli --env-cwd=wp-content bash ./.husky/phpcbf tools plugins/wpappointments",
 		"env": "wp-env",
 		"changeset": "changeset",
-		"version-packages": "changeset version",
+		"version-packages": "changeset version && bash .scripts/sync-plugin-versions",
 		"release": "pnpm build && changeset publish",
 		"prepare": "husky",
 		"initialize": "pnpm install && pnpm run start:wp; wp-env run cli --env-cwd=wp-content composer install && pnpm run dump-autoload && wp-env run cli wp plugin activate wpappointments other-plugin && pnpm run build",

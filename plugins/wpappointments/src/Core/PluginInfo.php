@@ -17,7 +17,7 @@ class PluginInfo extends Singleton {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.0.1';
+	const VERSION = '0.1.2';
 
 	/**
 	 * Plugin API namespace

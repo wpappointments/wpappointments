@@ -9,6 +9,9 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -19,6 +22,7 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - name: Create Release PR or Publish
+        id: changesets
         uses: changesets/action@v1
         with:
           publish: pnpm release
@@ -28,3 +32,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag plugin release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Check if any plugin was published (private packages appear in publishedPackages too)
+          plugin_version=$(node -p "
+            const pkgs = ${{ steps.changesets.outputs.publishedPackages }};
+            const plugin = pkgs.find(p => p.name === '@wpappointments/wpappointments');
+            plugin ? plugin.version : ''
+          ")
+
+          if [ -n "$plugin_version" ]; then
+            tag="v${plugin_version}"
+            echo "Tagging $tag"
+            git tag "$tag"
+            git push origin "$tag"
+          fi
