@@ -26,7 +26,7 @@
 		"env": "wp-env",
 		"changeset": "changeset",
 		"version-packages": "changeset version && bash .scripts/sync-plugin-versions",
-		"release": "pnpm build && changeset publish",
+		"release": "pnpm build && changeset publish --no-git-tag",
 		"prepare": "husky",
 		"initialize": "pnpm install && pnpm run start:wp; wp-env run cli --env-cwd=wp-content composer install && pnpm run dump-autoload && wp-env run cli wp plugin activate wpappointments other-plugin && pnpm run build",
 		"check-types": "turbo run check-types",
