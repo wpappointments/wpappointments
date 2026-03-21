@@ -34,18 +34,16 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag plugin release
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
-          # Check if any plugin was published (private packages appear in publishedPackages too)
-          plugin_version=$(node -p "
-            const pkgs = ${{ steps.changesets.outputs.publishedPackages }};
-            const plugin = pkgs.find(p => p.name === '@wpappointments/wpappointments');
-            plugin ? plugin.version : ''
-          ")
+          # After changesets publishes, check if plugin version differs from latest tag
+          plugin_version=$(node -p "require('./plugins/wpappointments/package.json').version")
+          tag="v${plugin_version}"
 
-          if [ -n "$plugin_version" ]; then
-            tag="v${plugin_version}"
-            echo "Tagging $tag"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists, skipping"
+          else
+            echo "Creating tag $tag"
             git tag "$tag"
             git push origin "$tag"
           fi
