@@ -78,6 +78,9 @@ importers:
       astro:
         specifier: ^5.7.0
         version: 5.18.1(@types/node@25.2.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.59.1)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
+      remark-mermaidjs:
+        specifier: ^7.0.0
+        version: 7.0.0(playwright@1.58.1)
       tailwindcss:
         specifier: ^4.0.0
         version: 4.2.2
