@@ -30,6 +30,7 @@
 		transform 0.3s ease-in-out;
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .toast-message :global(.components-snackbar) {
 	width: 100%;
 	border-radius: 5px;
@@ -46,10 +47,12 @@
 		transform 0.3s ease-in-out;
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .toast-message.type-success :global(.components-snackbar) {
 	background-color: #081b0a;
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .toast-message.type-error :global(.components-snackbar) {
 	background-color: #ff0019;
 }

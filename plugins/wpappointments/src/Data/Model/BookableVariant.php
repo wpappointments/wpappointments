@@ -271,7 +271,7 @@ class BookableVariant {
 		$this->variant      = null;
 		$this->variant_data = array();
 
-		return $deleted->ID;
+		return $id;
 	}
 
 	/**
@@ -602,7 +602,7 @@ class BookableVariant {
 	 *
 	 * @param int $entity_id Bookable entity post ID.
 	 *
-	 * @return array Array containing the single default variant.
+	 * @return array|WP_Error Array containing the single default variant, or WP_Error on failure.
 	 */
 	public static function ensure_default_variant( $entity_id ) {
 		$existing_variants = get_children(
@@ -619,7 +619,6 @@ class BookableVariant {
 			return array( new BookableVariant( $variant_post ) );
 		}
 
-		$entity  = get_post( $entity_id );
 		$variant = new BookableVariant(
 			array(
 				'parent_id'        => $entity_id,
@@ -631,7 +630,7 @@ class BookableVariant {
 		$saved = $variant->save();
 
 		if ( is_wp_error( $saved ) ) {
-			return array();
+			return $saved;
 		}
 
 		return array( $saved );

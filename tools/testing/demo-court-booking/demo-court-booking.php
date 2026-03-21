@@ -241,6 +241,7 @@ function activate() {
 		$variants = BookableVariant::generate_from_matrix( $entity_id );
 
 		if ( is_wp_error( $variants ) ) {
+			wp_delete_post( $entity_id, true );
 			continue;
 		}
 

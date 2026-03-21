@@ -17,6 +17,7 @@ export default function FormFieldSet({
 	horizontal = false,
 	horizontalCenter = false,
 	fieldsClassName,
+	className,
 	...rest
 }: Props) {
 	return (
@@ -30,7 +31,7 @@ export default function FormFieldSet({
 					[styles.fieldsetHasLegend]: !!legend,
 					[styles.fieldsetFill]: true,
 				}),
-				rest.className,
+				className,
 			]
 				.filter(Boolean)
 				.join(' ')}

@@ -373,7 +373,9 @@ function FieldControl({
 						value={value as number}
 						onChange={(val: string | undefined) => {
 							onChange(
-								val !== undefined ? Number(val) : undefined
+								val !== undefined && val !== ''
+									? Number(val)
+									: undefined
 							);
 						}}
 						min={field.validation?.min}

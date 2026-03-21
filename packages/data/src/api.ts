@@ -188,7 +188,7 @@ export async function updateVariant(
 	>(() =>
 		apiFetch({
 			path: `bookables/${entityId}/variants/${variantId}`,
-			method: 'POST',
+			method: 'PUT',
 			data,
 		})
 	);

@@ -85,8 +85,11 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 	};
 
 	const handleDelete = async (id: number) => {
-		await deleteBookable(id);
-		setServices((prev) => prev.filter((s) => s.id !== id));
+		const result = await deleteBookable(id);
+
+		if (!result.error) {
+			setServices((prev) => prev.filter((s) => s.id !== id));
+		}
 	};
 
 	return (

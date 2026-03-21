@@ -8,8 +8,6 @@
 
 namespace WPAppointments\Admin;
 
-use WPAppointments\Admin\BookableTypeAdminPage;
-
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );

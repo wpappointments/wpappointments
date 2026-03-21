@@ -1,7 +1,7 @@
 import type { Error as AppError } from './error';
 
 export default async function resolve<T>(
-	callback: () => Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
+	callback: () => Promise<T>
 ): Promise<[AppError | null, T | null]> {
 	try {
 		const response = await callback();

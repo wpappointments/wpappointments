@@ -14,8 +14,8 @@ type Action = {
 
 type Props<T> = {
 	action: Action;
-	onSuccess?: (response: T) => void;
-	onError?: (response: T) => void;
+	onSuccess?: (data: T) => void;
+	onError?: (error: unknown) => void;
 	variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
 	isDestructive?: boolean;
 };
@@ -48,8 +48,8 @@ export default function ActionButton<T>({
 
 function handleAction<T>(
 	action: Action,
-	onSuccess?: (response: T) => void,
-	onError?: (response: T) => void
+	onSuccess?: (data: T) => void,
+	onError?: (error: unknown) => void
 ) {
 	const { uri, method } = action;
 
@@ -60,17 +60,15 @@ function handleAction<T>(
 				method,
 			});
 
-			const { data } = response;
-
 			if (onSuccess && response.status === 'success') {
-				onSuccess(data);
+				onSuccess(response.data);
 			}
 
 			if (onError && response.status === 'error') {
-				onError(data);
+				onError(response.data);
 			}
 		} catch (error) {
-			onError?.(error as T);
+			onError?.(error);
 		}
 	};
 }

@@ -17,8 +17,8 @@ import styles from '../OnboardingWizard.module.css';
 type Fields = {
 	firstName: string;
 	lastName: string;
+	email: string;
 	phoneNumber: string;
-	companyName: string;
 };
 
 type Response = APIResponse<{

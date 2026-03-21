@@ -23,14 +23,14 @@ export function getGenericInputErrorMessage<T extends FieldValues>(
 		case 'required':
 			return __('This field is required.', 'wpappointments');
 		case 'minLength':
-			return __(
-				'This field requires at least {minLength} characters.',
-				'wpappointments'
+			return (
+				(typeof error.message === 'string' && error.message) ||
+				__('This field has too few characters.', 'wpappointments')
 			);
 		case 'maxLength':
-			return __(
-				'This field requires no more than {maxLength} characters.',
-				'wpappointments'
+			return (
+				(typeof error.message === 'string' && error.message) ||
+				__('This field has too many characters.', 'wpappointments')
 			);
 		default:
 			return __('This field requires attention.', 'wpappointments');

@@ -39,7 +39,7 @@ export default function DatePicker<TFields extends FieldValues>({
 		control,
 		setValue,
 		formState: { errors },
-	} = useFormContext();
+	} = useFormContext<TFields>();
 
 	const error: FormFieldError<TFields> = errors[name];
 
@@ -47,7 +47,7 @@ export default function DatePicker<TFields extends FieldValues>({
 		if (defaultValue) {
 			setValue(name, defaultValue);
 		}
-	}, []);
+	}, [name, defaultValue, setValue]);
 
 	return (
 		<FormField>

@@ -269,7 +269,7 @@ class BookableEntity {
 		$this->bookable      = null;
 		$this->bookable_data = array();
 
-		return $deleted->ID;
+		return $id;
 	}
 
 	/**

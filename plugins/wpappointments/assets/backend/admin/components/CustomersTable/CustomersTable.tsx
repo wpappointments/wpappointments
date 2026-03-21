@@ -31,12 +31,12 @@ type View = {
 };
 
 type CustomerDetailsModalsProps = {
-	deleteAppointment: () => Promise<void>;
+	deleteCustomer: () => Promise<void>;
 	closeModal: () => void;
 };
 
 export function CustomerDetailsModals({
-	deleteAppointment,
+	deleteCustomer,
 	closeModal,
 }: CustomerDetailsModalsProps) {
 	return (
@@ -46,7 +46,7 @@ export function CustomerDetailsModals({
 				'Are you sure you want to delete this customer? This action cannot be undone.',
 				'wpappointments'
 			)}
-			onConfirmClick={deleteAppointment}
+			onConfirmClick={deleteCustomer}
 			closeModal={closeModal}
 		/>
 	);
@@ -239,7 +239,7 @@ export default function CustomersTable() {
 			/>
 			{customerModal && (
 				<CustomerDetailsModals
-					deleteAppointment={async () => {
+					deleteCustomer={async () => {
 						if (!deleteCustomer) {
 							return;
 						}
