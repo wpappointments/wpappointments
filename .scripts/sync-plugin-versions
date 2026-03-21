@@ -1,6 +1,7 @@
 #!/bin/bash
 # Syncs version from package.json into PHP plugin header, readme.txt, and PluginInfo constant.
 # Runs automatically after `changeset version` via the version-packages script.
+# Uses perl instead of sed for cross-platform compatibility (macOS + Linux).
 
 set -e
 
@@ -15,18 +16,18 @@ sync_plugin() {
 	local main_php
 	main_php=$(grep -rl "Plugin Name:" "$plugin_dir"/*.php 2>/dev/null | head -1)
 	if [ -n "$main_php" ]; then
-		sed -i '' "s/^\( \* Version: *\).*/\1$version/" "$main_php"
+		perl -i -pe "s/^( \* Version:\s*).*/\${1}$version/" "$main_php"
 	fi
 
 	# readme.txt: Stable tag: X.X.X
 	if [ -f "$plugin_dir/readme.txt" ]; then
-		sed -i '' "s/^\(Stable tag: *\).*/\1$version/" "$plugin_dir/readme.txt"
+		perl -i -pe "s/^(Stable tag:\s*).*/\${1}$version/" "$plugin_dir/readme.txt"
 	fi
 
 	# PluginInfo.php: const VERSION = 'X.X.X'
 	local plugin_info="$plugin_dir/src/Core/PluginInfo.php"
 	if [ -f "$plugin_info" ]; then
-		sed -i '' "s/^\(	const VERSION = '\)[^']*'/\1$version'/" "$plugin_info"
+		perl -i -pe "s/^(\tconst VERSION = ')[^']*'/\${1}$version'/" "$plugin_info"
 	fi
 }
 
