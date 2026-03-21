@@ -69,7 +69,8 @@ export default function DataViewsFooter({
 										// translators: %s: Total number of pages.
 										_x(
 											'Page <CurrentPageControl /> of %s',
-											'paging'
+											'paging',
+											'wpappointments'
 										),
 										totalPages
 									),

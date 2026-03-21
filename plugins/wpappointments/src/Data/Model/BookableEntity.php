@@ -141,6 +141,7 @@ class BookableEntity {
 		$variants_result = BookableVariant::generate_from_matrix( $post_id );
 
 		if ( is_wp_error( $variants_result ) ) {
+			BookableVariant::delete_all_for_entity( $post_id );
 			wp_delete_post( $post_id, true );
 			return $variants_result;
 		}
