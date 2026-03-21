@@ -14,6 +14,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -21,6 +23,7 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
+
       - name: Create Release PR or Publish
         id: changesets
         uses: changesets/action@v1
@@ -35,9 +38,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag plugin release
-        if: steps.changesets.outputs.hasChangesets == 'false'
+        if: always() && steps.changesets.outcome != 'cancelled'
         run: |
-          # After changesets publishes, check if plugin version differs from latest tag
           plugin_version=$(node -p "require('./plugins/wpappointments/package.json').version")
           tag="v${plugin_version}"
 
