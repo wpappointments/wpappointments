@@ -1,4 +1,9 @@
 /* Mermaid diagrams — light background container */
+pre.remark-mermaid,
+pre.mermaid {
+	overflow-x: auto;
+}
+
 .remark-mermaid > svg,
 pre.mermaid > svg {
 	background: #f9fafb;
@@ -6,7 +11,7 @@ pre.mermaid > svg {
 	border-radius: 1rem;
 	padding: 1.5rem;
 	max-width: 100%;
-	overflow-x: auto;
+	display: block;
 }
 
 .premium-badge {

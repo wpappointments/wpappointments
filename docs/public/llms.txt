@@ -1,6 +1,6 @@
 # WP Appointments Developer Documentation
 
-> Build addons, integrate with the REST API, and extend WP Appointments — the next-gen appointment scheduling plugin for WordPress.
+> Build add-ons, integrate with the REST API, and extend WP Appointments — the next-gen appointment scheduling plugin for WordPress.
 
 ## Getting Started
 

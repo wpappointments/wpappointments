@@ -58,6 +58,10 @@ const { title, description, breadcrumbs = [] } = Astro.props;
 
 		<!-- Main -->
 		<div class="mx-auto max-w-7xl px-6">
+			<!-- Mobile sidebar navigation -->
+			<div class="pt-6 lg:hidden">
+				<slot name="sidebar" />
+			</div>
 			<div class="grid grid-cols-24 gap-0">
 				<!-- Sidebar -->
 				<nav
