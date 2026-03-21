@@ -1,0 +1,21 @@
+---
+interface Props {
+	title?: string;
+	variant?: 'learn' | 'tip' | 'warning';
+}
+
+const { title = 'What you will learn', variant = 'learn' } = Astro.props;
+
+const styles = {
+	learn: 'bg-surface border-border-weak',
+	tip: 'bg-emerald-50 border-emerald-200',
+	warning: 'bg-amber-50 border-amber-200',
+};
+---
+
+<div class={`rounded-xl border p-6 ${styles[variant]}`}>
+	<h2 class="mb-3 text-xl font-semibold text-text-secondary">{title}</h2>
+	<div class="text-text-secondary leading-relaxed [&_ul]:list-none [&_ul]:pl-0 [&_li]:pl-1.5 [&_li]:pt-1 [&_li]:before:content-['▪'] [&_li]:before:mr-2 [&_li]:before:text-text-caption">
+		<slot />
+	</div>
+</div>

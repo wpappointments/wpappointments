@@ -1,0 +1,34 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	href: string;
+	icon: string;
+	premium?: boolean;
+}
+
+const { title, description, href, icon, premium = false } = Astro.props;
+---
+
+<a
+	href={href}
+	class="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-border-subtle p-6 pt-5 transition-colors duration-300 hover:border-text-caption"
+>
+	<div
+		class="pointer-events-none absolute inset-0 bg-surface opacity-0 transition-opacity duration-200 group-hover:opacity-80"
+	/>
+	<div class="relative flex items-center justify-between">
+		<span class="text-2xl">{icon}</span>
+		{
+			premium && (
+				<span class="rounded-md bg-gradient-to-r from-purple-600 to-purple-400 px-2 py-0.5 text-xs font-semibold text-white">
+					Premium
+				</span>
+			)
+		}
+	</div>
+	<div class="relative flex flex-col gap-1">
+		<h3 class="font-semibold text-text-secondary">{title}</h3>
+		<p class="text-sm text-text-tertiary line-clamp-2">{description}</p>
+	</div>
+</a>

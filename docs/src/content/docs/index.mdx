@@ -1,31 +1,38 @@
 ---
-title: WP Appointments Documentation
-description: Appointment scheduling for WordPress. Extensible, developer-friendly booking system.
+title: WP Appointments Developer Docs
+description: Build addons, integrate with the REST API, and extend WP Appointments.
 template: splash
 hero:
-  tagline: Next-gen appointment scheduling for WordPress
+  tagline: Developer documentation for WP Appointments
   actions:
-    - text: User Guides
-      link: /guides/
+    - text: Quick Start
+      link: /developers/getting-started/
       icon: right-arrow
-    - text: Developer Docs
-      link: /developers/
+    - text: REST API
+      link: /developers/rest-api/
       variant: minimal
     - text: Packages
       link: /packages/
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 <CardGrid>
-	<Card title="User Guides" icon="open-book">
-		Install, configure, and use WP Appointments. Covers appointments, bookables, availability, customers, notifications, and the booking flow.
+	<Card title="Getting Started" icon="rocket">
+		Set up your dev environment, understand the architecture, and build your first addon.
 	</Card>
-	<Card title="Developer Docs" icon="laptop">
-		Build addons, use hooks, and integrate with the REST API. Architecture overview and extension patterns.
+	<Card title="Hooks Reference" icon="seti:config">
+		Actions and filters to customize every aspect of WP Appointments.
+	</Card>
+	<Card title="REST API" icon="seti:json">
+		Full endpoint reference for appointments, bookables, customers, availability, and settings.
 	</Card>
 	<Card title="Packages" icon="puzzle">
-		API reference for `@wpappointments/components` and `@wpappointments/data`. Build custom admin UIs and data integrations.
+		`@wpappointments/components` and `@wpappointments/data` — build custom admin UIs and data integrations.
 	</Card>
 </CardGrid>
+
+:::note[Looking for user guides?]
+User guides and step-by-step tutorials are at [wpappointments.com/help](https://wpappointments.com/help).
+:::

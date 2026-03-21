@@ -35,6 +35,13 @@
 		"docs:build": {
 			"dependsOn": ["docs:generate"],
 			"outputs": ["docs/dist/**"]
+		},
+		"help:dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"help:build": {
+			"outputs": ["help/dist/**"]
 		}
 	}
 }
