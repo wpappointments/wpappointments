@@ -25,6 +25,15 @@ pnpm -C plugins/wpappointments build        # Build plugin assets only
 pnpm -C plugins/wpappointments css-types    # Generate CSS module type declarations
 ```
 
+### Documentation
+```bash
+pnpm -C docs dev              # Start docs dev server (localhost:4321)
+pnpm -C docs build            # Build docs static site
+pnpm -C docs preview          # Preview production build
+pnpm -C docs generate         # Auto-generate TypeDoc + hooks reference pages
+pnpm turbo docs:generate      # Generate via Turborepo (respects cache/inputs)
+```
+
 ### Testing
 ```bash
 pnpm test                                    # PHP tests (Pest) via wp-env with coverage
