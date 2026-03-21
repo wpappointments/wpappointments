@@ -2,6 +2,7 @@
 	"name": "@wpappointments/docs",
 	"version": "0.0.0",
 	"private": true,
+	"packageManager": "pnpm@10.26.1",
 	"scripts": {
 		"dev": "astro dev",
 		"build": "astro build",
