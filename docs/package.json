@@ -1,0 +1,23 @@
+{
+	"name": "@wpappointments/docs",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"generate": "node scripts/generate-typedoc.mjs && node scripts/generate-hooks.mjs",
+		"generate:typedoc": "node scripts/generate-typedoc.mjs",
+		"generate:hooks": "node scripts/generate-hooks.mjs"
+	},
+	"dependencies": {
+		"@astrojs/starlight": "^0.32.0",
+		"astro": "^5.7.0",
+		"starlight-versions": "^0.4.0",
+		"sharp": "^0.33.0"
+	},
+	"devDependencies": {
+		"typedoc": "^0.27.0",
+		"typedoc-plugin-markdown": "^4.4.0"
+	}
+}

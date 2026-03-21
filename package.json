@@ -31,7 +31,10 @@
 		"initialize": "pnpm install && pnpm run start:wp; wp-env run cli --env-cwd=wp-content composer install && pnpm run dump-autoload && wp-env run cli wp plugin activate wpappointments other-plugin && pnpm run build",
 		"check-types": "turbo run check-types",
 		"dump-autoload": "wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer dump-autoload",
-		"test": "wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage"
+		"test": "wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage",
+		"docs:dev": "pnpm --filter @wpappointments/docs dev",
+		"docs:build": "pnpm --filter @wpappointments/docs build",
+		"docs:generate": "pnpm --filter @wpappointments/docs generate"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.6.0",

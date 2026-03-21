@@ -1,0 +1,36 @@
+---
+title: Addon Development
+description: How to build addons for WP Appointments.
+---
+
+WP Appointments is designed to be extended through WordPress plugins that hook into its registries and APIs.
+
+## What Can an Addon Do?
+
+| Extension Point | Example |
+|----------------|---------|
+| **Custom Bookable Type** | Register "Court", "Room", or "Equipment" as a new bookable entity type |
+| **Availability Layer** | Add holiday blocks, maintenance windows, or custom rules |
+| **Admin UI** | Add custom pages, form fields, or admin panels using shared components |
+| **REST API** | Register additional endpoints for your custom types |
+
+## Addon Structure
+
+A WP Appointments addon is a standard WordPress plugin that depends on the core plugin:
+
+```
+my-addon/
+├── my-addon.php          # Plugin header + bootstrap
+├── src/
+│   └── MyBookableType.php # PHP handler extending AbstractBookableTypeHandler
+├── assets/
+│   └── admin.tsx          # React admin UI (optional)
+├── package.json           # For JS build (optional)
+└── webpack.config.js      # Webpack config (optional)
+```
+
+## Guides
+
+- [Registering a Bookable Type](/developers/addons/bookable-type/) — PHP-side registration
+- [PHP Setup](/developers/addons/php-setup/) — plugin bootstrap and dependencies
+- [JavaScript Setup](/developers/addons/js-setup/) — admin UI with shared packages

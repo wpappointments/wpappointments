@@ -1,0 +1,31 @@
+---
+title: WP Appointments Documentation
+description: Appointment scheduling for WordPress. Extensible, developer-friendly booking system.
+template: splash
+hero:
+  tagline: Next-gen appointment scheduling for WordPress
+  actions:
+    - text: User Guides
+      link: /guides/
+      icon: right-arrow
+    - text: Developer Docs
+      link: /developers/
+      variant: minimal
+    - text: Packages
+      link: /packages/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+	<Card title="User Guides" icon="open-book">
+		Install, configure, and use WP Appointments. Covers appointments, bookables, availability, customers, notifications, and the booking flow.
+	</Card>
+	<Card title="Developer Docs" icon="laptop">
+		Build addons, use hooks, and integrate with the REST API. Architecture overview and extension patterns.
+	</Card>
+	<Card title="Packages" icon="puzzle">
+		API reference for `@wpappointments/components` and `@wpappointments/data`. Build custom admin UIs and data integrations.
+	</Card>
+</CardGrid>
