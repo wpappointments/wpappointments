@@ -105,7 +105,7 @@ export default function AppointmentsTableFull() {
 			<TableFullEmpty>
 				<p>{__('You have no appointments yet', 'wpappointments')}</p>
 				<Button variant="primary" onClick={addAppointment}>
-					{__('Create New Appointment', 'wpappointments')}
+					{__('New Appointment', 'wpappointments')}
 				</Button>
 			</TableFullEmpty>
 		);
