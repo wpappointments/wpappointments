@@ -148,8 +148,22 @@ class Settings {
 
 			if ( $schedule_post_id ) {
 				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
+					$settings[ $day ]['allDay']  = rest_sanitize_boolean( $settings[ $day ]['allDay'] ?? false );
+					$settings[ $day ]['enabled'] = rest_sanitize_boolean( $settings[ $day ]['enabled'] ?? false );
+
 					$slots         = $settings[ $day ]['slots']['list'] ?? array();
 					$is_manual_24h = false;
+
+					// Sanitize slot time values.
+					foreach ( $slots as &$slot ) {
+						$slot['start']['hour']   = self::sanitize_time_part( $slot['start']['hour'] ?? '00', 24 );
+						$slot['start']['minute'] = self::sanitize_time_part( $slot['start']['minute'] ?? '00', 59 );
+						$slot['end']['hour']     = self::sanitize_time_part( $slot['end']['hour'] ?? '00', 24 );
+						$slot['end']['minute']   = self::sanitize_time_part( $slot['end']['minute'] ?? '00', 59 );
+					}
+					unset( $slot );
+
+					$settings[ $day ]['slots']['list'] = $slots;
 
 					if ( ! empty( $slots ) ) {
 						$first_slot    = $slots[0];
@@ -203,6 +217,13 @@ class Settings {
 					continue;
 				}
 
+				// Sanitize value based on schema type.
+				$option_def = $this->get_option_definition( $category, $key );
+
+				if ( $option_def ) {
+					$value = self::sanitize_setting_value( $value, $option_def );
+				}
+
 				if ( 'serviceName' === $key ) {
 					$service_post_id = get_option( 'wpappointments_defaultServiceId' );
 
@@ -210,7 +231,7 @@ class Settings {
 						wp_update_post(
 							array(
 								'ID'         => $service_post_id,
-								'post_title' => $value,
+								'post_title' => sanitize_text_field( $value ),
 							)
 						);
 					}
@@ -396,5 +417,102 @@ class Settings {
 		update_option( 'wpappointments_' . $category . '_' . $name, $value );
 
 		return $this->get_setting( $category, $name );
+	}
+
+	/**
+	 * Get the option definition for a setting key within a category
+	 *
+	 * @param string $category Settings category.
+	 * @param string $key Setting key name.
+	 *
+	 * @return array|null Option definition array or null if not found.
+	 */
+	private function get_option_definition( $category, $key ) {
+		if ( ! isset( $this->settings[ $category ] ) ) {
+			return null;
+		}
+
+		foreach ( $this->settings[ $category ] as $option ) {
+			if ( $option['name'] === $key ) {
+				return $option;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sanitize a setting value based on its schema definition
+	 *
+	 * @param mixed $value Raw value.
+	 * @param array $option_def Option definition from settings schema.
+	 *
+	 * @return mixed Sanitized value.
+	 */
+	private static function sanitize_setting_value( $value, $option_def ) {
+		$type = $option_def['type'] ?? 'string';
+
+		switch ( $type ) {
+			case 'string':
+				return sanitize_text_field( (string) $value );
+
+			case 'number':
+				return intval( $value );
+
+			case 'boolean':
+				return rest_sanitize_boolean( $value );
+
+			case 'array':
+				return is_array( $value ) ? self::sanitize_setting_array( $value ) : array();
+
+			default:
+				return sanitize_text_field( (string) $value );
+		}
+	}
+
+	/**
+	 * Recursively sanitize a settings array (e.g. notification templates)
+	 *
+	 * @param array $data Array to sanitize.
+	 *
+	 * @return array Sanitized array.
+	 */
+	private static function sanitize_setting_array( $data ) {
+		$sanitized = array();
+
+		foreach ( $data as $key => $value ) {
+			$key = sanitize_key( $key );
+
+			if ( is_array( $value ) ) {
+				$sanitized[ $key ] = self::sanitize_setting_array( $value );
+			} elseif ( is_bool( $value ) ) {
+				$sanitized[ $key ] = (bool) $value;
+			} elseif ( is_int( $value ) ) {
+				$sanitized[ $key ] = (int) $value;
+			} else {
+				$sanitized[ $key ] = sanitize_textarea_field( (string) $value );
+			}
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize a time component (hour or minute) string
+	 *
+	 * @param string $value Raw time string.
+	 * @param int    $max Maximum allowed value (24 for hours, 59 for minutes).
+	 *
+	 * @return string Zero-padded two-digit time string.
+	 */
+	private static function sanitize_time_part( $value, $max ) {
+		$value   = sanitize_text_field( $value );
+		$numeric = absint( $value );
+
+		if ( $numeric > $max ) {
+			$numeric = 0;
+		}
+
+		return str_pad( (string) $numeric, 2, '0', STR_PAD_LEFT );
 	}
 }

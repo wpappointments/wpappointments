@@ -61,11 +61,11 @@ class BookableAvailabilityController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_variant_availability( $request ) {
-		$variant_id = (int) $request->get_param( 'variant_id' );
+		$variant_id = absint( $request->get_param( 'variant_id' ) );
 
 		$date_range = array(
-			'start' => $request->get_param( 'start_date' ) ?? '',
-			'end'   => $request->get_param( 'end_date' ) ?? '',
+			'start' => sanitize_text_field( $request->get_param( 'start_date' ) ?? '' ),
+			'end'   => sanitize_text_field( $request->get_param( 'end_date' ) ?? '' ),
 		);
 
 		$availability = AvailabilityEngine::get_effective_availability( $variant_id, $date_range );
@@ -84,11 +84,11 @@ class BookableAvailabilityController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_entity_availability( $request ) {
-		$entity_id = (int) $request->get_param( 'entity_id' );
+		$entity_id = absint( $request->get_param( 'entity_id' ) );
 
 		$date_range = array(
-			'start' => $request->get_param( 'start_date' ) ?? '',
-			'end'   => $request->get_param( 'end_date' ) ?? '',
+			'start' => sanitize_text_field( $request->get_param( 'start_date' ) ?? '' ),
+			'end'   => sanitize_text_field( $request->get_param( 'end_date' ) ?? '' ),
 		);
 
 		$result   = BookableVariantQuery::by_entity( $entity_id );

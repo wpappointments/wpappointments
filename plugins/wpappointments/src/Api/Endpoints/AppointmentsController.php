@@ -230,9 +230,15 @@ class AppointmentsController extends Controller {
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
 		$date           = sanitize_text_field( $request->get_param( 'date' ) );
-		$customer       = $request->get_param( 'customer' );
+		$raw_customer   = $request->get_param( 'customer' );
 		$create_account = (bool) $request->get_param( 'createAccount' );
 		$password       = $request->get_param( 'password' );
+
+		$customer = is_array( $raw_customer ) ? array(
+			'name'  => sanitize_text_field( $raw_customer['name'] ?? '' ),
+			'email' => sanitize_email( $raw_customer['email'] ?? '' ),
+			'phone' => sanitize_text_field( $raw_customer['phone'] ?? '' ),
+		) : null;
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -321,7 +327,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function cancel_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$cancelled        = $appointment_post->cancel();
@@ -346,7 +352,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function delete_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$deleted          = $appointment_post->delete();
@@ -371,7 +377,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function confirm_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$confirmed        = $appointment_post->confirm();

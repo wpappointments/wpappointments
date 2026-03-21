@@ -100,7 +100,7 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_variants( $request ) {
-		$entity_id = (int) $request->get_param( 'entity_id' );
+		$entity_id = absint( $request->get_param( 'entity_id' ) );
 
 		$results  = BookableVariantQuery::by_entity( $entity_id );
 		$variants = array_map(
@@ -127,8 +127,8 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function create_variant( $request ) {
-		$entity_id = (int) $request->get_param( 'entity_id' );
-		$data      = $request->get_json_params();
+		$entity_id = absint( $request->get_param( 'entity_id' ) );
+		$data      = self::sanitize_variant_data( $request->get_json_params() );
 
 		$data['parent_id'] = $entity_id;
 
@@ -153,7 +153,7 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function generate_variants( $request ) {
-		$entity_id = (int) $request->get_param( 'entity_id' );
+		$entity_id = absint( $request->get_param( 'entity_id' ) );
 
 		$variants = BookableVariant::generate_from_matrix( $entity_id );
 
@@ -182,8 +182,8 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_variant( $request ) {
-		$entity_id  = (int) $request->get_param( 'entity_id' );
-		$variant_id = (int) $request->get_param( 'variant_id' );
+		$entity_id  = absint( $request->get_param( 'entity_id' ) );
+		$variant_id = absint( $request->get_param( 'variant_id' ) );
 
 		$model = new BookableVariant( $variant_id );
 
@@ -215,9 +215,9 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function update_variant( $request ) {
-		$entity_id  = (int) $request->get_param( 'entity_id' );
-		$variant_id = (int) $request->get_param( 'variant_id' );
-		$data       = $request->get_json_params();
+		$entity_id  = absint( $request->get_param( 'entity_id' ) );
+		$variant_id = absint( $request->get_param( 'variant_id' ) );
+		$data       = self::sanitize_variant_data( $request->get_json_params() );
 
 		$model = new BookableVariant( $variant_id );
 
@@ -255,8 +255,8 @@ class VariantsController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function delete_variant( $request ) {
-		$entity_id  = (int) $request->get_param( 'entity_id' );
-		$variant_id = (int) $request->get_param( 'variant_id' );
+		$entity_id  = absint( $request->get_param( 'entity_id' ) );
+		$variant_id = absint( $request->get_param( 'variant_id' ) );
 
 		$model = new BookableVariant( $variant_id );
 
@@ -284,5 +284,34 @@ class VariantsController extends Controller {
 			__( 'Variant deleted successfully', 'wpappointments' ),
 			array( 'id' => $deleted )
 		);
+	}
+
+	/**
+	 * Sanitize variant data from request JSON body
+	 *
+	 * @param array $data Raw request data.
+	 *
+	 * @return array Sanitized data.
+	 */
+	private static function sanitize_variant_data( $data ) {
+		$sanitized = array();
+
+		if ( isset( $data['active'] ) ) {
+			$sanitized['active'] = rest_sanitize_boolean( $data['active'] );
+		}
+
+		$int_fields = array( 'parent_id', 'duration', 'schedule_id', 'buffer_before', 'buffer_after', 'min_lead_time', 'max_lead_time' );
+
+		foreach ( $int_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				$sanitized[ $field ] = absint( $data[ $field ] );
+			}
+		}
+
+		if ( isset( $data['attribute_values'] ) && is_array( $data['attribute_values'] ) ) {
+			$sanitized['attribute_values'] = array_map( 'sanitize_text_field', $data['attribute_values'] );
+		}
+
+		return $sanitized;
 	}
 }

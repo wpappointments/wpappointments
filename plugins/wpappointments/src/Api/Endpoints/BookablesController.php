@@ -128,7 +128,7 @@ class BookablesController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function create_bookable( $request ) {
-		$data = $request->get_json_params();
+		$data = self::sanitize_bookable_data( $request->get_json_params() );
 
 		if ( empty( $data['name'] ) ) {
 			return self::error(
@@ -157,7 +157,7 @@ class BookablesController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function get_bookable( $request ) {
-		$id    = (int) $request->get_param( 'id' );
+		$id    = absint( $request->get_param( 'id' ) );
 		$model = new BookableEntity( $id );
 
 		if ( is_wp_error( $model->bookable ) ) {
@@ -178,8 +178,8 @@ class BookablesController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function update_bookable( $request ) {
-		$id   = (int) $request->get_param( 'id' );
-		$data = $request->get_json_params();
+		$id   = absint( $request->get_param( 'id' ) );
+		$data = self::sanitize_bookable_data( $request->get_json_params() );
 
 		$model   = new BookableEntity( $id );
 		$updated = $model->update( $data );
@@ -202,7 +202,7 @@ class BookablesController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function delete_bookable( $request ) {
-		$id = (int) $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$model   = new BookableEntity( $id );
 		$deleted = $model->delete();
@@ -215,5 +215,79 @@ class BookablesController extends Controller {
 			__( 'Bookable deleted successfully', 'wpappointments' ),
 			array( 'id' => $deleted )
 		);
+	}
+
+	/**
+	 * Sanitize bookable data from request JSON body
+	 *
+	 * @param array $data Raw request data.
+	 *
+	 * @return array Sanitized data.
+	 */
+	private static function sanitize_bookable_data( $data ) {
+		$sanitized = array();
+
+		if ( isset( $data['name'] ) ) {
+			$sanitized['name'] = sanitize_text_field( $data['name'] );
+		}
+
+		if ( isset( $data['description'] ) ) {
+			$sanitized['description'] = sanitize_textarea_field( $data['description'] );
+		}
+
+		if ( isset( $data['type'] ) ) {
+			$sanitized['type'] = sanitize_key( $data['type'] );
+		}
+
+		if ( isset( $data['active'] ) ) {
+			$sanitized['active'] = rest_sanitize_boolean( $data['active'] );
+		}
+
+		if ( isset( $data['image'] ) ) {
+			$sanitized['image'] = esc_url_raw( $data['image'] );
+		}
+
+		$int_fields = array( 'schedule_id', 'buffer_before', 'buffer_after', 'min_lead_time', 'max_lead_time', 'duration' );
+
+		foreach ( $int_fields as $field ) {
+			if ( isset( $data[ $field ] ) ) {
+				$sanitized[ $field ] = absint( $data[ $field ] );
+			}
+		}
+
+		if ( isset( $data['attributes'] ) && is_array( $data['attributes'] ) ) {
+			$sanitized['attributes'] = self::sanitize_recursive( $data['attributes'] );
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Recursively sanitize an array of mixed values
+	 *
+	 * @param array $data Data to sanitize.
+	 *
+	 * @return array Sanitized data.
+	 */
+	private static function sanitize_recursive( $data ) {
+		$sanitized = array();
+
+		foreach ( $data as $key => $value ) {
+			$key = sanitize_key( $key );
+
+			if ( is_array( $value ) ) {
+				$sanitized[ $key ] = self::sanitize_recursive( $value );
+			} elseif ( is_bool( $value ) ) {
+				$sanitized[ $key ] = (bool) $value;
+			} elseif ( is_int( $value ) ) {
+				$sanitized[ $key ] = (int) $value;
+			} elseif ( is_float( $value ) ) {
+				$sanitized[ $key ] = (float) $value;
+			} else {
+				$sanitized[ $key ] = sanitize_text_field( (string) $value );
+			}
+		}
+
+		return $sanitized;
 	}
 }

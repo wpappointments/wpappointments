@@ -56,17 +56,9 @@ class AvailabilityController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function availability( WP_REST_Request $request ) {
-		$month    = $request->get_param( 'currentMonth' );
-		$year     = $request->get_param( 'currentYear' );
+		$month    = absint( $request->get_param( 'currentMonth' ) );
+		$year     = absint( $request->get_param( 'currentYear' ) );
 		$timezone = sanitize_text_field( (string) $request->get_param( 'timezone' ) );
-
-		if ( is_numeric( $month ) ) {
-			$month = (int) $month;
-		}
-
-		if ( is_numeric( $year ) ) {
-			$year = (int) $year;
-		}
 
 		$availability = Availability::get_month_days_availability(
 			$month,
