@@ -10,7 +10,7 @@ const js = (absolutePaths) => {
 
 	const commands = [
 		`wp-scripts format ${relativePaths.join(' ')}`,
-		`lerna run check-types`,
+		`turbo run check-types`,
 	];
 
 	if (jsRelativePaths.length > 0) {

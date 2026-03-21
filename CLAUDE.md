@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-WP Appointments is a WordPress appointment scheduling plugin. Monorepo with Lerna + pnpm workspaces. PHP 8.2 backend, TypeScript/React frontend using WordPress packages.
+WP Appointments is a WordPress appointment scheduling plugin. Monorepo with Turborepo + pnpm workspaces. PHP 8.2 backend, TypeScript/React frontend using WordPress packages. Versioning and publishing via Changesets (independent versioning per package).
 
 ## Commands
 
@@ -20,7 +20,7 @@ Dev site: http://localhost:8888 (admin: `admin` / `password`)
 
 ### Building
 ```bash
-pnpm run build                              # Full build (all packages via Lerna)
+pnpm run build                              # Full build (all packages via Turborepo)
 pnpm -C plugins/wpappointments build        # Build plugin assets only
 pnpm -C plugins/wpappointments css-types    # Generate CSS module type declarations
 ```

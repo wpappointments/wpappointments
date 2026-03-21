@@ -13,3 +13,4 @@ cache
 *.css.d.ts
 *.css.d.ts.map
 .claude/settings.local.json
+.turbo/
