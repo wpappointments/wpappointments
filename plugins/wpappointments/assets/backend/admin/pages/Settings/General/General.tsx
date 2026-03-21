@@ -367,6 +367,7 @@ function FormFields() {
 					<a
 						href="https://wordpress.org/documentation/article/customize-date-and-time-format/"
 						target="_blank"
+						rel="noopener noreferrer"
 					>
 						{__(
 							'Documentation on date and time formatting.',

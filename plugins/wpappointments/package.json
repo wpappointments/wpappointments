@@ -14,7 +14,7 @@
 		"test:e2e": "playwright test"
 	},
 	"author": "",
-	"license": "GPL-3.0-only",
+	"license": "GPL-2.0-or-later",
 	"devDependencies": {
 		"@playwright/test": "^1.42.1",
 		"@svgr/webpack": "^8.1.0",
@@ -28,6 +28,8 @@
 		"sass": "^1.70.0",
 		"ts-jest": "^29.1.2",
 		"typescript": "^5.3.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
 		"url-loader": "^4.1.1"
 	},
 	"dependencies": {
@@ -48,8 +50,6 @@
 		"date-fns": "^3.3.1",
 		"immer": "^10.0.3",
 		"obj-str": "^1.1.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.50.1",
 		"use-lilius": "^2.0.4",
 		"valibot": "^0.28.1"
