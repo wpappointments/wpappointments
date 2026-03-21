@@ -31,6 +31,7 @@ jobs:
           version: pnpm version-packages
           title: "Version Packages"
           commit: "chore: version packages"
+          createGithubReleases: false
         env:
           HUSKY: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
