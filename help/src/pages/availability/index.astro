@@ -1,0 +1,122 @@
+---
+import HelpLayout from '../../layouts/HelpLayout.astro';
+import SidebarNav from '../../components/SidebarNav.astro';
+import Callout from '../../components/Callout.astro';
+import ScreenshotPlaceholder from '../../components/ScreenshotPlaceholder.astro';
+---
+
+<HelpLayout
+	title="Availability"
+	description="Configure schedules, layers, and availability rules."
+	breadcrumbs={[{ label: 'Availability', href: '/help/availability/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Availability</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			Configure when your bookables are available with schedules and override layers.
+		</p>
+	</header>
+
+	<Callout>
+		<ul>
+			<li><strong>Schedules</strong> — weekly recurring availability (opening hours)</li>
+			<li><strong>Layers</strong> — overrides that block or allow specific time ranges</li>
+			<li><strong>Automatic blocking</strong> — existing bookings automatically reduce availability</li>
+		</ul>
+	</Callout>
+
+	<div class="mt-12 space-y-12">
+		<section>
+			<h2 class="text-2xl font-semibold">How Availability Works</h2>
+			<p class="mt-2 text-text-secondary">
+				WP Appointments uses a <strong>layered availability engine</strong>. Multiple layers combine to determine the final availability.
+			</p>
+
+			<!-- Architecture diagram -->
+			<div class="mermaid-container">
+				<p class="mb-3 text-xs font-semibold uppercase tracking-wider text-text-caption">Availability Layer Stack</p>
+				<pre class="mermaid">
+graph TB
+    subgraph Layers["Layer Stack (top = highest priority)"]
+        direction TB
+        L3["🚫 Existing Bookings<br/><i>Blocks booked slots</i>"]
+        L2["🔒 Custom Overrides<br/><i>Holidays, maintenance</i>"]
+        L1["✅ Opening Hours<br/><i>Weekly schedule</i>"]
+    end
+
+    L1 --> Result["Final Availability"]
+    L2 --> Result
+    L3 --> Result
+
+    style L1 fill:#d1fae5,stroke:#34d399,color:#1f2937
+    style L2 fill:#fef3c7,stroke:#f59e0b,color:#1f2937
+    style L3 fill:#fee2e2,stroke:#f87171,color:#1f2937
+    style Result fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+				</pre>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Schedules</h2>
+			<p class="mt-2 text-text-secondary">
+				Schedules define your weekly recurring availability — the base layer.
+			</p>
+			<ol class="mt-4 space-y-3">
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">1</span>
+					<p>Go to <strong>WP Appointments → Settings → Schedule</strong></p>
+				</li>
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">2</span>
+					<p>Toggle each day of the week on or off</p>
+				</li>
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">3</span>
+					<p>Set start and end times for each active day</p>
+				</li>
+			</ol>
+
+			<ScreenshotPlaceholder description="Schedule settings page showing day-of-week toggles with start/end time pickers for each day" />
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Override Layers</h2>
+			<p class="mt-2 text-text-secondary">
+				Layers override the base schedule for specific dates or date ranges.
+			</p>
+
+			<div class="mt-4 overflow-hidden rounded-xl border border-border-subtle">
+				<table class="w-full text-sm">
+					<thead class="bg-surface">
+						<tr>
+							<th class="px-4 py-3 text-left font-semibold">Layer</th>
+							<th class="px-4 py-3 text-left font-semibold">Priority</th>
+							<th class="px-4 py-3 text-left font-semibold">Purpose</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border-weak">
+						<tr>
+							<td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-emerald-400"></span> Opening Hours</span></td>
+							<td class="px-4 py-3 text-text-tertiary">Base</td>
+							<td class="px-4 py-3 text-text-tertiary">Weekly recurring schedule</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-red-400"></span> Existing Bookings</span></td>
+							<td class="px-4 py-3 text-text-tertiary">High</td>
+							<td class="px-4 py-3 text-text-tertiary">Automatically blocks booked slots</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<Callout title="Extending with addons" variant="tip">
+				<p>
+					Addons can register custom availability layers. For example, a facility booking addon
+					might add a "Maintenance Block" layer that blocks availability during maintenance windows.
+				</p>
+			</Callout>
+		</section>
+	</div>
+</HelpLayout>

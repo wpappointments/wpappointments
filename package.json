@@ -34,7 +34,9 @@
 		"test": "wp-env run tests-cli --env-cwd=wp-content ./vendor/bin/pest --coverage --coverage-html coverage",
 		"docs:dev": "pnpm --filter @wpappointments/docs dev",
 		"docs:build": "pnpm --filter @wpappointments/docs build",
-		"docs:generate": "pnpm --filter @wpappointments/docs generate"
+		"docs:generate": "pnpm --filter @wpappointments/docs generate",
+		"help:dev": "pnpm --filter @wpappointments/help dev",
+		"help:build": "pnpm --filter @wpappointments/help build"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.6.0",

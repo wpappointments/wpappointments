@@ -1,11 +1,32 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkMermaid from 'remark-mermaidjs';
 // import starlightVersions from 'starlight-versions';
 // Enable when first major version ships:
 // plugins: [starlightVersions({ versions: [{ slug: '1.x', label: 'v1.x' }] })],
 
 export default defineConfig({
 	site: 'https://docs.wpappointments.com',
+	markdown: {
+		remarkPlugins: [
+			[
+				remarkMermaid,
+				{
+					mermaidConfig: {
+						theme: 'neutral',
+						themeVariables: {
+							background: '#f9fafb',
+							primaryColor: '#e0e7ff',
+							primaryBorderColor: '#818cf8',
+							lineColor: '#6366f1',
+							textColor: '#1f2937',
+							fontFamily: 'Inter, system-ui, sans-serif',
+						},
+					},
+				},
+			],
+		],
+	},
 	integrations: [
 		starlight({
 			title: 'WP Appointments',
@@ -42,81 +63,30 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'User Guides',
-					items: [
-						{ label: 'Getting Started', link: '/guides/' },
-						{ label: 'Installation', link: '/guides/installation/' },
-						{
-							label: 'Appointments',
-							collapsed: true,
-							autogenerate: { directory: 'guides/appointments' },
-						},
-						{
-							label: 'Bookables',
-							collapsed: true,
-							autogenerate: { directory: 'guides/bookables' },
-						},
-						{
-							label: 'Availability',
-							collapsed: true,
-							autogenerate: { directory: 'guides/availability' },
-						},
-						{
-							label: 'Customers',
-							collapsed: true,
-							autogenerate: { directory: 'guides/customers' },
-						},
-						{
-							label: 'Notifications',
-							collapsed: true,
-							autogenerate: { directory: 'guides/notifications' },
-						},
-						{
-							label: 'Booking Flow',
-							collapsed: true,
-							autogenerate: { directory: 'guides/booking-flow' },
-						},
-						{
-							label: 'Settings',
-							collapsed: true,
-							autogenerate: { directory: 'guides/settings' },
-						},
-						{
-							label: 'Premium Features',
-							badge: { text: 'Premium', variant: 'tip' },
-							collapsed: true,
-							autogenerate: { directory: 'guides/premium' },
-						},
-					],
-				},
-				{
-					label: 'Developer Docs',
+					label: 'Getting Started',
 					items: [
 						{ label: 'Overview', link: '/developers/' },
 						{
-							label: 'Getting Started',
+							label: 'Quick Start',
 							link: '/developers/getting-started/',
 						},
 						{
 							label: 'Architecture',
 							link: '/developers/architecture/',
 						},
-						{
-							label: 'Hooks Reference',
-							collapsed: true,
-							autogenerate: { directory: 'developers/hooks' },
-						},
-						{
-							label: 'REST API',
-							collapsed: true,
-							autogenerate: { directory: 'developers/rest-api' },
-						},
-						{
-							label: 'Addon Development',
-							collapsed: true,
-							autogenerate: { directory: 'developers/addons' },
-						},
 					],
+				},
+				{
+					label: 'Hooks Reference',
+					autogenerate: { directory: 'developers/hooks' },
+				},
+				{
+					label: 'REST API',
+					autogenerate: { directory: 'developers/rest-api' },
+				},
+				{
+					label: 'Addon Development',
+					autogenerate: { directory: 'developers/addons' },
 				},
 				{
 					label: 'Packages',

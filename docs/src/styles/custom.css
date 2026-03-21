@@ -1,3 +1,19 @@
+/* Mermaid diagrams — light background container */
+pre.remark-mermaid,
+pre.mermaid {
+	overflow-x: auto;
+}
+
+.remark-mermaid > svg,
+pre.mermaid > svg {
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 1rem;
+	padding: 1.5rem;
+	max-width: 100%;
+	display: block;
+}
+
 .premium-badge {
 	display: inline-block;
 	background: linear-gradient(135deg, #7c3aed, #a855f7);
