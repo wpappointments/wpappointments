@@ -43,4 +43,4 @@ $block_output = sprintf(
 	)
 );
 
-echo apply_filters( 'wpappointments_booking_flow_output', $block_output, $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo wp_kses_post( apply_filters( 'wpappointments_booking_flow_output', $block_output, $attributes ) );

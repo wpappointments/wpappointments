@@ -49,7 +49,7 @@ function render_globals_component() {
 		return;
 	}
 
-	echo '<div id="wpappointments-globals"></div>';
+	echo wp_kses_post( '<div id="wpappointments-globals"></div>' );
 }
 
 /**

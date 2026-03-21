@@ -74,7 +74,7 @@ function menu() {
  * @return void
  */
 function admin_page() {
-	echo '<div id="wpappointments-admin" data-page="dashboard"></div>';
+	echo wp_kses_post( '<div id="wpappointments-admin" data-page="dashboard"></div>' );
 }
 
 /**
@@ -83,7 +83,7 @@ function admin_page() {
  * @return void
  */
 function calendar_page() {
-	echo '<div id="wpappointments-admin" data-page="calendar"></div>';
+	echo wp_kses_post( '<div id="wpappointments-admin" data-page="calendar"></div>' );
 }
 
 /**
@@ -92,7 +92,7 @@ function calendar_page() {
  * @return void
  */
 function customers_page() {
-	echo '<div id="wpappointments-admin" data-page="customers"></div>';
+	echo wp_kses_post( '<div id="wpappointments-admin" data-page="customers"></div>' );
 }
 
 /**
@@ -101,7 +101,7 @@ function customers_page() {
  * @return void
  */
 function settings_page() {
-	echo '<div id="wpappointments-admin" data-page="settings"></div>';
+	echo wp_kses_post( '<div id="wpappointments-admin" data-page="settings"></div>' );
 }
 
 /**
@@ -110,7 +110,7 @@ function settings_page() {
  * @return void
  */
 function wizard_page() {
-	echo '<div id="wpappointments-admin" data-page="wizard"></div>';
+	echo wp_kses_post( '<div id="wpappointments-admin" data-page="wizard"></div>' );
 }
 
 /**

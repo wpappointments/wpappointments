@@ -237,7 +237,7 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	private function send( $to, $subject, $message ) {
-		$site_name = get_bloginfo( 'name' );
+		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		/**

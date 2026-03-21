@@ -366,17 +366,17 @@ function evaluate_merge_tag( $content, $new_appointment, $previous_appointment =
 	$customer = maybe_unserialize( $new_appointment['customer'] );
 
 	$tags = array(
-		'{customer_name}'    => $customer['name'],
+		'{customer_name}'    => esc_html( $customer['name'] ?? '' ),
 		'{previous_date}'    => $previous_appointment ? wp_date( $formats['date'], $previous_appointment['timestamp'] ) : '',
 		'{previous_time}'    => $previous_appointment ? wp_date( $formats['time'], $previous_appointment['timestamp'] ) : '',
 		'{date}'             => wp_date( $formats['date'], $new_appointment['timestamp'] ),
 		'{time}'             => wp_date( $formats['time'], $new_appointment['timestamp'] ),
 		'{previous_status}'  => $previous_appointment ? strtoupper( $previous_appointment['status'] ) : '',
 		'{status}'           => strtoupper( $new_appointment['status'] ),
-		'{admin_first_name}' => $settings->get_setting( 'general', 'firstName' ),
-		'{admin_last_name}'  => $settings->get_setting( 'general', 'lastName' ),
-		'{admin_email}'      => $settings->get_setting( 'general', 'email' ),
-		'{admin_phone}'      => $settings->get_setting( 'general', 'phoneNumber' ),
+		'{admin_first_name}' => esc_html( $settings->get_setting( 'general', 'firstName' ) ?? '' ),
+		'{admin_last_name}'  => esc_html( $settings->get_setting( 'general', 'lastName' ) ?? '' ),
+		'{admin_email}'      => esc_html( $settings->get_setting( 'general', 'email' ) ?? '' ),
+		'{admin_phone}'      => esc_html( $settings->get_setting( 'general', 'phoneNumber' ) ?? '' ),
 	);
 
 	return str_replace( array_keys( $tags ), array_values( $tags ), $content );
