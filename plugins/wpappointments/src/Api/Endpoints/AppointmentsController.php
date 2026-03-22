@@ -193,7 +193,7 @@ class AppointmentsController extends Controller {
 		$date        = sanitize_text_field( $request->get_param( 'date' ) );
 		$service     = sanitize_text_field( $request->get_param( 'service' ) );
 		$duration    = absint( $request->get_param( 'duration' ) );
-		$customer    = $request->get_param( 'customer' );
+		$customer    = self::sanitize_customer( $request->get_param( 'customer' ) );
 		$customer_id = absint( $request->get_param( 'customerId' ) );
 		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 
@@ -244,15 +244,9 @@ class AppointmentsController extends Controller {
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
 		$date           = sanitize_text_field( $request->get_param( 'date' ) );
-		$raw_customer   = $request->get_param( 'customer' );
-		$create_account = (bool) $request->get_param( 'createAccount' );
+		$customer       = self::sanitize_customer( $request->get_param( 'customer' ) );
+		$create_account = rest_sanitize_boolean( $request->get_param( 'createAccount' ) );
 		$password       = $request->get_param( 'password' );
-
-		$customer = is_array( $raw_customer ) ? array(
-			'name'  => sanitize_text_field( $raw_customer['name'] ?? '' ),
-			'email' => sanitize_email( $raw_customer['email'] ?? '' ),
-			'phone' => sanitize_text_field( $raw_customer['phone'] ?? '' ),
-		) : null;
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -303,7 +297,7 @@ class AppointmentsController extends Controller {
 		$service_raw     = $request->get_param( 'service' );
 		$duration_raw    = $request->get_param( 'duration' );
 		$status_raw      = $request->get_param( 'status' );
-		$customer        = $request->get_param( 'customer' );
+		$customer        = self::sanitize_customer( $request->get_param( 'customer' ) );
 		$customer_id_raw = $request->get_param( 'customerId' );
 
 		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
@@ -439,6 +433,32 @@ class AppointmentsController extends Controller {
 			array(
 				'appointmentId' => $confirmed,
 			),
+		);
+	}
+
+	/**
+	 * Default normalizer
+	 *
+	 * @param WP_Post $appointment Appointment post object.
+	 *
+	 * @return array
+	 */
+	/**
+	 * Sanitize customer array from request input.
+	 *
+	 * @param mixed $raw_customer Raw customer parameter.
+	 *
+	 * @return array|null Sanitized customer array or null.
+	 */
+	private static function sanitize_customer( $raw_customer ) {
+		if ( ! is_array( $raw_customer ) ) {
+			return null;
+		}
+
+		return array(
+			'name'  => sanitize_text_field( is_string( $raw_customer['name'] ?? '' ) ? $raw_customer['name'] : '' ),
+			'email' => sanitize_email( is_string( $raw_customer['email'] ?? '' ) ? $raw_customer['email'] : '' ),
+			'phone' => sanitize_text_field( is_string( $raw_customer['phone'] ?? '' ) ? $raw_customer['phone'] : '' ),
 		);
 	}
 
