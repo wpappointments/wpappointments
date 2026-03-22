@@ -113,10 +113,14 @@ class Settings {
 			array(
 				'name' => 'defaultBufferBefore',
 				'type' => 'number',
+				'min'  => 0,
+				'max'  => 1440,
 			),
 			array(
 				'name' => 'defaultBufferAfter',
 				'type' => 'number',
+				'min'  => 0,
+				'max'  => 1440,
 			),
 		),
 		'calendar'      => array(),
