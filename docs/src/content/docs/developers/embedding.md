@@ -21,7 +21,7 @@ The **Booking Flow** block is available in the block editor under the **WP Appoi
 
 Use the `[wpappointments]` shortcode in the classic editor, page builders, or anywhere shortcodes are supported.
 
-```
+```text
 [wpappointments]
 [wpappointments flow_type="MultiStep" alignment="Center" width="Full"]
 [wpappointments trim_unavailable="0" slots_as_buttons="1"]
