@@ -52,17 +52,21 @@ class Availability {
 		);
 		$range_appointments = $range_appointments['appointments'];
 
+		$buffer_before = (int) get_option( 'wpappointments_appointments_defaultBufferBefore', 0 );
+		$buffer_after  = (int) get_option( 'wpappointments_appointments_defaultBufferAfter', 0 );
+
 		$range_appointments_periods = array();
 
 		if ( count( $range_appointments ) > 0 ) {
 			foreach ( $range_appointments as $appointment ) {
 				$start_date = new DateTime();
-				$start_date->setTimestamp( $appointment['timestamp'] );
+				$start_date->setTimestamp( $appointment['timestamp'] - $buffer_before * 60 );
 				$end_date = new DateTime();
-				$end_date->setTimestamp( $appointment['timestamp'] + $appointment['duration'] * 60 );
+				$end_date->setTimestamp( $appointment['timestamp'] + $appointment['duration'] * 60 + $buffer_after * 60 );
+				$total_blocked                = $buffer_before + $appointment['duration'] + $buffer_after;
 				$range_appointments_periods[] = new DatePeriod(
 					$start_date,
-					new DateInterval( 'PT' . $appointment['duration'] . 'M' ),
+					new DateInterval( 'PT' . $total_blocked . 'M' ),
 					$end_date
 				);
 			}

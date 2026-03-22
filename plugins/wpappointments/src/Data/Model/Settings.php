@@ -110,6 +110,14 @@ class Settings {
 				'type'    => 'string',
 				'allowed' => array( 'pending', 'confirmed' ),
 			),
+			array(
+				'name' => 'defaultBufferBefore',
+				'type' => 'number',
+			),
+			array(
+				'name' => 'defaultBufferAfter',
+				'type' => 'number',
+			),
 		),
 		'calendar'      => array(),
 		'schedule'      => array(),
