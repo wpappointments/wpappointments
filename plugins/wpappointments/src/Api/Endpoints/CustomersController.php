@@ -179,6 +179,10 @@ class CustomersController extends Controller {
 		$customer = new Customer( absint( $request->get_param( 'id' ) ) );
 		$deleted  = $customer->delete();
 
+		if ( is_wp_error( $deleted ) ) {
+			return self::error( $deleted );
+		}
+
 		return self::response(
 			__( 'Customer deleted successfully', 'wpappointments' ),
 			array(
