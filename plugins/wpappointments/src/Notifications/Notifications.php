@@ -392,10 +392,10 @@ class Notifications extends Singleton {
 	 * @return string HTML email body.
 	 */
 	private function build_fallback_message( $appointment ) {
-		$service        = esc_html( $appointment['service'] ?? '' );
-		$status         = esc_html( ucfirst( $appointment['status'] ?? '' ) );
+		$service        = $appointment['service'] ?? '';
+		$status         = ucfirst( $appointment['status'] ?? '' );
 		$appointment_id = absint( $appointment['id'] ?? 0 );
-		$customer_name  = esc_html( $this->get_customer_name( $appointment ) );
+		$customer_name  = $this->get_customer_name( $appointment );
 		$formats        = $this->get_formats();
 
 		$timestamp = absint( $appointment['timestamp'] ?? 0 );
