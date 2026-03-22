@@ -205,7 +205,9 @@ class Notifications extends Singleton {
 	 */
 	private function resolve_body( $custom_body, $template_name, $appointment, $old_appointment = null ) {
 		if ( ! empty( $custom_body ) ) {
-			return $this->interpolate( $custom_body, $appointment, $old_appointment );
+			$interpolated = $this->interpolate( $custom_body, $appointment, $old_appointment );
+
+			return $this->wrap_html( $interpolated );
 		}
 
 		$template_path = PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html';
@@ -215,7 +217,9 @@ class Notifications extends Singleton {
 			require $template_path;
 			$template = ob_get_clean();
 
-			return $this->wrap_html( $this->interpolate( $template, $appointment, $old_appointment ) );
+			$interpolated = $this->interpolate( $template, $appointment, $old_appointment );
+
+			return $this->wrap_html( $interpolated );
 		}
 
 		return $this->build_fallback_message( $appointment );
@@ -278,19 +282,19 @@ class Notifications extends Singleton {
 
 		$replacements = array(
 			'{id}'               => absint( $appointment['id'] ?? 0 ),
-			'{service}'          => $appointment['service'] ?? '',
-			'{status}'           => ucfirst( $appointment['status'] ?? '' ),
-			'{date}'             => $timestamp ? wp_date( $formats['date'], $timestamp ) : '—',
-			'{time}'             => $timestamp ? wp_date( $formats['time'], $timestamp ) : '—',
+			'{service}'          => esc_html( $appointment['service'] ?? '' ),
+			'{status}'           => esc_html( ucfirst( $appointment['status'] ?? '' ) ),
+			'{date}'             => $timestamp ? esc_html( wp_date( $formats['date'], $timestamp ) ) : '—',
+			'{time}'             => $timestamp ? esc_html( wp_date( $formats['time'], $timestamp ) ) : '—',
 			'{duration}'         => absint( $appointment['duration'] ?? 0 ),
-			'{customer_name}'    => $this->get_customer_name( $appointment ),
-			'{previous_date}'    => $old_timestamp ? wp_date( $formats['date'], $old_timestamp ) : '',
-			'{previous_time}'    => $old_timestamp ? wp_date( $formats['time'], $old_timestamp ) : '',
-			'{previous_status}'  => $old_appointment ? ucfirst( $old_appointment['status'] ?? '' ) : '',
-			'{admin_first_name}' => $admin_first ? $admin_first : '',
-			'{admin_last_name}'  => $admin_last ? $admin_last : '',
-			'{admin_email}'      => $admin_email ? $admin_email : get_option( 'admin_email' ),
-			'{admin_phone}'      => $admin_phone ? $admin_phone : '',
+			'{customer_name}'    => esc_html( $this->get_customer_name( $appointment ) ),
+			'{previous_date}'    => $old_timestamp ? esc_html( wp_date( $formats['date'], $old_timestamp ) ) : '',
+			'{previous_time}'    => $old_timestamp ? esc_html( wp_date( $formats['time'], $old_timestamp ) ) : '',
+			'{previous_status}'  => $old_appointment ? esc_html( ucfirst( $old_appointment['status'] ?? '' ) ) : '',
+			'{admin_first_name}' => esc_html( $admin_first ? $admin_first : '' ),
+			'{admin_last_name}'  => esc_html( $admin_last ? $admin_last : '' ),
+			'{admin_email}'      => esc_html( $admin_email ? $admin_email : get_option( 'admin_email' ) ),
+			'{admin_phone}'      => esc_html( $admin_phone ? $admin_phone : '' ),
 		);
 
 		return str_replace( array_keys( $replacements ), array_values( $replacements ), $template );
@@ -325,7 +329,7 @@ class Notifications extends Singleton {
 	 */
 	private function wrap_html( $content ) {
 		$site_name = esc_html( get_bloginfo( 'name' ) );
-		$content   = nl2br( esc_html( $content ) );
+		$content   = nl2br( $content );
 
 		return '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">'
 		. '<h2 style="color:#174aff;">' . $site_name . '</h2>'

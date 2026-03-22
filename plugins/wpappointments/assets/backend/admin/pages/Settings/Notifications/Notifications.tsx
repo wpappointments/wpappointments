@@ -65,7 +65,7 @@ const EVENT_META: Record<
 };
 
 const TEMPLATE_VARS =
-	'{id}, {service}, {status}, {date}, {time}, {duration}, {customer_name}, {admin_first_name}, {admin_last_name}, {admin_email}, {admin_phone}';
+	'{id}, {service}, {status}, {date}, {time}, {duration}, {customer_name}, {previous_date}, {previous_time}, {previous_status}, {admin_first_name}, {admin_last_name}, {admin_email}, {admin_phone}';
 
 const DEFAULT_EVENT: NotificationEvent = {
 	enabled: true,
@@ -119,7 +119,8 @@ function NotificationRow({
 					__nextHasNoMarginBottom
 					checked={value.enabled}
 					onChange={onToggle}
-					label=""
+					label={meta.title}
+					className={styles.srOnlyLabel}
 				/>
 				<Button variant="tertiary" onClick={onEdit}>
 					{__('Edit', 'wpappointments')}
@@ -172,7 +173,10 @@ function NotificationEditor({
 					)}
 					value={value.customRecipients}
 					onChange={(v) => set('customRecipients', v)}
-					placeholder="extra@example.com, other@example.com"
+					placeholder={__(
+						'extra@example.com, other@example.com',
+						'wpappointments'
+					)}
 				/>
 			</div>
 
