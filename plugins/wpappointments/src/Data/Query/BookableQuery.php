@@ -33,8 +33,9 @@ class BookableQuery {
 	 * @return array
 	 */
 	public static function all( $query = array() ) {
-		$orderby = $query['orderby'] ?? 'date';
-		$order   = strtoupper( $query['order'] ?? 'DESC' );
+		$orderby   = $query['orderby'] ?? 'date';
+		$order_raw = $query['order'] ?? 'DESC';
+		$order     = is_string( $order_raw ) ? strtoupper( $order_raw ) : 'DESC';
 
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['bookable'],

@@ -34,8 +34,9 @@ class BookableVariantQuery {
 	 * @return array
 	 */
 	public static function by_entity( $entity_id, $query = array() ) {
-		$orderby = $query['orderby'] ?? 'date';
-		$order   = strtoupper( $query['order'] ?? 'ASC' );
+		$orderby   = $query['orderby'] ?? 'date';
+		$order_raw = $query['order'] ?? 'ASC';
+		$order     = is_string( $order_raw ) ? strtoupper( $order_raw ) : 'ASC';
 
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['bookable-variant'],

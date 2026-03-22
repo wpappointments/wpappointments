@@ -60,6 +60,18 @@ class AvailabilityController extends Controller {
 		$year     = absint( $request->get_param( 'currentYear' ) );
 		$timezone = sanitize_text_field( (string) $request->get_param( 'timezone' ) );
 
+		if ( $month < 1 || $month > 12 ) {
+			return self::error(
+				new \WP_Error( 'invalid_month', __( 'Month must be between 1 and 12', 'wpappointments' ), array( 'status' => 400 ) )
+			);
+		}
+
+		if ( $year < 1970 || $year > 2100 ) {
+			return self::error(
+				new \WP_Error( 'invalid_year', __( 'Year must be between 1970 and 2100', 'wpappointments' ), array( 'status' => 400 ) )
+			);
+		}
+
 		$availability = Availability::get_month_days_availability(
 			$month,
 			$year,

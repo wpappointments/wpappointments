@@ -61,7 +61,7 @@ class Settings {
 			array(
 				'name'    => 'clockType',
 				'type'    => 'string',
-				'allowed' => array( '12h', '24h' ),
+				'allowed' => array( '12', '24', '12h', '24h' ),
 			),
 			array(
 				'name' => 'timezoneSiteDefault',

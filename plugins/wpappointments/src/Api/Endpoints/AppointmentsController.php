@@ -190,12 +190,12 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$date         = sanitize_text_field( $request->get_param( 'date' ) );
-		$service      = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration_raw = $request->get_param( 'duration' );
-		$customer     = $request->get_param( 'customer' );
-		$customer_id  = absint( $request->get_param( 'customerId' ) );
-		$status       = sanitize_text_field( $request->get_param( 'status' ) );
+		$date        = sanitize_text_field( $request->get_param( 'date' ) );
+		$service     = sanitize_text_field( $request->get_param( 'service' ) );
+		$duration    = absint( $request->get_param( 'duration' ) );
+		$customer    = $request->get_param( 'customer' );
+		$customer_id = absint( $request->get_param( 'customerId' ) );
+		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 
 		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
 
@@ -205,13 +205,11 @@ class AppointmentsController extends Controller {
 			);
 		}
 
-		if ( false === filter_var( $duration_raw, FILTER_VALIDATE_INT ) || (int) $duration_raw < 1 ) {
+		if ( $duration < 1 ) {
 			return self::error(
-				new \WP_Error( 'invalid_duration', __( 'Duration must be a positive integer', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
 			);
 		}
-
-		$duration = (int) $duration_raw;
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -319,10 +317,13 @@ class AppointmentsController extends Controller {
 			}
 		}
 
-		if ( null !== $duration_raw && ( false === filter_var( $duration_raw, FILTER_VALIDATE_INT ) || (int) $duration_raw < 1 ) ) {
-			return self::error(
-				new \WP_Error( 'invalid_duration', __( 'Duration must be a positive integer', 'wpappointments' ), array( 'status' => 422 ) )
-			);
+		if ( null !== $duration_raw ) {
+			$duration = absint( $duration_raw );
+			if ( $duration < 1 ) {
+				return self::error(
+					new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
 		}
 
 		$meta = array();
@@ -332,7 +333,7 @@ class AppointmentsController extends Controller {
 		}
 
 		if ( null !== $duration_raw ) {
-			$meta['duration'] = (int) $duration_raw;
+			$meta['duration'] = $duration;
 		}
 
 		if ( null !== $customer_id_raw ) {
