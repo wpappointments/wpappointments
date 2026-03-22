@@ -178,30 +178,15 @@ jobs:
               run: npx playwright test --project=chromium
               working-directory: plugins/wpappointments
 
-            - name: Upload screenshots artifact
-              uses: actions/upload-artifact@v4
+            - name: Publish screenshots and post to PR
               if: always()
-              with:
-                  name: e2e-screenshots
-                  path: tests/e2e/results/screenshots/
-                  retention-days: 30
-                  if-no-files-found: ignore
-
-            - name: Upload Playwright report
-              uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: playwright-report
-                  path: plugins/wpappointments/playwright-report/
-                  retention-days: 7
-                  if-no-files-found: ignore
-
-            - name: Post screenshots to PR
-              if: always() && github.event_name == 'pull_request'
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   SCREENSHOT_DIR="tests/e2e/results/screenshots"
+                  PR_NUMBER="${{ github.event.number }}"
+                  REPO="${{ github.repository }}"
+                  BRANCH="screenshots/pr-${PR_NUMBER}"
 
                   if [ ! -d "$SCREENSHOT_DIR" ]; then
                     echo "No screenshots directory"
@@ -215,26 +200,43 @@ jobs:
                     exit 0
                   fi
 
-                  RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  # Push screenshots to a dedicated branch for inline rendering
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                  git checkout --orphan "$BRANCH"
+                  git rm -rf --quiet . 2>/dev/null || true
+
+                  mkdir -p screenshots
+                  cp $FILES screenshots/
+                  git add screenshots/
+                  git commit -m "E2E screenshots for PR #${PR_NUMBER}" --quiet
+                  git push origin "$BRANCH" --force --quiet
+
+                  # Build PR comment with inline images
                   MARKER="<!-- e2e-screenshots -->"
                   BODY="${MARKER}"$'\n'"## E2E Screenshots"$'\n\n'
 
                   for FILE in $FILES; do
-                    NAME=$(basename "$FILE" .png | sed 's/-/ /g' | sed 's/^[0-9]* //')
-                    BODY+="### ${NAME}"$'\n\n'
-                    BODY+='```'$'\n'"Screenshot: $(basename "$FILE")"$'\n''```'$'\n\n'
+                    BASENAME=$(basename "$FILE")
+                    NAME=$(echo "$BASENAME" | sed 's/\.png$//' | sed 's/-/ /g' | sed 's/^[0-9]* //')
+                    IMG_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}/screenshots/${BASENAME}"
+                    BODY+="### ${NAME}"$'\n'
+                    BODY+="![${NAME}](${IMG_URL})"$'\n\n'
                   done
 
-                  BODY+=$'\n'"[Download all screenshots from artifacts](${RUN_URL})"$'\n\n'
-                  BODY+="<sub>Captured by Playwright E2E</sub>"
+                  BODY+="<sub>Captured by Playwright E2E • updated on each push</sub>"
 
                   # Find and update existing comment, or create new one
-                  EXISTING=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.number }}/comments" \
+                  EXISTING=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
                     --jq ".[] | select(.body | contains(\"${MARKER}\")) | .id" | head -1)
 
                   if [ -n "$EXISTING" ]; then
-                    gh api "repos/${{ github.repository }}/issues/comments/${EXISTING}" \
+                    gh api "repos/${REPO}/issues/comments/${EXISTING}" \
                       -X PATCH -f body="$BODY"
                   else
-                    gh pr comment "${{ github.event.number }}" --body "$BODY"
+                    gh pr comment "$PR_NUMBER" --body "$BODY"
                   fi
+
+                  # Switch back to the PR branch
+                  git checkout -
