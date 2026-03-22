@@ -8,34 +8,52 @@
 
 namespace WPAppointments\Notifications;
 
+use WPAppointments\Core\PluginInfo;
 use WPAppointments\Core\Singleton;
+use WPAppointments\Data\Model\Settings;
 
 /**
  * Handles email notifications for appointment lifecycle events
  */
 class Notifications extends Singleton {
 	/**
-	 * Default subjects per event
+	 * Notification event definitions — title, description, default subjects, template files
 	 *
 	 * @var array
 	 */
-	private static $default_subjects = array(
-		'created'   => 'New appointment booked',
-		'updated'   => 'Appointment updated',
-		'confirmed' => 'Appointment confirmed',
-		'cancelled' => 'Appointment cancelled',
-	);
-
-	/**
-	 * Default customer-facing subjects per event
-	 *
-	 * @var array
-	 */
-	private static $default_customer_subjects = array(
-		'created'   => 'Your appointment has been booked',
-		'updated'   => 'Your appointment has been updated',
-		'confirmed' => 'Your appointment is confirmed',
-		'cancelled' => 'Your appointment has been cancelled',
+	private static $events = array(
+		'created'   => array(
+			'title'            => 'Appointment Created',
+			'description'      => 'Sent when a new appointment is booked.',
+			'adminSubject'     => 'New appointment booked',
+			'customerSubject'  => 'Your appointment has been booked',
+			'adminTemplate'    => 'appointment-created-admin',
+			'customerTemplate' => 'appointment-created-customer',
+		),
+		'updated'   => array(
+			'title'            => 'Appointment Updated',
+			'description'      => 'Sent when an existing appointment is modified.',
+			'adminSubject'     => 'Appointment updated',
+			'customerSubject'  => 'Your appointment has been updated',
+			'adminTemplate'    => 'appointment-updated-admin',
+			'customerTemplate' => 'appointment-updated-customer',
+		),
+		'confirmed' => array(
+			'title'            => 'Appointment Confirmed',
+			'description'      => 'Sent when an appointment is confirmed.',
+			'adminSubject'     => 'Appointment confirmed',
+			'customerSubject'  => 'Your appointment is confirmed',
+			'adminTemplate'    => 'appointment-confirmed-admin',
+			'customerTemplate' => 'appointment-confirmed-customer',
+		),
+		'cancelled' => array(
+			'title'            => 'Appointment Cancelled',
+			'description'      => 'Sent when an appointment is cancelled.',
+			'adminSubject'     => 'Appointment cancelled',
+			'customerSubject'  => 'Your appointment has been cancelled',
+			'adminTemplate'    => 'appointment-cancelled-admin',
+			'customerTemplate' => 'appointment-cancelled-customer',
+		),
 	);
 
 	/**
@@ -43,9 +61,18 @@ class Notifications extends Singleton {
 	 */
 	public function __construct() {
 		add_action( 'wpappointments_appointment_created', array( $this, 'on_created' ) );
-		add_action( 'wpappointments_appointment_updated', array( $this, 'on_updated' ) );
-		add_action( 'wpappointments_appointment_confirmed', array( $this, 'on_confirmed' ) );
+		add_action( 'wpappointments_appointment_updated', array( $this, 'on_updated' ), 10, 2 );
+		add_action( 'wpappointments_appointment_confirmed', array( $this, 'on_confirmed' ), 10, 2 );
 		add_action( 'wpappointments_appointment_cancelled', array( $this, 'on_cancelled' ) );
+	}
+
+	/**
+	 * Get event definitions for the frontend (title, description, defaults)
+	 *
+	 * @return array
+	 */
+	public static function get_event_definitions() {
+		return self::$events;
 	}
 
 	/**
@@ -56,29 +83,31 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	public function on_created( $appointment ) {
-		$this->dispatch( 'created', $appointment, __( 'A new appointment has been booked.', 'wpappointments' ) );
+		$this->dispatch( 'created', $appointment );
 	}
 
 	/**
 	 * Send notification when appointment is updated
 	 *
-	 * @param array $appointment Updated appointment data.
+	 * @param array $appointment     Updated appointment data.
+	 * @param array $old_appointment Previous appointment data.
 	 *
 	 * @return void
 	 */
-	public function on_updated( $appointment ) {
-		$this->dispatch( 'updated', $appointment, __( 'An appointment has been updated.', 'wpappointments' ) );
+	public function on_updated( $appointment, $old_appointment ) {
+		$this->dispatch( 'updated', $appointment, $old_appointment );
 	}
 
 	/**
 	 * Send notification when appointment is confirmed
 	 *
-	 * @param array $appointment Confirmed appointment data.
+	 * @param array      $appointment     Confirmed appointment data.
+	 * @param array|null $old_appointment Previous appointment data.
 	 *
 	 * @return void
 	 */
-	public function on_confirmed( $appointment ) {
-		$this->dispatch( 'confirmed', $appointment, __( 'An appointment has been confirmed.', 'wpappointments' ) );
+	public function on_confirmed( $appointment, $old_appointment = null ) {
+		$this->dispatch( 'confirmed', $appointment, $old_appointment );
 	}
 
 	/**
@@ -89,45 +118,107 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	public function on_cancelled( $appointment ) {
-		$this->dispatch( 'cancelled', $appointment, __( 'An appointment has been cancelled.', 'wpappointments' ) );
+		$this->dispatch( 'cancelled', $appointment );
 	}
 
 	/**
 	 * Dispatch notifications for a given event, respecting user settings
 	 *
-	 * @param string $event       Event key (created|updated|confirmed|cancelled).
-	 * @param array  $appointment Normalized appointment data.
-	 * @param string $intro       Default intro sentence for the email body.
+	 * @param string     $event            Event key (created|updated|confirmed|cancelled).
+	 * @param array      $appointment      Normalized appointment data.
+	 * @param array|null $old_appointment  Previous appointment data (for updated events).
 	 *
 	 * @return void
 	 */
-	private function dispatch( $event, $appointment, $intro ) {
-		$config = $this->get_event_config( $event );
+	private function dispatch( $event, $appointment, $old_appointment = null ) {
+		$config     = $this->get_event_config( $event );
+		$event_def  = self::$events[ $event ];
+		$recipients = array();
 
 		if ( ! $config['enabled'] ) {
 			return;
 		}
 
-		$body = $config['body'] ? $this->interpolate( $config['body'], $appointment ) : $this->build_message( $appointment, $intro );
+		/**
+		 * Fires before a notification is dispatched.
+		 *
+		 * Allows third-party plugins (e.g. BracketSpace Notification) to hook
+		 * into the notification lifecycle.
+		 *
+		 * @param string     $event           Event key (created|updated|confirmed|cancelled).
+		 * @param array      $appointment     Normalized appointment data.
+		 * @param array      $config          Notification config for this event.
+		 * @param array|null $old_appointment Previous appointment data.
+		 */
+		do_action( 'wpappointments_before_notification', $event, $appointment, $config, $old_appointment );
 
 		if ( $config['sendToAdmin'] ) {
-			$subject = $config['subject'] ? $config['subject'] : self::$default_subjects[ $event ];
+			$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
+			$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
 			$this->send_to_admin( $subject, $body );
+			$recipients[] = 'admin';
 		}
 
 		if ( $config['sendToCustomer'] ) {
-			$subject = $config['subject'] ? $config['subject'] : self::$default_customer_subjects[ $event ];
+			$subject = $config['customerSubject'] ? $config['customerSubject'] : $event_def['customerSubject'];
+			$body    = $this->resolve_body( $config['customerBody'], $event_def['customerTemplate'], $appointment, $old_appointment );
 			$this->send_to_customer( $appointment, $subject, $body );
+			$recipients[] = 'customer';
 		}
 
 		$custom_recipients = array_filter( array_map( 'trim', explode( ',', $config['customRecipients'] ) ) );
 
 		foreach ( $custom_recipients as $recipient ) {
 			if ( is_email( $recipient ) ) {
-				$subject = $config['subject'] ? $config['subject'] : self::$default_subjects[ $event ];
+				$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
+				$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
 				$this->send( $recipient, $subject, $body );
+				$recipients[] = $recipient;
 			}
 		}
+
+		/**
+		 * Fires after a notification has been dispatched.
+		 *
+		 * Allows third-party plugins to react after emails are sent, e.g.
+		 * for logging, webhooks, or integration with external notification
+		 * services like BracketSpace Notification.
+		 *
+		 * @param string     $event           Event key.
+		 * @param array      $appointment     Normalized appointment data.
+		 * @param array      $recipients      List of recipients that were notified.
+		 * @param array      $config          Notification config for this event.
+		 * @param array|null $old_appointment Previous appointment data.
+		 */
+		do_action( 'wpappointments_after_notification', $event, $appointment, $recipients, $config, $old_appointment );
+	}
+
+	/**
+	 * Resolve the email body — use custom body if set, otherwise load HTML template
+	 *
+	 * @param string     $custom_body      Custom body from settings (may be empty).
+	 * @param string     $template_name    Default HTML template file name.
+	 * @param array      $appointment      Normalized appointment data.
+	 * @param array|null $old_appointment  Previous appointment data.
+	 *
+	 * @return string Interpolated email body.
+	 */
+	private function resolve_body( $custom_body, $template_name, $appointment, $old_appointment = null ) {
+		if ( ! empty( $custom_body ) ) {
+			return $this->interpolate( $custom_body, $appointment, $old_appointment );
+		}
+
+		$template_path = PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html';
+
+		if ( file_exists( $template_path ) ) {
+			ob_start();
+			require $template_path;
+			$template = ob_get_clean();
+
+			return $this->wrap_html( $this->interpolate( $template, $appointment, $old_appointment ) );
+		}
+
+		return $this->build_fallback_message( $appointment );
 	}
 
 	/**
@@ -145,8 +236,10 @@ class Notifications extends Singleton {
 			'sendToAdmin'      => true,
 			'sendToCustomer'   => true,
 			'customRecipients' => '',
-			'subject'          => '',
-			'body'             => '',
+			'adminSubject'     => '',
+			'customerSubject'  => '',
+			'adminBody'        => '',
+			'customerBody'     => '',
 		);
 
 		if ( ! is_array( $stored ) ) {
@@ -159,32 +252,148 @@ class Notifications extends Singleton {
 	/**
 	 * Replace template variables in a string with appointment data
 	 *
-	 * Supported variables: {service}, {status}, {date}, {duration}, {customer_name}, {id}
+	 * Supported variables:
+	 * {id}, {service}, {status}, {date}, {time}, {duration}, {customer_name},
+	 * {previous_date}, {previous_time}, {previous_status},
+	 * {admin_first_name}, {admin_last_name}, {admin_email}, {admin_phone}
 	 *
-	 * @param string $template    Template string with {variable} placeholders.
-	 * @param array  $appointment Normalized appointment data.
+	 * @param string     $template         Template string with {variable} placeholders.
+	 * @param array      $appointment      Normalized appointment data.
+	 * @param array|null $old_appointment  Previous appointment data.
 	 *
 	 * @return string Interpolated string.
 	 */
-	private function interpolate( $template, $appointment ) {
-		$date_format = get_option( 'wpappointments_general_dateFormat' );
-		$time_format = get_option( 'wpappointments_general_timeFormat' );
-		$date_format = $date_format ? $date_format : 'd/m/Y';
-		$time_format = $time_format ? $time_format : 'H:i';
+	private function interpolate( $template, $appointment, $old_appointment = null ) {
+		$formats = $this->get_formats();
 
-		$timestamp = absint( $appointment['timestamp'] ?? 0 );
-		$date_time = $timestamp ? wp_date( $date_format . ' ' . $time_format, $timestamp ) : '—';
+		$timestamp     = absint( $appointment['timestamp'] ?? 0 );
+		$old_timestamp = $old_appointment ? absint( $old_appointment['timestamp'] ?? 0 ) : 0;
+
+		$settings = new Settings();
+
+		$admin_first = $settings->get_setting( 'general', 'firstName' );
+		$admin_last  = $settings->get_setting( 'general', 'lastName' );
+		$admin_email = $settings->get_setting( 'general', 'email' );
+		$admin_phone = $settings->get_setting( 'general', 'phoneNumber' );
 
 		$replacements = array(
-			'{id}'            => absint( $appointment['id'] ?? 0 ),
-			'{service}'       => $appointment['service'] ?? '',
-			'{status}'        => ucfirst( $appointment['status'] ?? '' ),
-			'{date}'          => $date_time,
-			'{duration}'      => absint( $appointment['duration'] ?? 0 ),
-			'{customer_name}' => $this->get_customer_name( $appointment ),
+			'{id}'               => absint( $appointment['id'] ?? 0 ),
+			'{service}'          => $appointment['service'] ?? '',
+			'{status}'           => ucfirst( $appointment['status'] ?? '' ),
+			'{date}'             => $timestamp ? wp_date( $formats['date'], $timestamp ) : '—',
+			'{time}'             => $timestamp ? wp_date( $formats['time'], $timestamp ) : '—',
+			'{duration}'         => absint( $appointment['duration'] ?? 0 ),
+			'{customer_name}'    => $this->get_customer_name( $appointment ),
+			'{previous_date}'    => $old_timestamp ? wp_date( $formats['date'], $old_timestamp ) : '',
+			'{previous_time}'    => $old_timestamp ? wp_date( $formats['time'], $old_timestamp ) : '',
+			'{previous_status}'  => $old_appointment ? ucfirst( $old_appointment['status'] ?? '' ) : '',
+			'{admin_first_name}' => $admin_first ? $admin_first : '',
+			'{admin_last_name}'  => $admin_last ? $admin_last : '',
+			'{admin_email}'      => $admin_email ? $admin_email : get_option( 'admin_email' ),
+			'{admin_phone}'      => $admin_phone ? $admin_phone : '',
 		);
 
 		return str_replace( array_keys( $replacements ), array_values( $replacements ), $template );
+	}
+
+	/**
+	 * Get date and time format strings from plugin settings
+	 *
+	 * @return array{date: string, time: string}
+	 */
+	private function get_formats() {
+		$settings = new Settings();
+
+		$date = $settings->get_setting( 'general', 'dateFormat' );
+		$time = $settings->get_setting( 'general', 'timeFormat' );
+
+		$wp_date = get_option( 'date_format' );
+		$wp_time = get_option( 'time_format' );
+
+		return array(
+			'date' => $date ? $date : ( $wp_date ? $wp_date : 'd/m/Y' ),
+			'time' => $time ? $time : ( $wp_time ? $wp_time : 'H:i' ),
+		);
+	}
+
+	/**
+	 * Wrap plain text content in a simple HTML email layout
+	 *
+	 * @param string $content Email content (may contain newlines).
+	 *
+	 * @return string HTML email body.
+	 */
+	private function wrap_html( $content ) {
+		$site_name = esc_html( get_bloginfo( 'name' ) );
+		$content   = nl2br( esc_html( $content ) );
+
+		return '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">'
+		. '<h2 style="color:#174aff;">' . $site_name . '</h2>'
+		. '<div style="line-height:1.6;">' . $content . '</div>'
+		. '</body></html>';
+	}
+
+	/**
+	 * Build a fallback plain HTML email body when no template is available
+	 *
+	 * @param array $appointment Normalized appointment data.
+	 *
+	 * @return string HTML email body.
+	 */
+	private function build_fallback_message( $appointment ) {
+		$service        = esc_html( $appointment['service'] ?? '' );
+		$status         = esc_html( ucfirst( $appointment['status'] ?? '' ) );
+		$appointment_id = absint( $appointment['id'] ?? 0 );
+		$customer_name  = esc_html( $this->get_customer_name( $appointment ) );
+		$formats        = $this->get_formats();
+
+		$timestamp = absint( $appointment['timestamp'] ?? 0 );
+		$date_time = $timestamp ? wp_date( $formats['date'] . ' ' . $formats['time'], $timestamp ) : '—';
+
+		$duration  = absint( $appointment['duration'] ?? 0 );
+		$site_name = esc_html( get_bloginfo( 'name' ) );
+
+		$message  = '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">';
+		$message .= '<h2 style="color:#174aff;">' . $site_name . '</h2>';
+		$message .= '<table style="border-collapse:collapse;width:100%;">';
+		$message .= $this->table_row( __( 'Appointment ID', 'wpappointments' ), '#' . $appointment_id );
+		$message .= $this->table_row( __( 'Service', 'wpappointments' ), $service );
+		$message .= $this->table_row( __( 'Date & Time', 'wpappointments' ), $date_time );
+
+		if ( $duration ) {
+			$message .= $this->table_row( __( 'Duration', 'wpappointments' ), $duration . ' ' . __( 'minutes', 'wpappointments' ) );
+		}
+
+		if ( $customer_name ) {
+			$message .= $this->table_row( __( 'Customer', 'wpappointments' ), $customer_name );
+		}
+
+		$message .= $this->table_row( __( 'Status', 'wpappointments' ), $status );
+		$message .= '</table>';
+		$message .= '</body></html>';
+
+		/**
+		 * Filters the email message body for WP Appointments notifications.
+		 *
+		 * @param string $message     HTML email body.
+		 * @param array  $appointment Normalized appointment data.
+		 */
+		return apply_filters( 'wpappointments_notification_message', $message, $appointment );
+	}
+
+	/**
+	 * Build a single table row for the fallback email template
+	 *
+	 * @param string $label Table cell label.
+	 * @param string $value Table cell value.
+	 *
+	 * @return string HTML table row.
+	 */
+	private function table_row( $label, $value ) {
+		return '<tr>'
+		. '<td style="padding:8px;border:1px solid #ddd;font-weight:bold;width:40%;">' . esc_html( $label ) . '</td>'
+		. '<td style="padding:8px;border:1px solid #ddd;">' . esc_html( $value ) . '</td>'
+		. '</tr>';
 	}
 
 	/**
@@ -235,7 +444,7 @@ class Notifications extends Singleton {
 	 * @return void
 	 */
 	private function send( $to, $subject, $message ) {
-		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+		$site_name = get_bloginfo( 'name' );
 		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		/**
@@ -260,80 +469,6 @@ class Notifications extends Singleton {
 		);
 
 		wp_mail( $to, $full_subject, $message, $headers );
-	}
-
-	/**
-	 * Build a plain HTML email body for an appointment event
-	 *
-	 * @param array  $appointment Normalized appointment data.
-	 * @param string $intro       Introductory sentence describing the event.
-	 *
-	 * @return string HTML email body.
-	 */
-	private function build_message( $appointment, $intro ) {
-		$service        = esc_html( $appointment['service'] ?? '' );
-		$status         = esc_html( ucfirst( $appointment['status'] ?? '' ) );
-		$appointment_id = absint( $appointment['id'] ?? 0 );
-		$customer_name  = esc_html( $this->get_customer_name( $appointment ) );
-
-		$date_format     = get_option( 'wpappointments_general_dateFormat' );
-		$time_format     = get_option( 'wpappointments_general_timeFormat' );
-		$date_format     = $date_format ? $date_format : 'd/m/Y';
-		$time_format     = $time_format ? $time_format : 'H:i';
-		$raw_date_format = $date_format;
-		$raw_time_format = $time_format;
-		$date_format     = $raw_date_format ? $raw_date_format : 'd/m/Y';
-		$time_format     = $raw_time_format ? $raw_time_format : 'H:i';
-
-		$timestamp = absint( $appointment['timestamp'] ?? 0 );
-		$date_time = $timestamp ? wp_date( $date_format . ' ' . $time_format, $timestamp ) : '—';
-
-		$duration  = absint( $appointment['duration'] ?? 0 );
-		$site_name = esc_html( get_bloginfo( 'name' ) );
-
-		$message  = '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">';
-		$message .= '<h2 style="color:#174aff;">' . esc_html( $site_name ) . '</h2>';
-		$message .= '<p>' . esc_html( $intro ) . '</p>';
-		$message .= '<table style="border-collapse:collapse;width:100%;">';
-		$message .= $this->table_row( __( 'Appointment ID', 'wpappointments' ), '#' . $appointment_id );
-		$message .= $this->table_row( __( 'Service', 'wpappointments' ), $service );
-		$message .= $this->table_row( __( 'Date & Time', 'wpappointments' ), $date_time );
-
-		if ( $duration ) {
-			$message .= $this->table_row( __( 'Duration', 'wpappointments' ), $duration . ' ' . __( 'minutes', 'wpappointments' ) );
-		}
-
-		if ( $customer_name ) {
-			$message .= $this->table_row( __( 'Customer', 'wpappointments' ), $customer_name );
-		}
-
-		$message .= $this->table_row( __( 'Status', 'wpappointments' ), $status );
-		$message .= '</table>';
-		$message .= '</body></html>';
-
-		/**
-		 * Filters the email message body for WP Appointments notifications.
-		 *
-		 * @param string $message     HTML email body.
-		 * @param array  $appointment Normalized appointment data.
-		 * @param string $intro       Introductory sentence.
-		 */
-		return apply_filters( 'wpappointments_notification_message', $message, $appointment, $intro );
-	}
-
-	/**
-	 * Build a single table row for the email template
-	 *
-	 * @param string $label Table cell label.
-	 * @param string $value Table cell value.
-	 *
-	 * @return string HTML table row.
-	 */
-	private function table_row( $label, $value ) {
-		return '<tr>'
-		. '<td style="padding:8px;border:1px solid #ddd;font-weight:bold;width:40%;">' . esc_html( $label ) . '</td>'
-		. '<td style="padding:8px;border:1px solid #ddd;">' . esc_html( $value ) . '</td>'
-		. '</tr>';
 	}
 
 	/**

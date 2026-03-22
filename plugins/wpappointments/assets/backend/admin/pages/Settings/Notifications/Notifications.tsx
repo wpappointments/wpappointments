@@ -5,8 +5,6 @@ import {
 	CardBody,
 	CardFooter,
 	CardHeader,
-	PanelBody,
-	PanelRow,
 	TextareaControl,
 	TextControl,
 	ToggleControl,
@@ -14,14 +12,17 @@ import {
 import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { useSlideout } from '@wpappointments/data';
 import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import type {
 	NotificationEvent,
+	NotificationEventKey,
 	SettingsNotifications,
 } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
+import styles from './Notifications.module.css';
 import globalStyles from 'global.module.css';
 
 type Response = APIResponse<{
@@ -29,34 +30,116 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
-const EVENT_LABELS: Record<keyof SettingsNotifications, string> = {
-	created: __('Appointment created', 'wpappointments'),
-	updated: __('Appointment updated', 'wpappointments'),
-	confirmed: __('Appointment confirmed', 'wpappointments'),
-	cancelled: __('Appointment cancelled', 'wpappointments'),
+const EVENT_META: Record<
+	NotificationEventKey,
+	{ title: string; description: string }
+> = {
+	created: {
+		title: __('Appointment Created', 'wpappointments'),
+		description: __(
+			'Sent when a new appointment is booked.',
+			'wpappointments'
+		),
+	},
+	updated: {
+		title: __('Appointment Updated', 'wpappointments'),
+		description: __(
+			'Sent when an existing appointment is modified.',
+			'wpappointments'
+		),
+	},
+	confirmed: {
+		title: __('Appointment Confirmed', 'wpappointments'),
+		description: __(
+			'Sent when an appointment is confirmed.',
+			'wpappointments'
+		),
+	},
+	cancelled: {
+		title: __('Appointment Cancelled', 'wpappointments'),
+		description: __(
+			'Sent when an appointment is cancelled.',
+			'wpappointments'
+		),
+	},
 };
 
 const TEMPLATE_VARS =
-	'{id}, {service}, {status}, {date}, {duration}, {customer_name}';
+	'{id}, {service}, {status}, {date}, {time}, {duration}, {customer_name}, {admin_first_name}, {admin_last_name}, {admin_email}, {admin_phone}';
 
 const DEFAULT_EVENT: NotificationEvent = {
 	enabled: true,
 	sendToAdmin: true,
 	sendToCustomer: true,
 	customRecipients: '',
-	subject: '',
-	body: '',
+	adminSubject: '',
+	customerSubject: '',
+	adminBody: '',
+	customerBody: '',
 };
 
-function EventPanel({
-	label,
+function NotificationRow({
+	eventKey,
+	value,
+	onToggle,
+	onEdit,
+}: {
+	eventKey: NotificationEventKey;
+	value: NotificationEvent;
+	onToggle: (enabled: boolean) => void;
+	onEdit: () => void;
+}) {
+	const meta = EVENT_META[eventKey];
+
+	return (
+		<div className={styles.notificationRow}>
+			<div className={styles.notificationInfo}>
+				<div className={styles.notificationHeader}>
+					<span className={styles.notificationTitle}>
+						{meta.title}
+					</span>
+					<span
+						className={
+							value.enabled
+								? styles.badgeActive
+								: styles.badgeInactive
+						}
+					>
+						{value.enabled
+							? __('Active', 'wpappointments')
+							: __('Inactive', 'wpappointments')}
+					</span>
+				</div>
+				<span className={styles.notificationDescription}>
+					{meta.description}
+				</span>
+			</div>
+			<div className={styles.notificationActions}>
+				<ToggleControl
+					__nextHasNoMarginBottom
+					checked={value.enabled}
+					onChange={onToggle}
+					label=""
+				/>
+				<Button variant="tertiary" onClick={onEdit}>
+					{__('Edit', 'wpappointments')}
+				</Button>
+			</div>
+		</div>
+	);
+}
+
+function NotificationEditor({
+	eventKey,
 	value,
 	onChange,
 }: {
-	label: string;
+	eventKey: NotificationEventKey;
 	value: NotificationEvent;
 	onChange: (updated: NotificationEvent) => void;
 }) {
+	const meta = EVENT_META[eventKey];
+
 	const set = <K extends keyof NotificationEvent>(
 		key: K,
 		val: NotificationEvent[K]
@@ -65,74 +148,98 @@ function EventPanel({
 	};
 
 	return (
-		<PanelBody title={label} initialOpen={false}>
-			<PanelRow>
+		<div className={styles.editorContent}>
+			<p className={styles.editorDescription}>{meta.description}</p>
+
+			<div className={styles.editorSection}>
+				<h3 className={styles.editorSectionTitle}>
+					{__('Recipients', 'wpappointments')}
+				</h3>
 				<ToggleControl
-					label={__('Enable this notification', 'wpappointments')}
-					checked={value.enabled}
-					onChange={(v) => set('enabled', v)}
+					label={__('Send to admin', 'wpappointments')}
+					checked={value.sendToAdmin}
+					onChange={(v) => set('sendToAdmin', v)}
 				/>
-			</PanelRow>
-			{value.enabled && (
-				<>
-					<PanelRow>
-						<ToggleControl
-							label={__('Send to admin', 'wpappointments')}
-							checked={value.sendToAdmin}
-							onChange={(v) => set('sendToAdmin', v)}
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={__('Send to customer', 'wpappointments')}
-							checked={value.sendToCustomer}
-							onChange={(v) => set('sendToCustomer', v)}
-						/>
-					</PanelRow>
-					<PanelRow>
-						<TextControl
-							label={__(
-								'Additional recipients (comma-separated)',
+				<ToggleControl
+					label={__('Send to customer', 'wpappointments')}
+					checked={value.sendToCustomer}
+					onChange={(v) => set('sendToCustomer', v)}
+				/>
+				<TextControl
+					label={__(
+						'Additional recipients (comma-separated)',
+						'wpappointments'
+					)}
+					value={value.customRecipients}
+					onChange={(v) => set('customRecipients', v)}
+					placeholder="extra@example.com, other@example.com"
+				/>
+			</div>
+
+			{value.sendToAdmin && (
+				<div className={styles.editorSection}>
+					<h3 className={styles.editorSectionTitle}>
+						{__('Admin email', 'wpappointments')}
+					</h3>
+					<TextControl
+						label={__('Subject', 'wpappointments')}
+						help={__(
+							'Leave empty to use the default subject.',
+							'wpappointments'
+						)}
+						value={value.adminSubject}
+						onChange={(v) => set('adminSubject', v)}
+					/>
+					<TextareaControl
+						label={__('Body', 'wpappointments')}
+						help={
+							__(
+								'Leave empty to use the default template. Variables: ',
 								'wpappointments'
-							)}
-							value={value.customRecipients}
-							onChange={(v) => set('customRecipients', v)}
-							placeholder="extra@example.com, other@example.com"
-						/>
-					</PanelRow>
-					<PanelRow>
-						<TextControl
-							label={__('Custom subject', 'wpappointments')}
-							help={__(
-								'Leave empty to use the default subject.',
-								'wpappointments'
-							)}
-							value={value.subject}
-							onChange={(v) => set('subject', v)}
-						/>
-					</PanelRow>
-					<PanelRow>
-						<TextareaControl
-							label={__('Custom email body', 'wpappointments')}
-							help={
-								__(
-									'Leave empty to use the default body. Available variables: ',
-									'wpappointments'
-								) + TEMPLATE_VARS
-							}
-							value={value.body}
-							onChange={(v) => set('body', v)}
-							rows={6}
-						/>
-					</PanelRow>
-				</>
+							) + TEMPLATE_VARS
+						}
+						value={value.adminBody}
+						onChange={(v) => set('adminBody', v)}
+						rows={8}
+					/>
+				</div>
 			)}
-		</PanelBody>
+
+			{value.sendToCustomer && (
+				<div className={styles.editorSection}>
+					<h3 className={styles.editorSectionTitle}>
+						{__('Customer email', 'wpappointments')}
+					</h3>
+					<TextControl
+						label={__('Subject', 'wpappointments')}
+						help={__(
+							'Leave empty to use the default subject.',
+							'wpappointments'
+						)}
+						value={value.customerSubject}
+						onChange={(v) => set('customerSubject', v)}
+					/>
+					<TextareaControl
+						label={__('Body', 'wpappointments')}
+						help={
+							__(
+								'Leave empty to use the default template. Variables: ',
+								'wpappointments'
+							) + TEMPLATE_VARS
+						}
+						value={value.customerBody}
+						onChange={(v) => set('customerBody', v)}
+						rows={8}
+					/>
+				</div>
+			)}
+		</div>
 	);
 }
 
 export default function NotificationsSettings() {
 	const dispatch = useDispatch(store);
+	const { openSlideOut } = useSlideout();
 
 	const savedSettings = useSelect(() => {
 		return select(store).getNotificationsSettings();
@@ -142,40 +249,71 @@ export default function NotificationsSettings() {
 		Partial<SettingsNotifications>
 	>({});
 
-	const merged = {
-		created: {
-			...DEFAULT_EVENT,
-			...savedSettings?.created,
-			...localSettings?.created,
-		},
-		updated: {
-			...DEFAULT_EVENT,
-			...savedSettings?.updated,
-			...localSettings?.updated,
-		},
-		confirmed: {
-			...DEFAULT_EVENT,
-			...savedSettings?.confirmed,
-			...localSettings?.confirmed,
-		},
-		cancelled: {
-			...DEFAULT_EVENT,
-			...savedSettings?.cancelled,
-			...localSettings?.cancelled,
-		},
-	} as SettingsNotifications;
+	const getMerged = () =>
+		({
+			created: {
+				...DEFAULT_EVENT,
+				...savedSettings?.created,
+				...localSettings?.created,
+			},
+			updated: {
+				...DEFAULT_EVENT,
+				...savedSettings?.updated,
+				...localSettings?.updated,
+			},
+			confirmed: {
+				...DEFAULT_EVENT,
+				...savedSettings?.confirmed,
+				...localSettings?.confirmed,
+			},
+			cancelled: {
+				...DEFAULT_EVENT,
+				...savedSettings?.cancelled,
+				...localSettings?.cancelled,
+			},
+		}) as SettingsNotifications;
+
+	const merged = getMerged();
+
+	const handleToggle = (key: NotificationEventKey) => (enabled: boolean) => {
+		setLocalSettings((prev) => ({
+			...prev,
+			[key]: { ...merged[key], ...prev?.[key], enabled },
+		}));
+	};
 
 	const handleChange =
-		(key: keyof SettingsNotifications) => (val: NotificationEvent) => {
+		(key: NotificationEventKey) => (val: NotificationEvent) => {
 			setLocalSettings((prev) => ({ ...prev, [key]: val }));
 		};
 
+	const handleEdit = (key: NotificationEventKey) => () => {
+		const meta = EVENT_META[key];
+
+		openSlideOut({
+			id: `notification-${key}`,
+			title: meta.title,
+			content: (
+				<NotificationEditorWrapper
+					eventKey={key}
+					getSettings={() => ({
+						...DEFAULT_EVENT,
+						...savedSettings?.[key],
+						...localSettings?.[key],
+					})}
+					onChange={handleChange(key)}
+				/>
+			),
+		});
+	};
+
 	const onSave = async () => {
+		const current = getMerged();
 		const [error, response] = await resolve<Response>(async () => {
 			return await apiFetch<Response>({
 				path: 'settings/notifications',
 				method: 'PATCH',
-				data: merged,
+				data: current,
 			});
 		});
 
@@ -190,7 +328,7 @@ export default function NotificationsSettings() {
 		}
 
 		if (response.message) {
-			dispatch.setPluginSettings({ notifications: merged });
+			dispatch.setPluginSettings({ notifications: current });
 			setLocalSettings({});
 			displaySuccessToast(response.message);
 		}
@@ -204,18 +342,19 @@ export default function NotificationsSettings() {
 				</Text>
 			</CardHeader>
 			<CardBody style={{ padding: 0 }}>
-				{(
-					Object.keys(EVENT_LABELS) as Array<
-						keyof SettingsNotifications
-					>
-				).map((key) => (
-					<EventPanel
-						key={key}
-						label={EVENT_LABELS[key]}
-						value={merged[key]}
-						onChange={handleChange(key)}
-					/>
-				))}
+				<div className={styles.notificationList}>
+					{(Object.keys(EVENT_META) as NotificationEventKey[]).map(
+						(key) => (
+							<NotificationRow
+								key={key}
+								eventKey={key}
+								value={merged[key]}
+								onToggle={handleToggle(key)}
+								onEdit={handleEdit(key)}
+							/>
+						)
+					)}
+				</div>
 			</CardBody>
 			<CardFooter>
 				<Button variant="primary" onClick={onSave}>
@@ -223,5 +362,30 @@ export default function NotificationsSettings() {
 				</Button>
 			</CardFooter>
 		</Card>
+	);
+}
+
+function NotificationEditorWrapper({
+	eventKey,
+	getSettings,
+	onChange,
+}: {
+	eventKey: NotificationEventKey;
+	getSettings: () => NotificationEvent;
+	onChange: (val: NotificationEvent) => void;
+}) {
+	const [local, setLocal] = useState<NotificationEvent>(getSettings());
+
+	const handleChange = (updated: NotificationEvent) => {
+		setLocal(updated);
+		onChange(updated);
+	};
+
+	return (
+		<NotificationEditor
+			eventKey={eventKey}
+			value={local}
+			onChange={handleChange}
+		/>
 	);
 }
