@@ -52,30 +52,19 @@ test.describe('Admin Appointments', () => {
 		await goToAdminPage(page, 'wpappointments');
 
 		// Wait for React to render
-		await page.waitForTimeout(1500);
+		await page.waitForTimeout(2000);
 
-		// Look for the create appointment button
+		// Find and click the create button
 		const createButton = page.locator(
 			'button:has-text("New Appointment"), button:has-text("Create"), button:has-text("Add")'
 		);
+		await expect(createButton.first()).toBeVisible({ timeout: 5000 });
+		await createButton.first().click();
+		await page.waitForTimeout(500);
+		await screenshot(page, 'admin-create-appointment-slideout');
 
-		if (
-			await createButton
-				.first()
-				.isVisible({ timeout: 3000 })
-				.catch(() => false)
-		) {
-			await createButton.first().click();
-			await page.waitForTimeout(500);
-			await screenshot(page, 'admin-create-appointment-slideout');
-
-			// Verify slideout opened
-			const slideout = page.locator('[role="dialog"]');
-			if (
-				await slideout.isVisible({ timeout: 2000 }).catch(() => false)
-			) {
-				await expect(slideout).toBeVisible();
-			}
-		}
+		// Verify slideout opened
+		const slideout = page.locator('[role="dialog"]');
+		await expect(slideout).toBeVisible({ timeout: 3000 });
 	});
 });
