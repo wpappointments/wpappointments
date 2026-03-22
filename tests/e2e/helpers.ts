@@ -98,12 +98,18 @@ export async function createBookingPage(page: Page): Promise<string> {
 
 	// Get the published page URL
 	const viewLink = page.locator('a:has-text("View Page")');
-	if (await viewLink.isVisible({ timeout: 3000 }).catch(() => false)) {
-		const href = await viewLink.getAttribute('href');
-		return href || `${BASE_URL}/?page_id=999`;
+	if (!(await viewLink.isVisible({ timeout: 5000 }).catch(() => false))) {
+		throw new Error(
+			`Could not find "View Page" link after publishing at ${BASE_URL}. Page may not have been created successfully.`
+		);
 	}
 
-	return `${BASE_URL}/?p=999`;
+	const href = await viewLink.getAttribute('href');
+	if (!href) {
+		throw new Error('View Page link found but has no href attribute.');
+	}
+
+	return href;
 }
 
 /**
