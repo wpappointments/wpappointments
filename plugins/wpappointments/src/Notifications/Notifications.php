@@ -372,7 +372,11 @@ class Notifications extends Singleton {
 	 */
 	private function wrap_html( $content ) {
 		$site_name = esc_html( get_bloginfo( 'name' ) );
-		$content   = nl2br( $content );
+		$is_html   = wp_strip_all_tags( $content ) !== $content;
+
+		if ( ! $is_html ) {
+			$content = nl2br( $content );
+		}
 
 		return '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">'
 		. '<h2 style="color:#174aff;">' . $site_name . '</h2>'
