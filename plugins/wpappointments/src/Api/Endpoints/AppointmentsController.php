@@ -213,6 +213,12 @@ class AppointmentsController extends Controller {
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
+		if ( false === $date ) {
+			return self::error(
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
 		$appointment       = new Appointment(
 			array(
 				'title'    => $service,
@@ -249,6 +255,12 @@ class AppointmentsController extends Controller {
 		$password       = $request->get_param( 'password' );
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
+
+		if ( false === $date ) {
+			return self::error(
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
 
 		$settings = new Settings();
 
@@ -323,7 +335,15 @@ class AppointmentsController extends Controller {
 		$meta = array();
 
 		if ( null !== $date_raw ) {
-			$meta['timestamp'] = rest_parse_date( get_gmt_from_date( sanitize_text_field( $date_raw ) ) );
+			$timestamp = rest_parse_date( get_gmt_from_date( sanitize_text_field( $date_raw ) ) );
+
+			if ( false === $timestamp ) {
+				return self::error(
+					new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
+
+			$meta['timestamp'] = $timestamp;
 		}
 
 		if ( null !== $duration_raw ) {
