@@ -110,6 +110,14 @@ class Settings {
 				'type'    => 'string',
 				'allowed' => array( 'pending', 'confirmed' ),
 			),
+			array(
+				'name' => 'minLeadTime',
+				'type' => 'number',
+			),
+			array(
+				'name' => 'maxLeadTime',
+				'type' => 'number',
+			),
 		),
 		'calendar'      => array(),
 		'schedule'      => array(),

@@ -37,6 +37,8 @@ export type SettingsAppointments = {
 	timePickerPrecision?: number;
 	serviceId?: number;
 	serviceName?: string;
+	minLeadTime?: number;
+	maxLeadTime?: number;
 };
 
 export type Day = keyof SettingsSchedule;

@@ -27,6 +27,8 @@ type Fields = {
 	timePickerPrecision: number;
 	serviceName: string;
 	defaultStatus: 'confirmed' | 'pending';
+	minLeadTime: number;
+	maxLeadTime: number;
 };
 
 type Response = APIResponse<{
@@ -110,6 +112,40 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
+						<Input
+							type="number"
+							name="minLeadTime"
+							label={__(
+								'Minimum lead time (in minutes)',
+								'wpappointments'
+							)}
+							help={__(
+								'Minimum time before an appointment can be booked. E.g. 60 means customers must book at least 1 hour ahead.',
+								'wpappointments'
+							)}
+							placeholder="0"
+							rules={{
+								min: 0,
+							}}
+						/>
+
+						<Input
+							type="number"
+							name="maxLeadTime"
+							label={__(
+								'Maximum lead time (in days)',
+								'wpappointments'
+							)}
+							help={__(
+								'How far in advance appointments can be booked. E.g. 90 means up to 3 months ahead. Leave at 0 for no limit.',
+								'wpappointments'
+							)}
+							placeholder="0"
+							rules={{
+								min: 0,
+							}}
+						/>
+
 						<Select
 							name="defaultStatus"
 							defaultValue={settings.defaultStatus || 'confirmed'}

@@ -105,12 +105,30 @@ class Availability {
 			$booked    = Date::date_range_overlaps_with_any_date_range( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
 
+			$min_lead = (int) get_option( 'wpappointments_appointments_minLeadTime', 0 );
+			$max_lead = (int) get_option( 'wpappointments_appointments_maxLeadTime', 0 );
+
+			$too_soon = false;
+			$too_far  = false;
+
+			if ( $min_lead > 0 ) {
+				$earliest = clone $now;
+				$earliest->add( new \DateInterval( 'PT' . $min_lead . 'M' ) );
+				$too_soon = $slot < $earliest;
+			}
+
+			if ( $max_lead > 0 ) {
+				$latest = clone $now;
+				$latest->add( new \DateInterval( 'P' . $max_lead . 'D' ) );
+				$too_far = $slot > $latest;
+			}
+
 			array_push(
 				$slots,
 				array(
 					'timestamp'  => (int) $slot->format( 'U' ) * 1000,
 					'dateString' => $slot->format( 'c' ),
-					'available'  => $available && ! $is_past && ! $booked,
+					'available'  => $available && ! $is_past && ! $booked && ! $too_soon && ! $too_far,
 					'inSchedule' => $available,
 				)
 			);
