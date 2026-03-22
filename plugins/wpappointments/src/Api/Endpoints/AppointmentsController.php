@@ -300,20 +300,23 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$id           = absint( $request->get_param( 'id' ) );
-		$date         = sanitize_text_field( $request->get_param( 'date' ) );
-		$service      = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration_raw = $request->get_param( 'duration' );
-		$status       = sanitize_text_field( $request->get_param( 'status' ) );
-		$customer     = $request->get_param( 'customer' );
-		$customer_id  = absint( $request->get_param( 'customerId' ) );
+		$id              = absint( $request->get_param( 'id' ) );
+		$date_raw        = $request->get_param( 'date' );
+		$service_raw     = $request->get_param( 'service' );
+		$duration_raw    = $request->get_param( 'duration' );
+		$status_raw      = $request->get_param( 'status' );
+		$customer        = $request->get_param( 'customer' );
+		$customer_id_raw = $request->get_param( 'customerId' );
 
 		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
 
-		if ( $status && ! in_array( $status, $allowed_statuses, true ) ) {
-			return self::error(
-				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
-			);
+		if ( null !== $status_raw ) {
+			$status = sanitize_text_field( $status_raw );
+			if ( ! in_array( $status, $allowed_statuses, true ) ) {
+				return self::error(
+					new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
 		}
 
 		if ( null !== $duration_raw && ( false === filter_var( $duration_raw, FILTER_VALIDATE_INT ) || (int) $duration_raw < 1 ) ) {
@@ -322,19 +325,25 @@ class AppointmentsController extends Controller {
 			);
 		}
 
-		$duration = null !== $duration_raw ? (int) $duration_raw : null;
+		$meta = array();
 
-		$date = rest_parse_date( get_gmt_from_date( $date ) );
-
-		$meta = array(
-			'timestamp'   => $date,
-			'customer_id' => $customer_id,
-			'status'      => $status,
-		);
-
-		if ( null !== $duration ) {
-			$meta['duration'] = $duration;
+		if ( null !== $date_raw ) {
+			$meta['timestamp'] = rest_parse_date( get_gmt_from_date( sanitize_text_field( $date_raw ) ) );
 		}
+
+		if ( null !== $duration_raw ) {
+			$meta['duration'] = (int) $duration_raw;
+		}
+
+		if ( null !== $customer_id_raw ) {
+			$meta['customer_id'] = absint( $customer_id_raw );
+		}
+
+		if ( null !== $status_raw ) {
+			$meta['status'] = $status;
+		}
+
+		$service = null !== $service_raw ? sanitize_text_field( $service_raw ) : null;
 
 		$appointment         = new Appointment( $id );
 		$updated_appointment = $appointment->update(
