@@ -113,10 +113,12 @@ class Settings {
 			array(
 				'name' => 'minLeadTime',
 				'type' => 'number',
+				'min'  => 0,
 			),
 			array(
 				'name' => 'maxLeadTime',
 				'type' => 'number',
+				'min'  => 0,
 			),
 		),
 		'calendar'      => array(),
