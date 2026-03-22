@@ -111,16 +111,12 @@ class Settings {
 				'allowed' => array( 'pending', 'confirmed' ),
 			),
 			array(
-				'name' => 'defaultBufferBefore',
+				'name' => 'minLeadTime',
 				'type' => 'number',
-				'min'  => 0,
-				'max'  => 1440,
 			),
 			array(
-				'name' => 'defaultBufferAfter',
+				'name' => 'maxLeadTime',
 				'type' => 'number',
-				'min'  => 0,
-				'max'  => 1440,
 			),
 		),
 		'calendar'      => array(),

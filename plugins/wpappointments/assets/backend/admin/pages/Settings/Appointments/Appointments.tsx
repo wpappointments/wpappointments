@@ -27,8 +27,8 @@ type Fields = {
 	timePickerPrecision: number;
 	serviceName: string;
 	defaultStatus: 'confirmed' | 'pending';
-	defaultBufferBefore: number;
-	defaultBufferAfter: number;
+	minLeadTime: number;
+	maxLeadTime: number;
 };
 
 type Response = APIResponse<{
@@ -114,37 +114,35 @@ export default withForm(function AppointmentsSettings() {
 						/>
 						<Input
 							type="number"
-							name="defaultBufferBefore"
+							name="minLeadTime"
 							label={__(
-								'Buffer before appointment (in minutes)',
+								'Minimum lead time (in minutes)',
 								'wpappointments'
 							)}
 							help={__(
-								'Preparation time blocked before each appointment. Can be overridden per service.',
+								'Minimum time before an appointment can be booked. E.g. 60 means customers must book at least 1 hour ahead.',
 								'wpappointments'
 							)}
 							placeholder="0"
 							rules={{
 								min: 0,
-								max: 1440,
 							}}
 						/>
 
 						<Input
 							type="number"
-							name="defaultBufferAfter"
+							name="maxLeadTime"
 							label={__(
-								'Buffer after appointment (in minutes)',
+								'Maximum lead time (in days)',
 								'wpappointments'
 							)}
 							help={__(
-								'Cleanup time blocked after each appointment. Can be overridden per service.',
+								'How far in advance appointments can be booked. E.g. 90 means up to 3 months ahead. Leave at 0 for no limit.',
 								'wpappointments'
 							)}
 							placeholder="0"
 							rules={{
 								min: 0,
-								max: 1440,
 							}}
 						/>
 
