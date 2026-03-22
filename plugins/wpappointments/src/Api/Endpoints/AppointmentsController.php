@@ -190,12 +190,12 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function create_appointment( WP_REST_Request $request ) {
-		$date        = sanitize_text_field( $request->get_param( 'date' ) );
-		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = absint( $request->get_param( 'duration' ) );
-		$customer    = $request->get_param( 'customer' );
-		$customer_id = absint( $request->get_param( 'customerId' ) );
-		$status      = sanitize_text_field( $request->get_param( 'status' ) );
+		$date         = sanitize_text_field( $request->get_param( 'date' ) );
+		$service      = sanitize_text_field( $request->get_param( 'service' ) );
+		$duration_raw = $request->get_param( 'duration' );
+		$customer     = $request->get_param( 'customer' );
+		$customer_id  = absint( $request->get_param( 'customerId' ) );
+		$status       = sanitize_text_field( $request->get_param( 'status' ) );
 
 		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
 
@@ -205,11 +205,13 @@ class AppointmentsController extends Controller {
 			);
 		}
 
-		if ( $duration < 1 ) {
+		if ( false === filter_var( $duration_raw, FILTER_VALIDATE_INT ) || (int) $duration_raw < 1 ) {
 			return self::error(
-				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_duration', __( 'Duration must be a positive integer', 'wpappointments' ), array( 'status' => 422 ) )
 			);
 		}
+
+		$duration = (int) $duration_raw;
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
 
@@ -298,13 +300,13 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$id          = absint( $request->get_param( 'id' ) );
-		$date        = sanitize_text_field( $request->get_param( 'date' ) );
-		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = absint( $request->get_param( 'duration' ) );
-		$status      = sanitize_text_field( $request->get_param( 'status' ) );
-		$customer    = $request->get_param( 'customer' );
-		$customer_id = absint( $request->get_param( 'customerId' ) );
+		$id           = absint( $request->get_param( 'id' ) );
+		$date         = sanitize_text_field( $request->get_param( 'date' ) );
+		$service      = sanitize_text_field( $request->get_param( 'service' ) );
+		$duration_raw = $request->get_param( 'duration' );
+		$status       = sanitize_text_field( $request->get_param( 'status' ) );
+		$customer     = $request->get_param( 'customer' );
+		$customer_id  = absint( $request->get_param( 'customerId' ) );
 
 		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
 
@@ -314,25 +316,32 @@ class AppointmentsController extends Controller {
 			);
 		}
 
-		if ( null !== $request->get_param( 'duration' ) && $duration < 1 ) {
+		if ( null !== $duration_raw && ( false === filter_var( $duration_raw, FILTER_VALIDATE_INT ) || (int) $duration_raw < 1 ) ) {
 			return self::error(
-				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_duration', __( 'Duration must be a positive integer', 'wpappointments' ), array( 'status' => 422 ) )
 			);
 		}
 
+		$duration = null !== $duration_raw ? (int) $duration_raw : null;
+
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
+
+		$meta = array(
+			'timestamp'   => $date,
+			'customer_id' => $customer_id,
+			'status'      => $status,
+		);
+
+		if ( null !== $duration ) {
+			$meta['duration'] = $duration;
+		}
 
 		$appointment         = new Appointment( $id );
 		$updated_appointment = $appointment->update(
 			array(
 				'title'    => $service,
 				'customer' => $customer,
-				'meta'     => array(
-					'timestamp'   => $date,
-					'duration'    => $duration,
-					'customer_id' => $customer_id,
-					'status'      => $status,
-				),
+				'meta'     => $meta,
 			)
 		);
 
