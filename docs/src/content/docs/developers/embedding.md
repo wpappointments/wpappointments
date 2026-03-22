@@ -69,7 +69,5 @@ The template tag uses **camelCase** attribute keys (matching the JS/block API), 
 
 ## Filters
 
-Both the shortcode and template tag apply the same filters as the Gutenberg block:
-
-- **`wpappointments_booking_flow_attributes`** — Modify attributes before rendering.
-- **`wpappointments_booking_flow_output`** — Modify the final HTML output (Gutenberg block only).
+- **`wpappointments_booking_flow_attributes`** — Modify attributes before rendering. Applied by the Gutenberg block, shortcode, and template tag.
+- **`wpappointments_booking_flow_output`** — Modify the final HTML output. Applied by the Gutenberg block only (not the shortcode or template tag).
