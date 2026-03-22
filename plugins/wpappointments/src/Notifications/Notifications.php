@@ -169,6 +169,7 @@ class Notifications extends Singleton {
 
 		if ( $config['sendToAdmin'] ) {
 			$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
+			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 			$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
 			$this->send_to_admin( $subject, $body );
 			$recipients[] = 'admin';
@@ -176,6 +177,7 @@ class Notifications extends Singleton {
 
 		if ( $config['sendToCustomer'] ) {
 			$subject = $config['customerSubject'] ? $config['customerSubject'] : $event_def['customerSubject'];
+			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 			$body    = $this->resolve_body( $config['customerBody'], $event_def['customerTemplate'], $appointment, $old_appointment );
 			$this->send_to_customer( $appointment, $subject, $body );
 			$recipients[] = 'customer';
@@ -186,6 +188,7 @@ class Notifications extends Singleton {
 		foreach ( $custom_recipients as $recipient ) {
 			if ( is_email( $recipient ) ) {
 				$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
+				$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 				$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
 				$this->send( $recipient, $subject, $body );
 				$recipients[] = $recipient;
@@ -206,6 +209,21 @@ class Notifications extends Singleton {
 		 * @param array|null $old_appointment Previous appointment data.
 		 */
 		do_action( 'wpappointments_after_notification', $event, $appointment, $recipients, $config, $old_appointment );
+	}
+
+	/**
+	 * Interpolate merge tags in a subject line and sanitize for plain text
+	 *
+	 * @param string     $subject          Subject string with optional {variable} placeholders.
+	 * @param array      $appointment      Normalized appointment data.
+	 * @param array|null $old_appointment  Previous appointment data.
+	 *
+	 * @return string Plain-text subject.
+	 */
+	private function resolve_subject( $subject, $appointment, $old_appointment = null ) {
+		$resolved = $this->interpolate( $subject, $appointment, $old_appointment );
+
+		return wp_specialchars_decode( wp_strip_all_tags( $resolved ), ENT_QUOTES );
 	}
 
 	/**
