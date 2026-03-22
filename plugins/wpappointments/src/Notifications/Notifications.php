@@ -244,23 +244,28 @@ class Notifications extends Singleton {
 	private function resolve_body( $custom_body, $template_name, $appointment, $old_appointment = null ) {
 		if ( ! empty( $custom_body ) ) {
 			$interpolated = $this->interpolate( $custom_body, $appointment, $old_appointment );
-
-			return $this->wrap_html( $interpolated );
-		}
-
-		$template_path = PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html';
-
-		if ( file_exists( $template_path ) ) {
+			$message      = $this->wrap_html( $interpolated );
+		} elseif ( file_exists( PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html' ) ) {
 			ob_start();
-			require $template_path;
+			require PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html';
 			$template = ob_get_clean();
 
 			$interpolated = $this->interpolate( $template, $appointment, $old_appointment );
-
-			return $this->wrap_html( $interpolated );
+			$message      = $this->wrap_html( $interpolated );
+		} else {
+			$message = $this->build_fallback_message( $appointment );
 		}
 
-		return $this->build_fallback_message( $appointment );
+		/**
+		 * Filters the email message body for WP Appointments notifications.
+		 *
+		 * Applied to all notification bodies — custom, template, and fallback.
+		 *
+		 * @param string     $message         HTML email body.
+		 * @param array      $appointment     Normalized appointment data.
+		 * @param array|null $old_appointment Previous appointment data.
+		 */
+		return apply_filters( 'wpappointments_notification_message', $message, $appointment, $old_appointment );
 	}
 
 	/**
@@ -414,13 +419,7 @@ class Notifications extends Singleton {
 		$message .= '</table>';
 		$message .= '</body></html>';
 
-		/**
-		 * Filters the email message body for WP Appointments notifications.
-		 *
-		 * @param string $message     HTML email body.
-		 * @param array  $appointment Normalized appointment data.
-		 */
-		return apply_filters( 'wpappointments_notification_message', $message, $appointment );
+		return $message;
 	}
 
 	/**
