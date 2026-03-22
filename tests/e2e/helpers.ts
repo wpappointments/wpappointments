@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import path from 'path';
 
 const BASE_URL = 'http://localhost:8888';
 const ADMIN_USER = 'admin';
@@ -109,8 +110,9 @@ export async function createBookingPage(page: Page): Promise<string> {
  * Take a named screenshot and save to results directory
  */
 export async function screenshot(page: Page, name: string) {
+	const screenshotDir = path.resolve(__dirname, 'results', 'screenshots');
 	await page.screenshot({
-		path: `tests/e2e/results/screenshots/${name}.png`,
+		path: path.join(screenshotDir, `${name}.png`),
 		fullPage: false,
 	});
 }
