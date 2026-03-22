@@ -141,8 +141,9 @@ class BookableAvailabilityController extends Controller {
 		$model     = new BookableVariant( $variant_post );
 		$normalize = $model->normalize();
 
-		$before = ( $normalize['bufferBefore'] ?? 0 ) > 0 ? (int) $normalize['bufferBefore'] : $global_before;
-		$after  = ( $normalize['bufferAfter'] ?? 0 ) > 0 ? (int) $normalize['bufferAfter'] : $global_after;
+		$overrides = $normalize['overrides'] ?? array();
+		$before    = in_array( 'buffer_before', $overrides, true ) ? (int) $normalize['bufferBefore'] : $global_before;
+		$after     = in_array( 'buffer_after', $overrides, true ) ? (int) $normalize['bufferAfter'] : $global_after;
 
 		return array(
 			'before' => $before,
