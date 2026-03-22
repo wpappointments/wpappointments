@@ -17,44 +17,11 @@ use WPAppointments\Data\Model\Settings;
  */
 class Notifications extends Singleton {
 	/**
-	 * Notification event definitions — title, description, default subjects, template files
+	 * Cached event definitions (built lazily via get_events()).
 	 *
-	 * @var array
+	 * @var array|null
 	 */
-	private static $events = array(
-		'created'   => array(
-			'title'            => 'Appointment Created',
-			'description'      => 'Sent when a new appointment is booked.',
-			'adminSubject'     => 'New appointment booked',
-			'customerSubject'  => 'Your appointment has been booked',
-			'adminTemplate'    => 'appointment-created-admin',
-			'customerTemplate' => 'appointment-created-customer',
-		),
-		'updated'   => array(
-			'title'            => 'Appointment Updated',
-			'description'      => 'Sent when an existing appointment is modified.',
-			'adminSubject'     => 'Appointment updated',
-			'customerSubject'  => 'Your appointment has been updated',
-			'adminTemplate'    => 'appointment-updated-admin',
-			'customerTemplate' => 'appointment-updated-customer',
-		),
-		'confirmed' => array(
-			'title'            => 'Appointment Confirmed',
-			'description'      => 'Sent when an appointment is confirmed.',
-			'adminSubject'     => 'Appointment confirmed',
-			'customerSubject'  => 'Your appointment is confirmed',
-			'adminTemplate'    => 'appointment-confirmed-admin',
-			'customerTemplate' => 'appointment-confirmed-customer',
-		),
-		'cancelled' => array(
-			'title'            => 'Appointment Cancelled',
-			'description'      => 'Sent when an appointment is cancelled.',
-			'adminSubject'     => 'Appointment cancelled',
-			'customerSubject'  => 'Your appointment has been cancelled',
-			'adminTemplate'    => 'appointment-cancelled-admin',
-			'customerTemplate' => 'appointment-cancelled-customer',
-		),
-	);
+	private static $events = null;
 
 	/**
 	 * Register notification hooks
@@ -67,12 +34,60 @@ class Notifications extends Singleton {
 	}
 
 	/**
+	 * Get event definitions with localized strings
+	 *
+	 * Built lazily so __() runs after load_textdomain().
+	 *
+	 * @return array
+	 */
+	public static function get_events() {
+		if ( null === self::$events ) {
+			self::$events = array(
+				'created'   => array(
+					'title'            => __( 'Appointment Created', 'wpappointments' ),
+					'description'      => __( 'Sent when a new appointment is booked.', 'wpappointments' ),
+					'adminSubject'     => __( 'New appointment booked', 'wpappointments' ),
+					'customerSubject'  => __( 'Your appointment has been booked', 'wpappointments' ),
+					'adminTemplate'    => 'appointment-created-admin',
+					'customerTemplate' => 'appointment-created-customer',
+				),
+				'updated'   => array(
+					'title'            => __( 'Appointment Updated', 'wpappointments' ),
+					'description'      => __( 'Sent when an existing appointment is modified.', 'wpappointments' ),
+					'adminSubject'     => __( 'Appointment updated', 'wpappointments' ),
+					'customerSubject'  => __( 'Your appointment has been updated', 'wpappointments' ),
+					'adminTemplate'    => 'appointment-updated-admin',
+					'customerTemplate' => 'appointment-updated-customer',
+				),
+				'confirmed' => array(
+					'title'            => __( 'Appointment Confirmed', 'wpappointments' ),
+					'description'      => __( 'Sent when an appointment is confirmed.', 'wpappointments' ),
+					'adminSubject'     => __( 'Appointment confirmed', 'wpappointments' ),
+					'customerSubject'  => __( 'Your appointment is confirmed', 'wpappointments' ),
+					'adminTemplate'    => 'appointment-confirmed-admin',
+					'customerTemplate' => 'appointment-confirmed-customer',
+				),
+				'cancelled' => array(
+					'title'            => __( 'Appointment Cancelled', 'wpappointments' ),
+					'description'      => __( 'Sent when an appointment is cancelled.', 'wpappointments' ),
+					'adminSubject'     => __( 'Appointment cancelled', 'wpappointments' ),
+					'customerSubject'  => __( 'Your appointment has been cancelled', 'wpappointments' ),
+					'adminTemplate'    => 'appointment-cancelled-admin',
+					'customerTemplate' => 'appointment-cancelled-customer',
+				),
+			);
+		}
+
+		return self::$events;
+	}
+
+	/**
 	 * Get event definitions for the frontend (title, description, defaults)
 	 *
 	 * @return array
 	 */
 	public static function get_event_definitions() {
-		return self::$events;
+		return self::get_events();
 	}
 
 	/**
@@ -132,7 +147,7 @@ class Notifications extends Singleton {
 	 */
 	private function dispatch( $event, $appointment, $old_appointment = null ) {
 		$config     = $this->get_event_config( $event );
-		$event_def  = self::$events[ $event ];
+		$event_def  = self::get_events()[ $event ];
 		$recipients = array();
 
 		if ( ! $config['enabled'] ) {
