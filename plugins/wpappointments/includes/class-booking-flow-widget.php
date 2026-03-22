@@ -71,10 +71,12 @@ class Booking_Flow_Widget extends \WP_Widget {
 	 * @return void
 	 */
 	public function form( $instance ) {
-		$title     = $instance['title'] ?? '';
-		$flow_type = $instance['flow_type'] ?? 'OneStep';
-		$alignment = $instance['alignment'] ?? 'Left';
-		$width     = $instance['width'] ?? 'Narrow';
+		$title            = $instance['title'] ?? '';
+		$flow_type        = $instance['flow_type'] ?? 'OneStep';
+		$alignment        = $instance['alignment'] ?? 'Left';
+		$width            = $instance['width'] ?? 'Narrow';
+		$trim_unavailable = ! empty( $instance['trim_unavailable'] );
+		$slots_as_buttons = ! empty( $instance['slots_as_buttons'] );
 		?>
 		<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
@@ -141,6 +143,30 @@ class Booking_Flow_Widget extends \WP_Widget {
 		<?php esc_html_e( 'Full', 'wpappointments' ); ?>
 			</option>
 		</select>
+		</p>
+		<p>
+		<input
+			type="checkbox"
+			id="<?php echo esc_attr( $this->get_field_id( 'trim_unavailable' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'trim_unavailable' ) ); ?>"
+			value="1"
+		<?php checked( $trim_unavailable ); ?>
+		/>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'trim_unavailable' ) ); ?>">
+		<?php esc_html_e( 'Trim unavailable slots', 'wpappointments' ); ?>
+		</label>
+		</p>
+		<p>
+		<input
+			type="checkbox"
+			id="<?php echo esc_attr( $this->get_field_id( 'slots_as_buttons' ) ); ?>"
+			name="<?php echo esc_attr( $this->get_field_name( 'slots_as_buttons' ) ); ?>"
+			value="1"
+		<?php checked( $slots_as_buttons ); ?>
+		/>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'slots_as_buttons' ) ); ?>">
+		<?php esc_html_e( 'Show time slots as buttons', 'wpappointments' ); ?>
+		</label>
 		</p>
 		<?php
 	}
