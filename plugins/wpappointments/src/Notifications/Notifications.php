@@ -171,16 +171,19 @@ class Notifications extends Singleton {
 			$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
 			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 			$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
-			$this->send_to_admin( $subject, $body );
-			$recipients[] = 'admin';
+			if ( $this->send_to_admin( $subject, $body ) ) {
+				$recipients[] = 'admin';
+			}
 		}
 
 		if ( $config['sendToCustomer'] ) {
 			$subject = $config['customerSubject'] ? $config['customerSubject'] : $event_def['customerSubject'];
 			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 			$body    = $this->resolve_body( $config['customerBody'], $event_def['customerTemplate'], $appointment, $old_appointment );
-			$this->send_to_customer( $appointment, $subject, $body );
-			$recipients[] = 'customer';
+
+			if ( $this->send_to_customer( $appointment, $subject, $body ) ) {
+				$recipients[] = 'customer';
+			}
 		}
 
 		$custom_recipients = array_filter( array_map( 'trim', explode( ',', $config['customRecipients'] ) ) );
@@ -190,8 +193,10 @@ class Notifications extends Singleton {
 				$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
 				$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
 				$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
-				$this->send( $recipient, $subject, $body );
-				$recipients[] = $recipient;
+
+				if ( $this->send( $recipient, $subject, $body ) ) {
+					$recipients[] = $recipient;
+				}
 			}
 		}
 
@@ -439,17 +444,17 @@ class Notifications extends Singleton {
 	 * @param string $subject Email subject.
 	 * @param string $message Email message (HTML).
 	 *
-	 * @return void
+	 * @return bool Whether the email was sent successfully.
 	 */
 	private function send_to_admin( $subject, $message ) {
 		$plugin_email = get_option( 'wpappointments_general_email' );
 		$admin_email  = $plugin_email ? $plugin_email : get_option( 'admin_email' );
 
 		if ( ! $admin_email ) {
-			return;
+			return false;
 		}
 
-		$this->send( $admin_email, $subject, $message );
+		return $this->send( $admin_email, $subject, $message );
 	}
 
 	/**
@@ -459,16 +464,16 @@ class Notifications extends Singleton {
 	 * @param string $subject     Email subject.
 	 * @param string $message     Email message (HTML).
 	 *
-	 * @return void
+	 * @return bool Whether the email was sent successfully.
 	 */
 	private function send_to_customer( $appointment, $subject, $message ) {
 		$customer_email = $this->get_customer_email( $appointment );
 
 		if ( ! $customer_email ) {
-			return;
+			return false;
 		}
 
-		$this->send( $customer_email, $subject, $message );
+		return $this->send( $customer_email, $subject, $message );
 	}
 
 	/**
@@ -478,7 +483,7 @@ class Notifications extends Singleton {
 	 * @param string $subject Email subject.
 	 * @param string $message Email message (HTML).
 	 *
-	 * @return void
+	 * @return bool Whether the email was sent successfully.
 	 */
 	private function send( $to, $subject, $message ) {
 		$site_name = get_bloginfo( 'name' );
@@ -505,7 +510,7 @@ class Notifications extends Singleton {
 			$subject
 		);
 
-		wp_mail( $to, $full_subject, $message, $headers );
+		return wp_mail( $to, $full_subject, $message, $headers );
 	}
 
 	/**
