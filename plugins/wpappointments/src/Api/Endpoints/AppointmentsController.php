@@ -192,12 +192,32 @@ class AppointmentsController extends Controller {
 	public static function create_appointment( WP_REST_Request $request ) {
 		$date        = sanitize_text_field( $request->get_param( 'date' ) );
 		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = (int) $request->get_param( 'duration' );
-		$customer    = $request->get_param( 'customer' );
+		$duration    = absint( $request->get_param( 'duration' ) );
+		$customer    = self::sanitize_customer( $request->get_param( 'customer' ) );
 		$customer_id = absint( $request->get_param( 'customerId' ) );
 		$status      = sanitize_text_field( $request->get_param( 'status' ) );
 
+		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
+
+		if ( ! in_array( $status, $allowed_statuses, true ) ) {
+			return self::error(
+				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
+		if ( $duration < 1 ) {
+			return self::error(
+				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
+
+		if ( false === $date ) {
+			return self::error(
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
 
 		$appointment       = new Appointment(
 			array(
@@ -230,20 +250,27 @@ class AppointmentsController extends Controller {
 	 */
 	public static function create_appointment_public( WP_REST_Request $request ) {
 		$date           = sanitize_text_field( $request->get_param( 'date' ) );
-		$customer       = $request->get_param( 'customer' );
-		$create_account = (bool) $request->get_param( 'createAccount' );
+		$customer       = self::sanitize_customer( $request->get_param( 'customer' ) );
+		$create_account = rest_sanitize_boolean( $request->get_param( 'createAccount' ) );
 		$password       = $request->get_param( 'password' );
 
 		$date = rest_parse_date( get_gmt_from_date( $date ) );
+
+		if ( false === $date ) {
+			return self::error(
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
 
 		$settings = new Settings();
 
 		$default_duration = $settings->get_setting( 'appointments', 'defaultLength' );
 		$duration         = $default_duration ? $default_duration : 60;
 
-		$default_status  = $settings->get_setting( 'appointments', 'defaultStatus' );
-		$status          = $default_status ? $default_status : 'confirmed';
-		$default_service = $settings->get_default_service();
+		$default_status   = $settings->get_setting( 'appointments', 'defaultStatus' );
+		$allowed_statuses = array( 'pending', 'confirmed' );
+		$status           = in_array( $default_status, $allowed_statuses, true ) ? $default_status : 'confirmed';
+		$default_service  = $settings->get_default_service();
 
 		$appointment       = new Appointment(
 			array(
@@ -277,27 +304,68 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_appointment( WP_REST_Request $request ) {
-		$id          = absint( $request->get_param( 'id' ) );
-		$date        = sanitize_text_field( $request->get_param( 'date' ) );
-		$service     = sanitize_text_field( $request->get_param( 'service' ) );
-		$duration    = (int) $request->get_param( 'duration' );
-		$status      = sanitize_text_field( $request->get_param( 'status' ) );
-		$customer    = $request->get_param( 'customer' );
-		$customer_id = absint( $request->get_param( 'customerId' ) );
+		$id              = absint( $request->get_param( 'id' ) );
+		$date_raw        = $request->get_param( 'date' );
+		$service_raw     = $request->get_param( 'service' );
+		$duration_raw    = $request->get_param( 'duration' );
+		$status_raw      = $request->get_param( 'status' );
+		$customer        = self::sanitize_customer( $request->get_param( 'customer' ) );
+		$customer_id_raw = $request->get_param( 'customerId' );
 
-		$date = rest_parse_date( get_gmt_from_date( $date ) );
+		$allowed_statuses = array( 'pending', 'confirmed', 'cancelled' );
+
+		if ( null !== $status_raw ) {
+			$status = sanitize_text_field( $status_raw );
+			if ( ! in_array( $status, $allowed_statuses, true ) ) {
+				return self::error(
+					new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
+		}
+
+		if ( null !== $duration_raw ) {
+			$duration = absint( $duration_raw );
+			if ( $duration < 1 ) {
+				return self::error(
+					new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
+		}
+
+		$meta = array();
+
+		if ( null !== $date_raw ) {
+			$timestamp = rest_parse_date( get_gmt_from_date( sanitize_text_field( $date_raw ) ) );
+
+			if ( false === $timestamp ) {
+				return self::error(
+					new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+				);
+			}
+
+			$meta['timestamp'] = $timestamp;
+		}
+
+		if ( null !== $duration_raw ) {
+			$meta['duration'] = $duration;
+		}
+
+		if ( null !== $customer_id_raw ) {
+			$meta['customer_id'] = absint( $customer_id_raw );
+		}
+
+		if ( null !== $status_raw ) {
+			$meta['status'] = $status;
+		}
+
+		$service = null !== $service_raw ? sanitize_text_field( $service_raw ) : null;
 
 		$appointment         = new Appointment( $id );
 		$updated_appointment = $appointment->update(
 			array(
 				'title'    => $service,
 				'customer' => $customer,
-				'meta'     => array(
-					'timestamp'   => $date,
-					'duration'    => $duration,
-					'customer_id' => $customer_id,
-					'status'      => $status,
-				),
+				'meta'     => $meta,
 			)
 		);
 
@@ -321,7 +389,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function cancel_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$cancelled        = $appointment_post->cancel();
@@ -346,7 +414,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function delete_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$deleted          = $appointment_post->delete();
@@ -371,7 +439,7 @@ class AppointmentsController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function confirm_appointment( WP_REST_Request $request ) {
-		$id = $request->get_param( 'id' );
+		$id = absint( $request->get_param( 'id' ) );
 
 		$appointment_post = new Appointment( $id );
 		$confirmed        = $appointment_post->confirm();
@@ -385,6 +453,32 @@ class AppointmentsController extends Controller {
 			array(
 				'appointmentId' => $confirmed,
 			),
+		);
+	}
+
+	/**
+	 * Default normalizer
+	 *
+	 * @param WP_Post $appointment Appointment post object.
+	 *
+	 * @return array
+	 */
+	/**
+	 * Sanitize customer array from request input.
+	 *
+	 * @param mixed $raw_customer Raw customer parameter.
+	 *
+	 * @return array|null Sanitized customer array or null.
+	 */
+	private static function sanitize_customer( $raw_customer ) {
+		if ( ! is_array( $raw_customer ) ) {
+			return null;
+		}
+
+		return array(
+			'name'  => sanitize_text_field( is_string( $raw_customer['name'] ?? '' ) ? $raw_customer['name'] : '' ),
+			'email' => sanitize_email( is_string( $raw_customer['email'] ?? '' ) ? $raw_customer['email'] : '' ),
+			'phone' => sanitize_text_field( is_string( $raw_customer['phone'] ?? '' ) ? $raw_customer['phone'] : '' ),
 		);
 	}
 

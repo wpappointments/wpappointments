@@ -176,8 +176,12 @@ class CustomersController extends Controller {
 	 * @return \WP_REST_Response
 	 */
 	public static function delete( WP_REST_Request $request ) {
-		$customer = new Customer( $request->get_param( 'id' ) );
+		$customer = new Customer( absint( $request->get_param( 'id' ) ) );
 		$deleted  = $customer->delete();
+
+		if ( is_wp_error( $deleted ) ) {
+			return self::error( $deleted );
+		}
 
 		return self::response(
 			__( 'Customer deleted successfully', 'wpappointments' ),

@@ -159,7 +159,7 @@ class ServiceCategoriesController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function update_category( WP_REST_Request $request ) {
-		$id       = (int) $request->get_param( 'id' );
+		$id       = absint( $request->get_param( 'id' ) );
 		$data     = $request->get_json_params();
 		$name     = sanitize_text_field( $data['name'] ?? '' );
 		$taxonomy = PluginInfo::TAXONOMIES['service-category'];
@@ -203,7 +203,7 @@ class ServiceCategoriesController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function delete_category( WP_REST_Request $request ) {
-		$id       = (int) $request->get_param( 'id' );
+		$id       = absint( $request->get_param( 'id' ) );
 		$taxonomy = PluginInfo::TAXONOMIES['service-category'];
 
 		$result = wp_delete_term( $id, $taxonomy );

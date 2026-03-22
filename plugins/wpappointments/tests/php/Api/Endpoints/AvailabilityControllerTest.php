@@ -250,7 +250,7 @@ test(
 		// Log in as admin.
 		wp_set_current_user( 1 );
 
-		// Make request.
+		// Make request — absint() converts non-numeric to 0, treated as missing.
 		$results = $this->do_rest_get_request(
 			'availability',
 			array(
@@ -261,7 +261,7 @@ test(
 		);
 
 		// Assert response data.
-		expect( $results )->toBeError( 422, 'year_not_numeric' );
+		expect( $results )->toBeError( 422, 'missing_year' );
 	}
 );
 
@@ -271,7 +271,7 @@ test(
 		// Log in as admin.
 		wp_set_current_user( 1 );
 
-		// Make request.
+		// Make request — absint() converts non-numeric to 0, treated as missing.
 		$results = $this->do_rest_get_request(
 			'availability',
 			array(
@@ -282,7 +282,7 @@ test(
 		);
 
 		// Assert response data.
-		expect( $results )->toBeError( 422, 'invalid_month' );
+		expect( $results )->toBeError( 422, 'missing_month' );
 	}
 );
 

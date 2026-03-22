@@ -56,16 +56,20 @@ class AvailabilityController extends Controller {
 	 * @return WP_REST_Response
 	 */
 	public static function availability( WP_REST_Request $request ) {
-		$month    = $request->get_param( 'currentMonth' );
-		$year     = $request->get_param( 'currentYear' );
+		$month    = absint( $request->get_param( 'currentMonth' ) );
+		$year     = absint( $request->get_param( 'currentYear' ) );
 		$timezone = sanitize_text_field( (string) $request->get_param( 'timezone' ) );
 
-		if ( is_numeric( $month ) ) {
-			$month = (int) $month;
+		if ( $month > 12 ) {
+			return self::error(
+				new \WP_Error( 'invalid_month', __( 'Month must be between 1 and 12', 'wpappointments' ), array( 'status' => 422 ) )
+			);
 		}
 
-		if ( is_numeric( $year ) ) {
-			$year = (int) $year;
+		if ( $year > 2100 ) {
+			return self::error(
+				new \WP_Error( 'invalid_year', __( 'Year must be between 1970 and 2100', 'wpappointments' ), array( 'status' => 422 ) )
+			);
 		}
 
 		$availability = Availability::get_month_days_availability(
