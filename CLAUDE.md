@@ -116,6 +116,10 @@ The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/
 - Frontend state management via `@wordpress/data` Redux stores (not plain React state)
 - Custom capabilities: `wpa_manage_appointments`, etc.
 
+### WordPress Plugin Coding Rules
+
+**All PHP code MUST follow the rules in [`.claude/WP_CODING_RULES.md`](.claude/WP_CODING_RULES.md).** This covers input sanitization, output escaping, database safety, nonces, capabilities, and wp.org compliance. Read that file before writing any PHP.
+
 ## CI
 
 GitHub Actions runs on push/PR to main: PHP lint (PHPCS), JS lint + type check, build, PHP tests (Pest via wp-env).

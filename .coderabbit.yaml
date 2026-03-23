@@ -1,0 +1,75 @@
+reviews:
+  request_changes_workflow: true
+  high_level_summary: true
+  path_instructions:
+    - path: "plugins/wpappointments/src/**/*.php"
+      instructions: |
+        This is a WordPress plugin targeting wp.org directory submission. All PHP code MUST follow these security and compliance rules. Flag violations as blocking issues.
+
+        ## Input Sanitization (CRITICAL)
+
+        Every value from `$request->get_param()`, `$_GET`, `$_POST`, or any external source must be sanitized:
+        - Strings: `sanitize_text_field()`, `sanitize_textarea_field()`, `sanitize_key()`
+        - Email: `sanitize_email()`
+        - URLs: `sanitize_url()`
+        - Integers: `absint()` (WordPress preferred for non-negative ints)
+        - Booleans: `rest_sanitize_boolean()` — NEVER use `(bool)` cast (`(bool) 'false'` evaluates to `true`)
+        - HTML content: `wp_kses()`, `wp_kses_post()`
+        - File names: `sanitize_file_name()`
+
+        IMPORTANT: PHPCS only flags raw superglobals (`$_GET`, `$_POST`). It does NOT flag `$request->get_param()` — so this is the primary attack surface to review manually.
+
+        ## Validation
+
+        - Safelists: `in_array($value, $allowed, true)` — always with strict type checking (third param `true`)
+        - Range checks: verify numeric values after `absint()` (e.g., month 1-12, duration > 0)
+        - Type guards: use `is_string()`, `is_array()` before passing to type-specific functions like `strtoupper()`, `sanitize_text_field()`
+        - Return values: always check `is_wp_error()` on WordPress function returns (save, update, delete, wp_insert_post, wp_update_post, wp_delete_user, etc.) before using the result
+
+        ## Output Escaping
+
+        Escape at the point of output — never early:
+        - HTML content: `esc_html()`
+        - HTML attributes: `esc_attr()`
+        - URLs: `esc_url()` (display), `esc_url_raw()` (storage)
+        - JavaScript: `esc_js()`
+        - Textarea: `esc_textarea()`
+        - Combined localization: `esc_html__()`, `esc_html_e()`, `esc_attr__()`, `esc_attr_e()`
+
+        ## REST API Patterns
+
+        - Return `WP_Error` with HTTP status codes (400/422) for validation failures
+        - Only include fields in update payloads when explicitly provided (`null !== $request->get_param('field')`) — otherwise omitted fields get overwritten with sanitized defaults (e.g., `sanitize_text_field(null)` returns `''`, `absint(null)` returns `0`)
+        - Parse dates with `rest_parse_date()` and check for `false` return before storing
+        - Every REST endpoint must have a `permission_callback` — never `__return_true` for state-changing endpoints
+
+        ## Database
+
+        - Never write raw SQL when a WordPress function exists
+        - When raw SQL is needed: always use `$wpdb->prepare()` with placeholders
+        - Never concatenate user input into SQL strings
+
+        ## Nonces & Capabilities
+
+        - All form submissions must include nonce verification
+        - Always check `current_user_can()` before privileged actions
+        - Use specific capabilities (`wpa_manage_appointments`) over generic ones
+
+    - path: "plugins/wpappointments/assets/**/*.{ts,tsx}"
+      instructions: |
+        This is a WordPress plugin using React with TypeScript. Frontend conventions:
+        - State management via `@wordpress/data` stores — not local React state for shared data
+        - API calls via `@wordpress/api-fetch` — not raw fetch
+        - Components from `@wordpress/components` preferred
+        - CSS Modules with camelCase exports
+        - Form handling with React Hook Form + Valibot validation
+        - One exported component per file in packages/components
+
+    - path: "plugins/wpappointments/tests/**/*.php"
+      instructions: |
+        Tests use Pest (PHPUnit wrapper) and run inside wp-env Docker container.
+        - Test files must be suffixed with `Test.php`
+        - Use Pest's `test()` function syntax, not PHPUnit class syntax
+        - Test groups: 'query', 'api', 'model', etc.
+        - Use `$this->do_rest_get_request()` / `$this->do_rest_post_request()` helpers for API tests
+        - Always `wp_set_current_user(1)` before admin-only endpoint tests
