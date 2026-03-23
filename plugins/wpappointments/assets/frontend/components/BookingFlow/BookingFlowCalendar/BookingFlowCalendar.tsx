@@ -1,6 +1,4 @@
-import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { chevronLeft, chevronRight } from '@wordpress/icons';
 import { addDays, addMinutes, addYears, format } from 'date-fns';
 import cn from 'obj-str';
 import { formatTime } from '~/backend/utils/i18n';
@@ -57,7 +55,15 @@ export default function BookingFlowCalendar() {
 						}
 						className={styles.calendarControlButton}
 					>
-						<Icon icon={chevronLeft} />
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							width="24"
+							height="24"
+							aria-hidden="true"
+						>
+							<path d="M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z" />
+						</svg>
 					</button>
 					<h5 className={styles.calendarMonthHeader}>
 						{currentMonth} {currentYear}
@@ -67,7 +73,15 @@ export default function BookingFlowCalendar() {
 						type="button"
 						className={styles.calendarControlButton}
 					>
-						<Icon icon={chevronRight} />
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							width="24"
+							height="24"
+							aria-hidden="true"
+						>
+							<path d="M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1L16 12z" />
+						</svg>
 					</button>
 				</div>
 				<div className={styles.calendarHeader}>
