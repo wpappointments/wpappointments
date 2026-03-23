@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 WP Appointments is a WordPress appointment scheduling plugin. Monorepo with Turborepo + pnpm workspaces. PHP 8.2 backend, TypeScript/React frontend using WordPress packages. Versioning and publishing via Changesets (independent versioning per package).
 
+**This is pre-release software with no public users.** Never write backwards-compatible code. No deprecation layers, no old-name re-exports, no fallback paths for old interfaces, no `_unused` parameter renames. When changing APIs, interfaces, or data structures — just change them directly and update all references. Delete old code outright.
+
 ## Commands
 
 ### Setup & Development
@@ -94,11 +96,11 @@ The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/
 - **Namespace:** `WPAppointments\` with PSR-4 autoloading
 - **`Api/Endpoints/`** — REST controllers (namespace `/wpappointments/v1/`), extend base `Controller` class
 - **`Core/`** — Plugin bootstrap: post type registration, capabilities, activation/deactivation, `Singleton` base class
-- **`Data/Model/`** — Data models (Appointment, Customer, Service, Entity)
+- **`Data/Model/`** — Data models (Appointment, Customer, Bookable, Entity)
 - **`Data/Query/`** — Query classes for fetching/filtering posts
 - **`Notifications/`** — Email notification system with template variables
 - **`Utils/`** — Date, Schedule, Availability helpers
-- **Custom post types:** `wpa-appointment`, `wpa-schedule`, `wpa-service`, `wpa-entity`
+- **Custom post types:** `wpa-appointment`, `wpa-schedule`, `wpa-bookable`, `wpa-bookable-variant`
 
 ### TypeScript Frontend (`plugins/wpappointments/assets/`)
 - **`backend/`** — Admin UI (React). Pages: Dashboard, Calendar, Customers, Services, Entities, Settings
