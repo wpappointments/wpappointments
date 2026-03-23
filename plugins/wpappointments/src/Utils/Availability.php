@@ -73,6 +73,28 @@ class Availability {
 		$appointment_length          = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$appointment_length_interval = new \DateInterval( 'PT' . $appointment_length . 'M' );
 
+		$min_lead_minutes = self::lead_time_to_minutes(
+			(int) get_option( 'wpappointments_appointments_minLeadTimeValue', 0 ),
+			(string) get_option( 'wpappointments_appointments_minLeadTimeUnit', 'minute' )
+		);
+		$max_lead_minutes = self::lead_time_to_minutes(
+			(int) get_option( 'wpappointments_appointments_maxLeadTimeValue', 0 ),
+			(string) get_option( 'wpappointments_appointments_maxLeadTimeUnit', 'day' )
+		);
+
+		$earliest = null;
+		$latest   = null;
+
+		if ( $min_lead_minutes > 0 ) {
+			$earliest = clone $now;
+			$earliest->add( new \DateInterval( 'PT' . $min_lead_minutes . 'M' ) );
+		}
+
+		if ( $max_lead_minutes > 0 ) {
+			$latest = clone $now;
+			$latest->add( new \DateInterval( 'PT' . $max_lead_minutes . 'M' ) );
+		}
+
 		foreach ( $range as $slot ) {
 			$start = clone $slot;
 			$start->setTimezone( new \DateTimeZone( $timezone ) );
@@ -104,30 +126,8 @@ class Availability {
 			$available = Date::date_range_overlaps_with_any_date_range( $date_range, $schedule_periods );
 			$booked    = Date::date_range_overlaps_with_any_date_range( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
-
-			$min_lead_minutes = self::lead_time_to_minutes(
-				(int) get_option( 'wpappointments_appointments_minLeadTimeValue', 0 ),
-				get_option( 'wpappointments_appointments_minLeadTimeUnit', 'minute' )
-			);
-			$max_lead_minutes = self::lead_time_to_minutes(
-				(int) get_option( 'wpappointments_appointments_maxLeadTimeValue', 0 ),
-				get_option( 'wpappointments_appointments_maxLeadTimeUnit', 'day' )
-			);
-
-			$too_soon = false;
-			$too_far  = false;
-
-			if ( $min_lead_minutes > 0 ) {
-				$earliest = clone $now;
-				$earliest->add( new \DateInterval( 'PT' . $min_lead_minutes . 'M' ) );
-				$too_soon = $slot < $earliest;
-			}
-
-			if ( $max_lead_minutes > 0 ) {
-				$latest = clone $now;
-				$latest->add( new \DateInterval( 'PT' . $max_lead_minutes . 'M' ) );
-				$too_far = $slot > $latest;
-			}
+			$too_soon  = $earliest && $slot < $earliest;
+			$too_far   = $latest && $slot > $latest;
 
 			array_push(
 				$slots,
@@ -348,13 +348,6 @@ class Availability {
 	}
 
 	/**
-	 * Check if calendar is valid
-	 *
-	 * @param string[][] $calendar Calendar array.
-	 *
-	 * @return bool
-	 */
-	/**
 	 * Convert a lead time value + unit to minutes
 	 *
 	 * @param int    $value Numeric value.
@@ -371,7 +364,11 @@ class Availability {
 			'month'  => 43200,
 		);
 
-		return $value * ( $multipliers[ $unit ] ?? 1 );
+		if ( ! isset( $multipliers[ $unit ] ) || $value < 0 ) {
+			return 0;
+		}
+
+		return $value * $multipliers[ $unit ];
 	}
 
 	/**
