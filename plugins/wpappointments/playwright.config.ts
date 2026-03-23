@@ -10,6 +10,9 @@ export default defineConfig({
 	workers: 1,
 	reporter: 'html',
 	outputDir: '../../tests/e2e/results',
+	globalSetup: '../../tests/e2e/global-setup.ts',
+
+	timeout: 60_000,
 
 	use: {
 		baseURL: BASE_URL,
@@ -21,6 +24,10 @@ export default defineConfig({
 		{
 			name: 'chromium',
 			use: { ...devices['Desktop Chrome'] },
+		},
+		{
+			name: 'mobile',
+			use: { ...devices['Pixel 5'] },
 		},
 		{
 			name: 'demo',

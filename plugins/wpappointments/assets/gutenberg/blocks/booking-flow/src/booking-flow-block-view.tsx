@@ -1,5 +1,10 @@
 import { createRoot } from '@wordpress/element';
+import { createHooks } from '@wordpress/hooks';
 import BookingFlow from '~/frontend/frontend';
+
+if (!window.wpappointments.hooks) {
+	window.wpappointments.hooks = createHooks();
+}
 
 const bookingFlow = document.getElementsByClassName(
 	'wpappointments-booking-flow'
