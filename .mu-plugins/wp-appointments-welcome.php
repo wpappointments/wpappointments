@@ -70,7 +70,7 @@ add_action( 'welcome_panel', function () {
 						<li><?php esc_html_e( 'Add the Booking Flow block to a page', 'wpappointments' ); ?></li>
 						<li><?php esc_html_e( 'Manage appointments from the Calendar', 'wpappointments' ); ?></li>
 					</ol>
-					<?php if ( is_plugin_active( $plugin_file ) ) : ?>
+					<?php if ( is_plugin_active( $plugin_file ) && current_user_can( 'manage_options' ) ) : ?>
 						<div class="welcome-panel-actions">
 							<a href="<?php echo esc_url( $settings_url ); ?>" class="button button-secondary">
 								<?php esc_html_e( 'Settings', 'wpappointments' ); ?>
@@ -115,7 +115,7 @@ add_action( 'wp_dashboard_setup', function () {
 	remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
 } );
 
-add_action( 'admin_head', function () {
+add_action( 'admin_head-index.php', function () {
 	?>
 	<style>
 		:root {
@@ -139,6 +139,8 @@ add_action( 'admin_head', function () {
 		}
 
 		.welcome-panel-header-wrapper {
+			position: relative;
+			overflow: hidden;
 			background-color: var(--brand-color-default);
 		}
 
