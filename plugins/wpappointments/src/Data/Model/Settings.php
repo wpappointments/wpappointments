@@ -111,14 +111,24 @@ class Settings {
 				'allowed' => array( 'pending', 'confirmed' ),
 			),
 			array(
-				'name' => 'minLeadTime',
+				'name' => 'minLeadTimeValue',
 				'type' => 'number',
 				'min'  => 0,
 			),
 			array(
-				'name' => 'maxLeadTime',
+				'name'    => 'minLeadTimeUnit',
+				'type'    => 'string',
+				'allowed' => array( 'minute', 'hour', 'day', 'week', 'month' ),
+			),
+			array(
+				'name' => 'maxLeadTimeValue',
 				'type' => 'number',
 				'min'  => 0,
+			),
+			array(
+				'name'    => 'maxLeadTimeUnit',
+				'type'    => 'string',
+				'allowed' => array( 'minute', 'hour', 'day', 'week', 'month' ),
 			),
 		),
 		'calendar'      => array(),

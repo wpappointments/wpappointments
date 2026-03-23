@@ -19,6 +19,7 @@ import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
+import type { LeadTimeUnit } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import globalStyles from 'global.module.css';
 
@@ -27,9 +28,19 @@ type Fields = {
 	timePickerPrecision: number;
 	serviceName: string;
 	defaultStatus: 'confirmed' | 'pending';
-	minLeadTime: number;
-	maxLeadTime: number;
+	minLeadTimeValue: number;
+	minLeadTimeUnit: LeadTimeUnit;
+	maxLeadTimeValue: number;
+	maxLeadTimeUnit: LeadTimeUnit;
 };
+
+const LEAD_TIME_UNIT_OPTIONS = [
+	{ label: __('Minutes', 'wpappointments'), value: 'minute' },
+	{ label: __('Hours', 'wpappointments'), value: 'hour' },
+	{ label: __('Days', 'wpappointments'), value: 'day' },
+	{ label: __('Weeks', 'wpappointments'), value: 'week' },
+	{ label: __('Months', 'wpappointments'), value: 'month' },
+];
 
 type Response = APIResponse<{
 	data: Fields;
@@ -112,39 +123,45 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
-						<Input
-							type="number"
-							name="minLeadTime"
-							label={__(
-								'Minimum lead time (in minutes)',
-								'wpappointments'
-							)}
-							help={__(
-								'Minimum time before an appointment can be booked. E.g. 60 means customers must book at least 1 hour ahead.',
-								'wpappointments'
-							)}
-							placeholder="0"
-							rules={{
-								min: 0,
-							}}
-						/>
+						<FormFieldSet
+							legend={__('Minimum lead time', 'wpappointments')}
+							horizontal
+						>
+							<Input
+								type="number"
+								name="minLeadTimeValue"
+								placeholder="0"
+								rules={{ min: 0 }}
+							/>
+							<Select
+								name="minLeadTimeUnit"
+								defaultValue={
+									settings.minLeadTimeUnit || 'minute'
+								}
+								options={LEAD_TIME_UNIT_OPTIONS}
+							/>
+						</FormFieldSet>
 
-						<Input
-							type="number"
-							name="maxLeadTime"
-							label={__(
-								'Maximum lead time (in days)',
-								'wpappointments'
-							)}
-							help={__(
-								'How far in advance appointments can be booked. E.g. 90 means up to 3 months ahead. Leave at 0 for no limit.',
-								'wpappointments'
-							)}
-							placeholder="0"
-							rules={{
-								min: 0,
-							}}
-						/>
+						<FormFieldSet
+							legend={__('Maximum lead time', 'wpappointments')}
+							horizontal
+						>
+							<Input
+								type="number"
+								name="maxLeadTimeValue"
+								placeholder="0"
+								rules={{ min: 0 }}
+								help={__(
+									'Leave at 0 for no limit.',
+									'wpappointments'
+								)}
+							/>
+							<Select
+								name="maxLeadTimeUnit"
+								defaultValue={settings.maxLeadTimeUnit || 'day'}
+								options={LEAD_TIME_UNIT_OPTIONS}
+							/>
+						</FormFieldSet>
 
 						<Select
 							name="defaultStatus"
