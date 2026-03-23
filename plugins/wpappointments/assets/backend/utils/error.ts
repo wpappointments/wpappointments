@@ -7,7 +7,3 @@ export type Error = {
 export function getErrorMessage(error: Error) {
 	return error.message;
 }
-
-export function getErrorData(error: Error) {
-	return error.data;
-}

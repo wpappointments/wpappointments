@@ -191,9 +191,6 @@ export const selectors = {
 	getAppointmentsSettings(state: State) {
 		return state.settings.appointments;
 	},
-	getCalendarSettings(state: State) {
-		return state.settings.calendar;
-	},
 	getNotificationsSettings(state: State) {
 		return state.settings.notifications;
 	},
@@ -221,6 +218,5 @@ export const resolvers = {
 	getGeneralSettings: getSettings,
 	getScheduleSettings: getSettings,
 	getAppointmentsSettings: getSettings,
-	getCalendarSettings: getSettings,
 	getNotificationsSettings: getSettings,
 };

@@ -23,7 +23,6 @@ class Plugin extends Core\Singleton {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
-		add_action( 'init', array( 'WPAppointments\Migration\BookableMigration', 'maybe_run' ), 99 );
 		Notifications\Notifications::get_instance();
 	}
 
@@ -140,11 +139,9 @@ class Plugin extends Core\Singleton {
 			$this->delete_schedule_post();
 			delete_option( 'wpappointments_default_scheduleId' );
 
-			$this->delete_service_post();
-			delete_option( 'wpappointments_defaultServiceId' );
-
 			delete_option( 'wpappointments_appointments_defaultLength' );
 			delete_option( 'wpappointments_appointments_timePickerPrecision' );
+			delete_option( 'wpappointments_appointments_serviceName' );
 			delete_option( 'wpappointments_general_firstName' );
 			delete_option( 'wpappointments_general_lastName' );
 			delete_option( 'wpappointments_general_email' );
@@ -188,20 +185,5 @@ class Plugin extends Core\Singleton {
 		}
 
 		wp_delete_post( $default_schedule, true );
-	}
-
-	/**
-	 * Delete default service post
-	 *
-	 * @return void
-	 */
-	private function delete_service_post() {
-		$default_service = get_option( 'wpappointments_defaultServiceId' );
-
-		if ( ! $default_service ) {
-			return;
-		}
-
-		wp_delete_post( $default_service, true );
 	}
 }

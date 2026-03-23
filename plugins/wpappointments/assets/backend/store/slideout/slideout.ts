@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-import { type State } from '../store';
 import { SlideoutState, Slideout } from './slideout.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
@@ -62,29 +61,7 @@ export const reducer = (state = DEFAULT_SLIDEOUT_STATE, action: Action) => {
 	}
 };
 
-export const selectors = {
-	getSlideouts(state: State) {
-		return state.slideouts.slideouts;
-	},
-	getSlideoutsToClose(state: State) {
-		return state.slideouts.slideoutsToClose;
-	},
-	getCurrentSlideout(state: State) {
-		return state.slideouts.slideouts[state.slideouts.slideouts.length - 1];
-	},
-	getClosingSlideout(state: State, id?: string) {
-		if (!id) {
-			return state.slideouts.slideoutsToClose[
-				state.slideouts.slideoutsToClose.length - 1
-			];
-		}
-
-		return state.slideouts.slideoutsToClose.find((s) => s.id === id);
-	},
-	getAllClosingSlideouts(state: State) {
-		return state.slideouts.slideoutsToClose;
-	},
-};
+export const selectors = {};
 
 export const controls = {};
 

@@ -8,8 +8,6 @@
 
 namespace WPAppointments\Data\Model;
 
-use WP_Post;
-
 const DAY_OPENING_OPTIONS = array(
 	'enabled',
 	'startTime' => array(
@@ -238,22 +236,6 @@ class Settings {
 					}
 				}
 
-				if ( 'serviceName' === $key ) {
-					$service_post_id = get_option( 'wpappointments_defaultServiceId' );
-
-					if ( $service_post_id ) {
-						wp_update_post(
-							array(
-								'ID'         => $service_post_id,
-								'post_title' => sanitize_text_field( $value ),
-							)
-						);
-					}
-
-					$updated[ $key ] = $value;
-					continue;
-				}
-
 				update_option( 'wpappointments_' . $category . '_' . $key, $value );
 				$updated[ $key ] = $value;
 			}
@@ -302,20 +284,13 @@ class Settings {
 			$settings['schedule'] = $schedule;
 		}
 
-		$service = $this->get_default_service();
-
-		if ( is_a( $service, '\WP_Post' ) ) {
-			$settings['appointments']['service']     = $service;
-			$settings['appointments']['serviceName'] = $service->post_title;
-		}
-
 		return $settings;
 	}
 
 	/**
 	 * Get default schedule settings
 	 *
-	 * @return null|\WP_Post
+	 * @return array|null
 	 */
 	public function get_default_schedule() {
 		$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
@@ -336,22 +311,6 @@ class Settings {
 		}
 
 		return $schedule;
-	}
-
-	/**
-	 * Get default service settings
-	 *
-	 * @return null|\WP_Post
-	 */
-	public function get_default_service() {
-		$service_post_id = get_option( 'wpappointments_defaultServiceId' );
-		$service         = null;
-
-		if ( $service_post_id ) {
-			$service = get_post( $service_post_id );
-		}
-
-		return $service;
 	}
 
 	/**
