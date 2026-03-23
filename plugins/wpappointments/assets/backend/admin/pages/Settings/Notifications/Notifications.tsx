@@ -6,14 +6,22 @@ import {
 	CardFooter,
 	CardHeader,
 	TextareaControl,
-	TextControl,
 	ToggleControl,
+	__experimentalInputControl as InputControl,
+	__experimentalText as Text,
 } from '@wordpress/components';
-import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { useSlideout } from '@wpappointments/data';
-import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
+import {
+	FormField,
+	FormFieldSet,
+	formFieldStyles,
+} from '@wpappointments/components';
+import {
+	useSlideout,
+	displayErrorToast,
+	displaySuccessToast,
+} from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import type {
@@ -152,90 +160,112 @@ function NotificationEditor({
 		<div className={styles.editorContent}>
 			<p className={styles.editorDescription}>{meta.description}</p>
 
-			<div className={styles.editorSection}>
-				<h3 className={styles.editorSectionTitle}>
-					{__('Recipients', 'wpappointments')}
-				</h3>
-				<ToggleControl
-					label={__('Send to admin', 'wpappointments')}
-					checked={value.sendToAdmin}
-					onChange={(v) => set('sendToAdmin', v)}
-				/>
-				<ToggleControl
-					label={__('Send to customer', 'wpappointments')}
-					checked={value.sendToCustomer}
-					onChange={(v) => set('sendToCustomer', v)}
-				/>
-				<TextControl
-					label={__(
-						'Additional recipients (comma-separated)',
-						'wpappointments'
-					)}
-					value={value.customRecipients}
-					onChange={(v) => set('customRecipients', v)}
-					placeholder={__(
-						'extra@example.com, other@example.com',
-						'wpappointments'
-					)}
-				/>
-			</div>
-
-			{value.sendToAdmin && (
-				<div className={styles.editorSection}>
-					<h3 className={styles.editorSectionTitle}>
-						{__('Admin email', 'wpappointments')}
-					</h3>
-					<TextControl
-						label={__('Subject', 'wpappointments')}
-						help={__(
-							'Leave empty to use the default subject.',
+			<FormFieldSet legend={__('Recipients', 'wpappointments')}>
+				<FormField>
+					<ToggleControl
+						label={__('Send to admin', 'wpappointments')}
+						checked={value.sendToAdmin}
+						onChange={(v) => set('sendToAdmin', v)}
+						__nextHasNoMarginBottom
+					/>
+				</FormField>
+				<FormField>
+					<ToggleControl
+						label={__('Send to customer', 'wpappointments')}
+						checked={value.sendToCustomer}
+						onChange={(v) => set('sendToCustomer', v)}
+						__nextHasNoMarginBottom
+					/>
+				</FormField>
+				<FormField>
+					<label className={formFieldStyles.fieldLabel}>
+						{__(
+							'Additional recipients (comma-separated)',
 							'wpappointments'
 						)}
-						value={value.adminSubject}
-						onChange={(v) => set('adminSubject', v)}
+					</label>
+					<InputControl
+						value={value.customRecipients}
+						onChange={(v) => set('customRecipients', v ?? '')}
+						placeholder={__(
+							'extra@example.com, other@example.com',
+							'wpappointments'
+						)}
+						size="__unstable-large"
 					/>
-					<TextareaControl
-						label={__('Body', 'wpappointments')}
-						help={
-							__(
-								'Leave empty to use the default template. Variables: ',
+				</FormField>
+			</FormFieldSet>
+
+			{value.sendToAdmin && (
+				<FormFieldSet legend={__('Admin email', 'wpappointments')}>
+					<FormField>
+						<label className={formFieldStyles.fieldLabel}>
+							{__('Subject', 'wpappointments')}
+						</label>
+						<InputControl
+							value={value.adminSubject}
+							onChange={(v) => set('adminSubject', v ?? '')}
+							help={__(
+								'Leave empty to use the default subject.',
 								'wpappointments'
-							) + TEMPLATE_VARS
-						}
-						value={value.adminBody}
-						onChange={(v) => set('adminBody', v)}
-						rows={8}
-					/>
-				</div>
+							)}
+							size="__unstable-large"
+						/>
+					</FormField>
+					<FormField>
+						<label className={formFieldStyles.fieldLabel}>
+							{__('Body', 'wpappointments')}
+						</label>
+						<TextareaControl
+							help={
+								__(
+									'Leave empty to use the default template. Variables: ',
+									'wpappointments'
+								) + TEMPLATE_VARS
+							}
+							value={value.adminBody}
+							onChange={(v) => set('adminBody', v)}
+							rows={8}
+							__nextHasNoMarginBottom
+						/>
+					</FormField>
+				</FormFieldSet>
 			)}
 
 			{value.sendToCustomer && (
-				<div className={styles.editorSection}>
-					<h3 className={styles.editorSectionTitle}>
-						{__('Customer email', 'wpappointments')}
-					</h3>
-					<TextControl
-						label={__('Subject', 'wpappointments')}
-						help={__(
-							'Leave empty to use the default subject.',
-							'wpappointments'
-						)}
-						value={value.customerSubject}
-						onChange={(v) => set('customerSubject', v)}
-					/>
-					<TextareaControl
-						label={__('Body', 'wpappointments')}
-						help={
-							__(
-								'Leave empty to use the default template. Variables: ',
+				<FormFieldSet legend={__('Customer email', 'wpappointments')}>
+					<FormField>
+						<label className={formFieldStyles.fieldLabel}>
+							{__('Subject', 'wpappointments')}
+						</label>
+						<InputControl
+							value={value.customerSubject}
+							onChange={(v) => set('customerSubject', v ?? '')}
+							help={__(
+								'Leave empty to use the default subject.',
 								'wpappointments'
-							) + TEMPLATE_VARS
-						}
-						value={value.customerBody}
-						onChange={(v) => set('customerBody', v)}
-						rows={8}
-					/>
-				</div>
+							)}
+							size="__unstable-large"
+						/>
+					</FormField>
+					<FormField>
+						<label className={formFieldStyles.fieldLabel}>
+							{__('Body', 'wpappointments')}
+						</label>
+						<TextareaControl
+							help={
+								__(
+									'Leave empty to use the default template. Variables: ',
+									'wpappointments'
+								) + TEMPLATE_VARS
+							}
+							value={value.customerBody}
+							onChange={(v) => set('customerBody', v)}
+							rows={8}
+							__nextHasNoMarginBottom
+						/>
+					</FormField>
+				</FormFieldSet>
 			)}
 		</div>
 	);
