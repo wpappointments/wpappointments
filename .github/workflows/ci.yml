@@ -168,6 +168,9 @@ jobs:
                   npx wp-env run cli --env-cwd=wp-content composer install
                   npx wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer install
 
+            - name: Fix wp-env file permissions
+              run: sudo chown -R $(id -u):$(id -g) ~/wp-env
+
             - name: Restart wp-env
               run: npx wp-env start
 
