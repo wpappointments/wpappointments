@@ -142,20 +142,16 @@ function enqueue_frontend_assets() {
 	wp_enqueue_style(
 		'wpappointments-frontend-css',
 		$plugin_url . 'build/frontend.tsx.css',
-		array( 'wp-components' ),
+		array(),
 		$version
 	);
 
-	$block_style = $plugin_dir . 'assets/gutenberg/blocks/booking-flow/src/style-index.css';
-
-	if ( file_exists( $block_style ) ) {
-		wp_enqueue_style(
-			'wpappointments-booking-flow-style',
-			$plugin_url . 'assets/gutenberg/blocks/booking-flow/src/style-index.css',
-			array(),
-			$version
-		);
-	}
+	wp_enqueue_style(
+		'wpappointments-booking-flow-view-css',
+		$plugin_url . 'build/booking-flow-block-view.tsx.css',
+		array(),
+		$version
+	);
 }
 
 /**
