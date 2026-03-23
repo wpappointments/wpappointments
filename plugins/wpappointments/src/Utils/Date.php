@@ -12,10 +12,10 @@ namespace WPAppointments\Utils;
  */
 class Date {
 	/**
-	 * Check if a date range overlaps another date range
+	 * Check if a date range is fully contained within another date range
 	 *
-	 * @param DatePeriod $range Date or date range to check if overlaps.
-	 * @param DatePeriod $range_in Date or date range to check if overlaps.
+	 * @param \DatePeriod $range    Date range to check.
+	 * @param \DatePeriod $range_in Date range that should contain the first.
 	 *
 	 * @return bool
 	 */
@@ -28,23 +28,53 @@ class Date {
 	}
 
 	/**
-	 * Check if a date range overlaps with any date range from provided date ranges
+	 * Check if two date ranges have any overlap
 	 *
-	 * @param DatePeriod $range Date ranges.
-	 * @param array      $ranges_in Date or date range to check if contains.
+	 * Two ranges overlap when: start1 < end2 AND start2 < end1.
+	 *
+	 * @param \DatePeriod $range_a First date range.
+	 * @param \DatePeriod $range_b Second date range.
+	 *
+	 * @return bool
+	 */
+	public static function date_ranges_intersect( $range_a, $range_b ) {
+		return $range_a->getStartDate() < $range_b->getEndDate()
+		&& $range_b->getStartDate() < $range_a->getEndDate();
+	}
+
+	/**
+	 * Check if a date range is fully contained within any of the provided date ranges
+	 *
+	 * @param \DatePeriod $range     Date range to check.
+	 * @param array       $ranges_in Array of DatePeriod ranges.
 	 *
 	 * @return bool
 	 */
 	public static function date_range_overlaps_with_any_date_range( $range, $ranges_in ) {
-		$contains = false;
-
 		foreach ( $ranges_in as $range_in ) {
 			if ( self::date_range_overlaps_another_date_range( $range, $range_in ) ) {
-				$contains = true;
-				break;
+				return true;
 			}
 		}
 
-		return $contains;
+		return false;
+	}
+
+	/**
+	 * Check if a date range intersects with any of the provided date ranges
+	 *
+	 * @param \DatePeriod $range     Date range to check.
+	 * @param array       $ranges_in Array of DatePeriod ranges.
+	 *
+	 * @return bool
+	 */
+	public static function date_range_intersects_any( $range, $ranges_in ) {
+		foreach ( $ranges_in as $range_in ) {
+			if ( self::date_ranges_intersect( $range, $range_in ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

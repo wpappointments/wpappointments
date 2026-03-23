@@ -106,7 +106,7 @@ class Availability {
 			}
 
 			$available = Date::date_range_overlaps_with_any_date_range( $date_range, $schedule_periods );
-			$booked    = Date::date_range_overlaps_with_any_date_range( $date_range, $range_appointments_periods );
+			$booked    = Date::date_range_intersects_any( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
 
 			array_push(

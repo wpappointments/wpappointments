@@ -17,3 +17,4 @@ cache
 AGENTS.md
 **/playwright-report/
 **/tests/e2e/results/
+**/test-results/
