@@ -123,20 +123,24 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
-						<FormFieldSet
-							legend={__('Minimum lead time', 'wpappointments')}
-							horizontal
-						>
+						<FormFieldSet horizontal>
 							<Input
 								type="number"
 								name="minLeadTimeValue"
-								label={__('Value', 'wpappointments')}
+								label={__(
+									'Minimum lead time',
+									'wpappointments'
+								)}
 								placeholder="0"
 								rules={{ min: 0 }}
 							/>
 							<Select
 								name="minLeadTimeUnit"
-								label={__('Unit', 'wpappointments')}
+								label={__(
+									'Minimum lead time unit',
+									'wpappointments'
+								)}
+								labelInvisible
 								defaultValue={
 									settings.minLeadTimeUnit || 'minute'
 								}
@@ -144,14 +148,14 @@ export default withForm(function AppointmentsSettings() {
 							/>
 						</FormFieldSet>
 
-						<FormFieldSet
-							legend={__('Maximum lead time', 'wpappointments')}
-							horizontal
-						>
+						<FormFieldSet horizontal>
 							<Input
 								type="number"
 								name="maxLeadTimeValue"
-								label={__('Value', 'wpappointments')}
+								label={__(
+									'Maximum lead time',
+									'wpappointments'
+								)}
 								placeholder="0"
 								rules={{ min: 0 }}
 								help={__(
@@ -161,7 +165,11 @@ export default withForm(function AppointmentsSettings() {
 							/>
 							<Select
 								name="maxLeadTimeUnit"
-								label={__('Unit', 'wpappointments')}
+								label={__(
+									'Maximum lead time unit',
+									'wpappointments'
+								)}
+								labelInvisible
 								defaultValue={settings.maxLeadTimeUnit || 'day'}
 								options={LEAD_TIME_UNIT_OPTIONS}
 							/>

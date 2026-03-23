@@ -7,6 +7,8 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { SelectControl } from '@wordpress/components';
+import cn from 'obj-str';
+import FieldMessages from '../../FieldMessages/FieldMessages';
 import { getGenericInputErrorMessage } from '../../utils/forms';
 import type { FormFieldError } from '../../utils/forms';
 import FormField from '../FormField';
@@ -17,6 +19,8 @@ export type { FormFieldError };
 type Props<TFields extends FieldValues> = {
 	name: Path<TFields>;
 	label?: string;
+	labelHidden?: boolean;
+	labelInvisible?: boolean;
 	rules?: Omit<
 		RegisterOptions<TFields, Path<TFields>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -35,6 +39,8 @@ type Props<TFields extends FieldValues> = {
 
 export default function Select<TFields extends FieldValues>({
 	label,
+	labelHidden = false,
+	labelInvisible = false,
 	name,
 	rules,
 	options,
@@ -55,7 +61,14 @@ export default function Select<TFields extends FieldValues>({
 	return (
 		<FormField isFullWidth={fullWidth}>
 			{label && (
-				<label className={styles.fieldLabel} htmlFor={name}>
+				<label
+					className={cn({
+						[styles.fieldLabel]: true,
+						[styles.fieldHiddenLabel]: labelHidden,
+						[styles.fieldLabelInvisible]: labelInvisible,
+					})}
+					htmlFor={name}
+				>
 					{label}
 					{rules?.required && '*'}
 				</label>
@@ -88,17 +101,15 @@ export default function Select<TFields extends FieldValues>({
 						id={name}
 						options={options}
 						disabled={readOnly}
-						help={help}
 						suffix={noArrow ? <></> : null}
 						style={{ paddingRight: noArrow ? 16 : undefined }}
 					/>
 				)}
 			/>
-			{error && (
-				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<TFields>(error)}
-				</p>
-			)}
+			<FieldMessages
+				error={getGenericInputErrorMessage(error)}
+				help={help}
+			/>
 		</FormField>
 	);
 }

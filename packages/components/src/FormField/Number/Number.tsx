@@ -7,6 +7,7 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import FieldMessages from '../../FieldMessages/FieldMessages';
 import { getGenericInputErrorMessage } from '../../utils/forms';
 import type { FormFieldError } from '../../utils/forms';
 import FormField from '../FormField';
@@ -84,11 +85,7 @@ export default function Number<TFields extends FieldValues>({
 					/>
 				)}
 			/>
-			{error && (
-				<p style={{ marginTop: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<TFields>(error)}
-				</p>
-			)}
+			<FieldMessages error={getGenericInputErrorMessage(error)} />
 		</FormField>
 	);
 }
