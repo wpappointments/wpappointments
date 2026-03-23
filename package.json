@@ -36,7 +36,9 @@
 		"docs:build": "pnpm --filter @wpappointments/docs build",
 		"docs:generate": "pnpm --filter @wpappointments/docs generate",
 		"help:dev": "pnpm --filter @wpappointments/help dev",
-		"help:build": "pnpm --filter @wpappointments/help build"
+		"help:build": "pnpm --filter @wpappointments/help build",
+		"test:e2e": "pnpm -C plugins/wpappointments test:e2e",
+		"test:e2e:demo": "pnpm -C plugins/wpappointments test:e2e -- --project=demo"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.6.0",

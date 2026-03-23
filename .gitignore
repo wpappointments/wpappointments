@@ -14,3 +14,6 @@ cache
 *.css.d.ts.map
 .claude/settings.local.json
 .turbo/
+AGENTS.md
+**/playwright-report/
+**/tests/e2e/results/
