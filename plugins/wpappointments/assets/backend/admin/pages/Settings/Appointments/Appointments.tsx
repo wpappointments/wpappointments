@@ -130,11 +130,13 @@ export default withForm(function AppointmentsSettings() {
 							<Input
 								type="number"
 								name="minLeadTimeValue"
+								label={__('Value', 'wpappointments')}
 								placeholder="0"
 								rules={{ min: 0 }}
 							/>
 							<Select
 								name="minLeadTimeUnit"
+								label={__('Unit', 'wpappointments')}
 								defaultValue={
 									settings.minLeadTimeUnit || 'minute'
 								}
@@ -149,6 +151,7 @@ export default withForm(function AppointmentsSettings() {
 							<Input
 								type="number"
 								name="maxLeadTimeValue"
+								label={__('Value', 'wpappointments')}
 								placeholder="0"
 								rules={{ min: 0 }}
 								help={__(
@@ -158,6 +161,7 @@ export default withForm(function AppointmentsSettings() {
 							/>
 							<Select
 								name="maxLeadTimeUnit"
+								label={__('Unit', 'wpappointments')}
 								defaultValue={settings.maxLeadTimeUnit || 'day'}
 								options={LEAD_TIME_UNIT_OPTIONS}
 							/>
