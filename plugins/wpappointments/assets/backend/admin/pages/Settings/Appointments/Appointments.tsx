@@ -27,6 +27,8 @@ type Fields = {
 	timePickerPrecision: number;
 	serviceName: string;
 	defaultStatus: 'confirmed' | 'pending';
+	defaultBufferBefore: number;
+	defaultBufferAfter: number;
 };
 
 type Response = APIResponse<{
@@ -110,6 +112,42 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
+						<Input
+							type="number"
+							name="defaultBufferBefore"
+							label={__(
+								'Buffer before appointment (in minutes)',
+								'wpappointments'
+							)}
+							help={__(
+								'Preparation time blocked before each appointment. Can be overridden per service.',
+								'wpappointments'
+							)}
+							placeholder="0"
+							rules={{
+								min: 0,
+								max: 1440,
+							}}
+						/>
+
+						<Input
+							type="number"
+							name="defaultBufferAfter"
+							label={__(
+								'Buffer after appointment (in minutes)',
+								'wpappointments'
+							)}
+							help={__(
+								'Cleanup time blocked after each appointment. Can be overridden per service.',
+								'wpappointments'
+							)}
+							placeholder="0"
+							rules={{
+								min: 0,
+								max: 1440,
+							}}
+						/>
+
 						<Select
 							name="defaultStatus"
 							defaultValue={settings.defaultStatus || 'confirmed'}
