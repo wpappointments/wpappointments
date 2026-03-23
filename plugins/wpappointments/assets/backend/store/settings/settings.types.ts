@@ -37,9 +37,13 @@ export type SettingsAppointments = {
 	timePickerPrecision?: number;
 	serviceId?: number;
 	serviceName?: string;
-	minLeadTime?: number;
-	maxLeadTime?: number;
+	minLeadTimeValue?: number;
+	minLeadTimeUnit?: LeadTimeUnit;
+	maxLeadTimeValue?: number;
+	maxLeadTimeUnit?: LeadTimeUnit;
 };
+
+export type LeadTimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month';
 
 export type Day = keyof SettingsSchedule;
 
