@@ -23,7 +23,7 @@ Use the `[wpappointments]` shortcode in the classic editor, page builders, or an
 
 ```text
 [wpappointments]
-[wpappointments flow_type="MultiStep" alignment="Center" width="Full"]
+[wpappointments flow_type="multi_step" alignment="center" width="full"]
 [wpappointments trim_unavailable="0" slots_as_buttons="1"]
 ```
 
@@ -31,9 +31,9 @@ Use the `[wpappointments]` shortcode in the classic editor, page builders, or an
 
 | Attribute | Values | Default |
 |-----------|--------|---------|
-| `flow_type` | `OneStep`, `MultiStep` | `OneStep` |
-| `alignment` | `Left`, `Center`, `Right` | `Left` |
-| `width` | `Narrow`, `Full` | `Narrow` |
+| `flow_type` | `one_step`, `multi_step` | `one_step` |
+| `alignment` | `left`, `center`, `right` | `left` |
+| `width` | `narrow`, `full` | `narrow` |
 | `trim_unavailable` | `1`, `0` | `1` |
 | `slots_as_buttons` | `1`, `0` | `0` |
 

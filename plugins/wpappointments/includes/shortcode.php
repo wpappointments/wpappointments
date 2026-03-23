@@ -32,9 +32,9 @@ add_action( 'widgets_init', __NAMESPACE__ . '\\register_widget' );
  * Render the [wpappointments] shortcode
  *
  * Supported attributes:
- *   flow_type        — OneStep|MultiStep (default: OneStep)
- *   alignment        — Left|Center|Right (default: Left)
- *   width            — Narrow|Full (default: Narrow)
+ *   flow_type        — one_step|multi_step (default: one_step)
+ *   alignment        — left|center|right (default: left)
+ *   width            — narrow|full (default: narrow)
  *   trim_unavailable — 1|0 (default: 1)
  *   slots_as_buttons — 1|0 (default: 0)
  *
@@ -45,9 +45,9 @@ add_action( 'widgets_init', __NAMESPACE__ . '\\register_widget' );
 function render_shortcode( $atts ) {
 	$atts = shortcode_atts(
 		array(
-			'flow_type'        => 'OneStep',
-			'alignment'        => 'Left',
-			'width'            => 'Narrow',
+			'flow_type'        => 'one_step',
+			'alignment'        => 'left',
+			'width'            => 'narrow',
 			'trim_unavailable' => '1',
 			'slots_as_buttons' => '0',
 		),
@@ -55,12 +55,28 @@ function render_shortcode( $atts ) {
 		'wpappointments'
 	);
 
+	$value_map = array(
+		'flow_type' => array(
+			'one_step'   => 'OneStep',
+			'multi_step' => 'MultiStep',
+		),
+		'alignment' => array(
+			'left'   => 'Left',
+			'center' => 'Center',
+			'right'  => 'Right',
+		),
+		'width'     => array(
+			'narrow' => 'Narrow',
+			'full'   => 'Full',
+		),
+	);
+
 	$attributes = array(
-		'flowType'        => sanitize_text_field( $atts['flow_type'] ),
-		'alignment'       => sanitize_text_field( $atts['alignment'] ),
-		'width'           => sanitize_text_field( $atts['width'] ),
-		'trimUnavailable' => (bool) $atts['trim_unavailable'],
-		'slotsAsButtons'  => (bool) $atts['slots_as_buttons'],
+		'flowType'        => $value_map['flow_type'][ strtolower( $atts['flow_type'] ) ] ?? 'OneStep',
+		'alignment'       => $value_map['alignment'][ strtolower( $atts['alignment'] ) ] ?? 'Left',
+		'width'           => $value_map['width'][ strtolower( $atts['width'] ) ] ?? 'Narrow',
+		'trimUnavailable' => filter_var( $atts['trim_unavailable'], FILTER_VALIDATE_BOOLEAN ),
+		'slotsAsButtons'  => filter_var( $atts['slots_as_buttons'], FILTER_VALIDATE_BOOLEAN ),
 	);
 
 	return render_booking_flow_html( $attributes );

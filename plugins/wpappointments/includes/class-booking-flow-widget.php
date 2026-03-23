@@ -14,6 +14,28 @@ defined( 'ABSPATH' ) || exit;
  * Booking Flow widget for classic themes
  */
 class Booking_Flow_Widget extends \WP_Widget {
+
+	/**
+	 * Map snake_case widget values to camelCase JS attribute values.
+	 *
+	 * @var array
+	 */
+	private static $value_map = array(
+		'flow_type' => array(
+			'one_step'   => 'OneStep',
+			'multi_step' => 'MultiStep',
+		),
+		'alignment' => array(
+			'left'   => 'Left',
+			'center' => 'Center',
+			'right'  => 'Right',
+		),
+		'width'     => array(
+			'narrow' => 'Narrow',
+			'full'   => 'Full',
+		),
+	);
+
 	/**
 	 * Constructor
 	 */
@@ -37,9 +59,9 @@ class Booking_Flow_Widget extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		$attributes = array(
-			'flowType'        => $instance['flow_type'] ?? 'OneStep',
-			'alignment'       => $instance['alignment'] ?? 'Left',
-			'width'           => $instance['width'] ?? 'Narrow',
+			'flowType'        => self::$value_map['flow_type'][ $instance['flow_type'] ?? 'one_step' ] ?? 'OneStep',
+			'alignment'       => self::$value_map['alignment'][ $instance['alignment'] ?? 'left' ] ?? 'Left',
+			'width'           => self::$value_map['width'][ $instance['width'] ?? 'narrow' ] ?? 'Narrow',
 			'trimUnavailable' => ! empty( $instance['trim_unavailable'] ),
 			'slotsAsButtons'  => ! empty( $instance['slots_as_buttons'] ),
 		);
@@ -71,104 +93,15 @@ class Booking_Flow_Widget extends \WP_Widget {
 	 * @return void
 	 */
 	public function form( $instance ) {
+		$widget           = $this;
 		$title            = $instance['title'] ?? '';
-		$flow_type        = $instance['flow_type'] ?? 'OneStep';
-		$alignment        = $instance['alignment'] ?? 'Left';
-		$width            = $instance['width'] ?? 'Narrow';
+		$flow_type        = $instance['flow_type'] ?? 'one_step';
+		$alignment        = $instance['alignment'] ?? 'left';
+		$width            = $instance['width'] ?? 'narrow';
 		$trim_unavailable = ! empty( $instance['trim_unavailable'] );
 		$slots_as_buttons = ! empty( $instance['slots_as_buttons'] );
-		?>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
-		<?php esc_html_e( 'Title:', 'wpappointments' ); ?>
-		</label>
-		<input
-			class="widefat"
-			id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
-			type="text"
-			value="<?php echo esc_attr( $title ); ?>"
-		/>
-		</p>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'flow_type' ) ); ?>">
-		<?php esc_html_e( 'Flow type:', 'wpappointments' ); ?>
-		</label>
-		<select
-			class="widefat"
-			id="<?php echo esc_attr( $this->get_field_id( 'flow_type' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'flow_type' ) ); ?>"
-		>
-			<option value="OneStep" <?php selected( $flow_type, 'OneStep' ); ?>>
-		<?php esc_html_e( 'One Step', 'wpappointments' ); ?>
-			</option>
-			<option value="MultiStep" <?php selected( $flow_type, 'MultiStep' ); ?>>
-		<?php esc_html_e( 'Multi Step', 'wpappointments' ); ?>
-			</option>
-		</select>
-		</p>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'alignment' ) ); ?>">
-		<?php esc_html_e( 'Alignment:', 'wpappointments' ); ?>
-		</label>
-		<select
-			class="widefat"
-			id="<?php echo esc_attr( $this->get_field_id( 'alignment' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'alignment' ) ); ?>"
-		>
-			<option value="Left" <?php selected( $alignment, 'Left' ); ?>>
-		<?php esc_html_e( 'Left', 'wpappointments' ); ?>
-			</option>
-			<option value="Center" <?php selected( $alignment, 'Center' ); ?>>
-		<?php esc_html_e( 'Center', 'wpappointments' ); ?>
-			</option>
-			<option value="Right" <?php selected( $alignment, 'Right' ); ?>>
-		<?php esc_html_e( 'Right', 'wpappointments' ); ?>
-			</option>
-		</select>
-		</p>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>">
-		<?php esc_html_e( 'Width:', 'wpappointments' ); ?>
-		</label>
-		<select
-			class="widefat"
-			id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>"
-		>
-			<option value="Narrow" <?php selected( $width, 'Narrow' ); ?>>
-		<?php esc_html_e( 'Narrow', 'wpappointments' ); ?>
-			</option>
-			<option value="Full" <?php selected( $width, 'Full' ); ?>>
-		<?php esc_html_e( 'Full', 'wpappointments' ); ?>
-			</option>
-		</select>
-		</p>
-		<p>
-		<input
-			type="checkbox"
-			id="<?php echo esc_attr( $this->get_field_id( 'trim_unavailable' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'trim_unavailable' ) ); ?>"
-			value="1"
-		<?php checked( $trim_unavailable ); ?>
-		/>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'trim_unavailable' ) ); ?>">
-		<?php esc_html_e( 'Trim unavailable slots', 'wpappointments' ); ?>
-		</label>
-		</p>
-		<p>
-		<input
-			type="checkbox"
-			id="<?php echo esc_attr( $this->get_field_id( 'slots_as_buttons' ) ); ?>"
-			name="<?php echo esc_attr( $this->get_field_name( 'slots_as_buttons' ) ); ?>"
-			value="1"
-		<?php checked( $slots_as_buttons ); ?>
-		/>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'slots_as_buttons' ) ); ?>">
-		<?php esc_html_e( 'Show time slots as buttons', 'wpappointments' ); ?>
-		</label>
-		</p>
-		<?php
+
+		require __DIR__ . '/views/widget-form.php';
 	}
 
 	/**
@@ -182,9 +115,9 @@ class Booking_Flow_Widget extends \WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		return array(
 			'title'            => sanitize_text_field( $new_instance['title'] ?? '' ),
-			'flow_type'        => sanitize_text_field( $new_instance['flow_type'] ?? 'OneStep' ),
-			'alignment'        => sanitize_text_field( $new_instance['alignment'] ?? 'Left' ),
-			'width'            => sanitize_text_field( $new_instance['width'] ?? 'Narrow' ),
+			'flow_type'        => sanitize_text_field( $new_instance['flow_type'] ?? 'one_step' ),
+			'alignment'        => sanitize_text_field( $new_instance['alignment'] ?? 'left' ),
+			'width'            => sanitize_text_field( $new_instance['width'] ?? 'narrow' ),
 			'trim_unavailable' => ! empty( $new_instance['trim_unavailable'] ),
 			'slots_as_buttons' => ! empty( $new_instance['slots_as_buttons'] ),
 		);
