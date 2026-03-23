@@ -40,17 +40,25 @@ async function globalSetup() {
 	}
 
 	// 3. Resolve page IDs and write to file for test workers
-	const oneStepId = wpCli(
-		"post list --post_type=page --post_status=publish --title='Booking OneStep' --field=ID"
-	)
-		.split('\n')[0]
-		.trim();
+	const pagesJson = wpCli(
+		'post list --post_type=page --post_status=publish --fields=ID,post_title --format=json'
+	);
+	const pages: Array<{ ID: number; post_title: string }> =
+		JSON.parse(pagesJson);
 
-	const multiStepId = wpCli(
-		"post list --post_type=page --post_status=publish --title='Booking MultiStep' --field=ID"
-	)
-		.split('\n')[0]
-		.trim();
+	const oneStepPage = pages.find((p) => p.post_title === 'Booking OneStep');
+	const multiStepPage = pages.find(
+		(p) => p.post_title === 'Booking MultiStep'
+	);
+
+	if (!oneStepPage || !multiStepPage) {
+		throw new Error(
+			'Booking pages not found. Expected "Booking OneStep" and "Booking MultiStep".'
+		);
+	}
+
+	const oneStepId = String(oneStepPage.ID);
+	const multiStepId = String(multiStepPage.ID);
 
 	fs.mkdirSync(path.dirname(TEST_DATA_PATH), { recursive: true });
 	fs.writeFileSync(

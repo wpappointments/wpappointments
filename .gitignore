@@ -14,7 +14,6 @@ cache
 *.css.d.ts.map
 .claude/settings.local.json
 .turbo/
-tests/e2e/results/
-plugins/wpappointments/tests/e2e/results/
-test-results/
-playwright-report/
+AGENTS.md
+**/playwright-report/
+**/tests/e2e/results/

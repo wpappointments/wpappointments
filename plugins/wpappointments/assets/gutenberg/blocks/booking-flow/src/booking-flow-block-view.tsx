@@ -2,6 +2,10 @@ import { createRoot } from '@wordpress/element';
 import { createHooks } from '@wordpress/hooks';
 import BookingFlow from '~/frontend/frontend';
 
+if (!window.wpappointments) {
+	(window as unknown as Record<string, unknown>).wpappointments = {};
+}
+
 if (!window.wpappointments.hooks) {
 	window.wpappointments.hooks = createHooks();
 }

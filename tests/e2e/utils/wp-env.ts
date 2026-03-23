@@ -3,6 +3,13 @@ import { execSync } from 'child_process';
 const ROOT_DIR = process.env.WP_ENV_ROOT ?? `${__dirname}/../../../`;
 
 /**
+ * Escape a string for safe use in a single-quoted shell argument.
+ */
+function shellEscape(value: string): string {
+	return `'${value.replace(/'/g, "'\\''")}'`;
+}
+
+/**
  * Run a WP-CLI command inside the wp-env container.
  */
 export function wpCli(command: string): string {
@@ -39,7 +46,7 @@ export function enableScheduleDay(
 	});
 
 	wpCli(
-		`post meta update ${scheduleId} wpappointments_schedule_${day} '${meta}'`
+		`post meta update ${scheduleId} wpappointments_schedule_${day} ${shellEscape(meta)}`
 	);
 }
 
@@ -60,7 +67,11 @@ export function createBookingPage(
 	const blockComment = `<!-- wp:wpappointments/booking-flow ${blockAttributes} /-->`;
 
 	const result = wpCli(
-		`post create --post_type=page --post_title="Booking ${flowType}" --post_status=publish --post_content='${blockComment}' --porcelain`
+		`post create --post_type=page --post_title=${shellEscape(
+			`Booking ${flowType}`
+		)} --post_status=publish --post_content=${shellEscape(
+			blockComment
+		)} --porcelain`
 	);
 
 	return parseInt(result, 10);
