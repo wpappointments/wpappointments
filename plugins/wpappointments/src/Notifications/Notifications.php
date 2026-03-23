@@ -43,8 +43,8 @@ class Notifications extends Singleton {
 	 */
 	public function __construct() {
 		add_action( 'wpappointments_appointment_created', array( $this, 'on_created' ) );
-		add_action( 'wpappointments_appointment_updated', array( $this, 'on_updated' ), 10, 2 );
-		add_action( 'wpappointments_appointment_confirmed', array( $this, 'on_confirmed' ), 10, 2 );
+		add_action( 'wpappointments_appointment_updated', array( $this, 'on_updated' ) );
+		add_action( 'wpappointments_appointment_confirmed', array( $this, 'on_confirmed' ) );
 		add_action( 'wpappointments_appointment_cancelled', array( $this, 'on_cancelled' ) );
 	}
 
@@ -62,24 +62,22 @@ class Notifications extends Singleton {
 	/**
 	 * Send notification when appointment is updated
 	 *
-	 * @param array $appointment     Updated appointment data.
-	 * @param array $old_appointment Previous appointment data.
+	 * @param array $appointment Updated appointment data.
 	 *
 	 * @return void
 	 */
-	public function on_updated( $appointment, $old_appointment ) {
+	public function on_updated( $appointment ) {
 		$this->dispatch( 'updated', $appointment, __( 'An appointment has been updated.', 'wpappointments' ) );
 	}
 
 	/**
 	 * Send notification when appointment is confirmed
 	 *
-	 * @param array      $appointment     Confirmed appointment data.
-	 * @param array|null $old_appointment Previous appointment data.
+	 * @param array $appointment Confirmed appointment data.
 	 *
 	 * @return void
 	 */
-	public function on_confirmed( $appointment, $old_appointment = null ) {
+	public function on_confirmed( $appointment ) {
 		$this->dispatch( 'confirmed', $appointment, __( 'An appointment has been confirmed.', 'wpappointments' ) );
 	}
 

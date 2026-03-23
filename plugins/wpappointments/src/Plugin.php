@@ -23,7 +23,6 @@ class Plugin extends Core\Singleton {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
-		add_action( 'init', array( 'WPAppointments\Migration\BookableMigration', 'maybe_run' ), 99 );
 		Notifications\Notifications::get_instance();
 	}
 
@@ -140,19 +139,13 @@ class Plugin extends Core\Singleton {
 			$this->delete_schedule_post();
 			delete_option( 'wpappointments_default_scheduleId' );
 
-			$this->delete_service_post();
-			delete_option( 'wpappointments_defaultServiceId' );
+			$settings_model = new Data\Model\Settings();
 
-			delete_option( 'wpappointments_appointments_defaultLength' );
-			delete_option( 'wpappointments_appointments_timePickerPrecision' );
-			delete_option( 'wpappointments_general_firstName' );
-			delete_option( 'wpappointments_general_lastName' );
-			delete_option( 'wpappointments_general_email' );
-			delete_option( 'wpappointments_general_phoneNumber' );
-			delete_option( 'wpappointments_general_startOfWeek' );
-			delete_option( 'wpappointments_general_clockType' );
-			delete_option( 'wpappointments_general_timeFormat' );
-			delete_option( 'wpappointments_general_dateFormat' );
+			foreach ( $settings_model->settings as $category => $options ) {
+				foreach ( $options as $option ) {
+					delete_option( 'wpappointments_' . $category . '_' . $option['name'] );
+				}
+			}
 
 			$query = new \WP_Query(
 				array(
@@ -188,20 +181,5 @@ class Plugin extends Core\Singleton {
 		}
 
 		wp_delete_post( $default_schedule, true );
-	}
-
-	/**
-	 * Delete default service post
-	 *
-	 * @return void
-	 */
-	private function delete_service_post() {
-		$default_service = get_option( 'wpappointments_defaultServiceId' );
-
-		if ( ! $default_service ) {
-			return;
-		}
-
-		wp_delete_post( $default_service, true );
 	}
 }

@@ -31,7 +31,7 @@ class PluginInfo extends Singleton {
 	 *
 	 * @var string
 	 */
-	const REQUIRED_PHP = '7.4';
+	const REQUIRED_PHP = '8.2';
 
 	/**
 	 * Plugin file path
@@ -60,9 +60,6 @@ class PluginInfo extends Singleton {
 	const POST_TYPES = array(
 		'appointment'      => 'wpa-appointment',
 		'schedule'         => 'wpa-schedule',
-		'service'          => 'wpa-service',
-		'service-variant'  => 'wpa-service-variant',
-		'entity'           => 'wpa-entity',
 		'bookable'         => 'wpa-bookable',
 		'bookable-variant' => 'wpa-bookable-variant',
 	);

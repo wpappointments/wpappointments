@@ -36,11 +36,7 @@ function blocks() {
  *
  * @return array
  */
-if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
-	add_filter( 'block_categories_all', __NAMESPACE__ . '\\register_category' );
-} else {
-	add_filter( 'block_categories', __NAMESPACE__ . '\\register_category' );
-}
+add_filter( 'block_categories_all', __NAMESPACE__ . '\\register_category' );
 
 /**
  * Register block category

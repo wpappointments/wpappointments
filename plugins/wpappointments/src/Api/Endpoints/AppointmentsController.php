@@ -270,19 +270,18 @@ class AppointmentsController extends Controller {
 		$default_status   = $settings->get_setting( 'appointments', 'defaultStatus' );
 		$allowed_statuses = array( 'pending', 'confirmed' );
 		$status           = in_array( $default_status, $allowed_statuses, true ) ? $default_status : 'confirmed';
-		$default_service  = $settings->get_default_service();
+		$service_name     = $settings->get_setting( 'appointments', 'serviceName' );
 
 		$appointment       = new Appointment(
 			array(
-				'title'          => $default_service->post_title ?? __( 'Appointment', 'wpappointments' ),
+				'title'          => $service_name ? $service_name : __( 'Appointment', 'wpappointments' ),
 				'customer'       => $customer,
 				'create_account' => $create_account,
 				'password'       => $password,
 				'meta'           => array(
-					'timestamp'  => $date,
-					'duration'   => $duration,
-					'status'     => $status,
-					'service_id' => $default_service->ID ?? null,
+					'timestamp' => $date,
+					'duration'  => $duration,
+					'status'    => $status,
 				),
 			)
 		);

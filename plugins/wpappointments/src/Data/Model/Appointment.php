@@ -62,15 +62,17 @@ class Appointment {
 		$title          = $this->appointment_data['title'] ?? null;
 		$meta           = $this->appointment_data['meta'] ?? array();
 
-		if ( $password ) {
-			$customer['password'] = $password;
-		}
-
 		if ( null !== $customer ) {
 			$meta['customer'] = maybe_serialize( $customer );
 
 			if ( is_array( $customer ) && $create_account ) {
-				$customer       = new Customer( $customer );
+				$account_data = $customer;
+
+				if ( $password ) {
+					$account_data['password'] = $password;
+				}
+
+				$customer       = new Customer( $account_data );
 				$saved_customer = $customer->save();
 
 				if ( is_wp_error( $saved_customer ) ) {
