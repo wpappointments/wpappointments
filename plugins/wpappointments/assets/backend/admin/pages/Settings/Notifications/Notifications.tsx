@@ -130,7 +130,11 @@ function NotificationRow({
 					label={meta.title}
 					className={styles.srOnlyLabel}
 				/>
-				<Button variant="tertiary" onClick={onEdit}>
+				<Button
+					variant="tertiary"
+					onClick={onEdit}
+					aria-label={`${__('Edit', 'wpappointments')} ${meta.title}`}
+				>
 					{__('Edit', 'wpappointments')}
 				</Button>
 			</div>
