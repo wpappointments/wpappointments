@@ -14,7 +14,7 @@ jobs:
         run: |
           PAYLOAD=$(echo '${{ toJson(github.event) }}' | jq -c '.')
           SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "${{ secrets.WEBHOOK_SECRET }}" | awk '{print $2}')"
-          curl -sf -X POST "${{ secrets.RAILWAY_WEBHOOK_URL }}/webhook/assigned" \
+          curl -v -X POST "${{ secrets.RAILWAY_WEBHOOK_URL }}/webhook/assigned" \
             -H "Content-Type: application/json" \
             -H "x-hub-signature: $SIGNATURE" \
             -d "$PAYLOAD"
