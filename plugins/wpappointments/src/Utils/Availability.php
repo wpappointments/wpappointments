@@ -303,6 +303,41 @@ class Availability {
 			return new WP_Error( 'invalid_calendar', 'Invalid calendar shape. It needs to be an array of length 5 or 6. Each array of exact length 7' );
 		}
 
+		// Single query: get availability for the full calendar range at once.
+		$first_day = new DateTime( $calendar[0][0] );
+		$first_day->setTimezone( new \DateTimeZone( $timezone ) );
+		$first_day->setTime( 0, 0, 0 );
+
+		$last_week = $calendar[ count( $calendar ) - 1 ];
+		$last_day  = new DateTime( $last_week[6] );
+		$last_day->setTimezone( new \DateTimeZone( $timezone ) );
+		$last_day->setTime( 23, 59, 59 );
+
+		$all_slots = self::get_availability(
+			$first_day->format( 'c' ),
+			$last_day->format( 'c' ),
+			$timezone
+		);
+
+		$full_slots    = $all_slots['slots'] ?? array();
+		$trimmed_slots = $all_slots['trimmedSlots'] ?? array();
+		$use_slots     = $trim ? $trimmed_slots : $full_slots;
+
+		// Partition slots by day (Y-m-d key).
+		$slots_by_day = array();
+		foreach ( $use_slots as $slot ) {
+			$slot_date = new DateTime();
+			$slot_date->setTimestamp( (int) ( $slot['timestamp'] / 1000 ) );
+			$slot_date->setTimezone( new \DateTimeZone( $timezone ) );
+			$day_key = $slot_date->format( 'Y-m-d' );
+
+			if ( ! isset( $slots_by_day[ $day_key ] ) ) {
+				$slots_by_day[ $day_key ] = array();
+			}
+			$slots_by_day[ $day_key ][] = $slot;
+		}
+
+		// Build weekly structure matching the calendar shape.
 		$availability = array();
 
 		foreach ( $calendar as $week ) {
@@ -311,37 +346,22 @@ class Availability {
 			foreach ( $week as $day ) {
 				$day_date = new DateTime( $day );
 				$day_date->setTimezone( new \DateTimeZone( $timezone ) );
+				$day_key = $day_date->format( 'Y-m-d' );
 
-				$day_start = clone $day_date;
-				$day_start->setTime( 0, 0, 0 );
-
-				$day_end = clone $day_date;
-				$day_end->setTime( 23, 59, 59 );
-
-				$day_availability = self::get_availability(
-					$day_start->format( 'c' ),
-					$day_end->format( 'c' ),
-					$timezone
-				);
-
-				$slots         = $day_availability['slots'] ?? array();
-				$trimmed_slots = $day_availability['trimmedSlots'];
-
-				$slots = $trim ? $trimmed_slots : $slots;
-
-				$available_slots = $slots ? array_filter(
-					$slots,
+				$day_slots       = $slots_by_day[ $day_key ] ?? array();
+				$available_slots = array_filter(
+					$day_slots,
 					function ( $slot ) {
 						return true === $slot['available'];
 					}
-				) : array();
+				);
 
 				$week_availability[] = array(
 					'date'           => $day_date->format( 'c' ),
-					'day'            => $slots,
+					'day'            => $day_slots,
 					'available'      => count( $available_slots ) > 0,
 					'totalAvailable' => count( $available_slots ),
-					'totalSlots'     => count( $slots ),
+					'totalSlots'     => count( $day_slots ),
 				);
 			}
 
