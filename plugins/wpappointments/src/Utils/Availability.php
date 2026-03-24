@@ -77,6 +77,28 @@ class Availability {
 		$appointment_length          = (int) get_option( 'wpappointments_appointments_defaultLength' );
 		$appointment_length_interval = new \DateInterval( 'PT' . $appointment_length . 'M' );
 
+		$min_lead_minutes = self::lead_time_to_minutes(
+			(int) get_option( 'wpappointments_appointments_minLeadTimeValue', 0 ),
+			(string) get_option( 'wpappointments_appointments_minLeadTimeUnit', 'minute' )
+		);
+		$max_lead_minutes = self::lead_time_to_minutes(
+			(int) get_option( 'wpappointments_appointments_maxLeadTimeValue', 0 ),
+			(string) get_option( 'wpappointments_appointments_maxLeadTimeUnit', 'day' )
+		);
+
+		$earliest = null;
+		$latest   = null;
+
+		if ( $min_lead_minutes > 0 ) {
+			$earliest = clone $now;
+			$earliest->add( new \DateInterval( 'PT' . $min_lead_minutes . 'M' ) );
+		}
+
+		if ( $max_lead_minutes > 0 ) {
+			$latest = clone $now;
+			$latest->add( new \DateInterval( 'PT' . $max_lead_minutes . 'M' ) );
+		}
+
 		foreach ( $range as $slot ) {
 			$start = clone $slot;
 			$start->setTimezone( new \DateTimeZone( $timezone ) );
@@ -108,13 +130,15 @@ class Availability {
 			$available = Date::date_range_overlaps_with_any_date_range( $date_range, $schedule_periods );
 			$booked    = Date::date_range_intersects_any( $date_range, $range_appointments_periods );
 			$is_past   = $slot < $now;
+			$too_soon  = $earliest && $slot < $earliest;
+			$too_far   = $latest && $slot > $latest;
 
 			array_push(
 				$slots,
 				array(
 					'timestamp'  => (int) $slot->format( 'U' ) * 1000,
 					'dateString' => $slot->format( 'c' ),
-					'available'  => $available && ! $is_past && ! $booked,
+					'available'  => $available && ! $is_past && ! $booked && ! $too_soon && ! $too_far,
 					'inSchedule' => $available,
 				)
 			);
@@ -325,6 +349,30 @@ class Availability {
 		}
 
 		return $availability;
+	}
+
+	/**
+	 * Convert a lead time value + unit to minutes
+	 *
+	 * @param int    $value Numeric value.
+	 * @param string $unit  Unit: minute, hour, day, week, month.
+	 *
+	 * @return int Total minutes.
+	 */
+	private static function lead_time_to_minutes( $value, $unit ) {
+		$multipliers = array(
+			'minute' => 1,
+			'hour'   => 60,
+			'day'    => 1440,
+			'week'   => 10080,
+			'month'  => 43200,
+		);
+
+		if ( ! isset( $multipliers[ $unit ] ) || $value < 0 ) {
+			return 0;
+		}
+
+		return $value * $multipliers[ $unit ];
 	}
 
 	/**

@@ -19,6 +19,7 @@ import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
+import type { LeadTimeUnit } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import globalStyles from 'global.module.css';
 
@@ -27,9 +28,19 @@ type Fields = {
 	timePickerPrecision: number;
 	serviceName: string;
 	defaultStatus: 'confirmed' | 'pending';
-	defaultBufferBefore: number;
-	defaultBufferAfter: number;
+	minLeadTimeValue: number;
+	minLeadTimeUnit: LeadTimeUnit;
+	maxLeadTimeValue: number;
+	maxLeadTimeUnit: LeadTimeUnit;
 };
+
+const LEAD_TIME_UNIT_OPTIONS = [
+	{ label: __('Minutes', 'wpappointments'), value: 'minute' },
+	{ label: __('Hours', 'wpappointments'), value: 'hour' },
+	{ label: __('Days', 'wpappointments'), value: 'day' },
+	{ label: __('Weeks', 'wpappointments'), value: 'week' },
+	{ label: __('Months', 'wpappointments'), value: 'month' },
+];
 
 type Response = APIResponse<{
 	data: Fields;
@@ -112,41 +123,57 @@ export default withForm(function AppointmentsSettings() {
 								max: 60 * 24,
 							}}
 						/>
-						<Input
-							type="number"
-							name="defaultBufferBefore"
-							label={__(
-								'Buffer before appointment (in minutes)',
-								'wpappointments'
-							)}
-							help={__(
-								'Preparation time blocked before each appointment. Can be overridden per service.',
-								'wpappointments'
-							)}
-							placeholder="0"
-							rules={{
-								min: 0,
-								max: 1440,
-							}}
-						/>
+						<FormFieldSet horizontal>
+							<Input
+								type="number"
+								name="minLeadTimeValue"
+								label={__(
+									'Minimum lead time',
+									'wpappointments'
+								)}
+								placeholder="0"
+								rules={{ min: 0 }}
+							/>
+							<Select
+								name="minLeadTimeUnit"
+								label={__(
+									'Minimum lead time unit',
+									'wpappointments'
+								)}
+								labelInvisible
+								defaultValue={
+									settings.minLeadTimeUnit || 'minute'
+								}
+								options={LEAD_TIME_UNIT_OPTIONS}
+							/>
+						</FormFieldSet>
 
-						<Input
-							type="number"
-							name="defaultBufferAfter"
-							label={__(
-								'Buffer after appointment (in minutes)',
-								'wpappointments'
-							)}
-							help={__(
-								'Cleanup time blocked after each appointment. Can be overridden per service.',
-								'wpappointments'
-							)}
-							placeholder="0"
-							rules={{
-								min: 0,
-								max: 1440,
-							}}
-						/>
+						<FormFieldSet horizontal>
+							<Input
+								type="number"
+								name="maxLeadTimeValue"
+								label={__(
+									'Maximum lead time',
+									'wpappointments'
+								)}
+								placeholder="0"
+								rules={{ min: 0 }}
+								help={__(
+									'Leave at 0 for no limit.',
+									'wpappointments'
+								)}
+							/>
+							<Select
+								name="maxLeadTimeUnit"
+								label={__(
+									'Maximum lead time unit',
+									'wpappointments'
+								)}
+								labelInvisible
+								defaultValue={settings.maxLeadTimeUnit || 'day'}
+								options={LEAD_TIME_UNIT_OPTIONS}
+							/>
+						</FormFieldSet>
 
 						<Select
 							name="defaultStatus"

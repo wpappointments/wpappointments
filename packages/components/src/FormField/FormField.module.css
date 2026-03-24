@@ -12,6 +12,19 @@
 	padding: 0px;
 }
 
+.field-hidden-label {
+	position: absolute;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+.field-label-invisible {
+	visibility: hidden;
+}
+
 .field-full-width {
 	flex: 1;
 }
@@ -26,4 +39,6 @@
 
 .field-help {
 	font-size: 12px;
+	margin-bottom: 8px;
+	color: #757575;
 }
