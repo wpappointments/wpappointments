@@ -16,8 +16,9 @@
  */
 $attributes = apply_filters( 'wpappointments_booking_flow_attributes', $attributes );
 
+// min-height prevents CLS while React hydrates the booking flow.
 $element = sprintf(
-	"<div class='wpappointments-booking-flow' data-attributes='%s'></div>",
+	"<div class='wpappointments-booking-flow' style='min-height:400px' data-attributes='%s'></div>",
 	base64_encode( wp_json_encode( $attributes ) )
 );
 
@@ -37,6 +38,7 @@ $block_output = sprintf(
 		array(
 			'div' => array(
 				'class'           => array(),
+				'style'           => array(),
 				'data-attributes' => array(),
 			),
 		)
