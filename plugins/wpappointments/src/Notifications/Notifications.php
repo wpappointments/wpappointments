@@ -50,6 +50,8 @@ class Notifications extends Singleton {
 					'customerSubject'  => __( 'Your appointment has been booked', 'wpappointments' ),
 					'adminTemplate'    => 'appointment-created-admin',
 					'customerTemplate' => 'appointment-created-customer',
+					'adminBody'        => __( "Dear {admin_first_name},\n\nA new appointment has been booked with {customer_name}.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'     => __( "Dear {customer_name},\n\nThank you for booking an appointment with us.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nIf you need to reschedule, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'updated'   => array(
 					'title'            => __( 'Appointment Updated', 'wpappointments' ),
@@ -58,6 +60,8 @@ class Notifications extends Singleton {
 					'customerSubject'  => __( 'Your appointment has been updated', 'wpappointments' ),
 					'adminTemplate'    => 'appointment-updated-admin',
 					'customerTemplate' => 'appointment-updated-customer',
+					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} has been updated.\n\nPrevious: {previous_date} at {previous_time} ({previous_status})\nUpdated: {date} at {time} ({status})\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment has been updated.\n\nPrevious: {previous_date} at {previous_time}\nUpdated: {date} at {time}\nStatus: {status}\n\nIf you have any questions, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'confirmed' => array(
 					'title'            => __( 'Appointment Confirmed', 'wpappointments' ),
@@ -66,6 +70,8 @@ class Notifications extends Singleton {
 					'customerSubject'  => __( 'Your appointment is confirmed', 'wpappointments' ),
 					'adminTemplate'    => 'appointment-confirmed-admin',
 					'customerTemplate' => 'appointment-confirmed-customer',
+					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been confirmed.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} is confirmed.\n\nIf you need to make any changes, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'cancelled' => array(
 					'title'            => __( 'Appointment Cancelled', 'wpappointments' ),
@@ -74,6 +80,8 @@ class Notifications extends Singleton {
 					'customerSubject'  => __( 'Your appointment has been cancelled', 'wpappointments' ),
 					'adminTemplate'    => 'appointment-cancelled-admin',
 					'customerTemplate' => 'appointment-cancelled-customer',
+					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been cancelled.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 			);
 		}
@@ -170,7 +178,7 @@ class Notifications extends Singleton {
 		if ( $config['sendToAdmin'] ) {
 			$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
 			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
-			$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
+			$body    = $this->resolve_body( $config['adminBody'], $event_def['adminBody'], $appointment, $old_appointment );
 			if ( $this->send_to_admin( $subject, $body ) ) {
 				$recipients[] = 'admin';
 			}
@@ -179,7 +187,7 @@ class Notifications extends Singleton {
 		if ( $config['sendToCustomer'] ) {
 			$subject = $config['customerSubject'] ? $config['customerSubject'] : $event_def['customerSubject'];
 			$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
-			$body    = $this->resolve_body( $config['customerBody'], $event_def['customerTemplate'], $appointment, $old_appointment );
+			$body    = $this->resolve_body( $config['customerBody'], $event_def['customerBody'], $appointment, $old_appointment );
 
 			if ( $this->send_to_customer( $appointment, $subject, $body ) ) {
 				$recipients[] = 'customer';
@@ -192,7 +200,7 @@ class Notifications extends Singleton {
 			if ( is_email( $recipient ) ) {
 				$subject = $config['adminSubject'] ? $config['adminSubject'] : $event_def['adminSubject'];
 				$subject = $this->resolve_subject( $subject, $appointment, $old_appointment );
-				$body    = $this->resolve_body( $config['adminBody'], $event_def['adminTemplate'], $appointment, $old_appointment );
+				$body    = $this->resolve_body( $config['adminBody'], $event_def['adminBody'], $appointment, $old_appointment );
 
 				if ( $this->send( $recipient, $subject, $body ) ) {
 					$recipients[] = $recipient;
@@ -232,25 +240,20 @@ class Notifications extends Singleton {
 	}
 
 	/**
-	 * Resolve the email body — use custom body if set, otherwise load HTML template
+	 * Resolve the email body — use custom body if set, otherwise use default body
 	 *
 	 * @param string     $custom_body      Custom body from settings (may be empty).
-	 * @param string     $template_name    Default HTML template file name.
+	 * @param string     $default_body     Default body from event definition.
 	 * @param array      $appointment      Normalized appointment data.
 	 * @param array|null $old_appointment  Previous appointment data.
 	 *
 	 * @return string Interpolated email body.
 	 */
-	private function resolve_body( $custom_body, $template_name, $appointment, $old_appointment = null ) {
-		if ( ! empty( $custom_body ) ) {
-			$interpolated = $this->interpolate( $custom_body, $appointment, $old_appointment );
-			$message      = $this->wrap_html( $interpolated );
-		} elseif ( file_exists( PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html' ) ) {
-			ob_start();
-			require PluginInfo::get_plugin_dir_path() . 'includes/notifications/emails/html/' . $template_name . '.html';
-			$template = ob_get_clean();
+	private function resolve_body( $custom_body, $default_body, $appointment, $old_appointment = null ) {
+		$body = ! empty( $custom_body ) ? $custom_body : $default_body;
 
-			$interpolated = $this->interpolate( $template, $appointment, $old_appointment );
+		if ( ! empty( $body ) ) {
+			$interpolated = $this->interpolate( $body, $appointment, $old_appointment );
 			$message      = $this->wrap_html( $interpolated );
 		} else {
 			$message = $this->build_fallback_message( $appointment );
@@ -259,7 +262,7 @@ class Notifications extends Singleton {
 		/**
 		 * Filters the email message body for WP Appointments notifications.
 		 *
-		 * Applied to all notification bodies — custom, template, and fallback.
+		 * Applied to all notification bodies — custom, default, and fallback.
 		 *
 		 * @param string     $message         HTML email body.
 		 * @param array      $appointment     Normalized appointment data.

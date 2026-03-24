@@ -3,7 +3,6 @@ import {
 	Button,
 	Card,
 	CardBody,
-	CardFooter,
 	CardHeader,
 	TextareaControl,
 	ToggleControl,
@@ -38,15 +37,16 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
-const EVENT_META: Record<
-	NotificationEventKey,
-	{
-		title: string;
-		description: string;
-		defaultAdminSubject: string;
-		defaultCustomerSubject: string;
-	}
-> = {
+type EventMeta = {
+	title: string;
+	description: string;
+	defaultAdminSubject: string;
+	defaultCustomerSubject: string;
+	defaultAdminBody: string;
+	defaultCustomerBody: string;
+};
+
+const EVENT_META: Record<NotificationEventKey, EventMeta> = {
 	created: {
 		title: __('Appointment Created', 'wpappointments'),
 		description: __(
@@ -56,6 +56,36 @@ const EVENT_META: Record<
 		defaultAdminSubject: __('New appointment booked', 'wpappointments'),
 		defaultCustomerSubject: __(
 			'Your appointment has been booked',
+			'wpappointments'
+		),
+		defaultAdminBody: __(
+			`Dear {admin_first_name},
+
+A new appointment has been booked with {customer_name}.
+
+Date: {date}
+Time: {time}
+Service: {service}
+Duration: {duration} minutes
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
+		defaultCustomerBody: __(
+			`Dear {customer_name},
+
+Thank you for booking an appointment with us.
+
+Date: {date}
+Time: {time}
+Service: {service}
+Duration: {duration} minutes
+
+If you need to reschedule, please contact us at {admin_email}.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
 			'wpappointments'
 		),
 	},
@@ -70,6 +100,33 @@ const EVENT_META: Record<
 			'Your appointment has been updated',
 			'wpappointments'
 		),
+		defaultAdminBody: __(
+			`Dear {admin_first_name},
+
+The appointment with {customer_name} has been updated.
+
+Previous: {previous_date} at {previous_time} ({previous_status})
+Updated: {date} at {time} ({status})
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
+		defaultCustomerBody: __(
+			`Dear {customer_name},
+
+Your appointment has been updated.
+
+Previous: {previous_date} at {previous_time}
+Updated: {date} at {time}
+Status: {status}
+
+If you have any questions, please contact us at {admin_email}.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
 	},
 	confirmed: {
 		title: __('Appointment Confirmed', 'wpappointments'),
@@ -82,6 +139,26 @@ const EVENT_META: Record<
 			'Your appointment is confirmed',
 			'wpappointments'
 		),
+		defaultAdminBody: __(
+			`Dear {admin_first_name},
+
+The appointment with {customer_name} on {date} at {time} has been confirmed.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
+		defaultCustomerBody: __(
+			`Dear {customer_name},
+
+Your appointment on {date} at {time} is confirmed.
+
+If you need to make any changes, please contact us at {admin_email}.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
 	},
 	cancelled: {
 		title: __('Appointment Cancelled', 'wpappointments'),
@@ -92,6 +169,26 @@ const EVENT_META: Record<
 		defaultAdminSubject: __('Appointment cancelled', 'wpappointments'),
 		defaultCustomerSubject: __(
 			'Your appointment has been cancelled',
+			'wpappointments'
+		),
+		defaultAdminBody: __(
+			`Dear {admin_first_name},
+
+The appointment with {customer_name} on {date} at {time} has been cancelled.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
+			'wpappointments'
+		),
+		defaultCustomerBody: __(
+			`Dear {customer_name},
+
+Your appointment on {date} at {time} has been cancelled.
+
+If this was a mistake, please contact us at {admin_email} to reschedule.
+
+Best regards,
+{admin_first_name} {admin_last_name}`,
 			'wpappointments'
 		),
 	},
@@ -109,8 +206,8 @@ function getDefaultEvent(key: NotificationEventKey): NotificationEvent {
 		customRecipients: '',
 		adminSubject: meta.defaultAdminSubject,
 		customerSubject: meta.defaultCustomerSubject,
-		adminBody: '',
-		customerBody: '',
+		adminBody: meta.defaultAdminBody,
+		customerBody: meta.defaultCustomerBody,
 	};
 }
 
@@ -341,12 +438,40 @@ export default function NotificationsSettings() {
 
 	const merged = getMerged();
 
-	const handleToggle = (key: NotificationEventKey) => (enabled: boolean) => {
-		setLocalSettings((prev) => ({
-			...prev,
-			[key]: { ...merged[key], ...prev?.[key], enabled },
-		}));
-	};
+	const handleToggle =
+		(key: NotificationEventKey) => async (enabled: boolean) => {
+			const updatedEvent = { ...merged[key], enabled };
+
+			setLocalSettings((prev) => ({
+				...prev,
+				[key]: updatedEvent,
+			}));
+
+			const allSettings = {
+				...merged,
+				[key]: updatedEvent,
+			};
+
+			const [error] = await resolve<Response>(async () => {
+				return await apiFetch<Response>({
+					path: 'settings/notifications',
+					method: 'PATCH',
+					data: allSettings,
+				});
+			});
+
+			if (error) {
+				setLocalSettings((prev) => ({
+					...prev,
+					[key]: { ...updatedEvent, enabled: !enabled },
+				}));
+				displayErrorToast(error?.message);
+				return;
+			}
+
+			dispatch.setPluginSettings({ notifications: allSettings });
+			setLocalSettings({});
+		};
 
 	const handleEdit = (key: NotificationEventKey) => () => {
 		const meta = EVENT_META[key];
@@ -366,33 +491,6 @@ export default function NotificationsSettings() {
 				/>
 			),
 		});
-	};
-
-	const onSave = async () => {
-		const current = getMerged();
-		const [error, response] = await resolve<Response>(async () => {
-			return await apiFetch<Response>({
-				path: 'settings/notifications',
-				method: 'PATCH',
-				data: current,
-			});
-		});
-
-		if (error) {
-			displayErrorToast(error?.message);
-			return;
-		}
-
-		if (response === null) {
-			displayErrorToast(__('Error saving settings', 'wpappointments'));
-			return;
-		}
-
-		if (response.message) {
-			dispatch.setPluginSettings({ notifications: current });
-			setLocalSettings({});
-			displaySuccessToast(response.message);
-		}
 	};
 
 	return (
@@ -417,11 +515,6 @@ export default function NotificationsSettings() {
 					)}
 				</div>
 			</CardBody>
-			<CardFooter>
-				<Button variant="primary" onClick={onSave}>
-					{__('Save changes', 'wpappointments')}
-				</Button>
-			</CardFooter>
 		</Card>
 	);
 }
