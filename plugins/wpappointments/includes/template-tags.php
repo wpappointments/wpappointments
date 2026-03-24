@@ -35,10 +35,10 @@ function wpappointments_render_booking_flow( $attributes = array() ) {
 
 	$camel = array(
 		'flowType'        => wpappointments_snake_to_camel_value( $attributes['flow_type'] ),
-		'alignment'       => ucfirst( $attributes['alignment'] ),
-		'width'           => ucfirst( $attributes['width'] ),
-		'trimUnavailable' => (bool) $attributes['trim_unavailable'],
-		'slotsAsButtons'  => (bool) $attributes['slots_as_buttons'],
+		'alignment'       => wpappointments_snake_to_camel_value( $attributes['alignment'] ),
+		'width'           => wpappointments_snake_to_camel_value( $attributes['width'] ),
+		'trimUnavailable' => filter_var( $attributes['trim_unavailable'], FILTER_VALIDATE_BOOLEAN ),
+		'slotsAsButtons'  => filter_var( $attributes['slots_as_buttons'], FILTER_VALIDATE_BOOLEAN ),
 	);
 
 	echo wp_kses(
