@@ -40,12 +40,22 @@ type Response = APIResponse<{
 
 const EVENT_META: Record<
 	NotificationEventKey,
-	{ title: string; description: string }
+	{
+		title: string;
+		description: string;
+		defaultAdminSubject: string;
+		defaultCustomerSubject: string;
+	}
 > = {
 	created: {
 		title: __('Appointment Created', 'wpappointments'),
 		description: __(
 			'Sent when a new appointment is booked.',
+			'wpappointments'
+		),
+		defaultAdminSubject: __('New appointment booked', 'wpappointments'),
+		defaultCustomerSubject: __(
+			'Your appointment has been booked',
 			'wpappointments'
 		),
 	},
@@ -55,11 +65,21 @@ const EVENT_META: Record<
 			'Sent when an existing appointment is modified.',
 			'wpappointments'
 		),
+		defaultAdminSubject: __('Appointment updated', 'wpappointments'),
+		defaultCustomerSubject: __(
+			'Your appointment has been updated',
+			'wpappointments'
+		),
 	},
 	confirmed: {
 		title: __('Appointment Confirmed', 'wpappointments'),
 		description: __(
 			'Sent when an appointment is confirmed.',
+			'wpappointments'
+		),
+		defaultAdminSubject: __('Appointment confirmed', 'wpappointments'),
+		defaultCustomerSubject: __(
+			'Your appointment is confirmed',
 			'wpappointments'
 		),
 	},
@@ -69,22 +89,30 @@ const EVENT_META: Record<
 			'Sent when an appointment is cancelled.',
 			'wpappointments'
 		),
+		defaultAdminSubject: __('Appointment cancelled', 'wpappointments'),
+		defaultCustomerSubject: __(
+			'Your appointment has been cancelled',
+			'wpappointments'
+		),
 	},
 };
 
 const TEMPLATE_VARS =
 	'{id}, {service}, {status}, {date}, {time}, {duration}, {customer_name}, {previous_date}, {previous_time}, {previous_status}, {admin_first_name}, {admin_last_name}, {admin_email}, {admin_phone}';
 
-const DEFAULT_EVENT: NotificationEvent = {
-	enabled: true,
-	sendToAdmin: true,
-	sendToCustomer: true,
-	customRecipients: '',
-	adminSubject: '',
-	customerSubject: '',
-	adminBody: '',
-	customerBody: '',
-};
+function getDefaultEvent(key: NotificationEventKey): NotificationEvent {
+	const meta = EVENT_META[key];
+	return {
+		enabled: true,
+		sendToAdmin: true,
+		sendToCustomer: true,
+		customRecipients: '',
+		adminSubject: meta.defaultAdminSubject,
+		customerSubject: meta.defaultCustomerSubject,
+		adminBody: '',
+		customerBody: '',
+	};
+}
 
 function NotificationRow({
 	eventKey,
@@ -290,22 +318,22 @@ export default function NotificationsSettings() {
 	const getMerged = () =>
 		({
 			created: {
-				...DEFAULT_EVENT,
+				...getDefaultEvent('created'),
 				...savedSettings?.created,
 				...localSettings?.created,
 			},
 			updated: {
-				...DEFAULT_EVENT,
+				...getDefaultEvent('updated'),
 				...savedSettings?.updated,
 				...localSettings?.updated,
 			},
 			confirmed: {
-				...DEFAULT_EVENT,
+				...getDefaultEvent('confirmed'),
 				...savedSettings?.confirmed,
 				...localSettings?.confirmed,
 			},
 			cancelled: {
-				...DEFAULT_EVENT,
+				...getDefaultEvent('cancelled'),
 				...savedSettings?.cancelled,
 				...localSettings?.cancelled,
 			},
@@ -320,13 +348,13 @@ export default function NotificationsSettings() {
 		}));
 	};
 
-	const handleChange =
-		(key: NotificationEventKey) => (val: NotificationEvent) => {
-			setLocalSettings((prev) => ({ ...prev, [key]: val }));
-		};
-
 	const handleEdit = (key: NotificationEventKey) => () => {
 		const meta = EVENT_META[key];
+		const initialValues = {
+			...getDefaultEvent(key),
+			...savedSettings?.[key],
+			...localSettings?.[key],
+		};
 
 		openSlideOut({
 			id: `notification-${key}`,
@@ -334,13 +362,7 @@ export default function NotificationsSettings() {
 			content: (
 				<NotificationEditorWrapper
 					eventKey={key}
-					getSettings={() => ({
-						...DEFAULT_EVENT,
-						...savedSettings?.[key],
-						...localSettings?.[key],
-					})}
-					onChange={handleChange(key)}
-					onSave={onSave}
+					initialValues={initialValues}
 				/>
 			),
 		});
@@ -406,27 +428,68 @@ export default function NotificationsSettings() {
 
 function NotificationEditorWrapper({
 	eventKey,
-	getSettings,
-	onChange,
-	onSave,
+	initialValues,
 }: {
 	eventKey: NotificationEventKey;
-	getSettings: () => NotificationEvent;
-	onChange: (val: NotificationEvent) => void;
-	onSave: () => Promise<void>;
+	initialValues: NotificationEvent;
 }) {
-	const [local, setLocal] = useState<NotificationEvent>(getSettings());
+	const dispatch = useDispatch(store);
+	const { closeSlideOut } = useSlideout();
+	const [local, setLocal] = useState<NotificationEvent>(initialValues);
 	const [saving, setSaving] = useState(false);
 
-	const handleChange = (updated: NotificationEvent) => {
-		setLocal(updated);
-		onChange(updated);
-	};
+	const savedSettings = useSelect(() => {
+		return select(store).getNotificationsSettings();
+	}, []);
 
 	const handleSave = async () => {
 		setSaving(true);
-		await onSave();
+
+		const allSettings = {
+			created: {
+				...getDefaultEvent('created'),
+				...savedSettings?.created,
+			},
+			updated: {
+				...getDefaultEvent('updated'),
+				...savedSettings?.updated,
+			},
+			confirmed: {
+				...getDefaultEvent('confirmed'),
+				...savedSettings?.confirmed,
+			},
+			cancelled: {
+				...getDefaultEvent('cancelled'),
+				...savedSettings?.cancelled,
+			},
+			[eventKey]: local,
+		} as SettingsNotifications;
+
+		const [error, response] = await resolve<Response>(async () => {
+			return await apiFetch<Response>({
+				path: 'settings/notifications',
+				method: 'PATCH',
+				data: allSettings,
+			});
+		});
+
 		setSaving(false);
+
+		if (error) {
+			displayErrorToast(error?.message);
+			return;
+		}
+
+		if (response === null) {
+			displayErrorToast(__('Error saving settings', 'wpappointments'));
+			return;
+		}
+
+		if (response.message) {
+			dispatch.setPluginSettings({ notifications: allSettings });
+			displaySuccessToast(response.message);
+			closeSlideOut(`notification-${eventKey}`);
+		}
 	};
 
 	return (
@@ -434,18 +497,21 @@ function NotificationEditorWrapper({
 			<NotificationEditor
 				eventKey={eventKey}
 				value={local}
-				onChange={handleChange}
+				onChange={setLocal}
 			/>
-			<div
+			<Button
+				variant="primary"
+				onClick={handleSave}
+				isBusy={saving}
 				style={{
-					padding: 'var(--wpappointments-main-gap, 16px)',
-					borderTop: '1px solid #e5e5e5',
+					width: '100%',
+					justifyContent: 'center',
+					padding: '22px 0px',
+					marginTop: '34px',
 				}}
 			>
-				<Button variant="primary" onClick={handleSave} isBusy={saving}>
-					{__('Save changes', 'wpappointments')}
-				</Button>
-			</div>
+				{__('Save changes', 'wpappointments')}
+			</Button>
 		</>
 	);
 }
