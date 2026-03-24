@@ -84,7 +84,6 @@
 }
 
 .editorContent {
-	padding: 16px 24px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;

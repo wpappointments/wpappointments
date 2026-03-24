@@ -340,6 +340,7 @@ export default function NotificationsSettings() {
 						...localSettings?.[key],
 					})}
 					onChange={handleChange(key)}
+					onSave={onSave}
 				/>
 			),
 		});
@@ -407,23 +408,44 @@ function NotificationEditorWrapper({
 	eventKey,
 	getSettings,
 	onChange,
+	onSave,
 }: {
 	eventKey: NotificationEventKey;
 	getSettings: () => NotificationEvent;
 	onChange: (val: NotificationEvent) => void;
+	onSave: () => Promise<void>;
 }) {
 	const [local, setLocal] = useState<NotificationEvent>(getSettings());
+	const [saving, setSaving] = useState(false);
 
 	const handleChange = (updated: NotificationEvent) => {
 		setLocal(updated);
 		onChange(updated);
 	};
 
+	const handleSave = async () => {
+		setSaving(true);
+		await onSave();
+		setSaving(false);
+	};
+
 	return (
-		<NotificationEditor
-			eventKey={eventKey}
-			value={local}
-			onChange={handleChange}
-		/>
+		<>
+			<NotificationEditor
+				eventKey={eventKey}
+				value={local}
+				onChange={handleChange}
+			/>
+			<div
+				style={{
+					padding: 'var(--wpappointments-main-gap, 16px)',
+					borderTop: '1px solid #e5e5e5',
+				}}
+			>
+				<Button variant="primary" onClick={handleSave} isBusy={saving}>
+					{__('Save changes', 'wpappointments')}
+				</Button>
+			</div>
+		</>
 	);
 }
