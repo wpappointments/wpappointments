@@ -11,6 +11,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/utils/booking-flow.php';
+
 /**
  * Render the WP Appointments booking flow
  *
@@ -31,18 +33,10 @@ function wpappointments_render_booking_flow( $attributes = array() ) {
 		'slots_as_buttons' => false,
 	);
 
-	$attributes = wp_parse_args( $attributes, $defaults );
-
-	$camel = array(
-		'flowType'        => wpappointments_snake_to_camel_value( $attributes['flow_type'] ),
-		'alignment'       => wpappointments_snake_to_camel_value( $attributes['alignment'] ),
-		'width'           => wpappointments_snake_to_camel_value( $attributes['width'] ),
-		'trimUnavailable' => filter_var( $attributes['trim_unavailable'], FILTER_VALIDATE_BOOLEAN ),
-		'slotsAsButtons'  => filter_var( $attributes['slots_as_buttons'], FILTER_VALIDATE_BOOLEAN ),
-	);
+	$attributes = \WPAppointments\Utils\BookingFlow\parse_args( $attributes, $defaults );
 
 	echo wp_kses(
-		\WPAppointments\Shortcode\render_booking_flow_html( $camel ),
+		\WPAppointments\Shortcode\render_booking_flow_html( $attributes ),
 		array(
 			'div' => array(
 				'class'           => array(),
@@ -51,15 +45,4 @@ function wpappointments_render_booking_flow( $attributes = array() ) {
 			),
 		)
 	);
-}
-
-/**
- * Convert a snake_case value to CamelCase
- *
- * @param string $value Snake_case string (e.g. 'one_step').
- *
- * @return string CamelCase string (e.g. 'OneStep').
- */
-function wpappointments_snake_to_camel_value( $value ) {
-	return str_replace( ' ', '', ucwords( str_replace( '_', ' ', $value ) ) );
 }
