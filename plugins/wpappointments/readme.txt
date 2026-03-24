@@ -67,6 +67,15 @@ Bookable entities represent resources that can be reserved -- rooms, tables, sta
 
 Yes. WP Appointments exposes a full REST API under the `wpappointments/v1` namespace. You can manage appointments, services, entities, customers, and settings programmatically.
 
+== Screenshots ==
+
+1. Dashboard -- overview with upcoming appointments and quick actions
+2. Calendar -- month view with appointment management
+3. Settings: Schedule -- configure weekly opening hours per day
+4. Settings: Appointments -- default length, lead times, status
+5. Customers -- list of customers with contact details
+6. Booking flow -- customer-facing calendar with time slot selection
+
 == Changelog ==
 
 = 0.1.2 =
