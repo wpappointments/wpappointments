@@ -55,31 +55,17 @@ function render_shortcode( $atts ) {
 		'wpappointments'
 	);
 
-	$value_map = array(
-		'flow_type' => array(
-			'one_step'   => 'OneStep',
-			'multi_step' => 'MultiStep',
-		),
-		'alignment' => array(
-			'left'   => 'Left',
-			'center' => 'Center',
-			'right'  => 'Right',
-		),
-		'width'     => array(
-			'narrow' => 'Narrow',
-			'full'   => 'Full',
-		),
-	);
-
 	$attributes = array(
-		'flowType'        => $value_map['flow_type'][ strtolower( $atts['flow_type'] ) ] ?? 'OneStep',
-		'alignment'       => $value_map['alignment'][ strtolower( $atts['alignment'] ) ] ?? 'Left',
-		'width'           => $value_map['width'][ strtolower( $atts['width'] ) ] ?? 'Narrow',
-		'trimUnavailable' => filter_var( $atts['trim_unavailable'], FILTER_VALIDATE_BOOLEAN ),
-		'slotsAsButtons'  => filter_var( $atts['slots_as_buttons'], FILTER_VALIDATE_BOOLEAN ),
+		'flow_type'        => sanitize_text_field( $atts['flow_type'] ),
+		'alignment'        => sanitize_text_field( $atts['alignment'] ),
+		'width'            => sanitize_text_field( $atts['width'] ),
+		'trim_unavailable' => filter_var( $atts['trim_unavailable'], FILTER_VALIDATE_BOOLEAN ),
+		'slots_as_buttons' => filter_var( $atts['slots_as_buttons'], FILTER_VALIDATE_BOOLEAN ),
 	);
 
-	return render_booking_flow_html( $attributes );
+	ob_start();
+	wpappointments_render_booking_flow( $attributes );
+	return ob_get_clean();
 }
 
 /**

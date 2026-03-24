@@ -54,17 +54,17 @@ With custom attributes:
 ```php
 <?php
 wpappointments_render_booking_flow( array(
-    'flowType'        => 'MultiStep',
-    'alignment'       => 'Center',
-    'width'           => 'Full',
-    'trimUnavailable' => true,
-    'slotsAsButtons'  => false,
+    'flow_type'        => 'multi_step',
+    'alignment'        => 'center',
+    'width'            => 'full',
+    'trim_unavailable' => true,
+    'slots_as_buttons' => false,
 ) );
 ?>
 ```
 
 :::note
-The template tag uses **camelCase** attribute keys (matching the JS/block API), while the shortcode uses **snake_case**.
+Both the shortcode and template tag use **snake_case** keys and values. The conversion to camelCase (used by the JS frontend) is handled internally.
 :::
 
 ## Filters

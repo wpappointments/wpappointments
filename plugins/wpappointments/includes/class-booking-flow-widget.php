@@ -16,27 +16,6 @@ defined( 'ABSPATH' ) || exit;
 class Booking_Flow_Widget extends \WP_Widget {
 
 	/**
-	 * Map snake_case widget values to camelCase JS attribute values.
-	 *
-	 * @var array
-	 */
-	private static $value_map = array(
-		'flow_type' => array(
-			'one_step'   => 'OneStep',
-			'multi_step' => 'MultiStep',
-		),
-		'alignment' => array(
-			'left'   => 'Left',
-			'center' => 'Center',
-			'right'  => 'Right',
-		),
-		'width'     => array(
-			'narrow' => 'Narrow',
-			'full'   => 'Full',
-		),
-	);
-
-	/**
 	 * Constructor
 	 */
 	public function __construct() {
@@ -59,11 +38,11 @@ class Booking_Flow_Widget extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		$attributes = array(
-			'flowType'        => self::$value_map['flow_type'][ $instance['flow_type'] ?? 'one_step' ] ?? 'OneStep',
-			'alignment'       => self::$value_map['alignment'][ $instance['alignment'] ?? 'left' ] ?? 'Left',
-			'width'           => self::$value_map['width'][ $instance['width'] ?? 'narrow' ] ?? 'Narrow',
-			'trimUnavailable' => ! empty( $instance['trim_unavailable'] ),
-			'slotsAsButtons'  => ! empty( $instance['slots_as_buttons'] ),
+			'flow_type'        => $instance['flow_type'] ?? 'one_step',
+			'alignment'        => $instance['alignment'] ?? 'left',
+			'width'            => $instance['width'] ?? 'narrow',
+			'trim_unavailable' => ! empty( $instance['trim_unavailable'] ),
+			'slots_as_buttons' => ! empty( $instance['slots_as_buttons'] ),
 		);
 
 		echo wp_kses_post( $args['before_widget'] );
@@ -72,15 +51,7 @@ class Booking_Flow_Widget extends \WP_Widget {
 			echo wp_kses_post( $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'] );
 		}
 
-		echo wp_kses(
-			render_booking_flow_html( $attributes ),
-			array(
-				'div' => array(
-					'class'           => array(),
-					'data-attributes' => array(),
-				),
-			)
-		);
+		wpappointments_render_booking_flow( $attributes );
 
 		echo wp_kses_post( $args['after_widget'] );
 	}
