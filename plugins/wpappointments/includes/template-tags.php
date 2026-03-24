@@ -36,7 +36,7 @@ function wpappointments_render_booking_flow( $attributes = array() ) {
 	$attributes = \WPAppointments\Utils\BookingFlow\parse_args( $attributes, $defaults );
 
 	echo wp_kses(
-		\WPAppointments\Shortcode\render_booking_flow_html( $attributes ),
+		\WPAppointments\Utils\BookingFlow\render_html( $attributes ),
 		array(
 			'div' => array(
 				'class'           => array(),

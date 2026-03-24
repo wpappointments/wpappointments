@@ -12,8 +12,6 @@
 
 namespace WPAppointments\Shortcode;
 
-use WPAppointments\Core\PluginInfo;
-
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/class-booking-flow-widget.php';
@@ -66,78 +64,6 @@ function render_shortcode( $atts ) {
 	ob_start();
 	wpappointments_render_booking_flow( $attributes );
 	return ob_get_clean();
-}
-
-/**
- * Render the booking flow HTML and enqueue required assets
- *
- * Shared by the shortcode, widget, and template function.
- *
- * @param array $attributes Booking flow attributes (camelCase keys).
- *
- * @return string HTML output.
- */
-function render_booking_flow_html( $attributes ) {
-	enqueue_frontend_assets();
-
-	/** This filter is documented in assets/gutenberg/blocks/booking-flow/src/render.php */
-	$attributes = apply_filters( 'wpappointments_booking_flow_attributes', $attributes );
-
-	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Required for the view script to decode attributes.
-	return sprintf(
-		"<div class='wpappointments-booking-flow' data-attributes='%s'></div>",
-		esc_attr( base64_encode( wp_json_encode( $attributes ) ) )
-	);
-}
-
-/**
- * Enqueue the frontend scripts and styles required for the booking flow
- *
- * When the Gutenberg block is used, these are loaded automatically via
- * block.json viewScript/style. For shortcodes and widgets we must
- * enqueue them manually.
- *
- * @return void
- */
-function enqueue_frontend_assets() {
-	$plugin_dir  = PluginInfo::get_plugin_dir_path();
-	$plugin_url  = PluginInfo::get_plugin_dir_url();
-	$version     = PluginInfo::get_version();
-	$view_handle = 'wpappointments-booking-flow-view';
-
-	if ( wp_script_is( $view_handle, 'enqueued' ) ) {
-		return;
-	}
-
-	$asset_path = $plugin_dir . 'build/booking-flow-block-view.tsx.asset.php';
-
-	if ( ! file_exists( $asset_path ) ) {
-		return;
-	}
-
-	$asset = require $asset_path;
-
-	wp_enqueue_script(
-		$view_handle,
-		$plugin_url . 'build/booking-flow-block-view.tsx.js',
-		$asset['dependencies'],
-		$asset['version'],
-		true
-	);
-
-	wp_enqueue_style(
-		'wpappointments-frontend-css',
-		$plugin_url . 'build/frontend.tsx.css',
-		array(),
-		$version
-	);
-
-	wp_enqueue_style(
-		'wpappointments-booking-flow-view-css',
-		$plugin_url . 'build/booking-flow-block-view.tsx.css',
-		array(),
-		$version
-	);
 }
 
 /**
