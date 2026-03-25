@@ -7,6 +7,7 @@ import { CustomersState } from './customers/customers.types';
 import { NoticesState } from './notices/notices.types';
 import reducers from './reducers';
 import resolvers from './resolvers';
+import { SchedulesState } from './schedules/schedules.types';
 import selectors from './selectors';
 import { SettingsState } from './settings/settings.types';
 import { AppointmentSlideoutState } from './slideout/appointment/appointment.types';
@@ -20,6 +21,7 @@ export type State = {
 	availability: AvailabilityState;
 	appointmentSlideout: AppointmentSlideoutState;
 	customers: CustomersState;
+	schedules: SchedulesState;
 };
 
 export const store = createReduxStore('wpappointments', {
