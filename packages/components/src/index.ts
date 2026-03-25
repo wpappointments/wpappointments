@@ -58,6 +58,10 @@ export { default as DeleteModal } from './DeleteModal/DeleteModal';
 
 // SlotFill
 export { HeaderActionsSlot, HeaderActionsFill } from './SlotFill/HeaderActions';
+export {
+	SlideoutHeaderActionsSlot,
+	SlideoutHeaderActionsFill,
+} from './SlotFill/SlideoutHeaderActions';
 
 // Bookable CRUD components
 export { default as BookableListPage } from './BookableListPage/BookableListPage';
