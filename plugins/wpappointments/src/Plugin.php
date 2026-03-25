@@ -103,6 +103,49 @@ class Plugin extends Core\Singleton {
 			}
 		}
 
+		// Create core intrinsic bookable entity.
+		$core_entity_id = get_option( 'wpappointments_core_entityId' );
+
+		if ( ! $core_entity_id ) {
+			$entity_post_id = wp_insert_post(
+				array(
+					'post_title'  => __( 'Appointment', 'wpappointments' ),
+					'post_status' => 'publish',
+					'post_type'   => Core\PluginInfo::POST_TYPES['bookable'],
+					'meta_input'  => array(
+						'_core_entity'  => true,
+						'active'        => true,
+						'type'          => 'service',
+						'schedule_id'   => $default_schedule ? $default_schedule : 0,
+						'duration'      => 30,
+						'buffer_before' => 0,
+						'buffer_after'  => 0,
+						'min_lead_time' => 0,
+						'max_lead_time' => 0,
+						'attributes'    => array(),
+					),
+				),
+				true
+			);
+
+			if ( ! is_wp_error( $entity_post_id ) ) {
+				update_option( 'wpappointments_core_entityId', $entity_post_id );
+
+				// Create default variant for the core entity.
+				wp_insert_post(
+					array(
+						'post_title'  => __( 'Default', 'wpappointments' ),
+						'post_status' => 'publish',
+						'post_type'   => Core\PluginInfo::POST_TYPES['bookable-variant'],
+						'post_parent' => $entity_post_id,
+						'meta_input'  => array(
+							'attribute_values' => array(),
+						),
+					)
+				);
+			}
+		}
+
 		update_option( 'wpappointments_appointments_defaultLength', 30 );
 		update_option( 'wpappointments_appointments_timePickerPrecision', 30 );
 		update_option( 'wpappointments_general_timezoneSiteDefault', 1 );

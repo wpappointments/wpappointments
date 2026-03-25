@@ -97,8 +97,13 @@ export function BookingFlowContextProvider({
 
 	useEffect(() => {
 		async function fetchAvailability() {
+			const entityId =
+				attributes.entityId ||
+				window.wpappointments?.entity?.coreEntityId ||
+				0;
+
 			const data = await apiFetch({
-				path: addQueryArgs('calendar-availability', {
+				path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
 					calendar: JSON.stringify(calendar[0]),
 					timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 					trim: attributes.trimUnavailable,

@@ -13,6 +13,7 @@ export type BookingFlowBlockAttributes = {
 	width: 'Narrow' | 'Full';
 	trimUnavailable: boolean;
 	slotsAsButtons: boolean;
+	entityId?: number;
 };
 
 // @ts-ignore

@@ -49,6 +49,9 @@ function scripts() {
 					'defaultLength' => get_option( 'wpappointments_appointments_defaultLength', 30 ),
 				),
 			),
+			'entity'   => array(
+				'coreEntityId' => absint( get_option( 'wpappointments_core_entityId', 0 ) ),
+			),
 		)
 	);
 }
