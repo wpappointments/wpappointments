@@ -50,8 +50,8 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 	const firstDayOfCurrentMonthDate = new Date(year, monthIndex, 1);
 	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
 	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
-	const settings = useSelect(() => {
-		return select(store).getScheduleSettings();
+	const defaultSchedule = useSelect(() => {
+		return select(store).getDefaultSchedule();
 	}, []);
 
 	const days = [];
@@ -68,13 +68,10 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 		let startHour = 0;
 		let startMinute = 0;
 
-		// todo: fix this TS error
-		// @ts-ignore
-		if (settings[dayOfWeek]) {
-			// @ts-ignore
-			startHour = settings[dayOfWeek].slots.list[0].start.hour;
-			// @ts-ignore
-			startMinute = settings[dayOfWeek].slots.list[0].start.minute;
+		const dayData = defaultSchedule?.days?.[dayOfWeek];
+		if (dayData?.enabled && dayData?.slots?.list?.[0]) {
+			startHour = parseInt(dayData.slots.list[0].start.hour || '0');
+			startMinute = parseInt(dayData.slots.list[0].start.minute || '0');
 		}
 
 		days.push({

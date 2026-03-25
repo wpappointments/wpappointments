@@ -7,7 +7,7 @@
 	display: flex;
 	align-items: center;
 	padding: 4px;
-	background-color: #eee;
+	background-color: #f6f6f6;
 }
 
 .time-picker :global .components-number-control {
@@ -30,29 +30,29 @@
 	justify-content: center;
 	align-self: stretch;
 	width: 5px;
-	background-color: #eee;
+	background-color: #f6f6f6;
 }
 
 .time-picker-control
-	> div:nth-child( 1 )
-	:global( .components-input-control__input ) {
+	> div:nth-child(1)
+	:global(.components-input-control__input) {
 	padding-left: 4px;
 	padding-right: 0;
 	text-align: center;
 }
 
 .time-picker-control
-	> div:nth-child( 3 )
-	:global( .components-input-control__input ) {
+	> div:nth-child(3)
+	:global(.components-input-control__input) {
 	padding-left: 0;
 	padding-right: 4px;
 	text-align: center;
 }
 
-.time-picker :global( .components-input-control__backdrop ) {
+.time-picker :global(.components-input-control__backdrop) {
 	border: none !important;
 }
 
-.time-picker :global( .components-base-control__field ) {
+.time-picker :global(.components-base-control__field) {
 	margin-bottom: 0;
 }
