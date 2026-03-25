@@ -11,7 +11,6 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use WP_Error;
-use WPAppointments\Data\Model\Settings;
 use WPAppointments\Data\Query\AppointmentsQuery;
 
 /**
@@ -42,9 +41,11 @@ class Availability {
 		$interval = new \DateInterval( 'PT' . $length . 'M' );
 		$range    = new \DatePeriod( $range_start, $interval, $range_end );
 
-		$settings                 = new Settings();
-		$default_schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
-		$schedule                 = $settings->get_default_schedule( $default_schedule_post_id );
+		$schedule_model = new \WPAppointments\Data\Model\Schedule(
+			absint( get_option( 'wpappointments_default_scheduleId' ) )
+		);
+		$schedule_data  = $schedule_model->normalize();
+		$schedule       = $schedule_data['days'] ?? null;
 
 		$range_appointments = AppointmentsQuery::get_date_range_appointments(
 			(int) $range_start->getTimestamp(),

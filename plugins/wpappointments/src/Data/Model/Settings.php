@@ -8,18 +8,6 @@
 
 namespace WPAppointments\Data\Model;
 
-const DAY_OPENING_OPTIONS = array(
-	'enabled',
-	'startTime' => array(
-		'hour',
-		'minute',
-	),
-	'endTime'   => array(
-		'hour',
-		'minute',
-	),
-);
-
 /**
  * Plugin settings model class
  */
@@ -132,7 +120,6 @@ class Settings {
 			),
 		),
 		'calendar'      => array(),
-		'schedule'      => array(),
 		'notifications' => array(
 			array(
 				'name' => 'created',
@@ -166,65 +153,6 @@ class Settings {
 
 		if ( ! $category_exists ) {
 			return new \WP_Error( 'invalid_settings_category', __( 'Invalid settings category', 'wpappointments' ) );
-		}
-
-		$schedule = array();
-
-		if ( 'schedule' === $category ) {
-			$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
-
-			if ( $schedule_post_id ) {
-				foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-					$settings[ $day ]['allDay']  = rest_sanitize_boolean( $settings[ $day ]['allDay'] ?? false );
-					$settings[ $day ]['enabled'] = rest_sanitize_boolean( $settings[ $day ]['enabled'] ?? false );
-
-					$slots         = $settings[ $day ]['slots']['list'] ?? array();
-					$is_manual_24h = false;
-
-					// Sanitize slot time values.
-					foreach ( $slots as &$slot ) {
-						$slot['start']['hour']   = self::sanitize_time_part( $slot['start']['hour'] ?? '00', 24 );
-						$slot['start']['minute'] = self::sanitize_time_part( $slot['start']['minute'] ?? '00', 59 );
-						$slot['end']['hour']     = self::sanitize_time_part( $slot['end']['hour'] ?? '00', 24 );
-						$slot['end']['minute']   = self::sanitize_time_part( $slot['end']['minute'] ?? '00', 59 );
-					}
-					unset( $slot );
-
-					$settings[ $day ]['slots']['list'] = $slots;
-
-					if ( ! empty( $slots ) ) {
-						$first_slot    = $slots[0];
-						$is_start_zero = '00' === $first_slot['start']['hour'] && '00' === $first_slot['start']['minute'];
-						$is_end_full   = ( '24' === $first_slot['end']['hour'] || '00' === $first_slot['end']['hour'] ) && '00' === $first_slot['end']['minute'];
-
-						if ( $is_start_zero && $is_end_full && 1 === count( $slots ) ) {
-							$is_manual_24h = true;
-						}
-					}
-
-					if ( $settings[ $day ]['allDay'] || $is_manual_24h ) {
-						$settings[ $day ]['allDay']        = true;
-						$settings[ $day ]['slots']['list'] = array(
-							array(
-								'start' => array(
-									'hour'   => '00',
-									'minute' => '00',
-								),
-								'end'   => array(
-									'hour'   => '24',
-									'minute' => '00',
-								),
-							),
-						);
-					}
-
-					$day_schedule = wp_json_encode( $settings[ $day ] );
-					update_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, $day_schedule );
-					array_push( $schedule, $day_schedule );
-				}
-			}
-
-			return $schedule;
 		}
 
 		$updated = array();
@@ -298,39 +226,7 @@ class Settings {
 			}
 		}
 
-		$schedule = $this->get_default_schedule();
-
-		if ( $schedule ) {
-			$settings['schedule'] = $schedule;
-		}
-
 		return $settings;
-	}
-
-	/**
-	 * Get default schedule settings
-	 *
-	 * @return array|null
-	 */
-	public function get_default_schedule() {
-		$schedule_post_id = get_option( 'wpappointments_default_scheduleId' );
-		$schedule         = null;
-
-		if ( $schedule_post_id ) {
-			$hours = array();
-
-			foreach ( array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ) as $day ) {
-				$meta = get_post_meta( $schedule_post_id, 'wpappointments_schedule_' . $day, true );
-
-				if ( $meta ) {
-					$hours[ $day ] = json_decode( $meta, true );
-				}
-			}
-
-			$schedule = $hours;
-		}
-
-		return $schedule;
 	}
 
 	/**
