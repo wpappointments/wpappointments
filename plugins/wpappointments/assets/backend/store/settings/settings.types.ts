@@ -24,8 +24,8 @@ export type SettingsAppointments = {
 	defaultStatus: 'confirmed' | 'pending';
 	defaultLength?: number;
 	timePickerPrecision?: number;
-	serviceId?: number;
-	serviceName?: string;
+	coreEntityId?: number;
+	coreEntityName?: string;
 	minLeadTimeValue?: number;
 	minLeadTimeUnit?: LeadTimeUnit;
 	maxLeadTimeValue?: number;

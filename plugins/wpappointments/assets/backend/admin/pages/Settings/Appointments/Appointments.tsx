@@ -26,7 +26,7 @@ import globalStyles from 'global.module.css';
 type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
-	serviceName: string;
+	coreEntityName: string;
 	defaultStatus: 'confirmed' | 'pending';
 	minLeadTimeValue: number;
 	minLeadTimeUnit: LeadTimeUnit;
@@ -95,7 +95,7 @@ export default withForm(function AppointmentsSettings() {
 					<FormFieldSet>
 						<Input
 							type="text"
-							name="serviceName"
+							name="coreEntityName"
 							label={__('Service Name', 'wpappointments')}
 							placeholder={__('Appointment', 'wpappointments')}
 						/>

@@ -78,7 +78,7 @@ class Settings {
 		),
 		'appointments'  => array(
 			array(
-				'name' => 'serviceName',
+				'name' => 'coreEntityName',
 				'type' => 'string',
 			),
 			array(
