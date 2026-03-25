@@ -163,9 +163,55 @@ class DefaultLayers {
 			$weekly[ $day ] = $time_ranges;
 		}
 
+		$overrides_raw = get_post_meta( $schedule_post_id, 'wpappointments_schedule_overrides', true );
+		$overrides     = array();
+
+		if ( is_string( $overrides_raw ) && '' !== $overrides_raw ) {
+			$overrides_raw = json_decode( $overrides_raw, true );
+		}
+
+		// Override groups: [{id, dates, type, slots}] → flatten to date → time ranges.
+		if ( is_array( $overrides_raw ) ) {
+			foreach ( $overrides_raw as $group ) {
+				if ( ! is_array( $group ) || ! isset( $group['dates'] ) ) {
+					continue;
+				}
+
+				$type  = $group['type'] ?? 'closed';
+				$dates = $group['dates'] ?? array();
+
+				$time_ranges = array();
+
+				if ( 'custom' === $type ) {
+					foreach ( ( $group['slots'] ?? array() ) as $slot ) {
+						if ( ! is_array( $slot ) ) {
+							continue;
+						}
+
+						$start_hour   = $slot['start']['hour'] ?? '00';
+						$start_minute = $slot['start']['minute'] ?? '00';
+						$end_hour     = $slot['end']['hour'] ?? '00';
+						$end_minute   = $slot['end']['minute'] ?? '00';
+
+						$time_ranges[] = array(
+							'start' => sprintf( '%02d:%02d', (int) $start_hour, (int) $start_minute ),
+							'end'   => sprintf( '%02d:%02d', (int) $end_hour, (int) $end_minute ),
+						);
+					}
+				}
+
+				foreach ( $dates as $date ) {
+					if ( ! is_string( $date ) ) {
+						continue;
+					}
+					$overrides[ $date ] = $time_ranges;
+				}
+			}
+		}
+
 		return array(
 			'weekly'    => $weekly,
-			'overrides' => array(),
+			'overrides' => $overrides,
 		);
 	}
 }

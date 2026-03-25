@@ -24,12 +24,16 @@ import {
 } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import useFillFormValues from '~/backend/hooks/useFillFormValues';
-import type { Schedule } from '~/backend/store/schedules/schedules.types';
+import type {
+	OverrideGroup,
+	Schedule,
+} from '~/backend/store/schedules/schedules.types';
 import type {
 	Day,
 	DayOpeningHours,
 } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
+import DateOverrides from './DateOverrides/DateOverrides';
 import OpeningHoursDayOfWeek from './OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from './Schedule.module.css';
 import {
@@ -196,6 +200,7 @@ function ScheduleRow({
 type ScheduleFormFields = {
 	name: string;
 	timezone: string;
+	overrides: OverrideGroup[];
 } & Record<string, DayOpeningHours>;
 
 const ScheduleEditor = withForm(function ScheduleEditor({
@@ -219,6 +224,7 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 		() => ({
 			name: schedule.name,
 			timezone: schedule.timezone || siteTimezone,
+			overrides: schedule.overrides || [],
 			...DAYS.reduce(
 				(acc, day) => {
 					acc[day] = schedule.days[day] || getDefaultDay(day);
@@ -237,10 +243,15 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 	const onSubmit: SubmitHandler<ScheduleFormFields> = async (data) => {
 		setSaving(true);
 
-		const { name, timezone, ...days } = data;
+		const { name, timezone, overrides, ...days } = data;
 
 		if (isNew) {
-			const result = await createSchedule({ name, timezone, days });
+			const result = await createSchedule({
+				name,
+				timezone,
+				days,
+				overrides,
+			});
 			setSaving(false);
 
 			if (result) {
@@ -251,6 +262,7 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 				name,
 				timezone,
 				days,
+				overrides,
 			});
 			setSaving(false);
 
@@ -325,6 +337,7 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 							/>
 						))}
 					</div>
+					<DateOverrides scheduleSlideoutId={slideoutId} />
 					<Button
 						variant="primary"
 						type="submit"
@@ -496,6 +509,7 @@ export default function ScheduleSettings() {
 				},
 				{} as Record<string, DayOpeningHours>
 			),
+			overrides: [],
 		};
 
 		openSlideOut({

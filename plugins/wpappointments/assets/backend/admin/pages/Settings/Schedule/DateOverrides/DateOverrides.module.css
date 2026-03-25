@@ -1,0 +1,228 @@
+.dateOverrides {
+	border-top: 1px solid #e5e5e5;
+	padding-top: 16px;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.title {
+	font-size: 14px;
+	font-weight: 500;
+	color: #1e1e1e;
+}
+
+.emptyState {
+	font-size: 13px;
+	color: #757575;
+	margin: 4px 0 0;
+}
+
+/* Override list rows */
+.overrideRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 0;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.1s;
+	gap: 8px;
+}
+
+.overrideRow:hover {
+	background: #f0f0f0;
+}
+
+.overrideInfo {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+}
+
+.overrideDate {
+	font-size: 13px;
+	font-weight: 600;
+	color: #1e1e1e;
+	white-space: nowrap;
+}
+
+.badgeClosed,
+.badgeCustom {
+	font-size: 11px;
+	font-weight: 500;
+	padding: 1px 8px;
+	border-radius: 10px;
+	white-space: nowrap;
+}
+
+.badgeClosed {
+	background: #fce4ec;
+	color: #c62828;
+}
+
+.badgeCustom {
+	background: #fff3cd;
+	color: #856404;
+}
+
+.overrideActions {
+	flex-shrink: 0;
+}
+
+/* Editor slideout content */
+.editorContent {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.calendarSection {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.calendarSection :global(.components-datetime__date) {
+	padding: 0;
+}
+
+.sectionLabel {
+	font-size: 14px;
+	font-weight: 500;
+	color: #1e1e1e;
+	margin: 0;
+}
+
+.selectedDates {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.dateTag {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	background: #e8f0fe;
+	color: #1a73e8;
+	padding: 3px 8px;
+	border-radius: 12px;
+	font-weight: 500;
+}
+
+.dateTagRemove {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 14px;
+	line-height: 1;
+	cursor: pointer;
+	color: #1a73e8;
+	opacity: 0.7;
+}
+
+.dateTagRemove:hover {
+	opacity: 1;
+}
+
+/* Closed toggle */
+.closedSection {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 0;
+	border-top: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.closedSection :global(.components-toggle-control) {
+	margin-bottom: 0;
+}
+
+.closedSection :global(.components-toggle-control__label) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+.closedSection :global(.FormField-module__field) {
+	margin-bottom: 0;
+}
+
+.closedLabel {
+	font-size: 14px;
+	color: #1e1e1e;
+}
+
+/* Time slots */
+.slotsSection {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.slotRow {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.slotActions {
+	display: flex;
+	gap: 2px;
+}
+
+.slotActions :global(.components-button) {
+	min-width: 32px;
+	height: 32px;
+	padding: 0;
+	justify-content: center;
+}
+
+.slotActions :global(.components-button svg) {
+	width: 20px;
+	height: 20px;
+}
+
+.timePickerRow {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.timePickerRow span {
+	color: #757575;
+}
+
+.separator {
+	margin: 0 4px;
+}
+
+.timeSelect {
+	padding: 6px 8px;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	font-size: 13px;
+	background: #fff;
+	min-width: 60px;
+}
+
+.timeSelect:focus {
+	border-color: #007cba;
+	outline: none;
+	box-shadow: 0 0 0 1px #007cba;
+}

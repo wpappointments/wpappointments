@@ -273,6 +273,10 @@ class SchedulesController extends Controller {
 			$sanitized['days'] = self::sanitize_days_data( $data['days'] );
 		}
 
+		if ( isset( $data['overrides'] ) && is_array( $data['overrides'] ) ) {
+			$sanitized['overrides'] = self::sanitize_overrides_data( $data['overrides'] );
+		}
+
 		return $sanitized;
 	}
 
@@ -338,6 +342,76 @@ class SchedulesController extends Controller {
 					),
 				);
 			}
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize date override groups
+	 *
+	 * @param array $overrides Raw override groups array.
+	 *
+	 * @return array Sanitized override groups.
+	 */
+	private static function sanitize_overrides_data( $overrides ) {
+		$sanitized = array();
+
+		foreach ( $overrides as $group ) {
+			if ( ! is_array( $group ) ) {
+				continue;
+			}
+
+			$id   = sanitize_text_field( $group['id'] ?? '' );
+			$type = sanitize_text_field( $group['type'] ?? 'closed' );
+
+			if ( ! in_array( $type, array( 'custom', 'closed' ), true ) ) {
+				continue;
+			}
+
+			// Validate dates.
+			$dates = array();
+			foreach ( ( $group['dates'] ?? array() ) as $date ) {
+				if ( ! is_string( $date ) ) {
+					continue;
+				}
+				$date_obj = \DateTime::createFromFormat( 'Y-m-d', $date );
+				if ( $date_obj && $date_obj->format( 'Y-m-d' ) === $date ) {
+					$dates[] = $date;
+				}
+			}
+
+			if ( empty( $dates ) ) {
+				continue;
+			}
+
+			$sanitized_group = array(
+				'id'    => $id,
+				'dates' => $dates,
+				'type'  => $type,
+				'slots' => array(),
+			);
+
+			if ( 'custom' === $type && isset( $group['slots'] ) && is_array( $group['slots'] ) ) {
+				foreach ( $group['slots'] as $slot ) {
+					if ( ! is_array( $slot ) ) {
+						continue;
+					}
+
+					$sanitized_group['slots'][] = array(
+						'start' => array(
+							'hour'   => self::sanitize_time_part( $slot['start']['hour'] ?? null, 24 ),
+							'minute' => self::sanitize_time_part( $slot['start']['minute'] ?? null, 59 ),
+						),
+						'end'   => array(
+							'hour'   => self::sanitize_time_part( $slot['end']['hour'] ?? null, 24 ),
+							'minute' => self::sanitize_time_part( $slot['end']['minute'] ?? null, 59 ),
+						),
+					);
+				}
+			}
+
+			$sanitized[] = $sanitized_group;
 		}
 
 		return $sanitized;

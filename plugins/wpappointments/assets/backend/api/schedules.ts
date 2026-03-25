@@ -1,7 +1,10 @@
 import { displayErrorToast, displaySuccessToast } from '@wpappointments/data';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import type { Schedule } from '~/backend/store/schedules/schedules.types';
+import type {
+	OverrideGroup,
+	Schedule,
+} from '~/backend/store/schedules/schedules.types';
 import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
 
 type ScheduleResponse = APIResponse<{
@@ -16,12 +19,14 @@ export type CreateScheduleData = {
 	name: string;
 	timezone?: string;
 	days?: Record<string, DayOpeningHours>;
+	overrides?: OverrideGroup[];
 };
 
 export type UpdateScheduleData = {
 	name?: string;
 	timezone?: string;
 	days?: Record<string, DayOpeningHours>;
+	overrides?: OverrideGroup[];
 };
 
 export async function getSchedules() {

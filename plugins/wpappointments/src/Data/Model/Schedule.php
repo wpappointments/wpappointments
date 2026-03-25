@@ -125,6 +125,10 @@ class Schedule {
 			}
 		}
 
+		// Save overrides.
+		$overrides = $this->schedule_data['overrides'] ?? array();
+		update_post_meta( $post_id, 'wpappointments_schedule_overrides', wp_json_encode( $overrides ) );
+
 		$this->schedule_data['id'] = $post_id;
 		$this->schedule            = get_post( $post_id );
 
@@ -180,6 +184,11 @@ class Schedule {
 					);
 				}
 			}
+		}
+
+		// Update overrides.
+		if ( isset( $data['overrides'] ) ) {
+			update_post_meta( $id, 'wpappointments_schedule_overrides', wp_json_encode( $data['overrides'] ) );
 		}
 
 		$this->schedule = get_post( $id );
@@ -307,12 +316,24 @@ class Schedule {
 			$days[ $day ]    = $day_data;
 		}
 
+		$overrides_raw = get_post_meta( $id, 'wpappointments_schedule_overrides', true );
+		$overrides     = array();
+
+		if ( is_string( $overrides_raw ) && '' !== $overrides_raw ) {
+			$decoded = json_decode( $overrides_raw, true );
+
+			if ( is_array( $decoded ) ) {
+				$overrides = $decoded;
+			}
+		}
+
 		return array(
 			'id'        => $id,
 			'name'      => $post->post_title,
 			'timezone'  => is_string( $timezone ) ? $timezone : '',
 			'isDefault' => absint( $default_id ) === $id,
 			'days'      => $days,
+			'overrides' => $overrides,
 		);
 	}
 
