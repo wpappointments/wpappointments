@@ -98,7 +98,7 @@ class HolidayRegistry {
 			);
 		}
 
-		$source = self::read_source_file( $file_id );
+		$source = self::read_source_file( $file_id, $type );
 
 		if ( null === $source ) {
 			return new \WP_Error(
@@ -358,7 +358,7 @@ class HolidayRegistry {
 	 */
 	private static function resolve_group_holidays( array $group ): array {
 		$source_id = $group['source'] ?? '';
-		$source    = self::read_source_file( $source_id );
+		$source    = self::read_source_file( $source_id, $group['type'] ?? '' );
 
 		if ( null === $source ) {
 			return array();
@@ -392,7 +392,8 @@ class HolidayRegistry {
 	 * @return array Array of [ 'id' => string, 'name' => string ].
 	 */
 	private static function get_available_by_type( string $type ): array {
-		$dir = self::data_dir() . 'sources';
+		$subdir = 'country' === $type ? 'countries' : 'religious';
+		$dir    = self::data_dir() . 'sources/' . $subdir;
 
 		if ( ! is_dir( $dir ) ) {
 			return array();
@@ -416,10 +417,6 @@ class HolidayRegistry {
 			$data = json_decode( $raw, true );
 
 			if ( ! is_array( $data ) || empty( $data['id'] ) ) {
-				continue;
-			}
-
-			if ( ( $data['type'] ?? '' ) !== $type ) {
 				continue;
 			}
 
@@ -475,11 +472,32 @@ class HolidayRegistry {
 	 * Read a source file by ID
 	 *
 	 * @param string $source_id Source file ID (filename without extension).
+	 * @param string $type      Group type ('country' or 'religious') for subdirectory lookup.
 	 *
 	 * @return array|null Decoded source data or null.
 	 */
-	private static function read_source_file( string $source_id ): ?array {
-		$file_path = self::data_dir() . 'sources/' . $source_id . '.json';
+	private static function read_source_file( string $source_id, string $type = '' ): ?array {
+		// Try subdirectory based on type, fall back to searching both.
+		$subdir = '';
+
+		if ( 'country' === $type ) {
+			$subdir = 'countries/';
+		} elseif ( 'religious' === $type ) {
+			$subdir = 'religious/';
+		}
+
+		$file_path = self::data_dir() . 'sources/' . $subdir . $source_id . '.json';
+
+		if ( '' === $subdir && ! file_exists( $file_path ) ) {
+			// Search both subdirectories.
+			$try_country = self::data_dir() . 'sources/countries/' . $source_id . '.json';
+
+			if ( file_exists( $try_country ) ) {
+				$file_path = $try_country;
+			} else {
+				$file_path = self::data_dir() . 'sources/religious/' . $source_id . '.json';
+			}
+		}
 
 		$real_path = realpath( $file_path );
 		$real_dir  = realpath( self::data_dir() );
