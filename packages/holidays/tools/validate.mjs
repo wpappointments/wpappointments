@@ -12,7 +12,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const dataDir = join(__dirname, '../../packages/holidays/data');
+const dataDir = join(__dirname, '../data');
 
 const definitions = JSON.parse(
 	readFileSync(join(dataDir, 'definitions.json'), 'utf-8')
