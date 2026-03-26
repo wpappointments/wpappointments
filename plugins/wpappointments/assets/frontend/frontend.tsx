@@ -49,6 +49,7 @@ export type AvailabilityResponse = Output<typeof AvailabilityResponseSchema>;
  */
 export type DayNotice = {
 	type: 'ooo' | 'holiday';
+	reason?: string;
 	note?: string;
 };
 

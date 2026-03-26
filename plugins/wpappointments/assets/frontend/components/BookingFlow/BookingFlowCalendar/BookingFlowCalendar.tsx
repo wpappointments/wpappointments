@@ -35,7 +35,7 @@ export default function BookingFlowCalendar() {
 			<CalendarGrid />
 
 			{selectedDate && hasNotices && (
-				<DayNoticePanel date={selectedDate} notices={selectedNotices} />
+				<DayNoticePanel notices={selectedNotices} />
 			)}
 
 			{selectedDate && !hasNotices && dayAvailability && (

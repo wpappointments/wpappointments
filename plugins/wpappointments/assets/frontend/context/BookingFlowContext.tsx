@@ -139,7 +139,11 @@ export function BookingFlowContextProvider({
 				try {
 					const oooData = await apiFetch<
 						APIResponse<{
-							dates: { date: string; note?: string }[];
+							dates: {
+								date: string;
+								reason?: string;
+								note?: string;
+							}[];
 						}>
 					>({
 						path: addQueryArgs('ooo/dates', {
@@ -153,7 +157,7 @@ export function BookingFlowContextProvider({
 						const notices: DayNotices = {};
 
 						for (const entry of oooData.data.dates) {
-							if (!entry.note) continue;
+							if (!entry.note && !entry.reason) continue;
 
 							const key = entry.date;
 
@@ -163,6 +167,7 @@ export function BookingFlowContextProvider({
 
 							notices[key].push({
 								type: 'ooo',
+								reason: entry.reason,
 								note: entry.note,
 							});
 						}

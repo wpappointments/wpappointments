@@ -201,39 +201,9 @@
 	margin-bottom: 20px;
 }
 
-.notice-item {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	margin-top: 8px;
-}
-
-.notice-badge {
-	display: inline-block;
-	font-size: 12px;
-	font-weight: 500;
-	padding: 2px 10px;
-	border-radius: 12px;
-	background: #e8f0fe;
-	color: #1a73e8;
-	width: fit-content;
-}
-
-.notice-badge-holiday {
-	display: inline-block;
-	font-size: 12px;
-	font-weight: 500;
-	padding: 2px 10px;
-	border-radius: 12px;
-	background: #fce4ec;
-	color: #c62828;
-	width: fit-content;
-}
-
 .notice-text {
-	font-size: 14px;
 	color: #50575e;
-	margin: 0;
+	margin: 4px 0 0;
 	line-height: 1.5;
 }
 

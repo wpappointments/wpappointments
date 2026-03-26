@@ -256,7 +256,10 @@ class OutOfOfficeController extends Controller {
 			while ( $current <= $end ) {
 				$date_str = $current->format( 'Y-m-d' );
 
-				$entry = array( 'date' => $date_str );
+				$entry = array(
+					'date'   => $date_str,
+					'reason' => $normalized['reason'],
+				);
 
 				if ( $normalized['notePublic'] && ! empty( $normalized['notes'] ) ) {
 					$entry['note'] = $normalized['notes'];
