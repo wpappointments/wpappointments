@@ -12,6 +12,8 @@ namespace WPAppointments\Availability;
 
 use WPAppointments\Data\Model\OutOfOffice;
 use WPAppointments\Data\Query\OutOfOfficeQuery;
+use WPAppointments\Holidays\HolidayRegistry;
+use WPAppointments\Holidays\HolidayResolver;
 
 /**
  * Default availability layers class
@@ -40,6 +42,15 @@ class DefaultLayers {
 			array(
 				'type'     => 'narrowing',
 				'callback' => array( __CLASS__, 'entity_callback' ),
+			)
+		);
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'holidays',
+			30,
+			array(
+				'type'     => 'narrowing',
+				'callback' => array( __CLASS__, 'holidays_callback' ),
 			)
 		);
 
@@ -231,6 +242,108 @@ class DefaultLayers {
 			'weekly'    => $weekly,
 			'overrides' => $overrides,
 		);
+	}
+
+	/**
+	 * Holidays availability layer callback
+	 *
+	 * Blocks dates that fall on enabled holidays.
+	 *
+	 * @param array $context Layer context with variant_id, entity_id, date_range.
+	 *
+	 * @return array|null Availability data or null if no holidays configured.
+	 */
+	public static function holidays_callback( $context ) {
+		$date_range = $context['date_range'] ?? array();
+
+		if ( empty( $date_range['start'] ) || empty( $date_range['end'] ) ) {
+			return null;
+		}
+
+		$groups = HolidayRegistry::get_groups();
+
+		if ( empty( $groups ) ) {
+			return null;
+		}
+
+		// Determine which years are needed.
+		$start_year = (int) substr( $date_range['start'], 0, 4 );
+		$end_year   = (int) substr( $date_range['end'], 0, 4 );
+		$years      = range( $start_year, $end_year );
+
+		$blocked_dates = array();
+
+		foreach ( $years as $year ) {
+			$dates         = self::get_holiday_dates_for_year( $year, $groups );
+			$blocked_dates = array_merge( $blocked_dates, $dates );
+		}
+
+		if ( empty( $blocked_dates ) ) {
+			return null;
+		}
+
+		// Filter to only dates within the requested range.
+		$blocked_dates = array_filter(
+			$blocked_dates,
+			function ( $date ) use ( $date_range ) {
+				return $date >= $date_range['start'] && $date <= $date_range['end'];
+			}
+		);
+
+		if ( empty( $blocked_dates ) ) {
+			return null;
+		}
+
+		// Build fully-open weekly (pass-through for non-holiday days).
+		$weekly = array();
+
+		foreach ( AvailabilityEngine::WEEKDAYS as $day ) {
+			$weekly[ $day ] = array(
+				array(
+					'start' => '00:00',
+					'end'   => '23:59',
+				),
+			);
+		}
+
+		// Block each holiday date.
+		$overrides = array();
+
+		foreach ( $blocked_dates as $date ) {
+			$overrides[ $date ] = array();
+		}
+
+		return array(
+			'weekly'    => $weekly,
+			'overrides' => $overrides,
+		);
+	}
+
+	/**
+	 * Get computed holiday dates for a year with transient caching
+	 *
+	 * @param int   $year   Year.
+	 * @param array $groups Holiday groups.
+	 *
+	 * @return array Array of Y-m-d date strings.
+	 */
+	private static function get_holiday_dates_for_year( int $year, array $groups ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- $groups kept for signature stability; effective holidays are ref-deduped internally.
+		$transient_key = 'wpappointments_holidays_' . $year;
+		$cached        = get_transient( $transient_key );
+
+		if ( false !== $cached && is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$holidays = HolidayRegistry::get_all_effective_holidays();
+		$computed = HolidayResolver::compute_dates( $holidays, $year );
+		$dates    = array_values( $computed );
+
+		sort( $dates );
+
+		set_transient( $transient_key, $dates, DAY_IN_SECONDS );
+
+		return $dates;
 	}
 
 	/**
