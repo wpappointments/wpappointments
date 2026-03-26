@@ -14,8 +14,8 @@ import {
 	Checkbox,
 	DateRangePicker,
 	HtmlForm,
-	Input,
 	Select,
+	Textarea,
 	withForm,
 } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
@@ -186,7 +186,11 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 					options={REASON_OPTIONS}
 					defaultValue={'unspecified' as any}
 				/>
-				<Input name="notes" label={__('Notes', 'wpappointments')} />
+				<Textarea
+					name="notes"
+					label={__('Notes', 'wpappointments')}
+					rows={3}
+				/>
 				<Checkbox
 					name="note_public"
 					label={__(

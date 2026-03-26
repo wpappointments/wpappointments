@@ -43,6 +43,7 @@ export { default as Toggle } from './FormField/Toggle/Toggle';
 export { default as NumberField } from './FormField/Number/Number';
 export { default as Checkbox } from './FormField/Checkbox/Checkbox';
 export { default as Radio } from './FormField/Radio/Radio';
+export { default as Textarea } from './FormField/Textarea/Textarea';
 export { default as DatePicker } from './FormField/DatePicker/DatePicker';
 export { default as WPDatePicker } from './FormField/WPDatePicker/WPDatePicker';
 

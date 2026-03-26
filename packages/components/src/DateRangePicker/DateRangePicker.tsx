@@ -70,38 +70,44 @@ export default function DateRangePicker({
 		}
 	};
 
-	const isInRange = (day: Date): boolean => {
-		const d = startOfDay(day);
-
+	// Compute effective range (committed or hover preview).
+	const getEffectiveRange = (): {
+		start: Date | null;
+		end: Date | null;
+	} => {
 		if (startDate && endDate) {
-			return (
-				(isAfter(d, startDate) || isSameDay(d, startDate)) &&
-				(isBefore(d, endDate) || isSameDay(d, endDate))
-			);
+			return { start: startDate, end: endDate };
 		}
 
-		// Preview range while hovering.
 		if (startDate && !endDate && hoveredDay) {
-			const rangeStart = isBefore(hoveredDay, startDate)
-				? hoveredDay
-				: startDate;
-			const rangeEnd = isAfter(hoveredDay, startDate)
-				? hoveredDay
-				: startDate;
-
-			return (
-				(isAfter(d, rangeStart) || isSameDay(d, rangeStart)) &&
-				(isBefore(d, rangeEnd) || isSameDay(d, rangeEnd))
-			);
+			if (isBefore(hoveredDay, startDate)) {
+				return { start: hoveredDay, end: startDate };
+			}
+			return { start: startDate, end: hoveredDay };
 		}
 
-		return false;
+		return { start: startDate, end: null };
 	};
 
-	const isStart = (day: Date): boolean =>
-		!!startDate && isSameDay(day, startDate);
+	const effectiveRange = getEffectiveRange();
 
-	const isEnd = (day: Date): boolean => !!endDate && isSameDay(day, endDate);
+	const isInRange = (day: Date): boolean => {
+		if (!effectiveRange.start || !effectiveRange.end) return false;
+		const d = startOfDay(day);
+
+		return (
+			(isAfter(d, effectiveRange.start) ||
+				isSameDay(d, effectiveRange.start)) &&
+			(isBefore(d, effectiveRange.end) ||
+				isSameDay(d, effectiveRange.end))
+		);
+	};
+
+	const isRangeStart = (day: Date): boolean =>
+		!!effectiveRange.start && isSameDay(day, effectiveRange.start);
+
+	const isRangeEnd = (day: Date): boolean =>
+		!!effectiveRange.end && isSameDay(day, effectiveRange.end);
 
 	return (
 		<div
@@ -155,8 +161,8 @@ export default function DateRangePicker({
 							<DayCell
 								key={day.toString()}
 								day={day}
-								isStart={isStart(day)}
-								isEnd={isEnd(day)}
+								isStart={isRangeStart(day)}
+								isEnd={isRangeEnd(day)}
 								isInRange={isInRange(day)}
 								isFocusable={isEqual(day, focusable)}
 								isFocusAllowed={isFocusWithinCalendar}
@@ -259,7 +265,18 @@ function DayCell({
 		}
 	}, [isFocusable]);
 
-	const classNames = [
+	const isSingle = isStart && isEnd;
+	const wrapperClassNames = [
+		styles.dayWrapper,
+		isInRange && !isStart && !isEnd && styles.dayWrapperInRange,
+		isStart && !isSingle && styles.dayWrapperRangeStart,
+		isEnd && !isSingle && styles.dayWrapperRangeEnd,
+		isSingle && styles.dayWrapperSingleDay,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const buttonClassNames = [
 		styles.dayButton,
 		(isStart || isEnd) && styles.dayButtonSelected,
 		isInRange && !isStart && !isEnd && styles.dayButtonInRange,
@@ -269,18 +286,20 @@ function DayCell({
 		.join(' ');
 
 	return (
-		<button
-			ref={ref}
-			type="button"
-			className={classNames}
-			disabled={isInvalid}
-			tabIndex={isFocusable ? 0 : -1}
-			aria-label={dateI18n('F j, Y', day, -day.getTimezoneOffset())}
-			onClick={onClick}
-			onMouseEnter={onMouseEnter}
-			onKeyDown={onKeyDown}
-		>
-			{dateI18n('j', day, -day.getTimezoneOffset())}
-		</button>
+		<span className={wrapperClassNames}>
+			<button
+				ref={ref}
+				type="button"
+				className={buttonClassNames}
+				disabled={isInvalid}
+				tabIndex={isFocusable ? 0 : -1}
+				aria-label={dateI18n('F j, Y', day, -day.getTimezoneOffset())}
+				onClick={onClick}
+				onMouseEnter={onMouseEnter}
+				onKeyDown={onKeyDown}
+			>
+				{dateI18n('j', day, -day.getTimezoneOffset())}
+			</button>
+		</span>
 	);
 }
