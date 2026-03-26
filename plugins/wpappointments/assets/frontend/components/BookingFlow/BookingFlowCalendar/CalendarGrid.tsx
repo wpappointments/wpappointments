@@ -16,6 +16,7 @@ export default function CalendarGrid() {
 		inRange,
 		isSelected,
 		select,
+		setSelected,
 		viewing,
 		viewNextMonth,
 		viewPreviousMonth,
@@ -28,7 +29,10 @@ export default function CalendarGrid() {
 		<div className={styles.calendar}>
 			<div className={styles.calendarControls}>
 				<button
-					onClick={viewPreviousMonth}
+					onClick={() => {
+						viewPreviousMonth();
+						setSelected([]);
+					}}
 					type="button"
 					disabled={
 						viewing.getMonth() === new Date().getMonth() &&
@@ -50,7 +54,10 @@ export default function CalendarGrid() {
 					{currentMonth} {currentYear}
 				</h5>
 				<button
-					onClick={viewNextMonth}
+					onClick={() => {
+						viewNextMonth();
+						setSelected([]);
+					}}
 					type="button"
 					className={styles.calendarControlButton}
 				>
