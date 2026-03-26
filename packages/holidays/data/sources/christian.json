@@ -1,0 +1,19 @@
+{
+	"id": "christian",
+	"name": "Christian Holidays",
+	"type": "religious",
+	"holidays": [
+		"epiphany",
+		"ashWednesday",
+		"palmSunday",
+		"goodFriday",
+		"easter",
+		"easterMonday",
+		"ascension",
+		"pentecost",
+		"corpusChristi",
+		"assumptionOfMary",
+		"allSaints",
+		"christmas"
+	]
+}

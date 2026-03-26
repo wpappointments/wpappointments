@@ -1,0 +1,15 @@
+{
+	"id": "GB",
+	"name": "United Kingdom",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easterMonday",
+		"earlyMayBank",
+		"springBank",
+		"summerBank",
+		"christmas",
+		"boxingDay"
+	]
+}

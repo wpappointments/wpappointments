@@ -1,0 +1,20 @@
+{
+	"id": "PL",
+	"name": "Poland",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"epiphany",
+		"easter",
+		"easterMonday",
+		"labourDay",
+		"constitutionPL",
+		"pentecost",
+		"corpusChristi",
+		"assumptionOfMary",
+		"allSaints",
+		"independenceDayPL",
+		"christmas",
+		"christmas2"
+	]
+}
