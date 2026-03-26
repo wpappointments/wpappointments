@@ -23,10 +23,10 @@ export default function DayNoticePanel({ notices }: Props) {
 					REASON_LABELS.unspecified;
 
 				return (
-					<h5 key={i} className={styles.noticeText}>
+					<h5 key={i}>
 						<strong>{reasonLabel}</strong>
 						{notice.note ? `: ${notice.note}` : ''}
-					</p>
+					</h5>
 				);
 			})}
 		</div>
