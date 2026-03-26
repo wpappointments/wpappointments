@@ -1,0 +1,20 @@
+{
+	"id": "PH",
+	"name": "Philippines",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"ednsa",
+		"goodFriday",
+		"easter",
+		"labourDay",
+		"independenceDayPH",
+		"ninoyAquinoDay",
+		"nationalHeroesDayPH",
+		"allSaints",
+		"eidAlFitr",
+		"eidAlAdha",
+		"bondingOfRizal",
+		"christmas"
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"id": "TZ",
+	"name": "Tanzania",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easterMonday",
+		"tanzaniaUnionDay",
+		"labourDay",
+		"sababaDayTZ",
+		"navaDayTZ",
+		"eidAlFitr",
+		"eidAlAdha",
+		"prophetBirthday",
+		"nvereDayTZ",
+		"independenceDayTZ",
+		"christmas",
+		"boxingDay"
+	]
+}

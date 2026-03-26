@@ -1,0 +1,21 @@
+{
+	"id": "EG",
+	"name": "Egypt",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"shamElNessim",
+		"siniaiLiberationEG",
+		"labourDayEG",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"islamicNewYear",
+		"revolutionDayEG",
+		"prophetBirthday",
+		"nationalDayEG"
+	]
+}

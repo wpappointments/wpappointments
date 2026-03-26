@@ -1,0 +1,22 @@
+{
+	"id": "IQ",
+	"name": "Iraq",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"armyDayIQ",
+		"labourDay",
+		"republicDayIQ",
+		"nationalDayIQ",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"islamicNewYear",
+		"ashura",
+		"prophetBirthday",
+		"christmas"
+	]
+}

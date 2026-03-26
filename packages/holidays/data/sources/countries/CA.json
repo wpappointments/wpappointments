@@ -1,0 +1,17 @@
+{
+	"id": "CA",
+	"name": "Canada",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easterMonday",
+		"victoriaDay",
+		"canadaDay",
+		"laborDayUS",
+		"thanksgivingCA",
+		"rememranceDay",
+		"christmas",
+		"boxingDay"
+	]
+}

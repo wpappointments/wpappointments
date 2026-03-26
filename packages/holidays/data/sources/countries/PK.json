@@ -1,0 +1,21 @@
+{
+	"id": "PK",
+	"name": "Pakistan",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"pakistanDay",
+		"labourDayPK",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"ashura",
+		"prophetBirthday",
+		"independenceDayPK",
+		"iqbalDay",
+		"quaidAzamDay"
+	]
+}

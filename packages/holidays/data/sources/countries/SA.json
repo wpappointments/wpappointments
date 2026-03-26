@@ -1,0 +1,15 @@
+{
+	"id": "SA",
+	"name": "Saudi Arabia",
+	"type": "country",
+	"holidays": [
+		"foundingDaySA",
+		"nationalDaySA",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3"
+	]
+}

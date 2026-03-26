@@ -1,0 +1,18 @@
+{
+	"id": "GH",
+	"name": "Ghana",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"independenceDayGH",
+		"goodFriday",
+		"easterMonday",
+		"labourDay",
+		"eidAlFitr",
+		"republicDayGH",
+		"farmersDayGH",
+		"eidAlAdha",
+		"christmas",
+		"boxingDay"
+	]
+}
