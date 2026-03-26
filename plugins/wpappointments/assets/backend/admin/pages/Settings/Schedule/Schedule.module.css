@@ -69,8 +69,25 @@
 }
 
 .badgeInactive {
-	background: #f0f0f0;
-	color: #757575;
+	background: #fce4ec;
+	color: #c62828;
+}
+
+.slideoutTitle {
+	display: flex;
+	align-items: center;
+}
+
+.badgeInactiveHeader {
+	font-size: 11px;
+	font-weight: 500;
+	padding: 2px 8px;
+	border-radius: 10px;
+	white-space: nowrap;
+	background: #fce4ec;
+	color: #c62828;
+	margin-left: 8px;
+	vertical-align: middle;
 }
 
 .scheduleActions {

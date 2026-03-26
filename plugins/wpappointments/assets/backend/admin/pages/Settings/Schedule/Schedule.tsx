@@ -20,7 +20,6 @@ import {
 	Input,
 	Select,
 	SlideoutHeaderActionsFill,
-	Toggle,
 	withForm,
 } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
@@ -339,10 +338,21 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 					</div>
 					<DateOverrides scheduleSlideoutId={slideoutId} />
 					{!isNew && (
-						<Toggle
-							name="_isDefault"
+						<ToggleControl
+							__nextHasNoMarginBottom
 							label={__('Default schedule', 'wpappointments')}
-							defaultChecked={schedule.isDefault}
+							checked={schedule.isDefault}
+							disabled={schedule.isDefault || !schedule.active}
+							help={
+								schedule.isDefault
+									? undefined
+									: !schedule.active
+										? __(
+												'Activate this schedule first to set it as default.',
+												'wpappointments'
+											)
+										: undefined
+							}
 							onChange={async (checked) => {
 								if (checked) {
 									await setDefaultSchedule(schedule.id);
@@ -366,20 +376,6 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 							? __('Create schedule', 'wpappointments')
 							: __('Save changes', 'wpappointments')}
 					</Button>
-					{canDelete && (
-						<Button
-							variant="link"
-							isDestructive
-							onClick={openDangerZone}
-							style={{
-								width: '100%',
-								justifyContent: 'center',
-								marginTop: '4px',
-							}}
-						>
-							{__('Delete schedule', 'wpappointments')}
-						</Button>
-					)}
 				</div>
 			</HtmlForm>
 		</>
@@ -491,7 +487,16 @@ export default function ScheduleSettings() {
 	const handleOpen = (schedule: Schedule) => () => {
 		openSlideOut({
 			id: `schedule-${schedule.id}`,
-			title: schedule.name,
+			title: (
+				<span className={styles.slideoutTitle}>
+					{schedule.name}
+					{!schedule.active && (
+						<span className={styles.badgeInactiveHeader}>
+							{__('Inactive', 'wpappointments')}
+						</span>
+					)}
+				</span>
+			),
 			content: <ScheduleEditor schedule={schedule} />,
 		});
 	};

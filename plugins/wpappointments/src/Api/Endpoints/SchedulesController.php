@@ -239,6 +239,15 @@ class SchedulesController extends Controller {
 			return self::error( $model->schedule );
 		}
 
+		$active_raw = get_post_meta( $id, 'wpappointments_schedule_active', true );
+		$active     = '' === $active_raw ? true : (bool) $active_raw;
+
+		if ( ! $active ) {
+			return self::error(
+				new WP_Error( 'schedule_inactive', __( 'Cannot set an inactive schedule as default', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
 		update_option( 'wpappointments_default_scheduleId', $id );
 
 		return self::response(

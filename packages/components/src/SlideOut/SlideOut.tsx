@@ -11,11 +11,11 @@ import styles from './SlideOut.module.css';
 type Props = {
 	id: string;
 	children: ReactNode;
-	title?: string;
+	title?: ReactNode;
 	level?: number;
 	type?: 'default' | 'full';
 	onClose?: (id: string) => void;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>;
 
 export default function SlideOut({
 	id,

@@ -2,19 +2,23 @@ import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import {
 	Button,
+	Button as WPButton,
 	Card,
 	CardFooter,
 	CardHeader,
+	Tooltip,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { trash } from '@wordpress/icons';
 import {
 	CardBody,
 	Checkbox,
 	DateRangePicker,
 	HtmlForm,
 	Select,
+	SlideoutHeaderActionsFill,
 	Textarea,
 	withForm,
 } from '@wpappointments/components';
@@ -92,9 +96,8 @@ type OooFormFields = {
 };
 
 const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
-	const { closeSlideOut } = useSlideout();
+	const { closeSlideOut, currentSlideout } = useSlideout();
 	const [saving, setSaving] = useState(false);
-	const [deleting, setDeleting] = useState(false);
 
 	const generalSettings = useSelect(() => {
 		return select(store).getGeneralSettings();
@@ -151,88 +154,86 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 
 	const handleDelete = async () => {
 		if (!entry) return;
-		setDeleting(true);
 		await deleteOooEntry(entry.id);
-		setDeleting(false);
 		closeSlideOut(slideoutId);
 	};
 
+	const isTopSlideout = currentSlideout?.id === slideoutId;
+
 	return (
-		<HtmlForm onSubmit={onSubmit}>
-			<div className={styles.editorContent}>
-				<div>
-					<p className={styles.dateLabel}>
-						{rangeStart && rangeEnd
-							? `${formatYmd(rangeStart)} — ${formatYmd(rangeEnd)}`
-							: rangeStart
-								? `${formatYmd(rangeStart)} — ${__('select end date', 'wpappointments')}`
-								: __('Select date range', 'wpappointments')}
-					</p>
-					<DateRangePicker
-						startDate={rangeStart}
-						endDate={rangeEnd}
-						onChange={(start, end) => {
-							setRangeStart(start);
-							setRangeEnd(end);
-						}}
-						startOfWeek={
-							startOfWeekSetting as 0 | 1 | 2 | 3 | 4 | 5 | 6
-						}
+		<>
+			{entry && isTopSlideout && (
+				<SlideoutHeaderActionsFill>
+					<Tooltip text={__('Delete time off', 'wpappointments')}>
+						<WPButton
+							icon={trash}
+							isDestructive
+							onClick={handleDelete}
+							label={__('Delete time off', 'wpappointments')}
+						/>
+					</Tooltip>
+				</SlideoutHeaderActionsFill>
+			)}
+			<HtmlForm onSubmit={onSubmit}>
+				<div className={styles.editorContent}>
+					<div>
+						<p className={styles.dateLabel}>
+							{rangeStart && rangeEnd
+								? `${formatYmd(rangeStart)} — ${formatYmd(rangeEnd)}`
+								: rangeStart
+									? `${formatYmd(rangeStart)} — ${__('select end date', 'wpappointments')}`
+									: __('Select date range', 'wpappointments')}
+						</p>
+						<DateRangePicker
+							startDate={rangeStart}
+							endDate={rangeEnd}
+							onChange={(start, end) => {
+								setRangeStart(start);
+								setRangeEnd(end);
+							}}
+							startOfWeek={
+								startOfWeekSetting as 0 | 1 | 2 | 3 | 4 | 5 | 6
+							}
+						/>
+					</div>
+					<Select
+						name="reason"
+						label={__('Reason', 'wpappointments')}
+						options={REASON_OPTIONS}
+						defaultValue={'unspecified' as any}
 					/>
-				</div>
-				<Select
-					name="reason"
-					label={__('Reason', 'wpappointments')}
-					options={REASON_OPTIONS}
-					defaultValue={'unspecified' as any}
-				/>
-				<Textarea
-					name="notes"
-					label={__('Notes', 'wpappointments')}
-					rows={3}
-				/>
-				<Checkbox
-					name="note_public"
-					label={__(
-						'Show note in customer-facing calendar',
-						'wpappointments'
-					)}
-					defaultValue={false}
-				/>
+					<Textarea
+						name="notes"
+						label={__('Notes', 'wpappointments')}
+						rows={3}
+					/>
+					<Checkbox
+						name="note_public"
+						label={__(
+							'Show note in customer-facing calendar',
+							'wpappointments'
+						)}
+						defaultValue={false}
+					/>
 
-				<Button
-					variant="primary"
-					type="submit"
-					isBusy={saving}
-					style={{
-						width: '100%',
-						justifyContent: 'center',
-						padding: '22px 0px',
-						marginTop: '16px',
-					}}
-				>
-					{entry
-						? __('Save changes', 'wpappointments')
-						: __('Add time off', 'wpappointments')}
-				</Button>
-
-				{entry && (
 					<Button
-						variant="link"
-						isDestructive
-						isBusy={deleting}
-						onClick={handleDelete}
+						variant="primary"
+						type="submit"
+						isBusy={saving}
 						style={{
 							width: '100%',
 							justifyContent: 'center',
-							marginTop: '8px',
+							padding: '22px 0px',
+							marginTop: '16px',
 						}}
 					>
-						{__('Delete', 'wpappointments')}
+						{entry
+							? __('Save changes', 'wpappointments')
+							: __('Add time off', 'wpappointments')}
 					</Button>
-				)}
-			</div>
-		</HtmlForm>
+				</div>
+			</HtmlForm>
+		</>
 	);
 });
 
