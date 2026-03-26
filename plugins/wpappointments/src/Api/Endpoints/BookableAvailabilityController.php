@@ -145,11 +145,17 @@ class BookableAvailabilityController extends Controller {
 		$entity_id    = absint( $request->get_param( 'entity_id' ) );
 		$calendar_raw = $request->get_param( 'calendar' );
 		$timezone_raw = $request->get_param( 'timezone' );
-		$trim         = 'true' === $request->get_param( 'trim' );
+		$trim         = rest_sanitize_boolean( $request->get_param( 'trim' ) );
 
 		$timezone = ! empty( $timezone_raw ) ? sanitize_text_field( $timezone_raw ) : wp_timezone_string();
 
-		if ( null === $calendar_raw ) {
+		if ( ! in_array( $timezone, \DateTimeZone::listIdentifiers(), true ) ) {
+			return self::error(
+				new WP_Error( 'invalid_timezone', __( 'Invalid timezone', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
+		if ( ! is_string( $calendar_raw ) ) {
 			return self::error(
 				new WP_Error( 'missing_calendar', __( 'Calendar data is required', 'wpappointments' ), array( 'status' => 422 ) )
 			);
@@ -185,6 +191,17 @@ class BookableAvailabilityController extends Controller {
 				}
 			}
 		}
+
+		// Validate date strings.
+		$all_dates = array_values(
+			array_filter(
+				$all_dates,
+				function ( $d ) {
+					$obj = \DateTime::createFromFormat( 'Y-m-d', $d );
+					return $obj && $obj->format( 'Y-m-d' ) === $d;
+				}
+			)
+		);
 
 		if ( empty( $all_dates ) ) {
 			return self::response(
@@ -278,7 +295,11 @@ class BookableAvailabilityController extends Controller {
 			$week_availability = array();
 
 			foreach ( $week as $day_str ) {
-				if ( ! is_string( $day_str ) ) {
+				$valid_date = is_string( $day_str )
+				? \DateTime::createFromFormat( 'Y-m-d', $day_str )
+				: false;
+
+				if ( ! $valid_date || $valid_date->format( 'Y-m-d' ) !== $day_str ) {
 					$week_availability[] = array(
 						'date'           => '',
 						'day'            => array(),
@@ -289,7 +310,7 @@ class BookableAvailabilityController extends Controller {
 					continue;
 				}
 
-				$day_date = new \DateTime( $day_str );
+				$day_date = $valid_date;
 				$day_date->setTimezone( new \DateTimeZone( $timezone ) );
 
 				$ymd         = $day_date->format( 'Y-m-d' );
