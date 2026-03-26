@@ -44,15 +44,18 @@ function isCurrentYear(date: Date) {
 	return date.getFullYear() === new Date().getFullYear();
 }
 
-function getCalendarMonth(month: number = 0, year: number = 0) {
+function getCalendarMonth(
+	month: number = 0,
+	year: number = 0,
+	defaultSchedule?: ReturnType<
+		ReturnType<typeof select<typeof store>>['getDefaultSchedule']
+	>
+) {
 	const monthIndex = month;
 	const nextMonthIndex = month + 1;
 	const firstDayOfCurrentMonthDate = new Date(year, monthIndex, 1);
 	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
 	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
-	const defaultSchedule = useSelect(() => {
-		return select(store).getDefaultSchedule();
-	}, []);
 
 	const days = [];
 
@@ -119,11 +122,14 @@ export default function Calendar() {
 			posts_per_page: -1,
 		});
 	}, []);
+	const defaultSchedule = useSelect(() => {
+		return select(store).getDefaultSchedule();
+	}, []);
 
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const currentMonth = applyAppointmentsToCalendar(
-		getCalendarMonth(month, year),
+		getCalendarMonth(month, year, defaultSchedule),
 		appointments
 	);
 	const [defaultDate, setDefaultDate] = useState(new Date());
