@@ -138,6 +138,12 @@ class OutOfOfficeController extends Controller {
 			);
 		}
 
+		if ( $data['start_date'] > $data['end_date'] ) {
+			return self::error(
+				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
 		$model = new OutOfOffice( $data );
 		$saved = $model->save();
 
@@ -193,6 +199,16 @@ class OutOfOfficeController extends Controller {
 
 		if ( is_wp_error( $owner_check ) ) {
 			return self::error( $owner_check );
+		}
+
+		// Validate date range if both dates provided.
+		$start = $data['start_date'] ?? get_post_meta( $id, 'start_date', true );
+		$end   = $data['end_date'] ?? get_post_meta( $id, 'end_date', true );
+
+		if ( $start && $end && $start > $end ) {
+			return self::error(
+				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'wpappointments' ), array( 'status' => 422 ) )
+			);
 		}
 
 		$model   = new OutOfOffice( $id );

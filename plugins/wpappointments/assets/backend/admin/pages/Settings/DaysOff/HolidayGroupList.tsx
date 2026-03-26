@@ -100,6 +100,7 @@ function HolidayRow({
 					checked={holiday.enabled}
 					onChange={handleToggle}
 					label=""
+					aria-label={getHolidayName(holiday.ref)}
 				/>
 			)}
 		</div>
@@ -140,6 +141,7 @@ function HolidayGroupSection({
 						checked={group.enabled}
 						onChange={handleToggleGroup}
 						label=""
+						aria-label={getGroupName(group.source)}
 					/>
 					<Button
 						icon={trash}

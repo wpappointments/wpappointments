@@ -130,10 +130,8 @@ class Plugin extends Core\Singleton {
 			);
 
 			if ( ! is_wp_error( $entity_post_id ) ) {
-				update_option( 'wpappointments_core_entityId', $entity_post_id );
-
 				// Create default variant for the core entity.
-				wp_insert_post(
+				$variant_post_id = wp_insert_post(
 					array(
 						'post_title'  => __( 'Default', 'wpappointments' ),
 						'post_status' => 'publish',
@@ -142,8 +140,15 @@ class Plugin extends Core\Singleton {
 						'meta_input'  => array(
 							'attribute_values' => array(),
 						),
-					)
+					),
+					true
 				);
+
+				if ( ! is_wp_error( $variant_post_id ) ) {
+					update_option( 'wpappointments_core_entityId', $entity_post_id );
+				} else {
+					wp_delete_post( $entity_post_id, true );
+				}
 			}
 		}
 

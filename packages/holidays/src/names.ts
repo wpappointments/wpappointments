@@ -12,6 +12,7 @@ const translations = [ // eslint-disable-line @typescript-eslint/no-unused-vars
 	__('Bastille Day', 'wpappointments'),
 	__('Boxing Day', 'wpappointments'),
 	__('Christian Holidays', 'wpappointments'),
+	__('Christmas Eve', 'wpappointments'),
 	__('Christmas Day', 'wpappointments'),
 	__('Columbus Day', 'wpappointments'),
 	__('Constitution Day', 'wpappointments'),
@@ -80,6 +81,7 @@ const holidayNames: Record<string, string> = {
 	armistice: 'Armistice Day',
 	thanksgiving: 'Thanksgiving',
 	christmas: 'Christmas Day',
+	christmasEve: 'Christmas Eve',
 	christmas2: 'Second Day of Christmas',
 	boxingDay: 'Boxing Day',
 };

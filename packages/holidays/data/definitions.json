@@ -43,9 +43,10 @@
 		"day": 26
 	},
 	"columbusDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 10,
-		"day": 13
+		"weekday": 1,
+		"nth": 2
 	},
 	"constitutionPL": {
 		"type": "fixed",
@@ -57,9 +58,10 @@
 		"offset": 60
 	},
 	"earlyMayBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 5
+		"weekday": 1,
+		"nth": 1
 	},
 	"easter": {
 		"type": "easter",
@@ -99,9 +101,10 @@
 		"day": 19
 	},
 	"laborDayUS": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 9,
-		"day": 1
+		"weekday": 1,
+		"nth": 1
 	},
 	"labourDay": {
 		"type": "fixed",
@@ -109,14 +112,16 @@
 		"day": 1
 	},
 	"memorialDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 26
+		"weekday": 1,
+		"nth": -1
 	},
 	"mlkDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 1,
-		"day": 20
+		"weekday": 1,
+		"nth": 3
 	},
 	"newYear": {
 		"type": "fixed",
@@ -132,24 +137,28 @@
 		"offset": 49
 	},
 	"presidentsDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 2,
-		"day": 17
+		"weekday": 1,
+		"nth": 3
 	},
 	"springBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 26
+		"weekday": 1,
+		"nth": -1
 	},
 	"summerBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 8,
-		"day": 25
+		"weekday": 1,
+		"nth": -1
 	},
 	"thanksgiving": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 11,
-		"day": 27
+		"weekday": 4,
+		"nth": 4
 	},
 	"veteransDay": {
 		"type": "fixed",
@@ -164,5 +173,10 @@
 	"whitMonday": {
 		"type": "easter",
 		"offset": 50
+	},
+	"christmasEve": {
+		"type": "fixed",
+		"month": 12,
+		"day": 24
 	}
 }
