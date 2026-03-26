@@ -34,7 +34,13 @@ class Query {
 			return -1;
 		}
 
-		$value = absint( $query['postsPerPage'] );
+		$raw = $query['postsPerPage'];
+
+		if ( -1 === $raw || '-1' === $raw ) {
+			return -1;
+		}
+
+		$value = absint( $raw );
 
 		if ( 0 === $value ) {
 			return -1;
