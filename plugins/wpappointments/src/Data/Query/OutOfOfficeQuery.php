@@ -24,9 +24,18 @@ class OutOfOfficeQuery {
 	 * @return array
 	 */
 	public static function all( $user_id, $query = array() ) {
+		$user_id        = absint( $user_id );
+		$posts_per_page = isset( $query['postsPerPage'] )
+		? min( absint( $query['postsPerPage'] ), 100 )
+		: -1;
+
+		if ( 0 === $posts_per_page ) {
+			$posts_per_page = -1;
+		}
+
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
-			'posts_per_page' => $query['postsPerPage'] ?? -1,
+			'posts_per_page' => $posts_per_page,
 			'post_status'    => 'publish',
 			'orderby'        => 'meta_value',
 			'meta_key'       => 'start_date',
