@@ -192,14 +192,16 @@ class BookableAvailabilityController extends Controller {
 			}
 		}
 
-		// Validate date strings.
+		// Normalize and validate date strings (accept Y-m-d or ISO 8601).
 		$all_dates = array_values(
 			array_filter(
-				$all_dates,
-				function ( $d ) {
-					$obj = \DateTime::createFromFormat( 'Y-m-d', $d );
-					return $obj && $obj->format( 'Y-m-d' ) === $d;
-				}
+				array_map(
+					function ( $d ) {
+						$obj = date_create( $d );
+						return $obj ? $obj->format( 'Y-m-d' ) : null;
+					},
+					$all_dates
+				)
 			)
 		);
 
@@ -296,10 +298,10 @@ class BookableAvailabilityController extends Controller {
 
 			foreach ( $week as $day_str ) {
 				$valid_date = is_string( $day_str )
-				? \DateTime::createFromFormat( 'Y-m-d', $day_str )
+				? date_create( $day_str )
 				: false;
 
-				if ( ! $valid_date || $valid_date->format( 'Y-m-d' ) !== $day_str ) {
+				if ( ! $valid_date ) {
 					$week_availability[] = array(
 						'date'           => '',
 						'day'            => array(),
