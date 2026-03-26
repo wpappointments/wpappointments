@@ -110,10 +110,6 @@ function formatTimeSummary(schedule: Schedule): string {
 	return enabledDays.map((d) => dayLabels[d]).join(', ');
 }
 
-function hasEnabledDays(schedule: Schedule): boolean {
-	return DAYS.some((day) => schedule.days[day]?.enabled);
-}
-
 function useSiteTimezone(): string {
 	const generalSettings = useSelect(() => {
 		return select(store).getGeneralSettings();
@@ -168,12 +164,12 @@ function ScheduleRow({
 					)}
 					<span
 						className={
-							hasEnabledDays(schedule)
+							schedule.active
 								? styles.badgeActive
 								: styles.badgeInactive
 						}
 					>
-						{hasEnabledDays(schedule)
+						{schedule.active
 							? __('Active', 'wpappointments')
 							: __('Inactive', 'wpappointments')}
 					</span>
@@ -190,7 +186,7 @@ function ScheduleRow({
 				>
 					<ToggleControl
 						__nextHasNoMarginBottom
-						checked={hasEnabledDays(schedule)}
+						checked={schedule.active}
 						onChange={onToggle}
 						label={schedule.name}
 						className={styles.srOnlyLabel}
@@ -500,17 +496,8 @@ export default function ScheduleSettings() {
 		});
 	};
 
-	const handleToggle = (schedule: Schedule) => async (enabled: boolean) => {
-		const updatedDays: Record<string, DayOpeningHours> = {};
-
-		for (const day of DAYS) {
-			updatedDays[day] = {
-				...(schedule.days[day] || getDefaultDay(day)),
-				enabled,
-			};
-		}
-
-		await updateSchedule(schedule.id, { days: updatedDays });
+	const handleToggle = (schedule: Schedule) => async (active: boolean) => {
+		await updateSchedule(schedule.id, { active });
 	};
 
 	const handleCreate = () => {
@@ -518,6 +505,7 @@ export default function ScheduleSettings() {
 			id: 0,
 			name: '',
 			timezone: siteTimezone,
+			active: true,
 			isDefault: false,
 			days: DAYS.reduce(
 				(acc, day) => {

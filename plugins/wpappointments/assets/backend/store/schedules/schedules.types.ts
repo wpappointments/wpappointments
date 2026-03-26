@@ -14,6 +14,7 @@ export type Schedule = {
 	id: number;
 	name: string;
 	timezone: string;
+	active: boolean;
 	isDefault: boolean;
 	days: Record<string, DayOpeningHours>;
 	overrides: OverrideGroup[];

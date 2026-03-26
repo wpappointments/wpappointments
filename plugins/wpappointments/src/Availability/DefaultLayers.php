@@ -116,6 +116,14 @@ class DefaultLayers {
 			return null;
 		}
 
+		// Inactive schedules produce empty availability.
+		$active_raw = get_post_meta( $schedule_post_id, 'wpappointments_schedule_active', true );
+		$active     = '' === $active_raw ? true : (bool) $active_raw;
+
+		if ( ! $active ) {
+			return AvailabilityEngine::empty_availability();
+		}
+
 		$days   = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 		$weekly = array();
 

@@ -22,6 +22,7 @@ class Schedule {
 	const FIELDS = array(
 		'name',
 		'timezone',
+		'active',
 	);
 
 	const DAYS = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
@@ -98,6 +99,8 @@ class Schedule {
 			$timezone = wp_timezone_string();
 		}
 
+		$active = $this->schedule_data['active'] ?? true;
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => PluginInfo::POST_TYPES['schedule'],
@@ -105,6 +108,7 @@ class Schedule {
 				'post_title'  => $title,
 				'meta_input'  => array(
 					'wpappointments_schedule_timezone' => $timezone,
+					'wpappointments_schedule_active'   => $active ? '1' : '0',
 				),
 			),
 			true
@@ -171,6 +175,10 @@ class Schedule {
 
 		if ( isset( $data['timezone'] ) ) {
 			update_post_meta( $id, 'wpappointments_schedule_timezone', $data['timezone'] );
+		}
+
+		if ( isset( $data['active'] ) ) {
+			update_post_meta( $id, 'wpappointments_schedule_active', $data['active'] ? '1' : '0' );
 		}
 
 		// Update per-day schedule data.
@@ -296,6 +304,8 @@ class Schedule {
 
 		$id         = $post->ID;
 		$timezone   = get_post_meta( $id, 'wpappointments_schedule_timezone', true );
+		$active_raw = get_post_meta( $id, 'wpappointments_schedule_active', true );
+		$active     = '' === $active_raw ? true : (bool) $active_raw;
 		$default_id = get_option( 'wpappointments_default_scheduleId' );
 
 		$days = array();
@@ -331,6 +341,7 @@ class Schedule {
 			'id'        => $id,
 			'name'      => $post->post_title,
 			'timezone'  => is_string( $timezone ) ? $timezone : '',
+			'active'    => $active,
 			'isDefault' => absint( $default_id ) === $id,
 			'days'      => $days,
 			'overrides' => $overrides,

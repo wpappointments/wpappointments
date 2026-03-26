@@ -269,6 +269,10 @@ class SchedulesController extends Controller {
 			}
 		}
 
+		if ( isset( $data['active'] ) ) {
+			$sanitized['active'] = rest_sanitize_boolean( $data['active'] );
+		}
+
 		if ( isset( $data['days'] ) && is_array( $data['days'] ) ) {
 			$sanitized['days'] = self::sanitize_days_data( $data['days'] );
 		}

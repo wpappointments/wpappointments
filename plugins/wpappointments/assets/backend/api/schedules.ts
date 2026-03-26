@@ -25,6 +25,7 @@ export type CreateScheduleData = {
 export type UpdateScheduleData = {
 	name?: string;
 	timezone?: string;
+	active?: boolean;
 	days?: Record<string, DayOpeningHours>;
 	overrides?: OverrideGroup[];
 };
