@@ -44,6 +44,16 @@ export type DaySlot = Output<typeof DaySlotSchema>;
 export type DayCalendar = Output<typeof DaySchema>;
 export type AvailabilityResponse = Output<typeof AvailabilityResponseSchema>;
 
+/**
+ * Metadata for unavailable days — extensible for OOO notes, holidays, etc.
+ */
+export type DayNotice = {
+	type: 'ooo' | 'holiday';
+	note?: string;
+};
+
+export type DayNotices = Record<string, DayNotice[]>;
+
 export type FrontendAppProps = {
 	attributes: BookingFlowBlockAttributes;
 };

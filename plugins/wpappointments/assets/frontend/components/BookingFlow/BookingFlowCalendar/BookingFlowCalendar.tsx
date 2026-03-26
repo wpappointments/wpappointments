@@ -11,6 +11,7 @@ export default function BookingFlowCalendar() {
 		form,
 		calendarWithAvailability,
 		dayAvailability,
+		dayNotices,
 		attributes,
 		weekDays,
 		availabilityLoading,
@@ -117,6 +118,11 @@ export default function BookingFlowCalendar() {
 								>
 									{week.map((day, k) => {
 										const d = new Date(day.date);
+										const dateKey = day.date
+											? day.date.split('T')[0]
+											: '';
+										const notices =
+											dayNotices[dateKey] || [];
 										const totalSlots = day.totalSlots || 0;
 										const totalAvailable =
 											day.totalAvailable || 0;
@@ -148,12 +154,29 @@ export default function BookingFlowCalendar() {
 											<button
 												key={`day-${k}`}
 												onClick={() => {
+													if (notices.length > 0) {
+														select(d, true);
+														return;
+													}
+
 													if (!day.available) {
 														return;
 													}
 
 													select(d, true);
 												}}
+												title={
+													notices.length > 0
+														? notices
+																.map(
+																	(n) =>
+																		n.note ||
+																		''
+																)
+																.filter(Boolean)
+																.join(', ')
+														: undefined
+												}
 												className={cn({
 													[styles.calendarDay]: true,
 													[styles.calendarDaySelected]:
@@ -163,6 +186,8 @@ export default function BookingFlowCalendar() {
 														viewing.getMonth(),
 													[styles.calendarDayUnavailable]:
 														!day.available,
+													[styles.calendarDayHasNotice]:
+														notices.length > 0,
 													[styles[
 														`calendarDayThreshold${threshold}`
 													]]: true,
@@ -176,7 +201,9 @@ export default function BookingFlowCalendar() {
 															new Date(),
 															500
 														)
-													) || !day.available
+													) ||
+													(!day.available &&
+														notices.length === 0)
 												}
 											>
 												{d.getDate()}
@@ -198,6 +225,13 @@ export default function BookingFlowCalendar() {
 															></span>
 														</span>
 													)}
+												{notices.length > 0 && (
+													<span
+														className={
+															styles.calendarDayNoticeIndicator
+														}
+													/>
+												)}
 											</button>
 										);
 									})}
@@ -206,73 +240,132 @@ export default function BookingFlowCalendar() {
 						</div>
 					))}
 			</div>
-			{selected && selected[0] && dayAvailability && (
-				<>
-					<h5 className={styles.timeSlotHeader}>
-						{__('Select a time slot for', 'wpappointments')}{' '}
-						{format(selected[0], 'LLLL do')}
-					</h5>
-					<div
-						className={cn({
-							[styles.daySlots]: true,
-							[styles.center]: alignment === 'Center',
-							[styles.right]: alignment === 'Right',
-							[styles.buttonGroup]: slotsAsButtons,
-						})}
-					>
-						{dayAvailability.map((slot, i) => (
-							<button
-								key={i}
-								onClick={() => {
-									if (!slot.available) {
-										return;
-									}
+			{selected &&
+				selected[0] &&
+				(() => {
+					const selectedDateKey = format(selected[0], 'yyyy-MM-dd');
+					const selectedNotices = dayNotices[selectedDateKey] || [];
+					const hasNotices = selectedNotices.length > 0;
 
-									setValue(
-										'datetime',
-										new Date(slot.timestamp).toISOString()
-									);
-									clearErrors('datetime');
-								}}
-								type="button"
-								className={cn({
-									[styles.daySlot]: true,
-									[styles.isButton]: slotsAsButtons,
-									[styles.daySlotAvailable]: slot.available,
-									[styles.daySlotSelected]:
-										datetime &&
-										new Date(
-											slot.timestamp
-										).toISOString() === datetime,
-								})}
-								data-time={slot.time}
-							>
-								{slotsAsButtons && (
-									<>
-										{slot.time} -{' '}
-										{formatTime(
-											addMinutes(
-												slot.timestamp,
-												defaultLength
-											)
+					if (hasNotices) {
+						return (
+							<div className={styles.noticePanel}>
+								<h5 className={styles.timeSlotHeader}>
+									{format(selected[0], 'LLLL do')}
+								</h5>
+								{selectedNotices.map((notice, i) => (
+									<div key={i} className={styles.noticeItem}>
+										{notice.type === 'ooo' && (
+											<span
+												className={styles.noticeBadge}
+											>
+												{__(
+													'Out of Office',
+													'wpappointments'
+												)}
+											</span>
 										)}
-									</>
-								)}
-							</button>
-						))}
-					</div>
-					{datetime && (
-						<div>
-							<span>
-								{__('Selected time:', 'wpappointments')}
-							</span>{' '}
-							<strong>
-								{format(new Date(datetime), 'LLLL do, HH:mm')}
-							</strong>
+										{notice.type === 'holiday' && (
+											<span
+												className={
+													styles.noticeBadgeHoliday
+												}
+											>
+												{__(
+													'Holiday',
+													'wpappointments'
+												)}
+											</span>
+										)}
+										{notice.note && (
+											<p className={styles.noticeText}>
+												{notice.note}
+											</p>
+										)}
+									</div>
+								))}
+							</div>
+						);
+					}
+
+					return null;
+				})()}
+			{selected &&
+				selected[0] &&
+				dayAvailability &&
+				!dayNotices[format(selected[0], 'yyyy-MM-dd')]?.length && (
+					<>
+						<h5 className={styles.timeSlotHeader}>
+							{__('Select a time slot for', 'wpappointments')}{' '}
+							{format(selected[0], 'LLLL do')}
+						</h5>
+						<div
+							className={cn({
+								[styles.daySlots]: true,
+								[styles.center]: alignment === 'Center',
+								[styles.right]: alignment === 'Right',
+								[styles.buttonGroup]: slotsAsButtons,
+							})}
+						>
+							{dayAvailability.map((slot, i) => (
+								<button
+									key={i}
+									onClick={() => {
+										if (!slot.available) {
+											return;
+										}
+
+										setValue(
+											'datetime',
+											new Date(
+												slot.timestamp
+											).toISOString()
+										);
+										clearErrors('datetime');
+									}}
+									type="button"
+									className={cn({
+										[styles.daySlot]: true,
+										[styles.isButton]: slotsAsButtons,
+										[styles.daySlotAvailable]:
+											slot.available,
+										[styles.daySlotSelected]:
+											datetime &&
+											new Date(
+												slot.timestamp
+											).toISOString() === datetime,
+									})}
+									data-time={slot.time}
+								>
+									{slotsAsButtons && (
+										<>
+											{slot.time} -{' '}
+											{formatTime(
+												addMinutes(
+													slot.timestamp,
+													defaultLength
+												)
+											)}
+										</>
+									)}
+								</button>
+							))}
 						</div>
-					)}
-				</>
-			)}
+						{datetime && (
+							<div>
+								<span>
+									{__('Selected time:', 'wpappointments')}
+								</span>{' '}
+								<strong>
+									{format(
+										new Date(datetime),
+										'LLLL do, HH:mm'
+									)}
+								</strong>
+							</div>
+						)}
+					</>
+				)}
 			<div>
 				<input
 					type="hidden"

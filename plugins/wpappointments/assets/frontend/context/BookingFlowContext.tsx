@@ -13,6 +13,7 @@ import {
 	AvailabilityResponse,
 	AvailabilityResponseSchema,
 	DayCalendar,
+	DayNotices,
 } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 
@@ -43,6 +44,7 @@ export type BookingFlowContext = {
 		| [AvailabilityResponse['data']['availability']]
 		| [];
 	dayAvailability: DayCalendar['day'] | [];
+	dayNotices: DayNotices;
 	lilius: ReturnType<typeof useLilius>;
 	form: ReturnType<typeof useForm<BookingFlowFormFields>>;
 	formError: string | null;
@@ -74,6 +76,7 @@ export function BookingFlowContextProvider({
 	const [dayAvailability, setDayAvailability] = useState<
 		BookingFlowContext['dayAvailability']
 	>([]);
+	const [dayNotices, setDayNotices] = useState<DayNotices>({});
 	const [formError, setFormError] = useState<string | null>(null);
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
 	const [availabilityLoading, setAvailabilityLoading] =
@@ -123,6 +126,54 @@ export function BookingFlowContextProvider({
 			const { availability } = response;
 
 			setCalendarWithAvailability([availability]);
+
+			// Fetch OOO dates with public notes.
+			const allDates = availability.flat().map((d) => d.date);
+			const sortedDates = allDates.filter(Boolean).sort();
+
+			if (sortedDates.length > 0) {
+				const startDate = sortedDates[0].split('T')[0];
+				const endDate =
+					sortedDates[sortedDates.length - 1].split('T')[0];
+
+				try {
+					const oooData = await apiFetch<
+						APIResponse<{
+							dates: { date: string; note?: string }[];
+						}>
+					>({
+						path: addQueryArgs('ooo/dates', {
+							entity_id: entityId,
+							start_date: startDate,
+							end_date: endDate,
+						}),
+					});
+
+					if (oooData?.data?.dates) {
+						const notices: DayNotices = {};
+
+						for (const entry of oooData.data.dates) {
+							if (!entry.note) continue;
+
+							const key = entry.date;
+
+							if (!notices[key]) {
+								notices[key] = [];
+							}
+
+							notices[key].push({
+								type: 'ooo',
+								note: entry.note,
+							});
+						}
+
+						setDayNotices(notices);
+					}
+				} catch {
+					// OOO dates are non-critical — don't block the calendar.
+				}
+			}
+
 			setAvailabilityLoading(false);
 		}
 
@@ -179,6 +230,7 @@ export function BookingFlowContextProvider({
 	const value = {
 		attributes,
 		dayAvailability,
+		dayNotices,
 		calendarWithAvailability,
 		availabilityLoading,
 		lilius,
