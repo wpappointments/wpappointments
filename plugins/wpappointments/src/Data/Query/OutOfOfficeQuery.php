@@ -79,6 +79,23 @@ class OutOfOfficeQuery {
 	 * @return \WP_Post[]
 	 */
 	public static function for_date_range( $start, $end, $user_ids ) {
+		$user_ids = array_filter( array_map( 'absint', (array) $user_ids ) );
+
+		if ( empty( $user_ids ) ) {
+			return array();
+		}
+
+		$start_obj = \DateTime::createFromFormat( 'Y-m-d', $start );
+		$end_obj   = \DateTime::createFromFormat( 'Y-m-d', $end );
+
+		if ( ! $start_obj || $start_obj->format( 'Y-m-d' ) !== $start ) {
+			return array();
+		}
+
+		if ( ! $end_obj || $end_obj->format( 'Y-m-d' ) !== $end ) {
+			return array();
+		}
+
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
 			'posts_per_page' => -1,
@@ -116,6 +133,12 @@ class OutOfOfficeQuery {
 	 * @return \WP_Post[]
 	 */
 	public static function for_users( $user_ids ) {
+		$user_ids = array_filter( array_map( 'absint', (array) $user_ids ) );
+
+		if ( empty( $user_ids ) ) {
+			return array();
+		}
+
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
 			'posts_per_page' => -1,
