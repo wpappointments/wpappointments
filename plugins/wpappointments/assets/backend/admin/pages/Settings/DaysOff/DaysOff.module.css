@@ -1,0 +1,77 @@
+.oooList {
+	display: flex;
+	flex-direction: column;
+}
+
+.oooRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 24px;
+	border-bottom: 1px solid #e0e0e0;
+	gap: 12px;
+	background: #fff;
+	cursor: pointer;
+	transition: background-color 0.1s;
+}
+
+.oooRow:hover {
+	background: #f9f9f9;
+}
+
+.oooRow:last-child {
+	border-bottom: none;
+}
+
+.oooInfo {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+}
+
+.oooDate {
+	font-size: 14px;
+	font-weight: 600;
+	color: #1e1e1e;
+	white-space: nowrap;
+}
+
+.oooReasonBadge {
+	font-size: 11px;
+	font-weight: 500;
+	padding: 1px 8px;
+	border-radius: 10px;
+	white-space: nowrap;
+	background: #e8f0fe;
+	color: #1a73e8;
+}
+
+.oooNotes {
+	font-size: 13px;
+	color: #757575;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.emptyState {
+	padding: 24px;
+	text-align: center;
+	color: #757575;
+	font-size: 13px;
+}
+
+.editorContent {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.dateLabel {
+	font-size: 13px;
+	font-weight: 500;
+	color: #1e1e1e;
+	margin: 0 0 8px;
+}

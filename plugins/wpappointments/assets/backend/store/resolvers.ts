@@ -2,6 +2,7 @@ import { resolvers as appointments } from './appointments/appointments';
 import { resolvers as availability } from './availability/availability';
 import { resolvers as customers } from './customers/customers';
 import { resolvers as notices } from './notices/notices';
+import { resolvers as ooo } from './ooo/ooo';
 import { resolvers as schedules } from './schedules/schedules';
 import { resolvers as settings } from './settings/settings';
 import { resolvers as slideouts } from './slideout/slideout';
@@ -14,4 +15,5 @@ export default {
 	...availability,
 	...customers,
 	...schedules,
+	...ooo,
 };

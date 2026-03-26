@@ -3,6 +3,7 @@ import { actions as appointments } from './appointments/appointments';
 import { actions as availability } from './availability/availability';
 import { actions as customers } from './customers/customers';
 import { actions as notices } from './notices/notices';
+import { actions as ooo } from './ooo/ooo';
 import { actions as schedules } from './schedules/schedules';
 import { actions as settings } from './settings/settings';
 import { actions as appointmentSlideoutActions } from './slideout/appointment/appointment';
@@ -32,4 +33,5 @@ export default {
 	...appointmentSlideoutActions,
 	...customers,
 	...schedules,
+	...ooo,
 };

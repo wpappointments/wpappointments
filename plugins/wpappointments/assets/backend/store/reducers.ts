@@ -2,6 +2,7 @@ import { reducer as appointments } from './appointments/appointments';
 import { reducer as availability } from './availability/availability';
 import { reducer as customers } from './customers/customers';
 import { reducer as notices } from './notices/notices';
+import { reducer as ooo } from './ooo/ooo';
 import { reducer as schedules } from './schedules/schedules';
 import { reducer as settings } from './settings/settings';
 import { reducer as appointmentSlideout } from './slideout/appointment/appointment';
@@ -16,4 +17,5 @@ export default {
 	appointmentSlideout,
 	customers,
 	schedules,
+	ooo,
 };

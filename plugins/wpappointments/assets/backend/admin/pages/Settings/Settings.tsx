@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import AppointmentsSettings from './Appointments/Appointments';
+import DaysOffSettings from './DaysOff/DaysOff';
 import GeneralSettings from './General/General';
 import NotificationsSettings from './Notifications/Notifications';
 import ScheduleSettings from './Schedule/Schedule';
@@ -41,6 +42,15 @@ const tabs = new Map<string, Tab>([
 			title: __('Schedule', 'wpappointments'),
 			className: 'tab-schedule',
 			component: <ScheduleSettings />,
+		},
+	],
+	[
+		'days-off',
+		{
+			name: 'days-off',
+			title: __('Days Off', 'wpappointments'),
+			className: 'tab-days-off',
+			component: <DaysOffSettings />,
 		},
 	],
 	[

@@ -50,8 +50,9 @@ export { default as WPDatePicker } from './FormField/WPDatePicker/WPDatePicker';
 export { getGenericInputErrorMessage } from './utils/forms';
 export type { FormFieldError } from './utils/forms';
 
-// MultiDatePicker
+// Date Pickers
 export { default as MultiDatePicker } from './MultiDatePicker/MultiDatePicker';
+export { default as DateRangePicker } from './DateRangePicker/DateRangePicker';
 
 // Action Button
 export { default as ActionButton } from './ActionButton/ActionButton';
