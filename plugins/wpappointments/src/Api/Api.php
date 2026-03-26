@@ -28,5 +28,6 @@ class Api extends Core\Singleton {
 		Endpoints\BookableAvailabilityController::init();
 		Endpoints\BookableTypesController::init();
 		Endpoints\SchedulesController::init();
+		Endpoints\OutOfOfficeController::init();
 	}
 }

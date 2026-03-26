@@ -10,7 +10,8 @@
 
 namespace WPAppointments\Availability;
 
-use WPAppointments\Data\Model\Settings;
+use WPAppointments\Data\Model\OutOfOffice;
+use WPAppointments\Data\Query\OutOfOfficeQuery;
 
 /**
  * Default availability layers class
@@ -39,6 +40,15 @@ class DefaultLayers {
 			array(
 				'type'     => 'narrowing',
 				'callback' => array( __CLASS__, 'entity_callback' ),
+			)
+		);
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'ooo',
+			90,
+			array(
+				'type'     => 'narrowing',
+				'callback' => array( __CLASS__, 'ooo_callback' ),
 			)
 		);
 	}
@@ -206,6 +216,80 @@ class DefaultLayers {
 					}
 					$overrides[ $date ] = $time_ranges;
 				}
+			}
+		}
+
+		return array(
+			'weekly'    => $weekly,
+			'overrides' => $overrides,
+		);
+	}
+
+	/**
+	 * OOO availability layer callback
+	 *
+	 * Resolves entity owner(s) and blocks their OOO dates.
+	 *
+	 * @param array $context Layer context with variant_id, entity_id, date_range.
+	 *
+	 * @return array|null Availability data or null if no OOO entries.
+	 */
+	public static function ooo_callback( $context ) {
+		$date_range = $context['date_range'] ?? array();
+
+		if ( empty( $date_range['start'] ) || empty( $date_range['end'] ) ) {
+			return null;
+		}
+
+		$entity_id = $context['entity_id'] ?? 0;
+
+		// Resolve entity owners — always int[].
+		$owner_ids = apply_filters(
+			'wpappointments_entity_owners',
+			array( get_current_user_id() ),
+			$entity_id
+		);
+
+		if ( empty( $owner_ids ) ) {
+			return null;
+		}
+
+		$ooo_posts = OutOfOfficeQuery::for_date_range(
+			$date_range['start'],
+			$date_range['end'],
+			$owner_ids
+		);
+
+		if ( empty( $ooo_posts ) ) {
+			return null;
+		}
+
+		// Build fully-open weekly (pass-through for non-OOO days).
+		$weekly = array();
+
+		foreach ( AvailabilityEngine::WEEKDAYS as $day ) {
+			$weekly[ $day ] = array(
+				array(
+					'start' => '00:00',
+					'end'   => '23:59',
+				),
+			);
+		}
+
+		// Block each OOO date.
+		$overrides = array();
+
+		foreach ( $ooo_posts as $post ) {
+			$model      = new OutOfOffice( $post );
+			$normalized = $model->normalize();
+
+			$current = new \DateTime( $normalized['startDate'] );
+			$end     = new \DateTime( $normalized['endDate'] );
+
+			while ( $current <= $end ) {
+				$date_str               = $current->format( 'Y-m-d' );
+				$overrides[ $date_str ] = array();
+				$current->modify( '+1 day' );
 			}
 		}
 

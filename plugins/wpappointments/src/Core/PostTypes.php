@@ -22,6 +22,7 @@ class PostTypes {
 		self::register_schedule_post_type();
 		self::register_bookable_post_type();
 		self::register_bookable_variant_post_type();
+		self::register_ooo_post_type();
 	}
 
 	/**
@@ -143,6 +144,32 @@ class PostTypes {
 					'publish_posts'      => 'wpa_manage_bookables',
 					'read_private_posts' => 'wpa_manage_bookables',
 				),
+				'hierarchical'        => false,
+				'rewrite'             => false,
+				'query_var'           => false,
+				'supports'            => array( 'title', 'custom-fields' ),
+				'exclude_from_search' => true,
+				'publicly_queryable'  => false,
+			)
+		);
+	}
+
+	/**
+	 * Register out of office post type
+	 *
+	 * @return void
+	 */
+	private static function register_ooo_post_type() {
+		register_post_type(
+			PluginInfo::POST_TYPES['ooo'],
+			array(
+				'label'               => __( 'Out of Office', 'wpappointments' ),
+				'public'              => false,
+				'show_ui'             => false,
+				'show_in_menu'        => false,
+				'show_in_rest'        => false,
+				'capability_type'     => 'post',
+				'map_meta_cap'        => true,
 				'hierarchical'        => false,
 				'rewrite'             => false,
 				'query_var'           => false,
