@@ -10,7 +10,7 @@ import { addHolidayGroup } from '~/backend/api/holidays';
 
 export default function AddHolidayGroupSlideout() {
 	const [search, setSearch] = useState('');
-	const [adding, setAdding] = useState(false);
+	const [addingId, setAddingId] = useState<string | null>(null);
 
 	const { countries, religious, groups } = useSelect(() => {
 		return {
@@ -33,9 +33,9 @@ export default function AddHolidayGroupSlideout() {
 	);
 
 	const handleAdd = async (type: 'country' | 'religious', fileId: string) => {
-		setAdding(true);
+		setAddingId(`${type}_${fileId}`);
 		await addHolidayGroup(type, fileId);
-		setAdding(false);
+		setAddingId(null);
 	};
 
 	return (
@@ -49,7 +49,7 @@ export default function AddHolidayGroupSlideout() {
 						<SetItem
 							key={set.id}
 							set={set}
-							adding={adding}
+							adding={addingId === `religious_${set.id}`}
 							onAdd={() => handleAdd('religious', set.id)}
 						/>
 					))}
@@ -80,7 +80,7 @@ export default function AddHolidayGroupSlideout() {
 						<SetItem
 							key={country.id}
 							set={country}
-							adding={adding}
+							adding={addingId === `country_${country.id}`}
 							onAdd={() => handleAdd('country', country.id)}
 						/>
 					))}

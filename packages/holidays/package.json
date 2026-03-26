@@ -13,6 +13,6 @@
 	},
 	"license": "GPL-2.0-or-later",
 	"peerDependencies": {
-		"@wordpress/i18n": "*"
+		"@wordpress/i18n": "^4.51.0"
 	}
 }
