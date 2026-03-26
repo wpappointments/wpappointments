@@ -2,6 +2,7 @@ import { APIFetchOptions } from '@wordpress/api-fetch';
 import { actions as appointments } from './appointments/appointments';
 import { actions as availability } from './availability/availability';
 import { actions as customers } from './customers/customers';
+import { actions as holidays } from './holidays/holidays';
 import { actions as notices } from './notices/notices';
 import { actions as ooo } from './ooo/ooo';
 import { actions as schedules } from './schedules/schedules';
@@ -34,4 +35,5 @@ export default {
 	...customers,
 	...schedules,
 	...ooo,
+	...holidays,
 };

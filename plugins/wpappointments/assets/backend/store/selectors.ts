@@ -1,6 +1,7 @@
 import { selectors as appointments } from './appointments/appointments';
 import { selectors as availability } from './availability/availability';
 import { selectors as customers } from './customers/customers';
+import { selectors as holidays } from './holidays/holidays';
 import { selectors as notices } from './notices/notices';
 import { selectors as ooo } from './ooo/ooo';
 import { selectors as schedules } from './schedules/schedules';
@@ -18,4 +19,5 @@ export default {
 	...customers,
 	...schedules,
 	...ooo,
+	...holidays,
 };

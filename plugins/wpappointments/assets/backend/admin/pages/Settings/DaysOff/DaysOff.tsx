@@ -27,6 +27,7 @@ import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import type { OooEntry, OooReason } from '~/backend/store/ooo/ooo.types';
 import { store } from '~/backend/store/store';
 import styles from './DaysOff.module.css';
+import HolidayGroupList from './HolidayGroupList';
 import {
 	createOooEntry,
 	updateOooEntry,
@@ -261,33 +262,36 @@ export default function DaysOffSettings() {
 	};
 
 	return (
-		<Card className={globalStyles.card}>
-			<CardHeader>
-				<Text size="title">
-					{__('Your time off', 'wpappointments')}
-				</Text>
-			</CardHeader>
-			<CardBody style={{ padding: 0 }}>
-				<div className={styles.oooList}>
-					{entries.map((entry) => (
-						<OooRow
-							key={entry.id}
-							entry={entry}
-							onClick={handleOpen(entry)}
-						/>
-					))}
-					{entries.length === 0 && (
-						<div className={styles.emptyState}>
-							{__('No time off scheduled.', 'wpappointments')}
-						</div>
-					)}
-				</div>
-			</CardBody>
-			<CardFooter>
-				<Button variant="secondary" onClick={handleCreate}>
-					{__('Add time off', 'wpappointments')}
-				</Button>
-			</CardFooter>
-		</Card>
+		<>
+			<Card className={globalStyles.card}>
+				<CardHeader>
+					<Text size="title">
+						{__('Your time off', 'wpappointments')}
+					</Text>
+				</CardHeader>
+				<CardBody style={{ padding: 0 }}>
+					<div className={styles.oooList}>
+						{entries.map((entry) => (
+							<OooRow
+								key={entry.id}
+								entry={entry}
+								onClick={handleOpen(entry)}
+							/>
+						))}
+						{entries.length === 0 && (
+							<div className={styles.emptyState}>
+								{__('No time off scheduled.', 'wpappointments')}
+							</div>
+						)}
+					</div>
+				</CardBody>
+				<CardFooter>
+					<Button variant="secondary" onClick={handleCreate}>
+						{__('Add time off', 'wpappointments')}
+					</Button>
+				</CardFooter>
+			</Card>
+			<HolidayGroupList />
+		</>
 	);
 }
