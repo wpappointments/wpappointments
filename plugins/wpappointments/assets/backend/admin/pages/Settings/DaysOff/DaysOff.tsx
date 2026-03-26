@@ -114,13 +114,15 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 
 	const slideoutId = entry ? `ooo-${entry.id}` : 'ooo-new';
 
-	if (entry) {
-		useFillFormValues({
-			reason: entry.reason,
-			notes: entry.notes,
-			note_public: entry.notePublic,
-		});
-	}
+	const initialValues = entry
+		? {
+				reason: entry.reason,
+				notes: entry.notes,
+				note_public: entry.notePublic,
+			}
+		: undefined;
+
+	useFillFormValues(initialValues);
 
 	const formatYmd = (date: Date | null) =>
 		date
