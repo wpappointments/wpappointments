@@ -11,7 +11,8 @@
 		"wp-content/plugins/wpappointments": "./plugins/wpappointments",
 		"wp-content/plugins/other-plugin": "./plugins/other-plugin",
 		"wp-content/plugins/demo-court-booking": "./tools/testing/demo-court-booking",
-		"wp-content/mu-plugins": "./.mu-plugins"
+		"wp-content/mu-plugins": "./.mu-plugins",
+		"wp-content/packages": "./packages"
 	},
 	"plugins": [
 		"./plugins/wpappointments",
