@@ -10,6 +10,7 @@ namespace WPAppointments\Data\Query;
 
 use WP_Query;
 use WPAppointments\Core\PluginInfo;
+use WPAppointments\Utils\Query;
 
 /**
  * OutOfOfficeQuery class
@@ -24,18 +25,11 @@ class OutOfOfficeQuery {
 	 * @return array
 	 */
 	public static function all( $user_id, $query = array() ) {
-		$user_id        = absint( $user_id );
-		$posts_per_page = isset( $query['postsPerPage'] )
-		? min( absint( $query['postsPerPage'] ), 100 )
-		: -1;
-
-		if ( 0 === $posts_per_page ) {
-			$posts_per_page = -1;
-		}
+		$user_id = absint( $user_id );
 
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
-			'posts_per_page' => $posts_per_page,
+			'posts_per_page' => Query::sanitize_per_page( $query ),
 			'post_status'    => 'publish',
 			'orderby'        => 'meta_value',
 			'meta_key'       => 'start_date',
@@ -50,7 +44,7 @@ class OutOfOfficeQuery {
 		);
 
 		if ( isset( $query['paged'] ) ) {
-			$args['paged'] = max( 1, absint( $query['paged'] ) );
+			$args['paged'] = Query::sanitize_paged( $query );
 		}
 
 		$ooo = new WP_Query( $args );
@@ -79,7 +73,7 @@ class OutOfOfficeQuery {
 	 * @return \WP_Post[]
 	 */
 	public static function for_date_range( $start, $end, $user_ids ) {
-		$user_ids = array_filter( array_map( 'absint', (array) $user_ids ) );
+		$user_ids = Query::sanitize_user_ids( (array) $user_ids );
 
 		if ( empty( $user_ids ) ) {
 			return array();
@@ -133,7 +127,7 @@ class OutOfOfficeQuery {
 	 * @return \WP_Post[]
 	 */
 	public static function for_users( $user_ids ) {
-		$user_ids = array_filter( array_map( 'absint', (array) $user_ids ) );
+		$user_ids = Query::sanitize_user_ids( (array) $user_ids );
 
 		if ( empty( $user_ids ) ) {
 			return array();

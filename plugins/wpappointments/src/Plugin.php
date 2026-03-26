@@ -71,6 +71,7 @@ class Plugin extends Core\Singleton {
 			);
 
 			update_option( 'wpappointments_default_scheduleId', $post_id );
+			$default_schedule = $post_id;
 
 			$days = array( 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' );
 
