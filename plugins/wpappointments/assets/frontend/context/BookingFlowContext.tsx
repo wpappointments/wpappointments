@@ -157,7 +157,7 @@ export function BookingFlowContextProvider({
 						const notices: DayNotices = {};
 
 						for (const entry of oooData.data.dates) {
-							if (!entry.note && !entry.reason) continue;
+							if (!entry.note) continue;
 
 							const key = entry.date;
 

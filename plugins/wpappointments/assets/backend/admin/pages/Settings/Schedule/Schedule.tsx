@@ -20,6 +20,7 @@ import {
 	Input,
 	Select,
 	SlideoutHeaderActionsFill,
+	Toggle,
 	withForm,
 } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
@@ -40,6 +41,7 @@ import {
 	createSchedule,
 	updateSchedule,
 	deleteSchedule,
+	setDefaultSchedule,
 } from '~/backend/api/schedules';
 import globalStyles from 'global.module.css';
 
@@ -181,18 +183,20 @@ function ScheduleRow({
 					{schedule.timezone ? ` · ${schedule.timezone}` : ''}
 				</span>
 			</div>
-			<div
-				className={styles.scheduleActions}
-				onClick={(e) => e.stopPropagation()}
-			>
-				<ToggleControl
-					__nextHasNoMarginBottom
-					checked={hasEnabledDays(schedule)}
-					onChange={onToggle}
-					label={schedule.name}
-					className={styles.srOnlyLabel}
-				/>
-			</div>
+			{!schedule.isDefault && (
+				<div
+					className={styles.scheduleActions}
+					onClick={(e) => e.stopPropagation()}
+				>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						checked={hasEnabledDays(schedule)}
+						onChange={onToggle}
+						label={schedule.name}
+						className={styles.srOnlyLabel}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
@@ -338,6 +342,19 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 						))}
 					</div>
 					<DateOverrides scheduleSlideoutId={slideoutId} />
+					{!isNew && (
+						<Toggle
+							name="_isDefault"
+							label={__('Default schedule', 'wpappointments')}
+							defaultChecked={schedule.isDefault}
+							onChange={async (checked) => {
+								if (checked) {
+									await setDefaultSchedule(schedule.id);
+									closeSlideOut(slideoutId);
+								}
+							}}
+						/>
+					)}
 					<Button
 						variant="primary"
 						type="submit"
@@ -361,7 +378,7 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 							style={{
 								width: '100%',
 								justifyContent: 'center',
-								marginTop: '8px',
+								marginTop: '4px',
 							}}
 						>
 							{__('Delete schedule', 'wpappointments')}
