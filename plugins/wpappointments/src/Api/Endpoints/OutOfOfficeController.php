@@ -166,6 +166,12 @@ class OutOfOfficeController extends Controller {
 			return self::error( $model->ooo );
 		}
 
+		$owner_check = self::verify_entry_owner( $id );
+
+		if ( is_wp_error( $owner_check ) ) {
+			return self::error( $owner_check );
+		}
+
 		return self::response(
 			__( 'OOO entry fetched successfully', 'wpappointments' ),
 			array( 'entry' => $model->normalize() )
@@ -182,6 +188,12 @@ class OutOfOfficeController extends Controller {
 	public static function update( $request ) {
 		$id   = absint( $request->get_param( 'id' ) );
 		$data = self::sanitize_ooo_data( $request->get_json_params() );
+
+		$owner_check = self::verify_entry_owner( $id );
+
+		if ( is_wp_error( $owner_check ) ) {
+			return self::error( $owner_check );
+		}
 
 		$model   = new OutOfOffice( $id );
 		$updated = $model->update( $data );
@@ -205,6 +217,12 @@ class OutOfOfficeController extends Controller {
 	 */
 	public static function delete_entry( $request ) {
 		$id = absint( $request->get_param( 'id' ) );
+
+		$owner_check = self::verify_entry_owner( $id );
+
+		if ( is_wp_error( $owner_check ) ) {
+			return self::error( $owner_check );
+		}
 
 		$model   = new OutOfOffice( $id );
 		$deleted = $model->delete();
@@ -272,6 +290,27 @@ class OutOfOfficeController extends Controller {
 			__( 'Blocked dates fetched successfully', 'wpappointments' ),
 			array( 'dates' => $blocked )
 		);
+	}
+
+	/**
+	 * Verify the current user owns the OOO entry
+	 *
+	 * @param int $entry_id OOO entry post ID.
+	 *
+	 * @return true|\WP_Error True on success, WP_Error if not the owner.
+	 */
+	private static function verify_entry_owner( $entry_id ) {
+		$owner_id = absint( get_post_meta( $entry_id, 'user_id', true ) );
+
+		if ( get_current_user_id() !== $owner_id ) {
+			return new WP_Error(
+				'ooo_forbidden',
+				__( 'You do not own this time off entry.', 'wpappointments' ),
+				array( 'status' => 403 )
+			);
+		}
+
+		return true;
 	}
 
 	/**
