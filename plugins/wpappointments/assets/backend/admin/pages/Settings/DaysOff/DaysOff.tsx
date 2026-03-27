@@ -9,7 +9,7 @@ import {
 	Tooltip,
 	__experimentalText as Text,
 } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import {
@@ -100,16 +100,22 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 	const { closeSlideOut, currentSlideout } = useSlideout();
 	const [saving, setSaving] = useState(false);
 
-	const generalSettings = useSelect(() => {
-		return select(store).getGeneralSettings();
-	}, []);
+	const generalSettings = useSelect(
+		(select) => select(store).getGeneralSettings(),
+		[]
+	);
 	const startOfWeekSetting = generalSettings?.startOfWeek ?? 1;
 
+	const parseYmd = (value: string) => {
+		const [year, month, day] = value.split('-').map(Number);
+		return new Date(year, month - 1, day);
+	};
+
 	const [rangeStart, setRangeStart] = useState<Date | null>(
-		entry ? new Date(entry.startDate) : null
+		entry ? parseYmd(entry.startDate) : null
 	);
 	const [rangeEnd, setRangeEnd] = useState<Date | null>(
-		entry ? new Date(entry.endDate) : null
+		entry ? parseYmd(entry.endDate) : null
 	);
 
 	const slideoutId = entry ? `ooo-${entry.id}` : 'ooo-new';
@@ -243,9 +249,7 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 export default function DaysOffSettings() {
 	const { openSlideOut } = useSlideout();
 
-	const entries = useSelect(() => {
-		return select(store).getOooEntries();
-	}, []);
+	const entries = useSelect((select) => select(store).getOooEntries(), []);
 
 	const handleOpen = (entry: OooEntry) => () => {
 		openSlideOut({
