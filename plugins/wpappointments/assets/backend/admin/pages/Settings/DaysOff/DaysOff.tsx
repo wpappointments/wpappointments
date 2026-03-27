@@ -162,8 +162,10 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 
 	const handleDelete = async () => {
 		if (!entry) return;
-		await deleteOooEntry(entry.id);
-		closeSlideOut(slideoutId);
+		const result = await deleteOooEntry(entry.id);
+		if (result) {
+			closeSlideOut(slideoutId);
+		}
 	};
 
 	const isTopSlideout = currentSlideout?.id === slideoutId;
