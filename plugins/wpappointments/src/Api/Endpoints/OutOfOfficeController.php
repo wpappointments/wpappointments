@@ -129,6 +129,10 @@ class OutOfOfficeController extends Controller {
 	public static function create( $request ) {
 		$data = self::sanitize_ooo_data( $request->get_json_params() );
 
+		if ( is_wp_error( $data ) ) {
+			return self::error( $data );
+		}
+
 		// Auto-set user_id to current user.
 		$data['user_id'] = get_current_user_id();
 
@@ -194,6 +198,10 @@ class OutOfOfficeController extends Controller {
 	public static function update( $request ) {
 		$id   = absint( $request->get_param( 'id' ) );
 		$data = self::sanitize_ooo_data( $request->get_json_params() );
+
+		if ( is_wp_error( $data ) ) {
+			return self::error( $data );
+		}
 
 		$owner_check = self::verify_entry_owner( $id );
 
@@ -274,14 +282,13 @@ class OutOfOfficeController extends Controller {
 		$start_obj = \DateTime::createFromFormat( 'Y-m-d', $start_date );
 		$end_obj   = \DateTime::createFromFormat( 'Y-m-d', $end_date );
 
-		if ( ! $start_obj || ! $end_obj ) {
+		if ( ! $start_obj || $start_obj->format( 'Y-m-d' ) !== $start_date
+			|| ! $end_obj || $end_obj->format( 'Y-m-d' ) !== $end_date
+		) {
 			return self::error(
 				new WP_Error( 'ooo_dates_invalid', __( 'start_date and end_date must be valid Y-m-d dates', 'wpappointments' ), array( 'status' => 422 ) )
 			);
 		}
-
-		$start_date = $start_obj->format( 'Y-m-d' );
-		$end_date   = $end_obj->format( 'Y-m-d' );
 
 		if ( $start_date > $end_date ) {
 			return self::error(
@@ -356,7 +363,7 @@ class OutOfOfficeController extends Controller {
 	 *
 	 * @param array $data Raw data.
 	 *
-	 * @return array Sanitized data.
+	 * @return array|\WP_Error Sanitized data or WP_Error on invalid input.
 	 */
 	private static function sanitize_ooo_data( $data ) {
 		$sanitized = array();
@@ -365,26 +372,32 @@ class OutOfOfficeController extends Controller {
 			$date = sanitize_text_field( $data['start_date'] );
 			$obj  = \DateTime::createFromFormat( 'Y-m-d', $date );
 
-			if ( $obj && $obj->format( 'Y-m-d' ) === $date ) {
-				$sanitized['start_date'] = $date;
+			if ( ! $obj || $obj->format( 'Y-m-d' ) !== $date ) {
+				return new WP_Error( 'ooo_invalid_start_date', __( 'start_date must be a valid Y-m-d date', 'wpappointments' ), array( 'status' => 422 ) );
 			}
+
+			$sanitized['start_date'] = $date;
 		}
 
 		if ( isset( $data['end_date'] ) ) {
 			$date = sanitize_text_field( $data['end_date'] );
 			$obj  = \DateTime::createFromFormat( 'Y-m-d', $date );
 
-			if ( $obj && $obj->format( 'Y-m-d' ) === $date ) {
-				$sanitized['end_date'] = $date;
+			if ( ! $obj || $obj->format( 'Y-m-d' ) !== $date ) {
+				return new WP_Error( 'ooo_invalid_end_date', __( 'end_date must be a valid Y-m-d date', 'wpappointments' ), array( 'status' => 422 ) );
 			}
+
+			$sanitized['end_date'] = $date;
 		}
 
 		if ( isset( $data['reason'] ) ) {
 			$reason = sanitize_text_field( $data['reason'] );
 
-			if ( in_array( $reason, OutOfOffice::ALLOWED_REASONS, true ) ) {
-				$sanitized['reason'] = $reason;
+			if ( ! in_array( $reason, OutOfOffice::ALLOWED_REASONS, true ) ) {
+				return new WP_Error( 'ooo_invalid_reason', __( 'reason must be one of the allowed values', 'wpappointments' ), array( 'status' => 422 ) );
 			}
+
+			$sanitized['reason'] = $reason;
 		}
 
 		if ( isset( $data['notes'] ) ) {

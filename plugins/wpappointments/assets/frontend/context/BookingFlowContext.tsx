@@ -107,85 +107,93 @@ export function BookingFlowContextProvider({
 				window.wpappointments?.entity?.coreEntityId;
 
 			if (!entityId) {
+				setDayNotices({});
 				setAvailabilityLoading(false);
 				return;
 			}
 
-			const data = await apiFetch({
-				path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
-					calendar: JSON.stringify(calendar[0]),
-					timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-					trim: attributes.trimUnavailable,
-				}),
-			});
+			try {
+				const data = await apiFetch({
+					path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
+						calendar: JSON.stringify(calendar[0]),
+						timezone:
+							Intl.DateTimeFormat().resolvedOptions().timeZone,
+						trim: attributes.trimUnavailable,
+					}),
+				});
 
-			const parsed = safeParse(AvailabilityResponseSchema, data);
-			const { output, success } = parsed;
+				const parsed = safeParse(AvailabilityResponseSchema, data);
+				const { output, success } = parsed;
 
-			if (!success) {
-				console.error('Failed to parse availability response', parsed);
-				setAvailabilityLoading(false);
-				return;
-			}
+				if (!success) {
+					console.error(
+						'Failed to parse availability response',
+						parsed
+					);
+					return;
+				}
 
-			const { data: response } = output;
-			const { availability } = response;
+				const { data: response } = output;
+				const { availability } = response;
 
-			setCalendarWithAvailability([availability]);
+				setCalendarWithAvailability([availability]);
 
-			// Fetch OOO dates with public notes.
-			const allDates = availability.flat().map((d) => d.date);
-			const sortedDates = allDates.filter(Boolean).sort();
+				// Fetch OOO dates with public notes.
+				const allDates = availability.flat().map((d) => d.date);
+				const sortedDates = allDates.filter(Boolean).sort();
 
-			if (sortedDates.length > 0) {
-				const startDate = sortedDates[0].split('T')[0];
-				const endDate =
-					sortedDates[sortedDates.length - 1].split('T')[0];
+				setDayNotices({});
 
-				try {
-					const oooData = await apiFetch<
-						APIResponse<{
-							dates: {
-								date: string;
-								reason?: string;
-								note?: string;
-							}[];
-						}>
-					>({
-						path: addQueryArgs('ooo/dates', {
-							entity_id: entityId,
-							start_date: startDate,
-							end_date: endDate,
-						}),
-					});
+				if (sortedDates.length > 0) {
+					const startDate = sortedDates[0].split('T')[0];
+					const endDate =
+						sortedDates[sortedDates.length - 1].split('T')[0];
 
-					if (oooData?.data?.dates) {
-						const notices: DayNotices = {};
+					try {
+						const oooData = await apiFetch<
+							APIResponse<{
+								dates: {
+									date: string;
+									reason?: string;
+									note?: string;
+								}[];
+							}>
+						>({
+							path: addQueryArgs('ooo/dates', {
+								entity_id: entityId,
+								start_date: startDate,
+								end_date: endDate,
+							}),
+						});
 
-						for (const entry of oooData.data.dates) {
-							if (!entry.note) continue;
+						if (oooData?.data?.dates) {
+							const notices: DayNotices = {};
 
-							const key = entry.date;
+							for (const entry of oooData.data.dates) {
+								if (!entry.note) continue;
 
-							if (!notices[key]) {
-								notices[key] = [];
+								const key = entry.date;
+
+								if (!notices[key]) {
+									notices[key] = [];
+								}
+
+								notices[key].push({
+									type: 'ooo',
+									reason: entry.reason,
+									note: entry.note,
+								});
 							}
 
-							notices[key].push({
-								type: 'ooo',
-								reason: entry.reason,
-								note: entry.note,
-							});
+							setDayNotices(notices);
 						}
-
-						setDayNotices(notices);
+					} catch {
+						// OOO dates are non-critical — don't block the calendar.
 					}
-				} catch {
-					// OOO dates are non-critical — don't block the calendar.
 				}
+			} finally {
+				setAvailabilityLoading(false);
 			}
-
-			setAvailabilityLoading(false);
 		}
 
 		fetchAvailability();

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useFormContext } from 'react-hook-form';
 import {
 	Button,
 	Button as WPButton,
@@ -98,6 +98,7 @@ type OooFormFields = {
 
 const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 	const { closeSlideOut, currentSlideout } = useSlideout();
+	const { setError } = useFormContext();
 	const [saving, setSaving] = useState(false);
 
 	const generalSettings = useSelect(
@@ -136,7 +137,12 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 			: '';
 
 	const onSubmit: SubmitHandler<OooFormFields> = async (data) => {
-		if (!rangeStart) return;
+		if (!rangeStart) {
+			setError('root', {
+				message: __('Please select a date range', 'wpappointments'),
+			});
+			return;
+		}
 
 		const payload = {
 			...data,
@@ -161,8 +167,16 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 	};
 
 	const handleDelete = async () => {
-		if (!entry) return;
-		const result = await deleteOooEntry(entry.id);
+		if (!entry || saving) return;
+		setSaving(true);
+
+		let result;
+		try {
+			result = await deleteOooEntry(entry.id);
+		} finally {
+			setSaving(false);
+		}
+
 		if (result) {
 			closeSlideOut(slideoutId);
 		}
@@ -178,6 +192,7 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 						<WPButton
 							icon={trash}
 							isDestructive
+							disabled={saving}
 							onClick={handleDelete}
 							label={__('Delete time off', 'wpappointments')}
 						/>
