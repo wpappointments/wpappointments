@@ -399,15 +399,17 @@ class DefaultLayers {
 			);
 		}
 
-		// Block each OOO date.
-		$overrides = array();
+		// Block each OOO date, clamped to the requested range.
+		$overrides       = array();
+		$requested_start = new \DateTime( $date_range['start'] );
+		$requested_end   = new \DateTime( $date_range['end'] );
 
 		foreach ( $ooo_posts as $post ) {
 			$model      = new OutOfOffice( $post );
 			$normalized = $model->normalize();
 
-			$current = new \DateTime( $normalized['startDate'] );
-			$end     = new \DateTime( $normalized['endDate'] );
+			$current = max( new \DateTime( $normalized['startDate'] ), $requested_start );
+			$end     = min( new \DateTime( $normalized['endDate'] ), $requested_end );
 
 			while ( $current <= $end ) {
 				$date_str               = $current->format( 'Y-m-d' );

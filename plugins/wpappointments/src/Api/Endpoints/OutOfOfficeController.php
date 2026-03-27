@@ -297,15 +297,17 @@ class OutOfOfficeController extends Controller {
 			$entity_id
 		);
 
-		$posts   = OutOfOfficeQuery::for_date_range( $start_date, $end_date, $owner_ids );
-		$blocked = array();
+		$posts           = OutOfOfficeQuery::for_date_range( $start_date, $end_date, $owner_ids );
+		$blocked         = array();
+		$requested_start = new \DateTime( $start_date );
+		$requested_end   = new \DateTime( $end_date );
 
 		foreach ( $posts as $post ) {
 			$model      = new OutOfOffice( $post );
 			$normalized = $model->normalize();
 
-			$current = new \DateTime( $normalized['startDate'] );
-			$end     = new \DateTime( $normalized['endDate'] );
+			$current = max( new \DateTime( $normalized['startDate'] ), $requested_start );
+			$end     = min( new \DateTime( $normalized['endDate'] ), $requested_end );
 
 			while ( $current <= $end ) {
 				$date_str = $current->format( 'Y-m-d' );
