@@ -1,0 +1,182 @@
+{
+	"allSaints": {
+		"type": "fixed",
+		"month": 11,
+		"day": 1
+	},
+	"armistice": {
+		"type": "fixed",
+		"month": 11,
+		"day": 11
+	},
+	"ascension": {
+		"type": "easter",
+		"offset": 39
+	},
+	"ashWednesday": {
+		"type": "easter",
+		"offset": -46
+	},
+	"assumptionOfMary": {
+		"type": "fixed",
+		"month": 8,
+		"day": 15
+	},
+	"bastilleDay": {
+		"type": "fixed",
+		"month": 7,
+		"day": 14
+	},
+	"boxingDay": {
+		"type": "fixed",
+		"month": 12,
+		"day": 26
+	},
+	"christmas": {
+		"type": "fixed",
+		"month": 12,
+		"day": 25
+	},
+	"christmas2": {
+		"type": "fixed",
+		"month": 12,
+		"day": 26
+	},
+	"columbusDay": {
+		"type": "nthWeekday",
+		"month": 10,
+		"weekday": 1,
+		"nth": 2
+	},
+	"constitutionPL": {
+		"type": "fixed",
+		"month": 5,
+		"day": 3
+	},
+	"corpusChristi": {
+		"type": "easter",
+		"offset": 60
+	},
+	"earlyMayBank": {
+		"type": "nthWeekday",
+		"month": 5,
+		"weekday": 1,
+		"nth": 1
+	},
+	"easter": {
+		"type": "easter",
+		"offset": 0
+	},
+	"easterMonday": {
+		"type": "easter",
+		"offset": 1
+	},
+	"epiphany": {
+		"type": "fixed",
+		"month": 1,
+		"day": 6
+	},
+	"germanUnity": {
+		"type": "fixed",
+		"month": 10,
+		"day": 3
+	},
+	"goodFriday": {
+		"type": "easter",
+		"offset": -2
+	},
+	"independenceDayPL": {
+		"type": "fixed",
+		"month": 11,
+		"day": 11
+	},
+	"independenceDayUS": {
+		"type": "fixed",
+		"month": 7,
+		"day": 4
+	},
+	"juneteenth": {
+		"type": "fixed",
+		"month": 6,
+		"day": 19
+	},
+	"laborDayUS": {
+		"type": "nthWeekday",
+		"month": 9,
+		"weekday": 1,
+		"nth": 1
+	},
+	"labourDay": {
+		"type": "fixed",
+		"month": 5,
+		"day": 1
+	},
+	"memorialDay": {
+		"type": "nthWeekday",
+		"month": 5,
+		"weekday": 1,
+		"nth": -1
+	},
+	"mlkDay": {
+		"type": "nthWeekday",
+		"month": 1,
+		"weekday": 1,
+		"nth": 3
+	},
+	"newYear": {
+		"type": "fixed",
+		"month": 1,
+		"day": 1
+	},
+	"palmSunday": {
+		"type": "easter",
+		"offset": -7
+	},
+	"pentecost": {
+		"type": "easter",
+		"offset": 49
+	},
+	"presidentsDay": {
+		"type": "nthWeekday",
+		"month": 2,
+		"weekday": 1,
+		"nth": 3
+	},
+	"springBank": {
+		"type": "nthWeekday",
+		"month": 5,
+		"weekday": 1,
+		"nth": -1
+	},
+	"summerBank": {
+		"type": "nthWeekday",
+		"month": 8,
+		"weekday": 1,
+		"nth": -1
+	},
+	"thanksgiving": {
+		"type": "nthWeekday",
+		"month": 11,
+		"weekday": 4,
+		"nth": 4
+	},
+	"veteransDay": {
+		"type": "fixed",
+		"month": 11,
+		"day": 11
+	},
+	"victoryEurope": {
+		"type": "fixed",
+		"month": 5,
+		"day": 8
+	},
+	"whitMonday": {
+		"type": "easter",
+		"offset": 50
+	},
+	"christmasEve": {
+		"type": "fixed",
+		"month": 12,
+		"day": 24
+	}
+}

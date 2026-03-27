@@ -5,23 +5,22 @@ import { __ } from '@wordpress/i18n';
 import { close as closeIcon } from '@wordpress/icons';
 import { useSlideout } from '@wpappointments/data';
 import cn from 'obj-str';
+import { SlideoutHeaderActionsSlot } from '../SlotFill/SlideoutHeaderActions';
 import styles from './SlideOut.module.css';
 
 type Props = {
 	id: string;
 	children: ReactNode;
-	title?: string;
-	headerRightSlot?: ReactNode;
+	title?: ReactNode;
 	level?: number;
 	type?: 'default' | 'full';
 	onClose?: (id: string) => void;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>;
 
 export default function SlideOut({
 	id,
 	children,
 	title,
-	headerRightSlot,
 	type,
 	onClose,
 	...rest
@@ -63,7 +62,7 @@ export default function SlideOut({
 
 	const [isOpen, setIsOpen] = useState(false);
 	const slideOutRef = useRef<HTMLDivElement>(null);
-	const showHeader = title || headerRightSlot;
+	const showHeader = true;
 	const titleId = `slideout-title-${id}`;
 
 	const portalContainer = document.getElementById('slideout-container');
@@ -138,7 +137,7 @@ export default function SlideOut({
 								gap: 8,
 							}}
 						>
-							{headerRightSlot}
+							<SlideoutHeaderActionsSlot />
 							<Button
 								icon={closeIcon}
 								label={__('Close', 'wpappointments')}

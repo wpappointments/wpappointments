@@ -43,12 +43,17 @@ export { default as Toggle } from './FormField/Toggle/Toggle';
 export { default as NumberField } from './FormField/Number/Number';
 export { default as Checkbox } from './FormField/Checkbox/Checkbox';
 export { default as Radio } from './FormField/Radio/Radio';
+export { default as Textarea } from './FormField/Textarea/Textarea';
 export { default as DatePicker } from './FormField/DatePicker/DatePicker';
 export { default as WPDatePicker } from './FormField/WPDatePicker/WPDatePicker';
 
 // Form Utilities
 export { getGenericInputErrorMessage } from './utils/forms';
 export type { FormFieldError } from './utils/forms';
+
+// Date Pickers
+export { default as MultiDatePicker } from './MultiDatePicker/MultiDatePicker';
+export { default as DateRangePicker } from './DateRangePicker/DateRangePicker';
 
 // Action Button
 export { default as ActionButton } from './ActionButton/ActionButton';
@@ -58,6 +63,10 @@ export { default as DeleteModal } from './DeleteModal/DeleteModal';
 
 // SlotFill
 export { HeaderActionsSlot, HeaderActionsFill } from './SlotFill/HeaderActions';
+export {
+	SlideoutHeaderActionsSlot,
+	SlideoutHeaderActionsFill,
+} from './SlotFill/SlideoutHeaderActions';
 
 // Bookable CRUD components
 export { default as BookableListPage } from './BookableListPage/BookableListPage';

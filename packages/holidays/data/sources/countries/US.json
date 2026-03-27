@@ -1,0 +1,18 @@
+{
+	"id": "US",
+	"name": "United States",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"mlkDay",
+		"presidentsDay",
+		"memorialDay",
+		"juneteenth",
+		"independenceDayUS",
+		"laborDayUS",
+		"columbusDay",
+		"veteransDay",
+		"thanksgiving",
+		"christmas"
+	]
+}

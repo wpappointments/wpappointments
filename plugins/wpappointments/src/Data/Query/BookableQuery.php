@@ -10,6 +10,7 @@ namespace WPAppointments\Data\Query;
 
 use WP_Query;
 use WPAppointments\Core\PluginInfo;
+use WPAppointments\Utils\Query;
 
 /**
  * BookableQuery class
@@ -39,14 +40,14 @@ class BookableQuery {
 
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['bookable'],
-			'posts_per_page' => $query['postsPerPage'] ?? -1,
+			'posts_per_page' => Query::sanitize_per_page( $query ),
 			'post_status'    => 'publish',
 			'orderby'        => in_array( $orderby, self::ALLOWED_ORDERBY, true ) ? $orderby : 'date',
 			'order'          => in_array( $order, self::ALLOWED_ORDER, true ) ? $order : 'DESC',
 		);
 
 		if ( isset( $query['paged'] ) ) {
-			$args['paged'] = max( 1, (int) $query['paged'] );
+			$args['paged'] = Query::sanitize_paged( $query );
 		}
 
 		$meta_query = array();
