@@ -365,9 +365,11 @@ class DefaultLayers {
 		$entity_id = $context['entity_id'] ?? 0;
 
 		// Resolve entity owners — always int[].
-		$owner_ids = apply_filters(
+		$entity_post   = $entity_id ? get_post( $entity_id ) : null;
+		$default_owner = $entity_post ? absint( $entity_post->post_author ) : get_current_user_id();
+		$owner_ids     = apply_filters(
 			'wpappointments_entity_owners',
-			array( get_current_user_id() ),
+			$default_owner ? array( $default_owner ) : array(),
 			$entity_id
 		);
 
