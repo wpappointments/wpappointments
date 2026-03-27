@@ -7,7 +7,11 @@ export default function useFillFormValues(fields?: FieldValues) {
 	const prevSerialized = useRef<string | undefined>(undefined);
 
 	useEffect(() => {
-		if (!fields || serialized === prevSerialized.current) return;
+		if (!fields) {
+			prevSerialized.current = undefined;
+			return;
+		}
+		if (serialized === prevSerialized.current) return;
 		prevSerialized.current = serialized;
 		for (const [key, field] of Object.entries(fields)) {
 			setValue(key, field);
