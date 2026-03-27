@@ -104,8 +104,12 @@ export function BookingFlowContextProvider({
 		async function fetchAvailability() {
 			const entityId =
 				attributes.entityId ||
-				window.wpappointments?.entity?.coreEntityId ||
-				13; // TODO: remove hardcoded fallback
+				window.wpappointments?.entity?.coreEntityId;
+
+			if (!entityId) {
+				setAvailabilityLoading(false);
+				return;
+			}
 
 			const data = await apiFetch({
 				path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
