@@ -98,6 +98,8 @@ export function BookingFlowContextProvider({
 		setDayAvailability(availability);
 	}, [selected, calendarWithAvailability]);
 
+	const viewingMonth = viewing.getMonth();
+
 	useEffect(() => {
 		async function fetchAvailability() {
 			const entityId =
@@ -183,7 +185,7 @@ export function BookingFlowContextProvider({
 		}
 
 		fetchAvailability();
-	}, [viewing.getMonth(), attributes.trimUnavailable]);
+	}, [viewingMonth, attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
 		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
