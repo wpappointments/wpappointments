@@ -161,12 +161,17 @@ class OutOfOffice {
 		$end_date   = $data['end_date'] ?? get_post_meta( $id, 'end_date', true );
 		$reason     = $data['reason'] ?? get_post_meta( $id, 'reason', true );
 
-		wp_update_post(
+		$result = wp_update_post(
 			array(
 				'ID'         => $id,
 				'post_title' => self::generate_title( $reason, $start_date, $end_date ),
-			)
+			),
+			true
 		);
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
 
 		$this->ooo = get_post( $id );
 
@@ -239,15 +244,17 @@ class OutOfOffice {
 			return array();
 		}
 
-		$id = $post->ID;
+		$id     = $post->ID;
+		$reason = get_post_meta( $id, 'reason', true );
+		$notes  = get_post_meta( $id, 'notes', true );
 
 		return array(
 			'id'         => $id,
 			'userId'     => absint( get_post_meta( $id, 'user_id', true ) ),
 			'startDate'  => get_post_meta( $id, 'start_date', true ),
 			'endDate'    => get_post_meta( $id, 'end_date', true ),
-			'reason'     => get_post_meta( $id, 'reason', true ) ? get_post_meta( $id, 'reason', true ) : 'unspecified',
-			'notes'      => get_post_meta( $id, 'notes', true ) ? get_post_meta( $id, 'notes', true ) : '',
+			'reason'     => $reason ? $reason : 'unspecified',
+			'notes'      => $notes ? $notes : '',
 			'notePublic' => (bool) get_post_meta( $id, 'note_public', true ),
 		);
 	}

@@ -113,7 +113,6 @@ The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/
 - **Form handling:** React Hook Form + Valibot for validation
 
 ### Key Patterns
-- PHP classes use the Singleton pattern (`Core\Singleton` base class)
 - REST API returns standardized envelopes with pagination (`totalItems`, `totalPages`, `postsPerPage`, `currentPage`)
 - Frontend state management via `@wordpress/data` Redux stores (not plain React state)
 - Custom capabilities: `wpa_manage_appointments`, etc.

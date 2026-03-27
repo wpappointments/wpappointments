@@ -15,14 +15,16 @@
 		"day": 6
 	},
 	"mlkDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 1,
-		"day": 20
+		"weekday": 1,
+		"nth": 3
 	},
 	"presidentsDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 2,
-		"day": 17
+		"weekday": 1,
+		"nth": 3
 	},
 	"ashWednesday": {
 		"type": "easter",
@@ -55,9 +57,10 @@
 		"day": 3
 	},
 	"earlyMayBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 5
+		"weekday": 1,
+		"nth": 1
 	},
 	"victoryEurope": {
 		"type": "fixed",
@@ -65,14 +68,16 @@
 		"day": 8
 	},
 	"springBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 26
+		"weekday": 1,
+		"nth": -1
 	},
 	"memorialDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 5,
-		"day": 26
+		"weekday": 1,
+		"nth": -1
 	},
 	"ascension": {
 		"type": "easter",
@@ -111,14 +116,16 @@
 		"day": 15
 	},
 	"summerBank": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 8,
-		"day": 25
+		"weekday": 1,
+		"nth": -1
 	},
 	"laborDayUS": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 9,
-		"day": 1
+		"weekday": 1,
+		"nth": 1
 	},
 	"germanUnity": {
 		"type": "fixed",
@@ -126,9 +133,10 @@
 		"day": 3
 	},
 	"columbusDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 10,
-		"day": 13
+		"weekday": 1,
+		"nth": 2
 	},
 	"allSaints": {
 		"type": "fixed",
@@ -151,9 +159,10 @@
 		"day": 11
 	},
 	"thanksgiving": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 11,
-		"day": 27
+		"weekday": 4,
+		"nth": 4
 	},
 	"christmas": {
 		"type": "fixed",
@@ -2381,5 +2390,10 @@
 			"2039": "2039-10-10",
 			"2040": "2040-09-29"
 		}
+	},
+	"christmasEve": {
+		"type": "fixed",
+		"month": 12,
+		"day": 24
 	}
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useFormContext } from 'react-hook-form';
 import {
 	Button,
 	Button as WPButton,
@@ -9,7 +9,7 @@ import {
 	Tooltip,
 	__experimentalText as Text,
 } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import {
@@ -98,29 +98,38 @@ type OooFormFields = {
 
 const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 	const { closeSlideOut, currentSlideout } = useSlideout();
+	const { setError } = useFormContext();
 	const [saving, setSaving] = useState(false);
 
-	const generalSettings = useSelect(() => {
-		return select(store).getGeneralSettings();
-	}, []);
+	const generalSettings = useSelect(
+		(select) => select(store).getGeneralSettings(),
+		[]
+	);
 	const startOfWeekSetting = generalSettings?.startOfWeek ?? 1;
 
+	const parseYmd = (value: string) => {
+		const [year, month, day] = value.split('-').map(Number);
+		return new Date(year, month - 1, day);
+	};
+
 	const [rangeStart, setRangeStart] = useState<Date | null>(
-		entry ? new Date(entry.startDate) : null
+		entry ? parseYmd(entry.startDate) : null
 	);
 	const [rangeEnd, setRangeEnd] = useState<Date | null>(
-		entry ? new Date(entry.endDate) : null
+		entry ? parseYmd(entry.endDate) : null
 	);
 
 	const slideoutId = entry ? `ooo-${entry.id}` : 'ooo-new';
 
-	if (entry) {
-		useFillFormValues({
-			reason: entry.reason,
-			notes: entry.notes,
-			note_public: entry.notePublic,
-		});
-	}
+	const initialValues = entry
+		? {
+				reason: entry.reason,
+				notes: entry.notes,
+				note_public: entry.notePublic,
+			}
+		: undefined;
+
+	useFillFormValues(initialValues);
 
 	const formatYmd = (date: Date | null) =>
 		date
@@ -128,7 +137,12 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 			: '';
 
 	const onSubmit: SubmitHandler<OooFormFields> = async (data) => {
-		if (!rangeStart) return;
+		if (!rangeStart) {
+			setError('root', {
+				message: __('Please select a date range', 'wpappointments'),
+			});
+			return;
+		}
 
 		const payload = {
 			...data,
@@ -138,25 +152,34 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 
 		setSaving(true);
 
-		if (entry) {
-			const result = await updateOooEntry(entry.id, payload);
+		let result;
+		try {
+			result = entry
+				? await updateOooEntry(entry.id, payload)
+				: await createOooEntry(payload);
+		} finally {
 			setSaving(false);
-			if (result) {
-				closeSlideOut(slideoutId);
-			}
-		} else {
-			const result = await createOooEntry(payload);
-			setSaving(false);
-			if (result) {
-				closeSlideOut(slideoutId);
-			}
+		}
+
+		if (result) {
+			closeSlideOut(slideoutId);
 		}
 	};
 
 	const handleDelete = async () => {
-		if (!entry) return;
-		await deleteOooEntry(entry.id);
-		closeSlideOut(slideoutId);
+		if (!entry || saving) return;
+		setSaving(true);
+
+		let result;
+		try {
+			result = await deleteOooEntry(entry.id);
+		} finally {
+			setSaving(false);
+		}
+
+		if (result) {
+			closeSlideOut(slideoutId);
+		}
 	};
 
 	const isTopSlideout = currentSlideout?.id === slideoutId;
@@ -169,6 +192,7 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 						<WPButton
 							icon={trash}
 							isDestructive
+							disabled={saving}
 							onClick={handleDelete}
 							label={__('Delete time off', 'wpappointments')}
 						/>
@@ -241,9 +265,7 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 export default function DaysOffSettings() {
 	const { openSlideOut } = useSlideout();
 
-	const entries = useSelect(() => {
-		return select(store).getOooEntries();
-	}, []);
+	const entries = useSelect((select) => select(store).getOooEntries(), []);
 
 	const handleOpen = (entry: OooEntry) => () => {
 		openSlideOut({

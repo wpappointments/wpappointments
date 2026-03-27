@@ -342,10 +342,18 @@ class HolidayRegistry {
 	 * @return void
 	 */
 	public static function invalidate_cache(): void {
-		$current_year = (int) gmdate( 'Y' );
+		global $wpdb;
 
-		for ( $year = $current_year; $year <= $current_year + 1; $year++ ) {
-			delete_transient( 'wpappointments_holidays_' . $year );
+		$keys = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- No WP API for querying transients by prefix.
+			$wpdb->prepare(
+				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+				$wpdb->esc_like( '_transient_wpappointments_holidays_' ) . '%'
+			)
+		);
+
+		foreach ( $keys as $key ) {
+			// Strip the '_transient_' prefix to get the transient name.
+			delete_transient( substr( $key, strlen( '_transient_' ) ) );
 		}
 	}
 

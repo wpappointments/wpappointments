@@ -98,92 +98,106 @@ export function BookingFlowContextProvider({
 		setDayAvailability(availability);
 	}, [selected, calendarWithAvailability]);
 
+	const viewingMonth = viewing.getMonth();
+
 	useEffect(() => {
 		async function fetchAvailability() {
 			const entityId =
 				attributes.entityId ||
-				window.wpappointments?.entity?.coreEntityId ||
-				0;
+				window.wpappointments?.entity?.coreEntityId;
 
-			const data = await apiFetch({
-				path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
-					calendar: JSON.stringify(calendar[0]),
-					timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-					trim: attributes.trimUnavailable,
-				}),
-			});
-
-			const parsed = safeParse(AvailabilityResponseSchema, data);
-			const { output, success } = parsed;
-
-			if (!success) {
-				console.error('Failed to parse availability response', parsed);
+			if (!entityId) {
+				setDayNotices({});
 				setAvailabilityLoading(false);
 				return;
 			}
 
-			const { data: response } = output;
-			const { availability } = response;
+			try {
+				const data = await apiFetch({
+					path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
+						calendar: JSON.stringify(calendar[0]),
+						timezone:
+							Intl.DateTimeFormat().resolvedOptions().timeZone,
+						trim: attributes.trimUnavailable,
+					}),
+				});
 
-			setCalendarWithAvailability([availability]);
+				const parsed = safeParse(AvailabilityResponseSchema, data);
+				const { output, success } = parsed;
 
-			// Fetch OOO dates with public notes.
-			const allDates = availability.flat().map((d) => d.date);
-			const sortedDates = allDates.filter(Boolean).sort();
+				if (!success) {
+					console.error(
+						'Failed to parse availability response',
+						parsed
+					);
+					return;
+				}
 
-			if (sortedDates.length > 0) {
-				const startDate = sortedDates[0].split('T')[0];
-				const endDate =
-					sortedDates[sortedDates.length - 1].split('T')[0];
+				const { data: response } = output;
+				const { availability } = response;
 
-				try {
-					const oooData = await apiFetch<
-						APIResponse<{
-							dates: {
-								date: string;
-								reason?: string;
-								note?: string;
-							}[];
-						}>
-					>({
-						path: addQueryArgs('ooo/dates', {
-							entity_id: entityId,
-							start_date: startDate,
-							end_date: endDate,
-						}),
-					});
+				setCalendarWithAvailability([availability]);
 
-					if (oooData?.data?.dates) {
-						const notices: DayNotices = {};
+				// Fetch OOO dates with public notes.
+				const allDates = availability.flat().map((d) => d.date);
+				const sortedDates = allDates.filter(Boolean).sort();
 
-						for (const entry of oooData.data.dates) {
-							if (!entry.note) continue;
+				setDayNotices({});
 
-							const key = entry.date;
+				if (sortedDates.length > 0) {
+					const startDate = sortedDates[0].split('T')[0];
+					const endDate =
+						sortedDates[sortedDates.length - 1].split('T')[0];
 
-							if (!notices[key]) {
-								notices[key] = [];
+					try {
+						const oooData = await apiFetch<
+							APIResponse<{
+								dates: {
+									date: string;
+									reason?: string;
+									note?: string;
+								}[];
+							}>
+						>({
+							path: addQueryArgs('ooo/dates', {
+								entity_id: entityId,
+								start_date: startDate,
+								end_date: endDate,
+							}),
+						});
+
+						if (oooData?.data?.dates) {
+							const notices: DayNotices = {};
+
+							for (const entry of oooData.data.dates) {
+								if (!entry.note) continue;
+
+								const key = entry.date;
+
+								if (!notices[key]) {
+									notices[key] = [];
+								}
+
+								notices[key].push({
+									type: 'ooo',
+									reason: entry.reason,
+									note: entry.note,
+								});
 							}
 
-							notices[key].push({
-								type: 'ooo',
-								reason: entry.reason,
-								note: entry.note,
-							});
+							setDayNotices(notices);
 						}
-
-						setDayNotices(notices);
+					} catch {
+						// OOO dates are non-critical — don't block the calendar.
 					}
-				} catch {
-					// OOO dates are non-critical — don't block the calendar.
 				}
+			} finally {
+				setAvailabilityLoading(false);
 			}
-
-			setAvailabilityLoading(false);
 		}
 
 		fetchAvailability();
-	}, [viewing.getMonth(), attributes.trimUnavailable]);
+	}, [viewingMonth, attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
 		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {

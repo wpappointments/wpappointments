@@ -55,6 +55,9 @@ class HolidayResolver {
 
 				return $date->format( 'Y-m-d' );
 
+			case 'nthWeekday':
+				return self::compute_nth_weekday( $holiday, $year );
+
 			case 'lookup':
 				$dates = $holiday['dates'] ?? array();
 
@@ -142,16 +145,16 @@ class HolidayResolver {
 		$month = (int) floor( ( $d + $e + 114 ) / 31 );
 		$day   = ( ( $d + $e + 114 ) % 31 ) + 1;
 
-		// Convert Julian to Gregorian by adding the century offset.
-		// For 1900-2099 the offset is 13 days.
-		$julian_ts = mktime( 0, 0, 0, $month, $day, $year );
+		$gregorian_offset = intdiv( $year, 100 ) - intdiv( $year, 400 ) - 2;
+		$date             = new \DateTimeImmutable(
+			sprintf( '%04d-%02d-%02d', $year, $month, $day ),
+			new \DateTimeZone( 'UTC' )
+		);
+		$date             = $date->modify( sprintf( '+%d days', $gregorian_offset ) );
 
-		if ( false === $julian_ts ) {
+		if ( false === $date ) {
 			return null;
 		}
-
-		$date = new \DateTime( gmdate( 'Y-m-d', $julian_ts ) );
-		$date->modify( '+13 days' );
 
 		return $date->format( 'Y-m-d' );
 	}
@@ -177,5 +180,55 @@ class HolidayResolver {
 		}
 
 		return sprintf( '%04d-%02d-%02d', $year, $month, $day );
+	}
+
+	/**
+	 * Compute an nth-weekday-of-month holiday
+	 *
+	 * Handles rules like "3rd Monday of January" or "last Monday of May".
+	 *
+	 * @param array $holiday Holiday definition with month, weekday (0=Sun..6=Sat), nth (1-5 or -1 for last).
+	 * @param int   $year    Year to compute for.
+	 *
+	 * @return string|null Y-m-d date string or null if invalid.
+	 */
+	private static function compute_nth_weekday( array $holiday, int $year ): ?string {
+		$month   = (int) ( $holiday['month'] ?? 0 );
+		$weekday = (int) ( $holiday['weekday'] ?? 0 );
+		$nth     = (int) ( $holiday['nth'] ?? 0 );
+
+		if ( $month < 1 || $month > 12 || $weekday < 0 || $weekday > 6 || 0 === $nth ) {
+			return null;
+		}
+
+		if ( -1 === $nth ) {
+			// Last occurrence: start from last day of month and walk back.
+			$last_day = (int) gmdate( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+			$date     = new \DateTime( sprintf( '%04d-%02d-%02d', $year, $month, $last_day ) );
+
+			while ( (int) $date->format( 'w' ) !== $weekday ) {
+				$date->modify( '-1 day' );
+			}
+
+			return $date->format( 'Y-m-d' );
+		}
+
+		// Nth occurrence: start from first day of month and find the nth match.
+		$date  = new \DateTime( sprintf( '%04d-%02d-01', $year, $month ) );
+		$count = 0;
+
+		while ( (int) $date->format( 'n' ) === $month ) {
+			if ( (int) $date->format( 'w' ) === $weekday ) {
+				++$count;
+
+				if ( $count === $nth ) {
+					return $date->format( 'Y-m-d' );
+				}
+			}
+
+			$date->modify( '+1 day' );
+		}
+
+		return null;
 	}
 }

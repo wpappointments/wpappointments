@@ -365,9 +365,11 @@ class DefaultLayers {
 		$entity_id = $context['entity_id'] ?? 0;
 
 		// Resolve entity owners — always int[].
-		$owner_ids = apply_filters(
+		$entity_post   = $entity_id ? get_post( $entity_id ) : null;
+		$default_owner = $entity_post ? absint( $entity_post->post_author ) : get_current_user_id();
+		$owner_ids     = apply_filters(
 			'wpappointments_entity_owners',
-			array( get_current_user_id() ),
+			$default_owner ? array( $default_owner ) : array(),
 			$entity_id
 		);
 
@@ -397,15 +399,17 @@ class DefaultLayers {
 			);
 		}
 
-		// Block each OOO date.
-		$overrides = array();
+		// Block each OOO date, clamped to the requested range.
+		$overrides       = array();
+		$requested_start = new \DateTime( $date_range['start'] );
+		$requested_end   = new \DateTime( $date_range['end'] );
 
 		foreach ( $ooo_posts as $post ) {
 			$model      = new OutOfOffice( $post );
 			$normalized = $model->normalize();
 
-			$current = new \DateTime( $normalized['startDate'] );
-			$end     = new \DateTime( $normalized['endDate'] );
+			$current = max( new \DateTime( $normalized['startDate'] ), $requested_start );
+			$end     = min( new \DateTime( $normalized['endDate'] ), $requested_end );
 
 			while ( $current <= $end ) {
 				$date_str               = $current->format( 'Y-m-d' );

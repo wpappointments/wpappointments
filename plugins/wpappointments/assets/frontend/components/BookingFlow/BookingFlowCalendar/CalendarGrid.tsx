@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { format } from 'date-fns';
 import styles from './BookingFlowCalendar.module.css';
 import CalendarDay from './CalendarDay';
@@ -34,6 +35,7 @@ export default function CalendarGrid() {
 						setSelected([]);
 					}}
 					type="button"
+					aria-label={__('Previous month', 'wpappointments')}
 					disabled={
 						viewing.getMonth() === new Date().getMonth() &&
 						viewing.getFullYear() === new Date().getFullYear()
@@ -59,6 +61,7 @@ export default function CalendarGrid() {
 						setSelected([]);
 					}}
 					type="button"
+					aria-label={__('Next month', 'wpappointments')}
 					className={styles.calendarControlButton}
 				>
 					<svg

@@ -10,6 +10,7 @@ namespace WPAppointments\Data\Query;
 
 use WP_Query;
 use WPAppointments\Core\PluginInfo;
+use WPAppointments\Utils\Query;
 
 /**
  * ScheduleQuery class
@@ -25,14 +26,14 @@ class ScheduleQuery {
 	public static function all( $query = array() ) {
 		$args = array(
 			'post_type'      => PluginInfo::POST_TYPES['schedule'],
-			'posts_per_page' => $query['postsPerPage'] ?? -1,
+			'posts_per_page' => Query::sanitize_per_page( $query ),
 			'post_status'    => 'publish',
 			'orderby'        => 'date',
 			'order'          => 'ASC',
 		);
 
 		if ( isset( $query['paged'] ) ) {
-			$args['paged'] = max( 1, absint( $query['paged'] ) );
+			$args['paged'] = Query::sanitize_paged( $query );
 		}
 
 		$schedules = new WP_Query( $args );
