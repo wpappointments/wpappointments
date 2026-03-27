@@ -271,6 +271,24 @@ class OutOfOfficeController extends Controller {
 			);
 		}
 
+		$start_obj = \DateTime::createFromFormat( 'Y-m-d', $start_date );
+		$end_obj   = \DateTime::createFromFormat( 'Y-m-d', $end_date );
+
+		if ( ! $start_obj || ! $end_obj ) {
+			return self::error(
+				new WP_Error( 'ooo_dates_invalid', __( 'start_date and end_date must be valid Y-m-d dates', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
+		$start_date = $start_obj->format( 'Y-m-d' );
+		$end_date   = $end_obj->format( 'Y-m-d' );
+
+		if ( $start_date > $end_date ) {
+			return self::error(
+				new WP_Error( 'ooo_dates_order', __( 'start_date must not be after end_date', 'wpappointments' ), array( 'status' => 422 ) )
+			);
+		}
+
 		$entity_post   = $entity_id ? get_post( $entity_id ) : null;
 		$default_owner = $entity_post ? absint( $entity_post->post_author ) : get_current_user_id();
 		$owner_ids     = apply_filters(
