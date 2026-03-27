@@ -146,18 +146,17 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 
 		setSaving(true);
 
-		if (entry) {
-			const result = await updateOooEntry(entry.id, payload);
+		let result;
+		try {
+			result = entry
+				? await updateOooEntry(entry.id, payload)
+				: await createOooEntry(payload);
+		} finally {
 			setSaving(false);
-			if (result) {
-				closeSlideOut(slideoutId);
-			}
-		} else {
-			const result = await createOooEntry(payload);
-			setSaving(false);
-			if (result) {
-				closeSlideOut(slideoutId);
-			}
+		}
+
+		if (result) {
+			closeSlideOut(slideoutId);
 		}
 	};
 
