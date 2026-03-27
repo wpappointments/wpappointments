@@ -1,10 +1,11 @@
 import { Button, ButtonGroup } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSlideout } from '@wpappointments/data';
 import cn from 'obj-str';
 import { applyFilters } from '~/backend/utils/hooks';
+import type { Schedule } from '~/backend/store/schedules/schedules.types';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import styles from './Calendar.module.css';
@@ -47,9 +48,7 @@ function isCurrentYear(date: Date) {
 function getCalendarMonth(
 	month: number = 0,
 	year: number = 0,
-	defaultSchedule?: ReturnType<
-		ReturnType<typeof select<typeof store>>['getDefaultSchedule']
-	>
+	defaultSchedule?: Schedule
 ) {
 	const monthIndex = month;
 	const nextMonthIndex = month + 1;
@@ -120,14 +119,17 @@ function applyAppointmentsToCalendar(
 
 export default function Calendar() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
-	const { appointments } = useSelect(() => {
-		return select(store).getAppointments({
-			posts_per_page: -1,
-		});
-	}, []);
-	const defaultSchedule = useSelect(() => {
-		return select(store).getDefaultSchedule();
-	}, []);
+	const { appointments } = useSelect(
+		(select) =>
+			select(store).getAppointments({
+				posts_per_page: -1,
+			}),
+		[]
+	);
+	const defaultSchedule = useSelect(
+		(select) => select(store).getDefaultSchedule(),
+		[]
+	);
 
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
