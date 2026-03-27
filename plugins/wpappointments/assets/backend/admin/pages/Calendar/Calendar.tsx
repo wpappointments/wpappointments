@@ -73,8 +73,11 @@ function getCalendarMonth(
 
 		const dayData = defaultSchedule?.days?.[dayOfWeek];
 		if (dayData?.enabled && dayData?.slots?.list?.[0]) {
-			startHour = parseInt(dayData.slots.list[0].start.hour || '0');
-			startMinute = parseInt(dayData.slots.list[0].start.minute || '0');
+			startHour = parseInt(dayData.slots.list[0].start.hour || '0', 10);
+			startMinute = parseInt(
+				dayData.slots.list[0].start.minute || '0',
+				10
+			);
 		}
 
 		days.push({

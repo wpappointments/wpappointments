@@ -145,16 +145,16 @@ class HolidayResolver {
 		$month = (int) floor( ( $d + $e + 114 ) / 31 );
 		$day   = ( ( $d + $e + 114 ) % 31 ) + 1;
 
-		// Convert Julian to Gregorian by adding the century offset.
-		// For 1900-2099 the offset is 13 days.
-		$julian_ts = mktime( 0, 0, 0, $month, $day, $year );
+		$gregorian_offset = intdiv( $year, 100 ) - intdiv( $year, 400 ) - 2;
+		$date             = new \DateTimeImmutable(
+			sprintf( '%04d-%02d-%02d', $year, $month, $day ),
+			new \DateTimeZone( 'UTC' )
+		);
+		$date             = $date->modify( sprintf( '+%d days', $gregorian_offset ) );
 
-		if ( false === $julian_ts ) {
+		if ( false === $date ) {
 			return null;
 		}
-
-		$date = new \DateTime( gmdate( 'Y-m-d', $julian_ts ) );
-		$date->modify( '+13 days' );
 
 		return $date->format( 'Y-m-d' );
 	}
