@@ -12,7 +12,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
-import { Icon, edit, trash } from '@wordpress/icons';
+import { edit, trash } from '@wordpress/icons';
 import {
 	useSlideout,
 	fetchBookables,
@@ -21,7 +21,8 @@ import {
 import type { BookableEntity, BookableTypeColumn } from '@wpappointments/data';
 import BookableSlideoutContent from '../BookableSlideoutContent/BookableSlideoutContent';
 import { DataViews } from '../DataViews/DataViews';
-import type { Field, Action, View } from '../DataViews/types';
+import type { Action, Field, View } from '../DataViews/DataViews';
+import DeleteModal from '../DeleteModal/DeleteModal';
 import { HeaderActionsFill } from '../SlotFill/HeaderActions';
 import TableFullEmpty from '../TableFullEmpty/TableFullEmpty';
 
@@ -35,9 +36,17 @@ type BookableListPageProps = {
 };
 
 const COLORS = {
-	blue: '#2271b1',
-	red: '#cc1818',
 	green: '#00a32a',
+	red: '#cc1818',
+};
+
+const defaultView: View = {
+	type: 'table',
+	search: '',
+	filters: [],
+	page: 1,
+	perPage: 10,
+	layout: {},
 };
 
 export default function BookableListPage({
@@ -49,13 +58,12 @@ export default function BookableListPage({
 	const [loading, setLoading] = useState(true);
 	const [totalItems, setTotalItems] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
-	const [view, setView] = useState<View>({
-		type: 'table',
-		layout: {},
-		hiddenFields: [],
-		perPage: 10,
-		page: 1,
-	});
+	const [view, setView] = useState<View>(() => ({
+		...defaultView,
+		fields: (columns ?? [{ id: 'name' }, { id: 'active' }]).map(
+			(c) => c.id
+		),
+	}));
 
 	const createSlideoutId = `bookable-create-${type}`;
 	const editSlideoutId = `bookable-edit-${type}`;
@@ -71,8 +79,8 @@ export default function BookableListPage({
 		setLoading(true);
 		const result = await fetchBookables({
 			type,
-			postsPerPage: view.perPage,
-			paged: view.page,
+			postsPerPage: view.perPage ?? 10,
+			paged: view.page ?? 1,
 		});
 
 		if (result.data) {
@@ -130,39 +138,40 @@ export default function BookableListPage({
 	);
 
 	// Build DataViews fields from column config.
-	const fields: Field[] = buildFields(columns);
+	const fields: Field<BookableEntity>[] = buildFields(columns);
 
 	// Build actions.
-	const actions: Action[] = [
+	const actions: Action<BookableEntity>[] = [
 		{
 			id: 'edit',
-			icon: <Icon icon={edit} />,
-			isPrimary: true,
+			icon: edit,
 			label: __('Edit', 'wpappointments'),
-			callback: (item) => {
-				handleEdit(item as BookableEntity);
+			callback: (items) => {
+				handleEdit(items[0]);
 			},
 		},
 		{
 			id: 'delete',
-			icon: <Icon icon={trash} />,
-			isPrimary: true,
-			isDestructive: true,
+			icon: trash,
 			label: __('Delete', 'wpappointments'),
-			callback: (item) => {
-				const entity = item as BookableEntity;
-				if (
-					entity.id &&
-					// eslint-disable-next-line no-alert
-					window.confirm(
-						__(
-							'Are you sure you want to delete this item?',
+			RenderModal: ({ items, closeModal }) => {
+				const entity = items[0];
+				return (
+					<DeleteModal
+						title={__('Delete Item', 'wpappointments')}
+						message={__(
+							'Are you sure you want to delete this item? This action cannot be undone.',
 							'wpappointments'
-						)
-					)
-				) {
-					handleDelete(entity.id);
-				}
+						)}
+						onConfirmClick={async () => {
+							if (entity.id) {
+								await handleDelete(entity.id);
+							}
+							closeModal?.();
+						}}
+						closeModal={() => closeModal?.()}
+					/>
+				);
 			},
 		},
 	];
@@ -200,14 +209,15 @@ export default function BookableListPage({
 		<>
 			{headerActions}
 			<DataViews
-				view={view}
-				onChangeView={(newView: View) => {
-					setView(newView);
-				}}
+				data={entities}
 				fields={fields}
+				view={view}
+				onChangeView={setView}
 				actions={actions}
-				data={entities as Record<string, unknown>[]}
 				paginationInfo={{ totalItems, totalPages }}
+				getItemId={(item: BookableEntity) => String(item.id ?? 0)}
+				search={false}
+				defaultLayouts={{ table: {} }}
 			/>
 		</>
 	);
@@ -216,7 +226,7 @@ export default function BookableListPage({
 /**
  * Build DataViews Field definitions from BookableTypeColumn config
  */
-function buildFields(columns?: BookableTypeColumn[]): Field[] {
+function buildFields(columns?: BookableTypeColumn[]): Field<BookableEntity>[] {
 	// Default columns if none provided.
 	const defaultColumns: BookableTypeColumn[] = [
 		{
@@ -227,14 +237,13 @@ function buildFields(columns?: BookableTypeColumn[]): Field[] {
 			id: 'active',
 			header: __('Status', 'wpappointments'),
 			render: ({ item }) => {
-				const entity = item as BookableEntity;
 				return (
 					<span
 						style={{
-							color: entity.active ? COLORS.green : COLORS.red,
+							color: item.active ? COLORS.green : COLORS.red,
 						}}
 					>
-						{entity.active
+						{item.active
 							? __('Active', 'wpappointments')
 							: __('Inactive', 'wpappointments')}
 					</span>
@@ -247,19 +256,18 @@ function buildFields(columns?: BookableTypeColumn[]): Field[] {
 
 	return cols.map((col) => ({
 		id: col.id,
-		header: col.header,
+		label: col.header,
 		enableSorting: false,
 		enableHiding: false,
 		render: col.render
 			? ({ item }) => {
 					const Render = col.render!;
-					return <Render item={item as BookableEntity} />;
+					return <Render item={item} />;
 				}
 			: ({ item }) => {
-					const entity = item as BookableEntity;
 					const value = col.getValue
-						? col.getValue(entity)
-						: entity[col.id];
+						? col.getValue(item)
+						: item[col.id];
 
 					if (typeof value === 'boolean') {
 						return (

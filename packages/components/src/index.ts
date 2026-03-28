@@ -13,15 +13,9 @@ export { default as FormFieldSet } from './FormFieldSet/FormFieldSet';
 export { default as FormField, formFieldStyles } from './FormField/FormField';
 export { default as ErrorMessage } from './ErrorMessage/ErrorMessage';
 
-// DataViews
+// DataViews (re-exports from @wordpress/dataviews)
 export { DataViews } from './DataViews/DataViews';
-export type {
-	View,
-	Field,
-	Action,
-	PaginationInfo,
-	CollectionItem,
-} from './DataViews/types';
+export type { Action, Field, View } from './DataViews/DataViews';
 
 // Table
 export { default as TableFullEmpty } from './TableFullEmpty/TableFullEmpty';

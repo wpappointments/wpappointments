@@ -2,85 +2,55 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { Icon, info, edit, trash } from '@wordpress/icons';
+import { info, edit, trash } from '@wordpress/icons';
 import {
 	DataViews,
 	DeleteModal,
 	TableFullEmpty,
 } from '@wpappointments/components';
-import type { Action } from '@wpappointments/components';
+import type { Action, Field, View } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { formatDate } from '~/backend/utils/i18n';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { customersApi } from '~/backend/api/customers';
-import { COLORS as colors } from '~/backend/constants';
 
-type Fields = {
+type Filters = {
 	paged: number;
 	number: number;
 };
 
-type View = {
-	type: 'table';
-	layout: object;
-	hiddenFields: [];
-	perPage: number;
-	page: number;
+const defaultView: View = {
+	type: 'table',
+	search: '',
+	filters: [],
+	page: 1,
+	perPage: 10,
+	fields: ['name', 'email', 'phone', 'created'],
+	layout: {},
 };
-
-type CustomerDetailsModalsProps = {
-	deleteCustomer: () => Promise<void>;
-	closeModal: () => void;
-};
-
-export function CustomerDetailsModals({
-	deleteCustomer,
-	closeModal,
-}: CustomerDetailsModalsProps) {
-	return (
-		<DeleteModal
-			title={__('Delete Customer', 'wpappointments')}
-			message={__(
-				'Are you sure you want to delete this customer? This action cannot be undone.',
-				'wpappointments'
-			)}
-			onConfirmClick={deleteCustomer}
-			closeModal={closeModal}
-		/>
-	);
-}
 
 export default function CustomersTable() {
 	const { openSlideOut } = useSlideout({
 		id: 'customer',
 	});
-	const [customerModal, setCustomerModal] = useState<{
-		id: number;
-	} | null>(null);
 	const { invalidate, getSelector } = useStateContext();
 	const { deleteCustomer } = customersApi({
 		invalidateCache: invalidate,
 	});
-	const [filters, setFilters] = useState<Fields>({
+	const [filters, setFilters] = useState<Filters>({
 		paged: 1,
 		number: 10,
 	});
-	const { customers, totalItems, totalPages, currentPage } = useSelect(() => {
+	const { customers, totalItems, totalPages } = useSelect(() => {
 		return select(store).getCustomers({
 			...filters,
 			version: getSelector('getCustomers'),
 		});
 	}, [filters, getSelector('getCustomers')]);
 
-	const [view, setView] = useState<View>({
-		type: 'table',
-		layout: {},
-		hiddenFields: [],
-		perPage: 10,
-		page: currentPage,
-	});
+	const [view, setView] = useState<View>(defaultView);
 
 	const addCustomer = () => {
 		openSlideOut({
@@ -122,32 +92,25 @@ export default function CustomersTable() {
 		);
 	}
 
-	const fields = [
+	const fields: Field<Customer>[] = [
 		{
 			id: 'name',
-			header: __('Name', 'wpappointments'),
-			render: ({ item }: { item: Customer }) => {
+			label: __('Name', 'wpappointments'),
+			render: ({ item }) => {
 				return (
-					<>
-						<Button
-							variant="link"
-							onClick={() => {
-								viewCustomer && viewCustomer(item);
-							}}
-							style={{ marginBottom: '5px' }}
-						>
-							<strong>{item.name}</strong>
-						</Button>
-					</>
+					<Button variant="link" onClick={() => viewCustomer(item)}>
+						<strong>{item.name}</strong>
+					</Button>
 				);
 			},
 			enableSorting: false,
 			enableHiding: false,
+			enableGlobalSearch: true,
 		},
 		{
 			id: 'email',
-			header: __('Email', 'wpappointments'),
-			render: ({ item }: { item: Customer }) => {
+			label: __('Email', 'wpappointments'),
+			render: ({ item }) => {
 				return <a href={`mailto:${item.email}`}>{item.email}</a>;
 			},
 			enableSorting: false,
@@ -155,8 +118,8 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'phone',
-			header: __('Phone', 'wpappointments'),
-			render: ({ item }: { item: Customer }) => {
+			label: __('Phone', 'wpappointments'),
+			render: ({ item }) => {
 				return <a href={`tel:${item.phone}`}>{item.phone}</a>;
 			},
 			enableSorting: false,
@@ -164,8 +127,8 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'created',
-			header: __('Created', 'wpappointments'),
-			render: ({ item }: { item: Customer }) => {
+			label: __('Created', 'wpappointments'),
+			render: ({ item }) => {
 				return (
 					<>
 						{item.created
@@ -179,79 +142,70 @@ export default function CustomersTable() {
 		},
 	];
 
-	const actions: Action[] = [
+	const actions: Action<Customer>[] = [
 		{
 			id: 'view',
-			icon: <Icon icon={info} color={colors.blue} />,
-			isPrimary: true,
+			icon: info,
 			label: __('View customer details', 'wpappointments'),
-			callback: (item: Customer) => {
-				viewCustomer && viewCustomer(item);
+			callback: (items) => {
+				viewCustomer(items[0]);
 			},
 		},
 		{
 			id: 'edit',
-			icon: <Icon icon={edit} color={colors.blue} />,
-			isPrimary: true,
+			icon: edit,
 			label: __('Edit customer details', 'wpappointments'),
-			callback: (item: Customer) => {
-				editCustomer && editCustomer(item);
+			callback: (items) => {
+				editCustomer(items[0]);
 			},
 		},
 		{
 			id: 'delete',
-			icon: <Icon icon={trash} color={colors.red} />,
-			isPrimary: true,
-			isDestructive: true,
+			icon: trash,
 			label: __('Delete customer', 'wpappointments'),
-			callback: (item: Customer) => {
-				const { id } = item;
-
-				if (id) {
-					setCustomerModal({ id });
-				}
+			RenderModal: ({ items, closeModal: closeActionModal }) => {
+				const item = items[0];
+				return (
+					<DeleteModal
+						title={__('Delete Customer', 'wpappointments')}
+						message={__(
+							'Are you sure you want to delete this customer? This action cannot be undone.',
+							'wpappointments'
+						)}
+						onConfirmClick={async () => {
+							if (item.id && deleteCustomer) {
+								await deleteCustomer(item.id);
+							}
+							closeActionModal?.();
+						}}
+						closeModal={() => closeActionModal?.()}
+					/>
+				);
 			},
 		},
 	];
 
-	const paginationInfo = {
-		totalItems: totalItems,
-		totalPages: totalPages,
-	};
-
 	return (
-		<>
-			<DataViews
-				view={view}
-				onChangeView={(currentState: View) => {
-					setView(currentState);
-					setFilters({
-						paged: currentState.page,
-						number: currentState.perPage,
-					});
-
-					invalidate('getCustomers');
-				}}
-				fields={fields}
-				actions={actions}
-				data={customers}
-				paginationInfo={paginationInfo}
-			/>
-			{customerModal && (
-				<CustomerDetailsModals
-					deleteCustomer={async () => {
-						if (!deleteCustomer) {
-							return;
-						}
-
-						await deleteCustomer(customerModal.id);
-						setCustomerModal(null);
-					}}
-					closeModal={() => {
-						setCustomerModal(null);
-					}}
-				/>
-			)}
-		</>
+		<DataViews
+			data={customers}
+			fields={fields}
+			view={view}
+			onChangeView={(newView: View) => {
+				setView(newView);
+				setFilters({
+					paged: newView.page ?? 1,
+					number: newView.perPage ?? 10,
+				});
+				invalidate('getCustomers');
+			}}
+			actions={actions}
+			paginationInfo={{
+				totalItems,
+				totalPages,
+			}}
+			getItemId={(item: Customer) => String(item.id ?? 0)}
+			search={false}
+			defaultLayouts={{ table: {} }}
+		/>
 	);
 }
