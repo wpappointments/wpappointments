@@ -954,7 +954,7 @@
 		"month": 3,
 		"day": 2
 	},
-	"downgfallDergET": {
+	"downfallDergET": {
 		"type": "fixed",
 		"month": 5,
 		"day": 28
@@ -987,7 +987,7 @@
 		"month": 5,
 		"day": 3
 	},
-	"greenerDay": {
+	"greeneryDay": {
 		"type": "fixed",
 		"month": 5,
 		"day": 4
@@ -1062,7 +1062,7 @@
 		"month": 12,
 		"day": 30
 	},
-	"ednsa": {
+	"edsa": {
 		"type": "fixed",
 		"month": 2,
 		"day": 25
@@ -1223,7 +1223,7 @@
 		"month": 12,
 		"day": 9
 	},
-	"nvereDayTZ": {
+	"nyerereDayTZ": {
 		"type": "fixed",
 		"month": 10,
 		"day": 14
@@ -1324,6 +1324,16 @@
 			"2039": "2039-04-13",
 			"2040": "2040-04-13"
 		}
+	},
+	"songkranTH": {
+		"type": "fixed",
+		"month": 4,
+		"day": 13
+	},
+	"europeDayUA": {
+		"type": "fixed",
+		"month": 5,
+		"day": 8
 	},
 	"myanmarNewYear": {
 		"type": "fixed",
@@ -1566,7 +1576,7 @@
 		"month": 10,
 		"day": 13
 	},
-	"rememranceDay": {
+	"remembranceDay": {
 		"type": "fixed",
 		"month": 11,
 		"day": 11
@@ -2083,8 +2093,8 @@
 			"2028": "2028-02-22",
 			"2029": "2029-02-10",
 			"2030": "2030-01-31",
-			"2031": "2032-01-21",
-			"2032": "2033-01-09",
+			"2031": "2031-01-21",
+			"2032": "2032-01-09",
 			"2033": "2033-12-29",
 			"2034": "2034-12-19",
 			"2035": "2035-12-08",
