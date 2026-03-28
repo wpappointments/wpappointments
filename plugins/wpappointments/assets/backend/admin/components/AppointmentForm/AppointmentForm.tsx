@@ -1,9 +1,10 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, ButtonGroup } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
+	ButtonGroup,
 	FormFieldSet,
 	HtmlForm,
 	Input,
@@ -449,9 +450,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 											openSlideOut({
 												id: `select-customer`,
 											});
-										}}
-										style={{
-											margin: '0 4px',
 										}}
 									>
 										{__('Change', 'wpappointments')}

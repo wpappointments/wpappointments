@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Button, ButtonGroup } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
-import { SlideOut } from '@wpappointments/components';
+import { ButtonGroup, SlideOut } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from 'obj-str';

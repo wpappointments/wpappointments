@@ -58,6 +58,9 @@ export { default as DateRangePicker } from './DateRangePicker/DateRangePicker';
 // Action Button
 export { default as ActionButton } from './ActionButton/ActionButton';
 
+// ButtonGroup (replaces deprecated @wordpress/components ButtonGroup)
+export { default as ButtonGroup } from './ButtonGroup/ButtonGroup';
+
 // Modals
 export { default as DeleteModal } from './DeleteModal/DeleteModal';
 

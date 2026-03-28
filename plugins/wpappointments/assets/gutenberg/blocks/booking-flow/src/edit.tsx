@@ -3,7 +3,6 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import type { BlockEditProps } from '@wordpress/blocks';
 import {
 	Button,
-	ButtonGroup,
 	Panel,
 	PanelBody,
 	SelectControl,
@@ -18,6 +17,7 @@ import {
 	positionRight,
 	stretchFullWidth,
 } from '@wordpress/icons';
+import { ButtonGroup } from '@wpappointments/components';
 import { applyFilters } from '~/backend/utils/hooks';
 import type { BookingFlowBlockAttributes } from './booking-flow-block';
 import BookingFlow from '~/frontend/frontend';

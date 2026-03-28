@@ -1,7 +1,8 @@
-import { Button, ButtonGroup } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { ButtonGroup } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import cn from 'obj-str';
 import { applyFilters } from '~/backend/utils/hooks';
