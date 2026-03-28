@@ -2,7 +2,7 @@
 /**
  * Holiday date resolver
  *
- * Resolves holiday rules (fixed, easter, orthodox_easter, lookup) to Y-m-d dates.
+ * Resolves holiday rules (fixed, nthWeekday, weekdayOnOrBefore, easter, orthodox_easter, lookup) to Y-m-d dates.
  *
  * @package WPAppointments
  * @since 0.6.0
@@ -57,6 +57,9 @@ class HolidayResolver {
 
 			case 'nthWeekday':
 				return self::compute_nth_weekday( $holiday, $year );
+
+			case 'weekdayOnOrBefore':
+				return self::compute_weekday_on_or_before( $holiday, $year );
 
 			case 'lookup':
 				$dates = $holiday['dates'] ?? array();
@@ -230,5 +233,38 @@ class HolidayResolver {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Compute a weekday-on-or-before holiday
+	 *
+	 * Finds the last occurrence of a weekday on or before a given day in a month.
+	 * Example: "Monday on or before May 24" for Victoria Day.
+	 *
+	 * @param array $holiday Holiday definition with month, weekday (0=Sun..6=Sat), dayLimit.
+	 * @param int   $year    Year to compute for.
+	 *
+	 * @return string|null Y-m-d date string or null if invalid.
+	 */
+	private static function compute_weekday_on_or_before( array $holiday, int $year ): ?string {
+		$month     = (int) ( $holiday['month'] ?? 0 );
+		$weekday   = (int) ( $holiday['weekday'] ?? 0 );
+		$day_limit = (int) ( $holiday['dayLimit'] ?? 0 );
+
+		if ( $month < 1 || $month > 12 || $weekday < 0 || $weekday > 6 || $day_limit < 1 || $day_limit > 31 ) {
+			return null;
+		}
+
+		if ( ! checkdate( $month, $day_limit, $year ) ) {
+			return null;
+		}
+
+		$date = new \DateTime( sprintf( '%04d-%02d-%02d', $year, $month, $day_limit ) );
+
+		while ( (int) $date->format( 'w' ) !== $weekday ) {
+			$date->modify( '-1 day' );
+		}
+
+		return $date->format( 'Y-m-d' );
 	}
 }

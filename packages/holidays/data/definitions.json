@@ -998,9 +998,10 @@
 		"day": 5
 	},
 	"marineDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 7,
-		"day": 21
+		"weekday": 1,
+		"nth": 3
 	},
 	"mountainDay": {
 		"type": "fixed",
@@ -1008,9 +1009,10 @@
 		"day": 11
 	},
 	"respectForAgedDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 9,
-		"day": 15
+		"weekday": 1,
+		"nth": 3
 	},
 	"autumnEquinox": {
 		"type": "fixed",
@@ -1018,9 +1020,10 @@
 		"day": 23
 	},
 	"healthSportsDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 10,
-		"day": 14
+		"weekday": 1,
+		"nth": 2
 	},
 	"cultureDay": {
 		"type": "fixed",
@@ -1038,9 +1041,10 @@
 		"day": 20
 	},
 	"comingOfAgeDay": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 1,
-		"day": 13
+		"weekday": 1,
+		"nth": 2
 	},
 	"independenceDayPH": {
 		"type": "fixed",
@@ -1304,26 +1308,9 @@
 		"day": 27
 	},
 	"thingyanMM": {
-		"type": "lookup",
-		"dates": {
-			"2024": "2024-04-13",
-			"2025": "2025-04-13",
-			"2026": "2026-04-13",
-			"2027": "2027-04-13",
-			"2028": "2028-04-13",
-			"2029": "2029-04-13",
-			"2030": "2030-04-13",
-			"2031": "2031-04-13",
-			"2032": "2032-04-13",
-			"2033": "2033-04-13",
-			"2034": "2034-04-13",
-			"2035": "2035-04-13",
-			"2036": "2036-04-13",
-			"2037": "2037-04-13",
-			"2038": "2038-04-13",
-			"2039": "2039-04-13",
-			"2040": "2040-04-13"
-		}
+		"type": "fixed",
+		"month": 4,
+		"day": 13
 	},
 	"songkranTH": {
 		"type": "fixed",
@@ -1567,14 +1554,16 @@
 		"day": 1
 	},
 	"victoriaDay": {
-		"type": "fixed",
+		"type": "weekdayOnOrBefore",
 		"month": 5,
-		"day": 19
+		"weekday": 1,
+		"dayLimit": 24
 	},
 	"thanksgivingCA": {
-		"type": "fixed",
+		"type": "nthWeekday",
 		"month": 10,
-		"day": 13
+		"weekday": 1,
+		"nth": 2
 	},
 	"remembranceDay": {
 		"type": "fixed",
@@ -1856,7 +1845,7 @@
 		"month": 12,
 		"day": 31
 	},
-	"farmersDayGH": {
+	"foundersDayGH": {
 		"type": "fixed",
 		"month": 8,
 		"day": 4

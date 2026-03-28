@@ -544,7 +544,7 @@ const holidayNames: Record<string, string> = {
 	independenceDayGH: 'Independence Day',
 	republicDayGH: 'Republic Day',
 	revolutionDayGH: 'Revolution Day',
-	farmersDayGH: "Founders' Day",
+	foundersDayGH: "Founders' Day",
 	independenceDayYE: 'Independence Day',
 	unificationDayYE: 'Unification Day',
 	constitutionDayNP: 'Constitution Day',
