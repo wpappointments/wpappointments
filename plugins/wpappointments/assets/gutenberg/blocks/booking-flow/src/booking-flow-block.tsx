@@ -1,6 +1,16 @@
+import { InnerBlocks } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
+import { createHooks } from '@wordpress/hooks';
 import metadata from './block.json';
 import Edit from './edit';
+
+if (!window.wpappointments) {
+	(window as unknown as Record<string, unknown>).wpappointments = {};
+}
+
+if (!window.wpappointments.hooks) {
+	window.wpappointments.hooks = createHooks();
+}
 
 export type EditorFile = {
 	name: string;
@@ -13,12 +23,16 @@ export type BookingFlowBlockAttributes = {
 	width: 'Narrow' | 'Full';
 	trimUnavailable: boolean;
 	slotsAsButtons: boolean;
+	inlineTimePicker: boolean;
+	hideProgressBar: boolean;
+	hideStepTitles: boolean;
 	entityId?: number;
 };
 
 // @ts-ignore
 registerBlockType<BookingFlowBlockAttributes>(metadata.name, {
 	edit: Edit,
+	save: () => <InnerBlocks.Content />,
 	icon: (
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.45 40.98">
 			<g id="uuid-956e23e8-926f-4a3f-8843-a18bcb8e45cc" focusable="false">

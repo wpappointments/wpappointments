@@ -1,0 +1,39 @@
+import { useRef } from 'react';
+import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+
+/**
+ * Renders the Gutenberg-styled button group with event delegation.
+ * Uses the full wp-block-buttons HTML from the saved block content,
+ * preserving wrapper layout/spacing styles.
+ */
+export default function StyledButtons() {
+	const { buttonHtml, goBack } = useBookingFlowContext();
+	const ref = useRef<HTMLDivElement>(null);
+
+	if (!buttonHtml?.group) {
+		return null;
+	}
+
+	return (
+		<div
+			ref={ref}
+			onClick={(e) => {
+				const target = e.target as HTMLElement;
+				const button = target.closest('.wp-block-button');
+				if (!button) return;
+
+				e.preventDefault();
+
+				if (button.classList.contains('wpa-back-button')) {
+					goBack?.();
+				} else if (button.classList.contains('wpa-submit-button')) {
+					const form = ref.current?.closest('form');
+					if (form) {
+						form.requestSubmit();
+					}
+				}
+			}}
+			dangerouslySetInnerHTML={{ __html: buttonHtml.group }}
+		/>
+	);
+}

@@ -1,5 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 import { useLilius } from 'use-lilius';
@@ -12,9 +17,11 @@ import { Appointment, Customer } from '~/backend/types';
 import {
 	AvailabilityResponse,
 	AvailabilityResponseSchema,
+	ButtonHtml,
 	DayCalendar,
 	DayNotices,
 } from '../frontend';
+import { SlotFillProvider } from '../slotfill';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 
 type Response = APIResponse<{
@@ -38,6 +45,16 @@ export type BookingFlowCustomerFields = {
 export type BookingFlowFormFields = BookingFlowCalendarFields &
 	BookingFlowCustomerFields;
 
+const initialFormData: BookingFlowFormFields = {
+	datetime: '',
+	firstName: '',
+	lastName: '',
+	email: '',
+	phone: '',
+	account: false,
+	password: '',
+};
+
 export type BookingFlowContext = {
 	attributes: BookingFlowBlockAttributes;
 	calendarWithAvailability:
@@ -46,24 +63,40 @@ export type BookingFlowContext = {
 	dayAvailability: DayCalendar['day'] | [];
 	dayNotices: DayNotices;
 	lilius: ReturnType<typeof useLilius>;
-	form: ReturnType<typeof useForm<BookingFlowFormFields>>;
+	formData: BookingFlowFormFields;
+	setField: <K extends keyof BookingFlowFormFields>(
+		key: K,
+		value: BookingFlowFormFields[K]
+	) => void;
 	formError: string | null;
 	formSuccess: boolean;
-	onSubmit: (data: BookingFlowFormFields) => Promise<void>;
+	onSubmit: () => Promise<void>;
 	weekDays: ReturnType<typeof getWeekDays>;
 	availabilityLoading: boolean;
+	buttonHtml?: ButtonHtml;
+	goBack?: () => void;
+	setGoBack: (fn: () => void) => void;
+	editorStep?: number;
+	isEditor?: boolean;
 };
 
 export type BookingFlowContextProviderProps = {
 	children: React.ReactNode;
 	attributes: BookingFlowBlockAttributes;
+	buttonHtml?: ButtonHtml;
+	editorStep?: number;
+	isEditor?: boolean;
 };
 
 export function BookingFlowContextProvider({
 	children,
 	attributes,
+	buttonHtml,
+	editorStep,
+	isEditor,
 }: BookingFlowContextProviderProps) {
-	const form = useForm<BookingFlowFormFields>();
+	const [formData, setFormData] =
+		useState<BookingFlowFormFields>(initialFormData);
 	const lilius = useLilius({
 		weekStartsOn: window.wpappointments.date.startOfWeek,
 	});
@@ -81,6 +114,20 @@ export function BookingFlowContextProvider({
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
 	const [availabilityLoading, setAvailabilityLoading] =
 		useState<boolean>(true);
+	const [goBack, setGoBackState] = useState<(() => void) | undefined>();
+	const setGoBack = useCallback((fn: () => void) => {
+		setGoBackState(() => fn);
+	}, []);
+
+	const setField = useCallback(
+		<K extends keyof BookingFlowFormFields>(
+			key: K,
+			value: BookingFlowFormFields[K]
+		) => {
+			setFormData((prev) => ({ ...prev, [key]: value }));
+		},
+		[]
+	);
 
 	useEffect(() => {
 		if (
@@ -199,22 +246,22 @@ export function BookingFlowContextProvider({
 		fetchAvailability();
 	}, [viewingMonth, attributes.trimUnavailable]);
 
-	const onSubmit = async (data: BookingFlowFormFields) => {
+	const onSubmit = async () => {
 		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
-			name: `${data.firstName} ${data.lastName}`,
-			email: data.email,
-			phone: data.phone,
+			name: `${formData.firstName} ${formData.lastName}`,
+			email: formData.email,
+			phone: formData.phone,
 		};
 
 		const appointmentData = applyFilters(
 			'wpappointments.bookingFlow.appointmentData',
 			{
 				customer,
-				date: data.datetime,
-				createAccount: data.account,
-				password: data.password,
+				date: formData.datetime,
+				createAccount: formData.account,
+				password: formData.password,
 			},
-			data
+			formData
 		);
 
 		doAction('wpappointments.bookingFlow.beforeSubmit', appointmentData);
@@ -253,17 +300,25 @@ export function BookingFlowContextProvider({
 		calendarWithAvailability,
 		availabilityLoading,
 		lilius,
-		form,
+		formData,
+		setField,
 		formError,
 		formSuccess,
 		onSubmit,
 		weekDays,
+		buttonHtml,
+		goBack,
+		setGoBack,
+		editorStep,
+		isEditor,
 	};
 
 	return (
-		<BookingFlowContext.Provider value={value}>
-			{children}
-		</BookingFlowContext.Provider>
+		<SlotFillProvider>
+			<BookingFlowContext.Provider value={value}>
+				{children}
+			</BookingFlowContext.Provider>
+		</SlotFillProvider>
 	);
 }
 

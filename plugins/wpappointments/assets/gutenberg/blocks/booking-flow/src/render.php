@@ -16,10 +16,14 @@
  */
 $attributes = apply_filters( 'wpappointments_booking_flow_attributes', $attributes );
 
+// Encode the InnerBlocks content (styled buttons) as a data attribute for React.
+$buttons_data = base64_encode( $content );
+
 // min-height prevents CLS while React hydrates the booking flow.
 $element = sprintf(
-	"<div class='wpappointments-booking-flow' style='min-height:400px' data-attributes='%s'></div>",
-	base64_encode( wp_json_encode( $attributes ) )
+	"<div class='wpappointments-booking-flow' style='min-height:400px' data-attributes='%s' data-buttons='%s'></div>",
+	base64_encode( wp_json_encode( $attributes ) ),
+	$buttons_data
 );
 
 /**
@@ -40,6 +44,7 @@ $block_output = sprintf(
 				'class'           => array(),
 				'style'           => array(),
 				'data-attributes' => array(),
+				'data-buttons'    => array(),
 			),
 		)
 	)
