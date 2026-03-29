@@ -106,7 +106,11 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	});
 
 	const { data } = currentSlideout || {};
-	const { selectedAppointment, mode } = (data as any) || {};
+	const { selectedAppointment, mode = 'create' } =
+		(data as {
+			selectedAppointment?: number;
+			mode?: 'create' | 'edit';
+		}) || {};
 
 	const currentAppointment = useSelect(() => {
 		return select(store).getAppointment(selectedAppointment as number);
@@ -175,7 +179,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				duration: defaultLength || 30,
 			}));
 		}
-	}, [mode, defaultLength]);
+	}, [mode, defaultLength, currentAppointment?.id, defaultDate]);
 
 	const resetForm = () => {
 		setFormData(defaultFormData);

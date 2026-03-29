@@ -36,6 +36,10 @@ function scripts() {
 
 	$screen = get_current_screen();
 
+	if ( ! $screen ) {
+		return;
+	}
+
 	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		wp_enqueue_style(
 			'wpappointments-admin-css',

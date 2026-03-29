@@ -51,7 +51,7 @@ export default function BookingFlowCalendar({ onSlotSelected }: Props = {}) {
 
 	const showTimeSlots =
 		selectedDate &&
-		!hasNotices &&
+		!showNotice &&
 		dayAvailability &&
 		dayAvailability.length > 0;
 

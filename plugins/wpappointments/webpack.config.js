@@ -63,6 +63,11 @@ plugins.push(
 				return false; // bundle instead of externalizing
 			}
 		},
+		requestToHandle(request) {
+			if (shouldForceBundleRequest(request)) {
+				return false; // don't add phantom WP script handle dependencies
+			}
+		},
 	})
 );
 

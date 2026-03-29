@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
 	Button,
 	Card,
@@ -49,6 +49,124 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
+const profileFields: Field<Fields>[] = [
+	{
+		id: 'firstName',
+		type: 'text',
+		label: __('First name', 'wpappointments'),
+		Edit: TextInput,
+	},
+	{
+		id: 'lastName',
+		type: 'text',
+		label: __('Last name', 'wpappointments'),
+		Edit: TextInput,
+	},
+	{
+		id: 'email',
+		type: 'email',
+		label: __('Email', 'wpappointments'),
+		Edit: TextInput,
+	},
+	{
+		id: 'phoneNumber',
+		type: 'telephone',
+		label: __('Phone number', 'wpappointments'),
+		Edit: TextInput,
+	},
+];
+
+const profileForm: Form = {
+	layout: { type: 'regular' },
+	fields: ['firstName', 'lastName', 'email', 'phoneNumber'],
+};
+
+const calendarFields: Field<Fields>[] = [
+	{
+		id: 'startOfWeek',
+		label: __('Week starts on', 'wpappointments'),
+		isValid: { required: true },
+		elements: [
+			{ label: __('Sunday', 'wpappointments'), value: '0' },
+			{ label: __('Monday', 'wpappointments'), value: '1' },
+			{ label: __('Tuesday', 'wpappointments'), value: '2' },
+			{ label: __('Wednesday', 'wpappointments'), value: '3' },
+			{ label: __('Thursday', 'wpappointments'), value: '4' },
+			{ label: __('Friday', 'wpappointments'), value: '5' },
+			{ label: __('Saturday', 'wpappointments'), value: '6' },
+		],
+		Edit: SelectInput,
+	},
+];
+
+const calendarForm: Form = {
+	layout: { type: 'regular' },
+	fields: ['startOfWeek'],
+};
+
+const dateTimeForm: Form = {
+	layout: { type: 'regular' },
+	fields: ['clockType', 'timezoneSiteDefault', 'timezone'],
+};
+
+const dateFormatFields: Field<Fields>[] = [
+	{
+		id: 'dateFormat',
+		label: __('Date format', 'wpappointments'),
+		elements: [
+			{
+				label: format(new Date(), 'MMMM d, yyyy'),
+				value: 'F j, Y',
+			},
+			{
+				label: format(new Date(), 'yyyy-MM-dd'),
+				value: 'Y-m-d',
+			},
+			{
+				label: format(new Date(), 'MM/dd/yyyy'),
+				value: 'm/d/Y',
+			},
+			{
+				label: format(new Date(), 'dd/MM/yyyy'),
+				value: 'd/m/Y',
+			},
+		],
+		Edit: RadioInput,
+	},
+];
+
+const dateFormatForm: Form = {
+	layout: { type: 'regular' },
+	fields: ['dateFormat'],
+};
+
+const timeFormatFields: Field<Fields>[] = [
+	{
+		id: 'timeFormat',
+		label: __('Time format', 'wpappointments'),
+		elements: [
+			{
+				label: format(new Date(), 'h:mm aaa'),
+				value: 'g:i a',
+			},
+			{
+				label: format(new Date(), 'h:mm aa'),
+				value: 'g:i A',
+			},
+			{
+				label: format(new Date(), 'HH:mm'),
+				value: 'H:i',
+			},
+		],
+		Edit: RadioInput,
+	},
+];
+
+const timeFormatForm: Form = {
+	layout: { type: 'regular' },
+	fields: ['timeFormat'],
+};
+
 export default function GeneralSettings() {
 	const dispatch = useDispatch(store);
 
@@ -59,7 +177,7 @@ export default function GeneralSettings() {
 	const [formData, setFormData] = useState<Fields>(() => ({
 		firstName: settings?.firstName ?? '',
 		lastName: settings?.lastName ?? '',
-		email: (settings as Record<string, string>)?.email ?? '',
+		email: settings?.email ?? '',
 		phoneNumber: settings?.phoneNumber ?? '',
 		companyName: settings?.companyName ?? '',
 		clockType: settings?.clockType ?? '24',
@@ -79,16 +197,14 @@ export default function GeneralSettings() {
 		setFormData({
 			firstName: settings.firstName ?? '',
 			lastName: settings.lastName ?? '',
-			email: (settings as Record<string, string>)?.email ?? '',
+			email: settings.email ?? '',
 			phoneNumber: settings.phoneNumber ?? '',
 			companyName: settings.companyName ?? '',
 			clockType: settings.clockType ?? '24',
 			startOfWeek: String(
 				settings.startOfWeek ?? getSettings().l10n.startOfWeek
 			),
-			timezoneSiteDefault:
-				(settings as Record<string, boolean>)?.timezoneSiteDefault ??
-				false,
+			timezoneSiteDefault: settings.timezoneSiteDefault ?? false,
 			timezone: settings.timezone ?? '',
 			dateFormat: settings.dateFormat ?? 'F j, Y',
 			customDateFormat: settings.customDateFormat ?? '',
@@ -101,153 +217,46 @@ export default function GeneralSettings() {
 		setFormData((prev) => ({ ...prev, ...edits }));
 	};
 
-	const profileFields: Field<Fields>[] = [
-		{
-			id: 'firstName',
-			type: 'text',
-			label: __('First name', 'wpappointments'),
-			Edit: TextInput,
-		},
-		{
-			id: 'lastName',
-			type: 'text',
-			label: __('Last name', 'wpappointments'),
-			Edit: TextInput,
-		},
-		{
-			id: 'email',
-			type: 'email',
-			label: __('Email', 'wpappointments'),
-			Edit: TextInput,
-		},
-		{
-			id: 'phoneNumber',
-			type: 'telephone',
-			label: __('Phone number', 'wpappointments'),
-			Edit: TextInput,
-		},
-	];
-
-	const profileForm: Form = {
-		layout: { type: 'regular' },
-		fields: ['firstName', 'lastName', 'email', 'phoneNumber'],
-	};
-
-	const calendarFields: Field<Fields>[] = [
-		{
-			id: 'startOfWeek',
-			label: __('Week starts on', 'wpappointments'),
-			isValid: { required: true },
-			elements: [
-				{ label: __('Sunday', 'wpappointments'), value: '0' },
-				{ label: __('Monday', 'wpappointments'), value: '1' },
-				{ label: __('Tuesday', 'wpappointments'), value: '2' },
-				{ label: __('Wednesday', 'wpappointments'), value: '3' },
-				{ label: __('Thursday', 'wpappointments'), value: '4' },
-				{ label: __('Friday', 'wpappointments'), value: '5' },
-				{ label: __('Saturday', 'wpappointments'), value: '6' },
-			],
-			Edit: SelectInput,
-		},
-	];
-
-	const calendarForm: Form = {
-		layout: { type: 'regular' },
-		fields: ['startOfWeek'],
-	};
-
-	const dateTimeFields: Field<Fields>[] = [
-		{
-			id: 'clockType',
-			label: __('Clock type', 'wpappointments'),
-			isValid: { required: true },
-			elements: [
-				{ label: __('12 hours', 'wpappointments'), value: '12' },
-				{ label: __('24 hours', 'wpappointments'), value: '24' },
-			],
-			Edit: SelectInput,
-		},
-		{
-			id: 'timezoneSiteDefault',
-			type: 'boolean',
-			label: __('Use site default timezone', 'wpappointments'),
-			Edit: CheckboxInput,
-		},
-		{
-			id: 'timezone',
-			label: __('Timezone', 'wpappointments'),
-			isValid: { required: true },
-			isVisible: () => !formData.timezoneSiteDefault,
-			elements: window.wpappointments.date.timezones.map((timezone) => ({
-				label: timezone,
-				value: timezone,
-			})),
-			Edit: SelectInput,
-		},
-	];
-
-	const dateTimeForm: Form = {
-		layout: { type: 'regular' },
-		fields: ['clockType', 'timezoneSiteDefault', 'timezone'],
-	};
-
-	const dateFormatFields: Field<Fields>[] = [
-		{
-			id: 'dateFormat',
-			label: __('Date format', 'wpappointments'),
-			elements: [
-				{
-					label: format(new Date(), 'MMMM d, yyyy'),
-					value: 'F j, Y',
-				},
-				{
-					label: format(new Date(), 'yyyy-MM-dd'),
-					value: 'Y-m-d',
-				},
-				{
-					label: format(new Date(), 'MM/dd/yyyy'),
-					value: 'm/d/Y',
-				},
-				{
-					label: format(new Date(), 'dd/MM/yyyy'),
-					value: 'd/m/Y',
-				},
-			],
-			Edit: RadioInput,
-		},
-	];
-
-	const dateFormatForm: Form = {
-		layout: { type: 'regular' },
-		fields: ['dateFormat'],
-	};
-
-	const timeFormatFields: Field<Fields>[] = [
-		{
-			id: 'timeFormat',
-			label: __('Time format', 'wpappointments'),
-			elements: [
-				{
-					label: format(new Date(), 'h:mm aaa'),
-					value: 'g:i a',
-				},
-				{
-					label: format(new Date(), 'h:mm aa'),
-					value: 'g:i A',
-				},
-				{
-					label: format(new Date(), 'HH:mm'),
-					value: 'H:i',
-				},
-			],
-			Edit: RadioInput,
-		},
-	];
-
-	const timeFormatForm: Form = {
-		layout: { type: 'regular' },
-		fields: ['timeFormat'],
-	};
+	const dateTimeFields: Field<Fields>[] = useMemo(
+		() => [
+			{
+				id: 'clockType',
+				label: __('Clock type', 'wpappointments'),
+				isValid: { required: true },
+				elements: [
+					{
+						label: __('12 hours', 'wpappointments'),
+						value: '12',
+					},
+					{
+						label: __('24 hours', 'wpappointments'),
+						value: '24',
+					},
+				],
+				Edit: SelectInput,
+			},
+			{
+				id: 'timezoneSiteDefault',
+				type: 'boolean',
+				label: __('Use site default timezone', 'wpappointments'),
+				Edit: CheckboxInput,
+			},
+			{
+				id: 'timezone',
+				label: __('Timezone', 'wpappointments'),
+				isValid: { required: true },
+				isVisible: () => !formData.timezoneSiteDefault,
+				elements: window.wpappointments.date.timezones.map(
+					(timezone) => ({
+						label: timezone,
+						value: timezone,
+					})
+				),
+				Edit: SelectInput,
+			},
+		],
+		[formData.timezoneSiteDefault]
+	);
 
 	const allFields = [
 		...profileFields,
@@ -393,7 +402,7 @@ export default function GeneralSettings() {
 							{__('Local time is', 'wpappointments')}{' '}
 							<code>
 								<small>
-									{format(new Date(), 'yyyy-MM-dd HH:ii:ss')}
+									{format(new Date(), 'yyyy-MM-dd HH:mm:ss')}
 								</small>
 							</code>
 							.

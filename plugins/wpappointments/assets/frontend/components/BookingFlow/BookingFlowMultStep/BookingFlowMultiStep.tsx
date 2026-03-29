@@ -33,8 +33,8 @@ export default function BookingFlowMultiStep() {
 
 	const datetime = formData.datetime;
 
-	const onSubmitCustomer = () => {
-		onSubmit();
+	const onSubmitCustomer = async () => {
+		await onSubmit();
 		setCurrentStep(2);
 	};
 
