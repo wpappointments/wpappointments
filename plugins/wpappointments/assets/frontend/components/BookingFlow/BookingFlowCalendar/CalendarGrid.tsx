@@ -1,8 +1,10 @@
+import { useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import { format } from 'date-fns';
 import styles from './BookingFlowCalendar.module.css';
 import CalendarDay from './CalendarDay';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+import type { DayCalendar } from '~/frontend/frontend';
 
 export default function CalendarGrid() {
 	const {
@@ -14,6 +16,7 @@ export default function CalendarGrid() {
 	} = useBookingFlowContext();
 
 	const {
+		calendar,
 		inRange,
 		isSelected,
 		select,
@@ -26,11 +29,35 @@ export default function CalendarGrid() {
 	const currentMonth = format(viewing, 'LLLL');
 	const currentYear = viewing.getFullYear();
 
+	const hasAvailability = calendarWithAvailability.length > 0;
+	const pendingAutoSelect = useRef(false);
+
+	// Auto-select the first available day after month navigation.
+	useEffect(() => {
+		if (!pendingAutoSelect.current || !hasAvailability) return;
+		pendingAutoSelect.current = false;
+
+		for (const month of calendarWithAvailability) {
+			for (const week of month) {
+				for (const day of week) {
+					if (day.available) {
+						const d = new Date(day.date);
+						if (d.getMonth() === viewing.getMonth()) {
+							setSelected([d]);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}, [calendarWithAvailability, hasAvailability, viewing, setSelected]);
+
 	return (
 		<div className={styles.calendar}>
 			<div className={styles.calendarControls}>
 				<button
 					onClick={() => {
+						pendingAutoSelect.current = true;
 						viewPreviousMonth();
 						setSelected([]);
 					}}
@@ -57,6 +84,7 @@ export default function CalendarGrid() {
 				</h5>
 				<button
 					onClick={() => {
+						pendingAutoSelect.current = true;
 						viewNextMonth();
 						setSelected([]);
 					}}
@@ -83,8 +111,8 @@ export default function CalendarGrid() {
 				))}
 			</div>
 			{availabilityLoading && <CalendarSkeleton />}
-			{calendarWithAvailability &&
-				!availabilityLoading &&
+			{!availabilityLoading &&
+				hasAvailability &&
 				calendarWithAvailability.map((month, i) => (
 					<div key={i}>
 						{month.map((week, j) => (
@@ -116,6 +144,36 @@ export default function CalendarGrid() {
 								})}
 							</div>
 						))}
+					</div>
+				))}
+			{!availabilityLoading &&
+				!hasAvailability &&
+				calendar[0]?.map((week, j) => (
+					<div className={styles.calendarRow} key={`week-${j}`}>
+						{week.map((date, k) => {
+							const emptyDay: DayCalendar = {
+								date: date.toISOString(),
+								day: [],
+								available: false,
+								totalAvailable: 0,
+								totalSlots: 0,
+							};
+
+							return (
+								<CalendarDay
+									key={`day-${k}`}
+									day={emptyDay}
+									date={date}
+									notices={[]}
+									isSelected={isSelected(date)}
+									isInCurrentMonth={
+										date.getMonth() === viewing.getMonth()
+									}
+									inRange={inRange}
+									onSelect={() => select(date, true)}
+								/>
+							);
+						})}
 					</div>
 				))}
 		</div>
