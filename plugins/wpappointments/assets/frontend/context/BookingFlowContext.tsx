@@ -247,6 +247,11 @@ export function BookingFlowContextProvider({
 	}, [viewingMonth, attributes.trimUnavailable]);
 
 	const onSubmit = async () => {
+		if (!formData.datetime) {
+			setFormError(__('Please select a date and time', 'wpappointments'));
+			return;
+		}
+
 		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
 			name: `${formData.firstName} ${formData.lastName}`,
 			email: formData.email,

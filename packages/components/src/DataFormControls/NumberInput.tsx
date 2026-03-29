@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible number input control
  *
- * Uses the same FormField + NumberControl styling as the RHF NumberField
- * component, but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + NumberControl styling.
  *
  * @package WPAppointments
  */

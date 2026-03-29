@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible checkbox control
  *
- * Uses the same FormField + CheckboxControl styling as the RHF Checkbox
- * component, but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + CheckboxControl styling.
  *
  * @package WPAppointments
  */

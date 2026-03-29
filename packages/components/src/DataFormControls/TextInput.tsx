@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible text input control
  *
- * Uses the same FormField + InputControl styling as the RHF Input component,
- * but implements the DataForm Edit component interface (DataFormControlProps).
+ * Implements the DataForm Edit component interface (DataFormControlProps)
+ * with FormField + InputControl styling.
  *
  * Supports text, email, telephone, password, and url input types via the
  * field's `type` property.

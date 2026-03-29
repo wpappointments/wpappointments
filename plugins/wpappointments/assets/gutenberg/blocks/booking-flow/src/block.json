@@ -36,6 +36,9 @@
 		"hideStepTitles": {
 			"type": "boolean",
 			"default": false
+		},
+		"entityId": {
+			"type": "number"
 		}
 	},
 	"textdomain": "wpappointments",

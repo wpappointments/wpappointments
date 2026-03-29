@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible toggle control
  *
- * Uses the same FormField + ToggleControl styling as the RHF Toggle component,
- * but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + ToggleControl styling.
  *
  * @package WPAppointments
  */

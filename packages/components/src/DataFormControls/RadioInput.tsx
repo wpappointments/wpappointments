@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible radio control
  *
- * Uses the same FormField + RadioControl styling as the RHF Radio component,
- * but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + RadioControl styling.
  *
  * @package WPAppointments
  */

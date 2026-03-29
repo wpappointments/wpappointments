@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible select control
  *
- * Uses the same FormField + SelectControl styling as the RHF Select component,
- * but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + SelectControl styling.
  *
  * @package WPAppointments
  */

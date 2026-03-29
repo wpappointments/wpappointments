@@ -1,8 +1,8 @@
 /**
  * DataForm-compatible textarea control
  *
- * Uses the same FormField + TextareaControl styling as the RHF Textarea
- * component, but implements the DataForm Edit component interface.
+ * Implements the DataForm Edit component interface
+ * with FormField + TextareaControl styling.
  *
  * @package WPAppointments
  */
