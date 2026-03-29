@@ -28,7 +28,7 @@ export type {
 	View,
 } from '@wordpress/dataviews';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- upstream @wordpress/dataviews lacks .d.ts exports
 export function DataViews(props: any) {
 	return (
 		<div className={styles.wrapper}>

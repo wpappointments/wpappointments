@@ -80,7 +80,7 @@ export default function GeneralSettings({
 	const [formData, setFormData] = useState<Fields>(() => ({
 		firstName: settings?.firstName ?? '',
 		lastName: settings?.lastName ?? '',
-		email: (settings as Record<string, string>)?.email ?? '',
+		email: settings?.email ?? '',
 		phoneNumber: settings?.phoneNumber ?? '',
 	}));
 
@@ -89,7 +89,7 @@ export default function GeneralSettings({
 		setFormData({
 			firstName: settings.firstName ?? '',
 			lastName: settings.lastName ?? '',
-			email: (settings as Record<string, string>)?.email ?? '',
+			email: settings.email ?? '',
 			phoneNumber: settings.phoneNumber ?? '',
 		});
 	}, [settings]);

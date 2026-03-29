@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -59,34 +59,37 @@ export default function CustomerCreate({
 		return { ...emptyCustomer };
 	});
 
-	const fields: Field<CustomerFormData>[] = [
-		{
-			id: 'name',
-			type: 'text',
-			label: __('Name', 'wpappointments'),
-			isValid: { required: true },
-			Edit: TextInput,
-		},
-		{
-			id: 'email',
-			type: 'email',
-			label: __('Email', 'wpappointments'),
-			Edit: TextInput,
-		},
-		{
-			id: 'phone',
-			type: 'telephone',
-			label: __('Phone', 'wpappointments'),
-			Edit: TextInput,
-		},
-		{
-			id: 'createAccount',
-			type: 'boolean',
-			label: __('Create account', 'wpappointments'),
-			isVisible: () => mode === 'create' && screen !== 'customers',
-			Edit: CheckboxInput,
-		},
-	];
+	const fields: Field<CustomerFormData>[] = useMemo(
+		() => [
+			{
+				id: 'name',
+				type: 'text',
+				label: __('Name', 'wpappointments'),
+				isValid: { required: true },
+				Edit: TextInput,
+			},
+			{
+				id: 'email',
+				type: 'email',
+				label: __('Email', 'wpappointments'),
+				Edit: TextInput,
+			},
+			{
+				id: 'phone',
+				type: 'telephone',
+				label: __('Phone', 'wpappointments'),
+				Edit: TextInput,
+			},
+			{
+				id: 'createAccount',
+				type: 'boolean',
+				label: __('Create account', 'wpappointments'),
+				isVisible: () => mode === 'create' && screen !== 'customers',
+				Edit: CheckboxInput,
+			},
+		],
+		[mode, screen]
+	);
 
 	const form: Form = {
 		layout: { type: 'regular' },
@@ -129,9 +132,10 @@ export default function CustomerCreate({
 				onSubmitSuccess?.(customer as Customer);
 			}
 		} else {
-			dispatch.createCustomer(rest as Customer);
-			dispatch.setSelectedCustomer(rest as Customer);
-			onSubmitSuccess?.(rest as Customer);
+			const guestCustomer: Customer = { ...rest, id: 0 };
+			dispatch.createCustomer(guestCustomer);
+			dispatch.setSelectedCustomer(guestCustomer);
+			onSubmitSuccess?.(guestCustomer);
 		}
 
 		closeCurrentSlideOut();

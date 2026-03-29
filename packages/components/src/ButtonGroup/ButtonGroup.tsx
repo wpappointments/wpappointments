@@ -9,6 +9,7 @@ type Props = {
 export default function ButtonGroup({ children, className }: Props) {
 	return (
 		<div
+			role="group"
 			className={`${styles.buttonGroup}${className ? ` ${className}` : ''}`}
 		>
 			{children}

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
 	Button,
-	Button as WPButton,
 	Card,
 	CardFooter,
 	CardHeader,
@@ -218,7 +217,7 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 			{entry && isTopSlideout && (
 				<SlideoutHeaderActionsFill>
 					<Tooltip text={__('Delete time off', 'wpappointments')}>
-						<WPButton
+						<Button
 							icon={trash}
 							isDestructive
 							disabled={saving}

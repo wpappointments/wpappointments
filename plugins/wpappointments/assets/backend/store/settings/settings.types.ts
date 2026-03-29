@@ -8,6 +8,7 @@ export type SettingsState = {
 export type SettingsGeneral = {
 	firstName?: string;
 	lastName?: string;
+	email?: string;
 	phoneNumber?: string;
 	companyName?: string;
 	clockType?: '12' | '24';
