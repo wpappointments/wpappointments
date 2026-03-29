@@ -1,24 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
+	DataForm,
 	FormFieldSet,
-	HtmlForm,
-	Input,
-	Select,
-	withForm,
+	NumberInput,
+	SelectInput,
+	TextInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import styles from '../OnboardingWizard.module.css';
 
 type Fields = {
+	coreEntityName: string;
 	defaultLength: number;
 	timePickerPrecision: number;
-	coreEntityName: string;
 	defaultStatus: 'confirmed' | 'pending';
 };
 
@@ -27,7 +28,68 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
-function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
+const fields: Field<Fields>[] = [
+	{
+		id: 'coreEntityName',
+		type: 'text',
+		label: __('Service Name', 'wpappointments'),
+		placeholder: __('Appointment', 'wpappointments'),
+		description: __(
+			"Don't worry. You can always change it later.",
+			'wpappointments'
+		),
+		isValid: { required: true },
+		Edit: TextInput,
+	},
+	{
+		id: 'defaultLength',
+		type: 'integer',
+		label: __('Default appointment length (in minutes)', 'wpappointments'),
+		isValid: { required: true },
+		Edit: NumberInput,
+	},
+	{
+		id: 'timePickerPrecision',
+		type: 'integer',
+		label: __('Time picker precision (in minutes)', 'wpappointments'),
+		description: __(
+			'People will be able to book appointments every n minutes. For example if set to 30 minutes people can book 8:00, 8:30, 9:00 etc.',
+			'wpappointments'
+		),
+		isValid: { required: true, min: 1, max: 60 * 24 },
+		Edit: NumberInput,
+	},
+	{
+		id: 'defaultStatus',
+		label: __('Default appointment status', 'wpappointments'),
+		description: __(
+			'Default status for appointments created by your clients. You can change the status of each appointment individually. If Pending selected, you will have to confirm each appointment manually.',
+			'wpappointments'
+		),
+		isValid: { required: true },
+		elements: [
+			{ label: __('Confirmed', 'wpappointments'), value: 'confirmed' },
+			{ label: __('Pending', 'wpappointments'), value: 'pending' },
+		],
+		Edit: SelectInput,
+	},
+];
+
+const formConfig: Form = {
+	layout: { type: 'regular' },
+	fields: [
+		'coreEntityName',
+		'defaultLength',
+		'timePickerPrecision',
+		'defaultStatus',
+	],
+};
+
+export default function AppointmentsSettings({
+	onSuccess,
+}: {
+	onSuccess: () => void;
+}) {
 	const dispatch = useDispatch(store);
 	const [error, setError] = useState<string | null>(null);
 
@@ -35,21 +97,40 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 		return select(store).getAppointmentsSettings();
 	}, []);
 
-	useFillFormValues(settings);
+	const [formData, setFormData] = useState<Fields>(() => ({
+		coreEntityName: settings?.coreEntityName ?? '',
+		defaultLength: settings?.defaultLength ?? 30,
+		timePickerPrecision: settings?.timePickerPrecision ?? 15,
+		defaultStatus: settings?.defaultStatus ?? 'confirmed',
+	}));
 
-	const onSubmit = async (data: Fields) => {
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+	useEffect(() => {
+		if (!settings) return;
+		setFormData({
+			coreEntityName: settings.coreEntityName ?? '',
+			defaultLength: settings.defaultLength ?? 30,
+			timePickerPrecision: settings.timePickerPrecision ?? 15,
+			defaultStatus: settings.defaultStatus ?? 'confirmed',
+		});
+	}, [settings]);
+
+	const { validity, isValid } = useFormValidity(formData, fields, formConfig);
+
+	const onSubmit = async () => {
+		if (!isValid) {
+			return;
+		}
+
+		const [err, response] = await resolve<Response>(async () => {
+			return await apiFetch<Response>({
 				path: 'settings/appointments',
 				method: 'PATCH',
-				data,
+				data: formData,
 			});
-
-			return response;
 		});
 
-		if (error) {
-			setError(error?.message);
+		if (err) {
+			setError(err?.message);
 			return;
 		}
 
@@ -59,95 +140,29 @@ function AppointmentsSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response.message) {
-			dispatch.setPluginSettings({ appointments: data });
+			dispatch.setPluginSettings({ appointments: formData });
 			onSuccess();
 		}
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
-			{error && <div className={styles.error}>{error}</div>}
-			<FormFields />
-		</HtmlForm>
-	);
-}
-
-function FormFields() {
-	return (
 		<div>
+			{error && <div className={styles.error}>{error}</div>}
 			<FormFieldSet style={{ marginBottom: 25 }}>
-				<Input
-					type="text"
-					name="coreEntityName"
-					label={__('Service Name', 'wpappointments')}
-					placeholder={__('Appointment', 'wpappointments')}
-					rules={{
-						required: true,
-					}}
-					help={__(
-						"Don't worry. You can always change it later.",
-						'wpappointments'
-					)}
-				/>
-
-				<Input
-					type="number"
-					name="defaultLength"
-					label={__(
-						'Default appointment length (in minutes)',
-						'wpappointments'
-					)}
-					placeholder=""
-					rules={{
-						required: true,
-					}}
-				/>
-
-				<Input
-					type="number"
-					name="timePickerPrecision"
-					label={__(
-						'Time picker precision (in minutes)',
-						'wpappointments'
-					)}
-					placeholder=""
-					rules={{
-						required: true,
-						min: 1,
-						max: 60 * 24,
-					}}
-					help={__(
-						'People will be able to book appointments every n minutes. For example if set to 30 minutes people can book 8:00, 8:30, 9:00 etc.',
-						'wpappointments'
-					)}
-				/>
-
-				<Select
-					name="defaultStatus"
-					defaultValue="confirmed"
-					options={[
-						{
-							label: __('Confirmed', 'wpappointments'),
-							value: 'confirmed',
-						},
-						{
-							label: __('Pending', 'wpappointments'),
-							value: 'pending',
-						},
-					]}
-					label={__('Default appointment status', 'wpappointments')}
-					rules={{
-						required: true,
-					}}
-					help={__(
-						'Default status for appointments created by your clients. You can change the status of each appointment individually. If Pending selected, you will have to confirm each appointment manually.',
-						'wpappointments'
-					)}
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={formConfig}
+					onChange={(edits) =>
+						setFormData((prev) => ({ ...prev, ...edits }))
+					}
+					validity={validity}
 				/>
 			</FormFieldSet>
 			<Button
 				className={styles.stepButton}
-				type="submit"
+				onClick={onSubmit}
+				disabled={!isValid}
 				variant="primary"
 			>
 				{__('Continue', 'wpappointments')}
@@ -155,5 +170,3 @@ function FormFields() {
 		</div>
 	);
 }
-
-export default withForm(AppointmentsSettings);

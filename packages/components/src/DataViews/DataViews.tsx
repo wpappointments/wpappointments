@@ -17,7 +17,16 @@ import { DataViews as WPDataViews } from '@wordpress/dataviews';
 import '@wordpress/dataviews/build-style/style.css';
 import styles from './DataViews.module.css';
 
-export type { Action, Field, View } from '@wordpress/dataviews';
+export { DataForm, useFormValidity } from '@wordpress/dataviews';
+export type {
+	Action,
+	DataFormControlProps,
+	Field,
+	FieldValidity,
+	Form,
+	FormValidity,
+	View,
+} from '@wordpress/dataviews';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function DataViews(props: any) {

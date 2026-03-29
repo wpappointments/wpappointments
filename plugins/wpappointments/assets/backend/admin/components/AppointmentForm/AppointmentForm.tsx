@@ -1,16 +1,13 @@
-import { useFormContext } from 'react-hook-form';
-import { Button } from '@wordpress/components';
+import { Button, SelectControl } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	ButtonGroup,
+	FormField,
+	formFieldStyles,
 	FormFieldSet,
-	HtmlForm,
-	Input,
-	Select,
 	SlideOut,
-	withForm,
 } from '@wpappointments/components';
 import { displayErrorToast } from '@wpappointments/data';
 import { useSlideout } from '@wpappointments/data';
@@ -62,11 +59,38 @@ type FormProps = {
 	defaultDate?: Date;
 };
 
-export default withForm<FormProps>(function AppointmentFormFields({
-	defaultDate,
-}: FormProps) {
+const defaultFormData: AppointmentFormFields = {
+	date: '',
+	datetime: null,
+	service: '',
+	status: 'confirmed',
+	timeHourStart: '',
+	timeMinuteStart: '',
+	timeType: 'am',
+	duration: 30,
+	customer: {
+		id: 0,
+		name: '',
+		email: '',
+		phone: '',
+		created: '',
+		updated: '',
+	},
+	customerId: 0,
+	available: '1',
+};
+
+export default function AppointmentForm({ defaultDate }: FormProps) {
 	const dispatch = useDispatch(store);
-	const { reset, setValue, watch } = useFormContext<AppointmentFormFields>();
+	const [formData, setFormData] =
+		useState<AppointmentFormFields>(defaultFormData);
+
+	const setField = <K extends keyof AppointmentFormFields>(
+		field: K,
+		value: AppointmentFormFields[K]
+	) => {
+		setFormData((prev) => ({ ...prev, [field]: value }));
+	};
 
 	const { invalidate } = useStateContext();
 	const { createAppointment, updateAppointment } = appointmentsApi({
@@ -92,14 +116,10 @@ export default withForm<FormProps>(function AppointmentFormFields({
 		return select(store).getSelectedCustomer();
 	}, []);
 
-	const datetime = watch('datetime');
-	const date = watch('date');
-	const timeHourStart = watch('timeHourStart');
-	const timeMinuteStart = watch('timeMinuteStart');
-	const duration = watch('duration');
-	const customer = watch('customer');
+	const defaultCustomer = formData.customer?.name
+		? formData.customer
+		: selectedCustomer;
 
-	const defaultCustomer = customer || selectedCustomer;
 	const appointmentsSettings = useSelect(() => {
 		return select(store).getAppointmentsSettings();
 	}, []);
@@ -113,7 +133,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				currentYear: select(store).getCurrentYear(),
 			};
 		},
-		[datetime]
+		[formData.datetime]
 	);
 
 	useEffect(() => {
@@ -125,56 +145,64 @@ export default withForm<FormProps>(function AppointmentFormFields({
 				return;
 			}
 
-			const service = currentAppointment.service;
-			const status = currentAppointment.status;
 			const date = new Date(currentAppointment.timestamp * 1000);
-			const timeHourStart = formatTimeForPicker(date.getHours());
-			const timeMinuteStart = formatTimeForPicker(date.getMinutes());
-			const duration = currentAppointment.duration;
-			const customer = currentAppointment.customer;
-			const customerId = currentAppointment.customerId;
 
-			setValue('service', service);
-			setValue('status', status);
-			setValue('date', date.toISOString());
-			setValue('datetime', date.getTime().toString());
-			setValue('timeHourStart', timeHourStart);
-			setValue('timeMinuteStart', timeMinuteStart);
-			setValue('duration', duration);
-			setValue('customer.name', customer.name);
-			setValue('customer.email', customer.email || '');
-			setValue('customer.phone', customer.phone || '');
-			setValue('customer.created', customer.created || '');
-			setValue('customerId', customerId || 0);
+			setFormData((prev) => ({
+				...prev,
+				service: currentAppointment.service,
+				status: currentAppointment.status,
+				date: date.toISOString(),
+				datetime: date.getTime().toString(),
+				timeHourStart: formatTimeForPicker(date.getHours()),
+				timeMinuteStart: formatTimeForPicker(date.getMinutes()),
+				duration: currentAppointment.duration,
+				customer: {
+					...prev.customer,
+					name: currentAppointment.customer.name,
+					email: currentAppointment.customer.email || '',
+					phone: currentAppointment.customer.phone || '',
+					created: currentAppointment.customer.created || '',
+				},
+				customerId: currentAppointment.customerId || 0,
+			}));
 		} else if (defaultDate) {
-			const timeHourStart = formatTimeForPicker(defaultDate.getHours());
-			const timeMinuteStart = formatTimeForPicker(
-				defaultDate.getMinutes()
-			);
-			setValue('date', defaultDate?.toISOString());
-			setValue('datetime', defaultDate?.getTime().toString());
-			setValue('timeHourStart', timeHourStart);
-			setValue('timeMinuteStart', timeMinuteStart);
-			setValue('duration', defaultLength || 30);
+			setFormData((prev) => ({
+				...prev,
+				date: defaultDate.toISOString(),
+				datetime: defaultDate.getTime().toString(),
+				timeHourStart: formatTimeForPicker(defaultDate.getHours()),
+				timeMinuteStart: formatTimeForPicker(defaultDate.getMinutes()),
+				duration: defaultLength || 30,
+			}));
 		}
 	}, [mode, defaultLength]);
 
-	const onSubmit = async (formData: AppointmentFormFields) => {
+	const resetForm = () => {
+		setFormData(defaultFormData);
+	};
+
+	const onSubmit = async () => {
 		const date = new Date(formData.date);
 		date.setHours(parseInt(formData.timeHourStart));
 		date.setMinutes(parseInt(formData.timeMinuteStart));
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
-		formData.date = date.toISOString();
+		const submitData = {
+			...formData,
+			date: date.toISOString(),
+		};
 
 		const [error, result] = await resolve<SubmitResponse>(async () => {
 			let data;
 
 			if (mode === 'edit' && currentAppointment) {
-				data = await updateAppointment(currentAppointment.id, formData);
+				data = await updateAppointment(
+					currentAppointment.id,
+					submitData
+				);
 			} else {
-				data = await createAppointment(formData);
+				data = await createAppointment(submitData);
 			}
 
 			return data;
@@ -197,20 +225,14 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 		if (result) {
 			closeCurrentSlideOut(() => {
-				reset();
+				resetForm();
 				dispatch.clearSelectedCustomer();
 			});
 		}
 
 		if (mode === 'create') {
-			reset();
+			resetForm();
 			dispatch.clearSelectedCustomer();
-			setValue('datetime', null);
-			setValue('customerId', 0);
-			setValue('customer.name', '');
-			setValue('customer.email', '');
-			setValue('customer.phone', '');
-			setValue('customer.created', '');
 		}
 	};
 
@@ -218,20 +240,20 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	defaultDateToday.setMonth(currentMonth);
 	defaultDateToday.setFullYear(currentYear);
 
-	const start = new Date(date);
+	const start = new Date(formData.date);
 
-	if (timeHourStart && timeMinuteStart) {
-		start.setHours(parseInt(timeHourStart));
-		start.setMinutes(parseInt(timeMinuteStart));
+	if (formData.timeHourStart && formData.timeMinuteStart) {
+		start.setHours(parseInt(formData.timeHourStart));
+		start.setMinutes(parseInt(formData.timeMinuteStart));
 		start.setSeconds(0);
 		start.setMilliseconds(0);
 	}
 
 	const timeHourEnd = formatTimeForPicker(
-		addMinutes(start, duration).getHours()
+		addMinutes(start, formData.duration).getHours()
 	);
 	const timeMinuteEnd = formatTimeForPicker(
-		addMinutes(start, duration).getMinutes()
+		addMinutes(start, formData.duration).getMinutes()
 	);
 
 	const title =
@@ -242,67 +264,118 @@ export default withForm<FormProps>(function AppointmentFormFields({
 	const defaultEntityName =
 		coreEntityName || __('Appointment', 'wpappointments');
 
+	const handleCustomerSelect = (customer: Customer) => {
+		setFormData((prev) => ({
+			...prev,
+			customerId: customer.id || 0,
+			customer: {
+				...prev.customer,
+				name: customer.name,
+				email: customer.email || '',
+				phone: customer.phone || '',
+				created: customer.created || '',
+			},
+		}));
+	};
+
+	const clearCustomer = () => {
+		dispatch.clearSelectedCustomer();
+		setFormData((prev) => ({
+			...prev,
+			customerId: 0,
+			customer: {
+				...prev.customer,
+				name: '',
+				email: '',
+				phone: '',
+				created: '',
+			},
+		}));
+	};
+
 	return (
 		<SlideOut title={title} id="appointment">
-			<HtmlForm onSubmit={onSubmit}>
+			<div>
 				<FormFieldSet>
-					<Select
-						name="service"
-						label={__('Service', 'wpappointments')}
-						rules={{
-							required: true,
-						}}
-						defaultValue={
-							mode === 'edit' && currentAppointment
-								? currentAppointment?.service
-								: defaultEntityName
-						}
-						readOnly={true}
-						options={[
-							{
-								label: defaultEntityName,
-								value:
-									coreEntityId?.toString() ||
-									defaultEntityName.toLowerCase(),
-							},
-						]}
-					/>
+					<FormField>
+						<label
+							className={formFieldStyles.fieldLabel}
+							htmlFor="service"
+						>
+							{__('Service', 'wpappointments')}
+						</label>
+						<SelectControl
+							value={
+								formData.service ||
+								coreEntityId?.toString() ||
+								defaultEntityName.toLowerCase()
+							}
+							options={[
+								{
+									label: defaultEntityName,
+									value:
+										coreEntityId?.toString() ||
+										defaultEntityName.toLowerCase(),
+								},
+							]}
+							disabled={true}
+							onChange={(value) => setField('service', value)}
+							id="service"
+							size="__unstable-large"
+							hideLabelFromVision
+							label={__('Service', 'wpappointments')}
+						/>
+					</FormField>
 
-					<Select
-						name="status"
-						label={__('Status', 'wpappointments')}
-						rules={{
-							required: true,
-						}}
-						options={[
-							{
-								label: __('Pending', 'wpappointments'),
-								value: 'pending',
-							},
-							{
-								label: __('Confirmed', 'wpappointments'),
-								value: 'confirmed',
-							},
-							{
-								label: __('Cancelled', 'wpappointments'),
-								value: 'cancelled',
-							},
-							{
-								label: __('No Show', 'wpappointments'),
-								value: 'noshow',
-							},
-						]}
-						defaultValue={
-							mode === 'edit' && currentAppointment
-								? currentAppointment?.status
-								: 'confirmed'
-						}
-					/>
+					<FormField>
+						<label
+							className={formFieldStyles.fieldLabel}
+							htmlFor="status"
+						>
+							{__('Status', 'wpappointments')}
+						</label>
+						<SelectControl
+							value={
+								formData.status ||
+								(mode === 'edit' && currentAppointment
+									? currentAppointment.status
+									: 'confirmed')
+							}
+							options={[
+								{
+									label: __('Pending', 'wpappointments'),
+									value: 'pending',
+								},
+								{
+									label: __('Confirmed', 'wpappointments'),
+									value: 'confirmed',
+								},
+								{
+									label: __('Cancelled', 'wpappointments'),
+									value: 'cancelled',
+								},
+								{
+									label: __('No Show', 'wpappointments'),
+									value: 'noshow',
+								},
+							]}
+							onChange={(value) =>
+								setField(
+									'status',
+									value as Appointment['status']
+								)
+							}
+							id="status"
+							size="__unstable-large"
+							hideLabelFromVision
+							label={__('Status', 'wpappointments')}
+						/>
+					</FormField>
 
 					<FormFieldSet
 						legend={__('Date and time', 'wpappointments')}
 						style={{
-							display: datetime ? 'none' : 'block',
+							display: formData.datetime ? 'none' : 'block',
 						}}
 					>
 						<FormFieldSet horizontal horizontalCenter>
@@ -325,28 +398,16 @@ export default withForm<FormProps>(function AppointmentFormFields({
 								{__('Select time', 'wpappointments')}
 							</Button>
 						</FormFieldSet>
-						<Input
-							type="hidden"
-							name="datetime"
-							defaultValue={
-								mode === 'edit' && currentAppointment
-									? currentAppointment.timestamp * 1000
-									: defaultDate?.getTime().toString()
-							}
-							rules={{
-								required: true,
-							}}
-						/>
 					</FormFieldSet>
 
-					{datetime && date && (
+					{formData.datetime && formData.date && (
 						<Summary
-							date={new Date(date)}
-							timeHourStart={timeHourStart}
-							timeMinuteStart={timeMinuteStart}
+							date={new Date(formData.date)}
+							timeHourStart={formData.timeHourStart}
+							timeMinuteStart={formData.timeMinuteStart}
 							timeHourEnd={timeHourEnd}
 							timeMinuteEnd={timeMinuteEnd}
-							duration={duration}
+							duration={formData.duration}
 							showAvailabilityWarning={false}
 							headerActions={
 								<Button
@@ -405,37 +466,6 @@ export default withForm<FormProps>(function AppointmentFormFields({
 								</Button>
 							</ButtonGroup>
 						</FormFieldSet>
-
-						<Input type="hidden" name="customerId" />
-
-						<Input
-							type="hidden"
-							name="customer[name]"
-							rules={{
-								required: true,
-							}}
-						/>
-						<Input
-							type="hidden"
-							name="customer[email]"
-							rules={{
-								required: true,
-							}}
-						/>
-						<Input
-							type="hidden"
-							name="customer[phone]"
-							rules={{
-								required: true,
-							}}
-						/>
-						<Input
-							type="hidden"
-							name="customer[created]"
-							rules={{
-								required: true,
-							}}
-						/>
 					</FormFieldSet>
 
 					{defaultCustomer?.name && (
@@ -457,14 +487,7 @@ export default withForm<FormProps>(function AppointmentFormFields({
 									<Button
 										size="small"
 										variant="secondary"
-										onClick={() => {
-											dispatch.clearSelectedCustomer();
-											setValue('customerId', 0);
-											setValue('customer.name', '');
-											setValue('customer.email', '');
-											setValue('customer.phone', '');
-											setValue('customer.created', '');
-										}}
+										onClick={clearCustomer}
 									>
 										{__('Clear', 'wpappointments')}
 									</Button>
@@ -476,8 +499,8 @@ export default withForm<FormProps>(function AppointmentFormFields({
 
 				<div className={styles.formActions}>
 					<Button
-						type="submit"
 						variant="primary"
+						onClick={onSubmit}
 						style={{
 							width: '100%',
 							justifyContent: 'center',
@@ -492,21 +515,21 @@ export default withForm<FormProps>(function AppointmentFormFields({
 					<TimeSelector
 						mode={mode}
 						appointment={currentAppointment}
+						formData={formData}
+						setField={setField}
 					/>
 				)}
-				{isSlideoutOpen('select-customer') && <CustomerSelector />}
+				{isSlideoutOpen('select-customer') && (
+					<CustomerSelector onCustomerSelect={handleCustomerSelect} />
+				)}
 				{isSlideoutOpen('customer') && (
 					<CustomerCreate
 						onSubmitSuccess={(data: Customer) => {
-							setValue('customerId', 0);
-							setValue('customer.name', data.name);
-							setValue('customer.email', data.email || '');
-							setValue('customer.phone', data.phone || '');
-							setValue('customer.created', data.created || '');
+							handleCustomerSelect(data);
 						}}
 					/>
 				)}
-			</HtmlForm>
+			</div>
 		</SlideOut>
 	);
-});
+}

@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
+	DataForm,
 	FormFieldSet,
-	HtmlForm,
-	Input,
-	withForm,
+	TextInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
 import resolve from '~/backend/utils/resolve';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import styles from '../OnboardingWizard.module.css';
 
@@ -26,7 +26,50 @@ type Response = APIResponse<{
 	message: string;
 }>;
 
-function GeneralSettings({ onSuccess }: { onSuccess: () => void }) {
+const fields: Field<Fields>[] = [
+	{
+		id: 'firstName',
+		type: 'text',
+		label: __('First name', 'wpappointments'),
+		placeholder: __('Eg. John', 'wpappointments'),
+		isValid: { required: true },
+		Edit: TextInput,
+	},
+	{
+		id: 'lastName',
+		type: 'text',
+		label: __('Last name', 'wpappointments'),
+		placeholder: __('Eg. Doe', 'wpappointments'),
+		isValid: { required: true },
+		Edit: TextInput,
+	},
+	{
+		id: 'email',
+		type: 'email',
+		label: __('Email', 'wpappointments'),
+		placeholder: 'example@example.com',
+		isValid: { required: true },
+		Edit: TextInput,
+	},
+	{
+		id: 'phoneNumber',
+		type: 'telephone',
+		label: __('Phone number', 'wpappointments'),
+		placeholder: __('Eg. +1992334211', 'wpappointments'),
+		Edit: TextInput,
+	},
+];
+
+const form: Form = {
+	layout: { type: 'regular' },
+	fields: ['firstName', 'lastName', 'email', 'phoneNumber'],
+};
+
+export default function GeneralSettings({
+	onSuccess,
+}: {
+	onSuccess: () => void;
+}) {
 	const dispatch = useDispatch(store);
 	const [error, setError] = useState<string | null>(null);
 
@@ -34,21 +77,40 @@ function GeneralSettings({ onSuccess }: { onSuccess: () => void }) {
 		return select(store).getGeneralSettings();
 	}, []);
 
-	useFillFormValues(settings);
+	const [formData, setFormData] = useState<Fields>(() => ({
+		firstName: settings?.firstName ?? '',
+		lastName: settings?.lastName ?? '',
+		email: (settings as Record<string, string>)?.email ?? '',
+		phoneNumber: settings?.phoneNumber ?? '',
+	}));
 
-	const onSubmit = async (data: Fields) => {
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
+	useEffect(() => {
+		if (!settings) return;
+		setFormData({
+			firstName: settings.firstName ?? '',
+			lastName: settings.lastName ?? '',
+			email: (settings as Record<string, string>)?.email ?? '',
+			phoneNumber: settings.phoneNumber ?? '',
+		});
+	}, [settings]);
+
+	const { validity, isValid } = useFormValidity(formData, fields, form);
+
+	const onSubmit = async () => {
+		if (!isValid) {
+			return;
+		}
+
+		const [err, response] = await resolve<Response>(async () => {
+			return await apiFetch<Response>({
 				path: 'settings/general',
 				method: 'PATCH',
-				data,
+				data: formData,
 			});
-
-			return response;
 		});
 
-		if (error) {
-			setError(error?.message);
+		if (err) {
+			setError(err?.message);
 			return;
 		}
 
@@ -58,60 +120,29 @@ function GeneralSettings({ onSuccess }: { onSuccess: () => void }) {
 		}
 
 		if (response.message) {
-			dispatch.setPluginSettings({ general: data });
+			dispatch.setPluginSettings({ general: formData });
 			onSuccess();
 		}
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
-			{error && <div className={styles.error}>{error}</div>}
-			<FormFields />
-		</HtmlForm>
-	);
-}
-
-function FormFields() {
-	return (
 		<div>
+			{error && <div className={styles.error}>{error}</div>}
 			<FormFieldSet style={{ marginBottom: 25 }}>
-				<Input
-					name="firstName"
-					label={__('First name', 'wpappointments')}
-					placeholder={__('Eg. John', 'wpappointments')}
-					rules={{
-						required: true,
-					}}
-				/>
-
-				<Input
-					name="lastName"
-					label={__('Last name', 'wpappointments')}
-					placeholder={__('Eg. Doe', 'wpappointments')}
-					rules={{
-						required: true,
-					}}
-				/>
-
-				<Input
-					name="email"
-					label={__('Email', 'wpappointments')}
-					type="email"
-					placeholder="example@example.com"
-					rules={{
-						required: true,
-					}}
-				/>
-
-				<Input
-					name="phoneNumber"
-					label={__('Phone number', 'wpappointments')}
-					placeholder={__('Eg. +1992334211', 'wpappointments')}
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={form}
+					onChange={(edits) =>
+						setFormData((prev) => ({ ...prev, ...edits }))
+					}
+					validity={validity}
 				/>
 			</FormFieldSet>
 			<Button
 				className={styles.stepButton}
-				type="submit"
+				onClick={onSubmit}
+				disabled={!isValid}
 				variant="primary"
 			>
 				{__('Continue', 'wpappointments')}
@@ -119,5 +150,3 @@ function FormFields() {
 		</div>
 	);
 }
-
-export default withForm(GeneralSettings);

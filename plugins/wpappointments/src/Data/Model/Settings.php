@@ -82,6 +82,10 @@ class Settings {
 				'type' => 'string',
 			),
 			array(
+				'name' => 'coreEntityId',
+				'type' => 'number',
+			),
+			array(
 				'name' => 'defaultLength',
 				'type' => 'number',
 				'min'  => 1,

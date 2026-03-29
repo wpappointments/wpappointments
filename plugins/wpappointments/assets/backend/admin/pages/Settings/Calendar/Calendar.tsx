@@ -2,26 +2,22 @@ import { Button, Card, CardBody, CardHeader } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
 import { useDispatch, useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { FormFieldSet, HtmlForm, withForm } from '@wpappointments/components';
+import { FormFieldSet } from '@wpappointments/components';
 import apiFetch from '~/backend/utils/fetch';
 import { store } from '~/backend/store/store';
 import formStyles from '~/backend/admin/components/AppointmentForm/AppointmentForm.module.css';
 import globalStyles from 'global.module.css';
 
-// Any for now. Replace with actual type.
-type Fields = any;
-
-export default withForm(function CalendarSettings() {
-	// use below to set values
-	// const { setValue } = useFormContext();
+export default function CalendarSettings() {
 	const dispatch = useDispatch(store);
 
-	// returned value to be used for setting field values
 	useSelect(() => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 
-	const onSubmit = async (data: Fields) => {
+	const onSubmit = async () => {
+		const data = {};
+
 		await apiFetch({
 			path: 'settings/calendar',
 			method: 'PATCH',
@@ -32,24 +28,22 @@ export default withForm(function CalendarSettings() {
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
-			<Card className={globalStyles.card}>
-				<CardHeader>
-					<Text size="title">
-						{__('Calendar settings', 'wpappointments')}
-					</Text>
-				</CardHeader>
-				<CardBody>
-					<FormFieldSet>
-						{__('No fields here yet', 'wpappointments')}
-						<div className={formStyles.formActions}>
-							<Button type="submit" variant="primary">
-								{__('Save changes', 'wpappointments')}
-							</Button>
-						</div>
-					</FormFieldSet>
-				</CardBody>
-			</Card>
-		</HtmlForm>
+		<Card className={globalStyles.card}>
+			<CardHeader>
+				<Text size="title">
+					{__('Calendar settings', 'wpappointments')}
+				</Text>
+			</CardHeader>
+			<CardBody>
+				<FormFieldSet>
+					{__('No fields here yet', 'wpappointments')}
+					<div className={formStyles.formActions}>
+						<Button onClick={onSubmit} variant="primary">
+							{__('Save changes', 'wpappointments')}
+						</Button>
+					</div>
+				</FormFieldSet>
+			</CardBody>
+		</Card>
 	);
-});
+}

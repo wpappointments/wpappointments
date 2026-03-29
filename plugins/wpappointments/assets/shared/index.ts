@@ -11,20 +11,24 @@
 // Components
 import {
 	CardBody,
+	DataForm,
 	DataViews,
-	HtmlForm,
-	withForm,
-	Input,
-	Toggle,
 	FormFieldSet,
 	DeleteModal,
 	SlideOut,
 	TableFullEmpty,
+	TextInput,
+	SelectInput,
+	ToggleInput,
+	CheckboxInput,
+	NumberInput,
+	TextareaInput,
+	RadioInput,
+	useFormValidity,
 } from '@wpappointments/components';
 // Hooks & utilities
 import { useSlideout } from '@wpappointments/data';
 import { applyFilters, doAction } from '~/backend/utils/hooks';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
 // Store
 import { store } from '~/backend/store/store';
 // State context
@@ -39,18 +43,22 @@ window.wpappointments =
 	window.wpappointments || ({} as typeof window.wpappointments);
 window.wpappointments.components = {
 	DataViews,
+	DataForm,
 	SlideOut,
 	CardBody,
 	DeleteModal,
 	TableFullEmpty,
-	HtmlForm,
-	withForm,
-	Input,
-	Toggle,
 	FormFieldSet,
+	TextInput,
+	SelectInput,
+	ToggleInput,
+	CheckboxInput,
+	NumberInput,
+	TextareaInput,
+	RadioInput,
+	useFormValidity,
 	LayoutDefault,
 	useSlideout,
-	useFillFormValues,
 	store,
 	applyFilters,
 	doAction,

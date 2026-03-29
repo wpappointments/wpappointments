@@ -105,9 +105,6 @@ importers:
       react:
         specifier: ^18.0.0
         version: 18.3.1
-      react-hook-form:
-        specifier: '*'
-        version: 7.71.1(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: '*'
@@ -214,9 +211,6 @@ importers:
       obj-str:
         specifier: ^1.1.0
         version: 1.1.0
-      react-hook-form:
-        specifier: ^7.50.1
-        version: 7.71.1(react@18.3.1)
       use-lilius:
         specifier: ^2.0.4
         version: 2.0.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8500,12 +8494,6 @@ packages:
     peerDependencies:
       react: '>=16.4.0'
       react-dom: '>=16.4.0'
-
-  react-hook-form@7.71.1:
-    resolution: {integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -20666,10 +20654,6 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       tslib: 2.8.1
-
-  react-hook-form@7.71.1(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   react-is@16.13.1: {}
 

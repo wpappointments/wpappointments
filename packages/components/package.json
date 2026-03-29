@@ -30,7 +30,6 @@
 		"@wordpress/data": "*",
 		"@wordpress/dataviews": "*",
 		"@wordpress/i18n": "*",
-		"react": "^18.0.0",
-		"react-hook-form": "*"
+		"react": "^18.0.0"
 	}
 }
