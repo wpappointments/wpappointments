@@ -42,6 +42,7 @@ export default function ScheduleSettings({
 	onSuccess: () => void;
 }) {
 	const [error, setError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const orderedDays = useOrderedDays();
 	const [formData, setFormData] = useState<ScheduleData>({});
 
@@ -76,30 +77,38 @@ export default function ScheduleSettings({
 	};
 
 	const onSubmit = async () => {
+		if (isSubmitting) return;
+		setIsSubmitting(true);
 		setError(null);
 
-		let result;
+		try {
+			let result;
 
-		if (existingSchedules.length > 0) {
-			const defaultSchedule = existingSchedules.find((s) => s.isDefault);
-			if (defaultSchedule) {
-				result = await updateSchedule(defaultSchedule.id, {
+			if (existingSchedules.length > 0) {
+				const defaultSchedule = existingSchedules.find(
+					(s) => s.isDefault
+				);
+				if (defaultSchedule) {
+					result = await updateSchedule(defaultSchedule.id, {
+						days: formData,
+					});
+				}
+			} else {
+				result = await createSchedule({
+					name: __('Default', 'wpappointments'),
 					days: formData,
 				});
 			}
-		} else {
-			result = await createSchedule({
-				name: __('Default', 'wpappointments'),
-				days: formData,
-			});
-		}
 
-		if (!result) {
-			setError(__('Error saving schedule', 'wpappointments'));
-			return;
-		}
+			if (!result) {
+				setError(__('Error saving schedule', 'wpappointments'));
+				return;
+			}
 
-		onSuccess();
+			onSuccess();
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -121,6 +130,8 @@ export default function ScheduleSettings({
 				className={styles.stepButton}
 				onClick={onSubmit}
 				variant="primary"
+				isBusy={isSubmitting}
+				disabled={isSubmitting}
 			>
 				{__('Continue', 'wpappointments')}
 			</Button>
