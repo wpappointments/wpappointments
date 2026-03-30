@@ -144,41 +144,52 @@ class Availability {
 			);
 		}
 
-		$trimmed_slots = array();
-
-		$found_first_available = false;
-
-		foreach ( $slots as $slot ) {
-			if ( $slot['inSchedule'] ) {
-				$found_first_available = true;
-			}
-
-			if ( $found_first_available ) {
-				$trimmed_slots[] = $slot;
-			}
-		}
-
-		$trimmed_slots_reverse = array_reverse( $trimmed_slots );
-		$trimmed_slots_2       = array();
-
-		$found_first_available = false;
-
-		foreach ( $trimmed_slots_reverse as $slot ) {
-			if ( $slot['inSchedule'] ) {
-				$found_first_available = true;
-			}
-
-			if ( $found_first_available ) {
-				$trimmed_slots_2[] = $slot;
-			}
-		}
-
-		$trimmed_slots = array_reverse( $trimmed_slots_2 );
+		$trimmed_slots = self::trim_slots( $slots );
 
 		return array(
 			'slots'        => $slots,
 			'trimmedSlots' => $trimmed_slots,
 		);
+	}
+
+	/**
+	 * Trim slots by removing leading and trailing slots that are not in schedule.
+	 *
+	 * @param array $slots Array of slot data.
+	 *
+	 * @return array Trimmed slots.
+	 */
+	private static function trim_slots( array $slots ): array {
+		$trimmed = array();
+
+		$found_first = false;
+
+		foreach ( $slots as $slot ) {
+			if ( $slot['inSchedule'] ) {
+				$found_first = true;
+			}
+
+			if ( $found_first ) {
+				$trimmed[] = $slot;
+			}
+		}
+
+		$reversed        = array_reverse( $trimmed );
+		$trimmed_reverse = array();
+
+		$found_first = false;
+
+		foreach ( $reversed as $slot ) {
+			if ( $slot['inSchedule'] ) {
+				$found_first = true;
+			}
+
+			if ( $found_first ) {
+				$trimmed_reverse[] = $slot;
+			}
+		}
+
+		return array_reverse( $trimmed_reverse );
 	}
 
 	/**
@@ -319,13 +330,11 @@ class Availability {
 			$timezone
 		);
 
-		$full_slots    = $all_slots['slots'] ?? array();
-		$trimmed_slots = $all_slots['trimmedSlots'] ?? array();
-		$use_slots     = $trim ? $trimmed_slots : $full_slots;
+		$full_slots = $all_slots['slots'] ?? array();
 
-		// Partition slots by day (Y-m-d key).
+		// Partition all slots by day (Y-m-d key).
 		$slots_by_day = array();
-		foreach ( $use_slots as $slot ) {
+		foreach ( $full_slots as $slot ) {
 			$slot_date = new DateTime();
 			$slot_date->setTimestamp( (int) ( $slot['timestamp'] / 1000 ) );
 			$slot_date->setTimezone( new \DateTimeZone( $timezone ) );
@@ -335,6 +344,13 @@ class Availability {
 				$slots_by_day[ $day_key ] = array();
 			}
 			$slots_by_day[ $day_key ][] = $slot;
+		}
+
+		// Apply trimming per-day so boundary days are trimmed independently.
+		if ( $trim ) {
+			foreach ( $slots_by_day as $day_key => $day_slots ) {
+				$slots_by_day[ $day_key ] = self::trim_slots( $day_slots );
+			}
 		}
 
 		// Build weekly structure matching the calendar shape.
