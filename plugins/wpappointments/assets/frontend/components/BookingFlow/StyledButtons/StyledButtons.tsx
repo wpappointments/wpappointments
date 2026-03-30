@@ -35,6 +35,8 @@ export default function StyledButtons() {
 					}
 				}
 			}}
+			// Safe: buttonHtml.group is Gutenberg saved block markup (InnerBlocks
+			// outerHTML), sanitized by wp_kses_post in render.php before base64 encoding.
 			dangerouslySetInnerHTML={{ __html: buttonHtml.group }}
 		/>
 	);

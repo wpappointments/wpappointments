@@ -82,6 +82,12 @@ export default function ScheduleSettings({
 		setError(null);
 
 		try {
+			// Build complete days map including untouched days with defaults.
+			const allDays: ScheduleData = {};
+			for (const day of orderedDays) {
+				allDays[day] = getDayData(day);
+			}
+
 			let result;
 
 			if (existingSchedules.length > 0) {
@@ -90,13 +96,13 @@ export default function ScheduleSettings({
 				);
 				if (defaultSchedule) {
 					result = await updateSchedule(defaultSchedule.id, {
-						days: formData,
+						days: allDays,
 					});
 				}
 			} else {
 				result = await createSchedule({
 					name: __('Default', 'wpappointments'),
-					days: formData,
+					days: allDays,
 				});
 			}
 

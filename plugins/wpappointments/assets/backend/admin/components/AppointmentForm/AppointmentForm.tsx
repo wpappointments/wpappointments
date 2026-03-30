@@ -67,7 +67,7 @@ const defaultFormData: AppointmentFormFields = {
 	timeHourStart: '',
 	timeMinuteStart: '',
 	timeType: 'am',
-	duration: 30,
+	duration: 0,
 	customer: {
 		id: 0,
 		name: '',
@@ -84,6 +84,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	const dispatch = useDispatch(store);
 	const [formData, setFormData] =
 		useState<AppointmentFormFields>(defaultFormData);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const setField = <K extends keyof AppointmentFormFields>(
 		field: K,
@@ -141,6 +142,15 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	);
 
 	useEffect(() => {
+		if (formData.duration === 0 && defaultLength) {
+			setFormData((prev) => ({
+				...prev,
+				duration: defaultLength,
+			}));
+		}
+	}, [defaultLength, formData.duration]);
+
+	useEffect(() => {
 		if (mode === 'edit' && currentAppointment) {
 			const result = safeParse(AppointmentSchema, currentAppointment);
 
@@ -186,6 +196,8 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	};
 
 	const onSubmit = async () => {
+		if (isSubmitting) return;
+
 		if (
 			!formData.date ||
 			!formData.timeHourStart ||
@@ -217,46 +229,52 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			date: date.toISOString(),
 		};
 
-		const [error, result] = await resolve<SubmitResponse>(async () => {
-			let data;
+		setIsSubmitting(true);
 
-			if (mode === 'edit' && currentAppointment) {
-				data = await updateAppointment(
-					currentAppointment.id,
-					submitData
+		try {
+			const [error, result] = await resolve<SubmitResponse>(async () => {
+				let data;
+
+				if (mode === 'edit' && currentAppointment) {
+					data = await updateAppointment(
+						currentAppointment.id,
+						submitData
+					);
+				} else {
+					data = await createAppointment(submitData);
+				}
+
+				return data;
+			});
+
+			if (error) {
+				displayErrorToast(
+					__(
+						'Something went wrong while submitting the form.',
+						'wpappointments'
+					)
 				);
-			} else {
-				data = await createAppointment(submitData);
+
+				console.error(
+					'Something went wrong while submitting the form.',
+					error
+				);
+				return;
 			}
 
-			return data;
-		});
+			if (result) {
+				closeCurrentSlideOut(() => {
+					resetForm();
+					dispatch.clearSelectedCustomer();
+				});
+			}
 
-		if (error) {
-			displayErrorToast(
-				__(
-					'Something went wrong while submitting the form.',
-					'wpappointments'
-				)
-			);
-
-			console.error(
-				'Something went wrong while submitting the form.',
-				error
-			);
-			return;
-		}
-
-		if (result) {
-			closeCurrentSlideOut(() => {
+			if (mode === 'create') {
 				resetForm();
 				dispatch.clearSelectedCustomer();
-			});
-		}
-
-		if (mode === 'create') {
-			resetForm();
-			dispatch.clearSelectedCustomer();
+			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -525,6 +543,8 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 					<Button
 						variant="primary"
 						onClick={onSubmit}
+						isBusy={isSubmitting}
+						disabled={isSubmitting}
 						style={{
 							width: '100%',
 							justifyContent: 'center',

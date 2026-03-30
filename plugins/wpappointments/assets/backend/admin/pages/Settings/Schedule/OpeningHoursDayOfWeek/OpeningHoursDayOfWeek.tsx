@@ -3,9 +3,9 @@ import {
 	Button,
 	CheckboxControl,
 	Popover,
+	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
-import { ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { backup, copy, plus, trash } from '@wordpress/icons';
 import type {

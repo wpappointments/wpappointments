@@ -105,7 +105,7 @@ export default function CustomersTable() {
 			},
 			enableSorting: false,
 			enableHiding: false,
-			enableGlobalSearch: true,
+			enableGlobalSearch: false,
 		},
 		{
 			id: 'email',
@@ -148,7 +148,7 @@ export default function CustomersTable() {
 			icon: info,
 			label: __('View customer details', 'wpappointments'),
 			callback: (items) => {
-				viewCustomer(items[0]);
+				if (items[0]) viewCustomer(items[0]);
 			},
 		},
 		{
@@ -156,7 +156,7 @@ export default function CustomersTable() {
 			icon: edit,
 			label: __('Edit customer details', 'wpappointments'),
 			callback: (items) => {
-				editCustomer(items[0]);
+				if (items[0]) editCustomer(items[0]);
 			},
 		},
 		{

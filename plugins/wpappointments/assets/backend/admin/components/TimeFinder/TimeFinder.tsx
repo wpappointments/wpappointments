@@ -11,8 +11,8 @@ import { formatTimeForPicker } from '~/backend/utils/format';
 import { formatTime } from '~/backend/utils/i18n';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
-import { type AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
 import styles from './TimeFinder.module.css';
+import { type AppointmentFormFields } from '~/backend/admin/components/AppointmentForm/AppointmentForm';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 
 type TimeFinderProps = {
@@ -424,6 +424,12 @@ export default function TimeFinder({
 															formatTimeForPicker(
 																date.getMinutes()
 															)
+														);
+														setField(
+															'datetime',
+															date
+																.getTime()
+																.toString()
 														);
 
 														closeCurrentSlideOut();

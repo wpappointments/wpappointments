@@ -73,19 +73,20 @@ export default function Edit({
 	const isMultiStep = flowType === 'MultiStep';
 	const [editorStep, setEditorStep] = useState(0);
 
+	const blockProps = useBlockProps({
+		style:
+			width === 'Full' ? { maxWidth: 'none', width: '100%' } : undefined,
+	}) as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+
 	return (
-		<div
-			{...(useBlockProps({
-				style:
-					width === 'Full'
-						? { maxWidth: 'none', width: '100%' }
-						: undefined,
-			}) as DetailedHTMLProps<
-				HTMLAttributes<HTMLDivElement>,
-				HTMLDivElement
-			>)}
-		>
-			<Suspense fallback={null}>
+		<div {...blockProps}>
+			<Suspense
+				fallback={
+					<div style={{ minHeight: 400, padding: 20 }}>
+						{__('Loading booking flow…', 'wpappointments')}
+					</div>
+				}
+			>
 				<BookingFlow
 					attributes={attributes}
 					editorStep={editorStep}

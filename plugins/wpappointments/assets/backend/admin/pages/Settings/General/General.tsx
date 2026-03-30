@@ -284,11 +284,16 @@ export default function GeneralSettings() {
 			return;
 		}
 
+		const payload = {
+			...formData,
+			startOfWeek: Number(formData.startOfWeek),
+		};
+
 		const [error, response] = await resolve<Response>(async () => {
 			const response = await apiFetch<Response>({
 				path: 'settings/general',
 				method: 'PATCH',
-				data: formData,
+				data: payload,
 			});
 
 			return response;
@@ -305,12 +310,7 @@ export default function GeneralSettings() {
 		}
 
 		if (response.message) {
-			dispatch.setPluginSettings({
-				general: {
-					...formData,
-					startOfWeek: Number(formData.startOfWeek),
-				},
-			});
+			dispatch.setPluginSettings({ general: payload });
 			displaySuccessToast(response.message);
 		}
 	};
