@@ -113,7 +113,7 @@ importers:
         specifier: '*'
         version: 18.3.7(@types/react@18.3.27)
       '@wordpress/dataviews':
-        specifier: '*'
+        specifier: ^13.1.0
         version: 13.1.0(@emotion/is-prop-valid@1.4.0)(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(stylelint@14.16.1)
       '@wordpress/date':
         specifier: '*'
