@@ -39,6 +39,9 @@ declare global {
 					defaultLength: number;
 				};
 			};
+			entity: {
+				coreEntityId: number;
+			};
 		};
 		wp: WordPressGlobal;
 	}

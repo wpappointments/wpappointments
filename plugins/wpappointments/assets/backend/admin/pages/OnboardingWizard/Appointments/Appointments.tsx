@@ -18,7 +18,7 @@ import styles from '../OnboardingWizard.module.css';
 type Fields = {
 	defaultLength: number;
 	timePickerPrecision: number;
-	serviceName: string;
+	coreEntityName: string;
 	defaultStatus: 'confirmed' | 'pending';
 };
 
@@ -78,7 +78,7 @@ function FormFields() {
 			<FormFieldSet style={{ marginBottom: 25 }}>
 				<Input
 					type="text"
-					name="serviceName"
+					name="coreEntityName"
 					label={__('Service Name', 'wpappointments')}
 					placeholder={__('Appointment', 'wpappointments')}
 					rules={{

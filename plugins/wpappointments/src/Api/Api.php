@@ -21,12 +21,14 @@ class Api extends Core\Singleton {
 	 */
 	public function init() {
 		Endpoints\AppointmentsController::init();
-		Endpoints\AvailabilityController::init();
 		Endpoints\CustomersController::init();
 		Endpoints\SettingsController::init();
 		Endpoints\BookablesController::init();
 		Endpoints\VariantsController::init();
 		Endpoints\BookableAvailabilityController::init();
 		Endpoints\BookableTypesController::init();
+		Endpoints\SchedulesController::init();
+		Endpoints\OutOfOfficeController::init();
+		Endpoints\HolidaysController::init();
 	}
 }

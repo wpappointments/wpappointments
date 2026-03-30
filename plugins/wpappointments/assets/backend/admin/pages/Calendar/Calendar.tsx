@@ -1,10 +1,11 @@
 import { Button, ButtonGroup } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSlideout } from '@wpappointments/data';
 import cn from 'obj-str';
 import { applyFilters } from '~/backend/utils/hooks';
+import type { Schedule } from '~/backend/store/schedules/schedules.types';
 import { store } from '~/backend/store/store';
 import { Appointment } from '~/backend/types';
 import styles from './Calendar.module.css';
@@ -44,15 +45,16 @@ function isCurrentYear(date: Date) {
 	return date.getFullYear() === new Date().getFullYear();
 }
 
-function getCalendarMonth(month: number = 0, year: number = 0) {
+function getCalendarMonth(
+	month: number = 0,
+	year: number = 0,
+	defaultSchedule?: Schedule
+) {
 	const monthIndex = month;
 	const nextMonthIndex = month + 1;
 	const firstDayOfCurrentMonthDate = new Date(year, monthIndex, 1);
 	const firstDayOfCurrentMonth = firstDayOfCurrentMonthDate.getDay();
 	const daysInCurrentMonth = new Date(year, nextMonthIndex, 0).getDate();
-	const settings = useSelect(() => {
-		return select(store).getScheduleSettings();
-	}, []);
 
 	const days = [];
 
@@ -68,13 +70,13 @@ function getCalendarMonth(month: number = 0, year: number = 0) {
 		let startHour = 0;
 		let startMinute = 0;
 
-		// todo: fix this TS error
-		// @ts-ignore
-		if (settings[dayOfWeek]) {
-			// @ts-ignore
-			startHour = settings[dayOfWeek].slots.list[0].start.hour;
-			// @ts-ignore
-			startMinute = settings[dayOfWeek].slots.list[0].start.minute;
+		const dayData = defaultSchedule?.days?.[dayOfWeek];
+		if (dayData?.enabled && dayData?.slots?.list?.[0]) {
+			startHour = parseInt(dayData.slots.list[0].start.hour || '0', 10);
+			startMinute = parseInt(
+				dayData.slots.list[0].start.minute || '0',
+				10
+			);
 		}
 
 		days.push({
@@ -117,16 +119,22 @@ function applyAppointmentsToCalendar(
 
 export default function Calendar() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
-	const { appointments } = useSelect(() => {
-		return select(store).getAppointments({
-			posts_per_page: -1,
-		});
-	}, []);
+	const { appointments } = useSelect(
+		(select) =>
+			select(store).getAppointments({
+				posts_per_page: -1,
+			}),
+		[]
+	);
+	const defaultSchedule = useSelect(
+		(select) => select(store).getDefaultSchedule(),
+		[]
+	);
 
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const currentMonth = applyAppointmentsToCalendar(
-		getCalendarMonth(month, year),
+		getCalendarMonth(month, year, defaultSchedule),
 		appointments
 	);
 	const [defaultDate, setDefaultDate] = useState(new Date());

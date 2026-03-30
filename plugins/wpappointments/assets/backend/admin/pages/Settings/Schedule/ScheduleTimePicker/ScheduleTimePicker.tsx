@@ -1,20 +1,17 @@
+import { useFormContext } from 'react-hook-form';
 import { useSelect, select } from '@wordpress/data';
 import { Select } from '@wpappointments/components';
 import { addMinutes, format } from 'date-fns';
-import {
-	DayOpeningHours,
-	SettingsSchedule,
-} from '~/backend/store/settings/settings.types';
+import type { Day } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 
 type Props = {
-	day: keyof SettingsSchedule;
+	day: Day;
 	index: number;
 	timePickerPrecision?: number;
 	type: 'start' | 'end';
-	updateWorkingHoursTime: (args: {
-		values: DayOpeningHours;
+	onTimeChange: (args: {
 		value: string;
 		index: number;
 		type: 'start' | 'end';
@@ -23,10 +20,10 @@ type Props = {
 	minHour?: string | null;
 };
 
-type Option = {
+type HourOption = {
 	label: string;
 	value: string;
-	minutes?: { label: string; value: string }[];
+	minutes: { label: string; value: string }[];
 };
 
 export default function ScheduleTimePicker({
@@ -34,29 +31,36 @@ export default function ScheduleTimePicker({
 	index,
 	timePickerPrecision,
 	type,
-	updateWorkingHoursTime,
+	onTimeChange,
 	minHour,
 }: Props) {
-	const settings = useSelect(() => {
-		return select(store).getAllSettings();
+	const { watch } = useFormContext();
+	const generalSettings = useSelect(() => {
+		return select(store).getGeneralSettings();
 	}, []);
 
-	const { schedule, general } = settings;
-	const { clockType } = general;
+	const rawClockType: string = generalSettings?.clockType || '24';
+	const clockType: '12' | '24' = rawClockType.startsWith('12') ? '12' : '24';
 
-	const options = createOptions(
+	const allHours = createHourOptions(
 		timePickerPrecision,
-		clockType || '24',
+		clockType,
 		minHour || '0'
 	);
 
-	if (options.length === 0) {
+	// Hour 24 only available for end pickers
+	const hourOptions =
+		type === 'start' ? allHours.filter((h) => h.value !== '24') : allHours;
+
+	if (hourOptions.length === 0) {
 		return null;
 	}
 
-	const hour = schedule[day].slots.list[index][type].hour;
-	const hourIndex = parseInt(hour || minHour || '0');
-	const minutes = options[hourIndex]?.minutes;
+	const currentHour = watch(`${day}.slots.list.${index}.${type}.hour`);
+	const currentHourOption = allHours.find(
+		(h) => h.value === (currentHour || minHour || '00')
+	);
+	const minutes = currentHourOption?.minutes || allHours[0]?.minutes || [];
 
 	return (
 		<div className={styles.timePicker}>
@@ -65,39 +69,41 @@ export default function ScheduleTimePicker({
 					key={`${day}.slots.list.${index}.${type}.hour`}
 					name={`${day}.slots.list.${index}.${type}.hour`}
 					onChange={(value) => {
-						updateWorkingHoursTime({
-							values: schedule[day],
+						onTimeChange({
 							value,
 							index,
 							type,
 							time: 'hour',
 						});
-					}}
-					options={options}
-					defaultValue={hour}
-					noArrow
-				/>
-				<span className={styles.timePickerSeparator}>:</span>
-				{minutes && (
-					<Select
-						key={`${day}.slots.list.${index}.${type}.minute`}
-						name={`${day}.slots.list.${index}.${type}.minute`}
-						onChange={(value) => {
-							updateWorkingHoursTime({
-								values: schedule[day],
-								value,
+
+						// When selecting hour 24, force minute to 00
+						if (value === '24') {
+							onTimeChange({
+								value: '00',
 								index,
 								type,
 								time: 'minute',
 							});
-						}}
-						options={minutes}
-						defaultValue={
-							schedule[day].slots.list[index][type].minute
 						}
-						noArrow
-					/>
-				)}
+					}}
+					options={hourOptions}
+					noArrow
+				/>
+				<span className={styles.timePickerSeparator}>:</span>
+				<Select
+					key={`${day}.slots.list.${index}.${type}.minute-${currentHour}`}
+					name={`${day}.slots.list.${index}.${type}.minute`}
+					onChange={(value) => {
+						onTimeChange({
+							value,
+							index,
+							type,
+							time: 'minute',
+						});
+					}}
+					options={minutes}
+					noArrow
+				/>
 			</div>
 		</div>
 	);
@@ -115,11 +121,9 @@ class DateRange {
 	}
 
 	[Symbol.iterator]() {
-		const start = this.start;
 		const end = this.end;
 		const interval = this.interval;
-
-		let current = start;
+		let current = this.start;
 
 		return {
 			next() {
@@ -135,12 +139,12 @@ class DateRange {
 	}
 }
 
-function createOptions(
+function createHourOptions(
 	precision: number = 60,
 	clockType: '12' | '24' = '24',
 	minHour: string
-) {
-	const options: Option[] = [];
+): HourOption[] {
+	const byIndex: Record<number, HourOption> = {};
 	const minHourInt = parseInt(minHour);
 
 	const range = new DateRange(
@@ -154,27 +158,32 @@ function createOptions(
 			continue;
 		}
 
-		const index = parseInt(format(date, 'H'));
+		const hourNum = parseInt(format(date, 'H'));
 
-		if (!options[index]) {
-			options[index] = {
+		if (!byIndex[hourNum]) {
+			byIndex[hourNum] = {
 				label: format(date, clockType === '24' ? 'HH' : 'h aaa'),
 				value: format(date, 'HH'),
 				minutes: [],
 			};
 		}
 
-		const minutes = options[index].minutes;
-
-		if (!minutes) {
-			return [];
-		}
-
-		minutes.push({
+		byIndex[hourNum].minutes.push({
 			label: format(date, 'mm'),
 			value: format(date, 'mm'),
 		});
 	}
 
-	return options;
+	// Add hour 24 (end of day) as the last option
+	byIndex[24] = {
+		label: clockType === '24' ? '24' : '12 am',
+		value: '24',
+		minutes: [{ label: '00', value: '00' }],
+	};
+
+	// Return as a flat sorted array (no sparse gaps)
+	return Object.keys(byIndex)
+		.map(Number)
+		.sort((a, b) => a - b)
+		.map((k) => byIndex[k]);
 }

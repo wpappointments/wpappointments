@@ -10,7 +10,10 @@
 
 namespace WPAppointments\Availability;
 
-use WPAppointments\Data\Model\Settings;
+use WPAppointments\Data\Model\OutOfOffice;
+use WPAppointments\Data\Query\OutOfOfficeQuery;
+use WPAppointments\Holidays\HolidayRegistry;
+use WPAppointments\Holidays\HolidayResolver;
 
 /**
  * Default availability layers class
@@ -39,6 +42,24 @@ class DefaultLayers {
 			array(
 				'type'     => 'narrowing',
 				'callback' => array( __CLASS__, 'entity_callback' ),
+			)
+		);
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'holidays',
+			30,
+			array(
+				'type'     => 'narrowing',
+				'callback' => array( __CLASS__, 'holidays_callback' ),
+			)
+		);
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'ooo',
+			90,
+			array(
+				'type'     => 'narrowing',
+				'callback' => array( __CLASS__, 'ooo_callback' ),
 			)
 		);
 	}
@@ -106,6 +127,14 @@ class DefaultLayers {
 			return null;
 		}
 
+		// Inactive schedules produce empty availability.
+		$active_raw = get_post_meta( $schedule_post_id, 'wpappointments_schedule_active', true );
+		$active     = '' === $active_raw ? true : (bool) $active_raw;
+
+		if ( ! $active ) {
+			return AvailabilityEngine::empty_availability();
+		}
+
 		$days   = array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
 		$weekly = array();
 
@@ -163,9 +192,235 @@ class DefaultLayers {
 			$weekly[ $day ] = $time_ranges;
 		}
 
+		$overrides_raw = get_post_meta( $schedule_post_id, 'wpappointments_schedule_overrides', true );
+		$overrides     = array();
+
+		if ( is_string( $overrides_raw ) && '' !== $overrides_raw ) {
+			$overrides_raw = json_decode( $overrides_raw, true );
+		}
+
+		// Override groups: [{id, dates, type, slots}] → flatten to date → time ranges.
+		if ( is_array( $overrides_raw ) ) {
+			foreach ( $overrides_raw as $group ) {
+				if ( ! is_array( $group ) || ! isset( $group['dates'] ) ) {
+					continue;
+				}
+
+				$type  = $group['type'] ?? 'closed';
+				$dates = $group['dates'] ?? array();
+
+				$time_ranges = array();
+
+				if ( 'custom' === $type ) {
+					foreach ( ( $group['slots'] ?? array() ) as $slot ) {
+						if ( ! is_array( $slot ) ) {
+							continue;
+						}
+
+						$start_hour   = $slot['start']['hour'] ?? '00';
+						$start_minute = $slot['start']['minute'] ?? '00';
+						$end_hour     = $slot['end']['hour'] ?? '00';
+						$end_minute   = $slot['end']['minute'] ?? '00';
+
+						$time_ranges[] = array(
+							'start' => sprintf( '%02d:%02d', (int) $start_hour, (int) $start_minute ),
+							'end'   => sprintf( '%02d:%02d', (int) $end_hour, (int) $end_minute ),
+						);
+					}
+				}
+
+				foreach ( $dates as $date ) {
+					if ( ! is_string( $date ) ) {
+						continue;
+					}
+					$overrides[ $date ] = $time_ranges;
+				}
+			}
+		}
+
 		return array(
 			'weekly'    => $weekly,
-			'overrides' => array(),
+			'overrides' => $overrides,
+		);
+	}
+
+	/**
+	 * Holidays availability layer callback
+	 *
+	 * Blocks dates that fall on enabled holidays.
+	 *
+	 * @param array $context Layer context with variant_id, entity_id, date_range.
+	 *
+	 * @return array|null Availability data or null if no holidays configured.
+	 */
+	public static function holidays_callback( $context ) {
+		$date_range = $context['date_range'] ?? array();
+
+		if ( empty( $date_range['start'] ) || empty( $date_range['end'] ) ) {
+			return null;
+		}
+
+		$groups = HolidayRegistry::get_groups();
+
+		if ( empty( $groups ) ) {
+			return null;
+		}
+
+		// Determine which years are needed.
+		$start_year = (int) substr( $date_range['start'], 0, 4 );
+		$end_year   = (int) substr( $date_range['end'], 0, 4 );
+		$years      = range( $start_year, $end_year );
+
+		$blocked_dates = array();
+
+		foreach ( $years as $year ) {
+			$dates         = self::get_holiday_dates_for_year( $year, $groups );
+			$blocked_dates = array_merge( $blocked_dates, $dates );
+		}
+
+		if ( empty( $blocked_dates ) ) {
+			return null;
+		}
+
+		// Filter to only dates within the requested range.
+		$blocked_dates = array_filter(
+			$blocked_dates,
+			function ( $date ) use ( $date_range ) {
+				return $date >= $date_range['start'] && $date <= $date_range['end'];
+			}
+		);
+
+		if ( empty( $blocked_dates ) ) {
+			return null;
+		}
+
+		// Build fully-open weekly (pass-through for non-holiday days).
+		$weekly = array();
+
+		foreach ( AvailabilityEngine::WEEKDAYS as $day ) {
+			$weekly[ $day ] = array(
+				array(
+					'start' => '00:00',
+					'end'   => '23:59',
+				),
+			);
+		}
+
+		// Block each holiday date.
+		$overrides = array();
+
+		foreach ( $blocked_dates as $date ) {
+			$overrides[ $date ] = array();
+		}
+
+		return array(
+			'weekly'    => $weekly,
+			'overrides' => $overrides,
+		);
+	}
+
+	/**
+	 * Get computed holiday dates for a year with transient caching
+	 *
+	 * @param int   $year   Year.
+	 * @param array $groups Holiday groups.
+	 *
+	 * @return array Array of Y-m-d date strings.
+	 */
+	private static function get_holiday_dates_for_year( int $year, array $groups ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- $groups kept for signature stability; effective holidays are ref-deduped internally.
+		$transient_key = 'wpappointments_holidays_' . $year;
+		$cached        = get_transient( $transient_key );
+
+		if ( false !== $cached && is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$holidays = HolidayRegistry::get_all_effective_holidays();
+		$computed = HolidayResolver::compute_dates( $holidays, $year );
+		$dates    = array_values( $computed );
+
+		sort( $dates );
+
+		set_transient( $transient_key, $dates, DAY_IN_SECONDS );
+
+		return $dates;
+	}
+
+	/**
+	 * OOO availability layer callback
+	 *
+	 * Resolves entity owner(s) and blocks their OOO dates.
+	 *
+	 * @param array $context Layer context with variant_id, entity_id, date_range.
+	 *
+	 * @return array|null Availability data or null if no OOO entries.
+	 */
+	public static function ooo_callback( $context ) {
+		$date_range = $context['date_range'] ?? array();
+
+		if ( empty( $date_range['start'] ) || empty( $date_range['end'] ) ) {
+			return null;
+		}
+
+		$entity_id = $context['entity_id'] ?? 0;
+
+		// Resolve entity owners — always int[].
+		$entity_post   = $entity_id ? get_post( $entity_id ) : null;
+		$default_owner = $entity_post ? absint( $entity_post->post_author ) : get_current_user_id();
+		$owner_ids     = apply_filters(
+			'wpappointments_entity_owners',
+			$default_owner ? array( $default_owner ) : array(),
+			$entity_id
+		);
+
+		if ( empty( $owner_ids ) ) {
+			return null;
+		}
+
+		$ooo_posts = OutOfOfficeQuery::for_date_range(
+			$date_range['start'],
+			$date_range['end'],
+			$owner_ids
+		);
+
+		if ( empty( $ooo_posts ) ) {
+			return null;
+		}
+
+		// Build fully-open weekly (pass-through for non-OOO days).
+		$weekly = array();
+
+		foreach ( AvailabilityEngine::WEEKDAYS as $day ) {
+			$weekly[ $day ] = array(
+				array(
+					'start' => '00:00',
+					'end'   => '23:59',
+				),
+			);
+		}
+
+		// Block each OOO date, clamped to the requested range.
+		$overrides       = array();
+		$requested_start = new \DateTime( $date_range['start'] );
+		$requested_end   = new \DateTime( $date_range['end'] );
+
+		foreach ( $ooo_posts as $post ) {
+			$model      = new OutOfOffice( $post );
+			$normalized = $model->normalize();
+
+			$current = max( new \DateTime( $normalized['startDate'] ), $requested_start );
+			$end     = min( new \DateTime( $normalized['endDate'] ), $requested_end );
+
+			while ( $current <= $end ) {
+				$date_str               = $current->format( 'Y-m-d' );
+				$overrides[ $date_str ] = array();
+				$current->modify( '+1 day' );
+			}
+		}
+
+		return array(
+			'weekly'    => $weekly,
+			'overrides' => $overrides,
 		);
 	}
 }

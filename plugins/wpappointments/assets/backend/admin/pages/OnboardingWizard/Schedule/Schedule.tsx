@@ -1,106 +1,91 @@
 import { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { useDispatch, useSelect, select } from '@wordpress/data';
+import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { HtmlForm, withForm } from '@wpappointments/components';
-import apiFetch, { APIResponse } from '~/backend/utils/fetch';
-import resolve from '~/backend/utils/resolve';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
-import { useSchedule } from '~/backend/hooks/useSchedule';
-import { DayOpeningHours } from '~/backend/store/settings/settings.types';
+import type {
+	Day,
+	DayOpeningHours,
+} from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from '../OnboardingWizard.module.css';
+import { createSchedule, updateSchedule } from '~/backend/api/schedules';
 
-type Fields = {
-	monday: DayOpeningHours;
-	tuesday: DayOpeningHours;
-	wednesday: DayOpeningHours;
-	thursday: DayOpeningHours;
-	friday: DayOpeningHours;
-	saturday: DayOpeningHours;
-	sunday: DayOpeningHours;
-};
+const DAYS_FROM_SUNDAY: Day[] = [
+	'sunday',
+	'monday',
+	'tuesday',
+	'wednesday',
+	'thursday',
+	'friday',
+	'saturday',
+];
 
-type Response = APIResponse<{
-	data: Fields;
-	message: string;
-}>;
-
-function normalizeSchedule(schedule: Fields) {
-	const normalizedSchedule: Fields = {} as Fields;
-
-	for (const [day, data] of Object.entries(schedule)) {
-		const normalized = { ...data } as DayOpeningHours;
-
-		if (!normalized?.allDay) {
-			normalized.allDay = false;
-		}
-
-		normalizedSchedule[day as keyof Fields] = normalized;
-	}
-
-	return normalizedSchedule;
-}
-
-function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
-	const dispatch = useDispatch(store);
-	const [error, setError] = useState<string | null>(null);
-
-	const settings = useSelect(() => {
-		return select(store).getScheduleSettings();
+function useOrderedDays(): Day[] {
+	const generalSettings = useSelect(() => {
+		return select(store).getGeneralSettings();
 	}, []);
 
-	useFillFormValues(settings);
+	const startOfWeek = generalSettings?.startOfWeek ?? 1;
 
-	const onSubmit = async (rawData: Fields) => {
-		const data = normalizeSchedule(rawData);
+	return [
+		...DAYS_FROM_SUNDAY.slice(startOfWeek),
+		...DAYS_FROM_SUNDAY.slice(0, startOfWeek),
+	];
+}
 
-		const [error, response] = await resolve<Response>(async () => {
-			const response = await apiFetch<Response>({
-				path: 'settings/schedule',
-				method: 'PATCH',
-				data,
+type ScheduleFormFields = Record<string, DayOpeningHours>;
+
+function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
+	const [error, setError] = useState<string | null>(null);
+	const orderedDays = useOrderedDays();
+
+	const existingSchedules = useSelect(() => {
+		return select(store).getSchedules();
+	}, []);
+
+	const timePickerPrecision = useSelect(() => {
+		return select(store).getAppointmentsSettings()?.timePickerPrecision;
+	}, []);
+
+	const onSubmit: SubmitHandler<ScheduleFormFields> = async (data) => {
+		setError(null);
+
+		let result;
+
+		if (existingSchedules.length > 0) {
+			const defaultSchedule = existingSchedules.find((s) => s.isDefault);
+			if (defaultSchedule) {
+				result = await updateSchedule(defaultSchedule.id, {
+					days: data,
+				});
+			}
+		} else {
+			result = await createSchedule({
+				name: __('Default', 'wpappointments'),
+				days: data,
 			});
+		}
 
-			return response;
-		});
-
-		if (error) {
-			setError(error?.message);
+		if (!result) {
+			setError(__('Error saving schedule', 'wpappointments'));
 			return;
 		}
 
-		if (response === null) {
-			setError(__('Error saving settings', 'wpappointments'));
-			return;
-		}
-
-		if (response.message) {
-			dispatch.setPluginSettings({ schedule: data });
-			onSuccess();
-		}
+		onSuccess();
 	};
 
 	return (
 		<HtmlForm onSubmit={onSubmit}>
 			{error && <div className={styles.error}>{error}</div>}
-			<FormFields />
-		</HtmlForm>
-	);
-}
-
-function FormFields() {
-	const { schedule, timePickerPrecision } = useSchedule();
-
-	return (
-		<div>
 			<div style={{ marginBottom: 25 }}>
-				{Object.values(schedule).map((daySettings, index) => (
+				{orderedDays.map((day) => (
 					<OpeningHoursDayOfWeek
-						key={daySettings.day}
-						showCopyToAllDays={index === 0}
-						values={daySettings}
+						key={day}
+						day={day}
+						allDays={orderedDays}
 						timePickerPrecision={timePickerPrecision}
 					/>
 				))}
@@ -112,7 +97,7 @@ function FormFields() {
 			>
 				{__('Continue', 'wpappointments')}
 			</Button>
-		</div>
+		</HtmlForm>
 	);
 }
 

@@ -52,6 +52,9 @@ function inject_frontend_config() {
 				'defaultLength' => get_option( 'wpappointments_appointments_defaultLength', 30 ),
 			),
 		),
+		'entity'   => array(
+			'coreEntityId' => absint( get_option( 'wpappointments_core_entityId', 0 ) ),
+		),
 	);
 
 	wp_add_inline_script(

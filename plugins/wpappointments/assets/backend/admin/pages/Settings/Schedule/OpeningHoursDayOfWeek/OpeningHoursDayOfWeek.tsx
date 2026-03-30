@@ -1,252 +1,388 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Button, Dashicon } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
-import { useCallback } from '@wordpress/element';
+import {
+	Button,
+	CheckboxControl,
+	Popover,
+	Tooltip,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { backup, copy, plus, trash } from '@wordpress/icons';
 import { Toggle } from '@wpappointments/components';
-import { produce } from 'immer';
-import cn from 'obj-str';
-import type { DayOpeningHours } from '~/backend/store/settings/settings.types';
-import { store } from '~/backend/store/store';
-import { ScheduleFormFields } from '../Schedule';
+import type {
+	Day,
+	DayOpeningHours,
+} from '~/backend/store/settings/settings.types';
 import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
 
-export default function OpeningHoursDayOfWeek({
-	values,
-	showCopyToAllDays = false,
-	timePickerPrecision,
-}: {
-	values: DayOpeningHours;
-	showCopyToAllDays?: boolean;
+const DAY_LABELS: Record<Day, string> = {
+	monday: __('Monday', 'wpappointments'),
+	tuesday: __('Tuesday', 'wpappointments'),
+	wednesday: __('Wednesday', 'wpappointments'),
+	thursday: __('Thursday', 'wpappointments'),
+	friday: __('Friday', 'wpappointments'),
+	saturday: __('Saturday', 'wpappointments'),
+	sunday: __('Sunday', 'wpappointments'),
+};
+
+type Props = {
+	day: Day;
+	allDays: Day[];
 	timePickerPrecision?: number;
-}) {
-	const { setValue, reset } = useFormContext<ScheduleFormFields>();
+};
 
-	const {
-		updateWorkingHours,
-		addWorkingHoursSlot,
-		removeWorkingHoursSlot,
-		copyWorkingHoursToAllDays,
-	} = useDispatch(store);
+export default function OpeningHoursDayOfWeek({
+	day,
+	allDays,
+	timePickerPrecision,
+}: Props) {
+	const { setValue, getValues, watch } = useFormContext();
 
-	const settings = useSelect(() => {
-		return select(store).getAllSettings();
-	}, []);
-
-	const { schedule } = settings;
-
-	const { day, enabled, allDay, slots } = values;
-
+	const dayData: DayOpeningHours = watch(day) || getDefaultDay(day);
+	const { enabled, allDay, slots } = dayData;
 	const { list } = slots || { list: [] };
 
-	const updateWorkingHoursTime = useCallback(
-		({
-			values,
-			value,
-			index,
-			type,
-			time,
-		}: {
-			values: DayOpeningHours;
-			value: string;
-			index: number;
-			type: 'start' | 'end';
-			time: 'hour' | 'minute';
-		}) => {
-			updateWorkingHours(
-				produce(values, (draft) => {
-					if (!value) {
-						return;
-					}
+	const handleTimeChange = ({
+		value,
+		index,
+		type,
+		time,
+	}: {
+		value: string;
+		index: number;
+		type: 'start' | 'end';
+		time: 'hour' | 'minute';
+	}) => {
+		setValue(`${day}.slots.list.${index}.${type}.${time}`, value);
+	};
 
-					if (!draft.slots) {
-						draft.slots = {
-							list: [
-								{
-									start: {
-										hour: null,
-										minute: null,
-									},
-									end: {
-										hour: null,
-										minute: null,
-									},
-								},
-							],
-						};
-					}
+	const handleAddSlot = () => {
+		const current = getValues(`${day}.slots.list`) || [];
+		setValue(`${day}.slots.list`, [
+			...current,
+			{
+				start: { hour: '17', minute: '00' },
+				end: { hour: '18', minute: '00' },
+			},
+		]);
+	};
 
-					draft.slots.list[index][type][time] = value;
-				})
-			);
-		},
-		[updateWorkingHours]
-	);
+	const handleRemoveSlot = (index: number) => {
+		const current = getValues(`${day}.slots.list`) || [];
+		setValue(
+			`${day}.slots.list`,
+			current.filter((_: unknown, i: number) => i !== index)
+		);
+	};
+
+	const handleToggleAllDay = () => {
+		if (allDay) {
+			setValue(`${day}.allDay`, false);
+			setValue(`${day}.slots.list`, [
+				{
+					start: { hour: '09', minute: '00' },
+					end: { hour: '17', minute: '00' },
+				},
+			]);
+		} else {
+			setValue(`${day}.allDay`, true);
+			setValue(`${day}.slots.list`, [
+				{
+					start: { hour: '00', minute: '00' },
+					end: { hour: '24', minute: '00' },
+				},
+			]);
+		}
+	};
+
+	const handleCopyTo = (targetDays: Day[]) => {
+		for (const d of targetDays) {
+			if (d === day) continue;
+			setValue(d, { ...dayData, day: d });
+		}
+	};
 
 	return (
-		<div
-			className={cn({
-				[styles.fieldGroup]: true,
-				[styles.fieldGroupSpaceBetween]: true,
-			})}
-		>
-			<div className={styles.fieldGroupRow}>
-				<div>
-					<div className={styles.dayLabel}>
-						<span>{day}:</span>
-						<Toggle
-							name={`${day}.enabled`}
-							onChange={(enabled) => {
-								const newValues = {
-									...values,
-									enabled,
-								};
+		<div className={styles.dayRow}>
+			<div className={styles.dayHeader}>
+				<Toggle
+					name={`${day}.enabled`}
+					onChange={(newEnabled) => {
+						if (newEnabled) {
+							const currentSlots =
+								getValues(`${day}.slots.list`) || [];
+							const firstSlot = currentSlots[0];
 
-								if (!enabled) {
-									newValues.allDay = false;
-								}
-
-								updateWorkingHours(newValues);
-							}}
-							defaultChecked={true}
-						/>
-					</div>
-					{enabled && (
-						<div className={styles.allDayLabel}>
-							<span>{__('All day', 'wpappointments')}:</span>
-							<Toggle
-								name={`${day}.allDay`}
-								onChange={(allDay) => {
-									updateWorkingHours({
-										...values,
-										allDay,
-									});
-								}}
-								defaultChecked={false}
-							/>
-						</div>
-					)}
-				</div>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						gap: '5px',
+							if (
+								!firstSlot ||
+								!firstSlot.start?.hour ||
+								!firstSlot.end?.hour
+							) {
+								setValue(`${day}.slots.list`, [
+									{
+										start: {
+											hour: '09',
+											minute: '00',
+										},
+										end: {
+											hour: '17',
+											minute: '00',
+										},
+									},
+								]);
+							}
+						} else {
+							setValue(`${day}.allDay`, false);
+						}
 					}}
-				>
-					{!allDay &&
-						enabled &&
-						list.map((slot, index) => (
+					defaultChecked={enabled}
+				/>
+				<span className={styles.dayName}>{DAY_LABELS[day]}</span>
+			</div>
+
+			{enabled && (
+				<div className={styles.slotsColumn}>
+					{list.map((slot, index) => (
+						<div key={index} className={styles.slotRow}>
 							<div
-								key={`${index}-${day}-${slot.start.hour}-${slot.start.minute}-${slot.end.hour}-${slot.end.minute}`}
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									gap: '10px',
-								}}
+								className={
+									allDay
+										? styles.timePickersDisabled
+										: undefined
+								}
 							>
 								<ScheduleTimePicker
 									day={day}
 									index={index}
 									type="start"
 									timePickerPrecision={timePickerPrecision}
-									updateWorkingHoursTime={
-										updateWorkingHoursTime
-									}
+									onTimeChange={handleTimeChange}
 								/>
-								—
+							</div>
+							<span className={styles.slotSeparator}>-</span>
+							<div
+								className={
+									allDay
+										? styles.timePickersDisabled
+										: undefined
+								}
+							>
 								<ScheduleTimePicker
 									day={day}
 									index={index}
 									type="end"
 									timePickerPrecision={timePickerPrecision}
-									updateWorkingHoursTime={
-										updateWorkingHoursTime
-									}
+									onTimeChange={handleTimeChange}
 									minHour={slot.start.hour}
 								/>
-								{enabled && index > 0 && (
-									<Button
-										type="submit"
-										size="small"
-										variant="tertiary"
-										isDestructive={true}
-										onClick={() => {
-											removeWorkingHoursSlot(day, index);
-											reset();
-										}}
-									>
-										<Dashicon icon="remove" size={14} />
-									</Button>
-								)}
-								{enabled && index === list.length - 1 && (
-									<Button
-										type="submit"
-										size="small"
-										variant="tertiary"
-										onClick={() => {
-											addWorkingHoursSlot(day);
-										}}
-									>
-										<Dashicon icon="plus-alt" size={15} />
-									</Button>
-								)}
 							</div>
-						))}
-					{!enabled && (
-						<div
-							style={{
-								height: '100%',
-								display: 'flex',
-								alignItems: 'center',
-							}}
-						>
-							{__('Not available', 'wpappointments')}
+
+							{index === 0 && (
+								<div className={styles.slotActions}>
+									{!allDay && (
+										<Tooltip
+											text={__(
+												'Add new time slot',
+												'wpappointments'
+											)}
+										>
+											<Button
+												size="small"
+												icon={plus}
+												onClick={handleAddSlot}
+												label={__(
+													'Add new time slot',
+													'wpappointments'
+												)}
+											/>
+										</Tooltip>
+									)}
+									<CopyTimesButton
+										day={day}
+										allDays={allDays}
+										onCopy={handleCopyTo}
+									/>
+									<Tooltip
+										text={
+											allDay
+												? __(
+														'Unset all day',
+														'wpappointments'
+													)
+												: __(
+														'Set all day',
+														'wpappointments'
+													)
+										}
+									>
+										<Button
+											size="small"
+											icon={backup}
+											onClick={handleToggleAllDay}
+											label={
+												allDay
+													? __(
+															'Unset all day',
+															'wpappointments'
+														)
+													: __(
+															'Set all day',
+															'wpappointments'
+														)
+											}
+											style={{
+												color: allDay
+													? 'var(--wp-admin-theme-color)'
+													: undefined,
+											}}
+										/>
+									</Tooltip>
+								</div>
+							)}
+
+							{index > 0 && (
+								<div className={styles.slotActions}>
+									<Tooltip
+										text={__(
+											'Remove time slot',
+											'wpappointments'
+										)}
+									>
+										<Button
+											size="small"
+											icon={trash}
+											isDestructive
+											onClick={() =>
+												handleRemoveSlot(index)
+											}
+											label={__(
+												'Remove time slot',
+												'wpappointments'
+											)}
+										/>
+									</Tooltip>
+								</div>
+							)}
 						</div>
-					)}
-				</div>
-			</div>
-			{showCopyToAllDays && (
-				<div className={styles.copyToAllDaysWrapper}>
-					<Button
-						size="compact"
-						variant="link"
-						className={styles.copyToAllDays}
-						onClick={() => {
-							copyWorkingHoursToAllDays(values);
-
-							const days = Object.keys(schedule) as Array<
-								keyof typeof schedule
-							>;
-							const slots = values.slots.list[0];
-
-							reset();
-
-							for (const day of days) {
-								setValue(
-									`${day}.slots.list.0.start.hour`,
-									slots.start.hour
-								);
-								setValue(
-									`${day}.slots.list.0.start.minute`,
-									slots.start.minute
-								);
-								setValue(
-									`${day}.slots.list.0.end.hour`,
-									slots.end.hour
-								);
-								setValue(
-									`${day}.slots.list.0.end.minute`,
-									slots.end.minute
-								);
-							}
-						}}
-					>
-						{__('Copy to all days', 'wpappointments')}
-					</Button>
+					))}
 				</div>
 			)}
 		</div>
 	);
+}
+
+function CopyTimesButton({
+	day,
+	allDays,
+	onCopy,
+}: {
+	day: Day;
+	allDays: Day[];
+	onCopy: (days: Day[]) => void;
+}) {
+	const [isOpen, setIsOpen] = useState(false);
+	const [selected, setSelected] = useState<Set<Day>>(new Set([day]));
+
+	const otherDays = allDays.filter((d) => d !== day);
+	const allSelected = otherDays.every((d) => selected.has(d));
+
+	const handleToggleDay = (d: Day) => {
+		setSelected((prev) => {
+			const next = new Set(prev);
+			if (next.has(d)) {
+				next.delete(d);
+			} else {
+				next.add(d);
+			}
+			return next;
+		});
+	};
+
+	const handleToggleAll = () => {
+		if (allSelected) {
+			setSelected(new Set([day]));
+		} else {
+			setSelected(new Set(allDays));
+		}
+	};
+
+	const handleApply = () => {
+		onCopy(Array.from(selected));
+		setIsOpen(false);
+		setSelected(new Set([day]));
+	};
+
+	const handleCancel = () => {
+		setIsOpen(false);
+		setSelected(new Set([day]));
+	};
+
+	return (
+		<>
+			<Tooltip text={__('Copy times to', 'wpappointments')}>
+				<Button
+					size="small"
+					icon={copy}
+					onClick={() => setIsOpen(!isOpen)}
+					label={__('Copy times to', 'wpappointments')}
+				/>
+			</Tooltip>
+			{isOpen && (
+				<Popover
+					placement="bottom-start"
+					onClose={() => setIsOpen(false)}
+					className={styles.copyPopover}
+				>
+					<div className={styles.copyPopoverContent}>
+						<div className={styles.copyPopoverHeader}>
+							{__('COPY TIMES TO', 'wpappointments')}
+						</div>
+						<div className={styles.copyPopoverList}>
+							<CheckboxControl
+								__nextHasNoMarginBottom
+								label={__('Select all', 'wpappointments')}
+								checked={allSelected}
+								onChange={handleToggleAll}
+							/>
+							{allDays.map((d) => (
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									key={d}
+									label={DAY_LABELS[d]}
+									checked={selected.has(d)}
+									onChange={() => handleToggleDay(d)}
+									disabled={d === day}
+								/>
+							))}
+						</div>
+						<div className={styles.copyPopoverFooter}>
+							<Button variant="tertiary" onClick={handleCancel}>
+								{__('Cancel', 'wpappointments')}
+							</Button>
+							<Button variant="primary" onClick={handleApply}>
+								{__('Apply', 'wpappointments')}
+							</Button>
+						</div>
+					</div>
+				</Popover>
+			)}
+		</>
+	);
+}
+
+function getDefaultDay(day: Day): DayOpeningHours {
+	return {
+		day,
+		enabled: false,
+		allDay: false,
+		slots: {
+			list: [
+				{
+					start: { hour: '09', minute: '00' },
+					end: { hour: '17', minute: '00' },
+				},
+			],
+		},
+	};
 }

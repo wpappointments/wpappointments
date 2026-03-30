@@ -147,6 +147,12 @@ importers:
         specifier: '*'
         version: 18.3.27
 
+  packages/holidays:
+    dependencies:
+      '@wordpress/i18n':
+        specifier: ^4.51.0
+        version: 4.58.0
+
   plugins/other-plugin: {}
 
   plugins/wpappointments:
@@ -193,6 +199,9 @@ importers:
       '@wpappointments/data':
         specifier: workspace:*
         version: link:../../packages/data
+      '@wpappointments/holidays':
+        specifier: workspace:*
+        version: link:../../packages/holidays
       date-fns:
         specifier: ^3.3.1
         version: 3.6.0
