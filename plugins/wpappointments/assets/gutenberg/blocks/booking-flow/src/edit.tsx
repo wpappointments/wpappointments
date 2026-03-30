@@ -1,4 +1,10 @@
-import { DetailedHTMLProps, HTMLAttributes, useState } from 'react';
+import {
+	DetailedHTMLProps,
+	HTMLAttributes,
+	Suspense,
+	lazy,
+	useState,
+} from 'react';
 import {
 	InnerBlocks,
 	InspectorControls,
@@ -21,11 +27,18 @@ import {
 	positionRight,
 	stretchFullWidth,
 } from '@wordpress/icons';
-import { ButtonGroup } from '@wpappointments/components';
+// Import directly to avoid pulling @wordpress/dataviews through the barrel.
+// The barrel re-exports DataForm/DataViews which bundles @wordpress/dataviews
+// and conflicts with core's copy on Full Site Editor pages.
+import ButtonGroup from '@wpappointments/components/src/ButtonGroup/ButtonGroup';
 import { applyFilters } from '~/backend/utils/hooks';
 import type { BookingFlowBlockAttributes } from './booking-flow-block';
-import BookingFlow from '~/frontend/frontend';
 import { Fill } from '~/frontend/slotfill';
+
+// Lazy-load BookingFlow so @wordpress/dataviews is in a separate chunk
+// that only loads when the block is rendered, avoiding the private-apis
+// conflict on FSE pages where the block isn't present.
+const BookingFlow = lazy(() => import('~/frontend/frontend'));
 
 const BUTTONS_TEMPLATE: ReadonlyArray<any> = [
 	[
@@ -72,18 +85,20 @@ export default function Edit({
 				HTMLDivElement
 			>)}
 		>
-			<BookingFlow
-				attributes={attributes}
-				editorStep={editorStep}
-				isEditor
-			>
-				<Fill name="booking-flow/actions">
-					<InnerBlocks
-						template={BUTTONS_TEMPLATE}
-						templateLock="all"
-					/>
-				</Fill>
-			</BookingFlow>
+			<Suspense fallback={null}>
+				<BookingFlow
+					attributes={attributes}
+					editorStep={editorStep}
+					isEditor
+				>
+					<Fill name="booking-flow/actions">
+						<InnerBlocks
+							template={BUTTONS_TEMPLATE}
+							templateLock="all"
+						/>
+					</Fill>
+				</BookingFlow>
+			</Suspense>
 			<InspectorControls>
 				<Panel>
 					<PanelBody title={__('General', 'wpappointments')}>
