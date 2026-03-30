@@ -32,9 +32,13 @@ export default function RadioInput<Item>({
 	}));
 
 	const onChangeControl = useCallback(
-		(newValue: string) =>
-			onChange(setValue({ item: data, value: newValue })),
-		[data, setValue, onChange]
+		(newValue: string) => {
+			const original =
+				elements?.find((el) => String(el.value) === newValue)?.value ??
+				newValue;
+			onChange(setValue({ item: data, value: original }));
+		},
+		[data, elements, setValue, onChange]
 	);
 
 	return (

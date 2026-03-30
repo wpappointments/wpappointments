@@ -29,7 +29,10 @@ export default function NumberInput<Item>({
 
 	const onChangeControl = useCallback(
 		(newValue: string | undefined) => {
-			const numeric = newValue ? Number(newValue) : 0;
+			const numeric =
+				newValue === undefined || newValue === ''
+					? undefined
+					: Number(newValue);
 			onChange(setValue({ item: data, value: numeric }));
 		},
 		[data, setValue, onChange]
@@ -44,6 +47,8 @@ export default function NumberInput<Item>({
 				</label>
 			)}
 			<NumberControl
+				label={hideLabelFromVision ? label : undefined}
+				hideLabelFromVision={hideLabelFromVision}
 				placeholder={placeholder}
 				onChange={onChangeControl}
 				value={value}

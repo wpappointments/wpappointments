@@ -62,28 +62,39 @@ function AddServiceForm({
 	const [formData, setFormData] = useState<ServiceFormData>({
 		...emptyService,
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { validity, isValid } = useFormValidity(formData, fields, formConfig);
 
 	const onSubmit = async () => {
-		if (!isValid) {
+		if (!isValid || isSubmitting) {
 			return;
 		}
+		setIsSubmitting(true);
 
-		const result = await createBookable({
-			name: formData.name,
-			type: 'service',
-			duration: Number(formData.duration),
-			active: true,
-		});
+		try {
+			const result = await createBookable({
+				name: formData.name,
+				type: 'service',
+				duration: Number(formData.duration),
+				active: true,
+			});
 
-		if (result.data) {
-			onAdd(result.data);
-			setFormData({ ...emptyService });
+			if (result.data) {
+				onAdd(result.data);
+				setFormData({ ...emptyService });
+			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
-		<div>
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			<FormFieldSet style={{ marginBottom: 16 }}>
 				<DataForm
 					data={formData}
@@ -95,10 +106,14 @@ function AddServiceForm({
 					validity={validity}
 				/>
 			</FormFieldSet>
-			<Button variant="secondary" onClick={onSubmit} disabled={!isValid}>
+			<Button
+				type="submit"
+				variant="secondary"
+				disabled={!isValid || isSubmitting}
+			>
 				{__('Add Service', 'wpappointments')}
 			</Button>
-		</div>
+		</form>
 	);
 }
 

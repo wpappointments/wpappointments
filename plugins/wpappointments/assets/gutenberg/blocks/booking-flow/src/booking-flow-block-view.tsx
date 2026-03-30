@@ -19,14 +19,21 @@ const bookingFlow = document.getElementsByClassName(
 for (const element of bookingFlow) {
 	const rootElement = element as HTMLDivElement;
 	const root = createRoot(rootElement);
-	const attributes = JSON.parse(atob(rootElement.dataset.attributes || ''));
+	const attributes = JSON.parse(
+		new TextDecoder().decode(
+			Uint8Array.from(atob(rootElement.dataset.attributes || ''), (c) =>
+				c.charCodeAt(0)
+			)
+		)
+	);
 
 	// Extract styled button HTML from the data-buttons attribute.
 	const buttonHtml: { group?: string; back?: string; submit?: string } = {};
 	const buttonsRaw = rootElement.dataset.buttons;
 
 	if (buttonsRaw) {
-		const html = atob(buttonsRaw);
+		const bytes = Uint8Array.from(atob(buttonsRaw), (c) => c.charCodeAt(0));
+		const html = new TextDecoder().decode(bytes);
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(html, 'text/html');
 

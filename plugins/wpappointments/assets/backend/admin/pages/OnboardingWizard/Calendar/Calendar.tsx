@@ -94,11 +94,16 @@ export default function CalendarSettings({
 			return;
 		}
 
+		const payload = {
+			...formData,
+			startOfWeek: Number(formData.startOfWeek),
+		};
+
 		const [err, response] = await resolve<Response>(async () => {
 			return await apiFetch<Response>({
 				path: 'settings/general',
 				method: 'PATCH',
-				data: formData,
+				data: payload,
 			});
 		});
 
@@ -113,12 +118,7 @@ export default function CalendarSettings({
 		}
 
 		if (response.message) {
-			dispatch.setPluginSettings({
-				general: {
-					...formData,
-					startOfWeek: Number(formData.startOfWeek),
-				},
-			});
+			dispatch.setPluginSettings({ general: payload });
 			onSuccess();
 		}
 	};

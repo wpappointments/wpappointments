@@ -65,6 +65,7 @@ const fields: Field<Fields>[] = [
 		id: 'defaultLength',
 		type: 'integer',
 		label: __('Default appointment length (in minutes)', 'wpappointments'),
+		isValid: { min: 1 },
 		Edit: NumberInput,
 	},
 	{

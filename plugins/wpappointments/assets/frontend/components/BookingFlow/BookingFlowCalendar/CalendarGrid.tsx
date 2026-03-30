@@ -34,7 +34,13 @@ export default function CalendarGrid() {
 
 	// Auto-select the first available day after month navigation.
 	useEffect(() => {
-		if (!pendingAutoSelect.current || !hasAvailability) return;
+		if (
+			!pendingAutoSelect.current ||
+			availabilityLoading ||
+			!hasAvailability
+		) {
+			return;
+		}
 		pendingAutoSelect.current = false;
 
 		for (const month of calendarWithAvailability) {
@@ -42,7 +48,10 @@ export default function CalendarGrid() {
 				for (const day of week) {
 					if (day.available) {
 						const d = new Date(day.date);
-						if (d.getMonth() === viewing.getMonth()) {
+						if (
+							d.getMonth() === viewing.getMonth() &&
+							d.getFullYear() === viewing.getFullYear()
+						) {
 							setSelected([d]);
 							return;
 						}
@@ -50,7 +59,13 @@ export default function CalendarGrid() {
 				}
 			}
 		}
-	}, [calendarWithAvailability, hasAvailability, viewing, setSelected]);
+	}, [
+		availabilityLoading,
+		calendarWithAvailability,
+		hasAvailability,
+		viewing,
+		setSelected,
+	]);
 
 	return (
 		<div className={styles.calendar}>

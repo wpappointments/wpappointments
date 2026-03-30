@@ -210,6 +210,10 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 
 		const submitData = {
 			...formData,
+			service:
+				formData.service ||
+				coreEntityId?.toString() ||
+				defaultEntityName.toLowerCase(),
 			date: date.toISOString(),
 		};
 

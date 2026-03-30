@@ -74,11 +74,17 @@ const profileFields: Field<Fields>[] = [
 		label: __('Phone number', 'wpappointments'),
 		Edit: TextInput,
 	},
+	{
+		id: 'companyName',
+		type: 'text',
+		label: __('Company name', 'wpappointments'),
+		Edit: TextInput,
+	},
 ];
 
 const profileForm: Form = {
 	layout: { type: 'regular' },
-	fields: ['firstName', 'lastName', 'email', 'phoneNumber'],
+	fields: ['firstName', 'lastName', 'email', 'phoneNumber', 'companyName'],
 };
 
 const calendarFields: Field<Fields>[] = [

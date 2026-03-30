@@ -107,6 +107,7 @@ export default function CustomerCreate({
 			return;
 		}
 
+		let didSucceed = false;
 		const { createCustomer, updateCustomer } = customersApi();
 		const { createAccount, ...rest } = formData;
 
@@ -121,6 +122,7 @@ export default function CustomerCreate({
 				const { customer } = responseData;
 				dispatch.updateCustomer(customer as Customer);
 				onSubmitSuccess?.(customer as Customer);
+				didSucceed = true;
 			}
 		} else if (createAccount) {
 			const response = await createCustomer(rest);
@@ -130,15 +132,19 @@ export default function CustomerCreate({
 				const { customer } = responseData;
 				dispatch.setSelectedCustomer(customer as Customer);
 				onSubmitSuccess?.(customer as Customer);
+				didSucceed = true;
 			}
 		} else {
 			const guestCustomer: Customer = { ...rest, id: 0 };
 			dispatch.createCustomer(guestCustomer);
 			dispatch.setSelectedCustomer(guestCustomer);
 			onSubmitSuccess?.(guestCustomer);
+			didSucceed = true;
 		}
 
-		closeCurrentSlideOut();
+		if (didSucceed) {
+			closeCurrentSlideOut();
+		}
 	};
 
 	const submitText =

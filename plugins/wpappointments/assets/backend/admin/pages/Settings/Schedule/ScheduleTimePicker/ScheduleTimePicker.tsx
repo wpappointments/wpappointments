@@ -1,5 +1,6 @@
 import { SelectControl } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { addMinutes, format } from 'date-fns';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
@@ -72,7 +73,7 @@ export default function ScheduleTimePicker({
 					}}
 					options={hourOptions}
 					hideLabelFromVision
-					label=""
+					label={__('Hour', 'wpappointments')}
 					__nextHasNoMarginBottom
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
@@ -81,7 +82,7 @@ export default function ScheduleTimePicker({
 					onChange={(value) => onTimeChange(value, 'minute')}
 					options={minutes}
 					hideLabelFromVision
-					label=""
+					label={__('Minute', 'wpappointments')}
 					__nextHasNoMarginBottom
 				/>
 			</div>

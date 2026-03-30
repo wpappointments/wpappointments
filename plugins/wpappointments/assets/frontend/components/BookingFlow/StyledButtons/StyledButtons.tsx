@@ -19,14 +19,16 @@ export default function StyledButtons() {
 			ref={ref}
 			onClick={(e) => {
 				const target = e.target as HTMLElement;
-				const button = target.closest('.wp-block-button');
+				const button = target.closest(
+					'.wpa-back-button, .wpa-submit-button'
+				);
 				if (!button) return;
 
-				e.preventDefault();
-
 				if (button.classList.contains('wpa-back-button')) {
+					e.preventDefault();
 					goBack?.();
 				} else if (button.classList.contains('wpa-submit-button')) {
+					e.preventDefault();
 					const form = ref.current?.closest('form');
 					if (form) {
 						form.requestSubmit();

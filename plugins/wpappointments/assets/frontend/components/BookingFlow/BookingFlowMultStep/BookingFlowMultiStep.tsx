@@ -31,18 +31,24 @@ export default function BookingFlowMultiStep() {
 		setGoBack(() => setCurrentStep(0));
 	}, [setGoBack]);
 
+	useEffect(() => {
+		if (formSuccess) {
+			setCurrentStep(2);
+		}
+	}, [formSuccess]);
+
 	const datetime = formData.datetime;
 
 	const onSubmitCustomer = async () => {
 		await onSubmit();
-		setCurrentStep(2);
 	};
 
 	return (
 		<>
 			{!hideProgressBar && (
 				<header className={multiStepStyles.stepsHeader}>
-					<div
+					<button
+						type="button"
 						className={cn({
 							[multiStepStyles.stepsHeaderLabel]: true,
 							[multiStepStyles.stepsHeaderLabelActive]:
@@ -61,8 +67,9 @@ export default function BookingFlowMultiStep() {
 						data-step={1}
 					>
 						{__('Select date', 'wpappointments')}
-					</div>
-					<div
+					</button>
+					<button
+						type="button"
 						className={cn({
 							[multiStepStyles.stepsHeaderLabel]: true,
 							[multiStepStyles.stepsHeaderLabelActive]:
@@ -78,7 +85,7 @@ export default function BookingFlowMultiStep() {
 						data-step={2}
 					>
 						{__('About you', 'wpappointments')}
-					</div>
+					</button>
 					<div
 						className={cn({
 							[multiStepStyles.stepsHeaderLabel]: true,

@@ -153,9 +153,12 @@ export default function OpeningHoursDayOfWeek({
 				<ToggleControl
 					onChange={handleToggleEnabled}
 					checked={enabled}
-					label=""
+					label={DAY_LABELS[day]}
+					__nextHasNoMarginBottom
 				/>
-				<span className={styles.dayName}>{DAY_LABELS[day]}</span>
+				<span className={styles.dayName} aria-hidden="true">
+					{DAY_LABELS[day]}
+				</span>
 			</div>
 
 			{enabled && (
