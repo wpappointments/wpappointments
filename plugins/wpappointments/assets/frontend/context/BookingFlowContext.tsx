@@ -154,10 +154,13 @@ export function BookingFlowContextProvider({
 				window.wpappointments?.entity?.coreEntityId;
 
 			if (!entityId) {
+				setCalendarWithAvailability([]);
 				setDayNotices({});
 				setAvailabilityLoading(false);
 				return;
 			}
+
+			setAvailabilityLoading(true);
 
 			try {
 				const data = await apiFetch({
@@ -177,6 +180,8 @@ export function BookingFlowContextProvider({
 						'Failed to parse availability response',
 						parsed
 					);
+					setCalendarWithAvailability([]);
+					setDayNotices({});
 					return;
 				}
 
@@ -238,13 +243,16 @@ export function BookingFlowContextProvider({
 						// OOO dates are non-critical — don't block the calendar.
 					}
 				}
+			} catch {
+				setCalendarWithAvailability([]);
+				setDayNotices({});
 			} finally {
 				setAvailabilityLoading(false);
 			}
 		}
 
 		fetchAvailability();
-	}, [viewingMonth, attributes.trimUnavailable]);
+	}, [viewingMonth, attributes.trimUnavailable, attributes.entityId]);
 
 	const onSubmit = async () => {
 		if (!formData.datetime) {
