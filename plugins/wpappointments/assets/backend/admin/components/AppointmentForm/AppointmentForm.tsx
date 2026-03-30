@@ -186,11 +186,27 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	};
 
 	const onSubmit = async () => {
+		if (
+			!formData.date ||
+			!formData.timeHourStart ||
+			!formData.timeMinuteStart
+		) {
+			displayErrorToast(
+				__('Please select a date and time.', 'wpappointments')
+			);
+			return;
+		}
+
 		const date = new Date(formData.date);
-		date.setHours(parseInt(formData.timeHourStart));
-		date.setMinutes(parseInt(formData.timeMinuteStart));
+		date.setHours(parseInt(formData.timeHourStart, 10));
+		date.setMinutes(parseInt(formData.timeMinuteStart, 10));
 		date.setSeconds(0);
 		date.setMilliseconds(0);
+
+		if (isNaN(date.getTime())) {
+			displayErrorToast(__('Invalid date or time.', 'wpappointments'));
+			return;
+		}
 
 		const submitData = {
 			...formData,
@@ -247,8 +263,8 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	const start = new Date(formData.date);
 
 	if (formData.timeHourStart && formData.timeMinuteStart) {
-		start.setHours(parseInt(formData.timeHourStart));
-		start.setMinutes(parseInt(formData.timeMinuteStart));
+		start.setHours(parseInt(formData.timeHourStart, 10));
+		start.setMinutes(parseInt(formData.timeMinuteStart, 10));
 		start.setSeconds(0);
 		start.setMilliseconds(0);
 	}
