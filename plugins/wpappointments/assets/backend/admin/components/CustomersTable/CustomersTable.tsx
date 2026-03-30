@@ -81,7 +81,7 @@ export default function CustomersTable() {
 		});
 	};
 
-	if (!customers || customers.length === 0) {
+	if (!customers || totalItems === 0) {
 		return (
 			<TableFullEmpty>
 				<p>{__('You have no customers yet', 'wpappointments')}</p>
