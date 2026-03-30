@@ -23,8 +23,8 @@ $buttons_data = base64_encode( wp_kses_post( $content ) );
 // min-height prevents CLS while React hydrates the booking flow.
 $element = sprintf(
 	"<div class='wpappointments-booking-flow' style='min-height:400px' data-attributes='%s' data-buttons='%s'></div>",
-	base64_encode( wp_json_encode( $attributes ) ),
-	$buttons_data
+	esc_attr( base64_encode( wp_json_encode( $attributes ) ) ),
+	esc_attr( $buttons_data )
 );
 
 /**
