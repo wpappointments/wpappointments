@@ -176,10 +176,11 @@ export default function TimeFinder({
 			}
 		}
 
-		scrollableRef.current?.addEventListener('scroll', handleScroll);
+		const el = scrollableRef.current;
+		el?.addEventListener('scroll', handleScroll);
 
 		return () => {
-			scrollableRef.current?.removeEventListener('scroll', handleScroll);
+			el?.removeEventListener('scroll', handleScroll);
 		};
 	}, [scrollableRef]);
 
