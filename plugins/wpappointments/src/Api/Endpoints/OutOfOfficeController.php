@@ -296,8 +296,12 @@ class OutOfOfficeController extends Controller {
 			);
 		}
 
+		if ( ! $entity_id ) {
+			$entity_id = absint( get_option( 'wpappointments_core_entityId', 0 ) );
+		}
+
 		$entity_post   = $entity_id ? get_post( $entity_id ) : null;
-		$default_owner = $entity_post ? absint( $entity_post->post_author ) : get_current_user_id();
+		$default_owner = $entity_post ? absint( $entity_post->post_author ) : 0;
 		$owner_ids     = apply_filters(
 			'wpappointments_entity_owners',
 			$default_owner ? array( $default_owner ) : array(),
