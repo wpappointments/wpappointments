@@ -165,7 +165,7 @@ class Schedule {
 
 		if ( isset( $data['name'] ) ) {
 			if ( '' === trim( $data['name'] ) ) {
-				return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'wpappointments' ) );
+				return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'wpappointments' ), array( 'status' => 422 ) );
 			}
 			$post_data['post_title'] = $data['name'];
 		}
