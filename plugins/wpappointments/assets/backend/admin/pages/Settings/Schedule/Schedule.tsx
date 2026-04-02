@@ -355,8 +355,10 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 							}
 							onChange={async (checked) => {
 								if (checked) {
-									await setDefaultSchedule(schedule.id);
-									closeSlideOut(slideoutId);
+									const result = await setDefaultSchedule(schedule.id);
+									if (result) {
+										closeSlideOut(slideoutId);
+									}
 								}
 							}}
 						/>
@@ -398,10 +400,12 @@ const DangerZoneContent = withForm(function DangerZoneContent({
 	const reassign = watch('reassign') ?? false;
 
 	const handleDelete = async () => {
-		await deleteSchedule(scheduleId, reassign);
+		const result = await deleteSchedule(scheduleId, reassign);
 		setShowConfirm(false);
-		closeSlideOut(dangerSlideoutId);
-		closeSlideOut(slideoutId);
+		if (result) {
+			closeSlideOut(dangerSlideoutId);
+			closeSlideOut(slideoutId);
+		}
 	};
 
 	return (

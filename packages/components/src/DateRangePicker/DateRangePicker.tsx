@@ -50,7 +50,7 @@ export default function DateRangePicker({
 			weekStartsOn,
 		});
 
-	const [focusable, setFocusable] = useState(startOfDay(new Date()));
+	const [focusable, setFocusable] = useState(startOfDay(initialViewing));
 	const [isFocusWithinCalendar, setIsFocusWithinCalendar] = useState(false);
 	const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 

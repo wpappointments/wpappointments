@@ -42,12 +42,12 @@ export default function TimeSlotPicker({
 					<button
 						key={i}
 						onClick={() => {
-							if (!slot.available) return;
 							onSelectSlot(
 								new Date(slot.timestamp).toISOString()
 							);
 						}}
 						type="button"
+						disabled={!slot.available}
 						className={cn({
 							[styles.daySlot]: true,
 							[styles.isButton]: slotsAsButtons,
@@ -58,6 +58,7 @@ export default function TimeSlotPicker({
 									datetime,
 						})}
 						data-time={slot.time}
+						aria-label={slot.time}
 					>
 						{slotsAsButtons && (
 							<>

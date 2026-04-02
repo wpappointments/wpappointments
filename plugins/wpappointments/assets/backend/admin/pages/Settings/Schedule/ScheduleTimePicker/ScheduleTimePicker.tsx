@@ -18,6 +18,7 @@ type Props = {
 		time: 'hour' | 'minute';
 	}) => void;
 	minHour?: string | null;
+	minMinute?: string | null;
 };
 
 type HourOption = {
@@ -33,6 +34,7 @@ export default function ScheduleTimePicker({
 	type,
 	onTimeChange,
 	minHour,
+	minMinute,
 }: Props) {
 	const { watch } = useFormContext();
 	const generalSettings = useSelect(() => {
@@ -60,7 +62,13 @@ export default function ScheduleTimePicker({
 	const currentHourOption = allHours.find(
 		(h) => h.value === (currentHour || minHour || '00')
 	);
-	const minutes = currentHourOption?.minutes || allHours[0]?.minutes || [];
+	const allMinutes = currentHourOption?.minutes || allHours[0]?.minutes || [];
+
+	// Filter minutes when the current hour equals the start hour.
+	const minutes =
+		minMinute && currentHour === minHour
+			? allMinutes.filter((m) => parseInt(m.value) > parseInt(minMinute))
+			: allMinutes;
 
 	return (
 		<div className={styles.timePicker}>

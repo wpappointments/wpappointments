@@ -175,6 +175,7 @@ export default function OpeningHoursDayOfWeek({
 									timePickerPrecision={timePickerPrecision}
 									onTimeChange={handleTimeChange}
 									minHour={slot.start.hour}
+									minMinute={slot.start.minute}
 								/>
 							</div>
 

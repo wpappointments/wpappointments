@@ -157,7 +157,10 @@ export default function MultiDatePicker({
 											endOfWeek(day)
 										);
 									}
-									if (nextFocusable) {
+									if (
+										nextFocusable &&
+										!(isInvalidDate && isInvalidDate(nextFocusable))
+									) {
 										event.preventDefault();
 										setFocusable(nextFocusable);
 										if (
