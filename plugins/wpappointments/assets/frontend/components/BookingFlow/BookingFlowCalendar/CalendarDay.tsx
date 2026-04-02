@@ -16,6 +16,8 @@ type Props = {
 };
 
 function getThreshold(totalAvailable: number, totalSlots: number): Threshold {
+	if (totalSlots <= 0) return 'Limited';
+
 	const percentage = (totalAvailable / totalSlots) * 100;
 
 	if (percentage < 15 || totalAvailable === 1) return 'Limited';
@@ -35,7 +37,7 @@ export default function CalendarDay({
 }: Props) {
 	const totalSlots = day.totalSlots || 0;
 	const totalAvailable = day.totalAvailable || 0;
-	const percentage = (totalAvailable / totalSlots) * 100;
+	const percentage = totalSlots > 0 ? (totalAvailable / totalSlots) * 100 : 0;
 	const threshold = getThreshold(totalAvailable, totalSlots);
 	const hasNotices = notices.length > 0;
 	const isInFutureRange = inRange(

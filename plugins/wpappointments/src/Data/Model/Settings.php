@@ -202,11 +202,21 @@ class Settings {
 	public function get_all() {
 		$settings = array();
 
+		// Map renamed option keys to their old names for backwards compatibility.
+		$legacy_keys = array(
+			'appointments_coreEntityName' => 'appointments_serviceName',
+		);
+
 		foreach ( $this->settings as $category => $options ) {
 			foreach ( $options as $option ) {
 				$name   = $option['name'];
 				$type   = $option['type'];
 				$option = get_option( 'wpappointments_' . $category . '_' . $name );
+
+				// Fall back to legacy option key if the new one is empty.
+				if ( false === $option && isset( $legacy_keys[ $category . '_' . $name ] ) ) {
+					$option = get_option( 'wpappointments_' . $legacy_keys[ $category . '_' . $name ] );
+				}
 
 				if ( 'number' === $type ) {
 					$option = intval( $option );

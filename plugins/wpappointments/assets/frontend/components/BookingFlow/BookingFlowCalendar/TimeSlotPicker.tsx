@@ -74,7 +74,8 @@ export default function TimeSlotPicker({
 				<div>
 					<span>{__('Selected time:', 'wpappointments')}</span>{' '}
 					<strong>
-						{format(new Date(datetime), 'LLLL do, HH:mm')}
+						{format(new Date(datetime), 'LLLL do')},{' '}
+					{formatTime(new Date(datetime))}
 					</strong>
 				</div>
 			)}
