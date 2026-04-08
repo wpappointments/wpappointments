@@ -4,6 +4,17 @@
 	"description": "UI components for WP Appointments plugin extensions",
 	"main": "src/index.ts",
 	"types": "src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./ButtonGroup": "./src/ButtonGroup/ButtonGroup.tsx"
+	},
+	"typesVersions": {
+		"*": {
+			"ButtonGroup": [
+				"./src/ButtonGroup/ButtonGroup.tsx"
+			]
+		}
+	},
 	"files": [
 		"src"
 	],

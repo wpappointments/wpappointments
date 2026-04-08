@@ -31,7 +31,16 @@ export default function StyledButtons() {
 					e.preventDefault();
 					const form = ref.current?.closest('form');
 					if (form) {
-						form.requestSubmit();
+						if (typeof form.requestSubmit === 'function') {
+							form.requestSubmit();
+						} else {
+							const submitter = document.createElement('button');
+							submitter.type = 'submit';
+							submitter.style.display = 'none';
+							form.appendChild(submitter);
+							submitter.click();
+							form.removeChild(submitter);
+						}
 					}
 				}
 			}}

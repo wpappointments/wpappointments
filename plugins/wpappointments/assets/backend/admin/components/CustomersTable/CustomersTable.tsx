@@ -173,7 +173,7 @@ export default function CustomersTable() {
 							'wpappointments'
 						)}
 						onConfirmClick={async () => {
-							if (item.id && deleteCustomer) {
+							if (item?.id && deleteCustomer) {
 								await deleteCustomer(item.id);
 							}
 							closeActionModal?.();

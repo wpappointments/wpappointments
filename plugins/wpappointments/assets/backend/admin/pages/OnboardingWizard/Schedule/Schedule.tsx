@@ -7,8 +7,8 @@ import type {
 	DayOpeningHours,
 } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
-import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from '../OnboardingWizard.module.css';
+import OpeningHoursDayOfWeek from '~/backend/admin/pages/Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import { createSchedule, updateSchedule } from '~/backend/api/schedules';
 
 const DAYS_FROM_SUNDAY: Day[] = [
@@ -96,6 +96,11 @@ export default function ScheduleSettings({
 				);
 				if (defaultSchedule) {
 					result = await updateSchedule(defaultSchedule.id, {
+						days: allDays,
+					});
+				} else {
+					result = await createSchedule({
+						name: __('Default', 'wpappointments'),
 						days: allDays,
 					});
 				}

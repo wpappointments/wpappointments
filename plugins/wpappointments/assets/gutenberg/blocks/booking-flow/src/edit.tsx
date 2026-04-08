@@ -30,7 +30,7 @@ import {
 // Import directly to avoid pulling @wordpress/dataviews through the barrel.
 // The barrel re-exports DataForm/DataViews which bundles @wordpress/dataviews
 // and conflicts with core's copy on Full Site Editor pages.
-import ButtonGroup from '@wpappointments/components/src/ButtonGroup/ButtonGroup';
+import ButtonGroup from '@wpappointments/components/ButtonGroup';
 import { applyFilters } from '~/backend/utils/hooks';
 import type { BookingFlowBlockAttributes } from './booking-flow-block';
 import { Fill } from '~/frontend/slotfill';

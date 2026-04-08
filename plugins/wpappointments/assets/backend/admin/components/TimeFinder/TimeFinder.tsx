@@ -182,7 +182,7 @@ export default function TimeFinder({
 		return () => {
 			el?.removeEventListener('scroll', handleScroll);
 		};
-	}, [scrollableRef]);
+	}, []);
 
 	if (!month) {
 		return <div>{__('Loading...', 'wpappointments')}</div>;
