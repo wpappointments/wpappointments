@@ -1,0 +1,20 @@
+{
+	"id": "UG",
+	"name": "Uganda",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"liberationDayUG",
+		"internationalWomensDay8",
+		"goodFriday",
+		"easterMonday",
+		"labourDay",
+		"martyrsDayUG",
+		"heroesDay",
+		"eidAlFitr",
+		"eidAlAdha",
+		"independenceDayUG",
+		"christmas",
+		"boxingDay"
+	]
+}

@@ -1,0 +1,22 @@
+{
+	"id": "MY",
+	"name": "Malaysia",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"thaipusamMY",
+		"chineseNewYear",
+		"chineseNewYear2",
+		"labourDay",
+		"vesak",
+		"agongBirthday",
+		"hariRayaPuasa",
+		"hariRayaHaji",
+		"islamicNewYear",
+		"independenceDayMY",
+		"malaysiaDayMY",
+		"prophetBirthday",
+		"deepavali",
+		"christmas"
+	]
+}

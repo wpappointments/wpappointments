@@ -1,0 +1,19 @@
+{
+	"id": "MA",
+	"name": "Morocco",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"labourDayMA",
+		"throneDay",
+		"youthDayMA",
+		"greenMarchDay",
+		"independenceDayMA",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"islamicNewYear",
+		"prophetBirthday"
+	]
+}

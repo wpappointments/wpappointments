@@ -1,0 +1,17 @@
+{
+	"id": "hindu",
+	"name": "Hindu Holidays",
+	"type": "religious",
+	"holidays": [
+		"makarSankranti",
+		"baisakhi",
+		"holi",
+		"ramNavami",
+		"rakshabandhan",
+		"janamashtami",
+		"ganeshChaturthi",
+		"navaratri",
+		"dasara",
+		"diwali"
+	]
+}

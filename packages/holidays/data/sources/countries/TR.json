@@ -1,0 +1,20 @@
+{
+	"id": "TR",
+	"name": "Turkey",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"nationalSovereigntyTR",
+		"labourDay",
+		"youthSportsDayTR",
+		"democracyDayTR",
+		"victoryDayTR",
+		"republicDayTR",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3"
+	]
+}

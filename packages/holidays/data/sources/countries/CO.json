@@ -1,0 +1,21 @@
+{
+	"id": "CO",
+	"name": "Colombia",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"epiphany",
+		"goodFriday",
+		"labourDay",
+		"ascension",
+		"corpusChristi",
+		"independenceDayCO",
+		"battleOfBoyaca",
+		"assumptionOfMary",
+		"columbusDay",
+		"allSaints",
+		"armistice",
+		"immaculateConception",
+		"christmas"
+	]
+}
