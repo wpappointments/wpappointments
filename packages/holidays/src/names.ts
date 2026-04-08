@@ -421,7 +421,7 @@ const holidayNames: Record<string, string> = {
 	revolutionDayEG: 'Revolution Day',
 	nationalDayEG: 'National Day',
 	shamElNessim: 'Sham El-Nessim',
-	siniaiLiberationEG: 'Sinai Liberation Day',
+	sinaiLiberationEG: 'Sinai Liberation Day',
 	labourDayEG: 'Labour Day',
 	independenceDayCD: 'Independence Day',
 	liberationDayVN: 'Reunification Day',
