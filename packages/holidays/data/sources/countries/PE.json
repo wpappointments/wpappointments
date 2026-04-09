@@ -1,0 +1,18 @@
+{
+	"id": "PE",
+	"name": "Peru",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easter",
+		"labourDay",
+		"independenceDayPE",
+		"peruArmedForces",
+		"santaRosaLima",
+		"battleOfAngamos",
+		"allSaints",
+		"immaculateConception",
+		"christmas"
+	]
+}

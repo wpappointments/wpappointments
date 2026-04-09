@@ -7,6 +7,7 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { __experimentalInputControl as InputControl } from '@wordpress/components';
+import FieldMessages from '../../FieldMessages/FieldMessages';
 import { getGenericInputErrorMessage } from '../../utils/forms';
 import type { FormFieldError } from '../../utils/forms';
 import FormField from '../FormField';
@@ -76,15 +77,13 @@ export default function Input<TFields extends FieldValues>({
 						style={{
 							display: type === 'hidden' ? 'none' : 'block',
 						}}
-						help={help}
 					/>
 				)}
 			/>
-			{error && (
-				<p style={{ marginTop: 0, marginBottom: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<TFields>(error)}
-				</p>
-			)}
+			<FieldMessages
+				error={getGenericInputErrorMessage(error)}
+				help={help}
+			/>
 		</FormField>
 	);
 }

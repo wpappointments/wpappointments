@@ -1,0 +1,18 @@
+{
+	"id": "CN",
+	"name": "China",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"chineseNewYear",
+		"chineseNewYear2",
+		"chineseNewYear3",
+		"tombSweepingDay",
+		"labourDay",
+		"dragonBoatFestival",
+		"midAutumnFestival",
+		"nationalDayCN",
+		"nationalDayCN2",
+		"nationalDayCN3"
+	]
+}

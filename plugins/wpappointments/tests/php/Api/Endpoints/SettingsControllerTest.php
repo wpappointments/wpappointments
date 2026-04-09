@@ -100,10 +100,8 @@ test(
 		expect( $data )->toHaveKey( 'data' );
 		expect( $data['data'] )->toHaveKey( 'settings' );
 		expect( $data['data']['settings'] )->toBeArray();
-		expect( $data['data']['settings'] )->toHaveLength( 3 );
 		expect( $data['data']['settings'] )->toHaveKey( 'general' );
 		expect( $data['data']['settings'] )->toHaveKey( 'appointments' );
-		expect( $data['data']['settings'] )->toHaveKey( 'schedule' );
 	}
 );
 
@@ -154,15 +152,6 @@ test(
 
 		// Make request.
 		$results = $this->do_rest_get_request( 'settings/appointments' );
-
-		// Assert response data.
-		expect( $results )->toBeSuccess();
-		expect( $data )->toHaveKey( 'data' );
-		expect( $data['data'] )->toHaveKey( 'settings' );
-		expect( $data['data']['settings'] )->toBeArray();
-
-		// Make request.
-		$results = $this->do_rest_get_request( 'settings/schedule' );
 
 		// Assert response data.
 		expect( $results )->toBeSuccess();

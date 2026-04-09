@@ -1,0 +1,18 @@
+{
+	"id": "orthodox",
+	"name": "Orthodox Christian Holidays",
+	"type": "religious",
+	"holidays": [
+		"orthodoxChristmas",
+		"orthodoxNewYear",
+		"theophany",
+		"orthodoxPalmSunday",
+		"orthodoxGoodFriday",
+		"orthodoxEaster",
+		"orthodoxEasterMonday",
+		"orthodoxAscension",
+		"orthodoxPentecost",
+		"trinityDay",
+		"dormitionOfTheotokos"
+	]
+}

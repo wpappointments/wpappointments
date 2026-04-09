@@ -1,19 +1,8 @@
 export type SettingsState = {
 	general: SettingsGeneral;
-	schedule: SettingsSchedule;
 	appointments: SettingsAppointments;
 	calendar: SettingsCalendar;
 	notifications: Partial<SettingsNotifications>;
-};
-
-export type SettingsSchedule = {
-	monday: DayOpeningHours;
-	tuesday: DayOpeningHours;
-	wednesday: DayOpeningHours;
-	thursday: DayOpeningHours;
-	friday: DayOpeningHours;
-	saturday: DayOpeningHours;
-	sunday: DayOpeningHours;
 };
 
 export type SettingsGeneral = {
@@ -35,11 +24,24 @@ export type SettingsAppointments = {
 	defaultStatus: 'confirmed' | 'pending';
 	defaultLength?: number;
 	timePickerPrecision?: number;
-	serviceId?: number;
-	serviceName?: string;
+	coreEntityId?: number;
+	coreEntityName?: string;
+	minLeadTimeValue?: number;
+	minLeadTimeUnit?: LeadTimeUnit;
+	maxLeadTimeValue?: number;
+	maxLeadTimeUnit?: LeadTimeUnit;
 };
 
-export type Day = keyof SettingsSchedule;
+export type LeadTimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month';
+
+export type Day =
+	| 'monday'
+	| 'tuesday'
+	| 'wednesday'
+	| 'thursday'
+	| 'friday'
+	| 'saturday'
+	| 'sunday';
 
 export type OpeningHoursSlot = {
 	start: {

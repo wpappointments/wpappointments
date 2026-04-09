@@ -62,6 +62,7 @@ class PluginInfo extends Singleton {
 		'schedule'         => 'wpa-schedule',
 		'bookable'         => 'wpa-bookable',
 		'bookable-variant' => 'wpa-bookable-variant',
+		'ooo'              => 'wpa-ooo',
 	);
 
 	/**

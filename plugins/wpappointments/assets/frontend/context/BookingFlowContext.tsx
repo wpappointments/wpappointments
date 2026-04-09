@@ -13,6 +13,7 @@ import {
 	AvailabilityResponse,
 	AvailabilityResponseSchema,
 	DayCalendar,
+	DayNotices,
 } from '../frontend';
 import { BookingFlowBlockAttributes } from '~/blocks/booking-flow/src/booking-flow-block';
 
@@ -43,6 +44,7 @@ export type BookingFlowContext = {
 		| [AvailabilityResponse['data']['availability']]
 		| [];
 	dayAvailability: DayCalendar['day'] | [];
+	dayNotices: DayNotices;
 	lilius: ReturnType<typeof useLilius>;
 	form: ReturnType<typeof useForm<BookingFlowFormFields>>;
 	formError: string | null;
@@ -74,6 +76,7 @@ export function BookingFlowContextProvider({
 	const [dayAvailability, setDayAvailability] = useState<
 		BookingFlowContext['dayAvailability']
 	>([]);
+	const [dayNotices, setDayNotices] = useState<DayNotices>({});
 	const [formError, setFormError] = useState<string | null>(null);
 	const [formSuccess, setFormSuccess] = useState<boolean>(false);
 	const [availabilityLoading, setAvailabilityLoading] =
@@ -95,34 +98,106 @@ export function BookingFlowContextProvider({
 		setDayAvailability(availability);
 	}, [selected, calendarWithAvailability]);
 
+	const viewingMonth = viewing.getMonth();
+
 	useEffect(() => {
 		async function fetchAvailability() {
-			const data = await apiFetch({
-				path: addQueryArgs('calendar-availability', {
-					calendar: JSON.stringify(calendar[0]),
-					timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-					trim: attributes.trimUnavailable,
-				}),
-			});
+			const entityId =
+				attributes.entityId ||
+				window.wpappointments?.entity?.coreEntityId;
 
-			const parsed = safeParse(AvailabilityResponseSchema, data);
-			const { output, success } = parsed;
-
-			if (!success) {
-				console.error('Failed to parse availability response', parsed);
+			if (!entityId) {
+				setDayNotices({});
 				setAvailabilityLoading(false);
 				return;
 			}
 
-			const { data: response } = output;
-			const { availability } = response;
+			try {
+				const data = await apiFetch({
+					path: addQueryArgs(`bookables/${entityId}/calendar-slots`, {
+						calendar: JSON.stringify(calendar[0]),
+						timezone:
+							Intl.DateTimeFormat().resolvedOptions().timeZone,
+						trim: attributes.trimUnavailable,
+					}),
+				});
 
-			setCalendarWithAvailability([availability]);
-			setAvailabilityLoading(false);
+				const parsed = safeParse(AvailabilityResponseSchema, data);
+				const { output, success } = parsed;
+
+				if (!success) {
+					console.error(
+						'Failed to parse availability response',
+						parsed
+					);
+					return;
+				}
+
+				const { data: response } = output;
+				const { availability } = response;
+
+				setCalendarWithAvailability([availability]);
+
+				// Fetch OOO dates with public notes.
+				const allDates = availability.flat().map((d) => d.date);
+				const sortedDates = allDates.filter(Boolean).sort();
+
+				setDayNotices({});
+
+				if (sortedDates.length > 0) {
+					const startDate = sortedDates[0].split('T')[0];
+					const endDate =
+						sortedDates[sortedDates.length - 1].split('T')[0];
+
+					try {
+						const oooData = await apiFetch<
+							APIResponse<{
+								dates: {
+									date: string;
+									reason?: string;
+									note?: string;
+								}[];
+							}>
+						>({
+							path: addQueryArgs('ooo/dates', {
+								entity_id: entityId,
+								start_date: startDate,
+								end_date: endDate,
+							}),
+						});
+
+						if (oooData?.data?.dates) {
+							const notices: DayNotices = {};
+
+							for (const entry of oooData.data.dates) {
+								if (!entry.note) continue;
+
+								const key = entry.date;
+
+								if (!notices[key]) {
+									notices[key] = [];
+								}
+
+								notices[key].push({
+									type: 'ooo',
+									reason: entry.reason,
+									note: entry.note,
+								});
+							}
+
+							setDayNotices(notices);
+						}
+					} catch {
+						// OOO dates are non-critical — don't block the calendar.
+					}
+				}
+			} finally {
+				setAvailabilityLoading(false);
+			}
 		}
 
 		fetchAvailability();
-	}, [viewing.getMonth(), attributes.trimUnavailable]);
+	}, [viewingMonth, attributes.trimUnavailable]);
 
 	const onSubmit = async (data: BookingFlowFormFields) => {
 		const customer: Pick<Customer, 'name' | 'email' | 'phone'> = {
@@ -174,6 +249,7 @@ export function BookingFlowContextProvider({
 	const value = {
 		attributes,
 		dayAvailability,
+		dayNotices,
 		calendarWithAvailability,
 		availabilityLoading,
 		lilius,

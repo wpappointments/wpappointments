@@ -1,0 +1,16 @@
+{
+	"id": "UZ",
+	"name": "Uzbekistan",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"internationalWomensDay8",
+		"navruz",
+		"memoryAndHonourDay",
+		"labourDay",
+		"independenceDayUZ",
+		"constitutionDayUZ",
+		"eidAlFitr",
+		"eidAlAdha"
+	]
+}

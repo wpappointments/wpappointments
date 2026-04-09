@@ -4,7 +4,7 @@ export default function FieldMessages({
 	error,
 	help,
 }: {
-	error?: string;
+	error?: string | false;
 	help?: string;
 }) {
 	if (!error && !help) return null;

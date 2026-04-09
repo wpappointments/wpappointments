@@ -1,0 +1,18 @@
+{
+	"id": "DZ",
+	"name": "Algeria",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"labourDay",
+		"independenceDayDZ",
+		"revolutionDayDZ",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"islamicNewYear",
+		"prophetBirthday",
+		"ashura"
+	]
+}

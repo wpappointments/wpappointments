@@ -1,0 +1,17 @@
+{
+	"id": "NP",
+	"name": "Nepal",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"prithviJayanti",
+		"martyrsDayNP",
+		"democracyDayNP",
+		"nepaleseNewYear",
+		"buddhaJayanti",
+		"dashainNP",
+		"tihar",
+		"constitutionDayNP",
+		"christmas"
+	]
+}

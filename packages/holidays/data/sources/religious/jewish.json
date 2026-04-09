@@ -1,0 +1,15 @@
+{
+	"id": "jewish",
+	"name": "Jewish Holidays",
+	"type": "religious",
+	"holidays": [
+		"purim",
+		"passover",
+		"shavuot",
+		"roshHashanah",
+		"yomKippur",
+		"sukkot",
+		"simchatTorah",
+		"hanukkah"
+	]
+}

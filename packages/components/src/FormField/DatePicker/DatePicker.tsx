@@ -8,6 +8,7 @@ import {
 	useFormContext,
 } from 'react-hook-form';
 import { DateTimePickerProps } from '@wordpress/components/build-types/date-time/types';
+import FieldMessages from '../../FieldMessages/FieldMessages';
 import { getGenericInputErrorMessage } from '../../utils/forms';
 import type { FormFieldError } from '../../utils/forms';
 import FormField from '../FormField';
@@ -66,11 +67,7 @@ export default function DatePicker<TFields extends FieldValues>({
 					/>
 				)}
 			/>
-			{error && (
-				<p style={{ marginBottom: 0, color: 'red' }}>
-					{getGenericInputErrorMessage<TFields>(error)}
-				</p>
-			)}
+			<FieldMessages error={getGenericInputErrorMessage(error)} />
 		</FormField>
 	);
 }

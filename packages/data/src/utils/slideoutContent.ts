@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 export type SlideoutContent = {
-	title?: string;
+	title?: ReactNode;
 	content?: ReactNode;
 };
 

@@ -2,6 +2,13 @@
 	border-color: #dedede !important;
 }
 
+.field :global(.components-textarea-control__input) {
+	border-color: #dedede;
+	border-radius: 4px;
+	padding: 8px 12px;
+	font-size: 13px;
+}
+
 .field-label {
 	font-size: 11px;
 	font-weight: 500;
@@ -10,6 +17,19 @@
 	display: inline-block;
 	margin-bottom: 8px;
 	padding: 0px;
+}
+
+.field-hidden-label {
+	position: absolute;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+.field-label-invisible {
+	visibility: hidden;
 }
 
 .field-full-width {
@@ -26,4 +46,6 @@
 
 .field-help {
 	font-size: 12px;
+	margin-bottom: 8px;
+	color: #757575;
 }

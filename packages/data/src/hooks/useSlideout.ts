@@ -19,7 +19,7 @@ type UseSlideoutProps = {
 };
 
 export type OpenSlideOutOptions = Slideout & {
-	title?: string;
+	title?: ReactNode;
 	content?: ReactNode;
 };
 
