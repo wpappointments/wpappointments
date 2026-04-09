@@ -211,6 +211,26 @@ function getDefaultEvent(key: NotificationEventKey): NotificationEvent {
 	};
 }
 
+/**
+ * Merge saved/local values over defaults, treating empty strings as "unset"
+ * so cleared text fields fall back to the default template instead of staying
+ * blank in the editor.
+ */
+function mergeEvent(
+	key: NotificationEventKey,
+	...overrides: (Partial<NotificationEvent> | undefined)[]
+): NotificationEvent {
+	const result: NotificationEvent = getDefaultEvent(key);
+	for (const override of overrides) {
+		if (!override) continue;
+		for (const [k, v] of Object.entries(override)) {
+			if (v === '' || v === undefined) continue;
+			(result as Record<string, unknown>)[k] = v;
+		}
+	}
+	return result;
+}
+
 function NotificationRow({
 	eventKey,
 	value,
@@ -412,29 +432,28 @@ export default function NotificationsSettings() {
 		Partial<SettingsNotifications>
 	>({});
 
-	const getMerged = () =>
-		({
-			created: {
-				...getDefaultEvent('created'),
-				...savedSettings?.created,
-				...localSettings?.created,
-			},
-			updated: {
-				...getDefaultEvent('updated'),
-				...savedSettings?.updated,
-				...localSettings?.updated,
-			},
-			confirmed: {
-				...getDefaultEvent('confirmed'),
-				...savedSettings?.confirmed,
-				...localSettings?.confirmed,
-			},
-			cancelled: {
-				...getDefaultEvent('cancelled'),
-				...savedSettings?.cancelled,
-				...localSettings?.cancelled,
-			},
-		}) as SettingsNotifications;
+	const getMerged = (): SettingsNotifications => ({
+		created: mergeEvent(
+			'created',
+			savedSettings?.created,
+			localSettings?.created
+		),
+		updated: mergeEvent(
+			'updated',
+			savedSettings?.updated,
+			localSettings?.updated
+		),
+		confirmed: mergeEvent(
+			'confirmed',
+			savedSettings?.confirmed,
+			localSettings?.confirmed
+		),
+		cancelled: mergeEvent(
+			'cancelled',
+			savedSettings?.cancelled,
+			localSettings?.cancelled
+		),
+	});
 
 	const merged = getMerged();
 
@@ -475,11 +494,11 @@ export default function NotificationsSettings() {
 
 	const handleEdit = (key: NotificationEventKey) => () => {
 		const meta = EVENT_META[key];
-		const initialValues = {
-			...getDefaultEvent(key),
-			...savedSettings?.[key],
-			...localSettings?.[key],
-		};
+		const initialValues = mergeEvent(
+			key,
+			savedSettings?.[key],
+			localSettings?.[key]
+		);
 
 		openSlideOut({
 			id: `notification-${key}`,
@@ -538,25 +557,13 @@ function NotificationEditorWrapper({
 	const handleSave = async () => {
 		setSaving(true);
 
-		const allSettings = {
-			created: {
-				...getDefaultEvent('created'),
-				...savedSettings?.created,
-			},
-			updated: {
-				...getDefaultEvent('updated'),
-				...savedSettings?.updated,
-			},
-			confirmed: {
-				...getDefaultEvent('confirmed'),
-				...savedSettings?.confirmed,
-			},
-			cancelled: {
-				...getDefaultEvent('cancelled'),
-				...savedSettings?.cancelled,
-			},
+		const allSettings: SettingsNotifications = {
+			created: mergeEvent('created', savedSettings?.created),
+			updated: mergeEvent('updated', savedSettings?.updated),
+			confirmed: mergeEvent('confirmed', savedSettings?.confirmed),
+			cancelled: mergeEvent('cancelled', savedSettings?.cancelled),
 			[eventKey]: local,
-		} as SettingsNotifications;
+		};
 
 		const [error, response] = await resolve<Response>(async () => {
 			return await apiFetch<Response>({
