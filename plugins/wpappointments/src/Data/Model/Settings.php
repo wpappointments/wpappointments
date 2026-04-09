@@ -387,7 +387,7 @@ class Settings {
 		$sanitized = array();
 
 		foreach ( $data as $key => $value ) {
-			$key = sanitize_key( $key );
+			$key = preg_replace( '/[^a-zA-Z0-9_\-]/', '', $key );
 
 			if ( is_array( $value ) ) {
 				$sanitized[ $key ] = self::sanitize_setting_array( $value );

@@ -70,9 +70,13 @@ export type NotificationEvent = {
 	sendToAdmin: boolean;
 	sendToCustomer: boolean;
 	customRecipients: string;
-	subject: string;
-	body: string;
+	adminSubject: string;
+	customerSubject: string;
+	adminBody: string;
+	customerBody: string;
 };
+
+export type NotificationEventKey = keyof SettingsNotifications;
 
 export type SettingsNotifications = {
 	created: NotificationEvent;
