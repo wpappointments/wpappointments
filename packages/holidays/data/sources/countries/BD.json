@@ -1,0 +1,23 @@
+{
+	"id": "BD",
+	"name": "Bangladesh",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"shabbEBaraat",
+		"independenceDayBD",
+		"banglaNewYear",
+		"goodFriday",
+		"buddhaJayanti",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"ashura",
+		"prophetBirthday",
+		"victoryDayBD",
+		"christmas"
+	]
+}

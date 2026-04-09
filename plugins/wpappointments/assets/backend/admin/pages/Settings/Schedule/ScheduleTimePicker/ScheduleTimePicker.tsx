@@ -1,22 +1,20 @@
-import { useFormContext } from 'react-hook-form';
+import { SelectControl } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
-import { Select } from '@wpappointments/components';
+import { __ } from '@wordpress/i18n';
 import { addMinutes, format } from 'date-fns';
-import type { Day } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
 import styles from './ScheduleTimePicker.module.css';
 
+type Slot = {
+	start: { hour: string | null; minute: string | null };
+	end: { hour: string | null; minute: string | null };
+};
+
 type Props = {
-	day: Day;
-	index: number;
+	slot: Slot;
 	timePickerPrecision?: number;
 	type: 'start' | 'end';
-	onTimeChange: (args: {
-		value: string;
-		index: number;
-		type: 'start' | 'end';
-		time: 'hour' | 'minute';
-	}) => void;
+	onTimeChange: (value: string, time: 'hour' | 'minute') => void;
 	minHour?: string | null;
 	minMinute?: string | null;
 };
@@ -28,15 +26,13 @@ type HourOption = {
 };
 
 export default function ScheduleTimePicker({
-	day,
-	index,
+	slot,
 	timePickerPrecision,
 	type,
 	onTimeChange,
 	minHour,
 	minMinute,
 }: Props) {
-	const { watch } = useFormContext();
 	const generalSettings = useSelect(() => {
 		return select(store).getGeneralSettings();
 	}, []);
@@ -58,7 +54,7 @@ export default function ScheduleTimePicker({
 		return null;
 	}
 
-	const currentHour = watch(`${day}.slots.list.${index}.${type}.hour`);
+	const currentHour = slot[type].hour ?? '00';
 	const currentHourOption = allHours.find(
 		(h) => h.value === (currentHour || minHour || '00')
 	);
@@ -73,44 +69,29 @@ export default function ScheduleTimePicker({
 	return (
 		<div className={styles.timePicker}>
 			<div className={styles.timePickerControl}>
-				<Select
-					key={`${day}.slots.list.${index}.${type}.hour`}
-					name={`${day}.slots.list.${index}.${type}.hour`}
+				<SelectControl
+					value={currentHour}
 					onChange={(value) => {
-						onTimeChange({
-							value,
-							index,
-							type,
-							time: 'hour',
-						});
+						onTimeChange(value, 'hour');
 
 						// When selecting hour 24, force minute to 00
 						if (value === '24') {
-							onTimeChange({
-								value: '00',
-								index,
-								type,
-								time: 'minute',
-							});
+							onTimeChange('00', 'minute');
 						}
 					}}
 					options={hourOptions}
-					noArrow
+					hideLabelFromVision
+					label={__('Hour', 'wpappointments')}
+					__nextHasNoMarginBottom
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
-				<Select
-					key={`${day}.slots.list.${index}.${type}.minute-${currentHour}`}
-					name={`${day}.slots.list.${index}.${type}.minute`}
-					onChange={(value) => {
-						onTimeChange({
-							value,
-							index,
-							type,
-							time: 'minute',
-						});
-					}}
+				<SelectControl
+					value={slot[type].minute ?? '00'}
+					onChange={(value) => onTimeChange(value, 'minute')}
 					options={minutes}
-					noArrow
+					hideLabelFromVision
+					label={__('Minute', 'wpappointments')}
+					__nextHasNoMarginBottom
 				/>
 			</div>
 		</div>

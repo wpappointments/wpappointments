@@ -1,9 +1,10 @@
 import { addQueryArgs } from '@wordpress/url';
 import { produce } from 'immer';
-import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import { APIResponse } from '~/backend/utils/fetch';
 import { FetchFromApiActionReturn, baseActions } from '../actions';
 import { type State } from '../store';
 import { AvailabilityState } from './availability.types';
+import { DayCalendar } from '~/frontend/frontend';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 
@@ -36,6 +37,8 @@ export const selectors = {
 	getAvailability(
 		state: State,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		entityId: number,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentMonth: number,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		currentYear: number,
@@ -48,31 +51,44 @@ export const selectors = {
 	},
 };
 
-export const controls = {
-	SET_AVAILABILITY() {
-		return apiFetch({ path: 'availability' });
-	},
-};
+export const controls = {};
 
 export const resolvers = {
 	*getAvailability(
+		entityId: number,
 		currentMonth: number,
 		currentYear: number,
 		timezone: string
 	): Generator<
 		FetchFromApiActionReturn,
 		{ type: string; availability: State['availability'] },
-		APIResponse<{ availability: State['availability'] }>
+		APIResponse<{ availability: DayCalendar[][] }>
 	> {
+		if (!entityId) {
+			return actions.setAvailability({ month: [] });
+		}
+
+		const daysInMonth = new Date(
+			currentYear,
+			currentMonth + 1,
+			0
+		).getDate();
+		const dates: string[] = [];
+
+		for (let i = 1; i <= daysInMonth; i++) {
+			const m = String(currentMonth + 1).padStart(2, '0');
+			const day = String(i).padStart(2, '0');
+			dates.push(`${currentYear}-${m}-${day}`);
+		}
+
 		const response = yield baseActions.fetchFromAPI(
-			addQueryArgs('availability', {
-				currentMonth: currentMonth + 1,
-				currentYear,
+			addQueryArgs(`bookables/${entityId}/calendar-slots`, {
+				calendar: JSON.stringify([dates]),
 				timezone,
 			})
 		);
 		const { data } = response;
-		const { availability } = data;
-		return actions.setAvailability(availability);
+		const month = data.availability.flat();
+		return actions.setAvailability({ month });
 	},
 };

@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
 import {
 	Button,
 	Card,
 	CardFooter,
 	CardHeader,
+	CheckboxControl,
 	ToggleControl,
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -14,20 +14,16 @@ import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import {
 	CardBody,
-	Checkbox,
+	DataForm,
 	DeleteModal,
-	HtmlForm,
-	Input,
-	Select,
+	SelectInput,
 	SlideoutHeaderActionsFill,
-	withForm,
+	TextInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
-import type {
-	OverrideGroup,
-	Schedule,
-} from '~/backend/store/schedules/schedules.types';
+import type { Schedule } from '~/backend/store/schedules/schedules.types';
 import type {
 	Day,
 	DayOpeningHours,
@@ -196,13 +192,12 @@ function ScheduleRow({
 	);
 }
 
-type ScheduleFormFields = {
+type ScheduleFormData = {
 	name: string;
 	timezone: string;
-	overrides: OverrideGroup[];
-} & Record<string, DayOpeningHours>;
+};
 
-const ScheduleEditor = withForm(function ScheduleEditor({
+function ScheduleEditor({
 	schedule,
 	isNew,
 }: {
@@ -219,36 +214,70 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
 
-	const formValues = useMemo(
-		() => ({
-			name: schedule.name,
-			timezone: schedule.timezone || siteTimezone,
-			overrides: schedule.overrides || [],
-			...DAYS.reduce(
+	const [formData, setFormData] = useState<ScheduleFormData>(() => ({
+		name: schedule.name,
+		timezone: schedule.timezone || siteTimezone,
+	}));
+
+	const [overrides, setOverrides] = useState(schedule.overrides || []);
+
+	const [daysData, setDaysData] = useState<Record<string, DayOpeningHours>>(
+		() =>
+			DAYS.reduce(
 				(acc, day) => {
 					acc[day] = schedule.days[day] || getDefaultDay(day);
 					return acc;
 				},
 				{} as Record<string, DayOpeningHours>
-			),
-		}),
-		[schedule.id]
+			)
 	);
 
-	useFillFormValues(formValues);
+	const fields: Field<ScheduleFormData>[] = useMemo(
+		() => [
+			{
+				id: 'name',
+				type: 'text' as const,
+				label: __('Schedule name', 'wpappointments'),
+				isValid: { required: true },
+				Edit: TextInput,
+			},
+			{
+				id: 'timezone',
+				label: __('Timezone', 'wpappointments'),
+				elements: timezoneOptions,
+				Edit: SelectInput,
+			},
+		],
+		[timezoneOptions]
+	);
+
+	const formConfig: Form = {
+		layout: { type: 'regular' },
+		fields: ['name', 'timezone'],
+	};
+
+	const { validity, isValid } = useFormValidity(formData, fields, formConfig);
+
+	const handleDayChange = (day: string, value: DayOpeningHours) => {
+		setDaysData((prev) => ({ ...prev, [day]: value }));
+	};
 
 	const slideoutId = isNew ? 'schedule-new' : `schedule-${schedule.id}`;
 
-	const onSubmit: SubmitHandler<ScheduleFormFields> = async (data) => {
+	const onSubmit = async () => {
+		if (!isValid) {
+			return;
+		}
+
 		setSaving(true);
 
-		const { name, timezone, overrides, ...days } = data;
+		const { name, timezone } = formData;
 
 		if (isNew) {
 			const result = await createSchedule({
 				name,
 				timezone,
-				days,
+				days: daysData,
 				overrides,
 			});
 			setSaving(false);
@@ -260,7 +289,7 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 			const result = await updateSchedule(schedule.id, {
 				name,
 				timezone,
-				days,
+				days: daysData,
 				overrides,
 			});
 			setSaving(false);
@@ -304,87 +333,93 @@ const ScheduleEditor = withForm(function ScheduleEditor({
 					</Tooltip>
 				</SlideoutHeaderActionsFill>
 			)}
-			<HtmlForm onSubmit={onSubmit}>
-				<div className={styles.editorContent}>
-					<Input
-						name="name"
-						label={__('Schedule name', 'wpappointments')}
-						rules={{ required: true }}
-					/>
-					<Select
-						name="timezone"
-						label={__('Timezone', 'wpappointments')}
-						options={timezoneOptions}
-					/>
-					<div>
-						<Text
-							size=""
-							style={{
-								marginBottom: '12px',
-								display: 'block',
-								fontWeight: 500,
-							}}
-						>
-							{__('Working hours', 'wpappointments')}
-						</Text>
-						{orderedDays.map((day) => (
-							<OpeningHoursDayOfWeek
-								key={day}
-								day={day}
-								allDays={orderedDays}
-								timePickerPrecision={timePickerPrecision}
-							/>
-						))}
-					</div>
-					<DateOverrides scheduleSlideoutId={slideoutId} />
-					{!isNew && (
-						<ToggleControl
-							__nextHasNoMarginBottom
-							label={__('Default schedule', 'wpappointments')}
-							checked={schedule.isDefault}
-							disabled={schedule.isDefault || !schedule.active}
-							help={
-								schedule.isDefault
-									? undefined
-									: !schedule.active
-										? __(
-												'Activate this schedule first to set it as default.',
-												'wpappointments'
-											)
-										: undefined
-							}
-							onChange={async (checked) => {
-								if (checked) {
-									const result = await setDefaultSchedule(schedule.id);
-									if (result) {
-										closeSlideOut(slideoutId);
-									}
-								}
-							}}
-						/>
-					)}
-					<Button
-						variant="primary"
-						type="submit"
-						isBusy={saving}
+			<div className={styles.editorContent}>
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={formConfig}
+					onChange={(edits) =>
+						setFormData((prev) => ({ ...prev, ...edits }))
+					}
+					validity={validity}
+				/>
+				<div>
+					<Text
+						size=""
 						style={{
-							width: '100%',
-							justifyContent: 'center',
-							padding: '22px 0px',
-							marginTop: '16px',
+							marginBottom: '12px',
+							display: 'block',
+							fontWeight: 500,
 						}}
 					>
-						{isNew
-							? __('Create schedule', 'wpappointments')
-							: __('Save changes', 'wpappointments')}
-					</Button>
+						{__('Working hours', 'wpappointments')}
+					</Text>
+					{orderedDays.map((day) => (
+						<OpeningHoursDayOfWeek
+							key={day}
+							day={day}
+							allDays={orderedDays}
+							timePickerPrecision={timePickerPrecision}
+							dayData={daysData[day] || getDefaultDay(day)}
+							onChange={handleDayChange}
+						/>
+					))}
 				</div>
-			</HtmlForm>
+				<DateOverrides
+					scheduleSlideoutId={slideoutId}
+					overrides={overrides}
+					onOverridesChange={setOverrides}
+				/>
+				{!isNew && (
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={__('Default schedule', 'wpappointments')}
+						checked={schedule.isDefault}
+						disabled={schedule.isDefault || !schedule.active}
+						help={
+							schedule.isDefault
+								? undefined
+								: !schedule.active
+									? __(
+											'Activate this schedule first to set it as default.',
+											'wpappointments'
+										)
+									: undefined
+						}
+						onChange={async (checked) => {
+							if (checked) {
+								const result = await setDefaultSchedule(
+									schedule.id
+								);
+								if (result) {
+									closeSlideOut(slideoutId);
+								}
+							}
+						}}
+					/>
+				)}
+				<Button
+					variant="primary"
+					onClick={onSubmit}
+					isBusy={saving}
+					disabled={!isValid}
+					style={{
+						width: '100%',
+						justifyContent: 'center',
+						padding: '22px 0px',
+						marginTop: '16px',
+					}}
+				>
+					{isNew
+						? __('Create schedule', 'wpappointments')
+						: __('Save changes', 'wpappointments')}
+				</Button>
+			</div>
 		</>
 	);
-});
+}
 
-const DangerZoneContent = withForm(function DangerZoneContent({
+function DangerZoneContent({
 	scheduleId,
 	slideoutId,
 	dangerSlideoutId,
@@ -394,10 +429,8 @@ const DangerZoneContent = withForm(function DangerZoneContent({
 	dangerSlideoutId: string;
 }) {
 	const { closeSlideOut } = useSlideout();
-	const { watch } = useFormContext();
+	const [reassign, setReassign] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
-
-	const reassign = watch('reassign') ?? false;
 
 	const handleDelete = async () => {
 		const result = await deleteSchedule(scheduleId, reassign);
@@ -423,13 +456,13 @@ const DangerZoneContent = withForm(function DangerZoneContent({
 						'wpappointments'
 					)}
 				</p>
-				<Checkbox
-					name="reassign"
+				<CheckboxControl
 					label={__(
 						'Reassign all bookings using this schedule to the default schedule',
 						'wpappointments'
 					)}
-					defaultValue={false}
+					checked={reassign}
+					onChange={setReassign}
 				/>
 				<p className={styles.dangerZoneHelp}>
 					{reassign
@@ -477,7 +510,7 @@ const DangerZoneContent = withForm(function DangerZoneContent({
 			)}
 		</div>
 	);
-});
+}
 
 export default function ScheduleSettings() {
 	const { openSlideOut } = useSlideout();

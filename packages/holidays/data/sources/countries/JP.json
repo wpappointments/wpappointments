@@ -1,0 +1,23 @@
+{
+	"id": "JP",
+	"name": "Japan",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"comingOfAgeDay",
+		"nationalFoundationDayJP",
+		"emperorsBirthdayJP",
+		"vernalEquinox",
+		"showaDay",
+		"constitutionDayJP",
+		"greeneryDay",
+		"childrensDayJP",
+		"marineDay",
+		"mountainDay",
+		"respectForAgedDay",
+		"autumnEquinox",
+		"healthSportsDay",
+		"cultureDay",
+		"labourThanksgivingDay"
+	]
+}

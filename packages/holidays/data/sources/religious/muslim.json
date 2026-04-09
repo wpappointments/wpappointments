@@ -1,0 +1,19 @@
+{
+	"id": "muslim",
+	"name": "Muslim (Islamic) Holidays",
+	"type": "religious",
+	"holidays": [
+		"islamicNewYear",
+		"ashura",
+		"isra",
+		"ramadanStart",
+		"laylatalQadr",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"prophetBirthday"
+	]
+}

@@ -4,14 +4,16 @@ import {
 	SlideoutRenderer,
 	Toaster,
 } from '@wpappointments/components';
+import cn from 'obj-str';
 import styles from './LayoutDefault.module.css';
 
 type Props = {
 	title: string;
+	fullWidth?: boolean;
 	children?: React.ReactNode;
 };
 
-export default function LayoutDefault({ title, children }: Props) {
+export default function LayoutDefault({ title, fullWidth, children }: Props) {
 	return (
 		<SlotFillProvider>
 			<div className={styles.layout}>
@@ -21,7 +23,14 @@ export default function LayoutDefault({ title, children }: Props) {
 						<HeaderActionsSlot />
 					</div>
 				</div>
-				<div className={styles.layoutContent}>{children}</div>
+				<div
+					className={cn({
+						[styles.layoutContent]: true,
+						[styles.fullWidth]: !!fullWidth,
+					})}
+				>
+					{children}
+				</div>
 				<Toaster />
 				<div id="slideout-container"></div>
 				<SlideoutRenderer />

@@ -1,27 +1,31 @@
-import { __ } from '@wordpress/i18n';
+import { useCallback, useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import cn from 'obj-str';
 import styles from './BookingFlowCalendar.module.css';
 import CalendarGrid from './CalendarGrid';
 import DayNoticePanel from './DayNoticePanel';
 import TimeSlotPicker from './TimeSlotPicker';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
-export default function BookingFlowCalendar() {
-	const { lilius, form, dayAvailability, dayNotices, attributes } =
-		useBookingFlowContext();
+type Props = {
+	onSlotSelected?: () => void;
+};
+
+export default function BookingFlowCalendar({ onSlotSelected }: Props = {}) {
+	const {
+		lilius,
+		formData,
+		setField,
+		dayAvailability,
+		dayNotices,
+		attributes,
+	} = useBookingFlowContext();
 
 	const { selected } = lilius;
-	const {
-		setValue,
-		clearErrors,
-		register,
-		watch,
-		formState: { errors },
-	} = form;
-	const { alignment, slotsAsButtons } = attributes;
+	const { alignment, slotsAsButtons, inlineTimePicker } = attributes;
 	const { settings } = window.wpappointments;
 	const defaultLength = settings?.appointments?.defaultLength || 30;
-	const datetime = watch('datetime');
+	const datetime = formData.datetime;
 
 	const selectedDate = selected?.[0];
 	const selectedDateKey = selectedDate
@@ -30,40 +34,92 @@ export default function BookingFlowCalendar() {
 	const selectedNotices = dayNotices[selectedDateKey] || [];
 	const hasNotices = selectedNotices.length > 0;
 
+	const [noticeDismissed, setNoticeDismissed] = useState(false);
+	const showNotice = hasNotices && !noticeDismissed;
+
+	useEffect(() => {
+		setNoticeDismissed(false);
+	}, [selectedDateKey]);
+
+	const onDismiss = useCallback(() => {
+		setNoticeDismissed(true);
+	}, []);
+
+	const onCalendarDayClick = useCallback(() => {
+		setNoticeDismissed(false);
+	}, []);
+
+	const showTimeSlots =
+		selectedDate &&
+		!showNotice &&
+		dayAvailability &&
+		dayAvailability.length > 0;
+
+	const timePicker = showTimeSlots && (
+		<TimeSlotPicker
+			date={selectedDate}
+			slots={dayAvailability}
+			datetime={datetime}
+			alignment={alignment}
+			slotsAsButtons={slotsAsButtons}
+			inline={inlineTimePicker}
+			defaultLength={defaultLength}
+			onSelectSlot={(iso) => {
+				setField('datetime', iso);
+				onSlotSelected?.();
+			}}
+		/>
+	);
+
 	return (
 		<>
-			<CalendarGrid />
-
-			{selectedDate && hasNotices && (
-				<DayNoticePanel notices={selectedNotices} />
+			{inlineTimePicker ? (
+				<div
+					className={cn({
+						[styles.inlineLayout]: true,
+						[styles.inlineLayoutWithSlots]: !!showTimeSlots,
+						[styles.inlineLayoutCenter]: alignment === 'Center',
+						[styles.inlineLayoutRight]: alignment === 'Right',
+					})}
+				>
+					<div
+						className={styles.calendarWrapper}
+						onClick={onCalendarDayClick}
+					>
+						<CalendarGrid />
+						{showNotice && (
+							<DayNoticePanel
+								notices={selectedNotices}
+								onDismiss={onDismiss}
+							/>
+						)}
+					</div>
+					<div
+						className={cn({
+							[styles.inlineTimeSlots]: true,
+							[styles.inlineTimeSlotsVisible]: !!showTimeSlots,
+						})}
+					>
+						{showTimeSlots && timePicker}
+					</div>
+				</div>
+			) : (
+				<>
+					<div
+						className={styles.calendarWrapper}
+						onClick={onCalendarDayClick}
+					>
+						<CalendarGrid />
+						{showNotice && (
+							<DayNoticePanel
+								notices={selectedNotices}
+								onDismiss={onDismiss}
+							/>
+						)}
+					</div>
+					{timePicker}
+				</>
 			)}
-
-			{selectedDate && !hasNotices && dayAvailability && (
-				<TimeSlotPicker
-					date={selectedDate}
-					slots={dayAvailability}
-					datetime={datetime}
-					alignment={alignment}
-					slotsAsButtons={slotsAsButtons}
-					defaultLength={defaultLength}
-					onSelectSlot={(iso) => {
-						setValue('datetime', iso);
-						clearErrors('datetime');
-					}}
-				/>
-			)}
-
-			<div>
-				<input
-					type="hidden"
-					{...register('datetime', { required: true })}
-				/>
-				{errors.datetime && (
-					<p className={styles.error}>
-						{__('Please select a date and time', 'wpappointments')}
-					</p>
-				)}
-			</div>
 		</>
 	);
 }

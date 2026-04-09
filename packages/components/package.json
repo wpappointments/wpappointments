@@ -4,6 +4,17 @@
 	"description": "UI components for WP Appointments plugin extensions",
 	"main": "src/index.ts",
 	"types": "src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./ButtonGroup": "./src/ButtonGroup/ButtonGroup.tsx"
+	},
+	"typesVersions": {
+		"*": {
+			"ButtonGroup": [
+				"./src/ButtonGroup/ButtonGroup.tsx"
+			]
+		}
+	},
 	"files": [
 		"src"
 	],
@@ -18,6 +29,7 @@
 	"devDependencies": {
 		"@types/react": "*",
 		"@types/react-dom": "*",
+		"@wordpress/dataviews": "^13.1.0",
 		"@wordpress/date": "*",
 		"@wordpress/element": "*",
 		"@wordpress/icons": "*",
@@ -27,8 +39,8 @@
 	"peerDependencies": {
 		"@wordpress/components": "*",
 		"@wordpress/data": "*",
+		"@wordpress/dataviews": "^13.1.0",
 		"@wordpress/i18n": "*",
-		"react": "^18.0.0",
-		"react-hook-form": "*"
+		"react": "^18.0.0"
 	}
 }

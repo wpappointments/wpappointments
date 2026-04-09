@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import {
 	Button,
 	CheckboxControl,
 	Popover,
+	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { backup, copy, plus, trash } from '@wordpress/icons';
-import { Toggle } from '@wpappointments/components';
 import type {
 	Day,
 	DayOpeningHours,
@@ -30,18 +29,23 @@ type Props = {
 	day: Day;
 	allDays: Day[];
 	timePickerPrecision?: number;
+	dayData: DayOpeningHours;
+	onChange: (day: string, value: DayOpeningHours) => void;
 };
 
 export default function OpeningHoursDayOfWeek({
 	day,
 	allDays,
 	timePickerPrecision,
+	dayData,
+	onChange,
 }: Props) {
-	const { setValue, getValues, watch } = useFormContext();
-
-	const dayData: DayOpeningHours = watch(day) || getDefaultDay(day);
 	const { enabled, allDay, slots } = dayData;
 	const { list } = slots || { list: [] };
+
+	const update = (partial: Partial<DayOpeningHours>) => {
+		onChange(day, { ...dayData, ...partial });
+	};
 
 	const handleTimeChange = ({
 		value,
@@ -54,91 +58,107 @@ export default function OpeningHoursDayOfWeek({
 		type: 'start' | 'end';
 		time: 'hour' | 'minute';
 	}) => {
-		setValue(`${day}.slots.list.${index}.${type}.${time}`, value);
+		const newList = [...list];
+		newList[index] = {
+			...newList[index],
+			[type]: { ...newList[index][type], [time]: value },
+		};
+		update({ slots: { list: newList } });
 	};
 
 	const handleAddSlot = () => {
-		const current = getValues(`${day}.slots.list`) || [];
-		setValue(`${day}.slots.list`, [
-			...current,
-			{
-				start: { hour: '17', minute: '00' },
-				end: { hour: '18', minute: '00' },
+		update({
+			slots: {
+				list: [
+					...list,
+					{
+						start: { hour: '17', minute: '00' },
+						end: { hour: '18', minute: '00' },
+					},
+				],
 			},
-		]);
+		});
 	};
 
 	const handleRemoveSlot = (index: number) => {
-		const current = getValues(`${day}.slots.list`) || [];
-		setValue(
-			`${day}.slots.list`,
-			current.filter((_: unknown, i: number) => i !== index)
-		);
+		update({
+			slots: {
+				list: list.filter((_, i) => i !== index),
+			},
+		});
+	};
+
+	const handleToggleEnabled = (newEnabled: boolean) => {
+		if (newEnabled) {
+			const firstSlot = list[0];
+			if (!firstSlot || !firstSlot.start?.hour || !firstSlot.end?.hour) {
+				update({
+					enabled: true,
+					slots: {
+						list: [
+							{
+								start: { hour: '09', minute: '00' },
+								end: { hour: '17', minute: '00' },
+							},
+						],
+					},
+				});
+				return;
+			}
+		} else {
+			update({ enabled: false, allDay: false });
+			return;
+		}
+		update({ enabled: newEnabled });
 	};
 
 	const handleToggleAllDay = () => {
 		if (allDay) {
-			setValue(`${day}.allDay`, false);
-			setValue(`${day}.slots.list`, [
-				{
-					start: { hour: '09', minute: '00' },
-					end: { hour: '17', minute: '00' },
+			update({
+				allDay: false,
+				slots: {
+					list: [
+						{
+							start: { hour: '09', minute: '00' },
+							end: { hour: '17', minute: '00' },
+						},
+					],
 				},
-			]);
+			});
 		} else {
-			setValue(`${day}.allDay`, true);
-			setValue(`${day}.slots.list`, [
-				{
-					start: { hour: '00', minute: '00' },
-					end: { hour: '24', minute: '00' },
+			update({
+				allDay: true,
+				slots: {
+					list: [
+						{
+							start: { hour: '00', minute: '00' },
+							end: { hour: '24', minute: '00' },
+						},
+					],
 				},
-			]);
+			});
 		}
 	};
 
 	const handleCopyTo = (targetDays: Day[]) => {
 		for (const d of targetDays) {
 			if (d === day) continue;
-			setValue(d, { ...dayData, day: d });
+			onChange(d, { ...dayData, day: d });
 		}
 	};
 
 	return (
 		<div className={styles.dayRow}>
 			<div className={styles.dayHeader}>
-				<Toggle
-					name={`${day}.enabled`}
-					onChange={(newEnabled) => {
-						if (newEnabled) {
-							const currentSlots =
-								getValues(`${day}.slots.list`) || [];
-							const firstSlot = currentSlots[0];
-
-							if (
-								!firstSlot ||
-								!firstSlot.start?.hour ||
-								!firstSlot.end?.hour
-							) {
-								setValue(`${day}.slots.list`, [
-									{
-										start: {
-											hour: '09',
-											minute: '00',
-										},
-										end: {
-											hour: '17',
-											minute: '00',
-										},
-									},
-								]);
-							}
-						} else {
-							setValue(`${day}.allDay`, false);
-						}
-					}}
-					defaultChecked={enabled}
+				<ToggleControl
+					onChange={handleToggleEnabled}
+					checked={enabled}
+					label={DAY_LABELS[day]}
+					__nextHasNoMarginBottom
 				/>
-				<span className={styles.dayName}>{DAY_LABELS[day]}</span>
+				<span className={styles.dayName} aria-hidden="true">
+					{DAY_LABELS[day]}
+				</span>
 			</div>
 
 			{enabled && (
@@ -153,11 +173,17 @@ export default function OpeningHoursDayOfWeek({
 								}
 							>
 								<ScheduleTimePicker
-									day={day}
-									index={index}
+									slot={slot}
 									type="start"
 									timePickerPrecision={timePickerPrecision}
-									onTimeChange={handleTimeChange}
+									onTimeChange={(value, time) =>
+										handleTimeChange({
+											value,
+											index,
+											type: 'start',
+											time,
+										})
+									}
 								/>
 							</div>
 							<span className={styles.slotSeparator}>-</span>
@@ -169,11 +195,17 @@ export default function OpeningHoursDayOfWeek({
 								}
 							>
 								<ScheduleTimePicker
-									day={day}
-									index={index}
+									slot={slot}
 									type="end"
 									timePickerPrecision={timePickerPrecision}
-									onTimeChange={handleTimeChange}
+									onTimeChange={(value, time) =>
+										handleTimeChange({
+											value,
+											index,
+											type: 'end',
+											time,
+										})
+									}
 									minHour={slot.start.hour}
 									minMinute={slot.start.minute}
 								/>
@@ -370,20 +402,4 @@ function CopyTimesButton({
 			)}
 		</>
 	);
-}
-
-function getDefaultDay(day: Day): DayOpeningHours {
-	return {
-		day,
-		enabled: false,
-		allDay: false,
-		slots: {
-			list: [
-				{
-					start: { hour: '09', minute: '00' },
-					end: { hour: '17', minute: '00' },
-				},
-			],
-		},
-	};
 }

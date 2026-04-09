@@ -1,10 +1,9 @@
-import { useFormContext } from 'react-hook-form';
 import { Button } from '@wordpress/components';
-import { useDispatch } from '@wordpress/data';
+import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
-import { FormFieldSet, Input, SlideOut } from '@wpappointments/components';
-import DatePicker from '@wpappointments/components/src/FormField/DatePicker/DatePicker';
+import { FormFieldSet, SlideOut } from '@wpappointments/components';
+import { WPDatePicker } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { addDays, addMinutes } from 'date-fns';
 import { formatTimeForPicker } from '~/backend/utils/format';
@@ -16,25 +15,55 @@ import TimeFinder from '../TimeFinder/TimeFinder';
 import Summary from './Summary/Summary';
 import TimePicker from './TimePicker/TimePicker';
 import styles from './TimeSelector.module.css';
+import { useStateContext } from '~/backend/admin/context/StateContext';
 
 export type TimeSelectorProps = {
 	mode: 'edit' | 'create';
 	appointment?: Appointment;
+	formData: AppointmentFormFields;
+	setField: <K extends keyof AppointmentFormFields>(
+		field: K,
+		value: AppointmentFormFields[K]
+	) => void;
 };
 
-export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
-	const { getValues, setValue, watch } =
-		useFormContext<AppointmentFormFields>();
-
+export default function TimeSelector({
+	mode,
+	appointment,
+	formData,
+	setField,
+}: TimeSelectorProps) {
 	const { openSlideOut, isSlideoutOpen, closeCurrentSlideOut } =
 		useSlideout();
 	const dispatch = useDispatch(store);
+	const { getSelector } = useStateContext();
 
-	const date = watch('date');
-	const timeHourStart = watch('timeHourStart');
-	const timeMinuteStart = watch('timeMinuteStart');
-	const duration = watch('duration');
-	const available = watch('available');
+	const { currentMonth, currentYear } = useSelect((select) => {
+		return {
+			currentMonth: select(store).getCurrentMonth(),
+			currentYear: select(store).getCurrentYear(),
+		};
+	}, []);
+
+	const { coreEntityId } = useSelect(() => {
+		return select(store).getAppointmentsSettings();
+	}, []);
+
+	const availability = useSelect(
+		(select) => {
+			return select(store).getAvailability(
+				coreEntityId || 0,
+				currentMonth,
+				currentYear,
+				Intl.DateTimeFormat().resolvedOptions().timeZone,
+				getSelector('getAvailability')
+			);
+		},
+		[coreEntityId, currentMonth, currentYear]
+	);
+
+	const { date, timeHourStart, timeMinuteStart, duration, available } =
+		formData;
 
 	const start = new Date(date);
 
@@ -69,7 +98,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 						onClick={() => {
 							openSlideOut({
 								id: `find-time-${mode}`,
-								data: getValues(),
+								data: formData,
 							});
 						}}
 					>
@@ -81,23 +110,36 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					legend={__('Select day', 'wpappointments')}
 					style={{ maxWidth: '300px' }}
 				>
-					<DatePicker
-						name="date"
-						label={__('Date', 'wpappointments')}
-						defaultValue={
-							mode === 'edit' && appointment
+					<WPDatePicker
+						currentDate={
+							date ||
+							(mode === 'edit' && appointment
 								? new Date(
 										appointment.timestamp * 1000
 									).toISOString()
-								: new Date().toISOString()
+								: new Date().toISOString())
 						}
-						isInvalidDate={(date) => {
-							// TODO: make week days dynamic (from settings)
-							return (
-								addDays(new Date(), -1) > date ||
-								date.getDay() === 0 ||
-								date.getDay() === 6
+						onChange={(newDate) => {
+							if (newDate) {
+								setField('date', newDate);
+							}
+						}}
+						isInvalidDate={(d) => {
+							if (addDays(new Date(), -1) > d) {
+								return true;
+							}
+
+							const dayData = availability.month.find(
+								(day) =>
+									new Date(day.date).toDateString() ===
+									d.toDateString()
 							);
+
+							if (dayData) {
+								return !dayData.available;
+							}
+
+							return false;
 						}}
 						startOfWeek={
 							window.wpappointments.date.startOfWeek as
@@ -109,7 +151,7 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 								| 5
 								| 6
 						}
-						events={[]} // TODO: add days with available spots to events
+						events={[]}
 						onMonthPreviewed={(date) => {
 							const _date = new Date(date);
 							const month = _date.getMonth() as MonthIndex;
@@ -120,7 +162,13 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 					/>
 				</FormFieldSet>
 
-				{date && <TimePicker date={new Date(date)} />}
+				{date && (
+					<TimePicker
+						date={new Date(date)}
+						formData={formData}
+						setField={setField}
+					/>
+				)}
 
 				{timeHourStart &&
 					timeMinuteStart &&
@@ -138,8 +186,6 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 						/>
 					)}
 
-				<Input type="hidden" name="available" defaultValue="1" />
-
 				<div style={{ marginTop: '20px' }}>
 					<Button
 						type="button"
@@ -150,11 +196,11 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 							padding: '22px 0px',
 						}}
 						onClick={() => {
-							setValue(
+							setField(
 								'datetime',
 								new Date(date).getTime().toString()
 							);
-							setValue('date', new Date(date).toISOString());
+							setField('date', new Date(date).toISOString());
 							closeCurrentSlideOut();
 						}}
 					>
@@ -165,7 +211,11 @@ export default function TimeSelector({ mode, appointment }: TimeSelectorProps) {
 				</div>
 
 				{isSlideoutOpen(`find-time-${mode}`) && (
-					<TimeFinder mode={mode} />
+					<TimeFinder
+						mode={mode}
+						formData={formData}
+						setField={setField}
+					/>
 				)}
 			</div>
 		</SlideOut>

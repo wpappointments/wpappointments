@@ -110,7 +110,7 @@ The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/
 - **`gutenberg/blocks/`** — Booking flow Gutenberg block
 - **Path aliases** in tsconfig: `~/backend/*`, `~/frontend/*`, `~/blocks/*`, `~/images/*`
 - **CSS Modules** with camelCase exports (generated `.d.ts` via happy-css-modules)
-- **Form handling:** React Hook Form + Valibot for validation
+- **Form handling:** `DataForm` from `@wordpress/dataviews` for admin forms; Valibot for API response validation
 
 ### Key Patterns
 - REST API returns standardized envelopes with pagination (`totalItems`, `totalPages`, `postsPerPage`, `currentPage`)

@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import {
+	DataForm,
 	FormFieldSet,
-	HtmlForm,
-	Input,
-	withForm,
+	NumberInput,
+	TextInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import {
 	fetchBookables,
 	createBookable,
@@ -24,48 +26,96 @@ type ServicesProps = {
 	onSuccess: () => void;
 };
 
+const emptyService: ServiceFormData = {
+	name: '',
+	duration: 30,
+};
+
+const fields: Field<ServiceFormData>[] = [
+	{
+		id: 'name',
+		type: 'text',
+		label: __('Service name', 'wpappointments'),
+		placeholder: __('e.g. Consultation', 'wpappointments'),
+		isValid: { required: true },
+		Edit: TextInput,
+	},
+	{
+		id: 'duration',
+		type: 'integer',
+		label: __('Duration (minutes)', 'wpappointments'),
+		isValid: { required: true, min: 1 },
+		Edit: NumberInput,
+	},
+];
+
+const formConfig: Form = {
+	layout: { type: 'regular' },
+	fields: ['name', 'duration'],
+};
+
 function AddServiceForm({
 	onAdd,
 }: {
 	onAdd: (service: BookableEntity) => void;
 }) {
-	const onSubmit = async (data: ServiceFormData) => {
-		const result = await createBookable({
-			name: data.name,
-			type: 'service',
-			duration: Number(data.duration),
-			active: true,
-		});
+	const [formData, setFormData] = useState<ServiceFormData>({
+		...emptyService,
+	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { validity, isValid } = useFormValidity(formData, fields, formConfig);
 
-		if (result.data) {
-			onAdd(result.data);
+	const onSubmit = async () => {
+		if (!isValid || isSubmitting) {
+			return;
+		}
+		setIsSubmitting(true);
+
+		try {
+			const result = await createBookable({
+				name: formData.name,
+				type: 'service',
+				duration: Number(formData.duration),
+				active: true,
+			});
+
+			if (result.data) {
+				onAdd(result.data);
+				setFormData({ ...emptyService });
+			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			<FormFieldSet style={{ marginBottom: 16 }}>
-				<Input
-					name="name"
-					label={__('Service name', 'wpappointments')}
-					placeholder={__('e.g. Consultation', 'wpappointments')}
-					rules={{ required: true }}
-				/>
-				<Input
-					name="duration"
-					label={__('Duration (minutes)', 'wpappointments')}
-					type="number"
-					rules={{ required: true, min: 1 }}
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={formConfig}
+					onChange={(edits) =>
+						setFormData((prev) => ({ ...prev, ...edits }))
+					}
+					validity={validity}
 				/>
 			</FormFieldSet>
-			<Button variant="secondary" type="submit">
+			<Button
+				type="submit"
+				variant="secondary"
+				disabled={!isValid || isSubmitting}
+			>
 				{__('Add Service', 'wpappointments')}
 			</Button>
-		</HtmlForm>
+		</form>
 	);
 }
-
-const AddServiceFormWithForm = withForm(AddServiceForm);
 
 function ServicesStep({ onSuccess }: ServicesProps) {
 	const [services, setServices] = useState<BookableEntity[]>([]);
@@ -142,7 +192,7 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 				</p>
 			)}
 
-			<AddServiceFormWithForm onAdd={handleAdd} />
+			<AddServiceForm onAdd={handleAdd} />
 
 			<Button
 				className={styles.stepButton}

@@ -105,7 +105,17 @@ class Plugin extends Core\Singleton {
 		}
 
 		// Create core intrinsic bookable entity.
-		$core_entity_id = get_option( 'wpappointments_core_entityId' );
+		$core_entity_id = get_option( 'wpappointments_appointments_coreEntityId' );
+
+		// Migrate from legacy option key if needed.
+		if ( ! $core_entity_id ) {
+			$legacy_id = get_option( 'wpappointments_core_entityId' );
+			if ( $legacy_id ) {
+				update_option( 'wpappointments_appointments_coreEntityId', $legacy_id );
+				delete_option( 'wpappointments_core_entityId' );
+				$core_entity_id = $legacy_id;
+			}
+		}
 
 		if ( ! $core_entity_id ) {
 			$entity_post_id = wp_insert_post(
@@ -145,7 +155,7 @@ class Plugin extends Core\Singleton {
 				);
 
 				if ( ! is_wp_error( $variant_post_id ) ) {
-					update_option( 'wpappointments_core_entityId', $entity_post_id );
+					update_option( 'wpappointments_appointments_coreEntityId', $entity_post_id );
 				} else {
 					wp_delete_post( $entity_post_id, true );
 				}

@@ -1,0 +1,22 @@
+{
+	"id": "AR",
+	"name": "Argentina",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"carnival",
+		"carnival2",
+		"goodFriday",
+		"easter",
+		"dayOfRemembranceAR",
+		"labourDay",
+		"mayRevolutionAR",
+		"flagDayAR",
+		"independenceDayAR",
+		"assumptionOfMary",
+		"columbusDay",
+		"allSaints",
+		"immaculateConception",
+		"christmas"
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"id": "ET",
+	"name": "Ethiopia",
+	"type": "country",
+	"holidays": [
+		"ethiopianChristmas",
+		"ethiopianEpiphany",
+		"adwaVictoryDay",
+		"goodFriday",
+		"ethiopianEasterET",
+		"orthodoxGoodFriday",
+		"downfallDergET",
+		"eidAlFitr",
+		"eidAlAdha",
+		"ethiopianNewYear",
+		"meskel",
+		"prophetBirthday"
+	]
+}
