@@ -207,6 +207,7 @@ export default function OpeningHoursDayOfWeek({
 										})
 									}
 									minHour={slot.start.hour}
+									minMinute={slot.start.minute}
 								/>
 							</div>
 

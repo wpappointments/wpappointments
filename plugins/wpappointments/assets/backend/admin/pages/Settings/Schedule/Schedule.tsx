@@ -388,8 +388,12 @@ function ScheduleEditor({
 						}
 						onChange={async (checked) => {
 							if (checked) {
-								await setDefaultSchedule(schedule.id);
-								closeSlideOut(slideoutId);
+								const result = await setDefaultSchedule(
+									schedule.id
+								);
+								if (result) {
+									closeSlideOut(slideoutId);
+								}
 							}
 						}}
 					/>
@@ -429,10 +433,12 @@ function DangerZoneContent({
 	const [showConfirm, setShowConfirm] = useState(false);
 
 	const handleDelete = async () => {
-		await deleteSchedule(scheduleId, reassign);
+		const result = await deleteSchedule(scheduleId, reassign);
 		setShowConfirm(false);
-		closeSlideOut(dangerSlideoutId);
-		closeSlideOut(slideoutId);
+		if (result) {
+			closeSlideOut(dangerSlideoutId);
+			closeSlideOut(slideoutId);
+		}
 	};
 
 	return (

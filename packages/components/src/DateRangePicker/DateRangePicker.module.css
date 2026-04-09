@@ -118,3 +118,8 @@
 .dayButtonToday {
 	background: #e0e0e0;
 }
+
+.dayButtonToday.dayButtonSelected {
+	background: var(--wp-admin-theme-color, #3858e9);
+	color: #fff;
+}

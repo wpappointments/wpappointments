@@ -159,11 +159,11 @@ export default function MultiDatePicker({
 									}
 									if (nextFocusable) {
 										event.preventDefault();
-										setFocusable(nextFocusable);
-										if (
-											!isSameMonth(nextFocusable, viewing)
-										) {
-											setViewing(nextFocusable);
+										if (!(isInvalidDate && isInvalidDate(nextFocusable))) {
+											setFocusable(nextFocusable);
+											if (!isSameMonth(nextFocusable, viewing)) {
+												setViewing(nextFocusable);
+											}
 										}
 									}
 								}}

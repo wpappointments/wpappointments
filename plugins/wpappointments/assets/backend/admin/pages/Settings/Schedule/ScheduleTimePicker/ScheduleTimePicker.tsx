@@ -16,6 +16,7 @@ type Props = {
 	type: 'start' | 'end';
 	onTimeChange: (value: string, time: 'hour' | 'minute') => void;
 	minHour?: string | null;
+	minMinute?: string | null;
 };
 
 type HourOption = {
@@ -30,6 +31,7 @@ export default function ScheduleTimePicker({
 	type,
 	onTimeChange,
 	minHour,
+	minMinute,
 }: Props) {
 	const generalSettings = useSelect(() => {
 		return select(store).getGeneralSettings();
@@ -56,7 +58,15 @@ export default function ScheduleTimePicker({
 	const currentHourOption = allHours.find(
 		(h) => h.value === (currentHour || minHour || '00')
 	);
-	const minutes = currentHourOption?.minutes || allHours[0]?.minutes || [];
+	const allMinutes = currentHourOption?.minutes || allHours[0]?.minutes || [];
+	const effectiveHour =
+		currentHourOption?.value || allHours[0]?.value || currentHour;
+
+	// Filter minutes when the effective hour equals the start hour.
+	const minutes =
+		minMinute && effectiveHour === minHour
+			? allMinutes.filter((m) => parseInt(m.value) > parseInt(minMinute))
+			: allMinutes;
 
 	return (
 		<div className={styles.timePicker}>
