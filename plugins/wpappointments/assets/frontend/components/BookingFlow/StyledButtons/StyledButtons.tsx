@@ -12,8 +12,8 @@ export default function StyledButtons() {
 
 	const handleButtonClick = useCallback(
 		(e: MouseEvent<HTMLDivElement>) => {
-			const target = e.target as HTMLElement;
-			const button = target.closest(
+			if (!(e.target instanceof Element)) return;
+			const button = e.target.closest(
 				'.wpa-back-button, .wpa-submit-button'
 			);
 			if (!button) return;

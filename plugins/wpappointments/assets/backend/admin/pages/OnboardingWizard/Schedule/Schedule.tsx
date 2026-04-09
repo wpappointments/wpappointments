@@ -96,43 +96,38 @@ export default function ScheduleSettings({
 			}
 
 			let result;
-
-			try {
-				if (existingSchedules.length > 0) {
-					const defaultSchedule = existingSchedules.find(
-						(s) => s.isDefault
-					);
-					if (defaultSchedule) {
-						result = await updateSchedule(defaultSchedule.id, {
-							days: allDays,
-						});
-					} else {
-						result = await createSchedule({
-							name: __('Default', 'wpappointments'),
-							days: allDays,
-						});
-					}
+			if (existingSchedules.length > 0) {
+				const defaultSchedule = existingSchedules.find(
+					(s) => s.isDefault
+				);
+				if (defaultSchedule) {
+					result = await updateSchedule(defaultSchedule.id, {
+						days: allDays,
+					});
 				} else {
 					result = await createSchedule({
 						name: __('Default', 'wpappointments'),
 						days: allDays,
 					});
 				}
-			} catch (err) {
-				const message =
-					err instanceof Error && err.message
-						? err.message
-						: __('Error saving schedule', 'wpappointments');
-				setError(message);
-				return;
+			} else {
+				result = await createSchedule({
+					name: __('Default', 'wpappointments'),
+					days: allDays,
+				});
 			}
 
-			if (!result) {
+			if (result) {
+				onSuccess();
+			} else {
 				setError(__('Error saving schedule', 'wpappointments'));
-				return;
 			}
-
-			onSuccess();
+		} catch (err) {
+			const message =
+				err instanceof Error && err.message
+					? err.message
+					: __('Error saving schedule', 'wpappointments');
+			setError(message);
 		} finally {
 			setIsSubmitting(false);
 		}

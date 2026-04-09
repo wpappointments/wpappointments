@@ -3,6 +3,7 @@ import {
 	HTMLAttributes,
 	Suspense,
 	lazy,
+	useEffect,
 	useState,
 } from 'react';
 import {
@@ -72,6 +73,12 @@ export default function Edit({
 	const { alignment, width, flowType } = attributes;
 	const isMultiStep = flowType === 'MultiStep';
 	const [editorStep, setEditorStep] = useState(0);
+
+	useEffect(() => {
+		if (!isMultiStep) {
+			setEditorStep(0);
+		}
+	}, [isMultiStep]);
 
 	const blockProps = useBlockProps({
 		style:
