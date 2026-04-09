@@ -44,44 +44,36 @@ class Notifications extends Singleton {
 		if ( null === self::$events ) {
 			self::$events = array(
 				'created'   => array(
-					'title'            => __( 'Appointment Created', 'wpappointments' ),
-					'description'      => __( 'Sent when a new appointment is booked.', 'wpappointments' ),
-					'adminSubject'     => __( 'New appointment booked', 'wpappointments' ),
-					'customerSubject'  => __( 'Your appointment has been booked', 'wpappointments' ),
-					'adminTemplate'    => 'appointment-created-admin',
-					'customerTemplate' => 'appointment-created-customer',
-					'adminBody'        => __( "Dear {admin_first_name},\n\nA new appointment has been booked with {customer_name}.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'     => __( "Dear {customer_name},\n\nThank you for booking an appointment with us.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nIf you need to reschedule, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Created', 'wpappointments' ),
+					'description'     => __( 'Sent when a new appointment is booked.', 'wpappointments' ),
+					'adminSubject'    => __( 'New appointment booked', 'wpappointments' ),
+					'customerSubject' => __( 'Your appointment has been booked', 'wpappointments' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nA new appointment has been booked with {customer_name}.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nThank you for booking an appointment with us.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nIf you need to reschedule, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'updated'   => array(
-					'title'            => __( 'Appointment Updated', 'wpappointments' ),
-					'description'      => __( 'Sent when an existing appointment is modified.', 'wpappointments' ),
-					'adminSubject'     => __( 'Appointment updated', 'wpappointments' ),
-					'customerSubject'  => __( 'Your appointment has been updated', 'wpappointments' ),
-					'adminTemplate'    => 'appointment-updated-admin',
-					'customerTemplate' => 'appointment-updated-customer',
-					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} has been updated.\n\nPrevious: {previous_date} at {previous_time} ({previous_status})\nUpdated: {date} at {time} ({status})\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment has been updated.\n\nPrevious: {previous_date} at {previous_time}\nUpdated: {date} at {time}\nStatus: {status}\n\nIf you have any questions, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Updated', 'wpappointments' ),
+					'description'     => __( 'Sent when an existing appointment is modified.', 'wpappointments' ),
+					'adminSubject'    => __( 'Appointment updated', 'wpappointments' ),
+					'customerSubject' => __( 'Your appointment has been updated', 'wpappointments' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} has been updated.\n\nPrevious: {previous_date} at {previous_time} ({previous_status})\nUpdated: {date} at {time} ({status})\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment has been updated.\n\nPrevious: {previous_date} at {previous_time}\nUpdated: {date} at {time}\nStatus: {status}\n\nIf you have any questions, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'confirmed' => array(
-					'title'            => __( 'Appointment Confirmed', 'wpappointments' ),
-					'description'      => __( 'Sent when an appointment is confirmed.', 'wpappointments' ),
-					'adminSubject'     => __( 'Appointment confirmed', 'wpappointments' ),
-					'customerSubject'  => __( 'Your appointment is confirmed', 'wpappointments' ),
-					'adminTemplate'    => 'appointment-confirmed-admin',
-					'customerTemplate' => 'appointment-confirmed-customer',
-					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been confirmed.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} is confirmed.\n\nIf you need to make any changes, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Confirmed', 'wpappointments' ),
+					'description'     => __( 'Sent when an appointment is confirmed.', 'wpappointments' ),
+					'adminSubject'    => __( 'Appointment confirmed', 'wpappointments' ),
+					'customerSubject' => __( 'Your appointment is confirmed', 'wpappointments' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been confirmed.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} is confirmed.\n\nIf you need to make any changes, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 				'cancelled' => array(
-					'title'            => __( 'Appointment Cancelled', 'wpappointments' ),
-					'description'      => __( 'Sent when an appointment is cancelled.', 'wpappointments' ),
-					'adminSubject'     => __( 'Appointment cancelled', 'wpappointments' ),
-					'customerSubject'  => __( 'Your appointment has been cancelled', 'wpappointments' ),
-					'adminTemplate'    => 'appointment-cancelled-admin',
-					'customerTemplate' => 'appointment-cancelled-customer',
-					'adminBody'        => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been cancelled.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'     => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Cancelled', 'wpappointments' ),
+					'description'     => __( 'Sent when an appointment is cancelled.', 'wpappointments' ),
+					'adminSubject'    => __( 'Appointment cancelled', 'wpappointments' ),
+					'customerSubject' => __( 'Your appointment has been cancelled', 'wpappointments' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been cancelled.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
 				),
 			);
 		}
@@ -250,21 +242,13 @@ class Notifications extends Singleton {
 	 * @return string Interpolated email body.
 	 */
 	private function resolve_body( $custom_body, $default_body, $appointment, $old_appointment = null ) {
-		$body = ! empty( $custom_body ) ? $custom_body : $default_body;
-
-		if ( ! empty( $body ) ) {
-			$interpolated = $this->interpolate( $body, $appointment, $old_appointment );
-			$message      = $this->wrap_html( $interpolated );
-		} else {
-			$message = $this->build_fallback_message( $appointment );
-		}
+		$body    = ! empty( $custom_body ) ? $custom_body : $default_body;
+		$message = $this->interpolate( $body, $appointment, $old_appointment );
 
 		/**
 		 * Filters the email message body for WP Appointments notifications.
 		 *
-		 * Applied to all notification bodies — custom, default, and fallback.
-		 *
-		 * @param string     $message         HTML email body.
+		 * @param string     $message         Plain-text email body.
 		 * @param array      $appointment     Normalized appointment data.
 		 * @param array|null $old_appointment Previous appointment data.
 		 */
@@ -327,20 +311,20 @@ class Notifications extends Singleton {
 		$admin_phone = $settings->get_setting( 'general', 'phoneNumber' );
 
 		$replacements = array(
-			'{id}'               => absint( $appointment['id'] ?? 0 ),
-			'{service}'          => esc_html( $appointment['service'] ?? '' ),
-			'{status}'           => esc_html( ucfirst( $appointment['status'] ?? '' ) ),
-			'{date}'             => $timestamp ? esc_html( wp_date( $formats['date'], $timestamp ) ) : '—',
-			'{time}'             => $timestamp ? esc_html( wp_date( $formats['time'], $timestamp ) ) : '—',
-			'{duration}'         => absint( $appointment['duration'] ?? 0 ),
-			'{customer_name}'    => esc_html( $this->get_customer_name( $appointment ) ),
-			'{previous_date}'    => $old_timestamp ? esc_html( wp_date( $formats['date'], $old_timestamp ) ) : '',
-			'{previous_time}'    => $old_timestamp ? esc_html( wp_date( $formats['time'], $old_timestamp ) ) : '',
-			'{previous_status}'  => $old_appointment ? esc_html( ucfirst( $old_appointment['status'] ?? '' ) ) : '',
-			'{admin_first_name}' => esc_html( $admin_first ? $admin_first : '' ),
-			'{admin_last_name}'  => esc_html( $admin_last ? $admin_last : '' ),
-			'{admin_email}'      => esc_html( $admin_email ? $admin_email : get_option( 'admin_email' ) ),
-			'{admin_phone}'      => esc_html( $admin_phone ? $admin_phone : '' ),
+			'{id}'               => (string) absint( $appointment['id'] ?? 0 ),
+			'{service}'          => (string) ( $appointment['service'] ?? '' ),
+			'{status}'           => ucfirst( $appointment['status'] ?? '' ),
+			'{date}'             => $timestamp ? wp_date( $formats['date'], $timestamp ) : '—',
+			'{time}'             => $timestamp ? wp_date( $formats['time'], $timestamp ) : '—',
+			'{duration}'         => (string) absint( $appointment['duration'] ?? 0 ),
+			'{customer_name}'    => $this->get_customer_name( $appointment ),
+			'{previous_date}'    => $old_timestamp ? wp_date( $formats['date'], $old_timestamp ) : '',
+			'{previous_time}'    => $old_timestamp ? wp_date( $formats['time'], $old_timestamp ) : '',
+			'{previous_status}'  => $old_appointment ? ucfirst( $old_appointment['status'] ?? '' ) : '',
+			'{admin_first_name}' => $admin_first ? $admin_first : '',
+			'{admin_last_name}'  => $admin_last ? $admin_last : '',
+			'{admin_email}'      => $admin_email ? $admin_email : get_option( 'admin_email' ),
+			'{admin_phone}'      => $admin_phone ? $admin_phone : '',
 		);
 
 		return str_replace( array_keys( $replacements ), array_values( $replacements ), $template );
@@ -364,84 +348,6 @@ class Notifications extends Singleton {
 			'date' => $date ? $date : ( $wp_date ? $wp_date : 'd/m/Y' ),
 			'time' => $time ? $time : ( $wp_time ? $wp_time : 'H:i' ),
 		);
-	}
-
-	/**
-	 * Wrap plain text content in a simple HTML email layout
-	 *
-	 * @param string $content Email content (may contain newlines).
-	 *
-	 * @return string HTML email body.
-	 */
-	private function wrap_html( $content ) {
-		$site_name = esc_html( get_bloginfo( 'name' ) );
-		$is_html   = wp_strip_all_tags( $content ) !== $content;
-
-		if ( ! $is_html ) {
-			$content = nl2br( $content );
-		}
-
-		return '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">'
-		. '<h2 style="color:#174aff;">' . $site_name . '</h2>'
-		. '<div style="line-height:1.6;">' . $content . '</div>'
-		. '</body></html>';
-	}
-
-	/**
-	 * Build a fallback plain HTML email body when no template is available
-	 *
-	 * @param array $appointment Normalized appointment data.
-	 *
-	 * @return string HTML email body.
-	 */
-	private function build_fallback_message( $appointment ) {
-		$service        = $appointment['service'] ?? '';
-		$status         = ucfirst( $appointment['status'] ?? '' );
-		$appointment_id = absint( $appointment['id'] ?? 0 );
-		$customer_name  = $this->get_customer_name( $appointment );
-		$formats        = $this->get_formats();
-
-		$timestamp = absint( $appointment['timestamp'] ?? 0 );
-		$date_time = $timestamp ? wp_date( $formats['date'] . ' ' . $formats['time'], $timestamp ) : '—';
-
-		$duration  = absint( $appointment['duration'] ?? 0 );
-		$site_name = esc_html( get_bloginfo( 'name' ) );
-
-		$message  = '<html><body style="font-family:sans-serif;color:#333;max-width:600px;margin:0 auto;">';
-		$message .= '<h2 style="color:#174aff;">' . $site_name . '</h2>';
-		$message .= '<table style="border-collapse:collapse;width:100%;">';
-		$message .= $this->table_row( __( 'Appointment ID', 'wpappointments' ), '#' . $appointment_id );
-		$message .= $this->table_row( __( 'Service', 'wpappointments' ), $service );
-		$message .= $this->table_row( __( 'Date & Time', 'wpappointments' ), $date_time );
-
-		if ( $duration ) {
-			$message .= $this->table_row( __( 'Duration', 'wpappointments' ), $duration . ' ' . __( 'minutes', 'wpappointments' ) );
-		}
-
-		if ( $customer_name ) {
-			$message .= $this->table_row( __( 'Customer', 'wpappointments' ), $customer_name );
-		}
-
-		$message .= $this->table_row( __( 'Status', 'wpappointments' ), $status );
-		$message .= '</table>';
-		$message .= '</body></html>';
-
-		return $message;
-	}
-
-	/**
-	 * Build a single table row for the fallback email template
-	 *
-	 * @param string $label Table cell label.
-	 * @param string $value Table cell value.
-	 *
-	 * @return string HTML table row.
-	 */
-	private function table_row( $label, $value ) {
-		return '<tr>'
-		. '<td style="padding:8px;border:1px solid #ddd;font-weight:bold;width:40%;">' . esc_html( $label ) . '</td>'
-		. '<td style="padding:8px;border:1px solid #ddd;">' . esc_html( $value ) . '</td>'
-		. '</tr>';
 	}
 
 	/**
@@ -487,13 +393,13 @@ class Notifications extends Singleton {
 	 *
 	 * @param string $to      Recipient email.
 	 * @param string $subject Email subject.
-	 * @param string $message Email message (HTML).
+	 * @param string $message Email message (plain text).
 	 *
 	 * @return bool Whether the email was sent successfully.
 	 */
 	private function send( $to, $subject, $message ) {
 		$site_name = get_bloginfo( 'name' );
-		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
+		$headers   = array( 'Content-Type: text/plain; charset=UTF-8' );
 
 		/**
 		 * Filters the email headers for WP Appointments notifications.
