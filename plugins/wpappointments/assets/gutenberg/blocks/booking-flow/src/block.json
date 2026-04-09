@@ -44,14 +44,7 @@
 	"textdomain": "wpappointments",
 	"editorScript": "file:../../../../../build/booking-flow-block.tsx.js",
 	"editorStyle": "file:./index.css",
-	"style": [
-		"file:./style-index.css",
-		"file:../../../../../build/frontend.tsx.css",
-		"wp-components"
-	],
-	"viewScript": [
-		"file:../../../../../build/booking-flow-block-view.tsx.js",
-		"wp-components"
-	],
+	"style": ["file:../../../../../build/booking-flow-block-view.tsx.css"],
+	"viewScript": "file:../../../../../build/booking-flow-block-view.tsx.js",
 	"render": "file:./render.php"
 }
