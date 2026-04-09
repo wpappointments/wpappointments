@@ -4,87 +4,62 @@ import styles from './BookingFlowCustomer.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
 export default function BookingFlowCustomer() {
-	const { form } = useBookingFlowContext();
-	const {
-		register,
-		formState: { errors },
-		watch,
-	} = form;
-	const account = watch('account');
+	const { formData, setField } = useBookingFlowContext();
 
 	return (
-		<div>
+		<div className={bookingFlowStyles.fields}>
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="text"
 					placeholder={__('First name', 'wpappointments')}
 					className={styles.input}
-					{...register('firstName', {
-						required: true,
-					})}
+					value={formData.firstName}
+					onChange={(e) => setField('firstName', e.target.value)}
+					required
 				/>
-				{errors.firstName && (
-					<p className={bookingFlowStyles.error}>
-						{__('First name is required', 'wpappointments')}
-					</p>
-				)}
 			</div>
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="text"
 					placeholder={__('Last name', 'wpappointments')}
 					className={styles.input}
-					{...register('lastName', {
-						required: true,
-					})}
+					value={formData.lastName}
+					onChange={(e) => setField('lastName', e.target.value)}
+					required
 				/>
-				{errors.lastName && (
-					<p className={bookingFlowStyles.error}>
-						{__('Last name is required', 'wpappointments')}
-					</p>
-				)}
 			</div>
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="email"
 					placeholder={__('Email', 'wpappointments')}
 					className={styles.input}
-					{...register('email', {
-						required: true,
-					})}
+					value={formData.email}
+					onChange={(e) => setField('email', e.target.value)}
+					required
 				/>
-				{errors.email && (
-					<p className={bookingFlowStyles.error}>
-						{__('Email is required', 'wpappointments')}
-					</p>
-				)}
 			</div>
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="tel"
 					placeholder={__('Phone', 'wpappointments')}
 					className={styles.input}
-					{...register('phone', {
-						required: true,
-					})}
+					value={formData.phone}
+					onChange={(e) => setField('phone', e.target.value)}
+					required
 				/>
-				{errors.phone && (
-					<p className={bookingFlowStyles.error}>
-						{__('Phone is required', 'wpappointments')}
-					</p>
-				)}
 			</div>
 			<div className={bookingFlowStyles.field}>
 				<label className={bookingFlowStyles.checkboxLabel}>
 					<input
 						type="checkbox"
 						className={bookingFlowStyles.checkbox}
-						{...register('account')}
+						checked={formData.account}
+						onChange={(e) => setField('account', e.target.checked)}
 					/>
 					{__('Create account', 'wpappointments')}
 				</label>
 			</div>
-			{account && (
+			{formData.account && (
 				<div className={bookingFlowStyles.field}>
 					<input
 						type="password"
@@ -93,7 +68,8 @@ export default function BookingFlowCustomer() {
 							'wpappointments'
 						)}
 						className={styles.input}
-						{...register('password')}
+						value={formData.password || ''}
+						onChange={(e) => setField('password', e.target.value)}
 					/>
 					<small className={bookingFlowStyles.fieldInfo}>
 						{__(

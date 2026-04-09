@@ -2,16 +2,9 @@ import { useState } from 'react';
 import { Button } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import {
-	cancelCircleFilled,
-	check,
-	edit,
-	Icon,
-	info,
-	trash,
-} from '@wordpress/icons';
+import { cancelCircleFilled, check, edit, info, trash } from '@wordpress/icons';
 import { DataViews, TableFullEmpty } from '@wpappointments/components';
-import type { Action, View } from '@wpappointments/components';
+import type { Action, Field, View } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { addMinutes, fromUnixTime } from 'date-fns';
 import cn from 'obj-str';
@@ -23,16 +16,23 @@ import { AppointmentDetailsModals } from '../AppointmentDetails/AppointmentDetai
 import styles from './AppointmentsTableFull.module.css';
 import { useStateContext } from '~/backend/admin/context/StateContext';
 import { appointmentsApi } from '~/backend/api/appointments';
-import { COLORS as colors } from '~/backend/constants';
 
-type Fields = {
+type Filters = {
 	status: Appointment['status'] | '';
 	period: 'week' | 'month' | 'year' | 'all' | '';
 	paged: number;
 	posts_per_page: number;
 };
 
-// View type imported from @wpappointments/components via DataViews
+const defaultView: View = {
+	type: 'table',
+	search: '',
+	filters: [],
+	page: 1,
+	perPage: 10,
+	fields: ['title', 'date', 'time', 'status'],
+	layout: {},
+};
 
 export default function AppointmentsTableFull() {
 	const { openSlideOut } = useSlideout({
@@ -49,28 +49,21 @@ export default function AppointmentsTableFull() {
 		appointmentsApi({
 			invalidateCache: invalidate,
 		});
-	const [filters, setFilters] = useState<Fields>({
+	const [filters, setFilters] = useState<Filters>({
 		status: 'confirmed',
 		period: 'week',
 		paged: 1,
 		posts_per_page: 10,
 	});
 
-	const { appointments, totalItems, totalPages, currentPage } =
-		useSelect(() => {
-			return select(store).getAppointments({
-				...filters,
-				version: getSelector('getAppointments'),
-			});
-		}, [filters, getSelector('getAppointments')]);
+	const { appointments, totalItems, totalPages } = useSelect(() => {
+		return select(store).getAppointments({
+			...filters,
+			version: getSelector('getAppointments'),
+		});
+	}, [filters, getSelector('getAppointments')]);
 
-	const [view, setView] = useState<View>({
-		type: 'table',
-		layout: {},
-		hiddenFields: [],
-		page: currentPage,
-		perPage: 10,
-	});
+	const [view, setView] = useState<View>(defaultView);
 
 	const addAppointment = () => {
 		openSlideOut({
@@ -111,19 +104,16 @@ export default function AppointmentsTableFull() {
 		);
 	}
 
-	const fields = [
+	const fields: Field<Appointment>[] = [
 		{
 			id: 'title',
-			header: __('Title', 'wpappointments'),
-			render: ({ item }: { item: Appointment }) => {
+			label: __('Title', 'wpappointments'),
+			render: ({ item }) => {
 				return (
 					<>
 						<Button
 							variant="link"
-							onClick={() => {
-								viewAppointment && viewAppointment(item);
-							}}
-							style={{ marginBottom: '5px' }}
+							onClick={() => viewAppointment(item)}
 						>
 							<strong>{item.service}</strong>
 						</Button>
@@ -138,8 +128,8 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'date',
-			header: __('Date', 'wpappointments'),
-			render: ({ item }: { item: Appointment }) => {
+			label: __('Date', 'wpappointments'),
+			render: ({ item }) => {
 				return <>{formatDate(item.timestamp)}</>;
 			},
 			enableSorting: false,
@@ -147,8 +137,8 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'time',
-			header: __('Time', 'wpappointments'),
-			render: ({ item }: { item: Appointment }) => {
+			label: __('Time', 'wpappointments'),
+			render: ({ item }) => {
 				const { timestamp, duration } = item;
 				const dateStart = fromUnixTime(timestamp);
 				const dateEnd = addMinutes(dateStart, duration);
@@ -171,19 +161,17 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'status',
-			header: __('Status', 'wpappointments'),
-			render: ({ item }: { item: Appointment }) => {
+			label: __('Status', 'wpappointments'),
+			render: ({ item }) => {
 				return (
-					<>
-						<span
-							className={cn({
-								[styles.status]: true,
-								[styles[item.status]]: true,
-							})}
-						>
-							{item.status}
-						</span>
-					</>
+					<span
+						className={cn({
+							[styles.status]: true,
+							[styles[item.status]]: true,
+						})}
+					>
+						{item.status}
+					</span>
 				);
 			},
 			enableSorting: false,
@@ -191,84 +179,74 @@ export default function AppointmentsTableFull() {
 		},
 	];
 
-	const actions: Action[] = [
+	const actions: Action<Appointment>[] = [
 		{
 			id: 'view',
-			icon: <Icon icon={info} color={colors.blue} />,
-			isPrimary: true,
+			icon: info,
 			label: __('View appointment details', 'wpappointments'),
-			callback: (item: Appointment) => {
-				viewAppointment && viewAppointment(item);
+			callback: (items) => {
+				viewAppointment(items[0]);
 			},
 		},
 		{
 			id: 'edit',
-			icon: <Icon icon={edit} color={colors.blue} />,
-			isPrimary: true,
+			icon: edit,
 			label: __('Edit appointment details', 'wpappointments'),
-			callback: (item: Appointment) => {
-				editAppointment && editAppointment(item);
+			callback: (items) => {
+				editAppointment(items[0]);
 			},
 		},
 		{
 			id: 'cancel',
-			isDestructive: true,
-			icon: <Icon icon={cancelCircleFilled} color={colors.red} />,
-			isPrimary: true,
-			isEligible: (item: Appointment) => item.status === 'confirmed',
+			icon: cancelCircleFilled,
+			isEligible: (item) => item.status === 'confirmed',
 			label: __('Cancel appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				const { id, status } = item;
+			callback: (items) => {
+				const { id, status } = items[0];
 				setAppointmentModal({ id, status });
 			},
 		},
 		{
 			id: 'confirm',
-			icon: <Icon icon={check} color={colors.green} />,
-			isPrimary: true,
-			isEligible: (item: Appointment) => item.status === 'pending',
+			icon: check,
+			isEligible: (item) => item.status === 'pending',
 			label: __('Confirm appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				confirmAppointment && confirmAppointment(item.id);
+			callback: (items) => {
+				confirmAppointment && confirmAppointment(items[0].id);
 			},
 		},
 		{
 			id: 'delete',
-			icon: <Icon icon={trash} color={colors.red} />,
-			isPrimary: true,
-			isEligible: (item: Appointment) => item.status === 'cancelled',
-			isDestructive: true,
+			icon: trash,
+			isEligible: (item) => item.status === 'cancelled',
 			label: __('Delete appointment', 'wpappointments'),
-			callback: (item: Appointment) => {
-				const { id, status } = item;
+			callback: (items) => {
+				const { id, status } = items[0];
 				setAppointmentModal({ id, status });
 			},
 		},
 	];
 
-	const paginationInfo = {
-		totalItems,
-		totalPages,
-	};
-
 	return (
 		<>
 			<DataViews
+				data={appointments}
+				fields={fields}
 				view={view}
-				onChangeView={(currentState) => {
-					setView(currentState);
+				onChangeView={(newView: View) => {
+					setView(newView);
 					setFilters({
 						...filters,
-						paged: currentState.page,
-						posts_per_page: currentState.perPage,
+						paged: newView.page ?? 1,
+						posts_per_page: newView.perPage ?? 10,
 					});
-
 					invalidate('getAppointments');
 				}}
-				fields={fields}
 				actions={actions}
-				data={appointments}
-				paginationInfo={paginationInfo}
+				paginationInfo={{ totalItems, totalPages }}
+				getItemId={(item: Appointment) => String(item.id)}
+				search={false}
+				defaultLayouts={{ table: {} }}
 			/>
 			{appointmentModal && (
 				<AppointmentDetailsModals
@@ -277,7 +255,6 @@ export default function AppointmentsTableFull() {
 						if (!cancelAppointment) {
 							return;
 						}
-
 						await cancelAppointment(appointmentModal.id);
 						setAppointmentModal(null);
 					}}
@@ -285,7 +262,6 @@ export default function AppointmentsTableFull() {
 						if (!deleteAppointment) {
 							return;
 						}
-
 						await deleteAppointment(appointmentModal.id);
 						setAppointmentModal(null);
 					}}

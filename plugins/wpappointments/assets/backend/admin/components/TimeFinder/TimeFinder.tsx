@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { Button, ButtonGroup } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
-import { SlideOut } from '@wpappointments/components';
+import { ButtonGroup, SlideOut } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { addMinutes, format, getDaysInMonth } from 'date-fns';
 import cn from 'obj-str';
@@ -13,22 +12,23 @@ import { formatTime } from '~/backend/utils/i18n';
 import { MonthIndex } from '~/backend/store/slideout/appointment/appointment.types';
 import { store } from '~/backend/store/store';
 import styles from './TimeFinder.module.css';
+import { type AppointmentFormFields } from '~/backend/admin/components/AppointmentForm/AppointmentForm';
 import { useStateContext } from '~/backend/admin/context/StateContext';
-
-type Fields = {
-	timeHourStart: string;
-	timeMinuteStart: string;
-	duration: number;
-	datetime: string;
-	date: string;
-};
 
 type TimeFinderProps = {
 	mode: 'edit' | 'create';
+	formData: AppointmentFormFields;
+	setField: <K extends keyof AppointmentFormFields>(
+		field: K,
+		value: AppointmentFormFields[K]
+	) => void;
 };
 
-export default function TimeFinder({ mode }: TimeFinderProps) {
-	const { getValues, setValue } = useFormContext<Fields>();
+export default function TimeFinder({
+	mode,
+	formData,
+	setField,
+}: TimeFinderProps) {
 	const { invalidate, getSelector } = useStateContext();
 	const { closeCurrentSlideOut } = useSlideout();
 	const scrollableRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 	const { timePickerPrecision } = appointments;
 
 	const precision = timePickerPrecision || 15;
-	const duration = getValues('duration');
+	const duration = formData.duration;
 	const itemsToHighlight = Math.ceil(duration / precision);
 
 	const { currentMonth, currentYear } = useSelect((select) => {
@@ -65,16 +65,19 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 		dispatch.setCurrentYear(year);
 	}
 
+	const { coreEntityId } = appointments;
+
 	const availability = useSelect(
 		(select) => {
 			return select(store).getAvailability(
+				coreEntityId || 0,
 				currentMonth,
 				currentYear,
 				Intl.DateTimeFormat().resolvedOptions().timeZone,
 				getSelector('getAvailability')
 			);
 		},
-		[currentMonth, currentYear]
+		[coreEntityId, currentMonth, currentYear]
 	);
 
 	const { month } = availability;
@@ -173,12 +176,13 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 			}
 		}
 
-		scrollableRef.current?.addEventListener('scroll', handleScroll);
+		const el = scrollableRef.current;
+		el?.addEventListener('scroll', handleScroll);
 
 		return () => {
-			scrollableRef.current?.removeEventListener('scroll', handleScroll);
+			el?.removeEventListener('scroll', handleScroll);
 		};
-	}, [scrollableRef]);
+	}, []);
 
 	if (!month) {
 		return <div>{__('Loading...', 'wpappointments')}</div>;
@@ -405,21 +409,27 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 															slot.dateString
 														);
 
-														setValue(
+														setField(
 															'date',
 															slot.dateString
 														);
-														setValue(
+														setField(
 															'timeHourStart',
 															formatTimeForPicker(
 																date.getHours()
 															)
 														);
-														setValue(
+														setField(
 															'timeMinuteStart',
 															formatTimeForPicker(
 																date.getMinutes()
 															)
+														);
+														setField(
+															'datetime',
+															date
+																.getTime()
+																.toString()
 														);
 
 														closeCurrentSlideOut();
@@ -430,7 +440,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 														let next: HTMLDivElement =
 															target;
 
-														// highlight the next itemsToHighlight items
 														for (
 															let i = 0;
 															i <
@@ -456,7 +465,6 @@ export default function TimeFinder({ mode }: TimeFinderProps) {
 														let next: HTMLDivElement =
 															target;
 
-														// remove the highlight from the next itemsToHighlight items
 														for (
 															let i = 0;
 															i <

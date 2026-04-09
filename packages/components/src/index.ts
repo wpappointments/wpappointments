@@ -13,15 +13,26 @@ export { default as FormFieldSet } from './FormFieldSet/FormFieldSet';
 export { default as FormField, formFieldStyles } from './FormField/FormField';
 export { default as ErrorMessage } from './ErrorMessage/ErrorMessage';
 
-// DataViews
-export { DataViews } from './DataViews/DataViews';
+// DataViews & DataForm (re-exports from @wordpress/dataviews)
+export { DataViews, DataForm, useFormValidity } from './DataViews/DataViews';
 export type {
-	View,
-	Field,
 	Action,
-	PaginationInfo,
-	CollectionItem,
-} from './DataViews/types';
+	DataFormControlProps,
+	Field,
+	FieldValidity,
+	Form,
+	FormValidity,
+	View,
+} from './DataViews/DataViews';
+
+// DataForm Controls (styled Edit components for DataForm fields)
+export { default as TextInput } from './DataFormControls/TextInput';
+export { default as CheckboxInput } from './DataFormControls/CheckboxInput';
+export { default as SelectInput } from './DataFormControls/SelectInput';
+export { default as ToggleInput } from './DataFormControls/ToggleInput';
+export { default as TextareaInput } from './DataFormControls/TextareaInput';
+export { default as RadioInput } from './DataFormControls/RadioInput';
+export { default as NumberInput } from './DataFormControls/NumberInput';
 
 // Table
 export { default as TableFullEmpty } from './TableFullEmpty/TableFullEmpty';
@@ -33,23 +44,8 @@ export { default as SlideoutRenderer } from './SlideOut/SlideoutRenderer';
 // Toaster
 export { default as Toaster } from './Toaster/Toaster';
 
-// Form (React Hook Form wrappers)
-export { HtmlForm, FormProvider, withForm } from './Form/Form';
-
-// Form Fields (React Hook Form controlled)
-export { default as Input } from './FormField/Input/Input';
-export { default as Select } from './FormField/Select/Select';
-export { default as Toggle } from './FormField/Toggle/Toggle';
-export { default as NumberField } from './FormField/Number/Number';
-export { default as Checkbox } from './FormField/Checkbox/Checkbox';
-export { default as Radio } from './FormField/Radio/Radio';
-export { default as Textarea } from './FormField/Textarea/Textarea';
-export { default as DatePicker } from './FormField/DatePicker/DatePicker';
+// Standalone date picker (no form library dependency)
 export { default as WPDatePicker } from './FormField/WPDatePicker/WPDatePicker';
-
-// Form Utilities
-export { getGenericInputErrorMessage } from './utils/forms';
-export type { FormFieldError } from './utils/forms';
 
 // Date Pickers
 export { default as MultiDatePicker } from './MultiDatePicker/MultiDatePicker';
@@ -57,6 +53,9 @@ export { default as DateRangePicker } from './DateRangePicker/DateRangePicker';
 
 // Action Button
 export { default as ActionButton } from './ActionButton/ActionButton';
+
+// ButtonGroup (replaces deprecated @wordpress/components ButtonGroup)
+export { default as ButtonGroup } from './ButtonGroup/ButtonGroup';
 
 // Modals
 export { default as DeleteModal } from './DeleteModal/DeleteModal';

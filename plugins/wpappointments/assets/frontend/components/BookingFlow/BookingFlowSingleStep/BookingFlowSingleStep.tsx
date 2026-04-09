@@ -5,23 +5,37 @@ import BookingFlowConfirmation from '../BookingFlowConfirmation/BookingFlowConfi
 import BookingFlowCustomer from '../BookingFlowCustomer/BookingFlowCustomer';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+import { Slot } from '~/frontend/slotfill';
 
 export default function BookingFlowSingleStep() {
-	const { form, onSubmit, formError, formSuccess } = useBookingFlowContext();
-	const { handleSubmit } = form;
+	const { onSubmit, formError, formSuccess, attributes } =
+		useBookingFlowContext();
+	const { hideStepTitles } = attributes;
 
 	if (formSuccess) {
 		return <BookingFlowConfirmation />;
 	}
 
 	return (
-		<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+		<form
+			className={styles.form}
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			{formError && <p className={styles.error}>{formError}</p>}
-			<h2>{__('Select date and time', 'wpappointments')}</h2>
+			{!hideStepTitles && (
+				<h2>{__('Select date and time', 'wpappointments')}</h2>
+			)}
 			<BookingFlowCalendar />
-			<h2>{__('Customer information', 'wpappointments')}</h2>
+			{!hideStepTitles && (
+				<h2>{__('Customer information', 'wpappointments')}</h2>
+			)}
 			<BookingFlowCustomer />
-			<SubmitButton />
+			<Slot name="booking-flow/actions">
+				<SubmitButton />
+			</Slot>
 		</form>
 	);
 }

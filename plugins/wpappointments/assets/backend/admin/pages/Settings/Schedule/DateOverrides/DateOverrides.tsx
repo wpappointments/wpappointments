@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { Button, Tooltip } from '@wordpress/components';
+import { Button, ToggleControl, Tooltip } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { plus, trash } from '@wordpress/icons';
-import { MultiDatePicker, Toggle, withForm } from '@wpappointments/components';
+import { MultiDatePicker } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { format as formatDate, startOfDay } from 'date-fns';
 import type { OverrideGroup } from '~/backend/store/schedules/schedules.types';
@@ -66,11 +65,7 @@ type OverrideEditorProps = {
 	onSave: (group: OverrideGroup) => void;
 };
 
-const OverrideEditor = withForm(function OverrideEditor({
-	slideoutId,
-	group,
-	onSave,
-}: OverrideEditorProps) {
+function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 	const { closeSlideOut } = useSlideout();
 
 	const [selectedDates, setSelectedDates] = useState<Date[]>(() =>
@@ -161,14 +156,11 @@ const OverrideEditor = withForm(function OverrideEditor({
 			</div>
 
 			<div className={styles.closedSection}>
-				<Toggle
-					name="_override_closed"
-					defaultChecked={isClosed}
-					onChange={(val) => setIsClosed(val)}
+				<ToggleControl
+					checked={isClosed}
+					onChange={setIsClosed}
+					label={__('Mark unavailable (all day)', 'wpappointments')}
 				/>
-				<span className={styles.closedLabel}>
-					{__('Mark unavailable (all day)', 'wpappointments')}
-				</span>
 			</div>
 
 			{!isClosed && (
@@ -248,7 +240,7 @@ const OverrideEditor = withForm(function OverrideEditor({
 			</Button>
 		</div>
 	);
-});
+}
 
 // --- Slot Time Picker (standalone, no form context) ---
 
@@ -398,34 +390,30 @@ function createHourOptions(
 
 export default function DateOverrides({
 	scheduleSlideoutId,
+	overrides,
+	onOverridesChange,
 }: {
 	scheduleSlideoutId: string;
+	overrides: OverrideGroup[];
+	onOverridesChange: (overrides: OverrideGroup[]) => void;
 }) {
-	const { watch, getValues, setValue } = useFormContext();
 	const { openSlideOut } = useSlideout();
 	const clockType = useClockType();
 
-	const overrides: OverrideGroup[] = watch('overrides') || [];
-
 	const handleSaveGroup = (group: OverrideGroup) => {
-		const current: OverrideGroup[] = getValues('overrides') || [];
-		const index = current.findIndex((g) => g.id === group.id);
+		const index = overrides.findIndex((g) => g.id === group.id);
 
 		if (index >= 0) {
-			const updated = [...current];
+			const updated = [...overrides];
 			updated[index] = group;
-			setValue('overrides', updated);
+			onOverridesChange(updated);
 		} else {
-			setValue('overrides', [...current, group]);
+			onOverridesChange([...overrides, group]);
 		}
 	};
 
 	const handleRemove = (groupId: string) => {
-		const current: OverrideGroup[] = getValues('overrides') || [];
-		setValue(
-			'overrides',
-			current.filter((g) => g.id !== groupId)
-		);
+		onOverridesChange(overrides.filter((g) => g.id !== groupId));
 	};
 
 	const openEditor = (group?: OverrideGroup) => {

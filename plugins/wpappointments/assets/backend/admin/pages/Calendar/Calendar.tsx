@@ -1,7 +1,8 @@
-import { Button, ButtonGroup } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { ButtonGroup, HeaderActionsFill } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import cn from 'obj-str';
 import { applyFilters } from '~/backend/utils/hooks';
@@ -201,16 +202,22 @@ export default function Calendar() {
 			<div className={styles.pagination}>
 				<Button
 					variant="secondary"
+					size="compact"
 					onClick={switchToPreviousMonth}
 					aria-label={__('Previous month', 'wpappointments')}
 				>
 					&lsaquo;
 				</Button>
-				<Button variant="secondary" onClick={switchToToday}>
+				<Button
+					variant="secondary"
+					size="compact"
+					onClick={switchToToday}
+				>
 					{__('today', 'wpappointments')}
 				</Button>
 				<Button
 					variant="secondary"
+					size="compact"
 					onClick={switchToNextMonth}
 					aria-label={__('Next month', 'wpappointments')}
 				>
@@ -222,12 +229,32 @@ export default function Calendar() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title={__('Calendar', 'wpappointments')}>
-				<h1>
-					<strong>{getMonthName(month)}</strong> {year}
-				</h1>
+			<LayoutDefault title={__('Calendar', 'wpappointments')} fullWidth>
+				<HeaderActionsFill>
+					<Button
+						variant="primary"
+						onClick={() => {
+							openSlideOut({
+								id: 'appointment',
+								data: {
+									mode: 'create',
+								},
+							});
+						}}
+					>
+						{__('Create New Appointment', 'wpappointments')}
+					</Button>
+				</HeaderActionsFill>
 				<div className={styles.topBar}>
-					<ButtonGroup>
+					<h1 className={styles.monthYear}>
+						<strong>{getMonthName(month)}</strong> {year}
+					</h1>
+					<div className={styles.actions}>
+						{calendarActions.map((action, i) => (
+							<Fragment key={i}>{action}</Fragment>
+						))}
+					</div>
+					<ButtonGroup className={styles.viewSwitcher}>
 						<Button
 							variant="secondary"
 							size="compact"
@@ -256,24 +283,6 @@ export default function Calendar() {
 							{__('Month', 'wpappointments')}
 						</Button>
 					</ButtonGroup>
-					<div className={styles.actions}>
-						{calendarActions.map((action, i) => (
-							<Fragment key={i}>{action}</Fragment>
-						))}
-						<Button
-							variant="primary"
-							onClick={() => {
-								openSlideOut({
-									id: 'appointment',
-									data: {
-										mode: 'create',
-									},
-								});
-							}}
-						>
-							{__('Create New Appointment', 'wpappointments')}
-						</Button>
-					</div>
 				</div>
 				<div className={styles.calendarContainer}>
 					<div className={styles.header}>

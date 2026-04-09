@@ -6,7 +6,7 @@
 
 - **Product model:** Free core (open-source) + paid addons (premium repo: `wpappointments-premium` submodule).
 - **Core (free):** Appointments, Schedules, Customers, Settings, basic Notifications; REST API (Appointments, Availability, Customers, Settings, **Services**); CPTs: `wpa-appointment`, `wpa-schedule`, `wpa-service`. Capabilities are filterable for extensions.
-- **Existing:** 3 CPTs, 5 REST controllers (~15 routes), 4 capabilities, email notifications with template variables, React admin (Dashboard, Calendar, Customers, Services, Settings, Wizard), Gutenberg booking block (single/multi-step), 15 PHP tests + Playwright E2E, TypeScript frontend with React Hook Form + Valibot.
+- **Existing:** 3 CPTs, 5 REST controllers (~15 routes), 4 capabilities, email notifications with template variables, React admin (Dashboard, Calendar, Customers, Services, Settings, Wizard), Gutenberg booking block (single/multi-step), 15 PHP tests + Playwright E2E, TypeScript frontend with @wordpress/dataviews DataForm + Valibot.
 - **Missing:** WP-CLI, addon manager, service variants CPT (defined but not registered), shortcode builder, advanced scheduling (gaps, lead times, holidays), calendar sync, payments.
 - **Links:** [Milestones](https://github.com/wpappointments/wpappointments/milestones), [Project Board](https://github.com/orgs/wpappointments/projects/6), [Must Have Discussions](https://github.com/wpappointments/wpappointments/discussions?discussions_q=is%3Aopen+label%3A%22%5Bidea%5D+Must+have%22)
 

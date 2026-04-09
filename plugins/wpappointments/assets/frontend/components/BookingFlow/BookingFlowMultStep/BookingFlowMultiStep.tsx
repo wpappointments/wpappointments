@@ -1,108 +1,138 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import cn from 'obj-str';
+import BackButton from '../BackButton/BackButton';
 import styles from '../BookingFlow.module.css';
 import BookingFlowCalendar from '../BookingFlowCalendar/BookingFlowCalendar';
 import BookingFlowConfirmation from '../BookingFlowConfirmation/BookingFlowConfirmation';
 import BookingFlowCustomer from '../BookingFlowCustomer/BookingFlowCustomer';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import multiStepStyles from './BookingFlowMultiStep.module.css';
-import {
-	BookingFlowCalendarFields,
-	BookingFlowCustomerFields,
-	useBookingFlowContext,
-} from '~/frontend/context/BookingFlowContext';
+import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
+import { Slot } from '~/frontend/slotfill';
 
 export default function BookingFlowMultiStep() {
-	const { form, onSubmit, formError, formSuccess, attributes } =
-		useBookingFlowContext();
-	const { alignment } = attributes;
-	const { handleSubmit, setValue, getValues, watch } = form;
+	const {
+		formData,
+		onSubmit,
+		formError,
+		formSuccess,
+		attributes,
+		setGoBack,
+		editorStep,
+		isEditor,
+	} = useBookingFlowContext();
+	const { alignment, hideProgressBar, hideStepTitles } = attributes;
 	const [currentStep, setCurrentStep] = useState(0);
 
-	const datetime = watch('datetime');
+	const activeStep = isEditor ? (editorStep ?? 0) : currentStep;
 
-	const onSubmitDate = (data: BookingFlowCalendarFields) => {
-		setValue('datetime', data.datetime);
-		setCurrentStep(1);
-	};
+	useEffect(() => {
+		setGoBack(() => setCurrentStep(0));
+	}, [setGoBack]);
 
-	const onSubmitCustomer = (data: BookingFlowCustomerFields) => {
-		onSubmit({
-			...data,
-			datetime: getValues('datetime'),
-		});
-		setCurrentStep(2);
+	useEffect(() => {
+		if (formSuccess) {
+			setCurrentStep(2);
+		}
+	}, [formSuccess]);
+
+	const datetime = formData.datetime;
+
+	const onSubmitCustomer = async () => {
+		await onSubmit();
 	};
 
 	return (
 		<>
-			<header className={multiStepStyles.stepsHeader}>
-				<div
-					className={cn({
-						[multiStepStyles.stepsHeaderLabel]: true,
-						[multiStepStyles.stepsHeaderLabelActive]:
-							currentStep === 0,
-						[multiStepStyles.stepsHeaderLabelClickable]:
-							currentStep !== 0 && !formSuccess,
-						[multiStepStyles.stepsHeaderLabelCenter]:
-							alignment === 'Center',
-						[styles.alignLeft]: alignment === 'Left',
-					})}
-					onClick={() => {
-						if (currentStep !== 0 && !formSuccess) {
-							setCurrentStep(0);
-						}
-					}}
-					data-step={1}
-				>
-					{__('Select date', 'wpappointments')}
-				</div>
-				<div
-					className={cn({
-						[multiStepStyles.stepsHeaderLabel]: true,
-						[multiStepStyles.stepsHeaderLabelActive]:
-							currentStep === 1,
-						[multiStepStyles.stepsHeaderLabelClickable]:
-							currentStep !== 1 && !formSuccess && datetime,
-					})}
-					onClick={() => {
-						if (currentStep !== 1 && !formSuccess && datetime) {
-							setCurrentStep(1);
-						}
-					}}
-					data-step={2}
-				>
-					{__('About you', 'wpappointments')}
-				</div>
-				<div
-					className={cn({
-						[multiStepStyles.stepsHeaderLabel]: true,
-						[multiStepStyles.stepsHeaderLabelActive]:
-							currentStep === 2 && formSuccess,
-					})}
-					data-step={3}
-				>
-					{__('Summary', 'wpappointments')}
-				</div>
-			</header>
-			{currentStep === 0 && (
-				<form onSubmit={handleSubmit(onSubmitDate)}>
-					{formError && <p className={styles.error}>{formError}</p>}
-					<h2>{__('Select date and time', 'wpappointments')}</h2>
-					<BookingFlowCalendar />
-					<SubmitButton label={__('Next step', 'wpappointments')} />
-				</form>
+			{!hideProgressBar && (
+				<header className={multiStepStyles.stepsHeader}>
+					<button
+						type="button"
+						className={cn({
+							[multiStepStyles.stepsHeaderLabel]: true,
+							[multiStepStyles.stepsHeaderLabelActive]:
+								activeStep === 0,
+							[multiStepStyles.stepsHeaderLabelClickable]:
+								currentStep !== 0 && !formSuccess,
+							[multiStepStyles.stepsHeaderLabelCenter]:
+								alignment === 'Center',
+							[styles.alignLeft]: alignment === 'Left',
+						})}
+						onClick={() => {
+							if (currentStep !== 0 && !formSuccess) {
+								setCurrentStep(0);
+							}
+						}}
+						data-step={1}
+					>
+						{__('Select date', 'wpappointments')}
+					</button>
+					<button
+						type="button"
+						className={cn({
+							[multiStepStyles.stepsHeaderLabel]: true,
+							[multiStepStyles.stepsHeaderLabelActive]:
+								activeStep === 1,
+							[multiStepStyles.stepsHeaderLabelClickable]:
+								currentStep !== 1 && !formSuccess && datetime,
+						})}
+						onClick={() => {
+							if (currentStep !== 1 && !formSuccess && datetime) {
+								setCurrentStep(1);
+							}
+						}}
+						data-step={2}
+					>
+						{__('About you', 'wpappointments')}
+					</button>
+					<div
+						className={cn({
+							[multiStepStyles.stepsHeaderLabel]: true,
+							[multiStepStyles.stepsHeaderLabelActive]:
+								activeStep === 2 && formSuccess,
+						})}
+						data-step={3}
+					>
+						{__('Summary', 'wpappointments')}
+					</div>
+				</header>
 			)}
-			{currentStep === 1 && (
-				<form onSubmit={handleSubmit(onSubmitCustomer)}>
+
+			{activeStep === 0 && (
+				<div>
 					{formError && <p className={styles.error}>{formError}</p>}
-					<h2>{__('Customer information', 'wpappointments')}</h2>
+					{!hideStepTitles && (
+						<h2>{__('Select date and time', 'wpappointments')}</h2>
+					)}
+					<BookingFlowCalendar
+						onSlotSelected={
+							isEditor ? undefined : () => setCurrentStep(1)
+						}
+					/>
+				</div>
+			)}
+			{activeStep === 1 && (
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						onSubmitCustomer();
+					}}
+				>
+					{formError && <p className={styles.error}>{formError}</p>}
+					{!hideStepTitles && (
+						<h2>{__('Customer information', 'wpappointments')}</h2>
+					)}
 					<BookingFlowCustomer />
-					<SubmitButton />
+					<Slot name="booking-flow/actions">
+						<div className={multiStepStyles.stepActions}>
+							<BackButton onClick={() => setCurrentStep(0)} />
+							<SubmitButton />
+						</div>
+					</Slot>
 				</form>
 			)}
-			{currentStep === 2 && formSuccess && <BookingFlowConfirmation />}
+			{activeStep === 2 && formSuccess && <BookingFlowConfirmation />}
 		</>
 	);
 }
