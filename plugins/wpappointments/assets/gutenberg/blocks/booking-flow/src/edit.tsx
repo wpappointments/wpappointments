@@ -10,7 +10,7 @@ import {
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import type { BlockEditProps } from '@wordpress/blocks';
+import type { BlockEditProps, TemplateArray } from '@wordpress/blocks';
 import {
 	Button,
 	Panel,
@@ -40,7 +40,7 @@ import { Fill } from '~/frontend/slotfill';
 // conflict on FSE pages where the block isn't present.
 const BookingFlow = lazy(() => import('~/frontend/frontend'));
 
-const BUTTONS_TEMPLATE: ReadonlyArray<any> = [
+const BUTTONS_TEMPLATE: TemplateArray = [
 	[
 		'core/buttons',
 		{ layout: { type: 'flex', justifyContent: 'right' } },

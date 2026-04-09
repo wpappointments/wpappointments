@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -50,6 +50,13 @@ export default function ScheduleSettings({
 		return select(store).getSchedules();
 	}, []);
 
+	useEffect(() => {
+		const defaultSchedule = existingSchedules.find((s) => s.isDefault);
+		if (defaultSchedule?.days) {
+			setFormData((prev) => ({ ...defaultSchedule.days, ...prev }));
+		}
+	}, [existingSchedules]);
+
 	const timePickerPrecision = useSelect(() => {
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
@@ -90,25 +97,34 @@ export default function ScheduleSettings({
 
 			let result;
 
-			if (existingSchedules.length > 0) {
-				const defaultSchedule = existingSchedules.find(
-					(s) => s.isDefault
-				);
-				if (defaultSchedule) {
-					result = await updateSchedule(defaultSchedule.id, {
-						days: allDays,
-					});
+			try {
+				if (existingSchedules.length > 0) {
+					const defaultSchedule = existingSchedules.find(
+						(s) => s.isDefault
+					);
+					if (defaultSchedule) {
+						result = await updateSchedule(defaultSchedule.id, {
+							days: allDays,
+						});
+					} else {
+						result = await createSchedule({
+							name: __('Default', 'wpappointments'),
+							days: allDays,
+						});
+					}
 				} else {
 					result = await createSchedule({
 						name: __('Default', 'wpappointments'),
 						days: allDays,
 					});
 				}
-			} else {
-				result = await createSchedule({
-					name: __('Default', 'wpappointments'),
-					days: allDays,
-				});
+			} catch (err) {
+				const message =
+					err instanceof Error && err.message
+						? err.message
+						: __('Error saving schedule', 'wpappointments');
+				setError(message);
+				return;
 			}
 
 			if (!result) {

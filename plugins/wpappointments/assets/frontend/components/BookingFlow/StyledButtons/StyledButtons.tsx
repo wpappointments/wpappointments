@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useCallback, useRef, type MouseEvent } from 'react';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
 /**
@@ -10,6 +10,37 @@ export default function StyledButtons() {
 	const { buttonHtml, goBack } = useBookingFlowContext();
 	const ref = useRef<HTMLDivElement>(null);
 
+	const handleButtonClick = useCallback(
+		(e: MouseEvent<HTMLDivElement>) => {
+			const target = e.target as HTMLElement;
+			const button = target.closest(
+				'.wpa-back-button, .wpa-submit-button'
+			);
+			if (!button) return;
+
+			if (button.classList.contains('wpa-back-button')) {
+				e.preventDefault();
+				goBack?.();
+			} else if (button.classList.contains('wpa-submit-button')) {
+				e.preventDefault();
+				const form = ref.current?.closest('form');
+				if (form) {
+					if (typeof form.requestSubmit === 'function') {
+						form.requestSubmit();
+					} else {
+						const submitter = document.createElement('button');
+						submitter.type = 'submit';
+						submitter.style.display = 'none';
+						form.appendChild(submitter);
+						submitter.click();
+						form.removeChild(submitter);
+					}
+				}
+			}
+		},
+		[goBack]
+	);
+
 	if (!buttonHtml?.group) {
 		return null;
 	}
@@ -17,33 +48,7 @@ export default function StyledButtons() {
 	return (
 		<div
 			ref={ref}
-			onClick={(e) => {
-				const target = e.target as HTMLElement;
-				const button = target.closest(
-					'.wpa-back-button, .wpa-submit-button'
-				);
-				if (!button) return;
-
-				if (button.classList.contains('wpa-back-button')) {
-					e.preventDefault();
-					goBack?.();
-				} else if (button.classList.contains('wpa-submit-button')) {
-					e.preventDefault();
-					const form = ref.current?.closest('form');
-					if (form) {
-						if (typeof form.requestSubmit === 'function') {
-							form.requestSubmit();
-						} else {
-							const submitter = document.createElement('button');
-							submitter.type = 'submit';
-							submitter.style.display = 'none';
-							form.appendChild(submitter);
-							submitter.click();
-							form.removeChild(submitter);
-						}
-					}
-				}
-			}}
+			onClick={handleButtonClick}
 			// Safe: buttonHtml.group is Gutenberg saved block markup (InnerBlocks
 			// outerHTML), sanitized by wp_kses_post in render.php before base64 encoding.
 			dangerouslySetInnerHTML={{ __html: buttonHtml.group }}
