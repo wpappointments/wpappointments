@@ -38,6 +38,11 @@
 	margin: var(--wpappointments-large-gap) auto 128px auto;
 }
 
+.full-width {
+	max-width: none;
+	margin: 0;
+}
+
 @media screen and (min-width: 783px) {
 	.layout-header {
 		top: 32px;

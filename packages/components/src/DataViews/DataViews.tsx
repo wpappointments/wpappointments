@@ -1,36 +1,41 @@
+/**
+ * DataViews wrapper
+ *
+ * Wraps the official @wordpress/dataviews component using composition mode
+ * (children) to render a minimal UI — just the table layout and footer
+ * pagination, no settings panel or search bar.
+ *
+ * Based on the upstream "Minimal UI" pattern:
+ * https://github.com/WordPress/gutenberg/blob/trunk/packages/dataviews/src/dataviews/stories/minimal-ui.tsx
+ *
+ * All DataViews usage in the project should import from this package
+ * to maintain a single integration point.
+ *
+ * @package WPAppointments
+ */
+import { DataViews as WPDataViews } from '@wordpress/dataviews';
+import '@wordpress/dataviews/build-style/style.css';
 import styles from './DataViews.module.css';
-import DataViewsBody from './DataViewsBody';
-import DataViewsFooter from './DataViewsFooter';
-import DataViewsHeader from './DataViewsHeader';
-import { CollectionItem, View, Field, Action, PaginationInfo } from './types';
 
-export type DataViewsProps = {
-	view: View;
-	onChangeView: (view: View) => void;
-	fields: Field[];
-	actions: Action[];
-	data: CollectionItem[];
-	paginationInfo: PaginationInfo;
-};
+export { DataForm, useFormValidity } from '@wordpress/dataviews';
+export type {
+	Action,
+	DataFormControlProps,
+	Field,
+	FieldValidity,
+	Form,
+	FormValidity,
+	View,
+} from '@wordpress/dataviews';
 
-export function DataViews({
-	view,
-	onChangeView,
-	fields,
-	actions,
-	data,
-	paginationInfo,
-}: DataViewsProps) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- upstream @wordpress/dataviews lacks .d.ts exports
+export function DataViews(props: any) {
 	return (
-		<table className={styles.dataViews}>
-			<DataViewsHeader fields={fields} />
-			<DataViewsBody fields={fields} data={data} actions={actions} />
-			<DataViewsFooter
-				view={view}
-				onChangeView={onChangeView}
-				fields={fields}
-				paginationInfo={paginationInfo}
-			/>
-		</table>
+		<div className={styles.wrapper}>
+			<WPDataViews {...props}>
+				<WPDataViews.Layout />
+				<WPDataViews.Footer />
+			</WPDataViews>
+		</div>
 	);
 }

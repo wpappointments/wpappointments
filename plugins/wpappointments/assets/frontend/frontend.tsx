@@ -55,15 +55,37 @@ export type DayNotice = {
 
 export type DayNotices = Record<string, DayNotice[]>;
 
-export type FrontendAppProps = {
-	attributes: BookingFlowBlockAttributes;
+export type ButtonHtml = {
+	group?: string;
+	back?: string;
+	submit?: string;
 };
 
-export default function FrontendApp({ attributes }: FrontendAppProps) {
+export type FrontendAppProps = {
+	attributes: BookingFlowBlockAttributes;
+	buttonHtml?: ButtonHtml;
+	children?: React.ReactNode;
+	editorStep?: number;
+	isEditor?: boolean;
+};
+
+export default function FrontendApp({
+	attributes,
+	buttonHtml,
+	children,
+	editorStep,
+	isEditor,
+}: FrontendAppProps) {
 	const { alignment, width } = attributes;
 
 	return (
-		<BookingFlowContextProvider attributes={attributes}>
+		<BookingFlowContextProvider
+			attributes={attributes}
+			buttonHtml={buttonHtml}
+			editorStep={editorStep}
+			isEditor={isEditor}
+		>
+			{children}
 			<div
 				className={cn({
 					[styles.bookingFlow]: true,

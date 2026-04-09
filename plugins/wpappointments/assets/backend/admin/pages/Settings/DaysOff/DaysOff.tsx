@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
 import {
 	Button,
-	Button as WPButton,
 	Card,
 	CardFooter,
 	CardHeader,
@@ -14,16 +12,16 @@ import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import {
 	CardBody,
-	Checkbox,
+	CheckboxInput,
+	DataForm,
 	DateRangePicker,
-	HtmlForm,
-	Select,
+	SelectInput,
 	SlideoutHeaderActionsFill,
-	Textarea,
-	withForm,
+	TextareaInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import type { OooEntry, OooReason } from '~/backend/store/ooo/ooo.types';
 import { store } from '~/backend/store/store';
 import styles from './DaysOff.module.css';
@@ -88,18 +86,16 @@ function OooRow({ entry, onClick }: { entry: OooEntry; onClick: () => void }) {
 	);
 }
 
-type OooFormFields = {
-	start_date: string;
-	end_date: string;
+type OooFormData = {
 	reason: OooReason;
 	notes: string;
 	note_public: boolean;
 };
 
-const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
+function OooEditor({ entry }: { entry?: OooEntry }) {
 	const { closeSlideOut, currentSlideout } = useSlideout();
-	const { setError } = useFormContext();
 	const [saving, setSaving] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const generalSettings = useSelect(
 		(select) => select(store).getGeneralSettings(),
@@ -119,33 +115,65 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 		entry ? parseYmd(entry.endDate) : null
 	);
 
+	const [formData, setFormData] = useState<OooFormData>(() => ({
+		reason: entry?.reason ?? 'unspecified',
+		notes: entry?.notes ?? '',
+		note_public: entry?.notePublic ?? false,
+	}));
+
 	const slideoutId = entry ? `ooo-${entry.id}` : 'ooo-new';
 
-	const initialValues = entry
-		? {
-				reason: entry.reason,
-				notes: entry.notes,
-				note_public: entry.notePublic,
-			}
-		: undefined;
+	const fields: Field<OooFormData>[] = [
+		{
+			id: 'reason',
+			type: 'text',
+			label: __('Reason', 'wpappointments'),
+			elements: REASON_OPTIONS,
+			Edit: SelectInput,
+		},
+		{
+			id: 'notes',
+			type: 'text',
+			label: __('Notes', 'wpappointments'),
+			Edit: TextareaInput,
+		},
+		{
+			id: 'note_public',
+			type: 'boolean',
+			label: __(
+				'Show note in customer-facing calendar',
+				'wpappointments'
+			),
+			Edit: CheckboxInput,
+		},
+	];
 
-	useFillFormValues(initialValues);
+	const form: Form = {
+		layout: { type: 'regular' },
+		fields: ['reason', 'notes', 'note_public'],
+	};
+
+	const { validity } = useFormValidity(formData, fields, form);
+
+	const handleChange = (edits: Record<string, unknown>) => {
+		setFormData((prev) => ({ ...prev, ...edits }));
+	};
 
 	const formatYmd = (date: Date | null) =>
 		date
 			? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 			: '';
 
-	const onSubmit: SubmitHandler<OooFormFields> = async (data) => {
+	const handleSubmit = async () => {
 		if (!rangeStart) {
-			setError('root', {
-				message: __('Please select a date range', 'wpappointments'),
-			});
+			setError(__('Please select a date range', 'wpappointments'));
 			return;
 		}
 
+		setError(null);
+
 		const payload = {
-			...data,
+			...formData,
 			start_date: formatYmd(rangeStart),
 			end_date: formatYmd(rangeEnd || rangeStart),
 		};
@@ -189,7 +217,7 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 			{entry && isTopSlideout && (
 				<SlideoutHeaderActionsFill>
 					<Tooltip text={__('Delete time off', 'wpappointments')}>
-						<WPButton
+						<Button
 							icon={trash}
 							isDestructive
 							disabled={saving}
@@ -199,68 +227,60 @@ const OooEditor = withForm(function OooEditor({ entry }: { entry?: OooEntry }) {
 					</Tooltip>
 				</SlideoutHeaderActionsFill>
 			)}
-			<HtmlForm onSubmit={onSubmit}>
-				<div className={styles.editorContent}>
-					<div>
-						<p className={styles.dateLabel}>
-							{rangeStart && rangeEnd
-								? `${formatYmd(rangeStart)} — ${formatYmd(rangeEnd)}`
-								: rangeStart
-									? `${formatYmd(rangeStart)} — ${__('select end date', 'wpappointments')}`
-									: __('Select date range', 'wpappointments')}
-						</p>
-						<DateRangePicker
-							startDate={rangeStart}
-							endDate={rangeEnd}
-							onChange={(start, end) => {
-								setRangeStart(start);
-								setRangeEnd(end);
-							}}
-							startOfWeek={
-								startOfWeekSetting as 0 | 1 | 2 | 3 | 4 | 5 | 6
-							}
-						/>
-					</div>
-					<Select
-						name="reason"
-						label={__('Reason', 'wpappointments')}
-						options={REASON_OPTIONS}
-						defaultValue={'unspecified' as any}
-					/>
-					<Textarea
-						name="notes"
-						label={__('Notes', 'wpappointments')}
-						rows={3}
-					/>
-					<Checkbox
-						name="note_public"
-						label={__(
-							'Show note in customer-facing calendar',
-							'wpappointments'
-						)}
-						defaultValue={false}
-					/>
-
-					<Button
-						variant="primary"
-						type="submit"
-						isBusy={saving}
-						style={{
-							width: '100%',
-							justifyContent: 'center',
-							padding: '22px 0px',
-							marginTop: '16px',
+			<div className={styles.editorContent}>
+				<div>
+					<p className={styles.dateLabel}>
+						{rangeStart && rangeEnd
+							? `${formatYmd(rangeStart)} — ${formatYmd(rangeEnd)}`
+							: rangeStart
+								? `${formatYmd(rangeStart)} — ${__('select end date', 'wpappointments')}`
+								: __('Select date range', 'wpappointments')}
+					</p>
+					<DateRangePicker
+						startDate={rangeStart}
+						endDate={rangeEnd}
+						onChange={(start, end) => {
+							setRangeStart(start);
+							setRangeEnd(end);
+							setError(null);
 						}}
-					>
-						{entry
-							? __('Save changes', 'wpappointments')
-							: __('Add time off', 'wpappointments')}
-					</Button>
+						startOfWeek={
+							startOfWeekSetting as 0 | 1 | 2 | 3 | 4 | 5 | 6
+						}
+					/>
+					{error && (
+						<p style={{ color: '#cc1818', marginTop: '8px' }}>
+							{error}
+						</p>
+					)}
 				</div>
-			</HtmlForm>
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={form}
+					onChange={handleChange}
+					validity={validity}
+				/>
+
+				<Button
+					variant="primary"
+					onClick={handleSubmit}
+					isBusy={saving}
+					style={{
+						width: '100%',
+						justifyContent: 'center',
+						padding: '22px 0px',
+						marginTop: '16px',
+					}}
+				>
+					{entry
+						? __('Save changes', 'wpappointments')
+						: __('Add time off', 'wpappointments')}
+				</Button>
+			</div>
 		</>
 	);
-});
+}
 
 export default function DaysOffSettings() {
 	const { openSlideOut } = useSlideout();

@@ -4,10 +4,9 @@ import styles from '../BookingFlow.module.css';
 import { useBookingFlowContext } from '~/frontend/context/BookingFlowContext';
 
 export default function BookingFlowConfirmation() {
-	const { form } = useBookingFlowContext();
-	const { getValues } = form;
+	const { formData } = useBookingFlowContext();
 
-	const dateTime = getValues('datetime');
+	const dateTime = formData.datetime;
 	const date = formatDate(new Date(dateTime));
 	const time = formatTime(new Date(dateTime));
 

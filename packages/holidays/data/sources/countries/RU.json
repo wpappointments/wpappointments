@@ -1,0 +1,16 @@
+{
+	"id": "RU",
+	"name": "Russia",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"orthodoxChristmas",
+		"defenderOfFatherlandDay",
+		"internationalWomensDay8",
+		"springLabourDay",
+		"victoryDayRU",
+		"russiaDay",
+		"nationalUnityDayRU",
+		"christmas"
+	]
+}

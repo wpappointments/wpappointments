@@ -1,0 +1,18 @@
+{
+	"id": "MM",
+	"name": "Myanmar",
+	"type": "country",
+	"holidays": [
+		"independenceDayMM",
+		"unionDayMM",
+		"peasantsDayMM",
+		"armedForcesDayMM",
+		"thingyanMM",
+		"myanmarNewYear",
+		"labourDay",
+		"martyrsDayMM",
+		"vesak",
+		"nationalDayMM",
+		"christmas"
+	]
+}

@@ -11,6 +11,7 @@ type Props = {
 	datetime: string | undefined;
 	alignment: string;
 	slotsAsButtons: boolean;
+	inline?: boolean;
 	defaultLength: number;
 	onSelectSlot: (isoString: string) => void;
 };
@@ -21,11 +22,46 @@ export default function TimeSlotPicker({
 	datetime,
 	alignment,
 	slotsAsButtons,
+	inline,
 	defaultLength,
 	onSelectSlot,
 }: Props) {
+	if (inline) {
+		return (
+			<>
+				<h5 className={styles.timeSlotHeader}>
+					{format(date, 'EEE d')}
+				</h5>
+				<div className={styles.inlineSlots}>
+					{slots.map((slot, i) => {
+						const iso = new Date(slot.timestamp).toISOString();
+						return (
+							<button
+								key={i}
+								onClick={() => {
+									if (!slot.available) return;
+									onSelectSlot(iso);
+								}}
+								type="button"
+								className={cn({
+									[styles.inlineSlot]: true,
+									[styles.inlineSlotSelected]:
+										datetime === iso,
+									[styles.inlineSlotUnavailable]:
+										!slot.available,
+								})}
+							>
+								{slot.time}
+							</button>
+						);
+					})}
+				</div>
+			</>
+		);
+	}
+
 	return (
-		<>
+		<div className={styles.timeSlotPicker}>
 			<h5 className={styles.timeSlotHeader}>
 				{__('Select a time slot for', 'wpappointments')}{' '}
 				{format(date, 'LLLL do')}
@@ -71,13 +107,13 @@ export default function TimeSlotPicker({
 				))}
 			</div>
 			{datetime && (
-				<div>
+				<h5 className={styles.timeSlotHeader}>
 					<span>{__('Selected time:', 'wpappointments')}</span>{' '}
 					<strong>
 						{format(new Date(datetime), 'LLLL do, HH:mm')}
 					</strong>
-				</div>
+				</h5>
 			)}
-		</>
+		</div>
 	);
 }

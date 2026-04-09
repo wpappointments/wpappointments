@@ -149,15 +149,17 @@ class Appointment {
 
 		$new_appointment = $this->normalize();
 
-		if ( 'pending' === $new_appointment['status'] ) {
+		$status_changed = $new_appointment['status'] !== $current_appointment['status'];
+
+		if ( $status_changed && 'pending' !== $new_appointment['status'] ) {
 			do_action(
-				'wpappointments_appointment_updated',
+				"wpappointments_appointment_{$new_appointment['status']}",
 				$new_appointment,
 				$current_appointment
 			);
 		} else {
 			do_action(
-				"wpappointments_appointment_{$new_appointment['status']}",
+				'wpappointments_appointment_updated',
 				$new_appointment,
 				$current_appointment
 			);

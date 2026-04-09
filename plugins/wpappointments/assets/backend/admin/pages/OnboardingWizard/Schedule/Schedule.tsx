@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useSelect, select } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { HtmlForm, withForm } from '@wpappointments/components';
 import type {
 	Day,
 	DayOpeningHours,
 } from '~/backend/store/settings/settings.types';
 import { store } from '~/backend/store/store';
-import OpeningHoursDayOfWeek from '../../Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import styles from '../OnboardingWizard.module.css';
+import OpeningHoursDayOfWeek from '~/backend/admin/pages/Settings/Schedule/OpeningHoursDayOfWeek/OpeningHoursDayOfWeek';
 import { createSchedule, updateSchedule } from '~/backend/api/schedules';
 
 const DAYS_FROM_SUNDAY: Day[] = [
@@ -36,49 +34,107 @@ function useOrderedDays(): Day[] {
 	];
 }
 
-type ScheduleFormFields = Record<string, DayOpeningHours>;
+type ScheduleData = Record<string, DayOpeningHours>;
 
-function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
+export default function ScheduleSettings({
+	onSuccess,
+}: {
+	onSuccess: () => void;
+}) {
 	const [error, setError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const orderedDays = useOrderedDays();
+	const [formData, setFormData] = useState<ScheduleData>({});
 
 	const existingSchedules = useSelect(() => {
 		return select(store).getSchedules();
 	}, []);
 
+	useEffect(() => {
+		const defaultSchedule = existingSchedules.find((s) => s.isDefault);
+		if (defaultSchedule?.days) {
+			setFormData((prev) => ({ ...defaultSchedule.days, ...prev }));
+		}
+	}, [existingSchedules]);
+
 	const timePickerPrecision = useSelect(() => {
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
 
-	const onSubmit: SubmitHandler<ScheduleFormFields> = async (data) => {
+	const handleDayChange = (day: string, value: DayOpeningHours) => {
+		setFormData((prev) => ({ ...prev, [day]: value }));
+	};
+
+	const getDayData = (day: Day): DayOpeningHours => {
+		return (
+			formData[day] || {
+				day,
+				enabled: false,
+				allDay: false,
+				slots: {
+					list: [
+						{
+							start: { hour: '09', minute: '00' },
+							end: { hour: '17', minute: '00' },
+						},
+					],
+				},
+			}
+		);
+	};
+
+	const onSubmit = async () => {
+		if (isSubmitting) return;
+		setIsSubmitting(true);
 		setError(null);
 
-		let result;
+		try {
+			// Build complete days map including untouched days with defaults.
+			const allDays: ScheduleData = {};
+			for (const day of orderedDays) {
+				allDays[day] = getDayData(day);
+			}
 
-		if (existingSchedules.length > 0) {
-			const defaultSchedule = existingSchedules.find((s) => s.isDefault);
-			if (defaultSchedule) {
-				result = await updateSchedule(defaultSchedule.id, {
-					days: data,
+			let result;
+			if (existingSchedules.length > 0) {
+				const defaultSchedule = existingSchedules.find(
+					(s) => s.isDefault
+				);
+				if (defaultSchedule) {
+					result = await updateSchedule(defaultSchedule.id, {
+						days: allDays,
+					});
+				} else {
+					result = await createSchedule({
+						name: __('Default', 'wpappointments'),
+						days: allDays,
+					});
+				}
+			} else {
+				result = await createSchedule({
+					name: __('Default', 'wpappointments'),
+					days: allDays,
 				});
 			}
-		} else {
-			result = await createSchedule({
-				name: __('Default', 'wpappointments'),
-				days: data,
-			});
-		}
 
-		if (!result) {
-			setError(__('Error saving schedule', 'wpappointments'));
-			return;
+			if (result) {
+				onSuccess();
+			} else {
+				setError(__('Error saving schedule', 'wpappointments'));
+			}
+		} catch (err) {
+			const message =
+				err instanceof Error && err.message
+					? err.message
+					: __('Error saving schedule', 'wpappointments');
+			setError(message);
+		} finally {
+			setIsSubmitting(false);
 		}
-
-		onSuccess();
 	};
 
 	return (
-		<HtmlForm onSubmit={onSubmit}>
+		<div>
 			{error && <div className={styles.error}>{error}</div>}
 			<div style={{ marginBottom: 25 }}>
 				{orderedDays.map((day) => (
@@ -87,18 +143,20 @@ function ScheduleSettings({ onSuccess }: { onSuccess: () => void }) {
 						day={day}
 						allDays={orderedDays}
 						timePickerPrecision={timePickerPrecision}
+						dayData={getDayData(day)}
+						onChange={handleDayChange}
 					/>
 				))}
 			</div>
 			<Button
 				className={styles.stepButton}
-				type="submit"
+				onClick={onSubmit}
 				variant="primary"
+				isBusy={isSubmitting}
+				disabled={isSubmitting}
 			>
 				{__('Continue', 'wpappointments')}
 			</Button>
-		</HtmlForm>
+		</div>
 	);
 }
-
-export default withForm(ScheduleSettings);

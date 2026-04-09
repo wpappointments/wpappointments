@@ -1,23 +1,22 @@
-import { SubmitHandler } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 import { Button } from '@wordpress/components';
 import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
-	Checkbox,
+	CheckboxInput,
+	DataForm,
 	FormFieldSet,
-	HtmlForm,
-	Input,
 	SlideOut,
-	withForm,
+	TextInput,
+	useFormValidity,
 } from '@wpappointments/components';
+import type { Field, Form } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
-import useFillFormValues from '~/backend/hooks/useFillFormValues';
 import { store } from '~/backend/store/store';
 import { Customer } from '~/backend/types';
 import { customersApi, UpdateCustomerData } from '~/backend/api/customers';
 
-export type CustomerFormData = {
-	id?: number;
+type CustomerFormData = {
 	name: string;
 	email: string;
 	phone: string;
@@ -28,61 +27,124 @@ type CustomerCreateProps = {
 	onSubmitSuccess?: (data: Customer) => void;
 };
 
-export default withForm(function CustomerCreate({
+const emptyCustomer: CustomerFormData = {
+	name: '',
+	email: '',
+	phone: '',
+	createAccount: true,
+};
+
+export default function CustomerCreate({
 	onSubmitSuccess,
 }: CustomerCreateProps) {
 	const dispatch = useDispatch(store);
 	const { currentSlideout, closeCurrentSlideOut } = useSlideout();
-	const { data } = currentSlideout || {};
-	const { selectedCustomer, mode, screen } = (data as any) || {};
+	const { data: slideoutData } = currentSlideout || {};
+	const { selectedCustomer, mode, screen } =
+		(slideoutData as {
+			selectedCustomer?: Customer;
+			mode?: string;
+			screen?: string;
+		}) || {};
 
-	if (mode === 'edit' && selectedCustomer) {
-		useFillFormValues(selectedCustomer);
-	}
+	const [formData, setFormData] = useState<CustomerFormData>(() => {
+		if (mode === 'edit' && selectedCustomer) {
+			return {
+				name: selectedCustomer.name ?? '',
+				email: selectedCustomer.email ?? '',
+				phone: selectedCustomer.phone ?? '',
+				createAccount: false,
+			};
+		}
+		return { ...emptyCustomer };
+	});
 
-	const onSubmit: SubmitHandler<CustomerFormData> = async (data) => {
+	const fields: Field<CustomerFormData>[] = useMemo(
+		() => [
+			{
+				id: 'name',
+				type: 'text',
+				label: __('Name', 'wpappointments'),
+				isValid: { required: true },
+				Edit: TextInput,
+			},
+			{
+				id: 'email',
+				type: 'email',
+				label: __('Email', 'wpappointments'),
+				Edit: TextInput,
+			},
+			{
+				id: 'phone',
+				type: 'telephone',
+				label: __('Phone', 'wpappointments'),
+				Edit: TextInput,
+			},
+			{
+				id: 'createAccount',
+				type: 'boolean',
+				label: __('Create account', 'wpappointments'),
+				isVisible: () => mode === 'create' && screen !== 'customers',
+				Edit: CheckboxInput,
+			},
+		],
+		[mode, screen]
+	);
+
+	const form: Form = {
+		layout: { type: 'regular' },
+		fields: ['name', 'email', 'phone', 'createAccount'],
+	};
+
+	const { validity, isValid } = useFormValidity(formData, fields, form);
+
+	const handleChange = (edits: Record<string, unknown>) => {
+		setFormData((prev) => ({ ...prev, ...edits }));
+	};
+
+	const handleSubmit = async () => {
+		if (!isValid) {
+			return;
+		}
+
+		let didSucceed = false;
 		const { createCustomer, updateCustomer } = customersApi();
-		const { createAccount, ...rest } = data;
+		const { createAccount, ...rest } = formData;
 
-		if (createAccount) {
+		if (mode === 'edit') {
+			const response = await updateCustomer({
+				id: selectedCustomer?.id,
+				...rest,
+			} as UpdateCustomerData);
+
+			if (response) {
+				const { data: responseData } = response;
+				const { customer } = responseData;
+				dispatch.updateCustomer(customer as Customer);
+				onSubmitSuccess?.(customer as Customer);
+				didSucceed = true;
+			}
+		} else if (createAccount) {
 			const response = await createCustomer(rest);
 
 			if (response) {
 				const { data: responseData } = response;
 				const { customer } = responseData;
 				dispatch.setSelectedCustomer(customer as Customer);
-
-				if (onSubmitSuccess) {
-					onSubmitSuccess(customer as Customer);
-				}
+				onSubmitSuccess?.(customer as Customer);
+				didSucceed = true;
 			}
 		} else {
-			if (mode === 'create') {
-				dispatch.createCustomer(rest as Customer);
-			}
-
-			dispatch.setSelectedCustomer(rest as Customer);
-
-			if (onSubmitSuccess) {
-				onSubmitSuccess(rest as Customer);
-			}
+			const guestCustomer: Customer = { ...rest, id: 0 };
+			dispatch.createCustomer(guestCustomer);
+			dispatch.setSelectedCustomer(guestCustomer);
+			onSubmitSuccess?.(guestCustomer);
+			didSucceed = true;
 		}
 
-		if (mode === 'edit') {
-			const response = await updateCustomer(data as UpdateCustomerData);
-
-			if (response) {
-				const { data: responseData } = response;
-				const { customer } = responseData;
-				dispatch.updateCustomer(customer as Customer);
-
-				if (onSubmitSuccess) {
-					onSubmitSuccess(customer as Customer);
-				}
-			}
+		if (didSucceed) {
+			closeCurrentSlideOut();
 		}
-
-		closeCurrentSlideOut();
 	};
 
 	const submitText =
@@ -96,44 +158,28 @@ export default withForm(function CustomerCreate({
 
 	return (
 		<SlideOut title={title} id="customer">
-			<HtmlForm onSubmit={onSubmit}>
-				<FormFieldSet>
-					<Input
-						name="name"
-						label={__('Name', 'wpappointments')}
-						rules={{ required: true }}
-					/>
-					<Input
-						name="email"
-						label={__('Email', 'wpappointments')}
-						type="email"
-					/>
-					<Input name="phone" label={__('Phone', 'wpappointments')} />
-					{mode === 'create' && (
-						<Checkbox
-							name="createAccount"
-							label={__('Create account', 'wpappointments')}
-							defaultValue={true}
-							style={{
-								display:
-									screen === 'customers' ? 'none' : 'flex',
-							}}
-						/>
-					)}
-				</FormFieldSet>
-				<Button
-					variant="primary"
-					type="submit"
-					style={{
-						width: '100%',
-						justifyContent: 'center',
-						padding: '22px 0px',
-						marginTop: '34px',
-					}}
-				>
-					{submitText}
-				</Button>
-			</HtmlForm>
+			<FormFieldSet>
+				<DataForm
+					data={formData}
+					fields={fields}
+					form={form}
+					onChange={handleChange}
+					validity={validity}
+				/>
+			</FormFieldSet>
+			<Button
+				variant="primary"
+				onClick={handleSubmit}
+				disabled={!isValid}
+				style={{
+					width: '100%',
+					justifyContent: 'center',
+					padding: '22px 0px',
+					marginTop: '34px',
+				}}
+			>
+				{submitText}
+			</Button>
 		</SlideOut>
 	);
-});
+}

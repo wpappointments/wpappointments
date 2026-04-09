@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { __experimentalInputControl as InputControl } from '@wordpress/components';
 import { select, useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { SlideOut } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
 import { store } from '~/backend/store/store';
-import { AppointmentFormFields } from '../AppointmentForm/AppointmentForm';
+import { Customer } from '~/backend/types';
 import styles from './CustomerSelector.module.css';
 
-export default function CustomerSelector() {
-	const { setValue } = useFormContext<AppointmentFormFields>();
+type CustomerSelectorProps = {
+	onCustomerSelect: (customer: Customer) => void;
+};
+
+export default function CustomerSelector({
+	onCustomerSelect,
+}: CustomerSelectorProps) {
 	const { closeCurrentSlideOut } = useSlideout();
 	const [searchValue, setSearchValue] = useState('');
 
@@ -53,11 +57,7 @@ export default function CustomerSelector() {
 		);
 
 		if (selectedCustomer) {
-			setValue('customer.name', selectedCustomer.name);
-			setValue('customer.email', selectedCustomer.email || '');
-			setValue('customer.phone', selectedCustomer.phone || '');
-			setValue('customer.created', selectedCustomer.created || '');
-			setValue('customerId', id);
+			onCustomerSelect(selectedCustomer);
 			dispatch.setSelectedCustomer(selectedCustomer);
 			closeCurrentSlideOut();
 		}

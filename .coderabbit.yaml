@@ -62,7 +62,7 @@ reviews:
         - API calls via `@wordpress/api-fetch` — not raw fetch
         - Components from `@wordpress/components` preferred
         - CSS Modules with camelCase exports
-        - Form handling with React Hook Form + Valibot validation
+        - Form handling with `DataForm` from `@wordpress/dataviews`; Valibot for API response validation
         - One exported component per file in packages/components
 
     - path: "plugins/wpappointments/tests/**/*.php"

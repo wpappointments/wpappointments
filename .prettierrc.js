@@ -9,7 +9,6 @@ module.exports = {
 		'^react$',
 		'^react-dom$',
 		'^react-dom/(.*)$',
-		'^react-hook-form$',
 		'<THIRD_PARTY_MODULES>',
 		'~/backend/utils/',
 		'~/backend/hooks/',

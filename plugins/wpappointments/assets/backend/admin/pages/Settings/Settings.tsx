@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import { TabPanel } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import cn from 'obj-str';
 import AppointmentsSettings from './Appointments/Appointments';
 import DaysOffSettings from './DaysOff/DaysOff';
 import GeneralSettings from './General/General';
@@ -12,72 +12,78 @@ import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 type Tab = {
 	name: string;
 	title: string;
-	className: string;
-	component: ReactNode;
+	component: React.ReactNode;
 };
 
-const tabs = new Map<string, Tab>([
-	[
-		'general',
-		{
-			name: 'general',
-			title: __('General settings', 'wpappointments'),
-			className: 'tab-general',
-			component: <GeneralSettings />,
-		},
-	],
-	[
-		'appointments',
-		{
-			name: 'appointments',
-			title: __('Appointments', 'wpappointments'),
-			className: 'tab-appointments',
-			component: <AppointmentsSettings />,
-		},
-	],
-	[
-		'schedule',
-		{
-			name: 'schedule',
-			title: __('Schedule', 'wpappointments'),
-			className: 'tab-schedule',
-			component: <ScheduleSettings />,
-		},
-	],
-	[
-		'days-off',
-		{
-			name: 'days-off',
-			title: __('Days Off', 'wpappointments'),
-			className: 'tab-days-off',
-			component: <DaysOffSettings />,
-		},
-	],
-	[
-		'notifications',
-		{
-			name: 'notifications',
-			title: __('Notifications', 'wpappointments'),
-			className: 'tab-notifications',
-			component: <NotificationsSettings />,
-		},
-	],
-]);
+const tabs: Tab[] = [
+	{
+		name: 'general',
+		title: __('General', 'wpappointments'),
+		component: <GeneralSettings />,
+	},
+	{
+		name: 'appointments',
+		title: __('Appointments', 'wpappointments'),
+		component: <AppointmentsSettings />,
+	},
+	{
+		name: 'schedule',
+		title: __('Schedule', 'wpappointments'),
+		component: <ScheduleSettings />,
+	},
+	{
+		name: 'days-off',
+		title: __('Days Off', 'wpappointments'),
+		component: <DaysOffSettings />,
+	},
+	{
+		name: 'notifications',
+		title: __('Notifications', 'wpappointments'),
+		component: <NotificationsSettings />,
+	},
+];
+
+function getInitialTab(): string {
+	const hash = window.location.hash.replace('#', '');
+	const valid = tabs.some((tab) => tab.name === hash);
+	return valid ? hash : 'general';
+}
 
 export default function Settings() {
+	const [activeTab, setActiveTab] = useState(getInitialTab);
+
+	function selectTab(name: string) {
+		setActiveTab(name);
+		window.location.hash = `#${name}`;
+	}
+
+	const activeComponent = tabs.find(
+		(tab) => tab.name === activeTab
+	)?.component;
+
 	return (
-		<LayoutDefault title={__('Settings', 'wpappointments')}>
-			<TabPanel
-				className={styles.tabsContainer}
-				activeClass="active-tab"
-				initialTabName={window.location.hash.replace('#', '')}
-				tabs={[...tabs.values()]}
-				onSelect={(e) => {
-					window.location.hash = `#${e}`;
-				}}
-			>
-				{(tab) => tabs.get(tab.name)?.component}
-			</TabPanel>
+		<LayoutDefault title={__('Settings', 'wpappointments')} fullWidth>
+			<div className={styles.container}>
+				<nav className={styles.sidebar}>
+					<ul className={styles.menu}>
+						{tabs.map((tab) => (
+							<li key={tab.name}>
+								<button
+									className={cn({
+										[styles.menuItem]: true,
+										[styles.active]: activeTab === tab.name,
+									})}
+									onClick={() => selectTab(tab.name)}
+									type="button"
+								>
+									{tab.title}
+								</button>
+							</li>
+						))}
+					</ul>
+				</nav>
+				<div className={styles.content}>{activeComponent}</div>
+			</div>
 		</LayoutDefault>
 	);
 }

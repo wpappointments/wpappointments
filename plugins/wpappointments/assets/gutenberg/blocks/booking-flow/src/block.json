@@ -24,6 +24,21 @@
 		"slotsAsButtons": {
 			"type": "boolean",
 			"default": false
+		},
+		"inlineTimePicker": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideProgressBar": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideStepTitles": {
+			"type": "boolean",
+			"default": false
+		},
+		"entityId": {
+			"type": "number"
 		}
 	},
 	"textdomain": "wpappointments",

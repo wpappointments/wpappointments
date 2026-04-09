@@ -53,7 +53,7 @@ function inject_frontend_config() {
 			),
 		),
 		'entity'   => array(
-			'coreEntityId' => absint( get_option( 'wpappointments_core_entityId', 0 ) ),
+			'coreEntityId' => absint( get_option( 'wpappointments_appointments_coreEntityId', 0 ) ),
 		),
 	);
 

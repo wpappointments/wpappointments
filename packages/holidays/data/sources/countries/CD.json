@@ -1,0 +1,15 @@
+{
+	"id": "CD",
+	"name": "Democratic Republic of the Congo",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"labourDay",
+		"independenceDayCD",
+		"easterMonday",
+		"ascension",
+		"pentecost",
+		"allSaints",
+		"christmas"
+	]
+}
