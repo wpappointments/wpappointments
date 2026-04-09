@@ -69,7 +69,12 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 	const { closeSlideOut } = useSlideout();
 
 	const [selectedDates, setSelectedDates] = useState<Date[]>(() =>
-		group ? group.dates.map((d) => startOfDay(new Date(d))) : []
+		group
+			? group.dates.map((d) => {
+					const [y, m, day] = d.split('-').map(Number);
+					return startOfDay(new Date(y, m - 1, day));
+				})
+			: []
 	);
 
 	const generalSettings = useSelect(() => {
