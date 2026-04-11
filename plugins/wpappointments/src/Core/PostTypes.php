@@ -98,6 +98,7 @@ class PostTypes {
 				'capability_type'     => 'post',
 				'map_meta_cap'        => false,
 				'capabilities'        => array(
+					'create_posts'       => 'wpa_create_bookables',
 					'edit_post'          => 'wpa_edit_bookables',
 					'read_post'          => 'wpa_view_bookables',
 					'delete_post'        => 'wpa_delete_bookables',
@@ -136,6 +137,7 @@ class PostTypes {
 				'capability_type'     => 'post',
 				'map_meta_cap'        => false,
 				'capabilities'        => array(
+					'create_posts'       => 'wpa_create_bookables',
 					'edit_post'          => 'wpa_edit_bookables',
 					'read_post'          => 'wpa_view_bookables',
 					'delete_post'        => 'wpa_delete_bookables',
