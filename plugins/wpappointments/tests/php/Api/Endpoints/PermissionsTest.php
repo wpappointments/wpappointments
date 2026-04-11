@@ -321,11 +321,34 @@ test(
 // -- Granular capability: user with one cap but not another ------------------
 
 test(
-	'User with MANAGE_APPOINTMENTS cannot access settings',
+	'User with VIEW_APPOINTMENTS can view but not create appointments',
 	function () {
 		$user_id = create_subscriber();
 		$user    = get_user_by( 'id', $user_id );
-		$user->add_cap( Capabilities::MANAGE_APPOINTMENTS );
+		$user->add_cap( Capabilities::VIEW_APPOINTMENTS );
+
+		wp_set_current_user( $user_id );
+
+		$view = $this->do_rest_get_request( 'appointments' );
+		expect( $view )->toBeSuccess();
+
+		$create = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'timestamp' => time() + 86400,
+				'duration'  => 30,
+			)
+		);
+		expect( $create->get_status() )->toBe( 403 );
+	}
+);
+
+test(
+	'User with VIEW_APPOINTMENTS cannot access settings',
+	function () {
+		$user_id = create_subscriber();
+		$user    = get_user_by( 'id', $user_id );
+		$user->add_cap( Capabilities::VIEW_APPOINTMENTS );
 
 		wp_set_current_user( $user_id );
 
@@ -338,28 +361,31 @@ test(
 );
 
 test(
-	'User with MANAGE_SETTINGS cannot access appointments',
+	'User with VIEW_SETTINGS cannot edit settings',
 	function () {
 		$user_id = create_subscriber();
 		$user    = get_user_by( 'id', $user_id );
-		$user->add_cap( Capabilities::MANAGE_SETTINGS );
+		$user->add_cap( Capabilities::VIEW_SETTINGS );
 
 		wp_set_current_user( $user_id );
 
-		$settings = $this->do_rest_get_request( 'settings' );
-		expect( $settings )->toBeSuccess();
+		$view = $this->do_rest_get_request( 'settings' );
+		expect( $view )->toBeSuccess();
 
-		$appointments = $this->do_rest_get_request( 'appointments' );
-		expect( $appointments->get_status() )->toBe( 403 );
+		$edit = $this->do_rest_patch_request(
+			'settings/general',
+			array( 'firstName' => 'Hacker' )
+		);
+		expect( $edit->get_status() )->toBe( 403 );
 	}
 );
 
 test(
-	'User with MANAGE_CUSTOMERS cannot access bookables',
+	'User with VIEW_CUSTOMERS cannot access bookables',
 	function () {
 		$user_id = create_subscriber();
 		$user    = get_user_by( 'id', $user_id );
-		$user->add_cap( Capabilities::MANAGE_CUSTOMERS );
+		$user->add_cap( Capabilities::VIEW_CUSTOMERS );
 
 		wp_set_current_user( $user_id );
 

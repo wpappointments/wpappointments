@@ -35,7 +35,7 @@ class BookableAdminPages extends Singleton {
 	 * @param array  $config    Page configuration:
 	 *                          - page_title (string) Page <title> tag
 	 *                          - menu_title (string) Menu item text
-	 *                          - capability (string) Required capability (default: 'wpa_manage_bookables')
+	 *                          - capability (string) Required capability (default: 'wpa_view_bookables')
 	 *                          - menu_position (int|null) Position in submenu (default: null)
 	 *                          - icon (string) Dashicons class or SVG (default: 'dashicons-calendar-alt').
 	 *
@@ -45,7 +45,7 @@ class BookableAdminPages extends Singleton {
 		$defaults = array(
 			'page_title'    => ucfirst( $type_slug ),
 			'menu_title'    => ucfirst( $type_slug ),
-			'capability'    => 'wpa_manage_bookables',
+			'capability'    => 'wpa_view_bookables',
 			'menu_position' => null,
 			'icon'          => 'dashicons-calendar-alt',
 		);

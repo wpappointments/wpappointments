@@ -33,7 +33,7 @@ class SettingsController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_settings' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SETTINGS );
 					},
 				),
 			)
@@ -47,7 +47,7 @@ class SettingsController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_category_settings' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SETTINGS );
 					},
 				),
 			)
@@ -61,7 +61,7 @@ class SettingsController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_settings' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SETTINGS );
 					},
 				),
 			)

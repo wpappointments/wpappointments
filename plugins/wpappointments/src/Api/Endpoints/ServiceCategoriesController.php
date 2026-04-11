@@ -32,14 +32,14 @@ class ServiceCategoriesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_categories' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SERVICES );
+						return current_user_can( Capabilities::VIEW_SERVICES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_category' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SERVICES );
+						return current_user_can( Capabilities::CREATE_SERVICES );
 					},
 				),
 			)
@@ -53,14 +53,14 @@ class ServiceCategoriesController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_category' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SERVICES );
+						return current_user_can( Capabilities::EDIT_SERVICES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete_category' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SERVICES );
+						return current_user_can( Capabilities::DELETE_SERVICES );
 					},
 				),
 			)
