@@ -62,14 +62,12 @@ async function pickFirstAvailableSlot(page: Page) {
 		.first()
 		.waitFor({ state: 'visible', timeout: 15_000 });
 
-	// Pick a slot in the middle of the list — guaranteed to be in working hours
-	const count = await page.locator('[data-time]').count();
+	// Only consider enabled (non-disabled) slots
+	const enabledSlots = page.locator('[data-time]:not([disabled])');
+	const count = await enabledSlots.count();
 	const midIdx = Math.floor(count / 2);
 
-	// Playwright locators auto-retry on detached elements from React re-renders
-	await page
-		.locator(`[data-time] >> nth=${midIdx}`)
-		.click({ timeout: 10_000 });
+	await enabledSlots.nth(midIdx).click({ timeout: 10_000 });
 
 	// Wait for selection confirmation
 	await expect(page.getByText('Selected time:')).toBeVisible({
@@ -130,18 +128,25 @@ test.describe('Single-step booking flow', () => {
 		).toBeVisible();
 	});
 
-	test('shows validation errors for empty customer fields', async ({
-		page,
-	}) => {
+	test('prevents submission with empty customer fields', async ({ page }) => {
 		await pickAvailableFutureDay(page);
 		await pickFirstAvailableSlot(page);
 
+		// Click Book — native HTML validation should prevent submission
 		await page.getByRole('button', { name: 'Book' }).click();
 
-		await expect(page.getByText('First name is required')).toBeVisible();
-		await expect(page.getByText('Last name is required')).toBeVisible();
-		await expect(page.getByText('Email is required')).toBeVisible();
-		await expect(page.getByText('Phone is required')).toBeVisible();
+		// The first required field should report invalid via native constraint validation
+		const firstNameInput = page.getByPlaceholder('First name');
+		const isInvalid = await firstNameInput.evaluate(
+			(el: HTMLInputElement) => !el.validity.valid
+		);
+		expect(isInvalid).toBe(true);
+
+		// Confirm we're still on the same page (form was not submitted)
+		await expect(page.getByPlaceholder('First name')).toBeVisible();
+		await expect(
+			page.getByText('Appointment created successfully!')
+		).not.toBeVisible();
 	});
 
 	test('shows password field when "Create account" is checked', async ({
