@@ -176,15 +176,16 @@ test.describe('Multi-step booking flow', () => {
 	});
 
 	test('completes all three steps successfully', async ({ page }) => {
-		// Step 1: Select date
+		// Step 1: Select date — selecting a slot auto-advances to step 2
 		await expect(page.getByText('Select date and time')).toBeVisible();
 
 		await pickAvailableFutureDay(page);
 		await pickFirstAvailableSlot(page);
-		await page.getByRole('button', { name: 'Next step' }).click();
 
-		// Step 2: Customer info
-		await expect(page.getByText('Customer information')).toBeVisible();
+		// Step 2: Customer info — auto-advanced after slot selection
+		await expect(page.getByText('Customer information')).toBeVisible({
+			timeout: 10_000,
+		});
 
 		await fillCustomerForm(page);
 		await page.getByRole('button', { name: 'Book' }).click();
@@ -195,22 +196,14 @@ test.describe('Multi-step booking flow', () => {
 		).toBeVisible({ timeout: 10_000 });
 	});
 
-	test('shows date validation when advancing without selection', async ({
-		page,
-	}) => {
-		await page.getByRole('button', { name: 'Next step' }).click();
-
-		await expect(
-			page.getByText('Please select a date and time')
-		).toBeVisible();
-	});
-
 	test('can navigate back to date step', async ({ page }) => {
 		await pickAvailableFutureDay(page);
 		await pickFirstAvailableSlot(page);
-		await page.getByRole('button', { name: 'Next step' }).click();
 
-		await expect(page.getByText('Customer information')).toBeVisible();
+		// Auto-advanced to customer info
+		await expect(page.getByText('Customer information')).toBeVisible({
+			timeout: 10_000,
+		});
 
 		// Click "Select date" step header to go back
 		await page.locator('[data-step="1"]').click();
