@@ -54,8 +54,16 @@ async function pickAvailableFutureDay(page: Page) {
 	await availableDay.click();
 }
 
-/** Pick an available time slot. */
-async function pickFirstAvailableSlot(page: Page) {
+/**
+ * Pick an available time slot.
+ *
+ * In multi-step flow, selecting a slot auto-advances to the next step,
+ * so we skip waiting for "Selected time:" confirmation.
+ */
+async function pickFirstAvailableSlot(
+	page: Page,
+	{ waitForConfirmation = true } = {}
+) {
 	// Wait for time slot buttons to be visible
 	await page
 		.locator('[data-time]')
@@ -69,10 +77,11 @@ async function pickFirstAvailableSlot(page: Page) {
 
 	await enabledSlots.nth(midIdx).click({ timeout: 10_000 });
 
-	// Wait for selection confirmation
-	await expect(page.getByText('Selected time:')).toBeVisible({
-		timeout: 5_000,
-	});
+	if (waitForConfirmation) {
+		await expect(page.getByText('Selected time:')).toBeVisible({
+			timeout: 5_000,
+		});
+	}
 }
 
 /** Fill in the customer information form. */
@@ -180,7 +189,7 @@ test.describe('Multi-step booking flow', () => {
 		await expect(page.getByText('Select date and time')).toBeVisible();
 
 		await pickAvailableFutureDay(page);
-		await pickFirstAvailableSlot(page);
+		await pickFirstAvailableSlot(page, { waitForConfirmation: false });
 
 		// Step 2: Customer info — auto-advanced after slot selection
 		await expect(page.getByText('Customer information')).toBeVisible({
@@ -198,7 +207,7 @@ test.describe('Multi-step booking flow', () => {
 
 	test('can navigate back to date step', async ({ page }) => {
 		await pickAvailableFutureDay(page);
-		await pickFirstAvailableSlot(page);
+		await pickFirstAvailableSlot(page, { waitForConfirmation: false });
 
 		// Auto-advanced to customer info
 		await expect(page.getByText('Customer information')).toBeVisible({
