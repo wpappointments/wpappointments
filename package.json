@@ -43,7 +43,7 @@
 		"env:stop": "pnpm run stop:wp",
 		"check:wporg": "wp-env run cli wp plugin check wpappointments",
 		"check:wporg:pro": "wp-env run cli wp plugin check wpappointments --categories=plugin_repo,security,performance,accessibility --include-experimental",
-		"check:wporg:json": "wp-env run cli wp plugin check wpappointments --categories=plugin_repo,security,performance,accessibility --include-experimental --format=json"
+		"check:wporg:json": "pnpm run check:wporg:pro -- --format=json"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.6.0",
