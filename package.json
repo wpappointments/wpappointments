@@ -38,7 +38,12 @@
 		"help:dev": "pnpm --filter @wpappointments/help dev",
 		"help:build": "pnpm --filter @wpappointments/help build",
 		"test:e2e": "pnpm -C plugins/wpappointments test:e2e",
-		"test:e2e:demo": "pnpm -C plugins/wpappointments test:e2e -- --project=demo"
+		"test:e2e:demo": "pnpm -C plugins/wpappointments test:e2e -- --project=demo",
+		"env:start": "pnpm run start:wp",
+		"env:stop": "pnpm run stop:wp",
+		"check:wporg": "wp-env run cli wp plugin check wpappointments",
+		"check:wporg:pro": "wp-env run cli wp plugin check wpappointments --categories=plugin_repo,security,performance,accessibility --include-experimental",
+		"check:wporg:json": "wp-env run cli wp plugin check wpappointments --categories=plugin_repo,security,performance,accessibility --include-experimental --format=json"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.6.0",
