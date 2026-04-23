@@ -66,11 +66,17 @@ function Welcome({ setCurrentStep }: StepProps) {
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Welcome to WP Appointments!', 'wpappointments')}
+					{__('Welcome to Appointments Booking', 'wpappointments')}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
-						"It's great to have you here! We'll be guiding you through the setup process - first, answer a few questions to tailor your experience.",
+						'Manage services, availability, and customer bookings right inside WordPress — no external SaaS.',
+						'wpappointments'
+					)}
+				</p>
+				<p className={styles.leadText}>
+					{__(
+						"We'll walk you through a quick setup — a few questions to tailor the plugin to your business. Takes about two minutes.",
 						'wpappointments'
 					)}
 				</p>
@@ -103,28 +109,14 @@ function AllSet() {
 				</h1>
 				<p className={styles.leadText}>
 					{__(
-						"You're good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.",
+						"You're good to go — your site can now accept appointments. You can revisit any step from the Settings page.",
 						'wpappointments'
 					)}
 				</p>
 				<hr style={{ width: 80 }} />
 				<p className={styles.leadText}>
 					{__(
-						'For more information about the plugin please see this walkthrough video:',
-						'wpappointments'
-					)}{' '}
-					<a
-						href="https://wpappointments.com/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						{__('Watch video', 'wpappointments')}
-					</a>
-				</p>
-				<hr style={{ width: 80 }} />
-				<p className={styles.leadText}>
-					{__(
-						'When you are ready, you can insert a "Booking Flow" Gutenberg block on any of your pages.',
+						'Next: add the "Booking Flow" block to any page or post, and customers will be able to pick a time and book.',
 						'wpappointments'
 					)}
 				</p>
