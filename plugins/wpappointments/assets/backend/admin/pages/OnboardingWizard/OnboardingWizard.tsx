@@ -10,6 +10,13 @@ import ServicesStep from './Services/Services';
 import gutenbergBlock from '~/images/gutenberg-block.png';
 import logoIcon from '~/images/icons/logo-icon.svg';
 
+// Admin-post action registered by includes/admin/other.php::mark_wizard_complete.
+// Hitting this URL flips wpappointments_wizard_completed and redirects to the
+// main plugin page. Kept here to avoid drifting between the two admin-post
+// entry points (Skip and Go-to-dashboard).
+const WIZARD_COMPLETE_URL =
+	'/wp-admin/admin-post.php?action=wpappointments_wizard_complete';
+
 export function OnboardingWizard() {
 	const [currentStep, setCurrentStep] = useState(0);
 	const totalSteps = 6;
@@ -24,10 +31,7 @@ export function OnboardingWizard() {
 			></div>
 			<div className={styles.wizardHeader}>
 				<img className={styles.logoIcon} src={logoIcon} />
-				<Button
-					variant="link"
-					href="/wp-admin/admin-post.php?action=wpappointments_wizard_complete"
-				>
+				<Button variant="link" href={WIZARD_COMPLETE_URL}>
 					{__('Skip guided setup', 'wpappointments')}
 				</Button>
 			</div>
@@ -146,7 +150,7 @@ function AllSet() {
 					padding: '5px 70px',
 					height: 'auto',
 				}}
-				href="/wp-admin/admin-post.php?action=wpappointments_wizard_complete"
+				href={WIZARD_COMPLETE_URL}
 			>
 				{__('Go to dashboard', 'wpappointments')}
 			</Button>

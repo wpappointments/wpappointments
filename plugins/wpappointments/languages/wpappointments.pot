@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Appointments 0.1.2\n"
+"Project-Id-Version: WP Appointments 0.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpappointments\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-19T12:28:23+00:00\n"
+"POT-Creation-Date: 2026-04-23T19:27:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wpappointments\n"
@@ -17,8 +17,8 @@ msgstr ""
 #. Plugin Name of the plugin
 #. Author of the plugin
 #: wpappointments.php
-#: includes/admin/menu.php:28
-#: includes/gutenberg.php:57
+#: includes/admin/menu.php:25
+#: includes/gutenberg.php:98
 msgid "WP Appointments"
 msgstr ""
 
@@ -33,40 +33,28 @@ msgstr ""
 msgid "Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support."
 msgstr ""
 
-#: includes/admin/menu.php:29
+#: includes/admin/menu.php:26
 #: src/Core/PostTypes.php:37
 msgid "Appointments"
 msgstr ""
 
-#: includes/admin/menu.php:39
-#: includes/admin/menu.php:40
+#: includes/admin/menu.php:36
+#: includes/admin/menu.php:37
 msgid "Calendar"
 msgstr ""
 
-#: includes/admin/menu.php:48
-#: includes/admin/menu.php:49
+#: includes/admin/menu.php:45
+#: includes/admin/menu.php:46
 msgid "Customers"
 msgstr ""
 
-#: includes/admin/menu.php:57
-#: includes/admin/menu.php:58
-#: src/Core/PostTypes.php:89
-msgid "Services"
-msgstr ""
-
-#: includes/admin/menu.php:66
-#: includes/admin/menu.php:67
-#: src/Core/PostTypes.php:152
-msgid "Entities"
-msgstr ""
-
-#: includes/admin/menu.php:75
-#: includes/admin/menu.php:76
+#: includes/admin/menu.php:54
+#: includes/admin/menu.php:55
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/menu.php:84
-#: includes/admin/menu.php:85
+#: includes/admin/menu.php:63
+#: includes/admin/menu.php:64
 msgid "Wizard"
 msgstr ""
 
@@ -74,39 +62,64 @@ msgstr ""
 msgid "Customer (appointments)"
 msgstr ""
 
-#. translators: %1$s: Date, %2$s: Time
-#: includes/notifications/emails/appointment.php:31
-#: includes/notifications/emails/appointment.php:66
-#, php-format
-msgid "Appointment Confirmation: %1$s at %2$s"
+#: includes/class-booking-flow-widget.php:24
+msgid "WP Appointments Booking Flow"
 msgstr ""
 
-#. translators: %1$s: Date, %2$s: Time
-#: includes/notifications/emails/appointment.php:100
-#: includes/notifications/emails/appointment.php:136
-#, php-format
-msgid "Appointment Updated: %1$s at %2$s"
+#: includes/class-booking-flow-widget.php:26
+msgid "Display the appointment booking flow."
 msgstr ""
 
-#. translators: %1$s: Date, %2$s: Time
-#: includes/notifications/emails/appointment.php:168
-#: includes/notifications/emails/appointment.php:203
-#, php-format
-msgid "Appointment Cancelled: %1$s at %2$s"
+#: includes/views/widget-form.php:21
+msgid "Title:"
 msgstr ""
 
-#. translators: %1$s: Date, %2$s: Time
-#: includes/notifications/emails/appointment.php:235
-#: includes/notifications/emails/appointment.php:270
-#, php-format
-msgid "Appointment Confirmed: %1$s at %2$s"
+#: includes/views/widget-form.php:33
+msgid "Flow type:"
 msgstr ""
 
-#. translators: %1$s: Date, %2$s: Time
-#: includes/notifications/emails/appointment.php:303
-#: includes/notifications/emails/appointment.php:339
-#, php-format
-msgid "Appointment No-Show: %1$s at %2$s"
+#: includes/views/widget-form.php:41
+msgid "One Step"
+msgstr ""
+
+#: includes/views/widget-form.php:44
+msgid "Multi Step"
+msgstr ""
+
+#: includes/views/widget-form.php:50
+msgid "Alignment:"
+msgstr ""
+
+#: includes/views/widget-form.php:58
+msgid "Left"
+msgstr ""
+
+#: includes/views/widget-form.php:61
+msgid "Center"
+msgstr ""
+
+#: includes/views/widget-form.php:64
+msgid "Right"
+msgstr ""
+
+#: includes/views/widget-form.php:70
+msgid "Width:"
+msgstr ""
+
+#: includes/views/widget-form.php:78
+msgid "Narrow"
+msgstr ""
+
+#: includes/views/widget-form.php:81
+msgid "Full"
+msgstr ""
+
+#: includes/views/widget-form.php:94
+msgid "Trim unavailable slots"
+msgstr ""
+
+#: includes/views/widget-form.php:106
+msgid "Show time slots as buttons"
 msgstr ""
 
 #: src/Api/Endpoints/AppointmentsController.php:163
@@ -117,41 +130,100 @@ msgstr ""
 msgid "Upcoming appointments fetched successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:217
-#: src/Api/Endpoints/AppointmentsController.php:265
+#: src/Api/Endpoints/AppointmentsController.php:204
+#: src/Api/Endpoints/AppointmentsController.php:320
+msgid "Invalid appointment status"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:210
+#: src/Api/Endpoints/AppointmentsController.php:329
+msgid "Duration must be greater than zero"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:218
+#: src/Api/Endpoints/AppointmentsController.php:261
+#: src/Api/Endpoints/AppointmentsController.php:341
+msgid "Invalid date format"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:237
+#: src/Api/Endpoints/AppointmentsController.php:291
 msgid "Appointment created successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:250
+#: src/Api/Endpoints/AppointmentsController.php:277
+#: src/Plugin.php:123
 msgid "Appointment"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:309
+#: src/Api/Endpoints/AppointmentsController.php:376
 msgid "Appointment updated successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:334
+#: src/Api/Endpoints/AppointmentsController.php:401
 msgid "Appointment cancelled successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:359
+#: src/Api/Endpoints/AppointmentsController.php:426
 msgid "Appointment deleted successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AppointmentsController.php:384
+#: src/Api/Endpoints/AppointmentsController.php:451
 msgid "Appointment confirmed successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AvailabilityController.php:82
-msgid "Month availability fetched successfully"
+#: src/Api/Endpoints/BookableAvailabilityController.php:91
+msgid "Availability fetched successfully"
 msgstr ""
 
-#: src/Api/Endpoints/AvailabilityController.php:108
+#: src/Api/Endpoints/BookableAvailabilityController.php:128
+msgid "Entity availability fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:154
+msgid "Invalid timezone"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:160
+msgid "Calendar data is required"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:168
 msgid "Invalid calendar data"
 msgstr ""
 
-#: src/Api/Endpoints/AvailabilityController.php:122
-msgid "Calendar availability fetched successfully"
+#: src/Api/Endpoints/BookableAvailabilityController.php:210
+#: src/Api/Endpoints/BookableAvailabilityController.php:411
+msgid "Calendar slots fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:118
+msgid "Bookables fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:135
+#: src/Data/Model/BookableEntity.php:435
+msgid "Bookable name is required"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:147
+msgid "Bookable created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:168
+msgid "Bookable fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:192
+msgid "Bookable updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:215
+msgid "Bookable deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookableTypesController.php:68
+msgid "Bookable types fetched successfully"
 msgstr ""
 
 #: src/Api/Endpoints/CustomersController.php:97
@@ -166,44 +238,143 @@ msgstr ""
 msgid "Customer updated successfully"
 msgstr ""
 
-#: src/Api/Endpoints/CustomersController.php:183
+#: src/Api/Endpoints/CustomersController.php:187
 msgid "Customer deleted successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:165
-msgid "Entities fetched successfully"
+#: src/Api/Endpoints/HolidaysController.php:112
+msgid "Available holiday sets fetched successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:193
-msgid "Entity tree fetched successfully"
+#: src/Api/Endpoints/HolidaysController.php:129
+msgid "Holiday groups fetched successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:229
-msgid "Entity fetched successfully"
+#: src/Api/Endpoints/HolidaysController.php:156
+msgid "Holiday group added successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:253
-msgid "Entity created successfully"
+#: src/Api/Endpoints/HolidaysController.php:177
+msgid "Holiday group removed successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:279
-msgid "Entity updated successfully"
+#: src/Api/Endpoints/HolidaysController.php:203
+msgid "Holiday group updated successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:305
-msgid "Entity deleted successfully"
+#: src/Api/Endpoints/HolidaysController.php:219
+msgid "Holiday updated successfully"
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:324
-msgid "Entity children fetched successfully"
+#: src/Api/Endpoints/HolidaysController.php:227
+msgid "No update data provided."
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:364
-msgid "Entity services fetched successfully"
+#: src/Api/Endpoints/HolidaysController.php:256
+#: src/Holidays/HolidayRegistry.php:172
+#: src/Holidays/HolidayRegistry.php:207
+#: src/Holidays/HolidayRegistry.php:256
+msgid "Holiday group not found."
 msgstr ""
 
-#: src/Api/Endpoints/EntitiesController.php:400
-msgid "Entity services updated successfully"
+#: src/Api/Endpoints/HolidaysController.php:279
+msgid "Group holidays fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:117
+msgid "OOO entries fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:141
+#: src/Data/Model/OutOfOffice.php:294
+msgid "Start date and end date are required"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:147
+#: src/Api/Endpoints/OutOfOfficeController.php:218
+msgid "Start date must be before end date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:159
+msgid "OOO entry created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:186
+msgid "OOO entry fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:230
+msgid "OOO entry updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:259
+msgid "OOO entry deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:278
+msgid "start_date and end_date are required"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:289
+msgid "start_date and end_date must be valid Y-m-d dates"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:295
+msgid "start_date must not be after end_date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:339
+msgid "Blocked dates fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:357
+msgid "You do not own this time off entry."
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:380
+msgid "start_date must be a valid Y-m-d date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:391
+msgid "end_date must be a valid Y-m-d date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:401
+msgid "reason must be one of the allowed values"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:117
+msgid "Schedules fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:134
+#: src/Data/Model/Schedule.php:168
+#: src/Data/Model/Schedule.php:455
+msgid "Schedule name is required"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:153
+msgid "Schedule created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:174
+msgid "Schedule fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:198
+msgid "Schedule updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:222
+msgid "Schedule deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:247
+msgid "Cannot set an inactive schedule as default"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:254
+msgid "Default schedule updated"
 msgstr ""
 
 #: src/Api/Endpoints/ServiceCategoriesController.php:104
@@ -227,22 +398,6 @@ msgstr ""
 msgid "Service category deleted successfully"
 msgstr ""
 
-#: src/Api/Endpoints/ServicesController.php:94
-msgid "Services fetched successfully"
-msgstr ""
-
-#: src/Api/Endpoints/ServicesController.php:125
-msgid "Service created successfully"
-msgstr ""
-
-#: src/Api/Endpoints/ServicesController.php:151
-msgid "Service updated successfully"
-msgstr ""
-
-#: src/Api/Endpoints/ServicesController.php:176
-msgid "Service deleted successfully"
-msgstr ""
-
 #: src/Api/Endpoints/SettingsController.php:81
 msgid "Settings fetched successfully"
 msgstr ""
@@ -255,50 +410,197 @@ msgstr ""
 msgid "Settings updated successfully"
 msgstr ""
 
+#: src/Api/Endpoints/VariantsController.php:117
+msgid "Variants fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:143
+msgid "Variant created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:172
+msgid "Variants generated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:198
+#: src/Api/Endpoints/VariantsController.php:232
+#: src/Api/Endpoints/VariantsController.php:271
+msgid "Variant does not belong to the specified bookable entity"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:205
+msgid "Variant fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:245
+msgid "Variant updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:284
+msgid "Variant deleted successfully"
+msgstr ""
+
+#. translators: %s: layer slug
+#: src/Availability/AvailabilityLayerRegistry.php:42
+#, php-format
+msgid "Availability layer \"%s\" is already registered"
+msgstr ""
+
+#: src/Availability/AvailabilityLayerRegistry.php:51
+msgid "Availability layer type must be \"base\" or \"narrowing\""
+msgstr ""
+
+#: src/Availability/AvailabilityLayerRegistry.php:58
+msgid "Availability layer must have a callable callback"
+msgstr ""
+
+#. translators: %s: bookable type slug
+#: src/Bookable/BookableTypeRegistry.php:41
+#, php-format
+msgid "Bookable type \"%s\" is already registered"
+msgstr ""
+
+#. translators: %s: handler class name
+#: src/Bookable/BookableTypeRegistry.php:49
+#, php-format
+msgid "Bookable type handler class \"%s\" not found"
+msgstr ""
+
+#. translators: %s: handler class name
+#: src/Bookable/BookableTypeRegistry.php:57
+#, php-format
+msgid "Bookable type handler \"%s\" must extend AbstractBookableTypeHandler"
+msgstr ""
+
 #: src/Core/PostTypes.php:63
 msgid "Schedules"
 msgstr ""
 
-#: src/Core/PostTypes.php:116
-#: src/Core/PostTypes.php:118
-msgid "Service Categories"
+#: src/Core/PostTypes.php:93
+msgid "Bookables"
 msgstr ""
 
-#: src/Core/PostTypes.php:119
-msgid "Service Category"
+#: src/Core/PostTypes.php:131
+msgid "Bookable Variants"
 msgstr ""
 
-#: src/Core/PostTypes.php:120
-msgid "Add New Service Category"
+#: src/Core/PostTypes.php:166
+msgid "Out of Office"
 msgstr ""
 
-#: src/Core/PostTypes.php:121
-msgid "New Service Category Name"
-msgstr ""
-
-#: src/Data/Model/Appointment.php:184
+#: src/Data/Model/Appointment.php:188
 msgid "Appointment is already cancelled"
 msgstr ""
 
-#: src/Data/Model/Appointment.php:210
+#: src/Data/Model/Appointment.php:214
 msgid "Appointment is already confirmed"
 msgstr ""
 
-#: src/Data/Model/Appointment.php:236
-#: src/Data/Model/Appointment.php:311
+#: src/Data/Model/Appointment.php:240
+#: src/Data/Model/Appointment.php:315
 msgid "Appointment not found"
 msgstr ""
 
-#: src/Data/Model/Appointment.php:243
+#: src/Data/Model/Appointment.php:247
 msgid "Appointment must be cancelled before deleting"
 msgstr ""
 
-#: src/Data/Model/Appointment.php:305
+#: src/Data/Model/Appointment.php:309
 msgid "Appointment ID is required"
 msgstr ""
 
-#: src/Data/Model/Appointment.php:315
+#: src/Data/Model/Appointment.php:319
 msgid "Post is not an appointment"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:66
+msgid "Post is not a bookable entity. Expected post_type wpa-bookable"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:78
+msgid "Bookable value passed to constructor cannot be null. Expected array, int, string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:83
+msgid "Bookable value passed to constructor is invalid. Expected array, int, string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:101
+msgid "This bookable entity is already persisted. Use update() instead"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:171
+#: src/Data/Model/BookableEntity.php:250
+msgid "Bookable not found. Instantiate BookableEntity class with a bookable object"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:214
+msgid "Failed to update bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:264
+msgid "Failed to delete bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:410
+msgid "Bookable ID is required"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:416
+msgid "Bookable not found"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:420
+msgid "Post is not a bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:83
+msgid "Post is not a bookable variant. Expected post_type wpa-bookable-variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:95
+msgid "Variant value passed to constructor cannot be null. Expected array, int, string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:100
+msgid "Variant value passed to constructor is invalid. Expected array, int, string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:117
+msgid "Variant must have a parent bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:127
+msgid "Parent must be a valid bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:196
+#: src/Data/Model/BookableVariant.php:254
+msgid "Variant not found. Instantiate BookableVariant class with a variant object"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:227
+msgid "Failed to update bookable variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:265
+msgid "Failed to delete bookable variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:534
+msgid "Invalid bookable entity for variant generation"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:866
+msgid "Variant ID is required"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:872
+msgid "Variant not found"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:876
+msgid "Post is not a bookable variant"
 msgstr ""
 
 #: src/Data/Model/Customer.php:60
@@ -325,139 +627,285 @@ msgstr ""
 msgid "User is not a customer"
 msgstr ""
 
-#: src/Data/Model/Entity.php:71
-msgid "Entity value passed to constructor cannot be null. Expected array, int, string or WP_Post"
+#: src/Data/Model/OutOfOffice.php:60
+#: src/Data/Model/OutOfOffice.php:326
+msgid "Post is not an OOO entry"
 msgstr ""
 
-#: src/Data/Model/Entity.php:76
-msgid "Entity value passed to constructor is invalid. Expected array, int, string or WP_Post"
+#: src/Data/Model/OutOfOffice.php:72
+msgid "Invalid value passed to OutOfOffice constructor"
 msgstr ""
 
-#: src/Data/Model/Entity.php:139
-#: src/Data/Model/Entity.php:202
-msgid "Entity not found. Instantiate Entity class with an entity object"
+#: src/Data/Model/OutOfOffice.php:90
+msgid "This OOO entry is already persisted. Use update() instead"
 msgstr ""
 
-#: src/Data/Model/Entity.php:512
-msgid "Entity ID is required"
+#: src/Data/Model/OutOfOffice.php:145
+#: src/Data/Model/OutOfOffice.php:196
+#: src/Data/Model/OutOfOffice.php:321
+msgid "OOO entry not found"
 msgstr ""
 
-#: src/Data/Model/Entity.php:518
-msgid "Entity not found"
+#: src/Data/Model/OutOfOffice.php:206
+msgid "Failed to delete OOO entry"
 msgstr ""
 
-#: src/Data/Model/Entity.php:522
-msgid "Post is not an entity"
+#: src/Data/Model/OutOfOffice.php:273
+msgid "Time off"
 msgstr ""
 
-#: src/Data/Model/Entity.php:537
-msgid "Entity name is required"
+#: src/Data/Model/OutOfOffice.php:274
+msgid "Vacation"
 msgstr ""
 
-#: src/Data/Model/Service.php:62
-msgid "Service value passed to a service model constructor cannot be null. Expected array, int, string or WP_Post but received null"
+#: src/Data/Model/OutOfOffice.php:275
+msgid "Travel"
 msgstr ""
 
-#: src/Data/Model/Service.php:67
-msgid "Service value passed to a service model constructor is invalid. Expected array, int, string or WP_Post"
+#: src/Data/Model/OutOfOffice.php:276
+msgid "Sick Leave"
 msgstr ""
 
-#: src/Data/Model/Service.php:145
-#: src/Data/Model/Service.php:200
-msgid "Service not found. You have to instantiate Service class with a service object"
+#: src/Data/Model/OutOfOffice.php:277
+msgid "Holiday"
 msgstr ""
 
-#: src/Data/Model/Service.php:390
-msgid "Service ID is required"
+#: src/Data/Model/Schedule.php:54
+msgid "Post is not a schedule. Expected post_type wpa-schedule"
 msgstr ""
 
-#: src/Data/Model/Service.php:396
-msgid "Service not found"
+#: src/Data/Model/Schedule.php:66
+msgid "Schedule value passed to constructor cannot be null"
 msgstr ""
 
-#: src/Data/Model/Service.php:400
-msgid "Post is not a service"
+#: src/Data/Model/Schedule.php:71
+msgid "Schedule value passed to constructor is invalid. Expected array, int, string or WP_Post"
 msgstr ""
 
-#: src/Data/Model/Service.php:415
-msgid "Service name is required"
+#: src/Data/Model/Schedule.php:89
+msgid "This schedule is already persisted. Use update() instead"
 msgstr ""
 
-#: src/Data/Model/Service.php:419
-msgid "Service duration is required"
+#: src/Data/Model/Schedule.php:159
+msgid "Schedule not found. Instantiate Schedule class with a schedule object"
 msgstr ""
 
-#: src/Data/Model/Settings.php:141
+#: src/Data/Model/Schedule.php:227
+#: src/Data/Model/Schedule.php:436
+msgid "Schedule not found"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:239
+msgid "Cannot delete the default schedule"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:267
+msgid "Failed to delete schedule"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:430
+msgid "Schedule ID is required"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:440
+msgid "Post is not a schedule"
+msgstr ""
+
+#: src/Data/Model/Settings.php:159
 msgid "Invalid settings category"
 msgstr ""
 
-#: src/Data/Model/Settings.php:229
+#: src/Data/Model/Settings.php:198
 msgid "Unknown error while saving settings"
 msgstr ""
 
+#: src/Holidays/HolidayRegistry.php:96
+msgid "Invalid holiday group type."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:106
+msgid "Holiday data file not found."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:116
+msgid "Source file type does not match requested type."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:128
+msgid "This holiday group is already added."
+msgstr ""
+
+#: src/Notifications/Notifications.php:47
+msgid "Appointment Created"
+msgstr ""
+
+#: src/Notifications/Notifications.php:48
+msgid "Sent when a new appointment is booked."
+msgstr ""
+
+#: src/Notifications/Notifications.php:49
+msgid "New appointment booked"
+msgstr ""
+
+#: src/Notifications/Notifications.php:50
+msgid "Your appointment has been booked"
+msgstr ""
+
+#: src/Notifications/Notifications.php:51
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"A new appointment has been booked with {customer_name}.\n"
+"\n"
+"Date: {date}\n"
+"Time: {time}\n"
+"Service: {service}\n"
+"Duration: {duration} minutes\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:52
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Thank you for booking an appointment with us.\n"
+"\n"
+"Date: {date}\n"
+"Time: {time}\n"
+"Service: {service}\n"
+"Duration: {duration} minutes\n"
+"\n"
+"If you need to reschedule, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:55
+msgid "Appointment Updated"
+msgstr ""
+
+#: src/Notifications/Notifications.php:56
+msgid "Sent when an existing appointment is modified."
+msgstr ""
+
+#: src/Notifications/Notifications.php:57
+msgid "Appointment updated"
+msgstr ""
+
+#: src/Notifications/Notifications.php:58
+msgid "Your appointment has been updated"
+msgstr ""
+
 #: src/Notifications/Notifications.php:59
-msgid "A new appointment has been booked."
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} has been updated.\n"
+"\n"
+"Previous: {previous_date} at {previous_time} ({previous_status})\n"
+"Updated: {date} at {time} ({status})\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:60
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment has been updated.\n"
+"\n"
+"Previous: {previous_date} at {previous_time}\n"
+"Updated: {date} at {time}\n"
+"Status: {status}\n"
+"\n"
+"If you have any questions, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:63
+msgid "Appointment Confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:64
+msgid "Sent when an appointment is confirmed."
+msgstr ""
+
+#: src/Notifications/Notifications.php:65
+msgid "Appointment confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:66
+msgid "Your appointment is confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:67
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} on {date} at {time} has been confirmed.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:68
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment on {date} at {time} is confirmed.\n"
+"\n"
+"If you need to make any changes, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
 msgstr ""
 
 #: src/Notifications/Notifications.php:71
-msgid "An appointment has been updated."
+msgid "Appointment Cancelled"
 msgstr ""
 
-#: src/Notifications/Notifications.php:83
-msgid "An appointment has been confirmed."
+#: src/Notifications/Notifications.php:72
+msgid "Sent when an appointment is cancelled."
 msgstr ""
 
-#: src/Notifications/Notifications.php:94
-msgid "An appointment has been cancelled."
+#: src/Notifications/Notifications.php:73
+msgid "Appointment cancelled"
 msgstr ""
 
-#: src/Notifications/Notifications.php:300
-msgid "Appointment ID"
+#: src/Notifications/Notifications.php:74
+msgid "Your appointment has been cancelled"
 msgstr ""
 
-#: src/Notifications/Notifications.php:301
-msgid "Service"
+#: src/Notifications/Notifications.php:75
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} on {date} at {time} has been cancelled.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
 msgstr ""
 
-#: src/Notifications/Notifications.php:302
-msgid "Date & Time"
+#: src/Notifications/Notifications.php:76
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment on {date} at {time} has been cancelled.\n"
+"\n"
+"If this was a mistake, please contact us at {admin_email} to reschedule.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
 msgstr ""
 
-#: src/Notifications/Notifications.php:305
-msgid "Duration"
-msgstr ""
-
-#: src/Notifications/Notifications.php:305
-msgid "minutes"
-msgstr ""
-
-#: src/Notifications/Notifications.php:309
-msgid "Customer"
-msgstr ""
-
-#: src/Notifications/Notifications.php:312
-msgid "Status"
-msgstr ""
-
-#: src/Utils/Availability.php:167
-msgid "Month is required"
-msgstr ""
-
-#: src/Utils/Availability.php:171
-msgid "Year is required"
-msgstr ""
-
-#: src/Utils/Availability.php:175
-#: src/Utils/Availability.php:271
-msgid "Timezone is required"
-msgstr ""
-
-#: src/Utils/Availability.php:179
-msgid "Year must be numeric"
-msgstr ""
-
-#: src/Utils/Availability.php:267
-msgid "Calendar is required"
+#: src/Plugin.php:146
+msgid "Default"
 msgstr ""
 
 #: assets/gutenberg/blocks/booking-flow/src/block.json
