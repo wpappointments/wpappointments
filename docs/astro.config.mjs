@@ -29,7 +29,7 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
-			title: 'WP Appointments',
+			title: 'Appointments Booking',
 			social: {
 				github: 'https://github.com/wpappointments/wpappointments',
 			},

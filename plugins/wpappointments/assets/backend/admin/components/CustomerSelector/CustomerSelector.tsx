@@ -65,14 +65,14 @@ export default function CustomerSelector({
 
 	return (
 		<SlideOut
-			title={__('Select Customer', 'wpappointments')}
+			title={__('Select Customer', 'appointments-booking')}
 			id="select-customer"
 		>
 			<InputControl
-				label={__('Search for a customer', 'wpappointments')}
+				label={__('Search for a customer', 'appointments-booking')}
 				placeholder={__(
 					'Search by name, email or phone number',
-					'wpappointments'
+					'appointments-booking'
 				)}
 				onChange={(value) => {
 					setSearchValue(value || '');
@@ -86,9 +86,9 @@ export default function CustomerSelector({
 			{filteredCustomers && filteredCustomers.length > 0 && (
 				<>
 					<div className={styles.tableHeader}>
-						<span>{__('Name', 'wpappointments')}</span>
-						<span>{__('Email', 'wpappointments')}</span>
-						<span>{__('Phone', 'wpappointments')}</span>
+						<span>{__('Name', 'appointments-booking')}</span>
+						<span>{__('Email', 'appointments-booking')}</span>
+						<span>{__('Phone', 'appointments-booking')}</span>
 					</div>
 					<div className={styles.customers}>
 						{filteredCustomers.map((customer) => (

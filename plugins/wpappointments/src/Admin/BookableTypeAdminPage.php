@@ -83,7 +83,7 @@ class BookableTypeAdminPage {
 			$slug = 'wpappointments-' . sanitize_title( $type );
 
 			add_submenu_page(
-				'wpappointments',
+				'appointments-booking',
 				! empty( $config['page_title'] ) ? $config['page_title'] : $config['menu_title'],
 				$config['menu_title'],
 				$config['capability'],

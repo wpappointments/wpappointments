@@ -41,8 +41,8 @@
 		"test:e2e:demo": "pnpm -C plugins/wpappointments test:e2e -- --project=demo",
 		"env:start": "pnpm run start:wp",
 		"env:stop": "pnpm run stop:wp",
-		"check:wporg": "wp-env run cli wp plugin check wpappointments --exclude-directories=tests,coverage,playwright-report --exclude-files=.zipignore",
-		"check:wporg:pro": "wp-env run cli wp plugin check wpappointments --categories=plugin_repo,security,performance,accessibility --include-experimental --exclude-directories=tests,coverage,playwright-report --exclude-files=.zipignore",
+		"check:wporg": "wp-env run cli wp plugin check wpappointments --slug=appointments-booking --exclude-directories=tests,coverage,playwright-report --exclude-files=.zipignore",
+		"check:wporg:pro": "wp-env run cli wp plugin check wpappointments --slug=appointments-booking --categories=plugin_repo,security,performance,accessibility --include-experimental --exclude-directories=tests,coverage,playwright-report --exclude-files=.zipignore",
 		"check:wporg:json": "pnpm run check:wporg:pro -- --format=json"
 	},
 	"devDependencies": {

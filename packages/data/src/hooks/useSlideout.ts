@@ -5,7 +5,7 @@ import {
 	removeSlideoutContent,
 } from '../utils/slideoutContent';
 
-const STORE_NAME = 'wpappointments';
+const STORE_NAME = 'appointments-booking';
 
 type Slideout = {
 	id: string;

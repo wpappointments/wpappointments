@@ -1,7 +1,7 @@
 import { dispatch } from '@wordpress/data';
 import randomId from './randomId';
 
-const STORE_NAME = 'wpappointments';
+const STORE_NAME = 'appointments-booking';
 
 function displayToast(message: string, type: 'success' | 'error') {
 	const toastId = randomId();

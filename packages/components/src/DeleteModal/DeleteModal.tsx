@@ -24,14 +24,14 @@ export default function DeleteModal({
 			<p>{message}</p>
 			<div className={styles.modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
-					{__('Go back', 'wpappointments')}
+					{__('Go back', 'appointments-booking')}
 				</Button>
 				<Button
 					variant="primary"
 					isDestructive
 					onClick={onConfirmClick}
 				>
-					{__('Delete', 'wpappointments')}
+					{__('Delete', 'appointments-booking')}
 				</Button>
 			</div>
 		</Modal>

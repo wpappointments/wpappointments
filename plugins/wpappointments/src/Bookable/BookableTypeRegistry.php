@@ -38,7 +38,7 @@ class BookableTypeRegistry extends Singleton {
 			return new WP_Error(
 				'bookable_type_exists',
 				/* translators: %s: bookable type slug */
-				sprintf( __( 'Bookable type "%s" is already registered', 'wpappointments' ), $slug )
+				sprintf( __( 'Bookable type "%s" is already registered', 'appointments-booking' ), $slug )
 			);
 		}
 
@@ -46,7 +46,7 @@ class BookableTypeRegistry extends Singleton {
 			return new WP_Error(
 				'bookable_type_handler_not_found',
 				/* translators: %s: handler class name */
-				sprintf( __( 'Bookable type handler class "%s" not found', 'wpappointments' ), $handler_class )
+				sprintf( __( 'Bookable type handler class "%s" not found', 'appointments-booking' ), $handler_class )
 			);
 		}
 
@@ -54,7 +54,7 @@ class BookableTypeRegistry extends Singleton {
 			return new WP_Error(
 				'bookable_type_handler_invalid',
 				/* translators: %s: handler class name */
-				sprintf( __( 'Bookable type handler "%s" must extend AbstractBookableTypeHandler', 'wpappointments' ), $handler_class )
+				sprintf( __( 'Bookable type handler "%s" must extend AbstractBookableTypeHandler', 'appointments-booking' ), $handler_class )
 			);
 		}
 

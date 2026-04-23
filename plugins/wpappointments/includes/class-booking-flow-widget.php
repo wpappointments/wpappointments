@@ -21,9 +21,9 @@ class Booking_Flow_Widget extends \WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'wpappointments_booking_flow',
-			__( 'WP Appointments Booking Flow', 'wpappointments' ),
+			__( 'WP Appointments Booking Flow', 'appointments-booking' ),
 			array(
-				'description' => __( 'Display the appointment booking flow.', 'wpappointments' ),
+				'description' => __( 'Display the appointment booking flow.', 'appointments-booking' ),
 			)
 		);
 	}

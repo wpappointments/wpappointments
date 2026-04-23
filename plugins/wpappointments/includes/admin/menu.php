@@ -22,37 +22,37 @@ function menu() {
 	$icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJ1dWlkLTExODg4NjBlLWQ4YjQtNDVjYi1hMWNjLTYzZTkxNzNhYmVjMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGlkPSJ1dWlkLTRmZjQ2YjljLTMxMjItNDBjMC05OWNkLTIxMDVkMTZiZDRjMCI+PHBhdGggZD0ibTgsMEMzLjU5LDAsMCwzLjU5LDAsOHMzLjU5LDgsOCw4LDgtMy41OSw4LThTMTIuNDEsMCw4LDBabTAsMTIuNDVjLTIuNDYsMC00LjQ2LTItNC40Ni00LjQ1czItNC40Niw0LjQ2LTQuNDYsNC40NiwyLDQuNDYsNC40Ni0yLDQuNDUtNC40Niw0LjQ1WiIgZmlsbD0iIzE3NGFmZiIvPjxyZWN0IHg9IjYuMzQiIHk9IjYuMDgiIHdpZHRoPSI0LjQ2IiBoZWlnaHQ9IjIuODMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yLjc5IDguMjYpIHJvdGF0ZSgtNDUpIiBmaWxsPSIjMTc0YWZmIi8+PC9nPjwvc3ZnPg==';
 
 	add_menu_page(
-		__( 'WP Appointments', 'wpappointments' ),
-		__( 'Appointments', 'wpappointments' ),
+		__( 'WP Appointments', 'appointments-booking' ),
+		__( 'Appointments', 'appointments-booking' ),
 		'manage_options',
-		'wpappointments',
+		'appointments-booking',
 		__NAMESPACE__ . '\\admin_page',
 		$icon,
 		'58.5'
 	);
 
 	add_submenu_page(
-		'wpappointments',
-		__( 'Calendar', 'wpappointments' ),
-		__( 'Calendar', 'wpappointments' ),
+		'appointments-booking',
+		__( 'Calendar', 'appointments-booking' ),
+		__( 'Calendar', 'appointments-booking' ),
 		'manage_options',
 		'wpappointments-calendar',
 		__NAMESPACE__ . '\\calendar_page'
 	);
 
 	add_submenu_page(
-		'wpappointments',
-		__( 'Customers', 'wpappointments' ),
-		__( 'Customers', 'wpappointments' ),
+		'appointments-booking',
+		__( 'Customers', 'appointments-booking' ),
+		__( 'Customers', 'appointments-booking' ),
 		'manage_options',
 		'wpappointments-customers',
 		__NAMESPACE__ . '\customers_page'
 	);
 
 	add_submenu_page(
-		'wpappointments',
-		__( 'Settings', 'wpappointments' ),
-		__( 'Settings', 'wpappointments' ),
+		'appointments-booking',
+		__( 'Settings', 'appointments-booking' ),
+		__( 'Settings', 'appointments-booking' ),
 		'manage_options',
 		'wpappointments-settings',
 		__NAMESPACE__ . '\\settings_page'
@@ -60,8 +60,8 @@ function menu() {
 
 	add_submenu_page(
 		'noexistingpageslug',
-		__( 'Wizard', 'wpappointments' ),
-		__( 'Wizard', 'wpappointments' ),
+		__( 'Wizard', 'appointments-booking' ),
+		__( 'Wizard', 'appointments-booking' ),
 		'manage_options',
 		'wpappointments-wizard',
 		__NAMESPACE__ . '\\wizard_page'

@@ -12,7 +12,8 @@ export default function Summary({ headerActions, rows }: SummaryProps) {
 	return (
 		<Card className={styles.summary}>
 			<CardHeader className={styles.summaryHeader}>
-				{__('Selected customer', 'wpappointments')}: {headerActions}
+				{__('Selected customer', 'appointments-booking')}:{' '}
+				{headerActions}
 			</CardHeader>
 			<CardBody className={styles.summaryBody}>{rows}</CardBody>
 		</Card>

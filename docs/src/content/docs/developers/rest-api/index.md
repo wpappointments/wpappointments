@@ -1,6 +1,6 @@
 ---
 title: REST API
-description: WP Appointments REST API reference.
+description: Appointments Booking REST API reference.
 ---
 
 All endpoints are under the `/wpappointments/v1/` namespace and require authentication (cookie or application password).

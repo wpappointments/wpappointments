@@ -1,13 +1,13 @@
 ---
 title: Embedding the Booking Flow
-description: How to embed the WP Appointments booking flow using the Gutenberg block, shortcode, widget, or PHP template tag.
+description: How to embed the Appointments Booking booking flow using the Gutenberg block, shortcode, widget, or PHP template tag.
 ---
 
-WP Appointments provides four ways to embed the booking flow on your site. Choose the method that fits your setup.
+Appointments Booking provides four ways to embed the booking flow on your site. Choose the method that fits your setup.
 
 ## Gutenberg Block
 
-The **Booking Flow** block is available in the block editor under the **WP Appointments** category. It supports these settings in the block inspector:
+The **Booking Flow** block is available in the block editor under the **Appointments Booking** category. It supports these settings in the block inspector:
 
 | Setting | Options | Default |
 |---------|---------|---------|
@@ -39,7 +39,7 @@ Use the `[wpappointments]` shortcode in the classic editor, page builders, or an
 
 ## Widget
 
-The **WP Appointments Booking Flow** widget is available in **Appearance → Widgets** for classic themes. It provides a settings form with the same options as the Gutenberg block.
+The **Appointments Booking Booking Flow** widget is available in **Appearance → Widgets** for classic themes. It provides a settings form with the same options as the Gutenberg block.
 
 ## PHP Template Tag
 

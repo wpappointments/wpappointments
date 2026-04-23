@@ -42,7 +42,7 @@ export default function AddHolidayGroupSlideout() {
 		<div className={styles.addSlideoutContent}>
 			<div className={styles.addSection}>
 				<h3 className={styles.addSectionTitle}>
-					{__('Religious holidays', 'wpappointments')}
+					{__('Religious holidays', 'appointments-booking')}
 				</h3>
 				<div className={styles.countryList}>
 					{filteredReligious.map((set) => (
@@ -57,7 +57,7 @@ export default function AddHolidayGroupSlideout() {
 						<p className={styles.noResults}>
 							{__(
 								'All available religious holidays have been added.',
-								'wpappointments'
+								'appointments-booking'
 							)}
 						</p>
 					)}
@@ -66,11 +66,14 @@ export default function AddHolidayGroupSlideout() {
 
 			<div className={styles.addSection}>
 				<h3 className={styles.addSectionTitle}>
-					{__('Country holidays', 'wpappointments')}
+					{__('Country holidays', 'appointments-booking')}
 				</h3>
 				<TextControl
 					__nextHasNoMarginBottom
-					placeholder={__('Search countries…', 'wpappointments')}
+					placeholder={__(
+						'Search countries…',
+						'appointments-booking'
+					)}
 					value={search}
 					onChange={setSearch}
 					className={styles.searchInput}
@@ -89,11 +92,11 @@ export default function AddHolidayGroupSlideout() {
 							{search
 								? __(
 										'No matching countries found.',
-										'wpappointments'
+										'appointments-booking'
 									)
 								: __(
 										'All available countries have been added.',
-										'wpappointments'
+										'appointments-booking'
 									)}
 						</p>
 					)}
@@ -121,7 +124,7 @@ function SetItem({
 				onClick={onAdd}
 				isBusy={adding}
 			>
-				{__('Add', 'wpappointments')}
+				{__('Add', 'appointments-booking')}
 			</Button>
 		</div>
 	);

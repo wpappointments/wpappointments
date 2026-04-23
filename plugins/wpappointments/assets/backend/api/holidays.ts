@@ -11,7 +11,7 @@ type GroupsResponse = APIResponse<{
 }>;
 
 export async function addHolidayGroup(type: HolidayGroupType, fileId: string) {
-	const dispatch = window.wp.data.dispatch('wpappointments');
+	const dispatch = window.wp.data.dispatch('appointments-booking');
 
 	const [error, response] = await resolve<GroupsResponse>(async () => {
 		return await apiFetch<GroupsResponse>({
@@ -35,7 +35,7 @@ export async function addHolidayGroup(type: HolidayGroupType, fileId: string) {
 }
 
 export async function removeHolidayGroup(groupId: string) {
-	const dispatch = window.wp.data.dispatch('wpappointments');
+	const dispatch = window.wp.data.dispatch('appointments-booking');
 
 	const [error, response] = await resolve<GroupsResponse>(async () => {
 		return await apiFetch<GroupsResponse>({
@@ -58,7 +58,7 @@ export async function removeHolidayGroup(groupId: string) {
 }
 
 export async function toggleHolidayGroup(groupId: string, enabled: boolean) {
-	const dispatch = window.wp.data.dispatch('wpappointments');
+	const dispatch = window.wp.data.dispatch('appointments-booking');
 
 	const [error, response] = await resolve<GroupsResponse>(async () => {
 		return await apiFetch<GroupsResponse>({
@@ -85,7 +85,7 @@ export async function toggleHoliday(
 	holidayKey: string,
 	enabled: boolean
 ) {
-	const dispatch = window.wp.data.dispatch('wpappointments');
+	const dispatch = window.wp.data.dispatch('appointments-booking');
 
 	const [error, response] = await resolve<GroupsResponse>(async () => {
 		return await apiFetch<GroupsResponse>({

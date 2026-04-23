@@ -48,15 +48,18 @@ type EventMeta = {
 
 const EVENT_META: Record<NotificationEventKey, EventMeta> = {
 	created: {
-		title: __('Appointment Created', 'wpappointments'),
+		title: __('Appointment Created', 'appointments-booking'),
 		description: __(
 			'Sent when a new appointment is booked.',
-			'wpappointments'
+			'appointments-booking'
 		),
-		defaultAdminSubject: __('New appointment booked', 'wpappointments'),
+		defaultAdminSubject: __(
+			'New appointment booked',
+			'appointments-booking'
+		),
 		defaultCustomerSubject: __(
 			'Your appointment has been booked',
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultAdminBody: __(
 			`Dear {admin_first_name},
@@ -70,7 +73,7 @@ Duration: {duration} minutes
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultCustomerBody: __(
 			`Dear {customer_name},
@@ -86,19 +89,19 @@ If you need to reschedule, please contact us at {admin_email}.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 	},
 	updated: {
-		title: __('Appointment Updated', 'wpappointments'),
+		title: __('Appointment Updated', 'appointments-booking'),
 		description: __(
 			'Sent when an existing appointment is modified.',
-			'wpappointments'
+			'appointments-booking'
 		),
-		defaultAdminSubject: __('Appointment updated', 'wpappointments'),
+		defaultAdminSubject: __('Appointment updated', 'appointments-booking'),
 		defaultCustomerSubject: __(
 			'Your appointment has been updated',
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultAdminBody: __(
 			`Dear {admin_first_name},
@@ -110,7 +113,7 @@ Updated: {date} at {time} ({status})
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultCustomerBody: __(
 			`Dear {customer_name},
@@ -125,19 +128,22 @@ If you have any questions, please contact us at {admin_email}.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 	},
 	confirmed: {
-		title: __('Appointment Confirmed', 'wpappointments'),
+		title: __('Appointment Confirmed', 'appointments-booking'),
 		description: __(
 			'Sent when an appointment is confirmed.',
-			'wpappointments'
+			'appointments-booking'
 		),
-		defaultAdminSubject: __('Appointment confirmed', 'wpappointments'),
+		defaultAdminSubject: __(
+			'Appointment confirmed',
+			'appointments-booking'
+		),
 		defaultCustomerSubject: __(
 			'Your appointment is confirmed',
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultAdminBody: __(
 			`Dear {admin_first_name},
@@ -146,7 +152,7 @@ The appointment with {customer_name} on {date} at {time} has been confirmed.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultCustomerBody: __(
 			`Dear {customer_name},
@@ -157,19 +163,22 @@ If you need to make any changes, please contact us at {admin_email}.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 	},
 	cancelled: {
-		title: __('Appointment Cancelled', 'wpappointments'),
+		title: __('Appointment Cancelled', 'appointments-booking'),
 		description: __(
 			'Sent when an appointment is cancelled.',
-			'wpappointments'
+			'appointments-booking'
 		),
-		defaultAdminSubject: __('Appointment cancelled', 'wpappointments'),
+		defaultAdminSubject: __(
+			'Appointment cancelled',
+			'appointments-booking'
+		),
 		defaultCustomerSubject: __(
 			'Your appointment has been cancelled',
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultAdminBody: __(
 			`Dear {admin_first_name},
@@ -178,7 +187,7 @@ The appointment with {customer_name} on {date} at {time} has been cancelled.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 		defaultCustomerBody: __(
 			`Dear {customer_name},
@@ -189,7 +198,7 @@ If this was a mistake, please contact us at {admin_email} to reschedule.
 
 Best regards,
 {admin_first_name} {admin_last_name}`,
-			'wpappointments'
+			'appointments-booking'
 		),
 	},
 };
@@ -259,8 +268,8 @@ function NotificationRow({
 						}
 					>
 						{value.enabled
-							? __('Active', 'wpappointments')
-							: __('Inactive', 'wpappointments')}
+							? __('Active', 'appointments-booking')
+							: __('Inactive', 'appointments-booking')}
 					</span>
 				</div>
 				<span className={styles.notificationDescription}>
@@ -278,9 +287,9 @@ function NotificationRow({
 				<Button
 					variant="tertiary"
 					onClick={onEdit}
-					aria-label={`${__('Edit', 'wpappointments')} ${meta.title}`}
+					aria-label={`${__('Edit', 'appointments-booking')} ${meta.title}`}
 				>
-					{__('Edit', 'wpappointments')}
+					{__('Edit', 'appointments-booking')}
 				</Button>
 			</div>
 		</div>
@@ -309,10 +318,10 @@ function NotificationEditor({
 		<div className={styles.editorContent}>
 			<p className={styles.editorDescription}>{meta.description}</p>
 
-			<FormFieldSet legend={__('Recipients', 'wpappointments')}>
+			<FormFieldSet legend={__('Recipients', 'appointments-booking')}>
 				<FormField>
 					<ToggleControl
-						label={__('Send to admin', 'wpappointments')}
+						label={__('Send to admin', 'appointments-booking')}
 						checked={value.sendToAdmin}
 						onChange={(v) => set('sendToAdmin', v)}
 						__nextHasNoMarginBottom
@@ -320,7 +329,7 @@ function NotificationEditor({
 				</FormField>
 				<FormField>
 					<ToggleControl
-						label={__('Send to customer', 'wpappointments')}
+						label={__('Send to customer', 'appointments-booking')}
 						checked={value.sendToCustomer}
 						onChange={(v) => set('sendToCustomer', v)}
 						__nextHasNoMarginBottom
@@ -330,7 +339,7 @@ function NotificationEditor({
 					<label className={formFieldStyles.fieldLabel}>
 						{__(
 							'Additional recipients (comma-separated)',
-							'wpappointments'
+							'appointments-booking'
 						)}
 					</label>
 					<InputControl
@@ -338,7 +347,7 @@ function NotificationEditor({
 						onChange={(v) => set('customRecipients', v ?? '')}
 						placeholder={__(
 							'extra@example.com, other@example.com',
-							'wpappointments'
+							'appointments-booking'
 						)}
 						size="__unstable-large"
 					/>
@@ -346,30 +355,32 @@ function NotificationEditor({
 			</FormFieldSet>
 
 			{value.sendToAdmin && (
-				<FormFieldSet legend={__('Admin email', 'wpappointments')}>
+				<FormFieldSet
+					legend={__('Admin email', 'appointments-booking')}
+				>
 					<FormField>
 						<label className={formFieldStyles.fieldLabel}>
-							{__('Subject', 'wpappointments')}
+							{__('Subject', 'appointments-booking')}
 						</label>
 						<InputControl
 							value={value.adminSubject}
 							onChange={(v) => set('adminSubject', v ?? '')}
 							help={__(
 								'Leave empty to use the default subject.',
-								'wpappointments'
+								'appointments-booking'
 							)}
 							size="__unstable-large"
 						/>
 					</FormField>
 					<FormField>
 						<label className={formFieldStyles.fieldLabel}>
-							{__('Body', 'wpappointments')}
+							{__('Body', 'appointments-booking')}
 						</label>
 						<TextareaControl
 							help={
 								__(
 									'Leave empty to use the default template. Variables: ',
-									'wpappointments'
+									'appointments-booking'
 								) + TEMPLATE_VARS
 							}
 							value={value.adminBody}
@@ -382,30 +393,32 @@ function NotificationEditor({
 			)}
 
 			{value.sendToCustomer && (
-				<FormFieldSet legend={__('Customer email', 'wpappointments')}>
+				<FormFieldSet
+					legend={__('Customer email', 'appointments-booking')}
+				>
 					<FormField>
 						<label className={formFieldStyles.fieldLabel}>
-							{__('Subject', 'wpappointments')}
+							{__('Subject', 'appointments-booking')}
 						</label>
 						<InputControl
 							value={value.customerSubject}
 							onChange={(v) => set('customerSubject', v ?? '')}
 							help={__(
 								'Leave empty to use the default subject.',
-								'wpappointments'
+								'appointments-booking'
 							)}
 							size="__unstable-large"
 						/>
 					</FormField>
 					<FormField>
 						<label className={formFieldStyles.fieldLabel}>
-							{__('Body', 'wpappointments')}
+							{__('Body', 'appointments-booking')}
 						</label>
 						<TextareaControl
 							help={
 								__(
 									'Leave empty to use the default template. Variables: ',
-									'wpappointments'
+									'appointments-booking'
 								) + TEMPLATE_VARS
 							}
 							value={value.customerBody}
@@ -516,7 +529,7 @@ export default function NotificationsSettings() {
 		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">
-					{__('Email Notifications', 'wpappointments')}
+					{__('Email Notifications', 'appointments-booking')}
 				</Text>
 			</CardHeader>
 			<CardBody style={{ padding: 0 }}>
@@ -581,7 +594,9 @@ function NotificationEditorWrapper({
 		}
 
 		if (response === null) {
-			displayErrorToast(__('Error saving settings', 'wpappointments'));
+			displayErrorToast(
+				__('Error saving settings', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -610,7 +625,7 @@ function NotificationEditorWrapper({
 					marginTop: '34px',
 				}}
 			>
-				{__('Save changes', 'wpappointments')}
+				{__('Save changes', 'appointments-booking')}
 			</Button>
 		</>
 	);

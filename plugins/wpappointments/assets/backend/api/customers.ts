@@ -34,8 +34,8 @@ export type CustomersApiOptions = {
 export function customersApi(options?: CustomersApiOptions) {
 	const apiPath = 'customers';
 	const { invalidateCache } = options || {};
-	const dispatch = window.wp.data.dispatch('wpappointments');
-	const select = window.wp.data.select('wpappointments');
+	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const select = window.wp.data.select('appointments-booking');
 
 	async function getCustomers() {
 		return select.getCustomers();
@@ -73,7 +73,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			dispatch.createCustomer(customer);
 
 			displaySuccessToast(
-				__('Customer created successfully', 'wpappointments')
+				__('Customer created successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {
@@ -114,7 +114,7 @@ export function customersApi(options?: CustomersApiOptions) {
 			dispatch.updateCustomer(customer);
 
 			displaySuccessToast(
-				__('Customer updated successfully', 'wpappointments')
+				__('Customer updated successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {
@@ -142,13 +142,16 @@ export function customersApi(options?: CustomersApiOptions) {
 		});
 
 		if (error) {
-			handleError(error, __('Cannot delete customer', 'wpappointments'));
+			handleError(
+				error,
+				__('Cannot delete customer', 'appointments-booking')
+			);
 			return;
 		}
 
 		if (response) {
 			displaySuccessToast(
-				__('Customer deleted successfully', 'wpappointments')
+				__('Customer deleted successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {

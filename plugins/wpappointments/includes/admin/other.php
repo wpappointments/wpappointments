@@ -22,7 +22,7 @@ add_action( 'admin_body_class', __NAMESPACE__ . '\\body_class', 1000 );
 function body_class( $classes ) {
 	$screen = get_current_screen();
 
-	if ( str_contains( $screen->id, 'wpappointments' ) ) {
+	if ( str_contains( $screen->id, 'appointments-booking' ) ) {
 		$classes .= ' wpappointments-admin';
 
 		if ( 'admin_page_wpappointments-wizard' === $screen->id ) {
@@ -45,7 +45,7 @@ function render_globals_component() {
 		return;
 	}
 
-	if ( str_contains( get_current_screen()->id, 'wpappointments' ) ) {
+	if ( str_contains( get_current_screen()->id, 'appointments-booking' ) ) {
 		return;
 	}
 

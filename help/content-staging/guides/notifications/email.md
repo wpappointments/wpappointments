@@ -3,7 +3,7 @@ title: Email Notifications
 description: Configure email notifications for appointments.
 ---
 
-WP Appointments sends email notifications for key appointment events.
+Appointments Booking sends email notifications for key appointment events.
 
 ## Notification Events
 
@@ -27,4 +27,4 @@ Email templates support variables that are replaced with actual values:
 
 ## Configuration
 
-Go to **WP Appointments → Settings → Notifications** to customize email templates and toggle notifications on/off.
+Go to **Appointments Booking → Settings → Notifications** to customize email templates and toggle notifications on/off.

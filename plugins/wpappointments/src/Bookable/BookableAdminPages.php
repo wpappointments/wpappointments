@@ -79,7 +79,7 @@ class BookableAdminPages extends Singleton {
 			$menu_slug = 'wpappointments-bookable-' . $type_slug;
 
 			add_submenu_page(
-				'wpappointments',
+				'appointments-booking',
 				$config['page_title'],
 				$config['menu_title'],
 				$config['capability'],

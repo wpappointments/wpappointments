@@ -78,7 +78,7 @@ class SettingsController extends Controller {
 		$settings = $settings->get_all();
 
 		return self::response(
-			__( 'Settings fetched successfully', 'wpappointments' ),
+			__( 'Settings fetched successfully', 'appointments-booking' ),
 			array(
 				'settings' => $settings,
 			),
@@ -100,7 +100,7 @@ class SettingsController extends Controller {
 		$settings = $settings->get_all_by_category( $category );
 
 		return self::response(
-			__( 'Settings in category fetched successfully', 'wpappointments' ),
+			__( 'Settings in category fetched successfully', 'appointments-booking' ),
 			array(
 				'settings' => $settings,
 			),
@@ -127,7 +127,7 @@ class SettingsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Settings updated successfully', 'wpappointments' ),
+			__( 'Settings updated successfully', 'appointments-booking' ),
 			array(
 				'settings' => $settings,
 			),

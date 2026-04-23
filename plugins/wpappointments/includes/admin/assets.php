@@ -40,7 +40,7 @@ function scripts() {
 		return;
 	}
 
-	if ( str_contains( $screen->id, 'wpappointments' ) ) {
+	if ( str_contains( $screen->id, 'appointments-booking' ) ) {
 		wp_enqueue_style(
 			'wpappointments-admin-css',
 			PluginInfo::get_plugin_dir_url() . '/admin.css',
@@ -77,7 +77,7 @@ function scripts() {
 
 		wp_set_script_translations(
 			'wpappointments-admin-js',
-			'wpappointments',
+			'appointments-booking',
 			PluginInfo::get_plugin_dir_path() . '/languages'
 		);
 
@@ -103,7 +103,7 @@ function scripts() {
 		}
 	}
 
-	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
+	if ( ! str_contains( $screen->id, 'appointments-booking' ) ) {
 		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
 			return;
 		}

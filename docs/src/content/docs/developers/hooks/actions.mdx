@@ -1,6 +1,6 @@
 ---
 title: Actions
-description: WordPress actions provided by WP Appointments.
+description: WordPress actions provided by Appointments Booking.
 sidebar:
   order: 1
   badge:
@@ -12,27 +12,43 @@ sidebar:
 This page is auto-generated from the plugin source code. Do not edit manually — run `pnpm docs:generate` to update.
 :::
 
+## `wpappointments_after_notification`
+
+Fires after a notification has been dispatched. Allows third-party plugins to react after emails are sent, e.g. for logging, webhooks, or integration with external notification services like BracketSpace Notification. @param string     $event           Event key. @param array      $appointment     Normalized appointment data. @param array      $recipients      List of recipients that were notified. @param array      $config          Notification config for this event. @param array|null $old_appointment Previous appointment data. /
+
+**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:220`
+
+---
+
 ## `wpappointments_appointment_cancelled`
 
-**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:188`
+**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:192`
 
 ---
 
 ## `wpappointments_appointment_confirmed`
 
-**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:214`
+**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:218`
 
 ---
 
 ## `wpappointments_appointment_created`
 
-**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:102`
+**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:104`
 
 ---
 
 ## `wpappointments_appointment_deleted`
 
-**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:249`
+**Source:** `plugins/wpappointments/src/Data/Model/Appointment.php:253`
+
+---
+
+## `wpappointments_before_notification`
+
+Fires before a notification is dispatched. Allows third-party plugins (e.g. BracketSpace Notification) to hook into the notification lifecycle. @param string     $event           Event key (created|updated|confirmed|cancelled). @param array      $appointment     Normalized appointment data. @param array      $config          Notification config for this event. @param array|null $old_appointment Previous appointment data. /
+
+**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:172`
 
 ---
 
@@ -68,11 +84,47 @@ Fires when a bookable type admin page is loaded. Addon plugins should enqueue th
 
 ---
 
+## `wpappointments_ooo_created`
+
+**Source:** `plugins/wpappointments/src/Data/Model/OutOfOffice.php:125`
+
+---
+
+## `wpappointments_ooo_deleted`
+
+**Source:** `plugins/wpappointments/src/Data/Model/OutOfOffice.php:210`
+
+---
+
+## `wpappointments_ooo_updated`
+
+**Source:** `plugins/wpappointments/src/Data/Model/OutOfOffice.php:178`
+
+---
+
 ## `wpappointments_register_admin_pages`
 
 Fires when bookable type plugins should register their admin pages. Plugins should call BookableTypeAdminPage::register() inside this action callback. /
 
 **Source:** `plugins/wpappointments/src/Admin/BookableTypeAdminPage.php:80`
+
+---
+
+## `wpappointments_schedule_created`
+
+**Source:** `plugins/wpappointments/src/Data/Model/Schedule.php:139`
+
+---
+
+## `wpappointments_schedule_deleted`
+
+**Source:** `plugins/wpappointments/src/Data/Model/Schedule.php:272`
+
+---
+
+## `wpappointments_schedule_updated`
+
+**Source:** `plugins/wpappointments/src/Data/Model/Schedule.php:207`
 
 ---
 

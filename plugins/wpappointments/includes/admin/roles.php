@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 function create_plugin_roles() {
 	add_role(
 		'wpa-customer',
-		__( 'Customer (appointments)', 'wpappointments' ),
+		__( 'Customer (appointments)', 'appointments-booking' ),
 		array_merge(
 			get_role( 'subscriber' )->capabilities,
 			array(

@@ -4,7 +4,7 @@ import { useSelect } from '@wordpress/data';
 import cn from 'obj-str';
 import styles from './Toaster.module.css';
 
-const STORE_NAME = 'wpappointments';
+const STORE_NAME = 'appointments-booking';
 
 type Toast = {
 	id: string;

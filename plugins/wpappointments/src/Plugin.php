@@ -111,7 +111,7 @@ class Plugin extends Core\Singleton {
 		if ( ! $core_entity_id ) {
 			$entity_post_id = wp_insert_post(
 				array(
-					'post_title'  => __( 'Appointment', 'wpappointments' ),
+					'post_title'  => __( 'Appointment', 'appointments-booking' ),
 					'post_status' => 'publish',
 					'post_type'   => Core\PluginInfo::POST_TYPES['bookable'],
 					'meta_input'  => array(
@@ -134,7 +134,7 @@ class Plugin extends Core\Singleton {
 				// Create default variant for the core entity.
 				$variant_post_id = wp_insert_post(
 					array(
-						'post_title'  => __( 'Default', 'wpappointments' ),
+						'post_title'  => __( 'Default', 'appointments-booking' ),
 						'post_status' => 'publish',
 						'post_type'   => Core\PluginInfo::POST_TYPES['bookable-variant'],
 						'post_parent' => $entity_post_id,

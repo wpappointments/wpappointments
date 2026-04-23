@@ -3,7 +3,7 @@ import cn from 'obj-str';
 import styles from './BackButton.module.css';
 
 export default function BackButton({
-	label = __('Back', 'wpappointments'),
+	label = __('Back', 'appointments-booking'),
 	onClick,
 }: {
 	label?: string;

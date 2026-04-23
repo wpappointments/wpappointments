@@ -28,7 +28,7 @@ export type State = {
 	holidays: HolidaysState;
 };
 
-export const store = createReduxStore('wpappointments', {
+export const store = createReduxStore('appointments-booking', {
 	reducer: combineReducers(reducers),
 	selectors,
 	resolvers,

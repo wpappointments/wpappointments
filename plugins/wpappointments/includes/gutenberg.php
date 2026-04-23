@@ -94,8 +94,8 @@ function register_category( $categories ) {
 	return array_merge(
 		array(
 			array(
-				'slug'  => 'wpappointments',
-				'title' => __( 'WP Appointments', 'wpappointments' ),
+				'slug'  => 'appointments-booking',
+				'title' => __( 'WP Appointments', 'appointments-booking' ),
 			),
 		),
 		$categories
