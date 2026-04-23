@@ -246,8 +246,9 @@ class Schedule {
 			array(
 				'post_type'      => PluginInfo::POST_TYPES['bookable'],
 				'posts_per_page' => -1,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key,WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Admin-only query scoped to schedule reassignment flow.
 				'meta_key'       => 'schedule_id',
-				'meta_value'     => $id,
+				'meta_value'     => $id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			)
 		);
 

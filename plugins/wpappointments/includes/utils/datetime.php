@@ -6,12 +6,16 @@
  * @since 0.0.1
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Data\Model\Settings;
 
 /**
  * Create date settings array
  */
-function create_date_settings_array() {
+function wpappointments_create_date_settings_array() {
 	$php_to_js_date_format_map = array(
 		'F j, Y' => 'MMMM d, yyyy',
 		'Y-m-d'  => 'yyyy-MM-dd',
@@ -26,7 +30,7 @@ function create_date_settings_array() {
 	);
 
 	$settings = new Settings();
-	$formats  = get_date_formats();
+	$formats  = wpappointments_get_date_formats();
 
 	return array(
 		'timezones'    => timezone_identifiers_list(),
@@ -52,7 +56,7 @@ function create_date_settings_array() {
  *
  * @return array
  */
-function get_date_formats() {
+function wpappointments_get_date_formats() {
 	$settings = new Settings();
 
 	$date = $settings->get_setting( 'general', 'dateFormat' );

@@ -95,7 +95,7 @@ class AvailabilityLayerRegistry extends Singleton {
 			}
 		);
 
-		return apply_filters( 'wpa_availability_layers', $layers );
+		return apply_filters( 'wpappointments_availability_layers', $layers );
 	}
 
 	/**

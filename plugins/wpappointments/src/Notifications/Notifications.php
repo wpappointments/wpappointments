@@ -8,6 +8,10 @@
 
 namespace WPAppointments\Notifications;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\PluginInfo;
 use WPAppointments\Core\Singleton;
 use WPAppointments\Data\Model\Settings;

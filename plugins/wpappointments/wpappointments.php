@@ -36,10 +36,10 @@ define( 'WPAPPOINTMENTS_DIR_URL', plugin_dir_url( __FILE__ ) );
 global $wpappointments;
 
 // Get plugin information.
-$plugin_info = PluginInfo::get_instance();
+$wpappointments_plugin_info = PluginInfo::get_instance();
 
 // Stop loading the plugin if the PHP version is not met.
-if ( ! $plugin_info->is_php_version_met() ) {
+if ( ! $wpappointments_plugin_info->is_php_version_met() ) {
 	return false;
 }
 
@@ -47,8 +47,8 @@ if ( ! $plugin_info->is_php_version_met() ) {
 $wpappointments = Plugin::get_instance();
 
 // Register activation and deactivation hooks.
-$activation = new Core\Activation( $plugin_info, $wpappointments );
-$activation->register_hooks();
+$wpappointments_activation = new Core\Activation( $wpappointments_plugin_info, $wpappointments );
+$wpappointments_activation->register_hooks();
 
 // Load plugin functions.
 require_once __DIR__ . '/includes/functions.php';
