@@ -266,7 +266,8 @@ class BookableAvailabilityController extends Controller {
 
 		$appointments_data = AppointmentsQuery::get_date_range_appointments(
 			(int) $range_start->getTimestamp(),
-			(int) $range_end->getTimestamp()
+			(int) $range_end->getTimestamp(),
+			$entity_id
 		);
 
 		$appointments = $appointments_data['appointments'];

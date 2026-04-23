@@ -227,6 +227,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				coreEntityId?.toString() ||
 				defaultEntityName.toLowerCase(),
 			date: date.toISOString(),
+			entityId: coreEntityId,
 		};
 
 		setIsSubmitting(true);
