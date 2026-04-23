@@ -1,0 +1,74 @@
+---
+import HelpLayout from '../../layouts/HelpLayout.astro';
+import SidebarNav from '../../components/SidebarNav.astro';
+import Callout from '../../components/Callout.astro';
+---
+
+<HelpLayout
+	title="Bookables"
+	description="Set up bookable types, entities, and variants."
+	breadcrumbs={[{ label: 'Bookables', href: '/help/bookables/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Bookables</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			The bookable system is how WP Appointments models anything that can be reserved.
+		</p>
+	</header>
+
+	<Callout>
+		<ul>
+			<li><strong>Bookable Type</strong> — a category registered by a plugin (e.g. "Court", "Room")</li>
+			<li><strong>Bookable Entity</strong> — a specific instance (e.g. "Court A", "Meeting Room 1")</li>
+			<li><strong>Variant</strong> — a bookable unit with its own duration and price (e.g. "1-hour session")</li>
+		</ul>
+	</Callout>
+
+	<div class="mt-12 space-y-12">
+		<section>
+			<h2 class="text-2xl font-semibold">How It Works</h2>
+			<div class="mermaid-container">
+				<pre class="mermaid">
+graph TD
+    A[Bookable Type] --> B[Bookable Entity]
+    B --> C[Variant 1]
+    B --> D[Variant 2]
+    C --> E[Appointments]
+    D --> E
+
+    style A fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style B fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style C fill:#d1fae5,stroke:#34d399,color:#1f2937
+    style D fill:#d1fae5,stroke:#34d399,color:#1f2937
+    style E fill:#fef3c7,stroke:#f59e0b,color:#1f2937
+				</pre>
+			</div>
+			<p class="mt-4 text-text-secondary">
+				The core plugin provides the engine. Addon plugins register bookable types with custom fields and UI. Appointments are booked against variants, not entities directly.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Bookable Types</h2>
+			<p class="mt-2 text-text-secondary">
+				Types are registered by plugins using <code>register_bookable_type()</code>. The core plugin does not ship concrete types. Each type defines its own fields, admin UI, and availability rules.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Entities</h2>
+			<p class="mt-2 text-text-secondary">
+				Entities are instances of a type. Create them from the admin page that appears when a bookable type plugin is active. Each entity has a name, description, active toggle, and type-specific fields.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Variants</h2>
+			<p class="mt-2 text-text-secondary">
+				Every entity has at least one variant. Variants define the bookable unit: duration, buffer times, and any override settings. Appointments reference variants, not entities.
+			</p>
+		</section>
+	</div>
+</HelpLayout>

@@ -1,0 +1,16 @@
+{
+	"id": "DE",
+	"name": "Germany",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easterMonday",
+		"labourDay",
+		"ascension",
+		"whitMonday",
+		"germanUnity",
+		"christmas",
+		"christmas2"
+	]
+}

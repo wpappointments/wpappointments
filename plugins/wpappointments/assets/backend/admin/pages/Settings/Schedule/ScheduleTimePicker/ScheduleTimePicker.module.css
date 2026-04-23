@@ -1,0 +1,58 @@
+.time-picker {
+	display: flex;
+	align-items: center;
+}
+
+.time-picker-control {
+	display: flex;
+	align-items: center;
+	padding: 4px;
+	background-color: #f6f6f6;
+}
+
+.time-picker :global .components-number-control {
+	width: 36px;
+}
+
+.time-picker :global .components-number-control__input {
+	padding-right: 0px;
+	padding-left: 8px;
+	text-align: center;
+}
+
+.time-picker__label {
+	margin-right: 8px;
+}
+
+.time-picker-separator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-self: stretch;
+	width: 5px;
+	background-color: #f6f6f6;
+}
+
+.time-picker-control
+	> div:nth-child(1)
+	:global(.components-input-control__input) {
+	padding-left: 4px;
+	padding-right: 0;
+	text-align: center;
+}
+
+.time-picker-control
+	> div:nth-child(3)
+	:global(.components-input-control__input) {
+	padding-left: 0;
+	padding-right: 4px;
+	text-align: center;
+}
+
+.time-picker :global(.components-input-control__backdrop) {
+	border: none !important;
+}
+
+.time-picker :global(.components-base-control__field) {
+	margin-bottom: 0;
+}

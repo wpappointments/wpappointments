@@ -1,0 +1,139 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	breadcrumbs?: { label: string; href: string }[];
+}
+
+const { title, description, breadcrumbs = [] } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="font-sans text-base antialiased">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title} | WP Appointments Help</title>
+		{description && <meta name="description" content={description} />}
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-page-bg text-text-primary">
+		<!-- Header -->
+		<header
+			class="sticky top-0 z-50 border-b border-border-subtle bg-white/95 backdrop-blur-md"
+		>
+			<div class="mx-auto max-w-7xl px-6">
+				<nav class="flex items-center justify-between py-3">
+					<div class="flex items-center gap-6">
+						<a href="/help/" class="font-semibold text-lg">
+							WP Appointments
+						</a>
+						<span class="text-text-caption text-sm">Help Center</span>
+					</div>
+					<div class="flex items-center gap-4">
+						<a
+							href="https://docs.wpappointments.com"
+							class="text-sm text-text-tertiary transition-colors hover:text-text-secondary"
+						>
+							Developer Docs
+						</a>
+						<a
+							href="https://wpappointments.com"
+							class="text-sm text-text-tertiary transition-colors hover:text-text-secondary"
+						>
+							Website
+						</a>
+					</div>
+				</nav>
+			</div>
+		</header>
+
+		<!-- Main -->
+		<div class="mx-auto max-w-7xl px-6">
+			<!-- Mobile sidebar navigation -->
+			<div class="pt-6 lg:hidden">
+				<slot name="sidebar" />
+			</div>
+			<div class="grid grid-cols-24 gap-0">
+				<!-- Sidebar -->
+				<nav
+					class="col-span-5 border-r border-border-subtle max-lg:hidden"
+				>
+					<div
+						class="sticky top-14 flex h-[calc(100vh-3.5rem)] flex-col overflow-y-auto pt-10 pr-6 pb-8"
+					>
+						<slot name="sidebar" />
+					</div>
+				</nav>
+
+				<!-- Content -->
+				<main class="col-span-19 pt-10 pb-20 pl-10 max-lg:col-span-24 max-lg:pl-0">
+					{
+						breadcrumbs.length > 0 && (
+							<div class="mb-8 flex items-center gap-2 text-sm text-text-caption">
+								<a href="/help/" class="hover:text-text-tertiary">
+									Help
+								</a>
+								{breadcrumbs.map((bc) => (
+									<>
+										<span class="text-xs">/</span>
+										<a
+											href={bc.href}
+											class="hover:text-text-tertiary"
+										>
+											{bc.label}
+										</a>
+									</>
+								))}
+							</div>
+						)
+					}
+
+					<slot />
+
+					<!-- Related articles -->
+					<slot name="related" />
+				</main>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer class="border-t border-border-subtle bg-surface">
+			<div class="mx-auto max-w-7xl px-6 py-12">
+				<div class="flex flex-wrap items-center justify-between gap-4">
+					<p class="text-sm text-text-caption">
+						&copy; {new Date().getFullYear()} WP Appointments by
+						<a
+							href="https://wppoland.com"
+							class="underline hover:text-text-secondary"
+						>
+							wppoland.com
+						</a>
+					</p>
+					<div class="flex gap-6 text-sm text-text-caption">
+						<a
+							href="https://docs.wpappointments.com"
+							class="hover:text-text-secondary"
+						>
+							Developer Docs
+						</a>
+						<a
+							href="https://github.com/wpappointments/wpappointments"
+							class="hover:text-text-secondary"
+						>
+							GitHub
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

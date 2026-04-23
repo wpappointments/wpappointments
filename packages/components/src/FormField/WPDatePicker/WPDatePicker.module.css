@@ -1,0 +1,104 @@
+.wrapper {
+	box-sizing: border-box;
+}
+
+.navigator {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	gap: 8px;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 16px;
+}
+
+.navigator-heading {
+	line-height: 1.2;
+	margin: 0px;
+	color: rgb( 30, 30, 30 );
+	display: block;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+.navigator-heading strong {
+	font-weight: 600;
+}
+
+.calendar {
+	column-gap: 8px;
+	display: grid;
+	grid-template-columns: 0.5fr repeat( 5, 1fr ) 0.5fr;
+	justify-items: center;
+	row-gap: 8px;
+}
+
+.day-of-week {
+	color: rgb( 117, 117, 117 );
+	font-size: 13px;
+	line-height: 1.2;
+}
+
+.day-of-week:nth-of-type( 1 ) {
+	justify-self: start;
+}
+
+.day-of-week:nth-of-type( 7 ) {
+	justify-self: end;
+}
+
+.day-button {
+	border-radius: 100%;
+	height: 28px;
+	width: 28px;
+	grid-column: var( --grid-column, 1 );
+	position: relative;
+	justify-content: center;
+}
+
+.day-button-has-events::before {
+	background: var(
+		--wp-components-color-accent,
+		var( --wp-admin-theme-color, #3858e9 )
+	);
+	border-radius: 2px;
+	bottom: 2px;
+	content: ' ';
+	height: 4px;
+	left: 50%;
+	margin-left: -2px;
+	position: absolute;
+	width: 4px;
+}
+
+.day-button-is-selected {
+	background: var(
+		--wp-components-color-accent,
+		var( --wp-admin-theme-color, #3858e9 )
+	);
+	color: rgb( 255, 255, 255 );
+}
+
+.day-button-is-selected.day-button-has-events::before {
+	background: rgb( 255, 255, 255 );
+}
+
+.day-button-is-selected:hover {
+	color: rgb( 255, 255, 255 );
+}
+
+.day-button-is-today {
+	background: rgb( 224, 224, 224 );
+}
+
+.day-button-is-today.day-button-is-selected {
+	background: var(
+		--wp-components-color-accent,
+		var( --wp-admin-theme-color, #3858e9 )
+	);
+	color: rgb( 255, 255, 255 );
+}
+
+.day-button-is-invalid {
+	opacity: 0.3;
+}

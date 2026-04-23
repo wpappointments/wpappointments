@@ -1,0 +1,19 @@
+{
+	"id": "IT",
+	"name": "Italy",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"epiphany",
+		"easter",
+		"easterMonday",
+		"liberationDayIT",
+		"labourDay",
+		"republicDayIT",
+		"assumptionOfMary",
+		"allSaints",
+		"immaculateConception",
+		"christmas",
+		"christmas2"
+	]
+}

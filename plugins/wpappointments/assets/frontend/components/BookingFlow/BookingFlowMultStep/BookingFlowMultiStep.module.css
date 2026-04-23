@@ -1,0 +1,77 @@
+.steps-header {
+	display: flex;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+.steps-header-label {
+	flex: 1;
+	padding: 10px 2px;
+	cursor: not-allowed;
+	font-size: 16px;
+	background: none;
+	border: none;
+	font-family: inherit;
+	color: inherit;
+	text-align: left;
+}
+
+.steps-header-label-center {
+	text-align: center;
+}
+
+.steps-header-label::before {
+	content: attr(data-step);
+	width: 25px;
+	height: 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid #41c611;
+	color: #41c611;
+	font-size: 10px;
+	font-weight: bold;
+	vertical-align: middle;
+	margin-right: 8px;
+}
+
+.steps-header-label-active {
+	font-weight: bold;
+}
+
+.steps-header-label-active::before {
+	background-color: #41c611;
+	color: white;
+}
+
+.steps-header-label-clickable {
+	cursor: pointer;
+}
+
+.steps-header-label-clickable:hover::before {
+	background-color: #41c611;
+	color: white;
+}
+
+.step-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 6px;
+	margin-top: 20px;
+}
+
+.back-button {
+	padding: 10px 20px;
+	border: 1px solid #e0e0e0;
+	border-radius: 5px;
+	background: white;
+	cursor: pointer;
+	font-size: 14px;
+	color: inherit;
+}
+
+.back-button:hover {
+	border-color: #999;
+}

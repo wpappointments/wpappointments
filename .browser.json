@@ -1,0 +1,6 @@
+{
+	"url": "http://localhost:8888",
+	"browser": "chrome",
+	"chromeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+	"arcExecutable": "/Applications/Arc.app/Contents/MacOS/Arc"
+}

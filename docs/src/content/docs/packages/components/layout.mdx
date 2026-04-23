@@ -1,0 +1,51 @@
+---
+title: Layout Components
+description: Container and layout components.
+---
+
+## CardBody
+
+Content container with consistent padding:
+
+```tsx
+import { CardBody } from '@wpappointments/components';
+
+<CardBody>
+    <p>Card content here</p>
+</CardBody>
+```
+
+## FormFieldSet
+
+Groups related form fields with a legend:
+
+```tsx
+import { FormFieldSet } from '@wpappointments/components';
+
+<FormFieldSet legend="Contact Information">
+    <Input name="email" label="Email" />
+    <Input name="phone" label="Phone" />
+</FormFieldSet>
+```
+
+## ErrorMessage
+
+Displays error messages with consistent styling:
+
+```tsx
+import { ErrorMessage } from '@wpappointments/components';
+
+<ErrorMessage message="Something went wrong" />
+```
+
+## SlideOut
+
+Side panel overlay for detail views and forms:
+
+```tsx
+import { SlideOut } from '@wpappointments/components';
+
+<SlideOut isOpen={isOpen} onClose={handleClose} title="Edit Court">
+    {/* content */}
+</SlideOut>
+```

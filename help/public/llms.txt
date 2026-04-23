@@ -1,0 +1,44 @@
+# WP Appointments Help Center
+
+> User guides and tutorials for WP Appointments — the next-gen appointment scheduling plugin for WordPress.
+
+## Getting Started
+
+- [Installation](https://wpappointments.com/help/getting-started/): Install and activate the plugin, run the setup wizard
+
+## Appointments
+
+- [Creating Appointments](https://wpappointments.com/help/appointments/creating/): Book appointments from the admin calendar
+- [Managing Appointments](https://wpappointments.com/help/appointments/managing/): View, edit, cancel, and confirm appointments
+
+## Bookables
+
+- [Bookable Types](https://wpappointments.com/help/bookables/types/): Understand the bookable type system
+- [Entities](https://wpappointments.com/help/bookables/entities/): Manage bookable resources (people, rooms, equipment)
+- [Variants](https://wpappointments.com/help/bookables/variants/): Service variants and pricing
+
+## Availability
+
+- [Schedules](https://wpappointments.com/help/availability/schedules/): Set weekly availability schedules
+- [Layers](https://wpappointments.com/help/availability/layers/): Override rules, holidays, and exceptions
+
+## Customers
+
+- [Managing Customers](https://wpappointments.com/help/customers/managing/): View and manage customer records
+
+## Booking Flow
+
+- [Gutenberg Block](https://wpappointments.com/help/booking-flow/gutenberg-block/): Embed the booking form on any page
+
+## Notifications
+
+- [Email Notifications](https://wpappointments.com/help/notifications/email/): Confirmation, update, and cancellation emails
+
+## Settings
+
+- [General Settings](https://wpappointments.com/help/settings/general/): Plugin-wide configuration options
+
+## Related
+
+- [Developer Documentation](https://docs.wpappointments.com): REST API, hooks, addon development
+- [GitHub Repository](https://github.com/wpappointments/wpappointments): Source code and issues

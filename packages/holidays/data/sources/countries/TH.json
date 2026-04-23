@@ -1,0 +1,19 @@
+{
+	"id": "TH",
+	"name": "Thailand",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"makhaRucha",
+		"songkranTH",
+		"coronationDayTH",
+		"labourDay",
+		"vesak",
+		"asakhaRucha",
+		"khaoPhansa",
+		"queensBirthdayTH",
+		"kingsBirthdayTH",
+		"constitutionDayTH",
+		"newYearEve"
+	]
+}

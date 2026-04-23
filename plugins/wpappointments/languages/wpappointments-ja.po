@@ -1,0 +1,468 @@
+# Copyright (C) 2026 WP Appointments
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Appointments 0.1.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpappointments\n"
+"Last-Translator: WPPoland <hello@wppoland.com>\n"
+"Language-Team: Japanese <hello@wppoland.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-19T12:28:23+00:00\n"
+"PO-Revision-Date: 2026-03-21 00:00+0000\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wpappointments\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: wpappointments.php
+#: includes/admin/menu.php:28
+#: includes/gutenberg.php:57
+msgid "WP Appointments"
+msgstr "WP Appointments"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: wpappointments.php
+msgid "https://wpappointments.com"
+msgstr "https://wpappointments.com"
+
+#. Description of the plugin
+#: wpappointments.php
+msgid "Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support."
+msgstr "WordPress向け次世代予約スケジューリング。拡張可能で開発者に優しいバリアント対応の予約システムです。"
+
+#: includes/admin/menu.php:29
+#: src/Core/PostTypes.php:37
+msgid "Appointments"
+msgstr "予約"
+
+#: includes/admin/menu.php:39
+#: includes/admin/menu.php:40
+msgid "Calendar"
+msgstr "カレンダー"
+
+#: includes/admin/menu.php:48
+#: includes/admin/menu.php:49
+msgid "Customers"
+msgstr "顧客"
+
+#: includes/admin/menu.php:57
+#: includes/admin/menu.php:58
+#: src/Core/PostTypes.php:89
+msgid "Services"
+msgstr "サービス"
+
+#: includes/admin/menu.php:66
+#: includes/admin/menu.php:67
+#: src/Core/PostTypes.php:152
+msgid "Entities"
+msgstr "リソース"
+
+#: includes/admin/menu.php:75
+#: includes/admin/menu.php:76
+msgid "Settings"
+msgstr "設定"
+
+#: includes/admin/menu.php:84
+#: includes/admin/menu.php:85
+msgid "Wizard"
+msgstr "ウィザード"
+
+#: includes/admin/roles.php:21
+msgid "Customer (appointments)"
+msgstr "顧客（予約）"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:31
+#: includes/notifications/emails/appointment.php:66
+#, php-format
+msgid "Appointment Confirmation: %1$s at %2$s"
+msgstr "予約確認: %1$s %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:100
+#: includes/notifications/emails/appointment.php:136
+#, php-format
+msgid "Appointment Updated: %1$s at %2$s"
+msgstr "予約更新: %1$s %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:168
+#: includes/notifications/emails/appointment.php:203
+#, php-format
+msgid "Appointment Cancelled: %1$s at %2$s"
+msgstr "予約キャンセル: %1$s %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:235
+#: includes/notifications/emails/appointment.php:270
+#, php-format
+msgid "Appointment Confirmed: %1$s at %2$s"
+msgstr "予約確定: %1$s %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:303
+#: includes/notifications/emails/appointment.php:339
+#, php-format
+msgid "Appointment No-Show: %1$s at %2$s"
+msgstr "予約の無断キャンセル: %1$s %2$s"
+
+#: src/Api/Endpoints/AppointmentsController.php:163
+msgid "Appointments fetched successfully"
+msgstr "予約の取得に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:180
+msgid "Upcoming appointments fetched successfully"
+msgstr "今後の予約の取得に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:217
+#: src/Api/Endpoints/AppointmentsController.php:265
+msgid "Appointment created successfully"
+msgstr "予約の作成に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:250
+msgid "Appointment"
+msgstr "予約"
+
+#: src/Api/Endpoints/AppointmentsController.php:309
+msgid "Appointment updated successfully"
+msgstr "予約の更新に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:334
+msgid "Appointment cancelled successfully"
+msgstr "予約のキャンセルに成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:359
+msgid "Appointment deleted successfully"
+msgstr "予約の削除に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:384
+msgid "Appointment confirmed successfully"
+msgstr "予約の確定に成功しました"
+
+#: src/Api/Endpoints/AvailabilityController.php:82
+msgid "Month availability fetched successfully"
+msgstr "月間の空き状況の取得に成功しました"
+
+#: src/Api/Endpoints/AvailabilityController.php:108
+msgid "Invalid calendar data"
+msgstr "カレンダーデータが無効です"
+
+#: src/Api/Endpoints/AvailabilityController.php:122
+msgid "Calendar availability fetched successfully"
+msgstr "カレンダーの空き状況の取得に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:97
+msgid "Customers fetched successfully"
+msgstr "顧客の取得に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:130
+msgid "Customer created successfully"
+msgstr "顧客の作成に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:164
+msgid "Customer updated successfully"
+msgstr "顧客の更新に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:183
+msgid "Customer deleted successfully"
+msgstr "顧客の削除に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:165
+msgid "Entities fetched successfully"
+msgstr "リソースの取得に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:193
+msgid "Entity tree fetched successfully"
+msgstr "リソースツリーの取得に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:229
+msgid "Entity fetched successfully"
+msgstr "リソースの取得に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:253
+msgid "Entity created successfully"
+msgstr "リソースの作成に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:279
+msgid "Entity updated successfully"
+msgstr "リソースの更新に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:305
+msgid "Entity deleted successfully"
+msgstr "リソースの削除に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:324
+msgid "Entity children fetched successfully"
+msgstr "子リソースの取得に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:364
+msgid "Entity services fetched successfully"
+msgstr "リソースのサービスの取得に成功しました"
+
+#: src/Api/Endpoints/EntitiesController.php:400
+msgid "Entity services updated successfully"
+msgstr "リソースのサービスの更新に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:104
+msgid "Service categories fetched successfully"
+msgstr "サービスカテゴリの取得に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:127
+#: src/Api/Endpoints/ServiceCategoriesController.php:171
+msgid "Category name is required"
+msgstr "カテゴリ名は必須です"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:142
+msgid "Service category created successfully"
+msgstr "サービスカテゴリの作成に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:186
+msgid "Service category updated successfully"
+msgstr "サービスカテゴリの更新に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:216
+msgid "Service category deleted successfully"
+msgstr "サービスカテゴリの削除に成功しました"
+
+#: src/Api/Endpoints/ServicesController.php:94
+msgid "Services fetched successfully"
+msgstr "サービスの取得に成功しました"
+
+#: src/Api/Endpoints/ServicesController.php:125
+msgid "Service created successfully"
+msgstr "サービスの作成に成功しました"
+
+#: src/Api/Endpoints/ServicesController.php:151
+msgid "Service updated successfully"
+msgstr "サービスの更新に成功しました"
+
+#: src/Api/Endpoints/ServicesController.php:176
+msgid "Service deleted successfully"
+msgstr "サービスの削除に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:81
+msgid "Settings fetched successfully"
+msgstr "設定の取得に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:103
+msgid "Settings in category fetched successfully"
+msgstr "カテゴリ内の設定の取得に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:130
+msgid "Settings updated successfully"
+msgstr "設定の更新に成功しました"
+
+#: src/Core/PostTypes.php:63
+msgid "Schedules"
+msgstr "スケジュール"
+
+#: src/Core/PostTypes.php:116
+#: src/Core/PostTypes.php:118
+msgid "Service Categories"
+msgstr "サービスカテゴリ"
+
+#: src/Core/PostTypes.php:119
+msgid "Service Category"
+msgstr "サービスカテゴリ"
+
+#: src/Core/PostTypes.php:120
+msgid "Add New Service Category"
+msgstr "新しいサービスカテゴリを追加"
+
+#: src/Core/PostTypes.php:121
+msgid "New Service Category Name"
+msgstr "新しいサービスカテゴリ名"
+
+#: src/Data/Model/Appointment.php:184
+msgid "Appointment is already cancelled"
+msgstr "予約は既にキャンセルされています"
+
+#: src/Data/Model/Appointment.php:210
+msgid "Appointment is already confirmed"
+msgstr "予約は既に確定されています"
+
+#: src/Data/Model/Appointment.php:236
+#: src/Data/Model/Appointment.php:311
+msgid "Appointment not found"
+msgstr "予約が見つかりません"
+
+#: src/Data/Model/Appointment.php:243
+msgid "Appointment must be cancelled before deleting"
+msgstr "削除する前に予約をキャンセルする必要があります"
+
+#: src/Data/Model/Appointment.php:305
+msgid "Appointment ID is required"
+msgstr "予約IDは必須です"
+
+#: src/Data/Model/Appointment.php:315
+msgid "Post is not an appointment"
+msgstr "投稿は予約ではありません"
+
+#: src/Data/Model/Customer.php:60
+msgid "When saving user, you have to provide user data array in constructor"
+msgstr "ユーザーを保存する際、コンストラクタにユーザーデータ配列を提供する必要があります"
+
+#: src/Data/Model/Customer.php:105
+msgid "When updating customer you have to initialize model with user object or user id"
+msgstr "顧客を更新する際、ユーザーオブジェクトまたはユーザーIDでモデルを初期化する必要があります"
+
+#: src/Data/Model/Customer.php:158
+msgid "Could not delete customer"
+msgstr "顧客を削除できませんでした"
+
+#: src/Data/Model/Customer.php:213
+msgid "User ID is required"
+msgstr "ユーザーIDは必須です"
+
+#: src/Data/Model/Customer.php:219
+msgid "User not found"
+msgstr "ユーザーが見つかりません"
+
+#: src/Data/Model/Customer.php:223
+msgid "User is not a customer"
+msgstr "ユーザーは顧客ではありません"
+
+#: src/Data/Model/Entity.php:71
+msgid "Entity value passed to constructor cannot be null. Expected array, int, string or WP_Post"
+msgstr "コンストラクタに渡されたリソース値はnullにできません。array、int、stringまたはWP_Postが必要です"
+
+#: src/Data/Model/Entity.php:76
+msgid "Entity value passed to constructor is invalid. Expected array, int, string or WP_Post"
+msgstr "コンストラクタに渡されたリソース値が無効です。array、int、stringまたはWP_Postが必要です"
+
+#: src/Data/Model/Entity.php:139
+#: src/Data/Model/Entity.php:202
+msgid "Entity not found. Instantiate Entity class with an entity object"
+msgstr "リソースが見つかりません。リソースオブジェクトでEntityクラスをインスタンス化してください"
+
+#: src/Data/Model/Entity.php:512
+msgid "Entity ID is required"
+msgstr "リソースIDは必須です"
+
+#: src/Data/Model/Entity.php:518
+msgid "Entity not found"
+msgstr "リソースが見つかりません"
+
+#: src/Data/Model/Entity.php:522
+msgid "Post is not an entity"
+msgstr "投稿はリソースではありません"
+
+#: src/Data/Model/Entity.php:537
+msgid "Entity name is required"
+msgstr "リソース名は必須です"
+
+#: src/Data/Model/Service.php:62
+msgid "Service value passed to a service model constructor cannot be null. Expected array, int, string or WP_Post but received null"
+msgstr "サービスモデルのコンストラクタに渡されたサービス値はnullにできません。array、int、stringまたはWP_Postが必要ですが、nullを受け取りました"
+
+#: src/Data/Model/Service.php:67
+msgid "Service value passed to a service model constructor is invalid. Expected array, int, string or WP_Post"
+msgstr "サービスモデルのコンストラクタに渡されたサービス値が無効です。array、int、stringまたはWP_Postが必要です"
+
+#: src/Data/Model/Service.php:145
+#: src/Data/Model/Service.php:200
+msgid "Service not found. You have to instantiate Service class with a service object"
+msgstr "サービスが見つかりません。サービスオブジェクトでServiceクラスをインスタンス化する必要があります"
+
+#: src/Data/Model/Service.php:390
+msgid "Service ID is required"
+msgstr "サービスIDは必須です"
+
+#: src/Data/Model/Service.php:396
+msgid "Service not found"
+msgstr "サービスが見つかりません"
+
+#: src/Data/Model/Service.php:400
+msgid "Post is not a service"
+msgstr "投稿はサービスではありません"
+
+#: src/Data/Model/Service.php:415
+msgid "Service name is required"
+msgstr "サービス名は必須です"
+
+#: src/Data/Model/Service.php:419
+msgid "Service duration is required"
+msgstr "サービスの所要時間は必須です"
+
+#: src/Data/Model/Settings.php:141
+msgid "Invalid settings category"
+msgstr "無効な設定カテゴリ"
+
+#: src/Data/Model/Settings.php:229
+msgid "Unknown error while saving settings"
+msgstr "設定の保存中に不明なエラーが発生しました"
+
+#: src/Notifications/Notifications.php:59
+msgid "A new appointment has been booked."
+msgstr "新しい予約が入りました。"
+
+#: src/Notifications/Notifications.php:71
+msgid "An appointment has been updated."
+msgstr "予約が更新されました。"
+
+#: src/Notifications/Notifications.php:83
+msgid "An appointment has been confirmed."
+msgstr "予約が確定されました。"
+
+#: src/Notifications/Notifications.php:94
+msgid "An appointment has been cancelled."
+msgstr "予約がキャンセルされました。"
+
+#: src/Notifications/Notifications.php:300
+msgid "Appointment ID"
+msgstr "予約ID"
+
+#: src/Notifications/Notifications.php:301
+msgid "Service"
+msgstr "サービス"
+
+#: src/Notifications/Notifications.php:302
+msgid "Date & Time"
+msgstr "日時"
+
+#: src/Notifications/Notifications.php:305
+msgid "Duration"
+msgstr "所要時間"
+
+#: src/Notifications/Notifications.php:305
+msgid "minutes"
+msgstr "分"
+
+#: src/Notifications/Notifications.php:309
+msgid "Customer"
+msgstr "顧客"
+
+#: src/Notifications/Notifications.php:312
+msgid "Status"
+msgstr "ステータス"
+
+#: src/Utils/Availability.php:167
+msgid "Month is required"
+msgstr "月は必須です"
+
+#: src/Utils/Availability.php:171
+msgid "Year is required"
+msgstr "年は必須です"
+
+#: src/Utils/Availability.php:175
+#: src/Utils/Availability.php:271
+msgid "Timezone is required"
+msgstr "タイムゾーンは必須です"
+
+#: src/Utils/Availability.php:179
+msgid "Year must be numeric"
+msgstr "年は数値である必要があります"
+
+#: src/Utils/Availability.php:267
+msgid "Calendar is required"
+msgstr "カレンダーは必須です"
+
+#: assets/gutenberg/blocks/booking-flow/src/block.json
+msgctxt "block title"
+msgid "Booking Flow"
+msgstr "予約フォーム"

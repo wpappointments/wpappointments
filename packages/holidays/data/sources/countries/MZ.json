@@ -1,0 +1,17 @@
+{
+	"id": "MZ",
+	"name": "Mozambique",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"herosDayMZ",
+		"internationalWomensDay8",
+		"womensDayMZ",
+		"labourDay",
+		"independenceDayMZ",
+		"victoryDayMZ",
+		"peaceDayMZ",
+		"allSaints",
+		"christmas"
+	]
+}

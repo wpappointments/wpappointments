@@ -1,0 +1,15 @@
+{
+	"id": "VN",
+	"name": "Vietnam",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"chineseNewYear",
+		"chineseNewYear2",
+		"chineseNewYear3",
+		"hungKingsDay",
+		"liberationDayVN",
+		"internationalLabourDayVN",
+		"nationalDayVN"
+	]
+}

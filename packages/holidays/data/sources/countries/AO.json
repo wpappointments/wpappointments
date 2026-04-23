@@ -1,0 +1,16 @@
+{
+	"id": "AO",
+	"name": "Angola",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"victoryDayAO",
+		"internationalWomensDay8",
+		"peaceDayAO",
+		"labourDay",
+		"heroesOfAngolaDay",
+		"allSaints",
+		"independenceDayAO",
+		"christmas"
+	]
+}

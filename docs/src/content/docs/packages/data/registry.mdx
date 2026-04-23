@@ -1,0 +1,39 @@
+---
+title: Registry
+description: Client-side bookable type registration.
+---
+
+The type registry lets addons register their bookable types on the JavaScript side, enabling the shared components to render type-specific UI.
+
+## Registering a Type
+
+```tsx
+import { registerBookableType } from '@wpappointments/data';
+
+registerBookableType({
+    slug: 'court',
+    label: 'Court',
+    labelPlural: 'Courts',
+    fields: [
+        { name: 'surface', label: 'Surface', type: 'select', options: ['hard', 'clay', 'grass'] },
+        { name: 'indoor', label: 'Indoor', type: 'toggle' },
+    ],
+    columns: [
+        { id: 'surface', header: 'Surface' },
+        { id: 'indoor', header: 'Indoor' },
+    ],
+});
+```
+
+## Querying the Registry
+
+```tsx
+import { getBookableType, getRegisteredBookableTypes } from '@wpappointments/data';
+
+const courtType = getBookableType('court');
+const allTypes = getRegisteredBookableTypes();
+```
+
+## How Components Use It
+
+When you use `BookableListPage` or `BookableDefaultForm` from `@wpappointments/components`, they look up the registered type to determine which fields and columns to render. This is why JS-side registration is needed alongside the PHP-side registration.

@@ -1,0 +1,57 @@
+.wrapper {
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Full width table */
+.wrapper :global(.dataviews-view-table) {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+/* Table cell spacing */
+.wrapper :global(.dataviews-view-table td),
+.wrapper :global(.dataviews-view-table th) {
+	padding: 8px 12px;
+	vertical-align: top;
+	text-align: left;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wrapper :global(.dataviews-view-table tr:last-child td) {
+	border-bottom: none;
+}
+
+.wrapper
+	:global(.dataviews-view-table th.dataviews-view-table__actions-column) {
+	text-align: right;
+	vertical-align: middle;
+}
+
+.wrapper :global(.dataviews-view-table th .components-button) {
+	padding: 0;
+}
+
+/* Stronger row borders */
+.wrapper :global(.dataviews-view-table tr) {
+	border-top-color: #e5e5e5;
+}
+
+/* Header row */
+.wrapper :global(.dataviews-view-table th) {
+	font-size: 13px;
+	font-weight: 600;
+	color: #1e1e1e;
+}
+
+/* Link styling */
+.wrapper :global(.dataviews-view-table .is-link) {
+	text-decoration: none;
+}
+
+/* Footer/pagination area */
+.wrapper :global(.dataviews-pagination) {
+	padding: 12px 16px;
+	border-top: 1px solid #e5e5e5;
+}

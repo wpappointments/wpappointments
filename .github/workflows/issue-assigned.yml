@@ -1,0 +1,20 @@
+name: Notify Slack — Issue Assigned
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    # Only fire when the assignee is the person who triggered the action (self-assign)
+    if: github.event.assignee.login == github.actor
+    steps:
+      - name: POST to webhook
+        run: |
+          PAYLOAD=$(echo '${{ toJson(github.event) }}' | jq -c '.')
+          SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "${{ secrets.WEBHOOK_SECRET }}" | awk '{print $2}')"
+          curl -v -X POST "${{ secrets.RAILWAY_WEBHOOK_URL }}/webhook/assigned" \
+            -H "Content-Type: application/json" \
+            -H "x-hub-signature: $SIGNATURE" \
+            -d "$PAYLOAD"

@@ -1,0 +1,25 @@
+name: Notify Slack — Issue Activity
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, closed]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [closed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST to webhook
+        run: |
+          PAYLOAD=$(echo '${{ toJson(github.event) }}' | jq -c '.')
+          SIGNATURE="sha256=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "${{ secrets.WEBHOOK_SECRET }}" | awk '{print $2}')"
+          curl -sf -X POST "${{ secrets.RAILWAY_WEBHOOK_URL }}/webhook/activity" \
+            -H "Content-Type: application/json" \
+            -H "x-github-event: ${{ github.event_name }}" \
+            -H "x-hub-signature: $SIGNATURE" \
+            -d "$PAYLOAD"

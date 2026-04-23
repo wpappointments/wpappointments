@@ -1,0 +1,39 @@
+---
+title: Getting Started
+description: Set up @wpappointments/data in your addon.
+---
+
+## Installation
+
+```bash
+npm install @wpappointments/data
+```
+
+## Basic Usage
+
+```tsx
+import { useBookableEntities } from '@wpappointments/data';
+
+export function CourtsList() {
+    const { entities, isLoading, error } = useBookableEntities('court');
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+
+    return (
+        <ul>
+            {entities.map((court) => (
+                <li key={court.id}>{court.title}</li>
+            ))}
+        </ul>
+    );
+}
+```
+
+## Peer Dependencies
+
+The data package expects WordPress packages to be available:
+
+- `@wordpress/api-fetch`
+- `@wordpress/data`
+- `react`

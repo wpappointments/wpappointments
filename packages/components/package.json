@@ -1,0 +1,46 @@
+{
+	"name": "@wpappointments/components",
+	"version": "0.2.0",
+	"description": "UI components for WP Appointments plugin extensions",
+	"main": "src/index.ts",
+	"types": "src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./ButtonGroup": "./src/ButtonGroup/ButtonGroup.tsx"
+	},
+	"typesVersions": {
+		"*": {
+			"ButtonGroup": [
+				"./src/ButtonGroup/ButtonGroup.tsx"
+			]
+		}
+	},
+	"files": [
+		"src"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "GPL-2.0-or-later",
+	"dependencies": {
+		"@wpappointments/data": "workspace:*",
+		"obj-str": "*"
+	},
+	"devDependencies": {
+		"@types/react": "*",
+		"@types/react-dom": "*",
+		"@wordpress/dataviews": "^13.1.0",
+		"@wordpress/date": "*",
+		"@wordpress/element": "*",
+		"@wordpress/icons": "*",
+		"date-fns": "*",
+		"use-lilius": "*"
+	},
+	"peerDependencies": {
+		"@wordpress/components": "*",
+		"@wordpress/data": "*",
+		"@wordpress/dataviews": "^13.1.0",
+		"@wordpress/i18n": "*",
+		"react": "^18.0.0"
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"id": "FR",
+	"name": "France",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"easterMonday",
+		"labourDay",
+		"victoryEurope",
+		"ascension",
+		"whitMonday",
+		"bastilleDay",
+		"assumptionOfMary",
+		"allSaints",
+		"armistice",
+		"christmas"
+	]
+}

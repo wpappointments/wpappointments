@@ -1,0 +1,29 @@
+---
+title: "@wpappointments/data"
+description: Hooks, API client, and utilities for WP Appointments extensions.
+---
+
+Data layer package providing React hooks, API functions, type registry, and utilities for building WP Appointments addons.
+
+## Installation
+
+```bash
+npm install @wpappointments/data
+```
+
+## Exports
+
+| Category | Exports |
+|----------|---------|
+| **Hooks** | `useBookableEntities`, `useBookableEntity`, `useBookableVariants`, `useEffectiveAvailability`, `useSlideout` |
+| **API** | `fetchBookables`, `createBookable`, `updateBookable`, `deleteBookable`, `fetchVariants`, `fetchVariantAvailability`, `fetchBookableTypes` |
+| **Registry** | `registerBookableType`, `getBookableType`, `getRegisteredBookableTypes` |
+| **Types** | `BookableEntity`, `BookableVariant`, `BookableAttribute`, `AvailabilityData`, `BookableTypeInfo` |
+| **Utilities** | `apiFetch`, `toast`, `randomId`, `resolve`, `slideoutContent` |
+
+## Guides
+
+- [Getting Started](/packages/data/getting-started/) — setup and first hook
+- [Hooks](/packages/data/hooks/) — React hooks for data fetching
+- [API Client](/packages/data/api-client/) — direct API functions
+- [Registry](/packages/data/registry/) — bookable type registration on the JS side
