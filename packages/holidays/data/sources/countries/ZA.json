@@ -1,0 +1,19 @@
+{
+	"id": "ZA",
+	"name": "South Africa",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"humanRightsDayZA",
+		"goodFriday",
+		"easterMonday",
+		"freedomDayZA",
+		"labourDay",
+		"youthDayZA",
+		"nationalWomensDayZA",
+		"heritageDayZA",
+		"dayOfReconciliation",
+		"christmas",
+		"boxingDay"
+	]
+}

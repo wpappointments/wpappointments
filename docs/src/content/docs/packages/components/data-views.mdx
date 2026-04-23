@@ -1,0 +1,48 @@
+---
+title: Data Views
+description: Typed data table component for listing entities.
+---
+
+The `DataViews` component provides a table with sorting, pagination, and actions. Used by `BookableListPage` internally but available for custom use.
+
+## Usage
+
+```tsx
+import { DataViews } from '@wpappointments/components';
+import type { Field, Action } from '@wpappointments/components';
+
+const fields: Field<Court>[] = [
+    { id: 'title', header: 'Name', enableSorting: true },
+    { id: 'surface', header: 'Surface' },
+    { id: 'indoor', header: 'Indoor', render: ({ item }) => item.indoor ? 'Yes' : 'No' },
+];
+
+const actions: Action<Court>[] = [
+    { id: 'edit', label: 'Edit', callback: (item) => openSlideout(item) },
+    { id: 'delete', label: 'Delete', isDestructive: true, callback: (item) => deleteCourt(item.id) },
+];
+
+<DataViews
+    data={courts}
+    fields={fields}
+    actions={actions}
+    isLoading={isLoading}
+    paginationInfo={{ totalItems, totalPages, currentPage }}
+/>
+```
+
+## BookableListPage
+
+Higher-level component that combines DataViews with the standard bookable entity page layout:
+
+```tsx
+import { BookableListPage } from '@wpappointments/components';
+
+<BookableListPage
+    type="court"
+    entities={entities}
+    isLoading={isLoading}
+/>
+```
+
+This automatically generates columns from the bookable type's registered fields and adds standard CRUD actions.

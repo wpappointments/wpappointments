@@ -1,0 +1,17 @@
+{
+	"id": "VE",
+	"name": "Venezuela",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"carnival",
+		"carnival2",
+		"goodFriday",
+		"independenceDayVE2",
+		"labourDay",
+		"independenceDayVE",
+		"bolivarDay",
+		"columbusDay",
+		"christmas"
+	]
+}

@@ -1,0 +1,66 @@
+---
+title: PHP Setup
+description: Plugin bootstrap and dependency management for addons.
+sidebar:
+  order: 2
+---
+
+## Plugin Header
+
+```php
+<?php
+/**
+ * Plugin Name: My WPA Addon
+ * Description: Custom bookable type for WP Appointments.
+ * Version: 1.0.0
+ * Requires Plugins: wpappointments
+ * Author: Your Name
+ * Author URI: https://wppoland.com
+ * License: GPL-2.0-or-later
+ * Text Domain: my-wpa-addon
+ */
+
+declare(strict_types=1);
+```
+
+The `Requires Plugins: wpappointments` header ensures WordPress checks for the core plugin dependency.
+
+## Autoloading
+
+Use Composer PSR-4 autoloading:
+
+```json
+{
+    "autoload": {
+        "psr-4": {
+            "MyAddon\\": "src/"
+        }
+    }
+}
+```
+
+## Dependency Check
+
+Always check that WP Appointments is active before using its APIs:
+
+```php
+add_action('plugins_loaded', function () {
+    if (!class_exists('WPAppointments\Plugin')) {
+        return;
+    }
+
+    // Safe to use WP Appointments APIs here
+    require_once __DIR__ . '/vendor/autoload.php';
+
+    // Register your bookable type, availability layers, etc.
+});
+```
+
+## Hooks for Extension
+
+| Hook | When to Use |
+|------|-------------|
+| `init` | Register bookable types and availability layers |
+| `plugins_loaded` | Check dependencies, load autoloader |
+| `rest_api_init` | Register additional REST endpoints |
+| `admin_enqueue_scripts` | Enqueue addon admin assets |

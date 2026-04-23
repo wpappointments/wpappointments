@@ -1,0 +1,42 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "JS Base Plugin",
+			"type": "chrome",
+			"request": "attach",
+			"sourceMaps": true,
+			"port": 9222,
+			"webRoot": "${workspaceRoot}/plugins/wpappointments"
+		},
+		{
+			"name": "JS Other Plugin",
+			"type": "chrome",
+			"request": "attach",
+			"port": 9222,
+			"webRoot": "${workspaceRoot}/plugins/other-plugin"
+		},
+		{
+			"name": "PHP",
+			"type": "php",
+			"request": "launch",
+			"port": 9003,
+			"pathMappings": {
+				"/var/www/html/wp-content/wpappointments": "${workspaceFolder}",
+				"/var/www/html/wp-content/tools": "${workspaceFolder}/tools",
+				"/var/www/html/wp-content/plugins/wpappointments/": "${workspaceFolder}/plugins/wpappointments/",
+				"/var/www/html/wp-content/plugins/other-plugin/": "${workspaceFolder}/plugins/other-plugin/"
+			}
+		}
+	],
+	"compounds": [
+		{
+			"name": "All JS",
+			"configurations": ["JS Base Plugin", "JS Other Plugin"]
+		},
+		{
+			"name": "All JS + PHP",
+			"configurations": ["PHP", "JS Base Plugin", "JS Other Plugin"]
+		}
+	]
+}

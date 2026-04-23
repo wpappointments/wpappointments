@@ -1,0 +1,43 @@
+---
+import HelpLayout from '../../layouts/HelpLayout.astro';
+import SidebarNav from '../../components/SidebarNav.astro';
+---
+
+<HelpLayout
+	title="Customers"
+	description="Manage customer records and booking history."
+	breadcrumbs={[{ label: 'Customers', href: '/help/customers/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Customers</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			Customer records are created automatically when appointments are booked.
+		</p>
+	</header>
+
+	<div class="mt-12 space-y-12">
+		<section>
+			<h2 class="text-2xl font-semibold">Customer List</h2>
+			<p class="mt-2 text-text-secondary">
+				Go to <strong>WP Appointments &rarr; Customers</strong> to view all customers. The list shows name, email, phone, and number of appointments.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">How Customers Are Created</h2>
+			<ul class="mt-4 space-y-3 text-text-secondary">
+				<li><strong>Booking flow</strong> — customer fills in name, email, phone during booking. Optionally creates a WordPress account.</li>
+				<li><strong>Admin</strong> — when creating an appointment, select an existing customer or enter new details.</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Account Creation</h2>
+			<p class="mt-2 text-text-secondary">
+				The booking flow includes a "Create account" checkbox. When checked, a WordPress user with the <code>wpa-customer</code> role is created. Password is auto-generated if left blank.
+			</p>
+		</section>
+	</div>
+</HelpLayout>

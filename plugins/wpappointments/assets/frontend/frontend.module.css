@@ -1,0 +1,23 @@
+.booking-flow.align-left {
+	text-align: left;
+	margin-right: auto;
+}
+
+.align-center {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.align-right {
+	text-align: right;
+	margin-left: auto;
+}
+
+.width-narrow {
+	width: 650px;
+	max-width: 100%;
+}
+
+.width-full {
+	width: 100%;
+}

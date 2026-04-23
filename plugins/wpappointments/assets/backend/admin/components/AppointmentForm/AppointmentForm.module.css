@@ -1,0 +1,43 @@
+.form-actions {
+	display: flex;
+	gap: 15px;
+	margin-top: 34px;
+}
+
+.modal {
+	width: min( 500px, calc( 100vw - 100px ) );
+}
+
+.modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 15px;
+	margin-top: 34px;
+}
+
+.slideout {
+	width: 600px;
+}
+
+.no-time-label {
+	margin-right: 10px;
+}
+
+.summary-customer-row {
+	padding: 8px 20px;
+	border-bottom: 1px solid #eee;
+	font-size: 11px;
+}
+
+.summary-time-row {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 20px;
+	border-bottom: 1px solid #eee;
+	font-size: 11px;
+}
+
+.summary-time-row-error {
+	background-color: #d52020;
+	color: #fff;
+}

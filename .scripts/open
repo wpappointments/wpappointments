@@ -1,0 +1,51 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+BROWSER=$(jq -r '.browser' $SCRIPT_DIR/../.browser.override.json)
+
+if [ $BROWSER == null ]; then
+  BROWSER=$(jq -r '.browser' $SCRIPT_DIR/../.browser.json)
+fi
+
+BROWSER_EXECUTABLE_FIELD=".${BROWSER}Executable"
+
+echo $BROWSER
+echo $BROWSER_EXECUTABLE_FIELD
+
+BROWSER_EXECUTABLE=$(jq "$BROWSER_EXECUTABLE_FIELD" $SCRIPT_DIR/../.browser.override.json)
+
+if [ $BROWSER_EXECUTABLE == null ]; then
+  BROWSER_EXECUTABLE=$(jq $BROWSER_EXECUTABLE_FIELD $SCRIPT_DIR/../.browser.json)
+fi
+
+echo $BROWSER_EXECUTABLE
+echo $BROWSER_EXECUTABLE_OVERRIDE
+
+URL=$(jq '.url' $SCRIPT_DIR/../.browser.json)
+
+echo "Running web browser and opening $URL"
+
+if [ $BROWSER == "chrome" ]; then
+  echo "Opening Chrome"
+  eval "$BROWSER_EXECUTABLE $URL \
+    --remote-debugging-port=9222 \
+    --user-data-dir=.chrome/debug-profile \
+    --disable-fre \
+    --no-default-browser-check \
+    --no-first-run \
+    --no-experiments \
+    --background"
+elif [ $BROWSER == "arc" ]; then
+  echo "Opening Arc"
+  eval "open -a 'Arc' $URL --args \
+    --remote-debugging-port=9222 \
+    --user-data-dir=.chrome/debug-profile \
+    --disable-fre \
+    --no-default-browser-check \
+    --no-first-run \
+    --no-experiments"
+else
+  echo "Unsupported browser: $BROWSER"
+  exit 1
+fi

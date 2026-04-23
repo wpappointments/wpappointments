@@ -1,0 +1,103 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          version: pnpm version-packages
+          title: "Version Packages"
+          commit: "chore: version packages"
+          createGithubReleases: false
+        env:
+          HUSKY: "0"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Set up PHP
+        if: always() && steps.changesets.outcome != 'cancelled'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+
+      - name: Package and release plugins
+        if: always() && steps.changesets.outcome != 'cancelled'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          plugin_version=$(node -p "require('./plugins/wpappointments/package.json').version")
+          tag="v${plugin_version}"
+
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists, skipping release"
+            exit 0
+          fi
+
+          echo "Building plugin release $tag"
+
+          # Build assets (already built by pnpm release, but needed if npm publish failed)
+          pnpm build
+
+          # Package each plugin that has a .zipignore
+          for plugin_dir in plugins/*/; do
+            plugin_dir="${plugin_dir%/}"
+            plugin_name=$(basename "$plugin_dir")
+
+            if [ ! -f "$plugin_dir/.zipignore" ]; then
+              continue
+            fi
+
+            echo "Packaging $plugin_name..."
+            cd "$plugin_dir"
+
+            if [ -d vendor ]; then
+              mv vendor vendor-temp
+              composer install --no-dev --no-interaction --prefer-dist
+            fi
+
+            mkdir "$plugin_name"
+            rsync -av --exclude="$plugin_name" --exclude-from=.zipignore . "$plugin_name"
+            zip -qr "$plugin_name.zip" "$plugin_name"/* -x@.zipignore
+            rm -rf "$plugin_name"
+
+            if [ -d vendor-temp ]; then
+              rm -rf vendor
+              mv vendor-temp vendor
+            fi
+
+            cd "$GITHUB_WORKSPACE"
+          done
+
+          # Create tag and release
+          git tag "$tag"
+          git push origin "$tag"
+
+          zip_files=$(find plugins -name "*.zip" -maxdepth 2)
+          gh release create "$tag" \
+            $zip_files \
+            --title "$tag" \
+            --generate-notes

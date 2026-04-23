@@ -1,0 +1,24 @@
+---
+title: Developer Overview
+description: Extend WP Appointments with hooks, REST API, and custom addons.
+---
+
+WP Appointments is built for extensibility. Every feature is hookable, the REST API covers all operations, and the addon system lets you register entirely new bookable types.
+
+## Extension Points
+
+| Mechanism | Use Case |
+|-----------|----------|
+| **PHP Hooks** | Modify behavior, add fields, intercept events |
+| **REST API** | Headless integrations, custom frontends, external systems |
+| **Bookable Type Registry** | Register new bookable entity types (rooms, courts, equipment) |
+| **Availability Layers** | Add custom availability rules (maintenance blocks, holidays) |
+| **npm Packages** | Reuse admin UI components and data hooks in your addon |
+
+## Quick Links
+
+- [Getting Started](/developers/getting-started/) — set up a development environment
+- [Architecture](/developers/architecture/) — how the plugin is structured
+- [Hooks Reference](/developers/hooks/) — all actions and filters
+- [REST API](/developers/rest-api/) — endpoint documentation
+- [Addon Development](/developers/addons/) — build your own addon

@@ -1,0 +1,39 @@
+---
+title: "@wpappointments/components"
+description: React UI components for WP Appointments admin interfaces.
+---
+
+A library of React components used by WP Appointments and available for addon developers.
+
+## Installation
+
+```bash
+npm install @wpappointments/components
+```
+
+## Component Categories
+
+| Category | Components |
+|----------|------------|
+| **Form** | `HtmlForm`, `FormProvider`, `Input`, `Select`, `Toggle`, `NumberField`, `DatePicker`, `WPDatePicker`, `Checkbox`, `Radio` |
+| **Layout** | `CardBody`, `FormFieldSet`, `FormField`, `ErrorMessage`, `FieldMessages` |
+| **Data Display** | `DataViews`, `BookableListPage`, `BookableSlideoutContent` |
+| **Overlays** | `SlideOut`, `SlideoutRenderer`, `DeleteModal`, `Toaster` |
+| **Actions** | `ActionButton`, `HeaderActions` (SlotFill) |
+| **Bookable** | `BookableDefaultForm`, `BookableField`, `BookableListPage`, `BookableSlideoutContent` |
+
+## Peer Dependencies
+
+These components expect WordPress packages to be available as externals:
+
+- `@wordpress/components`
+- `@wordpress/i18n`
+- `@wordpress/element`
+- `react` / `react-dom`
+
+## Guides
+
+- [Getting Started](/packages/components/getting-started/) — setup and first component
+- [Form Fields](/packages/components/form-fields/) — form components and validation
+- [Layout](/packages/components/layout/) — layout and container components
+- [Data Views](/packages/components/data-views/) — data table with typed fields

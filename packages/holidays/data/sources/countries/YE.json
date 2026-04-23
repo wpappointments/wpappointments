@@ -1,0 +1,19 @@
+{
+	"id": "YE",
+	"name": "Yemen",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"labourDay",
+		"unificationDayYE",
+		"independenceDayYE",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"islamicNewYear",
+		"prophetBirthday"
+	]
+}

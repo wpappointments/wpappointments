@@ -1,0 +1,23 @@
+.modal {
+	width: min( 500px, calc( 100vw - 100px ) );
+}
+
+.modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 15px;
+	margin-top: 34px;
+}
+
+.notify {
+	display: flex;
+	align-items: center;
+	background-color: #eee;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.notify > :global( .components-toggle-control ) {
+	margin-bottom: 0;
+}

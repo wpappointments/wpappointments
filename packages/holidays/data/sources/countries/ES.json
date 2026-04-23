@@ -1,0 +1,18 @@
+{
+	"id": "ES",
+	"name": "Spain",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"epiphany",
+		"goodFriday",
+		"easter",
+		"labourDay",
+		"assumptionOfMary",
+		"hispanityDayES",
+		"allSaints",
+		"constitutionDayES",
+		"immaculateConcepcionES",
+		"christmas"
+	]
+}

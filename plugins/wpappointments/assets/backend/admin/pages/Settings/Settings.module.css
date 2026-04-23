@@ -1,0 +1,49 @@
+.container {
+	display: flex;
+	min-height: calc(100vh - var(--wpappointments-layout-header-height) - 32px);
+}
+
+.sidebar {
+	width: 200px;
+	flex-shrink: 0;
+	padding: 16px 0;
+}
+
+.menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.menu-item {
+	display: block;
+	width: 100%;
+	padding: 10px 20px;
+	border: none;
+	background: none;
+	text-align: left;
+	cursor: pointer;
+	font-size: 13px;
+	color: #1e1e1e;
+	border-left: 3px solid transparent;
+	transition: background-color 0.1s;
+}
+
+.menu-item:hover {
+	background-color: #f0f0f0;
+}
+
+.menu-item.active {
+	background-color: #f0f0f0;
+	border-left-color: var(
+		--wp-components-color-accent,
+		var(--wp-admin-theme-color, #3858e9)
+	);
+	font-weight: 600;
+}
+
+.content {
+	flex: 1;
+	padding: var(--wpappointments-main-gap);
+	max-width: 960px;
+}

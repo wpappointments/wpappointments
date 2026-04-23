@@ -1,0 +1,38 @@
+---
+title: WP Appointments Developer Docs
+description: Build addons, integrate with the REST API, and extend WP Appointments.
+template: splash
+hero:
+  tagline: Developer documentation for WP Appointments
+  actions:
+    - text: Quick Start
+      link: /developers/getting-started/
+      icon: right-arrow
+    - text: REST API
+      link: /developers/rest-api/
+      variant: minimal
+    - text: Packages
+      link: /packages/
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<CardGrid>
+	<Card title="Getting Started" icon="rocket">
+		Set up your dev environment, understand the architecture, and build your first addon.
+	</Card>
+	<Card title="Hooks Reference" icon="seti:config">
+		Actions and filters to customize every aspect of WP Appointments.
+	</Card>
+	<Card title="REST API" icon="seti:json">
+		Full endpoint reference for appointments, bookables, customers, availability, and settings.
+	</Card>
+	<Card title="Packages" icon="puzzle">
+		`@wpappointments/components` and `@wpappointments/data` — build custom admin UIs and data integrations.
+	</Card>
+</CardGrid>
+
+:::note[Looking for user guides?]
+User guides and step-by-step tutorials are at [wpappointments.com/help](https://wpappointments.com/help).
+:::

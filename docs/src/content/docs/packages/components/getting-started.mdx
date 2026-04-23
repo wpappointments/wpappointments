@@ -1,0 +1,30 @@
+---
+title: Getting Started
+description: Set up @wpappointments/components in your addon.
+---
+
+## Installation
+
+```bash
+npm install @wpappointments/components
+```
+
+## Basic Usage
+
+```tsx
+import { BookableListPage } from '@wpappointments/components';
+
+export function MyAdminPage({ entities, isLoading }) {
+    return (
+        <BookableListPage
+            type="court"
+            entities={entities}
+            isLoading={isLoading}
+        />
+    );
+}
+```
+
+## Webpack Externals
+
+Components rely on WordPress packages being available as globals. If you use `@wordpress/scripts`, this is handled automatically. Otherwise, add externals for `@wordpress/components`, `@wordpress/i18n`, `react`, and `react-dom`.

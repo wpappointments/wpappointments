@@ -1,0 +1,92 @@
+---
+import HelpLayout from '../../layouts/HelpLayout.astro';
+import SidebarNav from '../../components/SidebarNav.astro';
+import Callout from '../../components/Callout.astro';
+---
+
+<HelpLayout
+	title="Notifications"
+	description="Email notifications for appointment events."
+	breadcrumbs={[{ label: 'Notifications', href: '/help/notifications/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Notifications</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			Automatic email notifications for appointment lifecycle events.
+		</p>
+	</header>
+
+	<div class="mt-12 space-y-12">
+		<section>
+			<h2 class="text-2xl font-semibold">Notification Events</h2>
+			<div class="mt-4 overflow-hidden rounded-xl border border-border-subtle">
+				<table class="w-full text-sm">
+					<thead class="bg-surface">
+						<tr>
+							<th class="px-4 py-3 text-left font-semibold">Event</th>
+							<th class="px-4 py-3 text-left font-semibold">Trigger</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border-weak">
+						<tr><td class="px-4 py-3">Appointment Created</td><td class="px-4 py-3">New appointment booked by customer or admin</td></tr>
+						<tr><td class="px-4 py-3">Appointment Updated</td><td class="px-4 py-3">Date, time, or details changed</td></tr>
+						<tr><td class="px-4 py-3">Appointment Confirmed</td><td class="px-4 py-3">Admin confirms a pending appointment</td></tr>
+						<tr><td class="px-4 py-3">Appointment Cancelled</td><td class="px-4 py-3">Admin or customer cancels</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Configuration</h2>
+			<p class="mt-2 text-text-secondary">
+				Go to <strong>Settings &rarr; Notifications</strong>. Each event can be toggled on/off and customized individually.
+			</p>
+			<div class="mt-4 space-y-3">
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Recipients</h3>
+					<ul class="mt-2 text-sm text-text-tertiary space-y-1">
+						<li>Toggle send to admin</li>
+						<li>Toggle send to customer</li>
+						<li>Add custom recipients (comma-separated emails)</li>
+					</ul>
+				</div>
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Email Content</h3>
+					<p class="mt-1 text-sm text-text-tertiary">Separate subject and body for admin and customer emails. Leave empty to use defaults.</p>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-2xl font-semibold">Template Variables</h2>
+			<p class="mt-2 text-text-secondary">
+				Use these placeholders in subject and body fields. They are replaced with actual values when the email is sent.
+			</p>
+			<div class="mt-4 overflow-hidden rounded-xl border border-border-subtle">
+				<table class="w-full text-sm">
+					<thead class="bg-surface">
+						<tr>
+							<th class="px-4 py-3 text-left font-semibold">Variable</th>
+							<th class="px-4 py-3 text-left font-semibold">Value</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border-weak">
+						<tr><td class="px-4 py-3"><code>{`{customer_name}`}</code></td><td class="px-4 py-3">Customer full name</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{date}`}</code></td><td class="px-4 py-3">Appointment date</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{time}`}</code></td><td class="px-4 py-3">Appointment time</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{service}`}</code></td><td class="px-4 py-3">Service name</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{status}`}</code></td><td class="px-4 py-3">Current status</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{duration}`}</code></td><td class="px-4 py-3">Duration in minutes</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{id}`}</code></td><td class="px-4 py-3">Appointment ID</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{previous_date}`}</code></td><td class="px-4 py-3">Previous date (for updates)</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{previous_time}`}</code></td><td class="px-4 py-3">Previous time (for updates)</td></tr>
+						<tr><td class="px-4 py-3"><code>{`{admin_email}`}</code></td><td class="px-4 py-3">Admin email from settings</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</HelpLayout>

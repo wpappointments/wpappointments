@@ -1,0 +1,18 @@
+{
+	"id": "UA",
+	"name": "Ukraine",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"orthodoxChristmas",
+		"christmas",
+		"internationalWomensDay8",
+		"orthodoxEaster",
+		"orthodoxEasterMonday",
+		"labourDay",
+		"europeDayUA",
+		"constitutionDayUA",
+		"independenceDayUA",
+		"defendersDay"
+	]
+}
