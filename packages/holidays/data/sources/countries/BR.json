@@ -1,0 +1,20 @@
+{
+	"id": "BR",
+	"name": "Brazil",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"carnival",
+		"carnival2",
+		"goodFriday",
+		"tiradentesDay",
+		"labourDay",
+		"corpusChristi",
+		"independenceDayBR",
+		"ourLadyAparecida",
+		"allSaints",
+		"republicDayBR",
+		"blackConsciousnessDay",
+		"christmas"
+	]
+}

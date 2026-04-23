@@ -1,0 +1,18 @@
+{
+	"id": "NG",
+	"name": "Nigeria",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"goodFriday",
+		"easterMonday",
+		"labourDay",
+		"democracyDayNG",
+		"eidAlFitr",
+		"eidAlAdha",
+		"independenceDayNG",
+		"prophetBirthday",
+		"christmas",
+		"boxingDay"
+	]
+}

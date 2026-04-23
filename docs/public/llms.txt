@@ -1,0 +1,37 @@
+# WP Appointments Developer Documentation
+
+> Build add-ons, integrate with the REST API, and extend WP Appointments — the next-gen appointment scheduling plugin for WordPress.
+
+## Getting Started
+
+- [Overview](https://docs.wpappointments.com/developers/): Developer documentation overview
+- [Quick Start](https://docs.wpappointments.com/developers/getting-started/): Set up your dev environment and build your first addon
+- [Architecture](https://docs.wpappointments.com/developers/architecture/): Plugin architecture, PHP namespaces, frontend stack
+
+## Hooks Reference
+
+- [Actions](https://docs.wpappointments.com/developers/hooks/actions/): WordPress action hooks for extending WP Appointments
+- [Filters](https://docs.wpappointments.com/developers/hooks/filters/): WordPress filter hooks for modifying behavior
+
+## REST API
+
+- [Overview](https://docs.wpappointments.com/developers/rest-api/): REST API namespace `/wpappointments/v1/`
+- [Appointments](https://docs.wpappointments.com/developers/rest-api/appointments/): CRUD endpoints for appointments
+- [Bookables](https://docs.wpappointments.com/developers/rest-api/bookables/): Bookable entity endpoints
+- [Bookable Types](https://docs.wpappointments.com/developers/rest-api/bookable-types/): Bookable type registry endpoints
+- [Availability](https://docs.wpappointments.com/developers/rest-api/availability/): Calendar and month availability
+- [Customers](https://docs.wpappointments.com/developers/rest-api/customers/): Customer CRUD endpoints
+- [Variants](https://docs.wpappointments.com/developers/rest-api/variants/): Bookable variant endpoints
+- [Settings](https://docs.wpappointments.com/developers/rest-api/settings/): Plugin settings endpoints
+
+## Addon Development
+
+- [Overview](https://docs.wpappointments.com/developers/addons/): How the addon system works
+- [PHP Setup](https://docs.wpappointments.com/developers/addons/php-setup/): Register PHP addon with hooks and filters
+- [JS Setup](https://docs.wpappointments.com/developers/addons/js-setup/): Frontend integration with `@wordpress/data` stores
+- [Custom Bookable Type](https://docs.wpappointments.com/developers/addons/bookable-type/): Register a new bookable type
+
+## Packages
+
+- [@wpappointments/components](https://docs.wpappointments.com/packages/components/): UI components for addon admin pages
+- [@wpappointments/data](https://docs.wpappointments.com/packages/data/): Hooks, API client, and data store utilities

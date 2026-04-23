@@ -1,0 +1,21 @@
+{
+	"id": "IR",
+	"name": "Iran",
+	"type": "country",
+	"holidays": [
+		"nowruz",
+		"nowruz2",
+		"nowruz3",
+		"nowruz4",
+		"islamicRepublicDayIR",
+		"natureDayIR",
+		"revolutionDayIR",
+		"deathKhomeini",
+		"khordadUprisingIR",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlAdha",
+		"ashura",
+		"prophetBirthday"
+	]
+}

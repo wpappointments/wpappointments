@@ -1,0 +1,18 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"entryPoints": ["../packages/data/src/index.ts"],
+	"tsconfig": "../packages/data/tsconfig.json",
+	"plugin": ["typedoc-plugin-markdown"],
+	"out": "src/content/docs/packages/data/reference",
+	"outputFileStrategy": "modules",
+	"flattenOutputFiles": true,
+	"hidePageHeader": true,
+	"hideBreadcrumbs": true,
+	"useCodeBlocks": true,
+	"expandObjects": true,
+	"parametersFormat": "table",
+	"enumMembersFormat": "table",
+	"typeDeclarationFormat": "table",
+	"entryFileName": "index",
+	"fileExtension": ".mdx"
+}

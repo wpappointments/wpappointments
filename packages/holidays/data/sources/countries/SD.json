@@ -1,0 +1,18 @@
+{
+	"id": "SD",
+	"name": "Sudan",
+	"type": "country",
+	"holidays": [
+		"independenceDaySD",
+		"labourDay",
+		"revolutionDaySD",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"eidAlFitr3",
+		"eidAlAdha",
+		"eidAlAdha2",
+		"eidAlAdha3",
+		"islamicNewYear",
+		"prophetBirthday"
+	]
+}

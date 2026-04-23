@@ -1,0 +1,23 @@
+{
+	"name": "root/monorepo",
+	"type": "project",
+	"autoload": {
+		"psr-4": {
+			"Tests\\": "plugins/wpappointments/tests/php/",
+			"TestTools\\": "tools/testing/phpunit/src/"
+		}
+	},
+	"require-dev": {
+		"pestphp/pest": "^1.23",
+		"php-stubs/wordpress-tests-stubs": "^6.3",
+		"php-stubs/wordpress-stubs": "^6.4",
+		"wp-coding-standards/wpcs": "^3.0",
+		"yoast/phpunit-polyfills": "^1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}

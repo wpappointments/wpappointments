@@ -1,0 +1,6 @@
+packages:
+    - 'packages/*'
+    - 'plugins/*'
+    - 'tools/testing/*'
+    - 'docs'
+    - 'help'

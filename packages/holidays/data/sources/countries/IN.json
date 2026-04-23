@@ -1,0 +1,22 @@
+{
+	"id": "IN",
+	"name": "India",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"republicDayIN",
+		"holi",
+		"mahaviraJayanti",
+		"goodFriday",
+		"buddhaJayanti",
+		"eidAlFitr",
+		"independenceDayIN",
+		"eidAlAdha",
+		"prophetBirthday",
+		"gandhiJayanti",
+		"dasara",
+		"diwali",
+		"guruNanakJayanti",
+		"christmas"
+	]
+}

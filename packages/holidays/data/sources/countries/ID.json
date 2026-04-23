@@ -1,0 +1,24 @@
+{
+	"id": "ID",
+	"name": "Indonesia",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"chineseNewYear",
+		"isra",
+		"nyepi",
+		"goodFriday",
+		"easterMonday",
+		"labourDay",
+		"ascension",
+		"pancasilaDay",
+		"eidAlFitr",
+		"eidAlFitr2",
+		"vesak",
+		"eidAlAdha",
+		"islamicNewYear",
+		"independenceDayID",
+		"prophetBirthday",
+		"christmas"
+	]
+}

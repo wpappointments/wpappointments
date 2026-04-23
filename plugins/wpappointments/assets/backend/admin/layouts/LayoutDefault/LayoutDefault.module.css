@@ -1,0 +1,66 @@
+.layout p:first-child {
+	margin-top: 0;
+}
+
+.layout-header {
+	background: #fff;
+	box-sizing: border-box;
+	padding: 0 var(--wpappointments-large-gap);
+	position: fixed;
+	width: 100%;
+	top: 46px;
+	z-index: 1001;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: var(--wpappointments-layout-header-height);
+}
+
+:global(.wp-responsive-open) .layout-header {
+	left: 190px;
+}
+
+.layout-header > h1 {
+	background: #fff;
+	font-weight: 600;
+	font-size: 14px;
+	margin: 0;
+}
+
+.layout-header-actions {
+	display: flex;
+	align-items: center;
+}
+
+.layout-content {
+	max-width: min(1400px, 100% - calc(var(--wpappointments-large-gap) * 2));
+	margin: var(--wpappointments-large-gap) auto 128px auto;
+}
+
+.full-width {
+	max-width: none;
+	margin: 0;
+}
+
+@media screen and (min-width: 783px) {
+	.layout-header {
+		top: 32px;
+		width: calc(100% - 160px);
+	}
+
+	:global(.auto-fold) .layout-header {
+		width: calc(100% - 36px);
+	}
+}
+
+@media screen and (min-width: 961px) {
+	.layout-header,
+	:global(.auto-fold) .layout-header {
+		width: calc(100% - 160px);
+	}
+
+	:global(.folded) .layout-header {
+		width: calc(100% - 36px);
+	}
+}

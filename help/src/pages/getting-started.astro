@@ -1,0 +1,160 @@
+---
+import HelpLayout from '../layouts/HelpLayout.astro';
+import SidebarNav from '../components/SidebarNav.astro';
+import Callout from '../components/Callout.astro';
+import ScreenshotPlaceholder from '../components/ScreenshotPlaceholder.astro';
+---
+
+<HelpLayout
+	title="Getting Started"
+	description="Install, activate, and set up WP Appointments."
+	breadcrumbs={[{ label: 'Getting Started', href: '/help/getting-started/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Getting Started</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			Install the plugin and configure your first appointment system in minutes.
+		</p>
+	</header>
+
+	<Callout>
+		<ul>
+			<li><strong>Install the plugin</strong> — from WordPress directory or ZIP upload</li>
+			<li><strong>Run the setup wizard</strong> — configure business info, schedule, and first service</li>
+			<li><strong>Embed the booking form</strong> — add the Gutenberg block to any page</li>
+		</ul>
+	</Callout>
+
+	<div class="mt-12 space-y-12">
+		<!-- Requirements -->
+		<section>
+			<h2 class="text-2xl font-semibold">Requirements</h2>
+			<div class="mt-4 rounded-xl border border-border-weak bg-surface p-5">
+				<div class="grid grid-cols-2 gap-4 text-sm max-md:grid-cols-1">
+					<div class="flex items-center gap-3">
+						<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-light text-accent font-semibold text-xs">WP</span>
+						<span>WordPress <strong>6.4</strong> or later</span>
+					</div>
+					<div class="flex items-center gap-3">
+						<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-light text-accent font-semibold text-xs">PHP</span>
+						<span>PHP <strong>8.2</strong> or later</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Install -->
+		<section>
+			<h2 class="text-2xl font-semibold">Install from WordPress</h2>
+			<ol class="mt-4 space-y-4">
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">1</span>
+					<div>
+						<p>Go to <strong>Plugins → Add New</strong></p>
+						<ScreenshotPlaceholder description="WordPress admin: Plugins > Add New page with search bar" />
+					</div>
+				</li>
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">2</span>
+					<div>
+						<p>Search for <strong>"WP Appointments"</strong> and click <strong>Install Now</strong></p>
+						<ScreenshotPlaceholder description="Search results showing WP Appointments plugin card with Install button" />
+					</div>
+				</li>
+				<li class="flex gap-4">
+					<span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-text-caption">3</span>
+					<p>Click <strong>Activate</strong></p>
+				</li>
+			</ol>
+		</section>
+
+		<!-- Setup Wizard -->
+		<section>
+			<h2 class="text-2xl font-semibold">Setup Wizard</h2>
+			<p class="mt-2 text-text-secondary">
+				After activation, the setup wizard guides you through initial configuration.
+			</p>
+
+			<ScreenshotPlaceholder description="WP Appointments setup wizard — Step 1: Welcome screen with 'Get Started' button" />
+
+			<!-- Mermaid diagram: wizard flow -->
+			<div class="mermaid-container">
+				<p class="mb-3 text-xs font-semibold uppercase tracking-wider text-text-caption">Setup Flow</p>
+				<pre class="mermaid">
+graph LR
+    A[Welcome] --> B[Business Info]
+    B --> C[Schedule]
+    C --> D[Services]
+    D --> E[Booking Page]
+    E --> F[All Set!]
+
+    style A fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style B fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style C fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style D fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style E fill:#e0e7ff,stroke:#818cf8,color:#1f2937
+    style F fill:#d1fae5,stroke:#34d399,color:#1f2937
+				</pre>
+			</div>
+
+			<div class="mt-6 space-y-6">
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Step 1: Business Info</h3>
+					<p class="mt-1 text-sm text-text-tertiary">Set your business name, timezone, and date format.</p>
+					<ScreenshotPlaceholder description="Setup wizard — Business Info step with name, timezone, and date format fields" aspectRatio="4/3" />
+				</div>
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Step 2: Schedule</h3>
+					<p class="mt-1 text-sm text-text-tertiary">Configure your weekly opening hours. Toggle days on/off and set start/end times.</p>
+					<ScreenshotPlaceholder description="Setup wizard — Schedule step with day-by-day toggle and time pickers" aspectRatio="4/3" />
+				</div>
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Step 3: Services</h3>
+					<p class="mt-1 text-sm text-text-tertiary">Add your first bookable service with name and duration.</p>
+					<ScreenshotPlaceholder description="Setup wizard — Services step with service name input and duration dropdown" aspectRatio="4/3" />
+				</div>
+				<div class="rounded-xl border border-border-weak p-5">
+					<h3 class="font-semibold">Step 4: Booking Page</h3>
+					<p class="mt-1 text-sm text-text-tertiary">Choose a page to embed the booking flow, or create one automatically.</p>
+					<ScreenshotPlaceholder description="Setup wizard — Booking Page step with page selector and 'Create Page' button" aspectRatio="4/3" />
+				</div>
+			</div>
+		</section>
+
+		<!-- Embed -->
+		<section>
+			<h2 class="text-2xl font-semibold">Embed the Booking Flow</h2>
+			<p class="mt-2 text-text-secondary">
+				Add the <strong>Booking Flow</strong> Gutenberg block to any page or post.
+			</p>
+			<ScreenshotPlaceholder description="Gutenberg editor showing the WP Appointments Booking Flow block inserted into a page" />
+		</section>
+	</div>
+
+	<!-- Related articles -->
+	<div slot="related">
+		<svg width="100%" height="1" class="my-16 text-border-subtle">
+			<line x1="0" y1="0.5" x2="100%" y2="0.5" stroke="currentColor" stroke-dasharray="4 6" stroke-linecap="round" />
+		</svg>
+		<h2 class="text-xl font-semibold text-text-secondary">Next steps</h2>
+		<div class="mt-6 grid grid-cols-3 gap-4 max-md:grid-cols-1">
+			<a href="/help/appointments/" class="group rounded-2xl border border-border-subtle p-5 transition-colors hover:border-text-caption">
+				<span class="text-lg">📅</span>
+				<h3 class="mt-2 font-semibold">Create your first appointment</h3>
+				<p class="mt-1 text-sm text-text-tertiary">Book appointments from the admin calendar.</p>
+			</a>
+			<a href="/help/availability/" class="group rounded-2xl border border-border-subtle p-5 transition-colors hover:border-text-caption">
+				<span class="text-lg">⏰</span>
+				<h3 class="mt-2 font-semibold">Configure availability</h3>
+				<p class="mt-1 text-sm text-text-tertiary">Set schedules and override rules.</p>
+			</a>
+			<a href="/help/bookables/" class="group rounded-2xl border border-border-subtle p-5 transition-colors hover:border-text-caption">
+				<span class="text-lg">🏢</span>
+				<h3 class="mt-2 font-semibold">Set up bookables</h3>
+				<p class="mt-1 text-sm text-text-tertiary">Types, entities, and service variants.</p>
+			</a>
+		</div>
+	</div>
+</HelpLayout>

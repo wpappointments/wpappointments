@@ -1,0 +1,15 @@
+---
+interface Props {
+	description: string;
+	aspectRatio?: string;
+}
+
+const { description, aspectRatio = '16/9' } = Astro.props;
+---
+
+<div
+	class="screenshot-placeholder"
+	style={`aspect-ratio: ${aspectRatio};`}
+>
+	<p>{description}</p>
+</div>

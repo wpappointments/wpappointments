@@ -1,0 +1,50 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wpappointments/booking-flow",
+	"category": "wpappointments",
+	"title": "Booking Flow",
+	"attributes": {
+		"flowType": {
+			"type": "string",
+			"default": "OneStep"
+		},
+		"alignment": {
+			"type": "string",
+			"default": "Left"
+		},
+		"width": {
+			"type": "string",
+			"default": "Narrow"
+		},
+		"trimUnavailable": {
+			"type": "boolean",
+			"default": true
+		},
+		"slotsAsButtons": {
+			"type": "boolean",
+			"default": false
+		},
+		"inlineTimePicker": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideProgressBar": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideStepTitles": {
+			"type": "boolean",
+			"default": false
+		},
+		"entityId": {
+			"type": "number"
+		}
+	},
+	"textdomain": "wpappointments",
+	"editorScript": "file:../../../../../build/booking-flow-block.tsx.js",
+	"editorStyle": "file:./index.css",
+	"style": ["file:../../../../../build/booking-flow-block-view.tsx.css"],
+	"viewScript": "file:../../../../../build/booking-flow-block-view.tsx.js",
+	"render": "file:./render.php"
+}

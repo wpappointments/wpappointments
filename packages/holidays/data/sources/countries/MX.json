@@ -1,0 +1,15 @@
+{
+	"id": "MX",
+	"name": "Mexico",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"constitutionDayMX",
+		"benitoJuarezDay",
+		"goodFriday",
+		"labourDay",
+		"independenceDayMX",
+		"revolutionDayMX",
+		"christmas"
+	]
+}

@@ -1,0 +1,18 @@
+{
+	"id": "KR",
+	"name": "South Korea",
+	"type": "country",
+	"holidays": [
+		"newYear",
+		"seollal",
+		"independenceMovementDayKR",
+		"childrensDayKR",
+		"buddhasBirthdayKR",
+		"memorialDayKR",
+		"liberationDayKR",
+		"chuseok",
+		"nationalFoundationDayKR",
+		"hangulDay",
+		"christmas"
+	]
+}
