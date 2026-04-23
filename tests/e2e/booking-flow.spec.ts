@@ -62,14 +62,11 @@ async function pickFirstAvailableSlot(page: Page) {
 		.first()
 		.waitFor({ state: 'visible', timeout: 15_000 });
 
-	// Pick a slot in the middle of the list — guaranteed to be in working hours
-	const count = await page.locator('[data-time]').count();
-	const midIdx = Math.floor(count / 2);
-
-	// Playwright locators auto-retry on detached elements from React re-renders
-	await page
-		.locator(`[data-time] >> nth=${midIdx}`)
-		.click({ timeout: 10_000 });
+	// Pick the last enabled slot — guaranteed to be in the future regardless of
+	// CI clock (past slots on "today" are disabled by the availability engine).
+	const slot = page.locator('[data-time]:not([disabled])').last();
+	await slot.waitFor({ state: 'visible', timeout: 15_000 });
+	await slot.click({ timeout: 10_000 });
 
 	// Wait for selection confirmation
 	await expect(page.getByText('Selected time:')).toBeVisible({
