@@ -11,7 +11,8 @@
 		"css-types": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly",
 		"css-types-watch": "hcm 'assets/**/*.module.css' --namedExport --declarationMap --localsConvention=camelCaseOnly --watch",
 		"check-types": "tsc --noEmit",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"test:e2e:wporg-screenshots": "playwright test --project=chromium ../../tests/e2e/wporg-screenshots.spec.ts"
 	},
 	"author": "",
 	"license": "GPL-2.0-or-later",

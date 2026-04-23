@@ -1,0 +1,52 @@
+---
+title: Installing Addons
+description: How to install, activate, and update premium addons for Appointments Booking.
+badge:
+  text: Premium
+  variant: tip
+---
+
+Premium addons are distributed as regular WordPress plugin ZIPs. The free Appointments Booking plugin must be active first — addons refuse to activate without it.
+
+## Before you start
+
+- Make sure **Appointments Booking** is installed and active (Plugins → Installed Plugins).
+- You have the addon ZIP file, downloaded from your account on [wpappointments.com](https://wpappointments.com).
+- You have **Install Plugins** capability (administrators do by default).
+
+## Install
+
+1. Go to **Plugins → Add New → Upload Plugin**.
+2. Click **Choose File** and select the addon ZIP.
+3. Click **Install Now**.
+4. Click **Activate Plugin** after install finishes.
+
+The addon's settings appear under the **Appointments** admin menu. If you don't see them, check that the free plugin is active — the addon silently no-ops without it.
+
+## Update
+
+Addons do not auto-update from WordPress.org (they aren't hosted there). Two options:
+
+**Manual update.** Download the new ZIP from your account, deactivate the old version, delete it, then install the new ZIP. Your data is preserved — addons store their data in separate options/post types and WordPress only deletes plugin files, not data.
+
+**License-aware updates.** If the addon ships with a license key field, entering the key enables in-dashboard updates through Plugins → Installed Plugins. See the individual addon's docs for the exact steps.
+
+## Uninstall
+
+Deactivating an addon keeps its data. Deleting the plugin removes the files but leaves the data, so re-installing later resumes where you left off.
+
+To wipe addon data, enable the "Delete data on uninstall" option in the addon's settings before deleting — analogous to the free plugin's `wpappointments_uninstall_cleanup` flag.
+
+## Troubleshooting
+
+**Addon activation fails with "requires Appointments Booking".**
+The free plugin either isn't installed or isn't active. Fix the free plugin first.
+
+**Addon menu items don't appear.**
+Hard-refresh the admin and check **Appointments → Settings** — most addons register their UI there. Also verify your user role has the right capability; addons often introduce their own caps that need to be assigned.
+
+**Updates not downloading.**
+Check the license key is valid (addon settings page). Without a valid key, the addon runs but won't pull updates.
+
+**Conflicts with other plugins.**
+Deactivate other plugins one at a time to isolate. Most conflicts come from page builders that override Gutenberg block rendering, or from caching plugins caching the REST API.
