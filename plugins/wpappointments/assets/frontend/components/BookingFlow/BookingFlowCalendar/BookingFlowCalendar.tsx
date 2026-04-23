@@ -41,6 +41,17 @@ export default function BookingFlowCalendar({ onSlotSelected }: Props = {}) {
 		setNoticeDismissed(false);
 	}, [selectedDateKey]);
 
+	// Clear any previously-picked time slot if it doesn't belong to the
+	// newly-selected day/month. Prevents form submission with a stale ISO.
+	useEffect(() => {
+		if (!datetime) return;
+		// Compare in local time (selectedDateKey is produced with local format).
+		const datetimeDateKey = format(new Date(datetime), 'yyyy-MM-dd');
+		if (selectedDateKey && datetimeDateKey !== selectedDateKey) {
+			setField('datetime', '');
+		}
+	}, [selectedDateKey, datetime, setField]);
+
 	const onDismiss = useCallback(() => {
 		setNoticeDismissed(true);
 	}, []);

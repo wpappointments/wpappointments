@@ -50,6 +50,10 @@ export default function ScheduleSettings({
 		return select(store).getSchedules();
 	}, []);
 
+	const schedulesLoaded = useSelect(() => {
+		return select(store).getSchedulesLoaded();
+	}, []);
+
 	useEffect(() => {
 		const defaultSchedule = existingSchedules.find((s) => s.isDefault);
 		if (defaultSchedule?.days) {
@@ -85,6 +89,9 @@ export default function ScheduleSettings({
 
 	const onSubmit = async () => {
 		if (isSubmitting) return;
+		// Guard against creating a duplicate schedule when the default one
+		// exists but hasn't finished loading yet.
+		if (!schedulesLoaded) return;
 		setIsSubmitting(true);
 		setError(null);
 
@@ -152,8 +159,8 @@ export default function ScheduleSettings({
 				className={styles.stepButton}
 				onClick={onSubmit}
 				variant="primary"
-				isBusy={isSubmitting}
-				disabled={isSubmitting}
+				isBusy={isSubmitting || !schedulesLoaded}
+				disabled={isSubmitting || !schedulesLoaded}
 			>
 				{__('Continue', 'wpappointments')}
 			</Button>
