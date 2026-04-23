@@ -25,14 +25,14 @@ function menu() {
 		__( 'WP Appointments', 'appointments-booking' ),
 		__( 'Appointments', 'appointments-booking' ),
 		'manage_options',
-		'appointments-booking',
+		'wpappointments',
 		__NAMESPACE__ . '\\admin_page',
 		$icon,
 		'58.5'
 	);
 
 	add_submenu_page(
-		'appointments-booking',
+		'wpappointments',
 		__( 'Calendar', 'appointments-booking' ),
 		__( 'Calendar', 'appointments-booking' ),
 		'manage_options',
@@ -41,7 +41,7 @@ function menu() {
 	);
 
 	add_submenu_page(
-		'appointments-booking',
+		'wpappointments',
 		__( 'Customers', 'appointments-booking' ),
 		__( 'Customers', 'appointments-booking' ),
 		'manage_options',
@@ -50,7 +50,7 @@ function menu() {
 	);
 
 	add_submenu_page(
-		'appointments-booking',
+		'wpappointments',
 		__( 'Settings', 'appointments-booking' ),
 		__( 'Settings', 'appointments-booking' ),
 		'manage_options',

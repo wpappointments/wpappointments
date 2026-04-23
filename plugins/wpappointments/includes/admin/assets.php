@@ -40,7 +40,7 @@ function scripts() {
 		return;
 	}
 
-	if ( str_contains( $screen->id, 'appointments-booking' ) ) {
+	if ( str_contains( $screen->id, 'wpappointments' ) ) {
 		wp_enqueue_style(
 			'wpappointments-admin-css',
 			PluginInfo::get_plugin_dir_url() . '/admin.css',
@@ -103,7 +103,7 @@ function scripts() {
 		}
 	}
 
-	if ( ! str_contains( $screen->id, 'appointments-booking' ) ) {
+	if ( ! str_contains( $screen->id, 'wpappointments' ) ) {
 		if ( ! apply_filters( 'wpappointments_globals_api_enabled', false ) ) {
 			return;
 		}

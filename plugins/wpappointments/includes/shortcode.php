@@ -19,7 +19,7 @@ require_once __DIR__ . '/class-booking-flow-widget.php';
 /**
  * Register the [wpappointments] shortcode.
  */
-add_shortcode( 'appointments-booking', __NAMESPACE__ . '\\render_shortcode' );
+add_shortcode( 'wpappointments', __NAMESPACE__ . '\\render_shortcode' );
 
 /**
  * Register the widget.
@@ -50,7 +50,7 @@ function render_shortcode( $atts ) {
 			'slots_as_buttons' => '0',
 		),
 		$atts,
-		'appointments-booking'
+		'wpappointments'
 	);
 
 	$attributes = array(
