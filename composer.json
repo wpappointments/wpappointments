@@ -3,7 +3,7 @@
 	"type": "project",
 	"autoload": {
 		"psr-4": {
-			"Tests\\": "plugins/wpappointments/tests/php/",
+			"Tests\\": "plugins/appointments-booking/tests/php/",
 			"TestTools\\": "tools/testing/phpunit/src/"
 		}
 	},

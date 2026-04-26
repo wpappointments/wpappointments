@@ -74,7 +74,7 @@ Estimated time: 30–45 minutes.
 - [ ] Banner (772×250 and 1544×500) and icon (128×128 and 256×256) PNGs present.
 - [ ] `readme.txt` short description ≤ 150 chars and matches the listing blurb.
 - [ ] Changelog entry for the current version exists in `readme.txt`.
-- [ ] `Stable tag:` in `readme.txt` matches `Version:` in `wpappointments.php`.
+- [ ] `Stable tag:` in `readme.txt` matches `Version:` in `appointments-booking.php`.
 
 ---
 

@@ -8,14 +8,14 @@
 		"wp-content/coverage": "./coverage",
 		"wp-content/tools": "./tools",
 		"wp-content/vendor": "./vendor",
-		"wp-content/plugins/appointments-booking": "./plugins/wpappointments",
+		"wp-content/plugins/appointments-booking": "./plugins/appointments-booking",
 		"wp-content/plugins/other-plugin": "./plugins/other-plugin",
 		"wp-content/plugins/demo-court-booking": "./tools/testing/demo-court-booking",
 		"wp-content/mu-plugins": "./.mu-plugins",
 		"wp-content/packages": "./packages"
 	},
 	"plugins": [
-		"./plugins/wpappointments",
+		"./plugins/appointments-booking",
 		"./plugins/other-plugin",
 		"./tools/testing/demo-court-booking",
 		"https://downloads.wordpress.org/plugin/plugin-check.latest-stable.zip"

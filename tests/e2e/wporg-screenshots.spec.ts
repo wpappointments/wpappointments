@@ -4,10 +4,10 @@
  * Opt-in spec — not part of the normal CI run. Produces the five PNGs
  * referenced in readme.txt's Screenshots section. Output lands in
  * tests/e2e/results/wporg/ and can be copied into
- * plugins/wpappointments/assets/ for the wp.org submission.
+ * plugins/appointments-booking/assets/ for the wp.org submission.
  *
  * Run with:
- *   pnpm -C plugins/wpappointments test:e2e -- tests/e2e/wporg-screenshots.spec.ts
+ *   pnpm -C plugins/appointments-booking test:e2e -- tests/e2e/wporg-screenshots.spec.ts
  *
  * Prereqs: seeded booking pages from global-setup; clean MailHog not needed.
  */

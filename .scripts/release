@@ -1,26 +1,40 @@
 #!/bin/bash
+set -euo pipefail
 
-rm -rf wpappointments.zip
-rm -rf wpappointments
+cd "$(dirname "$0")/../plugins/appointments-booking"
+repo_root="$(cd ../.. && pwd)"
 
-version=$(grep -o "Version: [0-9.]*" wpappointments.php | awk '{print $2}')
+if [ -d vendor-temp ] && [ ! -d vendor ]; then
+	echo "Recovering vendor from vendor-temp (prior incomplete run)"
+	mv vendor-temp vendor
+fi
+
+rm -rf appointments-booking.zip appointments-booking
+
+version=$(grep -o "Version: *[0-9.]*" appointments-booking.php | awk '{print $2}')
 
 echo "Releasing version $version"
 
-pnpm build
+(cd "$repo_root" && pnpm build)
+
+restore_vendor() {
+	if [ -d vendor-temp ]; then
+		rm -rf vendor
+		mv vendor-temp vendor
+	fi
+}
+trap restore_vendor EXIT
 
 mv vendor vendor-temp
-pnpm composer install --no-dev > /dev/null 2>&1
 
-mkdir "wpappointments"
+(cd "$repo_root" && npx wp-env run cli --env-cwd=wp-content/plugins/appointments-booking composer install --no-dev --quiet)
 
-rsync -av --exclude=wpappointments --exclude-from=.zipignore . wpappointments
+mkdir appointments-booking
 
-zip -qr "wpappointments.zip" wpappointments/* -x@.zipignore
+rsync -a --exclude=appointments-booking --exclude-from=.zipignore . appointments-booking
 
-rm -rf "wpappointments"
+zip -qr appointments-booking.zip appointments-booking/* -x@.zipignore
 
-rm -rf vendor
-mv vendor-temp vendor
+rm -rf appointments-booking
 
-echo "\r\nRelease complete ✨ "
+echo "Release complete ✨ (appointments-booking.zip)"

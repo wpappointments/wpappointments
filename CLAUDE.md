@@ -23,8 +23,8 @@ Dev site: http://localhost:8888 (admin: `admin` / `password`)
 ### Building
 ```bash
 pnpm run build                              # Full build (all packages via Turborepo)
-pnpm -C plugins/wpappointments build        # Build plugin assets only
-pnpm -C plugins/wpappointments css-types    # Generate CSS module type declarations
+pnpm -C plugins/appointments-booking build        # Build plugin assets only
+pnpm -C plugins/appointments-booking css-types    # Generate CSS module type declarations
 ```
 
 ### Documentation
@@ -39,10 +39,10 @@ pnpm turbo docs:generate      # Generate via Turborepo (respects cache/inputs)
 ### Testing
 ```bash
 pnpm test                                    # PHP tests (Pest) via wp-env with coverage
-pnpm -C plugins/wpappointments test:e2e      # Playwright E2E tests
+pnpm -C plugins/appointments-booking test:e2e      # Playwright E2E tests
 ```
 
-PHP tests run inside wp-env Docker container. Test files: `plugins/wpappointments/tests/php/` (suffix: `Test.php`). Framework: Pest (PHPUnit wrapper).
+PHP tests run inside wp-env Docker container. Test files: `plugins/appointments-booking/tests/php/` (suffix: `Test.php`). Framework: Pest (PHPUnit wrapper).
 
 ### Linting & Type Checking
 ```bash
@@ -66,7 +66,7 @@ After adding new PHP classes, run dump-autoload for PSR-4 to pick them up.
 ## Architecture
 
 ### Monorepo Structure
-- `plugins/wpappointments/` — Main plugin (all core code lives here)
+- `plugins/appointments-booking/` — Main plugin (all core code lives here)
 - `plugins/other-plugin/` — Dev/test helper plugin
 - `premium/` — Git submodule for premium add-ons (`wpappointments/wpappointments-premium`, private)
 - `.claude/` — Git submodule for Claude Code workspace (`wpappointments/claude`, private)
@@ -92,7 +92,7 @@ git add .claude && git commit -m "Update .claude submodule"
 
 The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/thoughts`, `/epic`, `/breakdown`, `/develop`). See `.claude/README.md` for full workflow docs.
 
-### PHP Backend (`plugins/wpappointments/src/`)
+### PHP Backend (`plugins/appointments-booking/src/`)
 - **Namespace:** `WPAppointments\` with PSR-4 autoloading
 - **`Api/Endpoints/`** — REST controllers (namespace `/wpappointments/v1/`), extend base `Controller` class
 - **`Core/`** — Plugin bootstrap: post type registration, capabilities, activation/deactivation, `Singleton` base class
@@ -102,7 +102,7 @@ The `.claude/` submodule contains plans, tasks, thoughts, and slash commands (`/
 - **`Utils/`** — Date, Schedule, Availability helpers
 - **Custom post types:** `wpa-appointment`, `wpa-schedule`, `wpa-bookable`, `wpa-bookable-variant`
 
-### TypeScript Frontend (`plugins/wpappointments/assets/`)
+### TypeScript Frontend (`plugins/appointments-booking/assets/`)
 - **`backend/`** — Admin UI (React). Pages: Dashboard, Calendar, Customers, Services, Entities, Settings
 - **`backend/store/`** — `@wordpress/data` store with actions, reducers, selectors, resolvers, controls
 - **`backend/api/`** — API client functions using `@wordpress/api-fetch`
