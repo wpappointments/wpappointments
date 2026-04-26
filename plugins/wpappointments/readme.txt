@@ -1,5 +1,5 @@
-=== Appointments Booking by WPAppointments ===
-Contributors: wppoland
+=== Appointments Booking by WP Appointments ===
+Contributors: motylanogha, dawidurbanski
 Tags: appointments, booking, scheduling, calendar, reservations
 Requires at least: 6.4
 Tested up to: 6.9
@@ -12,7 +12,7 @@ Modern appointment scheduling for WordPress — services, variants, bookable res
 
 == Description ==
 
-Appointments Booking by WPAppointments is a modern appointment scheduling plugin for WordPress. It ships a full-featured booking system with bookable entities, service variants, availability management, and an admin interface built with React.
+Appointments Booking by WP Appointments is a modern appointment scheduling plugin for WordPress. It ships a full-featured booking system with bookable entities, service variants, availability management, and an admin interface built with React.
 
 Whether you run a salon, clinic, consulting firm, coaching practice, or any service-based business, this plugin gives you the tools to manage your bookings directly from WordPress — no external SaaS required.
 
