@@ -13,7 +13,8 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 	return (
 		<Card className={styles.summary}>
 			<CardHeader className={styles.summaryHeader}>
-				{__('Selected customer', 'wpappointments')}: {headerActions}
+				{__('Selected customer', 'appointments-booking')}:{' '}
+				{headerActions}
 			</CardHeader>
 			<CardBody className={styles.summaryBody}>
 				<div className={styles.summaryCustomerRow}>
@@ -24,7 +25,7 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 						<span>
 							{customer.email && (
 								<>
-									{__('mail:', 'wpappointments')}{' '}
+									{__('mail:', 'appointments-booking')}{' '}
 									<a
 										href={`mailto:${customer.email}`}
 										target="_blank"
@@ -36,7 +37,7 @@ export default function Summary({ customer, headerActions }: SummaryProps) {
 							)}
 							{customer.phone && (
 								<>
-									{__('phone:', 'wpappointments')}{' '}
+									{__('phone:', 'appointments-booking')}{' '}
 									<a href={`tel:${customer.phone}`}>
 										{customer.phone}
 									</a>

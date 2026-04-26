@@ -82,7 +82,10 @@ export default function TimeSelector({
 	);
 
 	return (
-		<SlideOut title={__('Select Time', 'wpappointments')} id="select-time">
+		<SlideOut
+			title={__('Select Time', 'appointments-booking')}
+			id="select-time"
+		>
 			<div className={styles.formGroup}>
 				<FormFieldSet
 					horizontal
@@ -91,7 +94,7 @@ export default function TimeSelector({
 				>
 					{__(
 						'Having trouble finding available time slot?',
-						'wpappointments'
+						'appointments-booking'
 					)}{' '}
 					<Button
 						icon={calendar}
@@ -102,12 +105,12 @@ export default function TimeSelector({
 							});
 						}}
 					>
-						{__('Find time', 'wpappointments')}
+						{__('Find time', 'appointments-booking')}
 					</Button>
 				</FormFieldSet>
 
 				<FormFieldSet
-					legend={__('Select day', 'wpappointments')}
+					legend={__('Select day', 'appointments-booking')}
 					style={{ maxWidth: '300px' }}
 				>
 					<WPDatePicker
@@ -205,8 +208,8 @@ export default function TimeSelector({
 						}}
 					>
 						{available === '0'
-							? __('Select time anyway', 'wpappointments')
-							: __('Select time', 'wpappointments')}
+							? __('Select time anyway', 'appointments-booking')
+							: __('Select time', 'appointments-booking')}
 					</Button>
 				</div>
 

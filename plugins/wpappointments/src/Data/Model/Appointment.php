@@ -185,7 +185,7 @@ class Appointment {
 		if ( ! $cancelled ) {
 			return new \WP_Error(
 				'appointment_already_cancelled',
-				__( 'Appointment is already cancelled', 'wpappointments' )
+				__( 'Appointment is already cancelled', 'appointments-booking' )
 			);
 		}
 
@@ -211,7 +211,7 @@ class Appointment {
 		if ( ! $confirmed ) {
 			return new \WP_Error(
 				'appointment_already_confirmed',
-				__( 'Appointment is already confirmed', 'wpappointments' )
+				__( 'Appointment is already confirmed', 'appointments-booking' )
 			);
 		}
 
@@ -237,14 +237,14 @@ class Appointment {
 		if ( ! $status ) {
 			return new \WP_Error(
 				'appointment_not_found',
-				__( 'Appointment not found', 'wpappointments' )
+				__( 'Appointment not found', 'appointments-booking' )
 			);
 		}
 
 		if ( 'cancelled' !== $status ) {
 			return new \WP_Error(
 				'deleting_not_cancelled_appointment',
-				__( 'Appointment must be cancelled before deleting', 'wpappointments' )
+				__( 'Appointment must be cancelled before deleting', 'appointments-booking' )
 			);
 		}
 
@@ -306,17 +306,17 @@ class Appointment {
 	 */
 	protected function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
-			return new \WP_Error( 'appointment_id_required', __( 'Appointment ID is required', 'wpappointments' ) );
+			return new \WP_Error( 'appointment_id_required', __( 'Appointment ID is required', 'appointments-booking' ) );
 		}
 
 		$post = get_post( $post_id );
 
 		if ( ! $post ) {
-			return new \WP_Error( 'appointment_not_found', __( 'Appointment not found', 'wpappointments' ) );
+			return new \WP_Error( 'appointment_not_found', __( 'Appointment not found', 'appointments-booking' ) );
 		}
 
 		if ( 'wpa-appointment' !== $post->post_type ) {
-			return new \WP_Error( 'appointment_invalid_type', __( 'Post is not an appointment', 'wpappointments' ) );
+			return new \WP_Error( 'appointment_invalid_type', __( 'Post is not an appointment', 'appointments-booking' ) );
 		}
 
 		return $post_id;

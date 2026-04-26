@@ -8,6 +8,10 @@
 
 namespace WPAppointments;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\PluginInfo;
 
 

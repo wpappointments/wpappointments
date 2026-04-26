@@ -256,7 +256,9 @@ export function BookingFlowContextProvider({
 
 	const onSubmit = async () => {
 		if (!formData.datetime) {
-			setFormError(__('Please select a date and time', 'wpappointments'));
+			setFormError(
+				__('Please select a date and time', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -266,6 +268,9 @@ export function BookingFlowContextProvider({
 			phone: formData.phone,
 		};
 
+		const entityId =
+			attributes.entityId || window.wpappointments?.entity?.coreEntityId;
+
 		const appointmentData = applyFilters(
 			'wpappointments.bookingFlow.appointmentData',
 			{
@@ -273,6 +278,7 @@ export function BookingFlowContextProvider({
 				date: formData.datetime,
 				createAccount: formData.account,
 				password: formData.password,
+				entityId,
 			},
 			formData
 		);
@@ -288,7 +294,9 @@ export function BookingFlowContextProvider({
 		});
 
 		if (error) {
-			setFormError(__('Error creating appointment', 'wpappointments'));
+			setFormError(
+				__('Error creating appointment', 'appointments-booking')
+			);
 			doAction('wpappointments.bookingFlow.submitError', error);
 		}
 

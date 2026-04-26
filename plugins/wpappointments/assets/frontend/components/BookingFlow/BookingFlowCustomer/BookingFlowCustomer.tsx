@@ -11,7 +11,7 @@ export default function BookingFlowCustomer() {
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="text"
-					placeholder={__('First name', 'wpappointments')}
+					placeholder={__('First name', 'appointments-booking')}
 					className={styles.input}
 					value={formData.firstName}
 					onChange={(e) => setField('firstName', e.target.value)}
@@ -21,7 +21,7 @@ export default function BookingFlowCustomer() {
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="text"
-					placeholder={__('Last name', 'wpappointments')}
+					placeholder={__('Last name', 'appointments-booking')}
 					className={styles.input}
 					value={formData.lastName}
 					onChange={(e) => setField('lastName', e.target.value)}
@@ -31,7 +31,7 @@ export default function BookingFlowCustomer() {
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="email"
-					placeholder={__('Email', 'wpappointments')}
+					placeholder={__('Email', 'appointments-booking')}
 					className={styles.input}
 					value={formData.email}
 					onChange={(e) => setField('email', e.target.value)}
@@ -41,7 +41,7 @@ export default function BookingFlowCustomer() {
 			<div className={bookingFlowStyles.field}>
 				<input
 					type="tel"
-					placeholder={__('Phone', 'wpappointments')}
+					placeholder={__('Phone', 'appointments-booking')}
 					className={styles.input}
 					value={formData.phone}
 					onChange={(e) => setField('phone', e.target.value)}
@@ -56,7 +56,7 @@ export default function BookingFlowCustomer() {
 						checked={formData.account}
 						onChange={(e) => setField('account', e.target.checked)}
 					/>
-					{__('Create account', 'wpappointments')}
+					{__('Create account', 'appointments-booking')}
 				</label>
 			</div>
 			{formData.account && (
@@ -65,7 +65,7 @@ export default function BookingFlowCustomer() {
 						type="password"
 						placeholder={__(
 							'Password (optional)',
-							'wpappointments'
+							'appointments-booking'
 						)}
 						className={styles.input}
 						value={formData.password || ''}
@@ -74,7 +74,7 @@ export default function BookingFlowCustomer() {
 					<small className={bookingFlowStyles.fieldInfo}>
 						{__(
 							'When left blank, password will be generated automatically',
-							'wpappointments'
+							'appointments-booking'
 						)}
 					</small>
 				</div>

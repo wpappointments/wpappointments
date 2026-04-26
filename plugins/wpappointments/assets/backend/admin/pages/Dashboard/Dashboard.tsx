@@ -20,7 +20,7 @@ export default function Dashboard() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title={__('Dashboard', 'wpappointments')}>
+			<LayoutDefault title={__('Dashboard', 'appointments-booking')}>
 				<div className={styles.header}>
 					<DashboardStats />
 					<UpcomingAppointments />
@@ -44,7 +44,7 @@ function DashboardAppointments() {
 			<CardHeader>
 				<div className={styles.upcomingTitleWrapper}>
 					<Text size="subheadline">
-						{__('All Appointments', 'wpappointments')}
+						{__('All Appointments', 'appointments-booking')}
 					</Text>
 				</div>
 				<Button
@@ -59,7 +59,7 @@ function DashboardAppointments() {
 						});
 					}}
 				>
-					{__('New Appointment', 'wpappointments')}
+					{__('New Appointment', 'appointments-booking')}
 				</Button>
 			</CardHeader>
 			<CardBody>
@@ -84,7 +84,7 @@ function UpcomingAppointments() {
 		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="subheadline">
-					{__('Upcoming Appointments', 'wpappointments')}
+					{__('Upcoming Appointments', 'appointments-booking')}
 				</Text>
 			</CardHeader>
 			<CardBody>
@@ -100,7 +100,7 @@ function UpcomingAppointments() {
 					}}
 					emptyStateMessage={__(
 						'No appointments in the next 24 hours',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				/>
 			</CardBody>
@@ -119,7 +119,7 @@ function DashboardStats() {
 				<Text size="subheadline">
 					{/* translators: 1 admin area user name */}
 					{sprintf(
-						__('Hello %s!', 'wpappointments'),
+						__('Hello %s!', 'appointments-booking'),
 						settings.firstName
 					)}
 				</Text>
@@ -129,7 +129,10 @@ function DashboardStats() {
 				<img
 					src={statsPlaceholder}
 					className={styles.statsPlaceholderImage}
-					alt={__('Dashboard stats placeholder', 'wpappointments')}
+					alt={__(
+						'Dashboard stats placeholder',
+						'appointments-booking'
+					)}
 				/>
 			</CardBody>
 		</Card>

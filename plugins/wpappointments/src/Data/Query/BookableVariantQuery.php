@@ -53,6 +53,7 @@ class BookableVariantQuery {
 		}
 
 		if ( isset( $query['active'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin filter for variant listing; bounded result set.
 			$args['meta_query'] = array(
 				array(
 					'key'     => 'active',

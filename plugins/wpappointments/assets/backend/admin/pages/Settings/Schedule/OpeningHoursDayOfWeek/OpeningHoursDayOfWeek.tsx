@@ -16,13 +16,13 @@ import ScheduleTimePicker from '../ScheduleTimePicker/ScheduleTimePicker';
 import styles from './OpeningHoursDayOfWeek.module.css';
 
 const DAY_LABELS: Record<Day, string> = {
-	monday: __('Monday', 'wpappointments'),
-	tuesday: __('Tuesday', 'wpappointments'),
-	wednesday: __('Wednesday', 'wpappointments'),
-	thursday: __('Thursday', 'wpappointments'),
-	friday: __('Friday', 'wpappointments'),
-	saturday: __('Saturday', 'wpappointments'),
-	sunday: __('Sunday', 'wpappointments'),
+	monday: __('Monday', 'appointments-booking'),
+	tuesday: __('Tuesday', 'appointments-booking'),
+	wednesday: __('Wednesday', 'appointments-booking'),
+	thursday: __('Thursday', 'appointments-booking'),
+	friday: __('Friday', 'appointments-booking'),
+	saturday: __('Saturday', 'appointments-booking'),
+	sunday: __('Sunday', 'appointments-booking'),
 };
 
 type Props = {
@@ -217,7 +217,7 @@ export default function OpeningHoursDayOfWeek({
 										<Tooltip
 											text={__(
 												'Add new time slot',
-												'wpappointments'
+												'appointments-booking'
 											)}
 										>
 											<Button
@@ -226,7 +226,7 @@ export default function OpeningHoursDayOfWeek({
 												onClick={handleAddSlot}
 												label={__(
 													'Add new time slot',
-													'wpappointments'
+													'appointments-booking'
 												)}
 											/>
 										</Tooltip>
@@ -241,11 +241,11 @@ export default function OpeningHoursDayOfWeek({
 											allDay
 												? __(
 														'Unset all day',
-														'wpappointments'
+														'appointments-booking'
 													)
 												: __(
 														'Set all day',
-														'wpappointments'
+														'appointments-booking'
 													)
 										}
 									>
@@ -257,11 +257,11 @@ export default function OpeningHoursDayOfWeek({
 												allDay
 													? __(
 															'Unset all day',
-															'wpappointments'
+															'appointments-booking'
 														)
 													: __(
 															'Set all day',
-															'wpappointments'
+															'appointments-booking'
 														)
 											}
 											style={{
@@ -279,7 +279,7 @@ export default function OpeningHoursDayOfWeek({
 									<Tooltip
 										text={__(
 											'Remove time slot',
-											'wpappointments'
+											'appointments-booking'
 										)}
 									>
 										<Button
@@ -291,7 +291,7 @@ export default function OpeningHoursDayOfWeek({
 											}
 											label={__(
 												'Remove time slot',
-												'wpappointments'
+												'appointments-booking'
 											)}
 										/>
 									</Tooltip>
@@ -353,12 +353,12 @@ function CopyTimesButton({
 
 	return (
 		<>
-			<Tooltip text={__('Copy times to', 'wpappointments')}>
+			<Tooltip text={__('Copy times to', 'appointments-booking')}>
 				<Button
 					size="small"
 					icon={copy}
 					onClick={() => setIsOpen(!isOpen)}
-					label={__('Copy times to', 'wpappointments')}
+					label={__('Copy times to', 'appointments-booking')}
 				/>
 			</Tooltip>
 			{isOpen && (
@@ -369,12 +369,12 @@ function CopyTimesButton({
 				>
 					<div className={styles.copyPopoverContent}>
 						<div className={styles.copyPopoverHeader}>
-							{__('COPY TIMES TO', 'wpappointments')}
+							{__('COPY TIMES TO', 'appointments-booking')}
 						</div>
 						<div className={styles.copyPopoverList}>
 							<CheckboxControl
 								__nextHasNoMarginBottom
-								label={__('Select all', 'wpappointments')}
+								label={__('Select all', 'appointments-booking')}
 								checked={allSelected}
 								onChange={handleToggleAll}
 							/>
@@ -391,10 +391,10 @@ function CopyTimesButton({
 						</div>
 						<div className={styles.copyPopoverFooter}>
 							<Button variant="tertiary" onClick={handleCancel}>
-								{__('Cancel', 'wpappointments')}
+								{__('Cancel', 'appointments-booking')}
 							</Button>
 							<Button variant="primary" onClick={handleApply}>
-								{__('Apply', 'wpappointments')}
+								{__('Apply', 'appointments-booking')}
 							</Button>
 						</div>
 					</div>

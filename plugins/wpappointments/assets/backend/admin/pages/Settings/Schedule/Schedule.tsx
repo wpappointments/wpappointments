@@ -85,21 +85,21 @@ function formatTimeSummary(schedule: Schedule): string {
 	const enabledDays = DAYS.filter((day) => schedule.days[day]?.enabled);
 
 	if (enabledDays.length === 0) {
-		return __('No working days', 'wpappointments');
+		return __('No working days', 'appointments-booking');
 	}
 
 	if (enabledDays.length === 7) {
-		return __('Every day', 'wpappointments');
+		return __('Every day', 'appointments-booking');
 	}
 
 	const dayLabels: Record<Day, string> = {
-		monday: __('Mon', 'wpappointments'),
-		tuesday: __('Tue', 'wpappointments'),
-		wednesday: __('Wed', 'wpappointments'),
-		thursday: __('Thu', 'wpappointments'),
-		friday: __('Fri', 'wpappointments'),
-		saturday: __('Sat', 'wpappointments'),
-		sunday: __('Sun', 'wpappointments'),
+		monday: __('Mon', 'appointments-booking'),
+		tuesday: __('Tue', 'appointments-booking'),
+		wednesday: __('Wed', 'appointments-booking'),
+		thursday: __('Thu', 'appointments-booking'),
+		friday: __('Fri', 'appointments-booking'),
+		saturday: __('Sat', 'appointments-booking'),
+		sunday: __('Sun', 'appointments-booking'),
 	};
 
 	return enabledDays.map((d) => dayLabels[d]).join(', ');
@@ -154,7 +154,7 @@ function ScheduleRow({
 					</span>
 					{schedule.isDefault && (
 						<span className={styles.badgeDefault}>
-							{__('Default', 'wpappointments')}
+							{__('Default', 'appointments-booking')}
 						</span>
 					)}
 					<span
@@ -165,8 +165,8 @@ function ScheduleRow({
 						}
 					>
 						{schedule.active
-							? __('Active', 'wpappointments')
-							: __('Inactive', 'wpappointments')}
+							? __('Active', 'appointments-booking')
+							: __('Inactive', 'appointments-booking')}
 					</span>
 				</div>
 				<span className={styles.scheduleDescription}>
@@ -237,13 +237,13 @@ function ScheduleEditor({
 			{
 				id: 'name',
 				type: 'text' as const,
-				label: __('Schedule name', 'wpappointments'),
+				label: __('Schedule name', 'appointments-booking'),
 				isValid: { required: true },
 				Edit: TextInput,
 			},
 			{
 				id: 'timezone',
-				label: __('Timezone', 'wpappointments'),
+				label: __('Timezone', 'appointments-booking'),
 				elements: timezoneOptions,
 				Edit: SelectInput,
 			},
@@ -308,7 +308,7 @@ function ScheduleEditor({
 		openSlideOut({
 			id: dangerSlideoutId,
 			parentId: slideoutId,
-			title: __('Danger zone', 'wpappointments'),
+			title: __('Danger zone', 'appointments-booking'),
 			content: (
 				<DangerZoneContent
 					scheduleId={schedule.id}
@@ -323,12 +323,17 @@ function ScheduleEditor({
 		<>
 			{canDelete && isTopSlideout && (
 				<SlideoutHeaderActionsFill>
-					<Tooltip text={__('Delete schedule', 'wpappointments')}>
+					<Tooltip
+						text={__('Delete schedule', 'appointments-booking')}
+					>
 						<WPButton
 							icon={trash}
 							isDestructive
 							onClick={openDangerZone}
-							label={__('Delete schedule', 'wpappointments')}
+							label={__(
+								'Delete schedule',
+								'appointments-booking'
+							)}
 						/>
 					</Tooltip>
 				</SlideoutHeaderActionsFill>
@@ -352,7 +357,7 @@ function ScheduleEditor({
 							fontWeight: 500,
 						}}
 					>
-						{__('Working hours', 'wpappointments')}
+						{__('Working hours', 'appointments-booking')}
 					</Text>
 					{orderedDays.map((day) => (
 						<OpeningHoursDayOfWeek
@@ -373,7 +378,7 @@ function ScheduleEditor({
 				{!isNew && (
 					<ToggleControl
 						__nextHasNoMarginBottom
-						label={__('Default schedule', 'wpappointments')}
+						label={__('Default schedule', 'appointments-booking')}
 						checked={schedule.isDefault}
 						disabled={schedule.isDefault || !schedule.active}
 						help={
@@ -382,7 +387,7 @@ function ScheduleEditor({
 								: !schedule.active
 									? __(
 											'Activate this schedule first to set it as default.',
-											'wpappointments'
+											'appointments-booking'
 										)
 									: undefined
 						}
@@ -411,8 +416,8 @@ function ScheduleEditor({
 					}}
 				>
 					{isNew
-						? __('Create schedule', 'wpappointments')
-						: __('Save changes', 'wpappointments')}
+						? __('Create schedule', 'appointments-booking')
+						: __('Save changes', 'appointments-booking')}
 				</Button>
 			</div>
 		</>
@@ -447,19 +452,19 @@ function DangerZoneContent({
 				<p className={styles.dangerZoneDescription}>
 					{__(
 						'Deleting this schedule is permanent and cannot be undone. Any bookings currently using this schedule will lose their schedule assignment and become unavailable for booking.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 				<p className={styles.dangerZoneDescription}>
 					{__(
 						'If you wish to keep the bookings available, you can choose to reassign them to the default schedule.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 				<CheckboxControl
 					label={__(
 						'Reassign all bookings using this schedule to the default schedule',
-						'wpappointments'
+						'appointments-booking'
 					)}
 					checked={reassign}
 					onChange={setReassign}
@@ -468,11 +473,11 @@ function DangerZoneContent({
 					{reassign
 						? __(
 								'All bookings using this schedule will be moved to the default schedule and will remain available for booking.',
-								'wpappointments'
+								'appointments-booking'
 							)
 						: __(
 								'Bookings using this schedule will have no schedule assigned and will become unavailable for booking until a new schedule is assigned.',
-								'wpappointments'
+								'appointments-booking'
 							)}
 				</p>
 			</div>
@@ -487,21 +492,21 @@ function DangerZoneContent({
 					marginTop: '24px',
 				}}
 			>
-				{__('Delete schedule', 'wpappointments')}
+				{__('Delete schedule', 'appointments-booking')}
 			</Button>
 
 			{showConfirm && (
 				<DeleteModal
-					title={__('Delete Schedule', 'wpappointments')}
+					title={__('Delete Schedule', 'appointments-booking')}
 					message={
 						reassign
 							? __(
 									'Are you sure? All bookings using this schedule will be reassigned to the default schedule.',
-									'wpappointments'
+									'appointments-booking'
 								)
 							: __(
 									'Are you sure? Bookings using this schedule will become unavailable for booking.',
-									'wpappointments'
+									'appointments-booking'
 								)
 					}
 					onConfirmClick={handleDelete}
@@ -529,7 +534,7 @@ export default function ScheduleSettings() {
 					{schedule.name}
 					{!schedule.active && (
 						<span className={styles.badgeInactiveHeader}>
-							{__('Inactive', 'wpappointments')}
+							{__('Inactive', 'appointments-booking')}
 						</span>
 					)}
 				</span>
@@ -561,7 +566,7 @@ export default function ScheduleSettings() {
 
 		openSlideOut({
 			id: 'schedule-new',
-			title: __('New schedule', 'wpappointments'),
+			title: __('New schedule', 'appointments-booking'),
 			content: <ScheduleEditor schedule={emptySchedule} isNew />,
 		});
 	};
@@ -569,7 +574,9 @@ export default function ScheduleSettings() {
 	return (
 		<Card className={globalStyles.card}>
 			<CardHeader>
-				<Text size="title">{__('Schedules', 'wpappointments')}</Text>
+				<Text size="title">
+					{__('Schedules', 'appointments-booking')}
+				</Text>
 			</CardHeader>
 			<CardBody style={{ padding: 0 }}>
 				<div className={styles.scheduleList}>
@@ -585,7 +592,7 @@ export default function ScheduleSettings() {
 						<div className={styles.emptyState}>
 							{__(
 								'No schedules yet. Create one to get started.',
-								'wpappointments'
+								'appointments-booking'
 							)}
 						</div>
 					)}
@@ -593,7 +600,7 @@ export default function ScheduleSettings() {
 			</CardBody>
 			<CardFooter>
 				<Button variant="secondary" onClick={handleCreate}>
-					{__('Add schedule', 'wpappointments')}
+					{__('Add schedule', 'appointments-booking')}
 				</Button>
 			</CardFooter>
 		</Card>

@@ -8,6 +8,10 @@
 
 namespace WPAppointments;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\PluginInfo;
 
 /**
@@ -20,24 +24,11 @@ class Plugin extends Core\Singleton {
 	 * Handle all plugin initialization, activation and deactivation.
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'init', array( 'WPAppointments\Core\PostTypes', 'register' ) );
 		add_action( 'init', array( 'WPAppointments\Availability\DefaultLayers', 'register' ) );
 		Notifications\Notifications::get_instance();
 	}
 
-	/**
-	 * Load plugin text domain for translations
-	 *
-	 * @return void
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain(
-			'wpappointments',
-			false,
-			dirname( plugin_basename( Core\PluginInfo::PLUGIN_FILE ) ) . '/languages'
-		);
-	}
 	/**
 	 * Get instance of a class by key
 	 *
@@ -120,7 +111,7 @@ class Plugin extends Core\Singleton {
 		if ( ! $core_entity_id ) {
 			$entity_post_id = wp_insert_post(
 				array(
-					'post_title'  => __( 'Appointment', 'wpappointments' ),
+					'post_title'  => __( 'Appointment', 'appointments-booking' ),
 					'post_status' => 'publish',
 					'post_type'   => Core\PluginInfo::POST_TYPES['bookable'],
 					'meta_input'  => array(
@@ -143,7 +134,7 @@ class Plugin extends Core\Singleton {
 				// Create default variant for the core entity.
 				$variant_post_id = wp_insert_post(
 					array(
-						'post_title'  => __( 'Default', 'wpappointments' ),
+						'post_title'  => __( 'Default', 'appointments-booking' ),
 						'post_status' => 'publish',
 						'post_type'   => Core\PluginInfo::POST_TYPES['bookable-variant'],
 						'post_parent' => $entity_post_id,

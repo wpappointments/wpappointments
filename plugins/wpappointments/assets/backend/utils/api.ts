@@ -5,7 +5,7 @@ export function missingId(id: number, errorPrefix: string, message?: string) {
 	if (!id) {
 		displayErrorToast(
 			`${errorPrefix}: ${
-				message || __('Item ID is missing', 'wpappointments')
+				message || __('Item ID is missing', 'appointments-booking')
 			}`
 		);
 

@@ -28,26 +28,26 @@ type Response = APIResponse<{
 const fields: Field<Fields>[] = [
 	{
 		id: 'startOfWeek',
-		label: __('Week starts on', 'wpappointments'),
+		label: __('Week starts on', 'appointments-booking'),
 		isValid: { required: true },
 		elements: [
-			{ label: __('Sunday', 'wpappointments'), value: '0' },
-			{ label: __('Monday', 'wpappointments'), value: '1' },
-			{ label: __('Tuesday', 'wpappointments'), value: '2' },
-			{ label: __('Wednesday', 'wpappointments'), value: '3' },
-			{ label: __('Thursday', 'wpappointments'), value: '4' },
-			{ label: __('Friday', 'wpappointments'), value: '5' },
-			{ label: __('Saturday', 'wpappointments'), value: '6' },
+			{ label: __('Sunday', 'appointments-booking'), value: '0' },
+			{ label: __('Monday', 'appointments-booking'), value: '1' },
+			{ label: __('Tuesday', 'appointments-booking'), value: '2' },
+			{ label: __('Wednesday', 'appointments-booking'), value: '3' },
+			{ label: __('Thursday', 'appointments-booking'), value: '4' },
+			{ label: __('Friday', 'appointments-booking'), value: '5' },
+			{ label: __('Saturday', 'appointments-booking'), value: '6' },
 		],
 		Edit: SelectInput,
 	},
 	{
 		id: 'clockType',
-		label: __('Clock type', 'wpappointments'),
+		label: __('Clock type', 'appointments-booking'),
 		isValid: { required: true },
 		elements: [
-			{ label: __('12 hours', 'wpappointments'), value: '12' },
-			{ label: __('24 hours', 'wpappointments'), value: '24' },
+			{ label: __('12 hours', 'appointments-booking'), value: '12' },
+			{ label: __('24 hours', 'appointments-booking'), value: '24' },
 		],
 		Edit: SelectInput,
 	},
@@ -113,7 +113,7 @@ export default function CalendarSettings({
 		}
 
 		if (response === null) {
-			setError(__('Error saving settings', 'wpappointments'));
+			setError(__('Error saving settings', 'appointments-booking'));
 			return;
 		}
 
@@ -143,7 +143,7 @@ export default function CalendarSettings({
 				disabled={!isValid}
 				variant="primary"
 			>
-				{__('Continue', 'wpappointments')}
+				{__('Continue', 'appointments-booking')}
 			</Button>
 		</div>
 	);

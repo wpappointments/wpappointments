@@ -66,7 +66,7 @@ export default function BookingFlowMultiStep() {
 						}}
 						data-step={1}
 					>
-						{__('Select date', 'wpappointments')}
+						{__('Select date', 'appointments-booking')}
 					</button>
 					<button
 						type="button"
@@ -84,7 +84,7 @@ export default function BookingFlowMultiStep() {
 						}}
 						data-step={2}
 					>
-						{__('About you', 'wpappointments')}
+						{__('About you', 'appointments-booking')}
 					</button>
 					<div
 						className={cn({
@@ -94,7 +94,7 @@ export default function BookingFlowMultiStep() {
 						})}
 						data-step={3}
 					>
-						{__('Summary', 'wpappointments')}
+						{__('Summary', 'appointments-booking')}
 					</div>
 				</header>
 			)}
@@ -103,7 +103,9 @@ export default function BookingFlowMultiStep() {
 				<div>
 					{formError && <p className={styles.error}>{formError}</p>}
 					{!hideStepTitles && (
-						<h2>{__('Select date and time', 'wpappointments')}</h2>
+						<h2>
+							{__('Select date and time', 'appointments-booking')}
+						</h2>
 					)}
 					<BookingFlowCalendar
 						onSlotSelected={
@@ -121,7 +123,9 @@ export default function BookingFlowMultiStep() {
 				>
 					{formError && <p className={styles.error}>{formError}</p>}
 					{!hideStepTitles && (
-						<h2>{__('Customer information', 'wpappointments')}</h2>
+						<h2>
+							{__('Customer information', 'appointments-booking')}
+						</h2>
 					)}
 					<BookingFlowCustomer />
 					<Slot name="booking-flow/actions">

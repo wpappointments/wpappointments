@@ -140,7 +140,7 @@ export default function SlideOut({
 							<SlideoutHeaderActionsSlot />
 							<Button
 								icon={closeIcon}
-								label={__('Close', 'wpappointments')}
+								label={__('Close', 'appointments-booking')}
 								onClick={() => closeCurrentSlideOut(onClose)}
 							/>
 						</div>

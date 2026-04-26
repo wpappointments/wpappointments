@@ -12,15 +12,9 @@ sidebar:
 This page is auto-generated from the plugin source code. Do not edit manually â€” run `pnpm docs:generate` to update.
 :::
 
-## `wpa_availability_layers`
+## `wpappointments_availability_layers`
 
 **Source:** `plugins/wpappointments/src/Availability/AvailabilityLayerRegistry.php:98`
-
----
-
-## `wpa_effective_availability`
-
-**Source:** `plugins/wpappointments/src/Availability/AvailabilityEngine.php:108`
 
 ---
 
@@ -30,19 +24,25 @@ This page is auto-generated from the plugin source code. Do not edit manually â€
 
 ---
 
+## `wpappointments_effective_availability`
+
+**Source:** `plugins/wpappointments/src/Availability/AvailabilityEngine.php:108`
+
+---
+
 ## `wpappointments_notification_headers`
 
 Filters the email headers for WP Appointments notifications. @param array  $headers Email headers. @param string $to      Recipient email. @param string $subject Email subject. /
 
-**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:250`
+**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:415`
 
 ---
 
 ## `wpappointments_notification_message`
 
-Filters the email message body for WP Appointments notifications. @param string $message     HTML email body. @param array  $appointment Normalized appointment data. @param string $intro       Introductory sentence. /
+Filters the email message body for WP Appointments notifications. @param string     $message         Plain-text email body. @param array      $appointment     Normalized appointment data. @param array|null $old_appointment Previous appointment data. /
 
-**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:323`
+**Source:** `plugins/wpappointments/src/Notifications/Notifications.php:259`
 
 ---
 

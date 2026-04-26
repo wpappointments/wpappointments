@@ -17,18 +17,18 @@ import LayoutDefault from '~/backend/admin/layouts/LayoutDefault/LayoutDefault';
 
 function getMonthName(month: number) {
 	const months = [
-		__('January', 'wpappointments'),
-		__('February', 'wpappointments'),
-		__('March', 'wpappointments'),
-		__('April', 'wpappointments'),
-		__('May', 'wpappointments'),
-		__('June', 'wpappointments'),
-		__('July', 'wpappointments'),
-		__('August', 'wpappointments'),
-		__('September', 'wpappointments'),
-		__('October', 'wpappointments'),
-		__('November', 'wpappointments'),
-		__('December', 'wpappointments'),
+		__('January', 'appointments-booking'),
+		__('February', 'appointments-booking'),
+		__('March', 'appointments-booking'),
+		__('April', 'appointments-booking'),
+		__('May', 'appointments-booking'),
+		__('June', 'appointments-booking'),
+		__('July', 'appointments-booking'),
+		__('August', 'appointments-booking'),
+		__('September', 'appointments-booking'),
+		__('October', 'appointments-booking'),
+		__('November', 'appointments-booking'),
+		__('December', 'appointments-booking'),
 	];
 
 	return months[month];
@@ -140,13 +140,13 @@ export default function Calendar() {
 	);
 	const [defaultDate, setDefaultDate] = useState(new Date());
 	const daysOfWeek = [
-		__('Mon', 'wpappointments'),
-		__('Tue', 'wpappointments'),
-		__('Wed', 'wpappointments'),
-		__('Thu', 'wpappointments'),
-		__('Fri', 'wpappointments'),
-		__('Sat', 'wpappointments'),
-		__('Sun', 'wpappointments'),
+		__('Mon', 'appointments-booking'),
+		__('Tue', 'appointments-booking'),
+		__('Wed', 'appointments-booking'),
+		__('Thu', 'appointments-booking'),
+		__('Fri', 'appointments-booking'),
+		__('Sat', 'appointments-booking'),
+		__('Sun', 'appointments-booking'),
 	];
 
 	const switchToPreviousMonth = () => {
@@ -204,7 +204,7 @@ export default function Calendar() {
 					variant="secondary"
 					size="compact"
 					onClick={switchToPreviousMonth}
-					aria-label={__('Previous month', 'wpappointments')}
+					aria-label={__('Previous month', 'appointments-booking')}
 				>
 					&lsaquo;
 				</Button>
@@ -213,13 +213,13 @@ export default function Calendar() {
 					size="compact"
 					onClick={switchToToday}
 				>
-					{__('today', 'wpappointments')}
+					{__('today', 'appointments-booking')}
 				</Button>
 				<Button
 					variant="secondary"
 					size="compact"
 					onClick={switchToNextMonth}
-					aria-label={__('Next month', 'wpappointments')}
+					aria-label={__('Next month', 'appointments-booking')}
 				>
 					&rsaquo;
 				</Button>
@@ -229,7 +229,10 @@ export default function Calendar() {
 
 	return (
 		<StateContextProvider>
-			<LayoutDefault title={__('Calendar', 'wpappointments')} fullWidth>
+			<LayoutDefault
+				title={__('Calendar', 'appointments-booking')}
+				fullWidth
+			>
 				<HeaderActionsFill>
 					<Button
 						variant="primary"
@@ -242,7 +245,7 @@ export default function Calendar() {
 							});
 						}}
 					>
-						{__('Create New Appointment', 'wpappointments')}
+						{__('Create New Appointment', 'appointments-booking')}
 					</Button>
 				</HeaderActionsFill>
 				<div className={styles.topBar}>
@@ -262,10 +265,10 @@ export default function Calendar() {
 							className={styles.disabled}
 							title={__(
 								'Currently not available',
-								'wpappointments'
+								'appointments-booking'
 							)}
 						>
-							{__('Day', 'wpappointments')}
+							{__('Day', 'appointments-booking')}
 						</Button>
 						<Button
 							variant="secondary"
@@ -274,13 +277,13 @@ export default function Calendar() {
 							className={styles.disabled}
 							title={__(
 								'Currently not available',
-								'wpappointments'
+								'appointments-booking'
 							)}
 						>
-							{__('Week', 'wpappointments')}
+							{__('Week', 'appointments-booking')}
 						</Button>
 						<Button variant="primary" size="compact">
-							{__('Month', 'wpappointments')}
+							{__('Month', 'appointments-booking')}
 						</Button>
 					</ButtonGroup>
 				</div>
@@ -342,7 +345,8 @@ export default function Calendar() {
 												});
 											}}
 										>
-											+ {__('Add', 'wpappointments')}
+											+{' '}
+											{__('Add', 'appointments-booking')}
 										</Button>
 									</div>
 								</div>

@@ -57,7 +57,7 @@ class Customer {
 		if ( ! is_array( $this->user ) ) {
 			return new WP_Error(
 				'create_user_requires_user_data_array',
-				__( 'When saving user, you have to provide user data array in constructor', 'wpappointments' )
+				__( 'When saving user, you have to provide user data array in constructor', 'appointments-booking' )
 			);
 		}
 
@@ -102,7 +102,7 @@ class Customer {
 		if ( is_array( $this->user ) ) {
 			return new WP_Error(
 				'initialized_with_user_data_array',
-				__( 'When updating customer you have to initialize model with user object or user id', 'wpappointments' )
+				__( 'When updating customer you have to initialize model with user object or user id', 'appointments-booking' )
 			);
 		}
 
@@ -155,7 +155,7 @@ class Customer {
 		if ( ! $deleted ) {
 			return new \WP_Error(
 				'cannot_delete_customer',
-				__( 'Could not delete customer', 'wpappointments' )
+				__( 'Could not delete customer', 'appointments-booking' )
 			);
 		}
 
@@ -210,17 +210,17 @@ class Customer {
 	 */
 	protected function validate_user_id( $user_id ) {
 		if ( ! $user_id ) {
-			return new \WP_Error( 'user_id_required', __( 'User ID is required', 'wpappointments' ) );
+			return new \WP_Error( 'user_id_required', __( 'User ID is required', 'appointments-booking' ) );
 		}
 
 		$user = get_user_by( 'ID', $user_id );
 
 		if ( ! $user ) {
-			return new \WP_Error( 'user_not_found', __( 'User not found', 'wpappointments' ) );
+			return new \WP_Error( 'user_not_found', __( 'User not found', 'appointments-booking' ) );
 		}
 
 		if ( ! $user->has_cap( 'wpa-customer' ) ) {
-			return new \WP_Error( 'user_not_customer', __( 'User is not a customer', 'wpappointments' ) );
+			return new \WP_Error( 'user_not_customer', __( 'User is not a customer', 'appointments-booking' ) );
 		}
 
 		return $user;

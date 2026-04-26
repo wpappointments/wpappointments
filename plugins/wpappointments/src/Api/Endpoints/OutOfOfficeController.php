@@ -114,7 +114,7 @@ class OutOfOfficeController extends Controller {
 		$results['entries'] = $entries;
 
 		return self::response(
-			__( 'OOO entries fetched successfully', 'wpappointments' ),
+			__( 'OOO entries fetched successfully', 'appointments-booking' ),
 			self::paginated( 'entries', $results )
 		);
 	}
@@ -138,13 +138,13 @@ class OutOfOfficeController extends Controller {
 
 		if ( empty( $data['start_date'] ) || empty( $data['end_date'] ) ) {
 			return self::error(
-				new WP_Error( 'ooo_dates_required', __( 'Start date and end date are required', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_required', __( 'Start date and end date are required', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
 		if ( $data['start_date'] > $data['end_date'] ) {
 			return self::error(
-				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -156,7 +156,7 @@ class OutOfOfficeController extends Controller {
 		}
 
 		return self::response(
-			__( 'OOO entry created successfully', 'wpappointments' ),
+			__( 'OOO entry created successfully', 'appointments-booking' ),
 			array( 'entry' => $saved->normalize() )
 		);
 	}
@@ -183,7 +183,7 @@ class OutOfOfficeController extends Controller {
 		}
 
 		return self::response(
-			__( 'OOO entry fetched successfully', 'wpappointments' ),
+			__( 'OOO entry fetched successfully', 'appointments-booking' ),
 			array( 'entry' => $model->normalize() )
 		);
 	}
@@ -215,7 +215,7 @@ class OutOfOfficeController extends Controller {
 
 		if ( $start && $end && $start > $end ) {
 			return self::error(
-				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_inverted', __( 'Start date must be before end date', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -227,7 +227,7 @@ class OutOfOfficeController extends Controller {
 		}
 
 		return self::response(
-			__( 'OOO entry updated successfully', 'wpappointments' ),
+			__( 'OOO entry updated successfully', 'appointments-booking' ),
 			array( 'entry' => $updated->normalize() )
 		);
 	}
@@ -256,7 +256,7 @@ class OutOfOfficeController extends Controller {
 		}
 
 		return self::response(
-			__( 'OOO entry deleted successfully', 'wpappointments' ),
+			__( 'OOO entry deleted successfully', 'appointments-booking' ),
 			array( 'id' => $deleted )
 		);
 	}
@@ -275,7 +275,7 @@ class OutOfOfficeController extends Controller {
 
 		if ( empty( $start_date ) || empty( $end_date ) ) {
 			return self::error(
-				new WP_Error( 'ooo_dates_required', __( 'start_date and end_date are required', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_required', __( 'start_date and end_date are required', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -286,13 +286,13 @@ class OutOfOfficeController extends Controller {
 			|| ! $end_obj || $end_obj->format( 'Y-m-d' ) !== $end_date
 		) {
 			return self::error(
-				new WP_Error( 'ooo_dates_invalid', __( 'start_date and end_date must be valid Y-m-d dates', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_invalid', __( 'start_date and end_date must be valid Y-m-d dates', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
 		if ( $start_date > $end_date ) {
 			return self::error(
-				new WP_Error( 'ooo_dates_order', __( 'start_date must not be after end_date', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'ooo_dates_order', __( 'start_date must not be after end_date', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -336,7 +336,7 @@ class OutOfOfficeController extends Controller {
 		}
 
 		return self::response(
-			__( 'Blocked dates fetched successfully', 'wpappointments' ),
+			__( 'Blocked dates fetched successfully', 'appointments-booking' ),
 			array( 'dates' => $blocked )
 		);
 	}
@@ -354,7 +354,7 @@ class OutOfOfficeController extends Controller {
 		if ( get_current_user_id() !== $owner_id ) {
 			return new WP_Error(
 				'ooo_forbidden',
-				__( 'You do not own this time off entry.', 'wpappointments' ),
+				__( 'You do not own this time off entry.', 'appointments-booking' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -377,7 +377,7 @@ class OutOfOfficeController extends Controller {
 			$obj  = \DateTime::createFromFormat( 'Y-m-d', $date );
 
 			if ( ! $obj || $obj->format( 'Y-m-d' ) !== $date ) {
-				return new WP_Error( 'ooo_invalid_start_date', __( 'start_date must be a valid Y-m-d date', 'wpappointments' ), array( 'status' => 422 ) );
+				return new WP_Error( 'ooo_invalid_start_date', __( 'start_date must be a valid Y-m-d date', 'appointments-booking' ), array( 'status' => 422 ) );
 			}
 
 			$sanitized['start_date'] = $date;
@@ -388,7 +388,7 @@ class OutOfOfficeController extends Controller {
 			$obj  = \DateTime::createFromFormat( 'Y-m-d', $date );
 
 			if ( ! $obj || $obj->format( 'Y-m-d' ) !== $date ) {
-				return new WP_Error( 'ooo_invalid_end_date', __( 'end_date must be a valid Y-m-d date', 'wpappointments' ), array( 'status' => 422 ) );
+				return new WP_Error( 'ooo_invalid_end_date', __( 'end_date must be a valid Y-m-d date', 'appointments-booking' ), array( 'status' => 422 ) );
 			}
 
 			$sanitized['end_date'] = $date;
@@ -398,7 +398,7 @@ class OutOfOfficeController extends Controller {
 			$reason = sanitize_text_field( $data['reason'] );
 
 			if ( ! in_array( $reason, OutOfOffice::ALLOWED_REASONS, true ) ) {
-				return new WP_Error( 'ooo_invalid_reason', __( 'reason must be one of the allowed values', 'wpappointments' ), array( 'status' => 422 ) );
+				return new WP_Error( 'ooo_invalid_reason', __( 'reason must be one of the allowed values', 'appointments-booking' ), array( 'status' => 422 ) );
 			}
 
 			$sanitized['reason'] = $reason;

@@ -55,7 +55,7 @@ export default function AppointmentDetails() {
 
 	return (
 		<SlideOut
-			title={__('Appointment', 'wpappointments')}
+			title={__('Appointment', 'appointments-booking')}
 			id="view-appointment"
 		>
 			<div
@@ -67,13 +67,13 @@ export default function AppointmentDetails() {
 					[styles.isNoshow]: status === 'noshow',
 				})}
 			>
-				{__('Status', 'wpappointments')}:{' '}
+				{__('Status', 'appointments-booking')}:{' '}
 				<span>
 					{status} {getStatusEmoji(status)}
 				</span>
 			</div>
 			<small className={styles.serviceLabel}>
-				{__('Service', 'wpappointments')}:
+				{__('Service', 'appointments-booking')}:
 			</small>
 			<h2 className={styles.title}>{service}</h2>
 			<div className={styles.details}>
@@ -101,7 +101,7 @@ export default function AppointmentDetails() {
 						});
 					}}
 				>
-					{__('Edit Appointment', 'wpappointments')}
+					{__('Edit Appointment', 'appointments-booking')}
 				</Button>
 				{status === 'confirmed' && (
 					<Button
@@ -110,7 +110,7 @@ export default function AppointmentDetails() {
 							setAppointmentId(id);
 						}}
 					>
-						{__('Cancel Appointment', 'wpappointments')}
+						{__('Cancel Appointment', 'appointments-booking')}
 					</Button>
 				)}
 				{status === 'cancelled' && (
@@ -120,7 +120,7 @@ export default function AppointmentDetails() {
 							setAppointmentId(id);
 						}}
 					>
-						{__('Delete Appointment', 'wpappointments')}
+						{__('Delete Appointment', 'appointments-booking')}
 					</Button>
 				)}
 				{status === 'pending' && (
@@ -131,7 +131,7 @@ export default function AppointmentDetails() {
 						}}
 						icon={<Icon icon={check} />}
 					>
-						{__('Confirm Appointment', 'wpappointments')}
+						{__('Confirm Appointment', 'appointments-booking')}
 					</Button>
 				)}
 				{appointmentId > 0 && (
