@@ -268,6 +268,9 @@ export function BookingFlowContextProvider({
 			phone: formData.phone,
 		};
 
+		const entityId =
+			attributes.entityId || window.wpappointments?.entity?.coreEntityId;
+
 		const appointmentData = applyFilters(
 			'wpappointments.bookingFlow.appointmentData',
 			{
@@ -275,6 +278,7 @@ export function BookingFlowContextProvider({
 				date: formData.datetime,
 				createAccount: formData.account,
 				password: formData.password,
+				entityId,
 			},
 			formData
 		);
