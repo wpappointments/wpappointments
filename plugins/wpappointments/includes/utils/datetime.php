@@ -15,7 +15,7 @@ use WPAppointments\Data\Model\Settings;
 /**
  * Create date settings array
  */
-function wpappointments_create_date_settings_array() {
+function create_date_settings_array() {
 	$php_to_js_date_format_map = array(
 		'F j, Y' => 'MMMM d, yyyy',
 		'Y-m-d'  => 'yyyy-MM-dd',
@@ -30,7 +30,7 @@ function wpappointments_create_date_settings_array() {
 	);
 
 	$settings = new Settings();
-	$formats  = wpappointments_get_date_formats();
+	$formats  = get_date_formats();
 
 	return array(
 		'timezones'    => timezone_identifiers_list(),
@@ -56,7 +56,7 @@ function wpappointments_create_date_settings_array() {
  *
  * @return array
  */
-function wpappointments_get_date_formats() {
+function get_date_formats() {
 	$settings = new Settings();
 
 	$date = $settings->get_setting( 'general', 'dateFormat' );
