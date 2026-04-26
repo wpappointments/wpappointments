@@ -114,7 +114,7 @@ class VariantsController extends Controller {
 		$results['variants'] = $variants;
 
 		return self::response(
-			__( 'Variants fetched successfully', 'wpappointments' ),
+			__( 'Variants fetched successfully', 'appointments-booking' ),
 			self::paginated( 'variants', $results )
 		);
 	}
@@ -140,7 +140,7 @@ class VariantsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Variant created successfully', 'wpappointments' ),
+			__( 'Variant created successfully', 'appointments-booking' ),
 			array( 'variant' => $saved->normalize() )
 		);
 	}
@@ -169,7 +169,7 @@ class VariantsController extends Controller {
 		);
 
 		return self::response(
-			__( 'Variants generated successfully', 'wpappointments' ),
+			__( 'Variants generated successfully', 'appointments-booking' ),
 			array( 'variants' => $normalized )
 		);
 	}
@@ -195,14 +195,14 @@ class VariantsController extends Controller {
 			return self::error(
 				new WP_Error(
 					'rest_invalid_parent',
-					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					__( 'Variant does not belong to the specified bookable entity', 'appointments-booking' ),
 					array( 'status' => 404 )
 				)
 			);
 		}
 
 		return self::response(
-			__( 'Variant fetched successfully', 'wpappointments' ),
+			__( 'Variant fetched successfully', 'appointments-booking' ),
 			array( 'variant' => $model->normalize() )
 		);
 	}
@@ -229,7 +229,7 @@ class VariantsController extends Controller {
 			return self::error(
 				new WP_Error(
 					'rest_invalid_parent',
-					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					__( 'Variant does not belong to the specified bookable entity', 'appointments-booking' ),
 					array( 'status' => 404 )
 				)
 			);
@@ -242,7 +242,7 @@ class VariantsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Variant updated successfully', 'wpappointments' ),
+			__( 'Variant updated successfully', 'appointments-booking' ),
 			array( 'variant' => $updated->normalize() )
 		);
 	}
@@ -268,7 +268,7 @@ class VariantsController extends Controller {
 			return self::error(
 				new WP_Error(
 					'rest_invalid_parent',
-					__( 'Variant does not belong to the specified bookable entity', 'wpappointments' ),
+					__( 'Variant does not belong to the specified bookable entity', 'appointments-booking' ),
 					array( 'status' => 404 )
 				)
 			);
@@ -281,7 +281,7 @@ class VariantsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Variant deleted successfully', 'wpappointments' ),
+			__( 'Variant deleted successfully', 'appointments-booking' ),
 			array( 'id' => $deleted )
 		);
 	}

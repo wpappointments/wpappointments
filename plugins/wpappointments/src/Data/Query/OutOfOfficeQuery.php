@@ -32,8 +32,10 @@ class OutOfOfficeQuery {
 			'posts_per_page' => Query::sanitize_per_page( $query ),
 			'post_status'    => 'publish',
 			'orderby'        => 'meta_value',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Required to filter OOO entries by user; scope is bounded to a single user's entries.
 			'meta_key'       => 'start_date',
 			'order'          => 'ASC',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin-only query bounded by user_id meta to fetch OOO entries per user.
 			'meta_query'     => array(
 				array(
 					'key'     => 'user_id',
@@ -94,6 +96,7 @@ class OutOfOfficeQuery {
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bounded by explicit user_ids and date range; admin/availability-only scope.
 			'meta_query'     => array(
 				'relation' => 'AND',
 				array(
@@ -137,6 +140,7 @@ class OutOfOfficeQuery {
 			'post_type'      => PluginInfo::POST_TYPES['ooo'],
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bounded by explicit user_ids; admin-scoped OOO lookup.
 			'meta_query'     => array(
 				array(
 					'key'     => 'user_id',

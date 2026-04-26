@@ -34,7 +34,7 @@ class PostTypes {
 		register_post_type(
 			PluginInfo::POST_TYPES['appointment'],
 			array(
-				'label'               => __( 'Appointments', 'wpappointments' ),
+				'label'               => __( 'Appointments', 'appointments-booking' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
@@ -60,7 +60,7 @@ class PostTypes {
 		register_post_type(
 			PluginInfo::POST_TYPES['schedule'],
 			array(
-				'label'               => __( 'Schedules', 'wpappointments' ),
+				'label'               => __( 'Schedules', 'appointments-booking' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
@@ -90,7 +90,7 @@ class PostTypes {
 		register_post_type(
 			PluginInfo::POST_TYPES['bookable'],
 			array(
-				'label'               => __( 'Bookables', 'wpappointments' ),
+				'label'               => __( 'Bookables', 'appointments-booking' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
@@ -129,7 +129,7 @@ class PostTypes {
 		register_post_type(
 			PluginInfo::POST_TYPES['bookable-variant'],
 			array(
-				'label'               => __( 'Bookable Variants', 'wpappointments' ),
+				'label'               => __( 'Bookable Variants', 'appointments-booking' ),
 				'public'              => false,
 				'show_ui'             => true,
 				'show_in_menu'        => false,
@@ -165,7 +165,7 @@ class PostTypes {
 		register_post_type(
 			PluginInfo::POST_TYPES['ooo'],
 			array(
-				'label'               => __( 'Out of Office', 'wpappointments' ),
+				'label'               => __( 'Out of Office', 'appointments-booking' ),
 				'public'              => false,
 				'show_ui'             => false,
 				'show_in_menu'        => false,

@@ -83,7 +83,7 @@ export default function ScheduleTimePicker({
 					}}
 					options={hourOptions}
 					hideLabelFromVision
-					label={__('Hour', 'wpappointments')}
+					label={__('Hour', 'appointments-booking')}
 					__nextHasNoMarginBottom
 				/>
 				<span className={styles.timePickerSeparator}>:</span>
@@ -92,7 +92,7 @@ export default function ScheduleTimePicker({
 					onChange={(value) => onTimeChange(value, 'minute')}
 					options={minutes}
 					hideLabelFromVision
-					label={__('Minute', 'wpappointments')}
+					label={__('Minute', 'appointments-booking')}
 					__nextHasNoMarginBottom
 				/>
 			</div>

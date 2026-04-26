@@ -101,7 +101,7 @@ class ServiceCategoriesController extends Controller {
 		);
 
 		return self::response(
-			__( 'Service categories fetched successfully', 'wpappointments' ),
+			__( 'Service categories fetched successfully', 'appointments-booking' ),
 			array(
 				'categories' => $categories,
 			)
@@ -124,7 +124,7 @@ class ServiceCategoriesController extends Controller {
 			return self::error(
 				new \WP_Error(
 					'category_name_required',
-					__( 'Category name is required', 'wpappointments' ),
+					__( 'Category name is required', 'appointments-booking' ),
 					array( 'status' => 422 )
 				)
 			);
@@ -139,7 +139,7 @@ class ServiceCategoriesController extends Controller {
 		$term = get_term( $result['term_id'], $taxonomy );
 
 		return self::response(
-			__( 'Service category created successfully', 'wpappointments' ),
+			__( 'Service category created successfully', 'appointments-booking' ),
 			array(
 				'category' => array(
 					'id'    => $term->term_id,
@@ -168,7 +168,7 @@ class ServiceCategoriesController extends Controller {
 			return self::error(
 				new \WP_Error(
 					'category_name_required',
-					__( 'Category name is required', 'wpappointments' ),
+					__( 'Category name is required', 'appointments-booking' ),
 					array( 'status' => 422 )
 				)
 			);
@@ -183,7 +183,7 @@ class ServiceCategoriesController extends Controller {
 		$term = get_term( $id, $taxonomy );
 
 		return self::response(
-			__( 'Service category updated successfully', 'wpappointments' ),
+			__( 'Service category updated successfully', 'appointments-booking' ),
 			array(
 				'category' => array(
 					'id'    => $term->term_id,
@@ -213,7 +213,7 @@ class ServiceCategoriesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Service category deleted successfully', 'wpappointments' ),
+			__( 'Service category deleted successfully', 'appointments-booking' ),
 			array(
 				'categoryId' => $id,
 			)

@@ -75,7 +75,7 @@ class AvailabilityEngine {
 			}
 
 			$layer_data = call_user_func( $layer['callback'], $context );
-			$layer_data = apply_filters( "wpa_availability_layer_{$slug}", $layer_data, $context );
+			$layer_data = apply_filters( "wpappointments_availability_layer_{$slug}", $layer_data, $context );
 
 			if ( null !== $layer_data && ! self::is_empty_availability( $layer_data ) ) {
 				$base = $layer_data;
@@ -95,7 +95,7 @@ class AvailabilityEngine {
 			}
 
 			$layer_data = call_user_func( $layer['callback'], $context );
-			$layer_data = apply_filters( "wpa_availability_layer_{$slug}", $layer_data, $context );
+			$layer_data = apply_filters( "wpappointments_availability_layer_{$slug}", $layer_data, $context );
 
 			// Skip layers that return no data (pass-through).
 			if ( null === $layer_data || self::is_empty_availability( $layer_data ) ) {
@@ -105,7 +105,7 @@ class AvailabilityEngine {
 			$result = self::intersect( $result, $layer_data );
 		}
 
-		return apply_filters( 'wpa_effective_availability', $result, $context );
+		return apply_filters( 'wpappointments_effective_availability', $result, $context );
 	}
 
 	/**

@@ -40,28 +40,30 @@ export default function Summary({
 		<>
 			<Card className={styles.summary}>
 				<CardHeader className={styles.summaryHeader}>
-					{__('Date and time summary', 'wpappointments')}:{' '}
+					{__('Date and time summary', 'appointments-booking')}:{' '}
 					{headerActions}
 				</CardHeader>
 				<CardBody className={styles.summaryBody}>
 					<div className={styles.summaryRow}>
-						<strong>{__('Date', 'wpappointments')}</strong>{' '}
+						<strong>{__('Date', 'appointments-booking')}</strong>{' '}
 						{date && formatDate(date)}
 					</div>
 					<div className={styles.summaryRow}>
-						<strong>{__('Time', 'wpappointments')}</strong>{' '}
+						<strong>{__('Time', 'appointments-booking')}</strong>{' '}
 						{/* translators: %s: start time, %s: end time */}
 						{sprintf(
-							__('%s to %s', 'wpappointments'),
+							__('%s to %s', 'appointments-booking'),
 							formatTime(dateTimeStart),
 							formatTime(dateTimeEnd)
 						)}
 						{userDiffTimezone && ` (${userDiffTimezone})`}
 					</div>
 					<div className={styles.summaryRow}>
-						<strong>{__('Duration', 'wpappointments')}</strong>{' '}
+						<strong>
+							{__('Duration', 'appointments-booking')}
+						</strong>{' '}
 						{/* TODO: use _n translation for this */}
-						{duration} {__('minutes', 'wpappointments')}
+						{duration} {__('minutes', 'appointments-booking')}
 					</div>
 				</CardBody>
 			</Card>
@@ -71,7 +73,7 @@ export default function Summary({
 				>
 					{__(
 						'Warning: Selected time is already booked or outside of working hours',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</div>
 			)}

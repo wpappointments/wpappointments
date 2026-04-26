@@ -94,7 +94,7 @@ class CustomersController extends Controller {
 		$results = CustomersQuery::all( $query );
 
 		return self::response(
-			__( 'Customers fetched successfully', 'wpappointments' ),
+			__( 'Customers fetched successfully', 'appointments-booking' ),
 			self::paginated( 'customers', $results )
 		);
 	}
@@ -127,7 +127,7 @@ class CustomersController extends Controller {
 		}
 
 		return self::response(
-			__( 'Customer created successfully', 'wpappointments' ),
+			__( 'Customer created successfully', 'appointments-booking' ),
 			array(
 				'customer' => $saved_customer->normalize(),
 			),
@@ -161,7 +161,7 @@ class CustomersController extends Controller {
 		}
 
 		return self::response(
-			__( 'Customer updated successfully', 'wpappointments' ),
+			__( 'Customer updated successfully', 'appointments-booking' ),
 			array(
 				'customer' => $updated_customer->normalize(),
 			),
@@ -184,7 +184,7 @@ class CustomersController extends Controller {
 		}
 
 		return self::response(
-			__( 'Customer deleted successfully', 'wpappointments' ),
+			__( 'Customer deleted successfully', 'appointments-booking' ),
 			array(
 				'id' => $deleted,
 			),

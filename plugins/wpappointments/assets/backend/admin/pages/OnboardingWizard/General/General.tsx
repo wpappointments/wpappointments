@@ -30,23 +30,23 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'firstName',
 		type: 'text',
-		label: __('First name', 'wpappointments'),
-		placeholder: __('Eg. John', 'wpappointments'),
+		label: __('First name', 'appointments-booking'),
+		placeholder: __('Eg. John', 'appointments-booking'),
 		isValid: { required: true },
 		Edit: TextInput,
 	},
 	{
 		id: 'lastName',
 		type: 'text',
-		label: __('Last name', 'wpappointments'),
-		placeholder: __('Eg. Doe', 'wpappointments'),
+		label: __('Last name', 'appointments-booking'),
+		placeholder: __('Eg. Doe', 'appointments-booking'),
 		isValid: { required: true },
 		Edit: TextInput,
 	},
 	{
 		id: 'email',
 		type: 'email',
-		label: __('Email', 'wpappointments'),
+		label: __('Email', 'appointments-booking'),
 		placeholder: 'example@example.com',
 		isValid: { required: true },
 		Edit: TextInput,
@@ -54,8 +54,8 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'phoneNumber',
 		type: 'telephone',
-		label: __('Phone number', 'wpappointments'),
-		placeholder: __('Eg. +1992334211', 'wpappointments'),
+		label: __('Phone number', 'appointments-booking'),
+		placeholder: __('Eg. +1992334211', 'appointments-booking'),
 		Edit: TextInput,
 	},
 ];
@@ -115,7 +115,7 @@ export default function GeneralSettings({
 		}
 
 		if (response === null) {
-			setError(__('Error saving settings', 'wpappointments'));
+			setError(__('Error saving settings', 'appointments-booking'));
 			return;
 		}
 
@@ -145,7 +145,7 @@ export default function GeneralSettings({
 				disabled={!isValid}
 				variant="primary"
 			>
-				{__('Continue', 'wpappointments')}
+				{__('Continue', 'appointments-booking')}
 			</Button>
 		</div>
 	);

@@ -115,7 +115,7 @@ class BookablesController extends Controller {
 		$results['bookables'] = $bookables;
 
 		return self::response(
-			__( 'Bookables fetched successfully', 'wpappointments' ),
+			__( 'Bookables fetched successfully', 'appointments-booking' ),
 			self::paginated( 'bookables', $results )
 		);
 	}
@@ -132,7 +132,7 @@ class BookablesController extends Controller {
 
 		if ( empty( $data['name'] ) ) {
 			return self::error(
-				new WP_Error( 'bookable_name_required', __( 'Bookable name is required', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'bookable_name_required', __( 'Bookable name is required', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -144,7 +144,7 @@ class BookablesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Bookable created successfully', 'wpappointments' ),
+			__( 'Bookable created successfully', 'appointments-booking' ),
 			array( 'bookable' => $saved->normalize() )
 		);
 	}
@@ -165,7 +165,7 @@ class BookablesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Bookable fetched successfully', 'wpappointments' ),
+			__( 'Bookable fetched successfully', 'appointments-booking' ),
 			array( 'bookable' => $model->normalize() )
 		);
 	}
@@ -189,7 +189,7 @@ class BookablesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Bookable updated successfully', 'wpappointments' ),
+			__( 'Bookable updated successfully', 'appointments-booking' ),
 			array( 'bookable' => $updated->normalize() )
 		);
 	}
@@ -212,7 +212,7 @@ class BookablesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Bookable deleted successfully', 'wpappointments' ),
+			__( 'Bookable deleted successfully', 'appointments-booking' ),
 			array( 'id' => $deleted )
 		);
 	}

@@ -63,7 +63,7 @@ export default function TimeSlotPicker({
 	return (
 		<div className={styles.timeSlotPicker}>
 			<h5 className={styles.timeSlotHeader}>
-				{__('Select a time slot for', 'wpappointments')}{' '}
+				{__('Select a time slot for', 'appointments-booking')}{' '}
 				{format(date, 'LLLL do')}
 			</h5>
 			<div
@@ -109,10 +109,10 @@ export default function TimeSlotPicker({
 			</div>
 			{datetime && (
 				<h5 className={styles.timeSlotHeader}>
-					<span>{__('Selected time:', 'wpappointments')}</span>{' '}
+					<span>{__('Selected time:', 'appointments-booking')}</span>{' '}
 					<strong>
 						{format(new Date(datetime), 'LLLL do')},{' '}
-					{formatTime(new Date(datetime))}
+						{formatTime(new Date(datetime))}
 					</strong>
 				</h5>
 			)}

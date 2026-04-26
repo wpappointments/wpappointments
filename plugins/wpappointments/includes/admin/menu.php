@@ -24,8 +24,8 @@ function menu() {
 	$icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJ1dWlkLTExODg4NjBlLWQ4YjQtNDVjYi1hMWNjLTYzZTkxNzNhYmVjMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGlkPSJ1dWlkLTRmZjQ2YjljLTMxMjItNDBjMC05OWNkLTIxMDVkMTZiZDRjMCI+PHBhdGggZD0ibTgsMEMzLjU5LDAsMCwzLjU5LDAsOHMzLjU5LDgsOCw4LDgtMy41OSw4LThTMTIuNDEsMCw4LDBabTAsMTIuNDVjLTIuNDYsMC00LjQ2LTItNC40Ni00LjQ1czItNC40Niw0LjQ2LTQuNDYsNC40NiwyLDQuNDYsNC40Ni0yLDQuNDUtNC40Niw0LjQ1WiIgZmlsbD0iIzE3NGFmZiIvPjxyZWN0IHg9IjYuMzQiIHk9IjYuMDgiIHdpZHRoPSI0LjQ2IiBoZWlnaHQ9IjIuODMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yLjc5IDguMjYpIHJvdGF0ZSgtNDUpIiBmaWxsPSIjMTc0YWZmIi8+PC9nPjwvc3ZnPg==';
 
 	add_menu_page(
-		__( 'WP Appointments', 'wpappointments' ),
-		__( 'Appointments', 'wpappointments' ),
+		__( 'Appointments', 'appointments-booking' ),
+		__( 'Appointments', 'appointments-booking' ),
 		Capabilities::VIEW_APPOINTMENTS,
 		'wpappointments',
 		__NAMESPACE__ . '\\admin_page',
@@ -35,8 +35,8 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
-		__( 'Calendar', 'wpappointments' ),
-		__( 'Calendar', 'wpappointments' ),
+		__( 'Calendar', 'appointments-booking' ),
+		__( 'Calendar', 'appointments-booking' ),
 		Capabilities::VIEW_APPOINTMENTS,
 		'wpappointments-calendar',
 		__NAMESPACE__ . '\\calendar_page'
@@ -44,8 +44,8 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
-		__( 'Customers', 'wpappointments' ),
-		__( 'Customers', 'wpappointments' ),
+		__( 'Customers', 'appointments-booking' ),
+		__( 'Customers', 'appointments-booking' ),
 		Capabilities::VIEW_CUSTOMERS,
 		'wpappointments-customers',
 		__NAMESPACE__ . '\customers_page'
@@ -53,8 +53,8 @@ function menu() {
 
 	add_submenu_page(
 		'wpappointments',
-		__( 'Settings', 'wpappointments' ),
-		__( 'Settings', 'wpappointments' ),
+		__( 'Settings', 'appointments-booking' ),
+		__( 'Settings', 'appointments-booking' ),
 		Capabilities::VIEW_SETTINGS,
 		'wpappointments-settings',
 		__NAMESPACE__ . '\\settings_page'
@@ -62,8 +62,8 @@ function menu() {
 
 	add_submenu_page(
 		'noexistingpageslug',
-		__( 'Wizard', 'wpappointments' ),
-		__( 'Wizard', 'wpappointments' ),
+		__( 'Wizard', 'appointments-booking' ),
+		__( 'Wizard', 'appointments-booking' ),
 		Capabilities::EDIT_SETTINGS,
 		'wpappointments-wizard',
 		__NAMESPACE__ . '\\wizard_page'

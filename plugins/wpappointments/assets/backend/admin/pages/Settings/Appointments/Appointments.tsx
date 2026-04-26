@@ -41,11 +41,11 @@ type Fields = {
 };
 
 const LEAD_TIME_UNIT_OPTIONS = [
-	{ label: __('Minutes', 'wpappointments'), value: 'minute' },
-	{ label: __('Hours', 'wpappointments'), value: 'hour' },
-	{ label: __('Days', 'wpappointments'), value: 'day' },
-	{ label: __('Weeks', 'wpappointments'), value: 'week' },
-	{ label: __('Months', 'wpappointments'), value: 'month' },
+	{ label: __('Minutes', 'appointments-booking'), value: 'minute' },
+	{ label: __('Hours', 'appointments-booking'), value: 'hour' },
+	{ label: __('Days', 'appointments-booking'), value: 'day' },
+	{ label: __('Weeks', 'appointments-booking'), value: 'week' },
+	{ label: __('Months', 'appointments-booking'), value: 'month' },
 ];
 
 type Response = APIResponse<{
@@ -57,34 +57,37 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'coreEntityName',
 		type: 'text',
-		label: __('Service Name', 'wpappointments'),
-		placeholder: __('Appointment', 'wpappointments'),
+		label: __('Service Name', 'appointments-booking'),
+		placeholder: __('Appointment', 'appointments-booking'),
 		Edit: TextInput,
 	},
 	{
 		id: 'defaultLength',
 		type: 'integer',
-		label: __('Default appointment length (in minutes)', 'wpappointments'),
+		label: __(
+			'Default appointment length (in minutes)',
+			'appointments-booking'
+		),
 		isValid: { min: 1 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'timePickerPrecision',
 		type: 'integer',
-		label: __('Time picker precision (in minutes)', 'wpappointments'),
+		label: __('Time picker precision (in minutes)', 'appointments-booking'),
 		isValid: { min: 1, max: 60 * 24 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'minLeadTimeValue',
 		type: 'integer',
-		label: __('Minimum lead time', 'wpappointments'),
+		label: __('Minimum lead time', 'appointments-booking'),
 		isValid: { min: 0 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'minLeadTimeUnit',
-		label: __('Minimum lead time unit', 'wpappointments'),
+		label: __('Minimum lead time unit', 'appointments-booking'),
 		elements: LEAD_TIME_UNIT_OPTIONS,
 		Edit: (props: DataFormControlProps<Fields>) => (
 			<SelectInput {...props} labelInvisible />
@@ -93,14 +96,14 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'maxLeadTimeValue',
 		type: 'integer',
-		label: __('Maximum lead time', 'wpappointments'),
-		description: __('Leave at 0 for no limit.', 'wpappointments'),
+		label: __('Maximum lead time', 'appointments-booking'),
+		description: __('Leave at 0 for no limit.', 'appointments-booking'),
 		isValid: { min: 0 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'maxLeadTimeUnit',
-		label: __('Maximum lead time unit', 'wpappointments'),
+		label: __('Maximum lead time unit', 'appointments-booking'),
 		elements: LEAD_TIME_UNIT_OPTIONS,
 		Edit: (props: DataFormControlProps<Fields>) => (
 			<SelectInput {...props} labelInvisible />
@@ -108,14 +111,17 @@ const fields: Field<Fields>[] = [
 	},
 	{
 		id: 'defaultStatus',
-		label: __('Default appointment status', 'wpappointments'),
+		label: __('Default appointment status', 'appointments-booking'),
 		description: __(
 			'Default status for appointments created by your clients. You can change the status of each appointment individually.',
-			'wpappointments'
+			'appointments-booking'
 		),
 		elements: [
-			{ label: __('Confirmed', 'wpappointments'), value: 'confirmed' },
-			{ label: __('Pending', 'wpappointments'), value: 'pending' },
+			{
+				label: __('Confirmed', 'appointments-booking'),
+				value: 'confirmed',
+			},
+			{ label: __('Pending', 'appointments-booking'), value: 'pending' },
 		],
 		Edit: SelectInput,
 	},
@@ -194,7 +200,9 @@ export default function AppointmentsSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast(__('Error saving settings', 'wpappointments'));
+			displayErrorToast(
+				__('Error saving settings', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -208,7 +216,7 @@ export default function AppointmentsSettings() {
 		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">
-					{__('Appointments Settings', 'wpappointments')}
+					{__('Appointments Settings', 'appointments-booking')}
 				</Text>
 			</CardHeader>
 			<CardBody>
@@ -230,7 +238,7 @@ export default function AppointmentsSettings() {
 					disabled={!isValid}
 					variant="primary"
 				>
-					{__('Save changes', 'wpappointments')}
+					{__('Save changes', 'appointments-booking')}
 				</Button>
 			</CardFooter>
 		</Card>

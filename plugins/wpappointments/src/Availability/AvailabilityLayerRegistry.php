@@ -39,7 +39,7 @@ class AvailabilityLayerRegistry extends Singleton {
 			return new WP_Error(
 				'availability_layer_exists',
 				/* translators: %s: layer slug */
-				sprintf( __( 'Availability layer "%s" is already registered', 'wpappointments' ), $slug )
+				sprintf( __( 'Availability layer "%s" is already registered', 'appointments-booking' ), $slug )
 			);
 		}
 
@@ -48,14 +48,14 @@ class AvailabilityLayerRegistry extends Singleton {
 		if ( ! in_array( $type, array( 'base', 'narrowing' ), true ) ) {
 			return new WP_Error(
 				'availability_layer_invalid_type',
-				__( 'Availability layer type must be "base" or "narrowing"', 'wpappointments' )
+				__( 'Availability layer type must be "base" or "narrowing"', 'appointments-booking' )
 			);
 		}
 
 		if ( ! isset( $config['callback'] ) || ! is_callable( $config['callback'] ) ) {
 			return new WP_Error(
 				'availability_layer_invalid_callback',
-				__( 'Availability layer must have a callable callback', 'wpappointments' )
+				__( 'Availability layer must have a callable callback', 'appointments-booking' )
 			);
 		}
 
@@ -95,7 +95,7 @@ class AvailabilityLayerRegistry extends Singleton {
 			}
 		);
 
-		return apply_filters( 'wpa_availability_layers', $layers );
+		return apply_filters( 'wpappointments_availability_layers', $layers );
 	}
 
 	/**

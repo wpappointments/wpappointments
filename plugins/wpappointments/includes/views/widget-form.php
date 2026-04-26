@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <p>
 <label for="<?php echo esc_attr( $widget->get_field_id( 'title' ) ); ?>">
-<?php esc_html_e( 'Title:', 'wpappointments' ); ?>
+<?php esc_html_e( 'Title:', 'appointments-booking' ); ?>
 </label>
 <input
 	class="widefat"
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 </p>
 <p>
 <label for="<?php echo esc_attr( $widget->get_field_id( 'flow_type' ) ); ?>">
-<?php esc_html_e( 'Flow type:', 'wpappointments' ); ?>
+<?php esc_html_e( 'Flow type:', 'appointments-booking' ); ?>
 </label>
 <select
 	class="widefat"
@@ -38,16 +38,16 @@ defined( 'ABSPATH' ) || exit;
 	name="<?php echo esc_attr( $widget->get_field_name( 'flow_type' ) ); ?>"
 >
 	<option value="one_step" <?php selected( $flow_type, 'one_step' ); ?>>
-<?php esc_html_e( 'One Step', 'wpappointments' ); ?>
+<?php esc_html_e( 'One Step', 'appointments-booking' ); ?>
 	</option>
 	<option value="multi_step" <?php selected( $flow_type, 'multi_step' ); ?>>
-<?php esc_html_e( 'Multi Step', 'wpappointments' ); ?>
+<?php esc_html_e( 'Multi Step', 'appointments-booking' ); ?>
 	</option>
 </select>
 </p>
 <p>
 <label for="<?php echo esc_attr( $widget->get_field_id( 'alignment' ) ); ?>">
-<?php esc_html_e( 'Alignment:', 'wpappointments' ); ?>
+<?php esc_html_e( 'Alignment:', 'appointments-booking' ); ?>
 </label>
 <select
 	class="widefat"
@@ -55,19 +55,19 @@ defined( 'ABSPATH' ) || exit;
 	name="<?php echo esc_attr( $widget->get_field_name( 'alignment' ) ); ?>"
 >
 	<option value="left" <?php selected( $alignment, 'left' ); ?>>
-<?php esc_html_e( 'Left', 'wpappointments' ); ?>
+<?php esc_html_e( 'Left', 'appointments-booking' ); ?>
 	</option>
 	<option value="center" <?php selected( $alignment, 'center' ); ?>>
-<?php esc_html_e( 'Center', 'wpappointments' ); ?>
+<?php esc_html_e( 'Center', 'appointments-booking' ); ?>
 	</option>
 	<option value="right" <?php selected( $alignment, 'right' ); ?>>
-<?php esc_html_e( 'Right', 'wpappointments' ); ?>
+<?php esc_html_e( 'Right', 'appointments-booking' ); ?>
 	</option>
 </select>
 </p>
 <p>
 <label for="<?php echo esc_attr( $widget->get_field_id( 'width' ) ); ?>">
-<?php esc_html_e( 'Width:', 'wpappointments' ); ?>
+<?php esc_html_e( 'Width:', 'appointments-booking' ); ?>
 </label>
 <select
 	class="widefat"
@@ -75,10 +75,10 @@ defined( 'ABSPATH' ) || exit;
 	name="<?php echo esc_attr( $widget->get_field_name( 'width' ) ); ?>"
 >
 	<option value="narrow" <?php selected( $width, 'narrow' ); ?>>
-<?php esc_html_e( 'Narrow', 'wpappointments' ); ?>
+<?php esc_html_e( 'Narrow', 'appointments-booking' ); ?>
 	</option>
 	<option value="full" <?php selected( $width, 'full' ); ?>>
-<?php esc_html_e( 'Full', 'wpappointments' ); ?>
+<?php esc_html_e( 'Full', 'appointments-booking' ); ?>
 	</option>
 </select>
 </p>
@@ -91,7 +91,7 @@ defined( 'ABSPATH' ) || exit;
 <?php checked( $trim_unavailable ); ?>
 />
 <label for="<?php echo esc_attr( $widget->get_field_id( 'trim_unavailable' ) ); ?>">
-<?php esc_html_e( 'Trim unavailable slots', 'wpappointments' ); ?>
+<?php esc_html_e( 'Trim unavailable slots', 'appointments-booking' ); ?>
 </label>
 </p>
 <p>
@@ -103,6 +103,6 @@ defined( 'ABSPATH' ) || exit;
 <?php checked( $slots_as_buttons ); ?>
 />
 <label for="<?php echo esc_attr( $widget->get_field_id( 'slots_as_buttons' ) ); ?>">
-<?php esc_html_e( 'Show time slots as buttons', 'wpappointments' ); ?>
+<?php esc_html_e( 'Show time slots as buttons', 'appointments-booking' ); ?>
 </label>
 </p>

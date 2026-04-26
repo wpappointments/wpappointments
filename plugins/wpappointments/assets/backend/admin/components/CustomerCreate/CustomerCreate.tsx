@@ -64,26 +64,26 @@ export default function CustomerCreate({
 			{
 				id: 'name',
 				type: 'text',
-				label: __('Name', 'wpappointments'),
+				label: __('Name', 'appointments-booking'),
 				isValid: { required: true },
 				Edit: TextInput,
 			},
 			{
 				id: 'email',
 				type: 'email',
-				label: __('Email', 'wpappointments'),
+				label: __('Email', 'appointments-booking'),
 				Edit: TextInput,
 			},
 			{
 				id: 'phone',
 				type: 'telephone',
-				label: __('Phone', 'wpappointments'),
+				label: __('Phone', 'appointments-booking'),
 				Edit: TextInput,
 			},
 			{
 				id: 'createAccount',
 				type: 'boolean',
-				label: __('Create account', 'wpappointments'),
+				label: __('Create account', 'appointments-booking'),
 				isVisible: () => mode === 'create' && screen !== 'customers',
 				Edit: CheckboxInput,
 			},
@@ -149,12 +149,12 @@ export default function CustomerCreate({
 
 	const submitText =
 		mode === 'create'
-			? __('Create', 'wpappointments')
-			: __('Update', 'wpappointments');
+			? __('Create', 'appointments-booking')
+			: __('Update', 'appointments-booking');
 	const title =
 		mode === 'create'
-			? __('New Customer', 'wpappointments')
-			: __('Update Customer', 'wpappointments');
+			? __('New Customer', 'appointments-booking')
+			: __('Update Customer', 'appointments-booking');
 
 	return (
 		<SlideOut title={title} id="customer">

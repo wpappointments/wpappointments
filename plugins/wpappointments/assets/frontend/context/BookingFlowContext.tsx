@@ -256,7 +256,9 @@ export function BookingFlowContextProvider({
 
 	const onSubmit = async () => {
 		if (!formData.datetime) {
-			setFormError(__('Please select a date and time', 'wpappointments'));
+			setFormError(
+				__('Please select a date and time', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -288,7 +290,9 @@ export function BookingFlowContextProvider({
 		});
 
 		if (error) {
-			setFormError(__('Error creating appointment', 'wpappointments'));
+			setFormError(
+				__('Error creating appointment', 'appointments-booking')
+			);
 			doAction('wpappointments.bookingFlow.submitError', error);
 		}
 

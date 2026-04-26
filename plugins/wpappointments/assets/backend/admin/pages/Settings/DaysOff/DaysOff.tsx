@@ -34,11 +34,11 @@ import {
 import globalStyles from 'global.module.css';
 
 const REASON_LABELS: Record<OooReason, string> = {
-	unspecified: __('Unspecified', 'wpappointments'),
-	vacation: __('Vacation', 'wpappointments'),
-	travel: __('Travel', 'wpappointments'),
-	sick_leave: __('Sick Leave', 'wpappointments'),
-	holiday: __('Holiday', 'wpappointments'),
+	unspecified: __('Unspecified', 'appointments-booking'),
+	vacation: __('Vacation', 'appointments-booking'),
+	travel: __('Travel', 'appointments-booking'),
+	sick_leave: __('Sick Leave', 'appointments-booking'),
+	holiday: __('Holiday', 'appointments-booking'),
 };
 
 const REASON_OPTIONS = Object.entries(REASON_LABELS).map(([value, label]) => ({
@@ -127,14 +127,14 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 		{
 			id: 'reason',
 			type: 'text',
-			label: __('Reason', 'wpappointments'),
+			label: __('Reason', 'appointments-booking'),
 			elements: REASON_OPTIONS,
 			Edit: SelectInput,
 		},
 		{
 			id: 'notes',
 			type: 'text',
-			label: __('Notes', 'wpappointments'),
+			label: __('Notes', 'appointments-booking'),
 			Edit: TextareaInput,
 		},
 		{
@@ -142,7 +142,7 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 			type: 'boolean',
 			label: __(
 				'Show note in customer-facing calendar',
-				'wpappointments'
+				'appointments-booking'
 			),
 			Edit: CheckboxInput,
 		},
@@ -166,7 +166,7 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 
 	const handleSubmit = async () => {
 		if (!rangeStart) {
-			setError(__('Please select a date range', 'wpappointments'));
+			setError(__('Please select a date range', 'appointments-booking'));
 			return;
 		}
 
@@ -216,13 +216,18 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 		<>
 			{entry && isTopSlideout && (
 				<SlideoutHeaderActionsFill>
-					<Tooltip text={__('Delete time off', 'wpappointments')}>
+					<Tooltip
+						text={__('Delete time off', 'appointments-booking')}
+					>
 						<Button
 							icon={trash}
 							isDestructive
 							disabled={saving}
 							onClick={handleDelete}
-							label={__('Delete time off', 'wpappointments')}
+							label={__(
+								'Delete time off',
+								'appointments-booking'
+							)}
 						/>
 					</Tooltip>
 				</SlideoutHeaderActionsFill>
@@ -233,8 +238,11 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 						{rangeStart && rangeEnd
 							? `${formatYmd(rangeStart)} — ${formatYmd(rangeEnd)}`
 							: rangeStart
-								? `${formatYmd(rangeStart)} — ${__('select end date', 'wpappointments')}`
-								: __('Select date range', 'wpappointments')}
+								? `${formatYmd(rangeStart)} — ${__('select end date', 'appointments-booking')}`
+								: __(
+										'Select date range',
+										'appointments-booking'
+									)}
 					</p>
 					<DateRangePicker
 						startDate={rangeStart}
@@ -274,8 +282,8 @@ function OooEditor({ entry }: { entry?: OooEntry }) {
 					}}
 				>
 					{entry
-						? __('Save changes', 'wpappointments')
-						: __('Add time off', 'wpappointments')}
+						? __('Save changes', 'appointments-booking')
+						: __('Add time off', 'appointments-booking')}
 				</Button>
 			</div>
 		</>
@@ -298,7 +306,7 @@ export default function DaysOffSettings() {
 	const handleCreate = () => {
 		openSlideOut({
 			id: 'ooo-new',
-			title: __('Add time off', 'wpappointments'),
+			title: __('Add time off', 'appointments-booking'),
 			content: <OooEditor />,
 		});
 	};
@@ -308,7 +316,7 @@ export default function DaysOffSettings() {
 			<Card className={globalStyles.card}>
 				<CardHeader>
 					<Text size="title">
-						{__('Your time off', 'wpappointments')}
+						{__('Your time off', 'appointments-booking')}
 					</Text>
 				</CardHeader>
 				<CardBody style={{ padding: 0 }}>
@@ -322,14 +330,17 @@ export default function DaysOffSettings() {
 						))}
 						{entries.length === 0 && (
 							<div className={styles.emptyState}>
-								{__('No time off scheduled.', 'wpappointments')}
+								{__(
+									'No time off scheduled.',
+									'appointments-booking'
+								)}
 							</div>
 						)}
 					</div>
 				</CardBody>
 				<CardFooter>
 					<Button variant="secondary" onClick={handleCreate}>
-						{__('Add time off', 'wpappointments')}
+						{__('Add time off', 'appointments-booking')}
 					</Button>
 				</CardFooter>
 			</Card>

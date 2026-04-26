@@ -114,7 +114,7 @@ class SchedulesController extends Controller {
 		$results['schedules'] = $schedules;
 
 		return self::response(
-			__( 'Schedules fetched successfully', 'wpappointments' ),
+			__( 'Schedules fetched successfully', 'appointments-booking' ),
 			self::paginated( 'schedules', $results )
 		);
 	}
@@ -131,7 +131,7 @@ class SchedulesController extends Controller {
 
 		if ( empty( $data['name'] ) ) {
 			return self::error(
-				new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -150,7 +150,7 @@ class SchedulesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Schedule created successfully', 'wpappointments' ),
+			__( 'Schedule created successfully', 'appointments-booking' ),
 			array( 'schedule' => $saved->normalize() )
 		);
 	}
@@ -171,7 +171,7 @@ class SchedulesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Schedule fetched successfully', 'wpappointments' ),
+			__( 'Schedule fetched successfully', 'appointments-booking' ),
 			array( 'schedule' => $model->normalize() )
 		);
 	}
@@ -195,7 +195,7 @@ class SchedulesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Schedule updated successfully', 'wpappointments' ),
+			__( 'Schedule updated successfully', 'appointments-booking' ),
 			array( 'schedule' => $updated->normalize() )
 		);
 	}
@@ -219,7 +219,7 @@ class SchedulesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Schedule deleted successfully', 'wpappointments' ),
+			__( 'Schedule deleted successfully', 'appointments-booking' ),
 			array( 'id' => $deleted )
 		);
 	}
@@ -244,14 +244,14 @@ class SchedulesController extends Controller {
 
 		if ( ! $active ) {
 			return self::error(
-				new WP_Error( 'schedule_inactive', __( 'Cannot set an inactive schedule as default', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'schedule_inactive', __( 'Cannot set an inactive schedule as default', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
 		update_option( 'wpappointments_default_scheduleId', $id );
 
 		return self::response(
-			__( 'Default schedule updated', 'wpappointments' ),
+			__( 'Default schedule updated', 'appointments-booking' ),
 			array( 'schedule' => $model->normalize() )
 		);
 	}

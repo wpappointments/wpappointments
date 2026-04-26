@@ -51,7 +51,7 @@ class Schedule {
 			if ( PluginInfo::POST_TYPES['schedule'] !== $schedule->post_type ) {
 				$this->schedule = new WP_Error(
 					'schedule_invalid_post_type',
-					__( 'Post is not a schedule. Expected post_type wpa-schedule', 'wpappointments' )
+					__( 'Post is not a schedule. Expected post_type wpa-schedule', 'appointments-booking' )
 				);
 				return;
 			}
@@ -63,12 +63,12 @@ class Schedule {
 		} elseif ( is_null( $schedule ) ) {
 			$this->schedule = new WP_Error(
 				'schedule_cannot_be_null',
-				__( 'Schedule value passed to constructor cannot be null', 'wpappointments' )
+				__( 'Schedule value passed to constructor cannot be null', 'appointments-booking' )
 			);
 		} else {
 			$this->schedule = new WP_Error(
 				'schedule_invalid_type',
-				__( 'Schedule value passed to constructor is invalid. Expected array, int, string or WP_Post', 'wpappointments' )
+				__( 'Schedule value passed to constructor is invalid. Expected array, int, string or WP_Post', 'appointments-booking' )
 			);
 		}
 	}
@@ -86,7 +86,7 @@ class Schedule {
 		if ( $this->schedule instanceof WP_Post ) {
 			return new WP_Error(
 				'schedule_already_persisted',
-				__( 'This schedule is already persisted. Use update() instead', 'wpappointments' )
+				__( 'This schedule is already persisted. Use update() instead', 'appointments-booking' )
 			);
 		}
 
@@ -156,7 +156,7 @@ class Schedule {
 		if ( ! $this->schedule ) {
 			return new WP_Error(
 				'schedule_object_expected',
-				__( 'Schedule not found. Instantiate Schedule class with a schedule object', 'wpappointments' )
+				__( 'Schedule not found. Instantiate Schedule class with a schedule object', 'appointments-booking' )
 			);
 		}
 
@@ -165,7 +165,7 @@ class Schedule {
 
 		if ( isset( $data['name'] ) ) {
 			if ( '' === trim( $data['name'] ) ) {
-				return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'wpappointments' ), array( 'status' => 422 ) );
+				return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'appointments-booking' ), array( 'status' => 422 ) );
 			}
 			$post_data['post_title'] = $data['name'];
 		}
@@ -224,7 +224,7 @@ class Schedule {
 		if ( ! $this->schedule ) {
 			return new WP_Error(
 				'schedule_object_expected',
-				__( 'Schedule not found', 'wpappointments' )
+				__( 'Schedule not found', 'appointments-booking' )
 			);
 		}
 
@@ -236,7 +236,7 @@ class Schedule {
 		if ( absint( $default_id ) === $id ) {
 			return new WP_Error(
 				'schedule_cannot_delete_default',
-				__( 'Cannot delete the default schedule', 'wpappointments' ),
+				__( 'Cannot delete the default schedule', 'appointments-booking' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -246,8 +246,9 @@ class Schedule {
 			array(
 				'post_type'      => PluginInfo::POST_TYPES['bookable'],
 				'posts_per_page' => -1,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key,WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Admin-only query scoped to schedule reassignment flow.
 				'meta_key'       => 'schedule_id',
-				'meta_value'     => $id,
+				'meta_value'     => $id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			)
 		);
 
@@ -264,7 +265,7 @@ class Schedule {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'schedule_delete_failed',
-				__( 'Failed to delete schedule', 'wpappointments' )
+				__( 'Failed to delete schedule', 'appointments-booking' )
 			);
 		}
 
@@ -427,17 +428,17 @@ class Schedule {
 	 */
 	private function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
-			return new WP_Error( 'schedule_id_required', __( 'Schedule ID is required', 'wpappointments' ) );
+			return new WP_Error( 'schedule_id_required', __( 'Schedule ID is required', 'appointments-booking' ) );
 		}
 
 		$post = get_post( $post_id );
 
 		if ( ! $post ) {
-			return new WP_Error( 'schedule_not_found', __( 'Schedule not found', 'wpappointments' ) );
+			return new WP_Error( 'schedule_not_found', __( 'Schedule not found', 'appointments-booking' ) );
 		}
 
 		if ( PluginInfo::POST_TYPES['schedule'] !== $post->post_type ) {
-			return new WP_Error( 'schedule_invalid_type', __( 'Post is not a schedule', 'wpappointments' ) );
+			return new WP_Error( 'schedule_invalid_type', __( 'Post is not a schedule', 'appointments-booking' ) );
 		}
 
 		return absint( $post_id );
@@ -452,7 +453,7 @@ class Schedule {
 	 */
 	private function validate_schedule_data( $data ) {
 		if ( ! isset( $data['name'] ) || '' === trim( $data['name'] ) ) {
-			return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'wpappointments' ) );
+			return new WP_Error( 'schedule_name_required', __( 'Schedule name is required', 'appointments-booking' ) );
 		}
 
 		return $data;

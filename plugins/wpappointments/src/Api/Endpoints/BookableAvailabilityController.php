@@ -88,7 +88,7 @@ class BookableAvailabilityController extends Controller {
 		$buffers      = self::get_effective_buffers( $variant_id );
 
 		return self::response(
-			__( 'Availability fetched successfully', 'wpappointments' ),
+			__( 'Availability fetched successfully', 'appointments-booking' ),
 			array(
 				'availability' => $availability,
 				'buffers'      => $buffers,
@@ -125,7 +125,7 @@ class BookableAvailabilityController extends Controller {
 		}
 
 		return self::response(
-			__( 'Entity availability fetched successfully', 'wpappointments' ),
+			__( 'Entity availability fetched successfully', 'appointments-booking' ),
 			array( 'variants' => $variants )
 		);
 	}
@@ -151,13 +151,13 @@ class BookableAvailabilityController extends Controller {
 
 		if ( ! in_array( $timezone, \DateTimeZone::listIdentifiers(), true ) ) {
 			return self::error(
-				new WP_Error( 'invalid_timezone', __( 'Invalid timezone', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'invalid_timezone', __( 'Invalid timezone', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
 		if ( ! is_string( $calendar_raw ) ) {
 			return self::error(
-				new WP_Error( 'missing_calendar', __( 'Calendar data is required', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'missing_calendar', __( 'Calendar data is required', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -165,7 +165,7 @@ class BookableAvailabilityController extends Controller {
 
 		if ( ! is_array( $calendar ) ) {
 			return self::error(
-				new WP_Error( 'invalid_calendar', __( 'Invalid calendar data', 'wpappointments' ), array( 'status' => 422 ) )
+				new WP_Error( 'invalid_calendar', __( 'Invalid calendar data', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -207,7 +207,7 @@ class BookableAvailabilityController extends Controller {
 
 		if ( empty( $all_dates ) ) {
 			return self::response(
-				__( 'Calendar slots fetched successfully', 'wpappointments' ),
+				__( 'Calendar slots fetched successfully', 'appointments-booking' ),
 				array( 'availability' => array() )
 			);
 		}
@@ -408,7 +408,7 @@ class BookableAvailabilityController extends Controller {
 		}
 
 		return self::response(
-			__( 'Calendar slots fetched successfully', 'wpappointments' ),
+			__( 'Calendar slots fetched successfully', 'appointments-booking' ),
 			array( 'availability' => $availability )
 		);
 	}

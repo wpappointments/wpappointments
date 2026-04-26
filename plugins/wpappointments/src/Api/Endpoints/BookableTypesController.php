@@ -65,7 +65,7 @@ class BookableTypesController extends Controller {
 		}
 
 		return self::response(
-			__( 'Bookable types fetched successfully', 'wpappointments' ),
+			__( 'Bookable types fetched successfully', 'appointments-booking' ),
 			array( 'types' => $response )
 		);
 	}
