@@ -29,7 +29,7 @@ if ( ! get_option( 'wpappointments_uninstall_cleanup' ) ) {
 global $wpdb;
 
 // --- Custom post types ---
-$wpa_post_types = array(
+$wpappointments_post_types = array(
 	'wpa-appointment',
 	'wpa-schedule',
 	'wpa-bookable',
@@ -37,39 +37,39 @@ $wpa_post_types = array(
 	'wpa-ooo',
 );
 
-foreach ( $wpa_post_types as $wpa_post_type ) {
-	$wpa_ids = get_posts(
+foreach ( $wpappointments_post_types as $wpappointments_post_type ) {
+	$wpappointments_ids = get_posts(
 		array(
-			'post_type'      => $wpa_post_type,
+			'post_type'      => $wpappointments_post_type,
 			'post_status'    => 'any',
 			'posts_per_page' => -1,
 			'fields'         => 'ids',
 		)
 	);
 
-	foreach ( $wpa_ids as $wpa_id ) {
-		wp_delete_post( (int) $wpa_id, true );
+	foreach ( $wpappointments_ids as $wpappointments_id ) {
+		wp_delete_post( (int) $wpappointments_id, true );
 	}
 }
 
 // --- Taxonomies ---
-$wpa_taxonomies = array( 'wpa-service-category' );
+$wpappointments_taxonomies = array( 'wpa-service-category' );
 
-foreach ( $wpa_taxonomies as $wpa_taxonomy ) {
+foreach ( $wpappointments_taxonomies as $wpappointments_taxonomy ) {
 	// get_terms needs the taxonomy to be registered in some contexts; fall back
 	// to a direct query to stay robust when called outside the normal runtime.
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- One-shot uninstall path; no runtime caching applicable.
-	$wpa_term_ids = $wpdb->get_col(
+	$wpappointments_term_ids = $wpdb->get_col(
 		$wpdb->prepare(
 			"SELECT t.term_id FROM {$wpdb->terms} AS t
 			 INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id
 			 WHERE tt.taxonomy = %s",
-			$wpa_taxonomy
+			$wpappointments_taxonomy
 		)
 	);
 
-	foreach ( $wpa_term_ids as $wpa_term_id ) {
-		wp_delete_term( (int) $wpa_term_id, $wpa_taxonomy );
+	foreach ( $wpappointments_term_ids as $wpappointments_term_id ) {
+		wp_delete_term( (int) $wpappointments_term_id, $wpappointments_taxonomy );
 	}
 }
 
@@ -94,7 +94,7 @@ $wpdb->query(
 );
 
 // --- Capabilities ---
-$wpa_caps = array(
+$wpappointments_caps = array(
 	'wpa_manage_appointments',
 	'wpa_manage_settings',
 	'wpa_manage_services',
@@ -103,12 +103,12 @@ $wpa_caps = array(
 	'wpa_manage_bookables',
 );
 
-$roles = wp_roles();
+$wpappointments_roles = wp_roles();
 
-if ( $roles && ! empty( $roles->role_objects ) ) {
-	foreach ( $roles->role_objects as $wpa_role ) {
-		foreach ( $wpa_caps as $wpa_cap ) {
-			$wpa_role->remove_cap( $wpa_cap );
+if ( $wpappointments_roles && ! empty( $wpappointments_roles->role_objects ) ) {
+	foreach ( $wpappointments_roles->role_objects as $wpappointments_role ) {
+		foreach ( $wpappointments_caps as $wpappointments_cap ) {
+			$wpappointments_role->remove_cap( $wpappointments_cap );
 		}
 	}
 }
