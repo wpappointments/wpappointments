@@ -31,7 +31,7 @@ function scripts() {
 	);
 
 	$date = array(
-		'date' => create_date_settings_array(),
+		'date' => \WPAppointments\Utils\DateTime\create_date_settings_array(),
 	);
 
 	$screen = get_current_screen();

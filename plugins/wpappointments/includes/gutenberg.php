@@ -55,7 +55,7 @@ function block_editor_data() {
 				'namespace' => trailingslashit( PluginInfo::get_api_namespace() ),
 				'url'       => esc_url_raw( trailingslashit( rest_url( PluginInfo::get_api_namespace() ) ) ),
 			),
-			'date'     => \create_date_settings_array(),
+			'date'     => \WPAppointments\Utils\DateTime\create_date_settings_array(),
 			'settings' => array(
 				'appointments' => array(
 					'defaultLength' => get_option( 'wpappointments_appointments_defaultLength', 30 ),

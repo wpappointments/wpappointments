@@ -6,11 +6,13 @@
  * @since 0.0.1
  */
 
+namespace WPAppointments\Utils\DateTime;
+
+use WPAppointments\Data\Model\Settings;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-use WPAppointments\Data\Model\Settings;
 
 /**
  * Create date settings array
