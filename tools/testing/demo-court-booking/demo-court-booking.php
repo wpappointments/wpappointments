@@ -93,7 +93,7 @@ add_action(
 					array(
 						'page_title' => 'Courts',
 						'menu_title' => 'Courts',
-						'capability' => 'wpa_manage_bookables',
+						'capability' => 'wpa_view_bookables',
 						'icon'       => 'dashicons-location',
 					)
 				);
