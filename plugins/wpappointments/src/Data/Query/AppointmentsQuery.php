@@ -221,6 +221,7 @@ class AppointmentsQuery {
 				self::DEFAULT_QUERY_PART,
 				array(
 					'posts_per_page' => - 1,
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Date range queries expected to be used in availability checks; not expected to return unbounded result sets.
 					'meta_query'     => $meta_query,
 				)
 			)

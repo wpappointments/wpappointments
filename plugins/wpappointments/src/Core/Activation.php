@@ -8,53 +8,33 @@
 
 namespace WPAppointments\Core;
 
+use WPAppointments\Plugin;
+
 /**
  * Activate and deactivate plugin hooks
  */
 class Activation {
 	/**
-	 * Plugin info
-	 *
-	 * @var Info
-	 */
-	private $info;
-
-	/**
-	 * Plugin instance
-	 *
-	 * @var Plugin
-	 */
-	private $plugin;
-
-	/**
-	 * Constructor
-	 *
-	 * @param Info   $info   Plugin info instance.
-	 * @param Plugin $plugin Plugin instance.
-	 */
-	public function __construct( $info = null, $plugin = null ) {
-		$this->info   = $info;
-		$this->plugin = $plugin;
-	}
-
-	/**
 	 * Register activation and deactivation hooks
+	 *
+	 * @param PluginInfo $info   Plugin info instance.
+	 * @param Plugin     $plugin Plugin instance.
 	 *
 	 * @return void
 	 */
-	public function register_hooks() {
+	public static function register_hooks( PluginInfo $info, Plugin $plugin ) {
 		register_activation_hook(
-			$this->info->get_plugin_file(),
+			$info->get_plugin_file(),
 			array(
-				$this->plugin,
+				$plugin,
 				'on_plugin_activation',
 			)
 		);
 
 		register_deactivation_hook(
-			$this->info->get_plugin_file(),
+			$info->get_plugin_file(),
 			array(
-				$this->plugin,
+				$plugin,
 				'on_plugin_deactivation',
 			)
 		);
