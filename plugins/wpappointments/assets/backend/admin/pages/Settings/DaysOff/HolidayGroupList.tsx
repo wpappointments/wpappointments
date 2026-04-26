@@ -131,8 +131,8 @@ function HolidayGroupSection({
 					</span>
 					<span className={styles.holidayTypeBadge}>
 						{group.type === 'country'
-							? __('Country', 'wpappointments')
-							: __('Religious', 'wpappointments')}
+							? __('Country', 'appointments-booking')
+							: __('Religious', 'appointments-booking')}
 					</span>
 				</div>
 				<div className={styles.holidayGroupHeaderRight}>
@@ -148,7 +148,10 @@ function HolidayGroupSection({
 						isDestructive
 						size="small"
 						onClick={handleRemove}
-						label={__('Remove holiday group', 'wpappointments')}
+						label={__(
+							'Remove holiday group',
+							'appointments-booking'
+						)}
 					/>
 				</div>
 			</div>
@@ -184,7 +187,7 @@ export default function HolidayGroupList() {
 	const handleAdd = () => {
 		openSlideOut({
 			id: 'holiday-add',
-			title: __('Add holidays', 'wpappointments'),
+			title: __('Add holidays', 'appointments-booking'),
 			content: <AddHolidayGroupSlideout />,
 		});
 	};
@@ -192,14 +195,16 @@ export default function HolidayGroupList() {
 	return (
 		<Card className={globalStyles.card}>
 			<CardHeader>
-				<Text size="title">{__('Holidays', 'wpappointments')}</Text>
+				<Text size="title">
+					{__('Holidays', 'appointments-booking')}
+				</Text>
 			</CardHeader>
 			<CardBody style={{ padding: 0 }}>
 				{groups.length === 0 && (
 					<div className={styles.emptyState}>
 						{__(
 							'No holiday groups added. Add a country or religious holiday set to automatically block those dates.',
-							'wpappointments'
+							'appointments-booking'
 						)}
 					</div>
 				)}
@@ -213,7 +218,7 @@ export default function HolidayGroupList() {
 			</CardBody>
 			<CardFooter>
 				<Button variant="secondary" onClick={handleAdd}>
-					{__('Add holidays', 'wpappointments')}
+					{__('Add holidays', 'appointments-booking')}
 				</Button>
 			</CardFooter>
 		</Card>

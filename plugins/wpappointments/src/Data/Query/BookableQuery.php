@@ -69,6 +69,7 @@ class BookableQuery {
 		}
 
 		if ( ! empty( $meta_query ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Admin-only filter for bookables by active/type; bounded result set.
 			$args['meta_query'] = $meta_query;
 		}
 

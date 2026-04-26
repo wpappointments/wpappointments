@@ -45,23 +45,29 @@ export function formatDateRelative(
 	const formatRelativeLocale = {
 		/* translators: %s: time, eeee: day of week name */
 		lastWeek: sprintf(
-			__("'last' eeee 'at' %s", 'wpappointments'),
+			__("'last' eeee 'at' %s", 'appointments-booking'),
 			formatsJs.time
 		),
 		/* translators: %s: time */
 		yesterday: sprintf(
-			__("'yesterday at' %s", 'wpappointments'),
+			__("'yesterday at' %s", 'appointments-booking'),
 			formatsJs.time
 		),
 		/* translators: %s: time */
-		today: sprintf(__("'today at' %s", 'wpappointments'), formatsJs.time),
+		today: sprintf(
+			__("'today at' %s", 'appointments-booking'),
+			formatsJs.time
+		),
 		/* translators: %s: time */
 		tomorrow: sprintf(
-			__("'tomorrow at' %s", 'wpappointments'),
+			__("'tomorrow at' %s", 'appointments-booking'),
 			formatsJs.time
 		),
 		/* translators: %s: time, eeee: day of week name */
-		nextWeek: sprintf(__("eeee 'at' %s", 'wpappointments'), formatsJs.time),
+		nextWeek: sprintf(
+			__("eeee 'at' %s", 'appointments-booking'),
+			formatsJs.time
+		),
 		/* translators: %s: date */
 		other: formatsJs.date,
 	};
@@ -92,23 +98,23 @@ export function getWeekDays(format: 'short' | 'long' = 'short') {
 	const { startOfWeek } = dateSettings;
 
 	const weekDaysLong = [
-		__('Sunday', 'wpappointments'),
-		__('Monday', 'wpappointments'),
-		__('Tuesday', 'wpappointments'),
-		__('Wednesday', 'wpappointments'),
-		__('Thursday', 'wpappointments'),
-		__('Friday', 'wpappointments'),
-		__('Saturday', 'wpappointments'),
+		__('Sunday', 'appointments-booking'),
+		__('Monday', 'appointments-booking'),
+		__('Tuesday', 'appointments-booking'),
+		__('Wednesday', 'appointments-booking'),
+		__('Thursday', 'appointments-booking'),
+		__('Friday', 'appointments-booking'),
+		__('Saturday', 'appointments-booking'),
 	];
 
 	const weekDaysShort = [
-		__('Sun', 'wpappointments'),
-		__('Mon', 'wpappointments'),
-		__('Tue', 'wpappointments'),
-		__('Wed', 'wpappointments'),
-		__('Thu', 'wpappointments'),
-		__('Fri', 'wpappointments'),
-		__('Sat', 'wpappointments'),
+		__('Sun', 'appointments-booking'),
+		__('Mon', 'appointments-booking'),
+		__('Tue', 'appointments-booking'),
+		__('Wed', 'appointments-booking'),
+		__('Thu', 'appointments-booking'),
+		__('Fri', 'appointments-booking'),
+		__('Sat', 'appointments-booking'),
 	];
 
 	const weekDays = format === 'short' ? weekDaysShort : weekDaysLong;

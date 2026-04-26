@@ -71,9 +71,12 @@ export default function BookableListPage({
 	const { openSlideOut } = useSlideout();
 
 	/* translators: %s: bookable type label */
-	const addNewLabel = sprintf(__('Add New %s', 'wpappointments'), label);
+	const addNewLabel = sprintf(
+		__('Add New %s', 'appointments-booking'),
+		label
+	);
 	/* translators: %s: bookable type label */
-	const editLabel = sprintf(__('Edit %s', 'wpappointments'), label);
+	const editLabel = sprintf(__('Edit %s', 'appointments-booking'), label);
 
 	const load = useCallback(async () => {
 		setLoading(true);
@@ -145,7 +148,7 @@ export default function BookableListPage({
 		{
 			id: 'edit',
 			icon: edit,
-			label: __('Edit', 'wpappointments'),
+			label: __('Edit', 'appointments-booking'),
 			callback: (items) => {
 				handleEdit(items[0]);
 			},
@@ -153,15 +156,15 @@ export default function BookableListPage({
 		{
 			id: 'delete',
 			icon: trash,
-			label: __('Delete', 'wpappointments'),
+			label: __('Delete', 'appointments-booking'),
 			RenderModal: ({ items, closeModal }) => {
 				const entity = items[0];
 				return (
 					<DeleteModal
-						title={__('Delete Item', 'wpappointments')}
+						title={__('Delete Item', 'appointments-booking')}
 						message={__(
 							'Are you sure you want to delete this item? This action cannot be undone.',
-							'wpappointments'
+							'appointments-booking'
 						)}
 						onConfirmClick={async () => {
 							if (entity.id) {
@@ -179,7 +182,7 @@ export default function BookableListPage({
 	const headerActions = (
 		<HeaderActionsFill>
 			<Button variant="primary" onClick={handleCreate}>
-				{__('Add New', 'wpappointments')}
+				{__('Add New', 'appointments-booking')}
 			</Button>
 		</HeaderActionsFill>
 	);
@@ -199,7 +202,7 @@ export default function BookableListPage({
 			<>
 				{headerActions}
 				<TableFullEmpty>
-					<p>{__('No items found.', 'wpappointments')}</p>
+					<p>{__('No items found.', 'appointments-booking')}</p>
 				</TableFullEmpty>
 			</>
 		);
@@ -231,11 +234,11 @@ function buildFields(columns?: BookableTypeColumn[]): Field<BookableEntity>[] {
 	const defaultColumns: BookableTypeColumn[] = [
 		{
 			id: 'name',
-			header: __('Name', 'wpappointments'),
+			header: __('Name', 'appointments-booking'),
 		},
 		{
 			id: 'active',
-			header: __('Status', 'wpappointments'),
+			header: __('Status', 'appointments-booking'),
 			render: ({ item }) => {
 				return (
 					<span
@@ -244,8 +247,8 @@ function buildFields(columns?: BookableTypeColumn[]): Field<BookableEntity>[] {
 						}}
 					>
 						{item.active
-							? __('Active', 'wpappointments')
-							: __('Inactive', 'wpappointments')}
+							? __('Active', 'appointments-booking')
+							: __('Inactive', 'appointments-booking')}
 					</span>
 				);
 			},
@@ -273,8 +276,8 @@ function buildFields(columns?: BookableTypeColumn[]): Field<BookableEntity>[] {
 						return (
 							<>
 								{value
-									? __('Yes', 'wpappointments')
-									: __('No', 'wpappointments')}
+									? __('Yes', 'appointments-booking')
+									: __('No', 'appointments-booking')}
 							</>
 						);
 					}

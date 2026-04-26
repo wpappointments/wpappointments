@@ -41,7 +41,7 @@
 			"type": "number"
 		}
 	},
-	"textdomain": "wpappointments",
+	"textdomain": "appointments-booking",
 	"editorScript": "file:../../../../../build/booking-flow-block.tsx.js",
 	"editorStyle": "file:./index.css",
 	"style": ["file:../../../../../build/booking-flow-block-view.tsx.css"],

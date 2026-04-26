@@ -185,7 +185,7 @@ export default function TimeFinder({
 	}, []);
 
 	if (!month) {
-		return <div>{__('Loading...', 'wpappointments')}</div>;
+		return <div>{__('Loading...', 'appointments-booking')}</div>;
 	}
 
 	const daysInMonth = getDaysInMonth(
@@ -253,7 +253,7 @@ export default function TimeFinder({
 
 	return (
 		<SlideOut
-			title={__('Find time', 'wpappointments')}
+			title={__('Find time', 'appointments-booking')}
 			id={`find-time-${mode}`}
 		>
 			<div className={styles.header}>
@@ -266,7 +266,7 @@ export default function TimeFinder({
 							size="small"
 							onClick={setDayTime('allDay')}
 						>
-							{__('All day', 'wpappointments')}
+							{__('All day', 'appointments-booking')}
 						</Button>
 						<Button
 							variant={
@@ -277,7 +277,7 @@ export default function TimeFinder({
 							size="small"
 							onClick={setDayTime('earlyMorning')}
 						>
-							{__('Early Morning', 'wpappointments')}
+							{__('Early Morning', 'appointments-booking')}
 						</Button>
 						<Button
 							variant={
@@ -286,7 +286,7 @@ export default function TimeFinder({
 							size="small"
 							onClick={setDayTime('morning')}
 						>
-							{__('Morning', 'wpappointments')}
+							{__('Morning', 'appointments-booking')}
 						</Button>
 						<Button
 							variant={
@@ -295,7 +295,7 @@ export default function TimeFinder({
 							size="small"
 							onClick={setDayTime('afternoon')}
 						>
-							{__('Afternoon', 'wpappointments')}
+							{__('Afternoon', 'appointments-booking')}
 						</Button>
 						<Button
 							variant={
@@ -304,7 +304,7 @@ export default function TimeFinder({
 							size="small"
 							onClick={setDayTime('evening')}
 						>
-							{__('Evening', 'wpappointments')}
+							{__('Evening', 'appointments-booking')}
 						</Button>
 					</ButtonGroup>
 				</div>

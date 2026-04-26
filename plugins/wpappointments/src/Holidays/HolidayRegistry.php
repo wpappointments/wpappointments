@@ -93,7 +93,7 @@ class HolidayRegistry {
 		if ( ! in_array( $type, self::ALLOWED_TYPES, true ) ) {
 			return new \WP_Error(
 				'invalid_type',
-				__( 'Invalid holiday group type.', 'wpappointments' ),
+				__( 'Invalid holiday group type.', 'appointments-booking' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -103,7 +103,7 @@ class HolidayRegistry {
 		if ( null === $source ) {
 			return new \WP_Error(
 				'file_not_found',
-				__( 'Holiday data file not found.', 'wpappointments' ),
+				__( 'Holiday data file not found.', 'appointments-booking' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -113,7 +113,7 @@ class HolidayRegistry {
 		if ( $source_type !== $type ) {
 			return new \WP_Error(
 				'type_mismatch',
-				__( 'Source file type does not match requested type.', 'wpappointments' ),
+				__( 'Source file type does not match requested type.', 'appointments-booking' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -125,7 +125,7 @@ class HolidayRegistry {
 			if ( ( $group['id'] ?? '' ) === $group_id ) {
 				return new \WP_Error(
 					'duplicate_group',
-					__( 'This holiday group is already added.', 'wpappointments' ),
+					__( 'This holiday group is already added.', 'appointments-booking' ),
 					array( 'status' => 422 )
 				);
 			}
@@ -169,7 +169,7 @@ class HolidayRegistry {
 		if ( ! $found ) {
 			return new \WP_Error(
 				'group_not_found',
-				__( 'Holiday group not found.', 'wpappointments' ),
+				__( 'Holiday group not found.', 'appointments-booking' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -204,7 +204,7 @@ class HolidayRegistry {
 		if ( ! $found ) {
 			return new \WP_Error(
 				'group_not_found',
-				__( 'Holiday group not found.', 'wpappointments' ),
+				__( 'Holiday group not found.', 'appointments-booking' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -253,7 +253,7 @@ class HolidayRegistry {
 		if ( ! $found ) {
 			return new \WP_Error(
 				'group_not_found',
-				__( 'Holiday group not found.', 'wpappointments' ),
+				__( 'Holiday group not found.', 'appointments-booking' ),
 				array( 'status' => 404 )
 			);
 		}

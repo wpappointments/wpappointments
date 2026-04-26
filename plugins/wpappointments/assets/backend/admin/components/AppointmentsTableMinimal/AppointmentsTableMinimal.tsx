@@ -34,7 +34,7 @@ export default function AppointmentsTableMinimal({
 						{emptyStateMessage ||
 							__(
 								'You have no appointments yet',
-								'wpappointments'
+								'appointments-booking'
 							)}
 					</p>
 				</div>
@@ -74,7 +74,7 @@ function TableRow({ row, view }: TableRowProps) {
 							[styles.status]: true,
 							[styles.pending]: true,
 						})}
-						title={__('Pending', 'wpappointments')}
+						title={__('Pending', 'appointments-booking')}
 					></span>
 				)}
 				{row.status === 'confirmed' && (
@@ -83,7 +83,7 @@ function TableRow({ row, view }: TableRowProps) {
 							[styles.status]: true,
 							[styles.confirmed]: true,
 						})}
-						title={__('Confirmed', 'wpappointments')}
+						title={__('Confirmed', 'appointments-booking')}
 					></span>
 				)}
 			</td>
@@ -105,7 +105,7 @@ function TableRow({ row, view }: TableRowProps) {
 				{userDiffTimezone && ` (${userDiffTimezone})`}
 			</td>
 			<td>
-				{duration} {__('min', 'wpappointments')}
+				{duration} {__('min', 'appointments-booking')}
 			</td>
 		</tr>
 	);

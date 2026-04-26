@@ -961,7 +961,7 @@ test(
 // --- Filter tests ---
 
 test(
-	'AvailabilityEngine - wpa_effective_availability filter applied',
+	'AvailabilityEngine - wpappointments_effective_availability filter applied',
 	function () {
 		$ids = create_entity_with_variant();
 
@@ -982,12 +982,12 @@ test(
 			return $availability;
 		};
 
-		add_filter( 'wpa_effective_availability', $callback, 10 );
+		add_filter( 'wpappointments_effective_availability', $callback, 10 );
 
 		$result = AvailabilityEngine::get_effective_availability( $ids['variant_id'] );
 
 		expect( $result['filtered'] )->toBeTrue();
 
-		remove_filter( 'wpa_effective_availability', $callback, 10 );
+		remove_filter( 'wpappointments_effective_availability', $callback, 10 );
 	}
 );

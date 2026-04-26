@@ -80,7 +80,7 @@ class BookableVariant {
 			if ( PluginInfo::POST_TYPES['bookable-variant'] !== $variant->post_type ) {
 				$this->variant = new WP_Error(
 					'variant_invalid_post_type',
-					__( 'Post is not a bookable variant. Expected post_type wpa-bookable-variant', 'wpappointments' )
+					__( 'Post is not a bookable variant. Expected post_type wpa-bookable-variant', 'appointments-booking' )
 				);
 				return;
 			}
@@ -92,12 +92,12 @@ class BookableVariant {
 		} elseif ( is_null( $variant ) ) {
 			$this->variant = new WP_Error(
 				'variant_cannot_be_null',
-				__( 'Variant value passed to constructor cannot be null. Expected array, int, string or WP_Post', 'wpappointments' )
+				__( 'Variant value passed to constructor cannot be null. Expected array, int, string or WP_Post', 'appointments-booking' )
 			);
 		} else {
 			$this->variant = new WP_Error(
 				'variant_invalid_type',
-				__( 'Variant value passed to constructor is invalid. Expected array, int, string or WP_Post', 'wpappointments' )
+				__( 'Variant value passed to constructor is invalid. Expected array, int, string or WP_Post', 'appointments-booking' )
 			);
 		}
 	}
@@ -114,7 +114,7 @@ class BookableVariant {
 		if ( ! $parent_id ) {
 			return new WP_Error(
 				'variant_parent_required',
-				__( 'Variant must have a parent bookable entity', 'wpappointments' )
+				__( 'Variant must have a parent bookable entity', 'appointments-booking' )
 			);
 		}
 
@@ -124,7 +124,7 @@ class BookableVariant {
 		if ( ! $parent || PluginInfo::POST_TYPES['bookable'] !== $parent->post_type ) {
 			return new WP_Error(
 				'variant_parent_invalid',
-				__( 'Parent must be a valid bookable entity', 'wpappointments' )
+				__( 'Parent must be a valid bookable entity', 'appointments-booking' )
 			);
 		}
 
@@ -193,7 +193,7 @@ class BookableVariant {
 		if ( ! $this->variant ) {
 			return new WP_Error(
 				'variant_object_expected',
-				__( 'Variant not found. Instantiate BookableVariant class with a variant object', 'wpappointments' )
+				__( 'Variant not found. Instantiate BookableVariant class with a variant object', 'appointments-booking' )
 			);
 		}
 
@@ -224,7 +224,7 @@ class BookableVariant {
 		if ( 0 === $result ) {
 			return new WP_Error(
 				'variant_update_failed',
-				__( 'Failed to update bookable variant', 'wpappointments' )
+				__( 'Failed to update bookable variant', 'appointments-booking' )
 			);
 		}
 
@@ -251,7 +251,7 @@ class BookableVariant {
 		if ( ! $this->variant ) {
 			return new WP_Error(
 				'variant_object_expected',
-				__( 'Variant not found. Instantiate BookableVariant class with a variant object', 'wpappointments' )
+				__( 'Variant not found. Instantiate BookableVariant class with a variant object', 'appointments-booking' )
 			);
 		}
 
@@ -262,7 +262,7 @@ class BookableVariant {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'variant_delete_failed',
-				__( 'Failed to delete bookable variant', 'wpappointments' )
+				__( 'Failed to delete bookable variant', 'appointments-booking' )
 			);
 		}
 
@@ -531,7 +531,7 @@ class BookableVariant {
 		if ( ! $entity || PluginInfo::POST_TYPES['bookable'] !== $entity->post_type ) {
 			return new WP_Error(
 				'variant_entity_invalid',
-				__( 'Invalid bookable entity for variant generation', 'wpappointments' )
+				__( 'Invalid bookable entity for variant generation', 'appointments-booking' )
 			);
 		}
 
@@ -863,17 +863,17 @@ class BookableVariant {
 	 */
 	private function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
-			return new WP_Error( 'variant_id_required', __( 'Variant ID is required', 'wpappointments' ) );
+			return new WP_Error( 'variant_id_required', __( 'Variant ID is required', 'appointments-booking' ) );
 		}
 
 		$post = get_post( $post_id );
 
 		if ( ! $post ) {
-			return new WP_Error( 'variant_not_found', __( 'Variant not found', 'wpappointments' ) );
+			return new WP_Error( 'variant_not_found', __( 'Variant not found', 'appointments-booking' ) );
 		}
 
 		if ( PluginInfo::POST_TYPES['bookable-variant'] !== $post->post_type ) {
-			return new WP_Error( 'variant_invalid_type', __( 'Post is not a bookable variant', 'wpappointments' ) );
+			return new WP_Error( 'variant_invalid_type', __( 'Post is not a bookable variant', 'appointments-booking' ) );
 		}
 
 		return $post_id;

@@ -11,6 +11,10 @@
 
 namespace WPAppointments\Bookable;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register a bookable type
  *

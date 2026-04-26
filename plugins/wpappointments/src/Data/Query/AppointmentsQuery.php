@@ -30,7 +30,7 @@ class AppointmentsQuery {
 		'post_type'   => self::POST_TYPE,
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value',
-		'meta_key'    => 'timestamp',
+		'meta_key'    => 'timestamp', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ordering by timestamp is intrinsic to appointment scheduling.
 		'order'       => 'ASC',
 	);
 
@@ -52,6 +52,7 @@ class AppointmentsQuery {
 			array(
 				'posts_per_page' => $posts_per_page,
 				'paged'          => $paged,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Filters admin appointment listing by status/date; bounded result set.
 				'meta_query'     => array(),
 			)
 		);
@@ -139,6 +140,7 @@ class AppointmentsQuery {
 			array(
 				'posts_per_page' => $posts_per_page,
 				'paged'          => $paged,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Upcoming appointments bounded to a 7-day window plus confirmed status.
 				'meta_query'     => array_merge(
 					array(
 						'relation' => 'AND',

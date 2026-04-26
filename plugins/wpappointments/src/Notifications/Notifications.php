@@ -8,6 +8,10 @@
 
 namespace WPAppointments\Notifications;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\PluginInfo;
 use WPAppointments\Core\Singleton;
 use WPAppointments\Data\Model\Settings;
@@ -44,36 +48,36 @@ class Notifications extends Singleton {
 		if ( null === self::$events ) {
 			self::$events = array(
 				'created'   => array(
-					'title'           => __( 'Appointment Created', 'wpappointments' ),
-					'description'     => __( 'Sent when a new appointment is booked.', 'wpappointments' ),
-					'adminSubject'    => __( 'New appointment booked', 'wpappointments' ),
-					'customerSubject' => __( 'Your appointment has been booked', 'wpappointments' ),
-					'adminBody'       => __( "Dear {admin_first_name},\n\nA new appointment has been booked with {customer_name}.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'    => __( "Dear {customer_name},\n\nThank you for booking an appointment with us.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nIf you need to reschedule, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Created', 'appointments-booking' ),
+					'description'     => __( 'Sent when a new appointment is booked.', 'appointments-booking' ),
+					'adminSubject'    => __( 'New appointment booked', 'appointments-booking' ),
+					'customerSubject' => __( 'Your appointment has been booked', 'appointments-booking' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nA new appointment has been booked with {customer_name}.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nThank you for booking an appointment with us.\n\nDate: {date}\nTime: {time}\nService: {service}\nDuration: {duration} minutes\n\nIf you need to reschedule, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
 				),
 				'updated'   => array(
-					'title'           => __( 'Appointment Updated', 'wpappointments' ),
-					'description'     => __( 'Sent when an existing appointment is modified.', 'wpappointments' ),
-					'adminSubject'    => __( 'Appointment updated', 'wpappointments' ),
-					'customerSubject' => __( 'Your appointment has been updated', 'wpappointments' ),
-					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} has been updated.\n\nPrevious: {previous_date} at {previous_time} ({previous_status})\nUpdated: {date} at {time} ({status})\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment has been updated.\n\nPrevious: {previous_date} at {previous_time}\nUpdated: {date} at {time}\nStatus: {status}\n\nIf you have any questions, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Updated', 'appointments-booking' ),
+					'description'     => __( 'Sent when an existing appointment is modified.', 'appointments-booking' ),
+					'adminSubject'    => __( 'Appointment updated', 'appointments-booking' ),
+					'customerSubject' => __( 'Your appointment has been updated', 'appointments-booking' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} has been updated.\n\nPrevious: {previous_date} at {previous_time} ({previous_status})\nUpdated: {date} at {time} ({status})\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment has been updated.\n\nPrevious: {previous_date} at {previous_time}\nUpdated: {date} at {time}\nStatus: {status}\n\nIf you have any questions, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
 				),
 				'confirmed' => array(
-					'title'           => __( 'Appointment Confirmed', 'wpappointments' ),
-					'description'     => __( 'Sent when an appointment is confirmed.', 'wpappointments' ),
-					'adminSubject'    => __( 'Appointment confirmed', 'wpappointments' ),
-					'customerSubject' => __( 'Your appointment is confirmed', 'wpappointments' ),
-					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been confirmed.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} is confirmed.\n\nIf you need to make any changes, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Confirmed', 'appointments-booking' ),
+					'description'     => __( 'Sent when an appointment is confirmed.', 'appointments-booking' ),
+					'adminSubject'    => __( 'Appointment confirmed', 'appointments-booking' ),
+					'customerSubject' => __( 'Your appointment is confirmed', 'appointments-booking' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been confirmed.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} is confirmed.\n\nIf you need to make any changes, please contact us at {admin_email}.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
 				),
 				'cancelled' => array(
-					'title'           => __( 'Appointment Cancelled', 'wpappointments' ),
-					'description'     => __( 'Sent when an appointment is cancelled.', 'wpappointments' ),
-					'adminSubject'    => __( 'Appointment cancelled', 'wpappointments' ),
-					'customerSubject' => __( 'Your appointment has been cancelled', 'wpappointments' ),
-					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been cancelled.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
-					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'wpappointments' ),
+					'title'           => __( 'Appointment Cancelled', 'appointments-booking' ),
+					'description'     => __( 'Sent when an appointment is cancelled.', 'appointments-booking' ),
+					'adminSubject'    => __( 'Appointment cancelled', 'appointments-booking' ),
+					'customerSubject' => __( 'Your appointment has been cancelled', 'appointments-booking' ),
+					'adminBody'       => __( "Dear {admin_first_name},\n\nThe appointment with {customer_name} on {date} at {time} has been cancelled.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
+					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appointments-booking' ),
 				),
 			);
 		}

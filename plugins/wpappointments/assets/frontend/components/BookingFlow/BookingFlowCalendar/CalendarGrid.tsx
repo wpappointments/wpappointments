@@ -77,7 +77,7 @@ export default function CalendarGrid() {
 						setSelected([]);
 					}}
 					type="button"
-					aria-label={__('Previous month', 'wpappointments')}
+					aria-label={__('Previous month', 'appointments-booking')}
 					disabled={
 						viewing.getMonth() === new Date().getMonth() &&
 						viewing.getFullYear() === new Date().getFullYear()
@@ -104,7 +104,7 @@ export default function CalendarGrid() {
 						setSelected([]);
 					}}
 					type="button"
-					aria-label={__('Next month', 'wpappointments')}
+					aria-label={__('Next month', 'appointments-booking')}
 					className={styles.calendarControlButton}
 				>
 					<svg

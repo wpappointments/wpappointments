@@ -160,7 +160,7 @@ class AppointmentsController extends Controller {
 		$results = AppointmentsQuery::all( $query );
 
 		return self::response(
-			__( 'Appointments fetched successfully', 'wpappointments' ),
+			__( 'Appointments fetched successfully', 'appointments-booking' ),
 			self::paginated( 'appointments', $results )
 		);
 	}
@@ -177,7 +177,7 @@ class AppointmentsController extends Controller {
 		$results = AppointmentsQuery::upcoming( $query );
 
 		return self::response(
-			__( 'Upcoming appointments fetched successfully', 'wpappointments' ),
+			__( 'Upcoming appointments fetched successfully', 'appointments-booking' ),
 			self::paginated( 'appointments', $results )
 		);
 	}
@@ -202,13 +202,13 @@ class AppointmentsController extends Controller {
 
 		if ( ! in_array( $status, $allowed_statuses, true ) ) {
 			return self::error(
-				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
 		if ( $duration < 1 ) {
 			return self::error(
-				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -216,7 +216,7 @@ class AppointmentsController extends Controller {
 
 		if ( false === $date ) {
 			return self::error(
-				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -241,7 +241,7 @@ class AppointmentsController extends Controller {
 		$saved_appointment = $appointment->save();
 
 		return self::response(
-			__( 'Appointment created successfully', 'wpappointments' ),
+			__( 'Appointment created successfully', 'appointments-booking' ),
 			array(
 				'appointment' => $saved_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
@@ -266,7 +266,7 @@ class AppointmentsController extends Controller {
 
 		if ( false === $date ) {
 			return self::error(
-				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+				new \WP_Error( 'invalid_date', __( 'Invalid date format', 'appointments-booking' ), array( 'status' => 422 ) )
 			);
 		}
 
@@ -298,7 +298,7 @@ class AppointmentsController extends Controller {
 
 		$appointment       = new Appointment(
 			array(
-				'title'          => $core_entity_name ? $core_entity_name : __( 'Appointment', 'wpappointments' ),
+				'title'          => $core_entity_name ? $core_entity_name : __( 'Appointment', 'appointments-booking' ),
 				'customer'       => $customer,
 				'create_account' => $create_account,
 				'password'       => $password,
@@ -308,7 +308,7 @@ class AppointmentsController extends Controller {
 		$saved_appointment = $appointment->save();
 
 		return self::response(
-			__( 'Appointment created successfully', 'wpappointments' ),
+			__( 'Appointment created successfully', 'appointments-booking' ),
 			array(
 				'appointment' => $saved_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
@@ -337,7 +337,7 @@ class AppointmentsController extends Controller {
 			$status = sanitize_text_field( $status_raw );
 			if ( ! in_array( $status, $allowed_statuses, true ) ) {
 				return self::error(
-					new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'wpappointments' ), array( 'status' => 422 ) )
+					new \WP_Error( 'invalid_status', __( 'Invalid appointment status', 'appointments-booking' ), array( 'status' => 422 ) )
 				);
 			}
 		}
@@ -346,7 +346,7 @@ class AppointmentsController extends Controller {
 			$duration = absint( $duration_raw );
 			if ( $duration < 1 ) {
 				return self::error(
-					new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'wpappointments' ), array( 'status' => 422 ) )
+					new \WP_Error( 'invalid_duration', __( 'Duration must be greater than zero', 'appointments-booking' ), array( 'status' => 422 ) )
 				);
 			}
 		}
@@ -358,7 +358,7 @@ class AppointmentsController extends Controller {
 
 			if ( false === $timestamp ) {
 				return self::error(
-					new \WP_Error( 'invalid_date', __( 'Invalid date format', 'wpappointments' ), array( 'status' => 422 ) )
+					new \WP_Error( 'invalid_date', __( 'Invalid date format', 'appointments-booking' ), array( 'status' => 422 ) )
 				);
 			}
 
@@ -393,7 +393,7 @@ class AppointmentsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Appointment updated successfully', 'wpappointments' ),
+			__( 'Appointment updated successfully', 'appointments-booking' ),
 			array(
 				'appointment' => $updated_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
@@ -418,7 +418,7 @@ class AppointmentsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Appointment cancelled successfully', 'wpappointments' ),
+			__( 'Appointment cancelled successfully', 'appointments-booking' ),
 			array(
 				'appointmentId' => $cancelled,
 			),
@@ -443,7 +443,7 @@ class AppointmentsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Appointment deleted successfully', 'wpappointments' ),
+			__( 'Appointment deleted successfully', 'appointments-booking' ),
 			array(
 				'appointmentId' => $deleted,
 			),
@@ -468,7 +468,7 @@ class AppointmentsController extends Controller {
 		}
 
 		return self::response(
-			__( 'Appointment confirmed successfully', 'wpappointments' ),
+			__( 'Appointment confirmed successfully', 'appointments-booking' ),
 			array(
 				'appointmentId' => $confirmed,
 			),

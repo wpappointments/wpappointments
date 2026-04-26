@@ -31,7 +31,7 @@ function scripts() {
 	);
 
 	$date = array(
-		'date' => create_date_settings_array(),
+		'date' => \WPAppointments\Utils\DateTime\create_date_settings_array(),
 	);
 
 	$screen = get_current_screen();
@@ -77,7 +77,7 @@ function scripts() {
 
 		wp_set_script_translations(
 			'wpappointments-admin-js',
-			'wpappointments',
+			'appointments-booking',
 			PluginInfo::get_plugin_dir_path() . '/languages'
 		);
 
