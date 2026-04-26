@@ -1,11 +1,11 @@
 ---
 title: JavaScript Setup
-description: Build admin UI for your addon using shared Appointments Booking packages.
+description: Build admin UI for your addon using shared WP Appointments packages.
 sidebar:
   order: 3
 ---
 
-Appointments Booking provides two npm packages for building addon admin UIs:
+WP Appointments provides two npm packages for building addon admin UIs:
 
 ## Packages
 
@@ -56,7 +56,7 @@ export function CourtsPage() {
 
 ## Enqueuing
 
-Register your admin script with WordPress and declare Appointments Booking as a dependency:
+Register your admin script with WordPress and declare WP Appointments as a dependency:
 
 ```php
 add_action('admin_enqueue_scripts', function (string $hook) {

@@ -11,7 +11,7 @@ sidebar:
 <?php
 /**
  * Plugin Name: My WPA Addon
- * Description: Custom bookable type for Appointments Booking.
+ * Description: Custom bookable type for WP Appointments.
  * Version: 1.0.0
  * Requires Plugins: wpappointments
  * Author: Your Name
@@ -41,7 +41,7 @@ Use Composer PSR-4 autoloading:
 
 ## Dependency Check
 
-Always check that Appointments Booking is active before using its APIs:
+Always check that WP Appointments is active before using its APIs:
 
 ```php
 add_action('plugins_loaded', function () {
@@ -49,7 +49,7 @@ add_action('plugins_loaded', function () {
         return;
     }
 
-    // Safe to use Appointments Booking APIs here
+    // Safe to use WP Appointments APIs here
     require_once __DIR__ . '/vendor/autoload.php';
 
     // Register your bookable type, availability layers, etc.

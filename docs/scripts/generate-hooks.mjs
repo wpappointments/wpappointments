@@ -106,12 +106,12 @@ console.log(`Found ${actions.length} actions, ${filters.length} filters`);
 
 writeFileSync(
 	resolve(hooksDir, 'actions.mdx'),
-	generateMdx('Actions', 'WordPress actions provided by Appointments Booking.', actions, 'action')
+	generateMdx('Actions', 'WordPress actions provided by WP Appointments.', actions, 'action')
 );
 
 writeFileSync(
 	resolve(hooksDir, 'filters.mdx'),
-	generateMdx('Filters', 'WordPress filters provided by Appointments Booking.', filters, 'filter')
+	generateMdx('Filters', 'WordPress filters provided by WP Appointments.', filters, 'filter')
 );
 
 console.log('Hooks reference generated.');
