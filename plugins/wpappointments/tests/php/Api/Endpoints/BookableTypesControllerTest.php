@@ -7,6 +7,10 @@
 
 namespace Tests\Api\Endpoints;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Bookable\BookableTypeRegistry;
 use Tests\Bookable\Stubs\StubServiceHandler;
 

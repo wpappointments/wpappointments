@@ -7,6 +7,10 @@
 
 namespace Tests\Data\Query;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Data\Model\BookableEntity;
 use WPAppointments\Data\Query\BookableVariantQuery;
 

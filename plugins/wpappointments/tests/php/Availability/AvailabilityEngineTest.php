@@ -7,6 +7,10 @@
 
 namespace Tests\Availability;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Availability\AvailabilityEngine;
 use WPAppointments\Availability\AvailabilityLayerRegistry;
 use WPAppointments\Bookable\BookableTypeRegistry;

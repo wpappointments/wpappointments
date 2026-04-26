@@ -7,6 +7,10 @@
 
 namespace Tests\Api\Endpoints;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Data\Model\Settings;
 
 uses( \TestTools\RestTestCase::class )->group( 'api' );

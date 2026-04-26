@@ -10,6 +10,10 @@
 
 namespace Tests\Api\Endpoints;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\Capabilities;
 
 uses( \TestTools\RestTestCase::class )->group( 'api', 'permissions' );

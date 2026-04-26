@@ -7,6 +7,10 @@
 
 namespace Tests;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Plugin;
 
 uses( \TestTools\TestCase::class )->group( 'core' );

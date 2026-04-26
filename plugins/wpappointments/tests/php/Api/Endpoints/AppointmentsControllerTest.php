@@ -7,6 +7,10 @@
 
 namespace Tests\Api\Endpoints;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 uses( \TestTools\RestTestCase::class )->group( 'api' );
 
 expect()->extend(

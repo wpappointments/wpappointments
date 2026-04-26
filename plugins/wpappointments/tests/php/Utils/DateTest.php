@@ -7,6 +7,10 @@
 
 namespace Tests\Utils;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Utils\Date;
 
 uses( \TestTools\TestCase::class )->group( 'utils' );

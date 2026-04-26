@@ -7,6 +7,10 @@
 
 namespace Tests\Api\Endpoints;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Bookable\BookableTypeRegistry;
 use WPAppointments\Data\Model\BookableEntity;
 use WPAppointments\Data\Model\BookableVariant;

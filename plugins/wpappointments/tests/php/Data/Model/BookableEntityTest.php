@@ -7,6 +7,10 @@
 
 namespace Tests\Data\Model;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use stdClass;
 use WP_Error;
 use WP_Post;

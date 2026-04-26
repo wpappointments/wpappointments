@@ -7,6 +7,10 @@
 
 namespace Tests\Core;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Core\Capabilities;
 
 uses( \TestTools\TestCase::class )->group( 'core' );

@@ -7,6 +7,10 @@
 
 namespace Tests\Bookable;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Bookable\AbstractBookableTypeHandler;
 use WPAppointments\Bookable\BookableTypeRegistry;
 use Tests\Bookable\Stubs\StubServiceHandler;

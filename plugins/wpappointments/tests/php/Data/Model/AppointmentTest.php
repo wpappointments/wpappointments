@@ -7,6 +7,10 @@
 
 namespace Tests\Data\Model;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WP_Error;
 use WP_Post;
 use WPAppointments\Data\Model\Appointment;

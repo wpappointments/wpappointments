@@ -7,6 +7,10 @@
 
 namespace Tests\Data\Query;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPAppointments\Data\Query\CustomersQuery;
 
 uses( \TestTools\TestCase::class )->group( 'query' );

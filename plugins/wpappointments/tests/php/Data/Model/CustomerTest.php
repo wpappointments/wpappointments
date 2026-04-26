@@ -7,6 +7,10 @@
 
 namespace Tests\Data\Model;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WP_User;
 use WPAppointments\Data\Model\Customer;
 
