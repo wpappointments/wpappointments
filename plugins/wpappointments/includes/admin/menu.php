@@ -22,7 +22,7 @@ function menu() {
 	$icon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJ1dWlkLTExODg4NjBlLWQ4YjQtNDVjYi1hMWNjLTYzZTkxNzNhYmVjMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGlkPSJ1dWlkLTRmZjQ2YjljLTMxMjItNDBjMC05OWNkLTIxMDVkMTZiZDRjMCI+PHBhdGggZD0ibTgsMEMzLjU5LDAsMCwzLjU5LDAsOHMzLjU5LDgsOCw4LDgtMy41OSw4LThTMTIuNDEsMCw4LDBabTAsMTIuNDVjLTIuNDYsMC00LjQ2LTItNC40Ni00LjQ1czItNC40Niw0LjQ2LTQuNDYsNC40NiwyLDQuNDYsNC40Ni0yLDQuNDUtNC40Niw0LjQ1WiIgZmlsbD0iIzE3NGFmZiIvPjxyZWN0IHg9IjYuMzQiIHk9IjYuMDgiIHdpZHRoPSI0LjQ2IiBoZWlnaHQ9IjIuODMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yLjc5IDguMjYpIHJvdGF0ZSgtNDUpIiBmaWxsPSIjMTc0YWZmIi8+PC9nPjwvc3ZnPg==';
 
 	add_menu_page(
-		__( 'WP Appointments', 'appointments-booking' ),
+		__( 'Appointments', 'appointments-booking' ),
 		__( 'Appointments', 'appointments-booking' ),
 		'manage_options',
 		'wpappointments',
