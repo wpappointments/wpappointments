@@ -11,7 +11,7 @@ export default function Customers() {
 	const { openSlideOut, isSlideoutOpen } = useSlideout();
 	return (
 		<StateContextProvider>
-			<LayoutDefault title={__('Customers', 'wpappointments')}>
+			<LayoutDefault title={__('Customers', 'appointments-booking')}>
 				<HeaderActionsFill>
 					<Button
 						variant="primary"
@@ -25,7 +25,7 @@ export default function Customers() {
 							});
 						}}
 					>
-						{__('Create New Customer', 'wpappointments')}
+						{__('Create New Customer', 'appointments-booking')}
 					</Button>
 				</HeaderActionsFill>
 				<CustomersTable />

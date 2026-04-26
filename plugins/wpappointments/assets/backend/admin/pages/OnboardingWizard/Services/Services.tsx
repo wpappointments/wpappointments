@@ -35,15 +35,15 @@ const fields: Field<ServiceFormData>[] = [
 	{
 		id: 'name',
 		type: 'text',
-		label: __('Service name', 'wpappointments'),
-		placeholder: __('e.g. Consultation', 'wpappointments'),
+		label: __('Service name', 'appointments-booking'),
+		placeholder: __('e.g. Consultation', 'appointments-booking'),
 		isValid: { required: true },
 		Edit: TextInput,
 	},
 	{
 		id: 'duration',
 		type: 'integer',
-		label: __('Duration (minutes)', 'wpappointments'),
+		label: __('Duration (minutes)', 'appointments-booking'),
 		isValid: { required: true, min: 1 },
 		Edit: NumberInput,
 	},
@@ -111,7 +111,7 @@ function AddServiceForm({
 				variant="secondary"
 				disabled={!isValid || isSubmitting}
 			>
-				{__('Add Service', 'wpappointments')}
+				{__('Add Service', 'appointments-booking')}
 			</Button>
 		</form>
 	);
@@ -151,12 +151,12 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 				>
 					<thead>
 						<tr>
-							<th>{__('Name', 'wpappointments')}</th>
+							<th>{__('Name', 'appointments-booking')}</th>
 							<th style={{ width: 120 }}>
-								{__('Duration (min)', 'wpappointments')}
+								{__('Duration (min)', 'appointments-booking')}
 							</th>
 							<th style={{ width: 80 }}>
-								{__('Remove', 'wpappointments')}
+								{__('Remove', 'appointments-booking')}
 							</th>
 						</tr>
 					</thead>
@@ -174,7 +174,7 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 											handleDelete(service.id)
 										}
 									>
-										{__('Remove', 'wpappointments')}
+										{__('Remove', 'appointments-booking')}
 									</Button>
 								</td>
 							</tr>
@@ -187,7 +187,7 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 				<p style={{ color: '#757575', marginBottom: 16 }}>
 					{__(
 						'No services added yet. Add your first service below.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			)}
@@ -200,7 +200,7 @@ function ServicesStep({ onSuccess }: ServicesProps) {
 				onClick={onSuccess}
 				style={{ marginTop: 24 }}
 			>
-				{__('Continue', 'wpappointments')}
+				{__('Continue', 'appointments-booking')}
 			</Button>
 		</div>
 	);

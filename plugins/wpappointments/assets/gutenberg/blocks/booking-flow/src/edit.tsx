@@ -49,7 +49,7 @@ const BUTTONS_TEMPLATE: TemplateArray = [
 			[
 				'core/button',
 				{
-					text: __('Back', 'wpappointments'),
+					text: __('Back', 'appointments-booking'),
 					className: 'wpa-back-button',
 					style: { color: { text: '#333' } },
 					backgroundColor: undefined,
@@ -58,7 +58,7 @@ const BUTTONS_TEMPLATE: TemplateArray = [
 			[
 				'core/button',
 				{
-					text: __('Book', 'wpappointments'),
+					text: __('Book', 'appointments-booking'),
 					className: 'wpa-submit-button',
 				},
 			],
@@ -90,7 +90,7 @@ export default function Edit({
 			<Suspense
 				fallback={
 					<div style={{ minHeight: 400, padding: 20 }}>
-						{__('Loading booking flow…', 'wpappointments')}
+						{__('Loading booking flow…', 'appointments-booking')}
 					</div>
 				}
 			>
@@ -109,9 +109,9 @@ export default function Edit({
 			</Suspense>
 			<InspectorControls>
 				<Panel>
-					<PanelBody title={__('General', 'wpappointments')}>
+					<PanelBody title={__('General', 'appointments-booking')}>
 						<SelectControl
-							label={__('Flow type', 'wpappointments')}
+							label={__('Flow type', 'appointments-booking')}
 							value={attributes.flowType}
 							options={[
 								{ label: 'One step', value: 'OneStep' },
@@ -122,10 +122,13 @@ export default function Edit({
 							}
 						/>
 						<ToggleControl
-							label={__('Hide step titles', 'wpappointments')}
+							label={__(
+								'Hide step titles',
+								'appointments-booking'
+							)}
 							help={__(
 								'Hide all section headings from the booking flow',
-								'wpappointments'
+								'appointments-booking'
 							)}
 							checked={attributes.hideStepTitles}
 							onChange={(hideStepTitles) =>
@@ -135,20 +138,23 @@ export default function Edit({
 						{isMultiStep && (
 							<>
 								<SelectControl
-									label={__('Preview step', 'wpappointments')}
+									label={__(
+										'Preview step',
+										'appointments-booking'
+									)}
 									value={String(editorStep)}
 									options={[
 										{
 											label: __(
 												'1. Select date',
-												'wpappointments'
+												'appointments-booking'
 											),
 											value: '0',
 										},
 										{
 											label: __(
 												'2. Customer info',
-												'wpappointments'
+												'appointments-booking'
 											),
 											value: '1',
 										},
@@ -158,11 +164,11 @@ export default function Edit({
 								<ToggleControl
 									label={__(
 										'Hide progress bar',
-										'wpappointments'
+										'appointments-booking'
 									)}
 									help={__(
 										'Hide the step indicator at the top of the booking flow',
-										'wpappointments'
+										'appointments-booking'
 									)}
 									checked={attributes.hideProgressBar}
 									onChange={(hideProgressBar) =>
@@ -173,15 +179,17 @@ export default function Edit({
 						)}
 					</PanelBody>
 					{(!isMultiStep || editorStep === 0) && (
-						<PanelBody title={__('Calendar', 'wpappointments')}>
+						<PanelBody
+							title={__('Calendar', 'appointments-booking')}
+						>
 							<ToggleControl
 								label={__(
 									'Trim time slots outside of working hours',
-									'wpappointments'
+									'appointments-booking'
 								)}
 								help={__(
 									'When showing the time picker, hide time slots that are not available for booking before and after opening hours',
-									'wpappointments'
+									'appointments-booking'
 								)}
 								checked={attributes.trimUnavailable}
 								onChange={(trimUnavailable) =>
@@ -192,11 +200,11 @@ export default function Edit({
 								<ToggleControl
 									label={__(
 										'Display available time slots as buttons',
-										'wpappointments'
+										'appointments-booking'
 									)}
 									help={__(
 										'Shows the available time slots as buttons. Recommended if you have a lot of traffic from mobile devices',
-										'wpappointments'
+										'appointments-booking'
 									)}
 									checked={attributes.slotsAsButtons}
 									onChange={(slotsAsButtons) =>
@@ -207,11 +215,11 @@ export default function Edit({
 							<ToggleControl
 								label={__(
 									'Inline time picker',
-									'wpappointments'
+									'appointments-booking'
 								)}
 								help={__(
 									'Display the calendar and time slots side by side instead of stacked vertically',
-									'wpappointments'
+									'appointments-booking'
 								)}
 								checked={attributes.inlineTimePicker}
 								onChange={(inlineTimePicker) =>
@@ -220,7 +228,7 @@ export default function Edit({
 							/>
 						</PanelBody>
 					)}
-					<PanelBody title={__('Alignment', 'wpappointments')}>
+					<PanelBody title={__('Alignment', 'appointments-booking')}>
 						<ButtonGroup>
 							<Button
 								variant={
@@ -232,7 +240,7 @@ export default function Edit({
 									setAttributes({ alignment: 'Left' })
 								}
 								icon={<Icon icon={positionLeft} />}
-								label={__('Align left', 'wpappointments')}
+								label={__('Align left', 'appointments-booking')}
 							/>
 							<Button
 								variant={
@@ -244,7 +252,10 @@ export default function Edit({
 									setAttributes({ alignment: 'Center' })
 								}
 								icon={<Icon icon={positionCenter} />}
-								label={__('Align center', 'wpappointments')}
+								label={__(
+									'Align center',
+									'appointments-booking'
+								)}
 							/>
 							<Button
 								variant={
@@ -256,11 +267,14 @@ export default function Edit({
 									setAttributes({ alignment: 'Right' })
 								}
 								icon={<Icon icon={positionRight} />}
-								label={__('Align right', 'wpappointments')}
+								label={__(
+									'Align right',
+									'appointments-booking'
+								)}
 							/>
 						</ButtonGroup>
 					</PanelBody>
-					<PanelBody title={__('Size', 'wpappointments')}>
+					<PanelBody title={__('Size', 'appointments-booking')}>
 						<ButtonGroup>
 							<Button
 								variant={
@@ -270,7 +284,10 @@ export default function Edit({
 									setAttributes({ width: 'Narrow' })
 								}
 								icon={<Icon icon={column} />}
-								label={__('Size narrow', 'wpappointments')}
+								label={__(
+									'Size narrow',
+									'appointments-booking'
+								)}
 							/>
 							<Button
 								variant={
@@ -278,7 +295,10 @@ export default function Edit({
 								}
 								onClick={() => setAttributes({ width: 'Full' })}
 								icon={<Icon icon={stretchFullWidth} />}
-								label={__('Size full width', 'wpappointments')}
+								label={__(
+									'Size full width',
+									'appointments-booking'
+								)}
 							/>
 						</ButtonGroup>
 					</PanelBody>

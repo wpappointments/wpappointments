@@ -96,9 +96,11 @@ export default function AppointmentsTableFull() {
 	if (!appointments || appointments.length === 0) {
 		return (
 			<TableFullEmpty>
-				<p>{__('You have no appointments yet', 'wpappointments')}</p>
+				<p>
+					{__('You have no appointments yet', 'appointments-booking')}
+				</p>
 				<Button variant="primary" onClick={addAppointment}>
-					{__('New Appointment', 'wpappointments')}
+					{__('New Appointment', 'appointments-booking')}
 				</Button>
 			</TableFullEmpty>
 		);
@@ -107,7 +109,7 @@ export default function AppointmentsTableFull() {
 	const fields: Field<Appointment>[] = [
 		{
 			id: 'title',
-			label: __('Title', 'wpappointments'),
+			label: __('Title', 'appointments-booking'),
 			render: ({ item }) => {
 				return (
 					<>
@@ -118,7 +120,7 @@ export default function AppointmentsTableFull() {
 							<strong>{item.service}</strong>
 						</Button>
 						<br />
-						{__('Customer', 'wpappointments')}:{' '}
+						{__('Customer', 'appointments-booking')}:{' '}
 						<strong>{item.customer.name}</strong>
 					</>
 				);
@@ -128,7 +130,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'date',
-			label: __('Date', 'wpappointments'),
+			label: __('Date', 'appointments-booking'),
 			render: ({ item }) => {
 				return <>{formatDate(item.timestamp)}</>;
 			},
@@ -137,7 +139,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'time',
-			label: __('Time', 'wpappointments'),
+			label: __('Time', 'appointments-booking'),
 			render: ({ item }) => {
 				const { timestamp, duration } = item;
 				const dateStart = fromUnixTime(timestamp);
@@ -161,7 +163,7 @@ export default function AppointmentsTableFull() {
 		},
 		{
 			id: 'status',
-			label: __('Status', 'wpappointments'),
+			label: __('Status', 'appointments-booking'),
 			render: ({ item }) => {
 				return (
 					<span
@@ -183,7 +185,7 @@ export default function AppointmentsTableFull() {
 		{
 			id: 'view',
 			icon: info,
-			label: __('View appointment details', 'wpappointments'),
+			label: __('View appointment details', 'appointments-booking'),
 			callback: (items) => {
 				viewAppointment(items[0]);
 			},
@@ -191,7 +193,7 @@ export default function AppointmentsTableFull() {
 		{
 			id: 'edit',
 			icon: edit,
-			label: __('Edit appointment details', 'wpappointments'),
+			label: __('Edit appointment details', 'appointments-booking'),
 			callback: (items) => {
 				editAppointment(items[0]);
 			},
@@ -200,7 +202,7 @@ export default function AppointmentsTableFull() {
 			id: 'cancel',
 			icon: cancelCircleFilled,
 			isEligible: (item) => item.status === 'confirmed',
-			label: __('Cancel appointment', 'wpappointments'),
+			label: __('Cancel appointment', 'appointments-booking'),
 			callback: (items) => {
 				const { id, status } = items[0];
 				setAppointmentModal({ id, status });
@@ -210,7 +212,7 @@ export default function AppointmentsTableFull() {
 			id: 'confirm',
 			icon: check,
 			isEligible: (item) => item.status === 'pending',
-			label: __('Confirm appointment', 'wpappointments'),
+			label: __('Confirm appointment', 'appointments-booking'),
 			callback: (items) => {
 				confirmAppointment && confirmAppointment(items[0].id);
 			},
@@ -219,7 +221,7 @@ export default function AppointmentsTableFull() {
 			id: 'delete',
 			icon: trash,
 			isEligible: (item) => item.status === 'cancelled',
-			label: __('Delete appointment', 'wpappointments'),
+			label: __('Delete appointment', 'appointments-booking'),
 			callback: (items) => {
 				const { id, status } = items[0];
 				setAppointmentModal({ id, status });

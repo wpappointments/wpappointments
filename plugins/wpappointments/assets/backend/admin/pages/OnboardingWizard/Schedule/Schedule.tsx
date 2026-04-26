@@ -50,6 +50,10 @@ export default function ScheduleSettings({
 		return select(store).getSchedules();
 	}, []);
 
+	const schedulesLoaded = useSelect(() => {
+		return select(store).getSchedulesLoaded();
+	}, []);
+
 	useEffect(() => {
 		const defaultSchedule = existingSchedules.find((s) => s.isDefault);
 		if (defaultSchedule?.days) {
@@ -85,6 +89,9 @@ export default function ScheduleSettings({
 
 	const onSubmit = async () => {
 		if (isSubmitting) return;
+		// Guard against creating a duplicate schedule when the default one
+		// exists but hasn't finished loading yet.
+		if (!schedulesLoaded) return;
 		setIsSubmitting(true);
 		setError(null);
 
@@ -106,13 +113,13 @@ export default function ScheduleSettings({
 					});
 				} else {
 					result = await createSchedule({
-						name: __('Default', 'wpappointments'),
+						name: __('Default', 'appointments-booking'),
 						days: allDays,
 					});
 				}
 			} else {
 				result = await createSchedule({
-					name: __('Default', 'wpappointments'),
+					name: __('Default', 'appointments-booking'),
 					days: allDays,
 				});
 			}
@@ -120,13 +127,13 @@ export default function ScheduleSettings({
 			if (result) {
 				onSuccess();
 			} else {
-				setError(__('Error saving schedule', 'wpappointments'));
+				setError(__('Error saving schedule', 'appointments-booking'));
 			}
 		} catch (err) {
 			const message =
 				err instanceof Error && err.message
 					? err.message
-					: __('Error saving schedule', 'wpappointments');
+					: __('Error saving schedule', 'appointments-booking');
 			setError(message);
 		} finally {
 			setIsSubmitting(false);
@@ -152,10 +159,10 @@ export default function ScheduleSettings({
 				className={styles.stepButton}
 				onClick={onSubmit}
 				variant="primary"
-				isBusy={isSubmitting}
-				disabled={isSubmitting}
+				isBusy={isSubmitting || !schedulesLoaded}
+				disabled={isSubmitting || !schedulesLoaded}
 			>
-				{__('Continue', 'wpappointments')}
+				{__('Continue', 'appointments-booking')}
 			</Button>
 		</div>
 	);

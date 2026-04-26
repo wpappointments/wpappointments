@@ -30,7 +30,7 @@ class AppointmentsQuery {
 		'post_type'   => self::POST_TYPE,
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value',
-		'meta_key'    => 'timestamp',
+		'meta_key'    => 'timestamp', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ordering by timestamp is intrinsic to appointment scheduling.
 		'order'       => 'ASC',
 	);
 
@@ -52,6 +52,7 @@ class AppointmentsQuery {
 			array(
 				'posts_per_page' => $posts_per_page,
 				'paged'          => $paged,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Filters admin appointment listing by status/date; bounded result set.
 				'meta_query'     => array(),
 			)
 		);
@@ -139,6 +140,7 @@ class AppointmentsQuery {
 			array(
 				'posts_per_page' => $posts_per_page,
 				'paged'          => $paged,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Upcoming appointments bounded to a 7-day window plus confirmed status.
 				'meta_query'     => array_merge(
 					array(
 						'relation' => 'AND',
@@ -173,30 +175,53 @@ class AppointmentsQuery {
 	/**
 	 * Get date range appointments
 	 *
-	 * @param \DateTimeImmutable $start_date Start date.
-	 * @param \DateTimeImmutable $end_date End date.
+	 * @param int $start_date Start date (unix timestamp).
+	 * @param int $end_date   End date (unix timestamp).
+	 * @param int $entity_id  Optional bookable entity ID. When supplied, only
+	 *                        appointments booked against that entity block
+	 *                        availability. When 0, all appointments are returned
+	 *                        (legacy behavior).
 	 *
-	 * @return object
+	 * @return array
 	 */
-	public static function get_date_range_appointments( $start_date, $end_date ) {
+	public static function get_date_range_appointments( $start_date, $end_date, $entity_id = 0 ) {
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'timestamp',
+				'value'   => $start_date,
+				'compare' => '>=',
+			),
+			array(
+				'key'     => 'timestamp',
+				'value'   => $end_date,
+				'compare' => '<=',
+			),
+		);
+
+		if ( $entity_id > 0 ) {
+			// Include appointments for the specific entity AND legacy
+			// appointments that have no entity_id meta yet (upgrade path).
+			$meta_query[] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'entity_id',
+					'value'   => $entity_id,
+					'compare' => '=',
+				),
+				array(
+					'key'     => 'entity_id',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+
 		$query = new \WP_Query(
 			array_merge(
 				self::DEFAULT_QUERY_PART,
 				array(
 					'posts_per_page' => - 1,
-					'meta_query'     => array(
-						'relation' => 'AND',
-						array(
-							'key'     => 'timestamp',
-							'value'   => $start_date,
-							'compare' => '>=',
-						),
-						array(
-							'key'     => 'timestamp',
-							'value'   => $end_date,
-							'compare' => '<=',
-						),
-					),
+					'meta_query'     => $meta_query,
 				)
 			)
 		);

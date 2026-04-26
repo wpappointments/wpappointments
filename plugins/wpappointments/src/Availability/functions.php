@@ -11,6 +11,10 @@
 
 namespace WPAppointments\Availability;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Register an availability layer
  *

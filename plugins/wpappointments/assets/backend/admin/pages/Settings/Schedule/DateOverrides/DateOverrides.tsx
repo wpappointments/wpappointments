@@ -149,7 +149,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 		<div className={styles.editorContent}>
 			<div className={styles.calendarSection}>
 				<p className={styles.sectionLabel}>
-					{__('Select dates', 'wpappointments')}
+					{__('Select dates', 'appointments-booking')}
 				</p>
 				<MultiDatePicker
 					selectedDates={selectedDates}
@@ -164,14 +164,17 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 				<ToggleControl
 					checked={isClosed}
 					onChange={setIsClosed}
-					label={__('Mark unavailable (all day)', 'wpappointments')}
+					label={__(
+						'Mark unavailable (all day)',
+						'appointments-booking'
+					)}
 				/>
 			</div>
 
 			{!isClosed && (
 				<div className={styles.slotsSection}>
 					<p className={styles.sectionLabel}>
-						{__('Custom hours', 'wpappointments')}
+						{__('Custom hours', 'appointments-booking')}
 					</p>
 					{slots.map((slot, index) => (
 						<div key={index} className={styles.slotRow}>
@@ -187,7 +190,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 									<Tooltip
 										text={__(
 											'Add time slot',
-											'wpappointments'
+											'appointments-booking'
 										)}
 									>
 										<Button
@@ -196,7 +199,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 											onClick={handleAddSlot}
 											label={__(
 												'Add time slot',
-												'wpappointments'
+												'appointments-booking'
 											)}
 										/>
 									</Tooltip>
@@ -205,7 +208,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 									<Tooltip
 										text={__(
 											'Remove time slot',
-											'wpappointments'
+											'appointments-booking'
 										)}
 									>
 										<Button
@@ -217,7 +220,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 											}
 											label={__(
 												'Remove time slot',
-												'wpappointments'
+												'appointments-booking'
 											)}
 										/>
 									</Tooltip>
@@ -240,8 +243,8 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 				}}
 			>
 				{group
-					? __('Update override', 'wpappointments')
-					: __('Add override', 'wpappointments')}
+					? __('Update override', 'appointments-booking')
+					: __('Add override', 'appointments-booking')}
 			</Button>
 		</div>
 	);
@@ -428,8 +431,8 @@ export default function DateOverrides({
 			id: slideoutId,
 			parentId: scheduleSlideoutId,
 			title: group
-				? __('Edit date override', 'wpappointments')
-				: __('Add date override', 'wpappointments'),
+				? __('Edit date override', 'appointments-booking')
+				: __('Add date override', 'appointments-booking'),
 			content: (
 				<OverrideEditor
 					slideoutId={slideoutId}
@@ -444,21 +447,21 @@ export default function DateOverrides({
 		<div className={styles.dateOverrides}>
 			<div className={styles.header}>
 				<span className={styles.title}>
-					{__('Date overrides', 'wpappointments')}
+					{__('Date overrides', 'appointments-booking')}
 				</span>
-				<Tooltip text={__('Add date override', 'wpappointments')}>
+				<Tooltip text={__('Add date override', 'appointments-booking')}>
 					<Button
 						size="small"
 						icon={plus}
 						onClick={() => openEditor()}
-						label={__('Add date override', 'wpappointments')}
+						label={__('Add date override', 'appointments-booking')}
 					/>
 				</Tooltip>
 			</div>
 
 			{overrides.length === 0 && (
 				<p className={styles.emptyState}>
-					{__('No date overrides yet.', 'wpappointments')}
+					{__('No date overrides yet.', 'appointments-booking')}
 				</p>
 			)}
 
@@ -491,7 +494,7 @@ export default function DateOverrides({
 								}
 							>
 								{isClosed
-									? __('Unavailable', 'wpappointments')
+									? __('Unavailable', 'appointments-booking')
 									: group.slots
 											.map((s) =>
 												formatSlotSummary(s, clockType)
@@ -504,7 +507,10 @@ export default function DateOverrides({
 							onClick={(e) => e.stopPropagation()}
 						>
 							<Tooltip
-								text={__('Remove override', 'wpappointments')}
+								text={__(
+									'Remove override',
+									'appointments-booking'
+								)}
 							>
 								<Button
 									size="small"
@@ -513,7 +519,7 @@ export default function DateOverrides({
 									onClick={() => handleRemove(group.id)}
 									label={__(
 										'Remove override',
-										'wpappointments'
+										'appointments-booking'
 									)}
 								/>
 							</Tooltip>

@@ -84,9 +84,9 @@ export default function CustomersTable() {
 	if (!customers || totalItems === 0) {
 		return (
 			<TableFullEmpty>
-				<p>{__('You have no customers yet', 'wpappointments')}</p>
+				<p>{__('You have no customers yet', 'appointments-booking')}</p>
 				<Button variant="primary" onClick={addCustomer}>
-					{__('Create New Customer', 'wpappointments')}
+					{__('Create New Customer', 'appointments-booking')}
 				</Button>
 			</TableFullEmpty>
 		);
@@ -95,7 +95,7 @@ export default function CustomersTable() {
 	const fields: Field<Customer>[] = [
 		{
 			id: 'name',
-			label: __('Name', 'wpappointments'),
+			label: __('Name', 'appointments-booking'),
 			render: ({ item }) => {
 				return (
 					<Button variant="link" onClick={() => viewCustomer(item)}>
@@ -109,7 +109,7 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'email',
-			label: __('Email', 'wpappointments'),
+			label: __('Email', 'appointments-booking'),
 			render: ({ item }) => {
 				return <a href={`mailto:${item.email}`}>{item.email}</a>;
 			},
@@ -118,7 +118,7 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'phone',
-			label: __('Phone', 'wpappointments'),
+			label: __('Phone', 'appointments-booking'),
 			render: ({ item }) => {
 				return <a href={`tel:${item.phone}`}>{item.phone}</a>;
 			},
@@ -127,13 +127,16 @@ export default function CustomersTable() {
 		},
 		{
 			id: 'created',
-			label: __('Created', 'wpappointments'),
+			label: __('Created', 'appointments-booking'),
 			render: ({ item }) => {
 				return (
 					<>
 						{item.created
 							? formatDate(item.created)
-							: __('Missing date information', 'wpappointments')}
+							: __(
+									'Missing date information',
+									'appointments-booking'
+								)}
 					</>
 				);
 			},
@@ -146,7 +149,7 @@ export default function CustomersTable() {
 		{
 			id: 'view',
 			icon: info,
-			label: __('View customer details', 'wpappointments'),
+			label: __('View customer details', 'appointments-booking'),
 			callback: (items) => {
 				if (items[0]) viewCustomer(items[0]);
 			},
@@ -154,7 +157,7 @@ export default function CustomersTable() {
 		{
 			id: 'edit',
 			icon: edit,
-			label: __('Edit customer details', 'wpappointments'),
+			label: __('Edit customer details', 'appointments-booking'),
 			callback: (items) => {
 				if (items[0]) editCustomer(items[0]);
 			},
@@ -162,15 +165,15 @@ export default function CustomersTable() {
 		{
 			id: 'delete',
 			icon: trash,
-			label: __('Delete customer', 'wpappointments'),
+			label: __('Delete customer', 'appointments-booking'),
 			RenderModal: ({ items, closeModal: closeActionModal }) => {
 				const item = items[0];
 				return (
 					<DeleteModal
-						title={__('Delete Customer', 'wpappointments')}
+						title={__('Delete Customer', 'appointments-booking')}
 						message={__(
 							'Are you sure you want to delete this customer? This action cannot be undone.',
-							'wpappointments'
+							'appointments-booking'
 						)}
 						onConfirmClick={async () => {
 							if (item?.id && deleteCustomer) {

@@ -106,14 +106,14 @@ export default function TimePicker({
 			<FormFieldSet horizontal>
 				<FormFieldSet
 					horizontal
-					legend={__('Start time', 'wpappointments')}
+					legend={__('Start time', 'appointments-booking')}
 				>
 					<FormField>
 						<label
 							className={formFieldStyles.fieldLabel}
 							htmlFor="timeHourStart"
 						>
-							{__('Hour', 'wpappointments')}
+							{__('Hour', 'appointments-booking')}
 						</label>
 						<SelectControl
 							id="timeHourStart"
@@ -127,7 +127,7 @@ export default function TimePicker({
 							}
 							size="__unstable-large"
 							hideLabelFromVision
-							label={__('Hour', 'wpappointments')}
+							label={__('Hour', 'appointments-booking')}
 						/>
 					</FormField>
 
@@ -136,7 +136,7 @@ export default function TimePicker({
 							className={formFieldStyles.fieldLabel}
 							htmlFor="timeMinuteStart"
 						>
-							{__('Minute', 'wpappointments')}
+							{__('Minute', 'appointments-booking')}
 						</label>
 						<SelectControl
 							id="timeMinuteStart"
@@ -147,20 +147,20 @@ export default function TimePicker({
 							}
 							size="__unstable-large"
 							hideLabelFromVision
-							label={__('Minute', 'wpappointments')}
+							label={__('Minute', 'appointments-booking')}
 						/>
 					</FormField>
 				</FormFieldSet>
 				<FormFieldSet
 					horizontal={true}
-					legend={__('Duration', 'wpappointments')}
+					legend={__('Duration', 'appointments-booking')}
 				>
 					<FormField>
 						<label
 							className={formFieldStyles.fieldLabel}
 							htmlFor="duration"
 						>
-							{__('Minutes', 'wpappointments')}
+							{__('Minutes', 'appointments-booking')}
 						</label>
 						<NumberControl
 							id="duration"

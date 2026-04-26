@@ -63,7 +63,7 @@ class BookableEntity {
 			if ( PluginInfo::POST_TYPES['bookable'] !== $bookable->post_type ) {
 				$this->bookable = new WP_Error(
 					'bookable_invalid_post_type',
-					__( 'Post is not a bookable entity. Expected post_type wpa-bookable', 'wpappointments' )
+					__( 'Post is not a bookable entity. Expected post_type wpa-bookable', 'appointments-booking' )
 				);
 				return;
 			}
@@ -75,12 +75,12 @@ class BookableEntity {
 		} elseif ( is_null( $bookable ) ) {
 			$this->bookable = new WP_Error(
 				'bookable_cannot_be_null',
-				__( 'Bookable value passed to constructor cannot be null. Expected array, int, string or WP_Post', 'wpappointments' )
+				__( 'Bookable value passed to constructor cannot be null. Expected array, int, string or WP_Post', 'appointments-booking' )
 			);
 		} else {
 			$this->bookable = new WP_Error(
 				'bookable_invalid_type',
-				__( 'Bookable value passed to constructor is invalid. Expected array, int, string or WP_Post', 'wpappointments' )
+				__( 'Bookable value passed to constructor is invalid. Expected array, int, string or WP_Post', 'appointments-booking' )
 			);
 		}
 	}
@@ -98,7 +98,7 @@ class BookableEntity {
 		if ( $this->bookable instanceof WP_Post ) {
 			return new WP_Error(
 				'bookable_already_persisted',
-				__( 'This bookable entity is already persisted. Use update() instead', 'wpappointments' )
+				__( 'This bookable entity is already persisted. Use update() instead', 'appointments-booking' )
 			);
 		}
 
@@ -168,7 +168,7 @@ class BookableEntity {
 		if ( ! $this->bookable ) {
 			return new WP_Error(
 				'bookable_object_expected',
-				__( 'Bookable not found. Instantiate BookableEntity class with a bookable object', 'wpappointments' )
+				__( 'Bookable not found. Instantiate BookableEntity class with a bookable object', 'appointments-booking' )
 			);
 		}
 
@@ -211,7 +211,7 @@ class BookableEntity {
 		if ( 0 === $result ) {
 			return new WP_Error(
 				'bookable_update_failed',
-				__( 'Failed to update bookable entity', 'wpappointments' )
+				__( 'Failed to update bookable entity', 'appointments-booking' )
 			);
 		}
 
@@ -247,7 +247,7 @@ class BookableEntity {
 		if ( ! $this->bookable ) {
 			return new WP_Error(
 				'bookable_object_expected',
-				__( 'Bookable not found. Instantiate BookableEntity class with a bookable object', 'wpappointments' )
+				__( 'Bookable not found. Instantiate BookableEntity class with a bookable object', 'appointments-booking' )
 			);
 		}
 
@@ -261,7 +261,7 @@ class BookableEntity {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'bookable_delete_failed',
-				__( 'Failed to delete bookable entity', 'wpappointments' )
+				__( 'Failed to delete bookable entity', 'appointments-booking' )
 			);
 		}
 
@@ -407,17 +407,17 @@ class BookableEntity {
 	 */
 	private function validate_post_id( $post_id ) {
 		if ( ! $post_id ) {
-			return new WP_Error( 'bookable_id_required', __( 'Bookable ID is required', 'wpappointments' ) );
+			return new WP_Error( 'bookable_id_required', __( 'Bookable ID is required', 'appointments-booking' ) );
 		}
 
 		$post = get_post( $post_id );
 
 		if ( ! $post ) {
-			return new WP_Error( 'bookable_not_found', __( 'Bookable not found', 'wpappointments' ) );
+			return new WP_Error( 'bookable_not_found', __( 'Bookable not found', 'appointments-booking' ) );
 		}
 
 		if ( PluginInfo::POST_TYPES['bookable'] !== $post->post_type ) {
-			return new WP_Error( 'bookable_invalid_type', __( 'Post is not a bookable entity', 'wpappointments' ) );
+			return new WP_Error( 'bookable_invalid_type', __( 'Post is not a bookable entity', 'appointments-booking' ) );
 		}
 
 		return $post_id;
@@ -432,7 +432,7 @@ class BookableEntity {
 	 */
 	private function validate_bookable_data( $data ) {
 		if ( ! isset( $data['name'] ) || '' === trim( $data['name'] ) ) {
-			return new WP_Error( 'bookable_name_required', __( 'Bookable name is required', 'wpappointments' ) );
+			return new WP_Error( 'bookable_name_required', __( 'Bookable name is required', 'appointments-booking' ) );
 		}
 
 		return $data;

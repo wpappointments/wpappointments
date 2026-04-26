@@ -13,21 +13,26 @@ export default function CancelAppointment({
 }: Props) {
 	return (
 		<Modal
-			title={__('Cancel appointment?', 'wpappointments')}
+			title={__('Cancel appointment?', 'appointments-booking')}
 			onRequestClose={closeModal}
 			className={styles.modal}
 		>
-			<p>{__('This will cancel the appointment.', 'wpappointments')}</p>
+			<p>
+				{__(
+					'This will cancel the appointment.',
+					'appointments-booking'
+				)}
+			</p>
 			<div className={styles.modalActions}>
 				<Button variant="secondary" onClick={closeModal}>
-					{__('Go back', 'wpappointments')}
+					{__('Go back', 'appointments-booking')}
 				</Button>
 				<Button
 					variant="primary"
 					isDestructive
 					onClick={onConfirmClick}
 				>
-					{__('Cancel appointment', 'wpappointments')}
+					{__('Cancel appointment', 'appointments-booking')}
 				</Button>
 			</div>
 		</Modal>

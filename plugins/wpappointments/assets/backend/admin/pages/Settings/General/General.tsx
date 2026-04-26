@@ -53,31 +53,31 @@ const profileFields: Field<Fields>[] = [
 	{
 		id: 'firstName',
 		type: 'text',
-		label: __('First name', 'wpappointments'),
+		label: __('First name', 'appointments-booking'),
 		Edit: TextInput,
 	},
 	{
 		id: 'lastName',
 		type: 'text',
-		label: __('Last name', 'wpappointments'),
+		label: __('Last name', 'appointments-booking'),
 		Edit: TextInput,
 	},
 	{
 		id: 'email',
 		type: 'email',
-		label: __('Email', 'wpappointments'),
+		label: __('Email', 'appointments-booking'),
 		Edit: TextInput,
 	},
 	{
 		id: 'phoneNumber',
 		type: 'telephone',
-		label: __('Phone number', 'wpappointments'),
+		label: __('Phone number', 'appointments-booking'),
 		Edit: TextInput,
 	},
 	{
 		id: 'companyName',
 		type: 'text',
-		label: __('Company name', 'wpappointments'),
+		label: __('Company name', 'appointments-booking'),
 		Edit: TextInput,
 	},
 ];
@@ -90,16 +90,16 @@ const profileForm: Form = {
 const calendarFields: Field<Fields>[] = [
 	{
 		id: 'startOfWeek',
-		label: __('Week starts on', 'wpappointments'),
+		label: __('Week starts on', 'appointments-booking'),
 		isValid: { required: true },
 		elements: [
-			{ label: __('Sunday', 'wpappointments'), value: '0' },
-			{ label: __('Monday', 'wpappointments'), value: '1' },
-			{ label: __('Tuesday', 'wpappointments'), value: '2' },
-			{ label: __('Wednesday', 'wpappointments'), value: '3' },
-			{ label: __('Thursday', 'wpappointments'), value: '4' },
-			{ label: __('Friday', 'wpappointments'), value: '5' },
-			{ label: __('Saturday', 'wpappointments'), value: '6' },
+			{ label: __('Sunday', 'appointments-booking'), value: '0' },
+			{ label: __('Monday', 'appointments-booking'), value: '1' },
+			{ label: __('Tuesday', 'appointments-booking'), value: '2' },
+			{ label: __('Wednesday', 'appointments-booking'), value: '3' },
+			{ label: __('Thursday', 'appointments-booking'), value: '4' },
+			{ label: __('Friday', 'appointments-booking'), value: '5' },
+			{ label: __('Saturday', 'appointments-booking'), value: '6' },
 		],
 		Edit: SelectInput,
 	},
@@ -118,7 +118,7 @@ const dateTimeForm: Form = {
 const dateFormatFields: Field<Fields>[] = [
 	{
 		id: 'dateFormat',
-		label: __('Date format', 'wpappointments'),
+		label: __('Date format', 'appointments-booking'),
 		elements: [
 			{
 				label: format(new Date(), 'MMMM d, yyyy'),
@@ -149,7 +149,7 @@ const dateFormatForm: Form = {
 const timeFormatFields: Field<Fields>[] = [
 	{
 		id: 'timeFormat',
-		label: __('Time format', 'wpappointments'),
+		label: __('Time format', 'appointments-booking'),
 		elements: [
 			{
 				label: format(new Date(), 'h:mm aaa'),
@@ -227,15 +227,15 @@ export default function GeneralSettings() {
 		() => [
 			{
 				id: 'clockType',
-				label: __('Clock type', 'wpappointments'),
+				label: __('Clock type', 'appointments-booking'),
 				isValid: { required: true },
 				elements: [
 					{
-						label: __('12 hours', 'wpappointments'),
+						label: __('12 hours', 'appointments-booking'),
 						value: '12',
 					},
 					{
-						label: __('24 hours', 'wpappointments'),
+						label: __('24 hours', 'appointments-booking'),
 						value: '24',
 					},
 				],
@@ -244,12 +244,12 @@ export default function GeneralSettings() {
 			{
 				id: 'timezoneSiteDefault',
 				type: 'boolean',
-				label: __('Use site default timezone', 'wpappointments'),
+				label: __('Use site default timezone', 'appointments-booking'),
 				Edit: CheckboxInput,
 			},
 			{
 				id: 'timezone',
-				label: __('Timezone', 'wpappointments'),
+				label: __('Timezone', 'appointments-booking'),
 				isValid: { required: true },
 				isVisible: () => !formData.timezoneSiteDefault,
 				elements: window.wpappointments.date.timezones.map(
@@ -305,7 +305,9 @@ export default function GeneralSettings() {
 		}
 
 		if (response === null) {
-			displayErrorToast(__('Error saving settings', 'wpappointments'));
+			displayErrorToast(
+				__('Error saving settings', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -319,7 +321,7 @@ export default function GeneralSettings() {
 		<Card className={globalStyles.card}>
 			<CardHeader>
 				<Text size="title">
-					{__('Profile and company details', 'wpappointments')}
+					{__('Profile and company details', 'appointments-booking')}
 				</Text>
 			</CardHeader>
 			<CardBody>
@@ -334,7 +336,9 @@ export default function GeneralSettings() {
 				</FormFieldSet>
 			</CardBody>
 			<CardHeader style={{ borderTop: '1px solid #eee', marginTop: 15 }}>
-				<Text size="title">{__('Calendar', 'wpappointments')}</Text>
+				<Text size="title">
+					{__('Calendar', 'appointments-booking')}
+				</Text>
 			</CardHeader>
 			<CardBody>
 				<FormFieldSet>
@@ -349,7 +353,7 @@ export default function GeneralSettings() {
 			</CardBody>
 			<CardHeader style={{ borderTop: '1px solid #eee', marginTop: 15 }}>
 				<Text size="title">
-					{__('Date and time', 'wpappointments')}
+					{__('Date and time', 'appointments-booking')}
 				</Text>
 			</CardHeader>
 			<CardBody>
@@ -368,7 +372,7 @@ export default function GeneralSettings() {
 							<small>
 								{__(
 									'Site default timezone is',
-									'wpappointments'
+									'appointments-booking'
 								)}{' '}
 								<code>
 									<small>
@@ -387,14 +391,14 @@ export default function GeneralSettings() {
 							<small>
 								{__(
 									'Choose either a city in the same timezone as you or a UTC',
-									'wpappointments'
+									'appointments-booking'
 								)}
 							</small>
 						</div>
 					)}
 					<div>
 						<small>
-							{__('Universal time is', 'wpappointments')}{' '}
+							{__('Universal time is', 'appointments-booking')}{' '}
 							<code>
 								<small>
 									{_formatDate(new Date().toISOString())}
@@ -405,7 +409,7 @@ export default function GeneralSettings() {
 					</div>
 					<div>
 						<small>
-							{__('Local time is', 'wpappointments')}{' '}
+							{__('Local time is', 'appointments-booking')}{' '}
 							<code>
 								<small>
 									{format(new Date(), 'yyyy-MM-dd HH:mm:ss')}
@@ -429,7 +433,7 @@ export default function GeneralSettings() {
 						{formData.dateFormat &&
 							dateFormatMap.get(formData.dateFormat) &&
 							sprintf(
-								__('Preview: %s', 'wpappointments'),
+								__('Preview: %s', 'appointments-booking'),
 								format(
 									new Date(),
 									dateFormatMap.get(formData.dateFormat) ||
@@ -439,7 +443,7 @@ export default function GeneralSettings() {
 					</div>
 					{__(
 						'Default date format is derived from WordPress site settings',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</FormFieldSet>
 				<FormFieldSet style={{ marginBottom: 25 }}>
@@ -456,7 +460,7 @@ export default function GeneralSettings() {
 						{formData.timeFormat &&
 							timeFormatMap.get(formData.timeFormat) &&
 							sprintf(
-								__('Preview: %s', 'wpappointments'),
+								__('Preview: %s', 'appointments-booking'),
 								format(
 									new Date(),
 									timeFormatMap.get(
@@ -467,7 +471,7 @@ export default function GeneralSettings() {
 					</div>
 					{__(
 						'Default time format is derived from WordPress site settings',
-						'wpappointments'
+						'appointments-booking'
 					)}
 					<a
 						href="https://wordpress.org/documentation/article/customize-date-and-time-format/"
@@ -476,7 +480,7 @@ export default function GeneralSettings() {
 					>
 						{__(
 							'Documentation on date and time formatting.',
-							'wpappointments'
+							'appointments-booking'
 						)}
 					</a>
 				</FormFieldSet>
@@ -487,7 +491,7 @@ export default function GeneralSettings() {
 					onClick={onSubmit}
 					disabled={!isValid}
 				>
-					{__('Save changes', 'wpappointments')}
+					{__('Save changes', 'appointments-booking')}
 				</Button>
 			</CardFooter>
 		</Card>

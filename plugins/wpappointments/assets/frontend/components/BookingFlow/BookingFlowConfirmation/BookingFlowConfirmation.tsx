@@ -12,19 +12,24 @@ export default function BookingFlowConfirmation() {
 
 	return (
 		<div className={styles.alignLeft}>
-			<h2>{__('Appointment created successfully!', 'wpappointments')}</h2>
+			<h2>
+				{__(
+					'Appointment created successfully!',
+					'appointments-booking'
+				)}
+			</h2>
 			<p>
 				{__(
 					'Thank you for scheduling your appointment!',
-					'wpappointments'
+					'appointments-booking'
 				)}
 			</p>
 			<p>
-				<strong>{__('Details', 'wpappointments')}</strong>:
+				<strong>{__('Details', 'appointments-booking')}</strong>:
 			</p>
-			<strong>{__('Date', 'wpappointments')}</strong>: {date}
+			<strong>{__('Date', 'appointments-booking')}</strong>: {date}
 			<br />
-			<strong>{__('Time', 'wpappointments')}</strong>: {time}
+			<strong>{__('Time', 'appointments-booking')}</strong>: {time}
 			<br />
 		</div>
 	);

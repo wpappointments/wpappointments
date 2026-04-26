@@ -109,7 +109,7 @@ class HolidaysController extends Controller {
 	 */
 	public static function get_available( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by REST callback contract.
 		return self::response(
-			__( 'Available holiday sets fetched successfully', 'wpappointments' ),
+			__( 'Available holiday sets fetched successfully', 'appointments-booking' ),
 			array(
 				'countries' => HolidayRegistry::get_available_countries(),
 				'religious' => HolidayRegistry::get_available_religious(),
@@ -126,7 +126,7 @@ class HolidaysController extends Controller {
 	 */
 	public static function get_groups( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by REST callback contract.
 		return self::response(
-			__( 'Holiday groups fetched successfully', 'wpappointments' ),
+			__( 'Holiday groups fetched successfully', 'appointments-booking' ),
 			array( 'groups' => HolidayRegistry::get_groups_with_holidays() )
 		);
 	}
@@ -153,7 +153,7 @@ class HolidaysController extends Controller {
 		}
 
 		return self::response(
-			__( 'Holiday group added successfully', 'wpappointments' ),
+			__( 'Holiday group added successfully', 'appointments-booking' ),
 			array( 'groups' => HolidayRegistry::get_groups_with_holidays() )
 		);
 	}
@@ -174,7 +174,7 @@ class HolidaysController extends Controller {
 		}
 
 		return self::response(
-			__( 'Holiday group removed successfully', 'wpappointments' ),
+			__( 'Holiday group removed successfully', 'appointments-booking' ),
 			array( 'groups' => HolidayRegistry::get_groups_with_holidays() )
 		);
 	}
@@ -200,7 +200,7 @@ class HolidaysController extends Controller {
 			}
 
 			return self::response(
-				__( 'Holiday group updated successfully', 'wpappointments' ),
+				__( 'Holiday group updated successfully', 'appointments-booking' ),
 				array( 'groups' => HolidayRegistry::get_groups_with_holidays() )
 			);
 		}
@@ -216,7 +216,7 @@ class HolidaysController extends Controller {
 			}
 
 			return self::response(
-				__( 'Holiday updated successfully', 'wpappointments' ),
+				__( 'Holiday updated successfully', 'appointments-booking' ),
 				array( 'groups' => HolidayRegistry::get_groups_with_holidays() )
 			);
 		}
@@ -224,7 +224,7 @@ class HolidaysController extends Controller {
 		return self::error(
 			new WP_Error(
 				'no_update_data',
-				__( 'No update data provided.', 'wpappointments' ),
+				__( 'No update data provided.', 'appointments-booking' ),
 				array( 'status' => 422 )
 			)
 		);
@@ -253,7 +253,7 @@ class HolidaysController extends Controller {
 			return self::error(
 				new WP_Error(
 					'group_not_found',
-					__( 'Holiday group not found.', 'wpappointments' ),
+					__( 'Holiday group not found.', 'appointments-booking' ),
 					array( 'status' => 404 )
 				)
 			);
@@ -276,7 +276,7 @@ class HolidaysController extends Controller {
 		);
 
 		return self::response(
-			__( 'Group holidays fetched successfully', 'wpappointments' ),
+			__( 'Group holidays fetched successfully', 'appointments-booking' ),
 			array( 'holidays' => $holidays )
 		);
 	}
