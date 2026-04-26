@@ -37,14 +37,14 @@ class SchedulesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_schedules' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SCHEDULES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_schedule' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::CREATE_SCHEDULES );
 					},
 				),
 			)
@@ -58,21 +58,21 @@ class SchedulesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_schedule' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SCHEDULES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_schedule' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SCHEDULES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete_schedule' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::DELETE_SCHEDULES );
 					},
 				),
 			)
@@ -86,7 +86,7 @@ class SchedulesController extends Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'set_default' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SCHEDULES );
 					},
 				),
 			)

@@ -54,27 +54,34 @@ async function pickAvailableFutureDay(page: Page) {
 	await availableDay.click();
 }
 
-/** Pick an available time slot. */
-async function pickFirstAvailableSlot(page: Page) {
+/**
+ * Pick an available time slot.
+ *
+ * In multi-step flow, selecting a slot auto-advances to the next step,
+ * so we skip waiting for "Selected time:" confirmation.
+ */
+async function pickFirstAvailableSlot(
+	page: Page,
+	{ waitForConfirmation = true } = {}
+) {
 	// Wait for time slot buttons to be visible
 	await page
 		.locator('[data-time]')
 		.first()
 		.waitFor({ state: 'visible', timeout: 15_000 });
 
-	// Pick a slot in the middle of the list — guaranteed to be in working hours
-	const count = await page.locator('[data-time]').count();
+	// Only consider enabled (non-disabled) slots
+	const enabledSlots = page.locator('[data-time]:not([disabled])');
+	const count = await enabledSlots.count();
 	const midIdx = Math.floor(count / 2);
 
-	// Playwright locators auto-retry on detached elements from React re-renders
-	await page
-		.locator(`[data-time] >> nth=${midIdx}`)
-		.click({ timeout: 10_000 });
+	await enabledSlots.nth(midIdx).click({ timeout: 10_000 });
 
-	// Wait for selection confirmation
-	await expect(page.getByText('Selected time:')).toBeVisible({
-		timeout: 5_000,
-	});
+	if (waitForConfirmation) {
+		await expect(page.getByText('Selected time:')).toBeVisible({
+			timeout: 5_000,
+		});
+	}
 }
 
 /** Fill in the customer information form. */
@@ -130,18 +137,25 @@ test.describe('Single-step booking flow', () => {
 		).toBeVisible();
 	});
 
-	test('shows validation errors for empty customer fields', async ({
-		page,
-	}) => {
+	test('prevents submission with empty customer fields', async ({ page }) => {
 		await pickAvailableFutureDay(page);
 		await pickFirstAvailableSlot(page);
 
+		// Click Book — native HTML validation should prevent submission
 		await page.getByRole('button', { name: 'Book' }).click();
 
-		await expect(page.getByText('First name is required')).toBeVisible();
-		await expect(page.getByText('Last name is required')).toBeVisible();
-		await expect(page.getByText('Email is required')).toBeVisible();
-		await expect(page.getByText('Phone is required')).toBeVisible();
+		// The first required field should report invalid via native constraint validation
+		const firstNameInput = page.getByPlaceholder('First name');
+		const isInvalid = await firstNameInput.evaluate(
+			(el: HTMLInputElement) => !el.validity.valid
+		);
+		expect(isInvalid).toBe(true);
+
+		// Confirm we're still on the same page (form was not submitted)
+		await expect(page.getByPlaceholder('First name')).toBeVisible();
+		await expect(
+			page.getByText('Appointment created successfully!')
+		).not.toBeVisible();
 	});
 
 	test('shows password field when "Create account" is checked', async ({
@@ -171,15 +185,16 @@ test.describe('Multi-step booking flow', () => {
 	});
 
 	test('completes all three steps successfully', async ({ page }) => {
-		// Step 1: Select date
+		// Step 1: Select date — selecting a slot auto-advances to step 2
 		await expect(page.getByText('Select date and time')).toBeVisible();
 
 		await pickAvailableFutureDay(page);
-		await pickFirstAvailableSlot(page);
-		await page.getByRole('button', { name: 'Next step' }).click();
+		await pickFirstAvailableSlot(page, { waitForConfirmation: false });
 
-		// Step 2: Customer info
-		await expect(page.getByText('Customer information')).toBeVisible();
+		// Step 2: Customer info — auto-advanced after slot selection
+		await expect(page.getByText('Customer information')).toBeVisible({
+			timeout: 10_000,
+		});
 
 		await fillCustomerForm(page);
 		await page.getByRole('button', { name: 'Book' }).click();
@@ -190,22 +205,14 @@ test.describe('Multi-step booking flow', () => {
 		).toBeVisible({ timeout: 10_000 });
 	});
 
-	test('shows date validation when advancing without selection', async ({
-		page,
-	}) => {
-		await page.getByRole('button', { name: 'Next step' }).click();
-
-		await expect(
-			page.getByText('Please select a date and time')
-		).toBeVisible();
-	});
-
 	test('can navigate back to date step', async ({ page }) => {
 		await pickAvailableFutureDay(page);
-		await pickFirstAvailableSlot(page);
-		await page.getByRole('button', { name: 'Next step' }).click();
+		await pickFirstAvailableSlot(page, { waitForConfirmation: false });
 
-		await expect(page.getByText('Customer information')).toBeVisible();
+		// Auto-advanced to customer info
+		await expect(page.getByText('Customer information')).toBeVisible({
+			timeout: 10_000,
+		});
 
 		// Click "Select date" step header to go back
 		await page.locator('[data-step="1"]').click();

@@ -38,7 +38,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_appointments' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::VIEW_APPOINTMENTS );
 					},
 				),
 			)
@@ -52,7 +52,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_upcoming_appointments' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::VIEW_APPOINTMENTS );
 					},
 				),
 			)
@@ -66,7 +66,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_appointment' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::CREATE_APPOINTMENTS );
 					},
 				),
 			)
@@ -80,7 +80,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_appointment' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::EDIT_APPOINTMENTS );
 					},
 				),
 			)
@@ -94,7 +94,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'cancel_appointment' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::EDIT_APPOINTMENTS );
 					},
 				),
 			)
@@ -108,7 +108,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete_appointment' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::DELETE_APPOINTMENTS );
 					},
 				),
 			)
@@ -122,7 +122,7 @@ class AppointmentsController extends Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'confirm_appointment' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_APPOINTMENTS );
+						return current_user_can( Capabilities::EDIT_APPOINTMENTS );
 					},
 				),
 			)

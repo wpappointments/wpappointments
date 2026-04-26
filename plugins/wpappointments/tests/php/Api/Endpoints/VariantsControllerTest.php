@@ -19,7 +19,9 @@ beforeEach(
 
 		$role = get_role( 'administrator' );
 		if ( $role ) {
-			$role->add_cap( 'wpa_manage_bookables' );
+			foreach ( \WPAppointments\Core\Capabilities::for_group( 'bookables' ) as $cap ) {
+				$role->add_cap( $cap );
+			}
 		}
 	}
 );

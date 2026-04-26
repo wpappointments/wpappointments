@@ -34,7 +34,7 @@ class BookableTypesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_types' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::VIEW_BOOKABLES );
 					},
 				),
 			)

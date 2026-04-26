@@ -16,10 +16,12 @@ beforeEach(
 	function () {
 		BookableTypeRegistry::get_instance()->reset();
 
-		// Ensure the admin has the bookables capability.
+		// Ensure the admin has all bookable capabilities.
 		$role = get_role( 'administrator' );
 		if ( $role ) {
-			$role->add_cap( 'wpa_manage_bookables' );
+			foreach ( \WPAppointments\Core\Capabilities::for_group( 'bookables' ) as $cap ) {
+				$role->add_cap( $cap );
+			}
 		}
 	}
 );
