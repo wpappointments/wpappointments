@@ -34,8 +34,8 @@ export type CustomersApiOptions = {
 export function customersApi(options?: CustomersApiOptions) {
 	const apiPath = 'customers';
 	const { invalidateCache } = options || {};
-	const dispatch = window.wp.data.dispatch('appointments-booking');
-	const select = window.wp.data.select('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
+	const select = window.wp.data.select('wpappointments');
 
 	async function getCustomers() {
 		return select.getCustomers();

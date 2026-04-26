@@ -28,8 +28,8 @@ export function appointmentsApi({
 	invalidateCache?: (selector: string) => void;
 }) {
 	const apiPath = 'appointments';
-	const dispatch = window.wp.data.dispatch('appointments-booking');
-	const select = window.wp.data.select('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
+	const select = window.wp.data.select('wpappointments');
 
 	async function getAppointments() {
 		return select.getAppointments();

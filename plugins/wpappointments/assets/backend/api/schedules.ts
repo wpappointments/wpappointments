@@ -31,7 +31,7 @@ export type UpdateScheduleData = {
 };
 
 export async function getSchedules() {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<SchedulesResponse>(async () => {
 		return await apiFetch<SchedulesResponse>({ path: 'schedules' });
@@ -50,7 +50,7 @@ export async function getSchedules() {
 }
 
 export async function createSchedule(data: CreateScheduleData) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<ScheduleResponse>(async () => {
 		return await apiFetch<ScheduleResponse>({
@@ -74,7 +74,7 @@ export async function createSchedule(data: CreateScheduleData) {
 }
 
 export async function updateSchedule(id: number, data: UpdateScheduleData) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<ScheduleResponse>(async () => {
 		return await apiFetch<ScheduleResponse>({
@@ -98,7 +98,7 @@ export async function updateSchedule(id: number, data: UpdateScheduleData) {
 }
 
 export async function deleteSchedule(id: number, reassign: boolean = true) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<APIResponse<{ id: number }>>(
 		async () => {
@@ -124,7 +124,7 @@ export async function deleteSchedule(id: number, reassign: boolean = true) {
 }
 
 export async function setDefaultSchedule(id: number) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<ScheduleResponse>(async () => {
 		return await apiFetch<ScheduleResponse>({

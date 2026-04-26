@@ -18,7 +18,7 @@ export type CreateOooData = {
 export type UpdateOooData = Partial<CreateOooData>;
 
 export async function createOooEntry(data: CreateOooData) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<OooResponse>(async () => {
 		return await apiFetch<OooResponse>({
@@ -42,7 +42,7 @@ export async function createOooEntry(data: CreateOooData) {
 }
 
 export async function updateOooEntry(id: number, data: UpdateOooData) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<OooResponse>(async () => {
 		return await apiFetch<OooResponse>({
@@ -66,7 +66,7 @@ export async function updateOooEntry(id: number, data: UpdateOooData) {
 }
 
 export async function deleteOooEntry(id: number) {
-	const dispatch = window.wp.data.dispatch('appointments-booking');
+	const dispatch = window.wp.data.dispatch('wpappointments');
 
 	const [error, response] = await resolve<APIResponse<{ id: number }>>(
 		async () => {

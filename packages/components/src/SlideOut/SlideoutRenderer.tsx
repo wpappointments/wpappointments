@@ -16,7 +16,7 @@ import { useSelect } from '@wordpress/data';
 import { getSlideoutContent } from '@wpappointments/data';
 import SlideOut from './SlideOut';
 
-const STORE_NAME = 'appointments-booking';
+const STORE_NAME = 'wpappointments';
 
 export default function SlideoutRenderer() {
 	const openSlideouts = useSelect((select) => {
