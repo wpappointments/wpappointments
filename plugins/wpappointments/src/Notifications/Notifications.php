@@ -250,7 +250,7 @@ class Notifications extends Singleton {
 		$message = $this->interpolate( $body, $appointment, $old_appointment );
 
 		/**
-		 * Filters the email message body for Appointments Booking notifications.
+		 * Filters the email message body for WP Appointments notifications.
 		 *
 		 * @param string     $message         Plain-text email body.
 		 * @param array      $appointment     Normalized appointment data.
@@ -406,7 +406,7 @@ class Notifications extends Singleton {
 		$headers   = array( 'Content-Type: text/plain; charset=UTF-8' );
 
 		/**
-		 * Filters the email headers for Appointments Booking notifications.
+		 * Filters the email headers for WP Appointments notifications.
 		 *
 		 * @param array  $headers Email headers.
 		 * @param string $to      Recipient email.
@@ -415,7 +415,7 @@ class Notifications extends Singleton {
 		$headers = apply_filters( 'wpappointments_notification_headers', $headers, $to, $subject );
 
 		/**
-		 * Filters the full email subject for Appointments Booking notifications.
+		 * Filters the full email subject for WP Appointments notifications.
 		 *
 		 * @param string $full_subject Full subject with site name prefix.
 		 * @param string $subject      Original subject.
