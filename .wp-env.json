@@ -17,6 +17,7 @@
 	"plugins": [
 		"./plugins/wpappointments",
 		"./plugins/other-plugin",
-		"./tools/testing/demo-court-booking"
+		"./tools/testing/demo-court-booking",
+		"https://downloads.wordpress.org/plugin/plugin-check.latest-stable.zip"
 	]
 }

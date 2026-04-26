@@ -18,27 +18,27 @@ type Tab = {
 const tabs: Tab[] = [
 	{
 		name: 'general',
-		title: __('General', 'wpappointments'),
+		title: __('General', 'appointments-booking'),
 		component: <GeneralSettings />,
 	},
 	{
 		name: 'appointments',
-		title: __('Appointments', 'wpappointments'),
+		title: __('Appointments', 'appointments-booking'),
 		component: <AppointmentsSettings />,
 	},
 	{
 		name: 'schedule',
-		title: __('Schedule', 'wpappointments'),
+		title: __('Schedule', 'appointments-booking'),
 		component: <ScheduleSettings />,
 	},
 	{
 		name: 'days-off',
-		title: __('Days Off', 'wpappointments'),
+		title: __('Days Off', 'appointments-booking'),
 		component: <DaysOffSettings />,
 	},
 	{
 		name: 'notifications',
-		title: __('Notifications', 'wpappointments'),
+		title: __('Notifications', 'appointments-booking'),
 		component: <NotificationsSettings />,
 	},
 ];
@@ -62,7 +62,7 @@ export default function Settings() {
 	)?.component;
 
 	return (
-		<LayoutDefault title={__('Settings', 'wpappointments')} fullWidth>
+		<LayoutDefault title={__('Settings', 'appointments-booking')} fullWidth>
 			<div className={styles.container}>
 				<nav className={styles.sidebar}>
 					<ul className={styles.menu}>

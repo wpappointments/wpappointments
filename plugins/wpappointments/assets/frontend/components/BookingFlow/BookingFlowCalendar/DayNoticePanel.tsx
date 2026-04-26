@@ -4,11 +4,11 @@ import styles from './BookingFlowCalendar.module.css';
 import type { DayNotice } from '~/frontend/frontend';
 
 const REASON_LABELS: Record<string, string> = {
-	unspecified: __('Time off', 'wpappointments'),
-	vacation: __('Vacation', 'wpappointments'),
-	travel: __('Travel', 'wpappointments'),
-	sick_leave: __('Sick Leave', 'wpappointments'),
-	holiday: __('Holiday', 'wpappointments'),
+	unspecified: __('Time off', 'appointments-booking'),
+	vacation: __('Vacation', 'appointments-booking'),
+	travel: __('Travel', 'appointments-booking'),
+	sick_leave: __('Sick Leave', 'appointments-booking'),
+	holiday: __('Holiday', 'appointments-booking'),
 };
 
 type Props = {

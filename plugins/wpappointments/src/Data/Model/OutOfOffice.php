@@ -57,7 +57,7 @@ class OutOfOffice {
 			if ( PluginInfo::POST_TYPES['ooo'] !== $ooo->post_type ) {
 				$this->ooo = new WP_Error(
 					'ooo_invalid_post_type',
-					__( 'Post is not an OOO entry', 'wpappointments' )
+					__( 'Post is not an OOO entry', 'appointments-booking' )
 				);
 				return;
 			}
@@ -69,7 +69,7 @@ class OutOfOffice {
 		} else {
 			$this->ooo = new WP_Error(
 				'ooo_invalid_type',
-				__( 'Invalid value passed to OutOfOffice constructor', 'wpappointments' )
+				__( 'Invalid value passed to OutOfOffice constructor', 'appointments-booking' )
 			);
 		}
 	}
@@ -87,7 +87,7 @@ class OutOfOffice {
 		if ( $this->ooo instanceof WP_Post ) {
 			return new WP_Error(
 				'ooo_already_persisted',
-				__( 'This OOO entry is already persisted. Use update() instead', 'wpappointments' )
+				__( 'This OOO entry is already persisted. Use update() instead', 'appointments-booking' )
 			);
 		}
 
@@ -142,7 +142,7 @@ class OutOfOffice {
 		if ( ! $this->ooo ) {
 			return new WP_Error(
 				'ooo_object_expected',
-				__( 'OOO entry not found', 'wpappointments' )
+				__( 'OOO entry not found', 'appointments-booking' )
 			);
 		}
 
@@ -193,7 +193,7 @@ class OutOfOffice {
 		if ( ! $this->ooo ) {
 			return new WP_Error(
 				'ooo_object_expected',
-				__( 'OOO entry not found', 'wpappointments' )
+				__( 'OOO entry not found', 'appointments-booking' )
 			);
 		}
 
@@ -203,7 +203,7 @@ class OutOfOffice {
 		if ( ! $deleted ) {
 			return new WP_Error(
 				'ooo_delete_failed',
-				__( 'Failed to delete OOO entry', 'wpappointments' )
+				__( 'Failed to delete OOO entry', 'appointments-booking' )
 			);
 		}
 
@@ -270,11 +270,11 @@ class OutOfOffice {
 	 */
 	private static function generate_title( $reason, $start_date, $end_date ) {
 		$labels = array(
-			'unspecified' => __( 'Time off', 'wpappointments' ),
-			'vacation'    => __( 'Vacation', 'wpappointments' ),
-			'travel'      => __( 'Travel', 'wpappointments' ),
-			'sick_leave'  => __( 'Sick Leave', 'wpappointments' ),
-			'holiday'     => __( 'Holiday', 'wpappointments' ),
+			'unspecified' => __( 'Time off', 'appointments-booking' ),
+			'vacation'    => __( 'Vacation', 'appointments-booking' ),
+			'travel'      => __( 'Travel', 'appointments-booking' ),
+			'sick_leave'  => __( 'Sick Leave', 'appointments-booking' ),
+			'holiday'     => __( 'Holiday', 'appointments-booking' ),
 		);
 
 		$label = $labels[ $reason ] ?? $labels['unspecified'];
@@ -291,7 +291,7 @@ class OutOfOffice {
 		if ( empty( $data['start_date'] ) || empty( $data['end_date'] ) ) {
 			$this->ooo = new WP_Error(
 				'ooo_dates_required',
-				__( 'Start date and end date are required', 'wpappointments' )
+				__( 'Start date and end date are required', 'appointments-booking' )
 			);
 			return;
 		}
@@ -318,12 +318,12 @@ class OutOfOffice {
 		$post = get_post( absint( $id ) );
 
 		if ( ! $post ) {
-			$this->ooo = new WP_Error( 'ooo_not_found', __( 'OOO entry not found', 'wpappointments' ) );
+			$this->ooo = new WP_Error( 'ooo_not_found', __( 'OOO entry not found', 'appointments-booking' ) );
 			return;
 		}
 
 		if ( PluginInfo::POST_TYPES['ooo'] !== $post->post_type ) {
-			$this->ooo = new WP_Error( 'ooo_invalid_type', __( 'Post is not an OOO entry', 'wpappointments' ) );
+			$this->ooo = new WP_Error( 'ooo_invalid_type', __( 'Post is not an OOO entry', 'appointments-booking' ) );
 			return;
 		}
 

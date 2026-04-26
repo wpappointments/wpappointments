@@ -204,7 +204,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			!formData.timeMinuteStart
 		) {
 			displayErrorToast(
-				__('Please select a date and time.', 'wpappointments')
+				__('Please select a date and time.', 'appointments-booking')
 			);
 			return;
 		}
@@ -216,7 +216,9 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 		date.setMilliseconds(0);
 
 		if (isNaN(date.getTime())) {
-			displayErrorToast(__('Invalid date or time.', 'wpappointments'));
+			displayErrorToast(
+				__('Invalid date or time.', 'appointments-booking')
+			);
 			return;
 		}
 
@@ -227,6 +229,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				coreEntityId?.toString() ||
 				defaultEntityName.toLowerCase(),
 			date: date.toISOString(),
+			entityId: coreEntityId,
 		};
 
 		setIsSubmitting(true);
@@ -251,7 +254,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				displayErrorToast(
 					__(
 						'Something went wrong while submitting the form.',
-						'wpappointments'
+						'appointments-booking'
 					)
 				);
 
@@ -300,11 +303,11 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 
 	const title =
 		mode === 'edit'
-			? __('Edit Appointment', 'wpappointments')
-			: __('Create New Appointment', 'wpappointments');
+			? __('Edit Appointment', 'appointments-booking')
+			: __('Create New Appointment', 'appointments-booking');
 
 	const defaultEntityName =
-		coreEntityName || __('Appointment', 'wpappointments');
+		coreEntityName || __('Appointment', 'appointments-booking');
 
 	const handleCustomerSelect = (customer: Customer) => {
 		setFormData((prev) => ({
@@ -344,7 +347,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 							className={formFieldStyles.fieldLabel}
 							htmlFor="service"
 						>
-							{__('Service', 'wpappointments')}
+							{__('Service', 'appointments-booking')}
 						</label>
 						<SelectControl
 							value={
@@ -365,7 +368,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 							id="service"
 							size="__unstable-large"
 							hideLabelFromVision
-							label={__('Service', 'wpappointments')}
+							label={__('Service', 'appointments-booking')}
 						/>
 					</FormField>
 
@@ -374,7 +377,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 							className={formFieldStyles.fieldLabel}
 							htmlFor="status"
 						>
-							{__('Status', 'wpappointments')}
+							{__('Status', 'appointments-booking')}
 						</label>
 						<SelectControl
 							value={
@@ -385,19 +388,31 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 							}
 							options={[
 								{
-									label: __('Pending', 'wpappointments'),
+									label: __(
+										'Pending',
+										'appointments-booking'
+									),
 									value: 'pending',
 								},
 								{
-									label: __('Confirmed', 'wpappointments'),
+									label: __(
+										'Confirmed',
+										'appointments-booking'
+									),
 									value: 'confirmed',
 								},
 								{
-									label: __('Cancelled', 'wpappointments'),
+									label: __(
+										'Cancelled',
+										'appointments-booking'
+									),
 									value: 'cancelled',
 								},
 								{
-									label: __('No Show', 'wpappointments'),
+									label: __(
+										'No Show',
+										'appointments-booking'
+									),
 									value: 'noshow',
 								},
 							]}
@@ -410,19 +425,19 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 							id="status"
 							size="__unstable-large"
 							hideLabelFromVision
-							label={__('Status', 'wpappointments')}
+							label={__('Status', 'appointments-booking')}
 						/>
 					</FormField>
 
 					<FormFieldSet
-						legend={__('Date and time', 'wpappointments')}
+						legend={__('Date and time', 'appointments-booking')}
 						style={{
 							display: formData.datetime ? 'none' : 'block',
 						}}
 					>
 						<FormFieldSet horizontal horizontalCenter>
 							<span className={styles.noTimeLabel}>
-								{__('No time selected', 'wpappointments')}
+								{__('No time selected', 'appointments-booking')}
 							</span>
 							<Button
 								variant="secondary"
@@ -437,7 +452,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 									});
 								}}
 							>
-								{__('Select time', 'wpappointments')}
+								{__('Select time', 'appointments-booking')}
 							</Button>
 						</FormFieldSet>
 					</FormFieldSet>
@@ -461,14 +476,14 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 										});
 									}}
 								>
-									{__('Change', 'wpappointments')}
+									{__('Change', 'appointments-booking')}
 								</Button>
 							}
 						/>
 					)}
 
 					<FormFieldSet
-						legend={__('Customer', 'wpappointments')}
+						legend={__('Customer', 'appointments-booking')}
 						style={{
 							display:
 								selectedCustomer || defaultCustomer?.name
@@ -478,7 +493,10 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 					>
 						<FormFieldSet horizontal horizontalCenter>
 							<span className={styles.noTimeLabel}>
-								{__('No customer selected', 'wpappointments')}
+								{__(
+									'No customer selected',
+									'appointments-booking'
+								)}
 							</span>
 							<ButtonGroup>
 								<Button
@@ -490,7 +508,10 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 										});
 									}}
 								>
-									{__('Select customer', 'wpappointments')}
+									{__(
+										'Select customer',
+										'appointments-booking'
+									)}
 								</Button>
 								<Button
 									variant="secondary"
@@ -504,7 +525,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 										});
 									}}
 								>
-									{__('New customer', 'wpappointments')}
+									{__('New customer', 'appointments-booking')}
 								</Button>
 							</ButtonGroup>
 						</FormFieldSet>
@@ -524,14 +545,14 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 											});
 										}}
 									>
-										{__('Change', 'wpappointments')}
+										{__('Change', 'appointments-booking')}
 									</Button>
 									<Button
 										size="small"
 										variant="secondary"
 										onClick={clearCustomer}
 									>
-										{__('Clear', 'wpappointments')}
+										{__('Clear', 'appointments-booking')}
 									</Button>
 								</ButtonGroup>
 							}

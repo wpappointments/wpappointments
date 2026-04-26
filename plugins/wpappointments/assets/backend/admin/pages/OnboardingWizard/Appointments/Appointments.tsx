@@ -32,11 +32,11 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'coreEntityName',
 		type: 'text',
-		label: __('Service Name', 'wpappointments'),
-		placeholder: __('Appointment', 'wpappointments'),
+		label: __('Service Name', 'appointments-booking'),
+		placeholder: __('Appointment', 'appointments-booking'),
 		description: __(
 			"Don't worry. You can always change it later.",
-			'wpappointments'
+			'appointments-booking'
 		),
 		isValid: { required: true },
 		Edit: TextInput,
@@ -44,32 +44,38 @@ const fields: Field<Fields>[] = [
 	{
 		id: 'defaultLength',
 		type: 'integer',
-		label: __('Default appointment length (in minutes)', 'wpappointments'),
+		label: __(
+			'Default appointment length (in minutes)',
+			'appointments-booking'
+		),
 		isValid: { required: true, min: 1 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'timePickerPrecision',
 		type: 'integer',
-		label: __('Time picker precision (in minutes)', 'wpappointments'),
+		label: __('Time picker precision (in minutes)', 'appointments-booking'),
 		description: __(
 			'People will be able to book appointments every n minutes. For example if set to 30 minutes people can book 8:00, 8:30, 9:00 etc.',
-			'wpappointments'
+			'appointments-booking'
 		),
 		isValid: { required: true, min: 1, max: 60 * 24 },
 		Edit: NumberInput,
 	},
 	{
 		id: 'defaultStatus',
-		label: __('Default appointment status', 'wpappointments'),
+		label: __('Default appointment status', 'appointments-booking'),
 		description: __(
 			'Default status for appointments created by your clients. You can change the status of each appointment individually. If Pending selected, you will have to confirm each appointment manually.',
-			'wpappointments'
+			'appointments-booking'
 		),
 		isValid: { required: true },
 		elements: [
-			{ label: __('Confirmed', 'wpappointments'), value: 'confirmed' },
-			{ label: __('Pending', 'wpappointments'), value: 'pending' },
+			{
+				label: __('Confirmed', 'appointments-booking'),
+				value: 'confirmed',
+			},
+			{ label: __('Pending', 'appointments-booking'), value: 'pending' },
 		],
 		Edit: SelectInput,
 	},
@@ -135,7 +141,7 @@ export default function AppointmentsSettings({
 		}
 
 		if (response === null) {
-			setError(__('Error saving settings', 'wpappointments'));
+			setError(__('Error saving settings', 'appointments-booking'));
 			return;
 		}
 
@@ -165,7 +171,7 @@ export default function AppointmentsSettings({
 				disabled={!isValid}
 				variant="primary"
 			>
-				{__('Continue', 'wpappointments')}
+				{__('Continue', 'appointments-booking')}
 			</Button>
 		</div>
 	);

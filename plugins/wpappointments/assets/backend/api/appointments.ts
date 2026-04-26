@@ -52,7 +52,7 @@ export function appointmentsApi({
 		dispatch.createAppointment(appointment);
 
 		displaySuccessToast(
-			__('Appointment created successfully', 'wpappointments')
+			__('Appointment created successfully', 'appointments-booking')
 		);
 
 		if (invalidateCache) {
@@ -86,14 +86,14 @@ export function appointmentsApi({
 		if (error) {
 			handleError(
 				error,
-				__('Cannot update appointment', 'wpappointments')
+				__('Cannot update appointment', 'appointments-booking')
 			);
 			return;
 		}
 
 		if (response) {
 			displaySuccessToast(
-				__('Appointment updated successfully', 'wpappointments')
+				__('Appointment updated successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {
@@ -124,14 +124,14 @@ export function appointmentsApi({
 		if (error) {
 			handleError(
 				error,
-				__('Cannot cancel appointment', 'wpappointments')
+				__('Cannot cancel appointment', 'appointments-booking')
 			);
 			return;
 		}
 
 		if (response) {
 			displaySuccessToast(
-				__('Appointment cancelled successfully', 'wpappointments')
+				__('Appointment cancelled successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {
@@ -162,14 +162,14 @@ export function appointmentsApi({
 		if (error) {
 			handleError(
 				error,
-				__('Cannot delete appointment', 'wpappointments')
+				__('Cannot delete appointment', 'appointments-booking')
 			);
 			return;
 		}
 
 		if (response) {
 			displaySuccessToast(
-				__('Appointment deleted successfully', 'wpappointments')
+				__('Appointment deleted successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {
@@ -200,14 +200,14 @@ export function appointmentsApi({
 		if (error) {
 			handleError(
 				error,
-				__('Cannot confirm appointment', 'wpappointments')
+				__('Cannot confirm appointment', 'appointments-booking')
 			);
 			return;
 		}
 
 		if (response) {
 			displaySuccessToast(
-				__('Appointment confirmed successfully', 'wpappointments')
+				__('Appointment confirmed successfully', 'appointments-booking')
 			);
 
 			if (invalidateCache) {

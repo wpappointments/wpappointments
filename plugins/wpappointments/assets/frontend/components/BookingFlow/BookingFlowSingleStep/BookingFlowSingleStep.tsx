@@ -26,11 +26,11 @@ export default function BookingFlowSingleStep() {
 		>
 			{formError && <p className={styles.error}>{formError}</p>}
 			{!hideStepTitles && (
-				<h2>{__('Select date and time', 'wpappointments')}</h2>
+				<h2>{__('Select date and time', 'appointments-booking')}</h2>
 			)}
 			<BookingFlowCalendar />
 			{!hideStepTitles && (
-				<h2>{__('Customer information', 'wpappointments')}</h2>
+				<h2>{__('Customer information', 'appointments-booking')}</h2>
 			)}
 			<BookingFlowCustomer />
 			<Slot name="booking-flow/actions">

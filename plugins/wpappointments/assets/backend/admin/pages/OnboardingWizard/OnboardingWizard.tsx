@@ -32,7 +32,7 @@ export function OnboardingWizard() {
 			<div className={styles.wizardHeader}>
 				<img className={styles.logoIcon} src={logoIcon} />
 				<Button variant="link" href={WIZARD_COMPLETE_URL}>
-					{__('Skip guided setup', 'wpappointments')}
+					{__('Skip guided setup', 'appointments-booking')}
 				</Button>
 			</div>
 			<div className={styles.wizardContent}>
@@ -70,12 +70,15 @@ function Welcome({ setCurrentStep }: StepProps) {
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Welcome to WP Appointments!', 'wpappointments')}
+					{__(
+						'Welcome to Appointments Booking by WP Appointments!',
+						'appointments-booking'
+					)}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						"It's great to have you here! We'll be guiding you through the setup process - first, answer a few questions to tailor your experience.",
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			</div>
@@ -92,7 +95,7 @@ function Welcome({ setCurrentStep }: StepProps) {
 					setCurrentStep(1);
 				}}
 			>
-				{__('Set up appointments', 'wpappointments')}
+				{__('Set up appointments', 'appointments-booking')}
 			</Button>
 		</div>
 	);
@@ -103,33 +106,19 @@ function AllSet() {
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('All set!', 'wpappointments')}
+					{__('All set!', 'appointments-booking')}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						"You're good to go! You can now start accepting appointments on your website. You can always come back to the setup wizard to make changes.",
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 				<hr style={{ width: 80 }} />
 				<p className={styles.leadText}>
 					{__(
-						'For more information about the plugin please see this walkthrough video:',
-						'wpappointments'
-					)}{' '}
-					<a
-						href="https://wpappointments.com/"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						{__('Watch video', 'wpappointments')}
-					</a>
-				</p>
-				<hr style={{ width: 80 }} />
-				<p className={styles.leadText}>
-					{__(
 						'When you are ready, you can insert a "Booking Flow" Gutenberg block on any of your pages.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 				<img
@@ -137,7 +126,7 @@ function AllSet() {
 					className={styles.gutenbergBlockImage}
 					alt={__(
 						'Gutenberg block inserting visual guide',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				/>
 			</div>
@@ -152,7 +141,7 @@ function AllSet() {
 				}}
 				href={WIZARD_COMPLETE_URL}
 			>
-				{__('Go to dashboard', 'wpappointments')}
+				{__('Go to dashboard', 'appointments-booking')}
 			</Button>
 		</div>
 	);
@@ -163,12 +152,12 @@ function OnboardingWizardStep1({ setCurrentStep }: StepProps) {
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Tell us a bit about you', 'wpappointments')}
+					{__('Tell us a bit about you', 'appointments-booking')}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						'We use this information in set up notifications and you can also display this on the site.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			</div>
@@ -186,12 +175,15 @@ function OnboardingWizardStep2({ setCurrentStep }: StepProps) {
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('What appointments do you accept?', 'wpappointments')}
+					{__(
+						'What appointments do you accept?',
+						'appointments-booking'
+					)}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						'In the free version you can set up to one appointment. Specify the length and tell us in which intervals people can book.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			</div>
@@ -209,10 +201,10 @@ function OnboardingWizardStep3({ setCurrentStep }: StepProps) {
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Tailor you calendar options', 'wpappointments')}
+					{__('Tailor you calendar options', 'appointments-booking')}
 				</h1>
 				<p className={styles.leadText}>
-					{__('You know what to do.', 'wpappointments')}
+					{__('You know what to do.', 'appointments-booking')}
 				</p>
 			</div>
 			<Calendar
@@ -229,12 +221,12 @@ function OnboardingWizardStep4({ setCurrentStep }: StepProps) {
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Setup you working hours', 'wpappointments')}
+					{__('Setup you working hours', 'appointments-booking')}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						'You may specify one or many working hours periods for each week day.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			</div>
@@ -252,12 +244,12 @@ function OnboardingWizardStep5({ setCurrentStep }: StepProps) {
 		<div style={{ margin: '40px auto' }}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Set up your services', 'wpappointments')}
+					{__('Set up your services', 'appointments-booking')}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
 						'Add the services you offer. You can add as many as you need and manage them later from the Services page.',
-						'wpappointments'
+						'appointments-booking'
 					)}
 				</p>
 			</div>
