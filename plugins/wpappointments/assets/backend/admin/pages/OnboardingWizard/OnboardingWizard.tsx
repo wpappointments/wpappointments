@@ -66,7 +66,10 @@ function Welcome({ setCurrentStep }: StepProps) {
 		<div className={styles.welcome}>
 			<div className={styles.stepHeader}>
 				<h1 className={styles.title}>
-					{__('Welcome to WP Appointments!', 'appointments-booking')}
+					{__(
+						'Welcome to Appointments Booking by WP Appointments!',
+						'appointments-booking'
+					)}
 				</h1>
 				<p className={styles.leadText}>
 					{__(
