@@ -1,8 +1,0 @@
-.card {
-	margin-bottom: var( --wpappointments-main-gap );
-
-	> div {
-		display: flex;
-		flex-direction: column;
-	}
-}
