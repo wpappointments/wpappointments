@@ -1,0 +1,62 @@
+name: WP.org listing screenshots
+
+on:
+    workflow_dispatch:
+
+jobs:
+    screenshots:
+        name: Generate listing screenshots
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  tools: composer:v2
+
+            - name: Install Composer dependencies (host)
+              run: |
+                  composer install --no-interaction --prefer-dist
+                  composer install --no-interaction --prefer-dist --working-dir=plugins/appointments-booking
+
+            - name: Build plugin assets
+              run: pnpm build
+
+            - name: Start wp-env
+              run: npx wp-env start || true
+
+            - name: Fix wp-env file permissions
+              run: sudo chown -R $(id -u):$(id -g) ~/wp-env
+
+            - name: Restart wp-env
+              run: npx wp-env start
+
+            - name: Install Playwright browsers
+              run: npx playwright install chromium --with-deps
+              working-directory: plugins/appointments-booking
+
+            - name: Generate wp.org screenshots
+              run: pnpm test:e2e:wporg-screenshots
+              working-directory: plugins/appointments-booking
+
+            - name: Upload screenshots
+              uses: actions/upload-artifact@v4
+              with:
+                  name: wporg-screenshots
+                  path: tests/e2e/results/wporg/*.png
+                  if-no-files-found: error
+                  retention-days: 14

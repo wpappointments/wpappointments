@@ -70,7 +70,7 @@ Estimated time: 30–45 minutes.
 
 ## Final checks
 
-- [ ] All 5 wp.org listing screenshots captured and saved to `assets/` (see `WPORG_LISTING.md`).
+- [ ] All 5 wp.org listing screenshots captured (run the **WP.org listing screenshots** GitHub Action manually and download the `wporg-screenshots` artifact, or run `pnpm -C plugins/appointments-booking test:e2e:wporg-screenshots` locally). Save the PNGs to `plugins/appointments-booking/assets/` per `WPORG_LISTING.md`.
 - [ ] Banner (772×250 and 1544×500) and icon (128×128 and 256×256) PNGs present.
 - [ ] `readme.txt` short description ≤ 150 chars and matches the listing blurb.
 - [ ] Changelog entry for the current version exists in `readme.txt`.
