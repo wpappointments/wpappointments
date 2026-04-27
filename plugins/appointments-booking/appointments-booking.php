@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Appointments Booking by WP Appointments
+ * Plugin Name: Appointments Booking
  * Version:     0.2.0
  * Description: Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support.
- * Author:      WP Appointments, Dawid Urbański, Mariusz Szatkowski
+ * Author:      Appsy
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: appointments-booking
