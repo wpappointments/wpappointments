@@ -16,12 +16,35 @@ use WPAppointments\Core\Capabilities;
 uses( \TestTools\TestCase::class )->group( 'core' );
 
 test(
-	'Capabilities constants are defined',
+	'Granular capability constants are defined',
 	function () {
-		expect( Capabilities::MANAGE_APPOINTMENTS )->toBe( 'wpa_manage_appointments' );
-		expect( Capabilities::MANAGE_SETTINGS )->toBe( 'wpa_manage_settings' );
-		expect( Capabilities::MANAGE_SERVICES )->toBe( 'wpa_manage_services' );
-		expect( Capabilities::MANAGE_CUSTOMERS )->toBe( 'wpa_manage_customers' );
+		expect( Capabilities::VIEW_APPOINTMENTS )->toBe( 'wpa_view_appointments' );
+		expect( Capabilities::CREATE_APPOINTMENTS )->toBe( 'wpa_create_appointments' );
+		expect( Capabilities::EDIT_APPOINTMENTS )->toBe( 'wpa_edit_appointments' );
+		expect( Capabilities::DELETE_APPOINTMENTS )->toBe( 'wpa_delete_appointments' );
+
+		expect( Capabilities::VIEW_BOOKABLES )->toBe( 'wpa_view_bookables' );
+		expect( Capabilities::CREATE_BOOKABLES )->toBe( 'wpa_create_bookables' );
+		expect( Capabilities::EDIT_BOOKABLES )->toBe( 'wpa_edit_bookables' );
+		expect( Capabilities::DELETE_BOOKABLES )->toBe( 'wpa_delete_bookables' );
+
+		expect( Capabilities::VIEW_CUSTOMERS )->toBe( 'wpa_view_customers' );
+		expect( Capabilities::CREATE_CUSTOMERS )->toBe( 'wpa_create_customers' );
+		expect( Capabilities::EDIT_CUSTOMERS )->toBe( 'wpa_edit_customers' );
+		expect( Capabilities::DELETE_CUSTOMERS )->toBe( 'wpa_delete_customers' );
+
+		expect( Capabilities::VIEW_SERVICES )->toBe( 'wpa_view_services' );
+		expect( Capabilities::CREATE_SERVICES )->toBe( 'wpa_create_services' );
+		expect( Capabilities::EDIT_SERVICES )->toBe( 'wpa_edit_services' );
+		expect( Capabilities::DELETE_SERVICES )->toBe( 'wpa_delete_services' );
+
+		expect( Capabilities::VIEW_SCHEDULES )->toBe( 'wpa_view_schedules' );
+		expect( Capabilities::CREATE_SCHEDULES )->toBe( 'wpa_create_schedules' );
+		expect( Capabilities::EDIT_SCHEDULES )->toBe( 'wpa_edit_schedules' );
+		expect( Capabilities::DELETE_SCHEDULES )->toBe( 'wpa_delete_schedules' );
+
+		expect( Capabilities::VIEW_SETTINGS )->toBe( 'wpa_view_settings' );
+		expect( Capabilities::EDIT_SETTINGS )->toBe( 'wpa_edit_settings' );
 	}
 );
 
@@ -31,10 +54,34 @@ test(
 		$caps = Capabilities::all();
 
 		expect( $caps )->toBeArray();
-		expect( $caps )->toContain( Capabilities::MANAGE_APPOINTMENTS );
-		expect( $caps )->toContain( Capabilities::MANAGE_SETTINGS );
-		expect( $caps )->toContain( Capabilities::MANAGE_SERVICES );
-		expect( $caps )->toContain( Capabilities::MANAGE_CUSTOMERS );
+		expect( $caps )->toHaveCount( 22 );
+		expect( $caps )->toContain( Capabilities::VIEW_APPOINTMENTS );
+		expect( $caps )->toContain( Capabilities::CREATE_APPOINTMENTS );
+		expect( $caps )->toContain( Capabilities::EDIT_APPOINTMENTS );
+		expect( $caps )->toContain( Capabilities::DELETE_APPOINTMENTS );
+		expect( $caps )->toContain( Capabilities::VIEW_SETTINGS );
+		expect( $caps )->toContain( Capabilities::EDIT_SETTINGS );
+	}
+);
+
+test(
+	'Capabilities::for_group returns correct caps per entity group',
+	function () {
+		$appointment_caps = Capabilities::for_group( 'appointments' );
+
+		expect( $appointment_caps )->toHaveCount( 4 );
+		expect( $appointment_caps )->toContain( Capabilities::VIEW_APPOINTMENTS );
+		expect( $appointment_caps )->toContain( Capabilities::CREATE_APPOINTMENTS );
+		expect( $appointment_caps )->toContain( Capabilities::EDIT_APPOINTMENTS );
+		expect( $appointment_caps )->toContain( Capabilities::DELETE_APPOINTMENTS );
+
+		$settings_caps = Capabilities::for_group( 'settings' );
+
+		expect( $settings_caps )->toHaveCount( 2 );
+		expect( $settings_caps )->toContain( Capabilities::VIEW_SETTINGS );
+		expect( $settings_caps )->toContain( Capabilities::EDIT_SETTINGS );
+
+		expect( Capabilities::for_group( 'nonexistent' ) )->toBeEmpty();
 	}
 );
 

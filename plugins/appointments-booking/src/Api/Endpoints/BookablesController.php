@@ -37,14 +37,14 @@ class BookablesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_all_bookables' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::VIEW_BOOKABLES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'create_bookable' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::CREATE_BOOKABLES );
 					},
 				),
 			)
@@ -58,21 +58,21 @@ class BookablesController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_bookable' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::VIEW_BOOKABLES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_bookable' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::EDIT_BOOKABLES );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'delete_bookable' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_BOOKABLES );
+						return current_user_can( Capabilities::DELETE_BOOKABLES );
 					},
 				),
 			)

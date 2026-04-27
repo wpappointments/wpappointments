@@ -20,7 +20,7 @@ use WPAppointments\Core\Capabilities;
  *           'type'       => 'court',
  *           'page_title' => 'Courts',
  *           'menu_title' => 'Courts',
- *           'capability' => 'wpa_manage_bookables',
+ *           'capability' => 'wpa_view_bookables',
  *           'position'   => 25,
  *       ] );
  *   } );
@@ -40,7 +40,7 @@ class BookableTypeAdminPage {
 	 *   - type:        string  Bookable type slug (e.g. "court").
 	 *   - page_title:  string  Page title shown in browser tab.
 	 *   - menu_title:  string  Menu item label.
-	 *   - capability:  string  Required capability (default: wpa_manage_bookables).
+	 *   - capability:  string  Required capability (default: wpa_view_bookables).
 	 *   - icon:        string  Dashicon or SVG (optional, submenu items don't show icons).
 	 *   - position:    int     Menu position (optional).
 	 *
@@ -51,7 +51,7 @@ class BookableTypeAdminPage {
 			'type'       => '',
 			'page_title' => '',
 			'menu_title' => '',
-			'capability' => Capabilities::MANAGE_BOOKABLES,
+			'capability' => Capabilities::VIEW_BOOKABLES,
 			'position'   => null,
 		);
 

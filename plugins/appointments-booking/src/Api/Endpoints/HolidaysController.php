@@ -37,7 +37,7 @@ class HolidaysController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_available' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SETTINGS );
 					},
 				),
 			)
@@ -51,14 +51,14 @@ class HolidaysController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_groups' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SETTINGS );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( __CLASS__, 'add_group' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SETTINGS );
 					},
 				),
 			)
@@ -72,14 +72,14 @@ class HolidaysController extends Controller {
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( __CLASS__, 'remove_group' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SETTINGS );
 					},
 				),
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( __CLASS__, 'update_group' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::EDIT_SETTINGS );
 					},
 				),
 			)
@@ -93,7 +93,7 @@ class HolidaysController extends Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( __CLASS__, 'get_group_holidays' ),
 					'permission_callback' => function () {
-						return current_user_can( Capabilities::MANAGE_SETTINGS );
+						return current_user_can( Capabilities::VIEW_SETTINGS );
 					},
 				),
 			)

@@ -8,6 +8,8 @@
 
 namespace WPAppointments\Admin;
 
+use WPAppointments\Core\Capabilities;
+
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );
@@ -24,7 +26,7 @@ function menu() {
 	add_menu_page(
 		__( 'Appointments', 'appointments-booking' ),
 		__( 'Appointments', 'appointments-booking' ),
-		'manage_options',
+		Capabilities::VIEW_APPOINTMENTS,
 		'wpappointments',
 		__NAMESPACE__ . '\\admin_page',
 		$icon,
@@ -35,7 +37,7 @@ function menu() {
 		'wpappointments',
 		__( 'Calendar', 'appointments-booking' ),
 		__( 'Calendar', 'appointments-booking' ),
-		'manage_options',
+		Capabilities::VIEW_APPOINTMENTS,
 		'wpappointments-calendar',
 		__NAMESPACE__ . '\\calendar_page'
 	);
@@ -44,7 +46,7 @@ function menu() {
 		'wpappointments',
 		__( 'Customers', 'appointments-booking' ),
 		__( 'Customers', 'appointments-booking' ),
-		'manage_options',
+		Capabilities::VIEW_CUSTOMERS,
 		'wpappointments-customers',
 		__NAMESPACE__ . '\customers_page'
 	);
@@ -53,7 +55,7 @@ function menu() {
 		'wpappointments',
 		__( 'Settings', 'appointments-booking' ),
 		__( 'Settings', 'appointments-booking' ),
-		'manage_options',
+		Capabilities::VIEW_SETTINGS,
 		'wpappointments-settings',
 		__NAMESPACE__ . '\\settings_page'
 	);
@@ -62,7 +64,7 @@ function menu() {
 		'noexistingpageslug',
 		__( 'Wizard', 'appointments-booking' ),
 		__( 'Wizard', 'appointments-booking' ),
-		'manage_options',
+		Capabilities::EDIT_SETTINGS,
 		'wpappointments-wizard',
 		__NAMESPACE__ . '\\wizard_page'
 	);
