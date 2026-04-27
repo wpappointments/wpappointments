@@ -1,0 +1,468 @@
+# Copyright (C) 2026 WP Appointments
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Appointments Booking 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appointments-booking\n"
+"Last-Translator: WPPoland <hello@wppoland.com>\n"
+"Language-Team: French <hello@wppoland.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-19T12:28:23+00:00\n"
+"PO-Revision-Date: 2026-03-21 12:00+0100\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: appointments-booking\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: wpappointments.php
+#: includes/admin/menu.php:28
+#: includes/gutenberg.php:57
+msgid "WP Appointments"
+msgstr "WP Appointments"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: wpappointments.php
+msgid "https://wpappointments.com"
+msgstr "https://wpappointments.com"
+
+#. Description of the plugin
+#: wpappointments.php
+msgid "Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support."
+msgstr "Système de prise de rendez-vous nouvelle génération pour WordPress. Système de réservation extensible et convivial pour les développeurs avec prise en charge des variantes."
+
+#: includes/admin/menu.php:29
+#: src/Core/PostTypes.php:37
+msgid "Appointments"
+msgstr "Rendez-vous"
+
+#: includes/admin/menu.php:39
+#: includes/admin/menu.php:40
+msgid "Calendar"
+msgstr "Calendrier"
+
+#: includes/admin/menu.php:48
+#: includes/admin/menu.php:49
+msgid "Customers"
+msgstr "Clients"
+
+#: includes/admin/menu.php:57
+#: includes/admin/menu.php:58
+#: src/Core/PostTypes.php:89
+msgid "Services"
+msgstr "Services"
+
+#: includes/admin/menu.php:66
+#: includes/admin/menu.php:67
+#: src/Core/PostTypes.php:152
+msgid "Entities"
+msgstr "Ressources"
+
+#: includes/admin/menu.php:75
+#: includes/admin/menu.php:76
+msgid "Settings"
+msgstr "Réglages"
+
+#: includes/admin/menu.php:84
+#: includes/admin/menu.php:85
+msgid "Wizard"
+msgstr "Assistant"
+
+#: includes/admin/roles.php:21
+msgid "Customer (appointments)"
+msgstr "Client (rendez-vous)"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:31
+#: includes/notifications/emails/appointment.php:66
+#, php-format
+msgid "Appointment Confirmation: %1$s at %2$s"
+msgstr "Confirmation de rendez-vous : %1$s à %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:100
+#: includes/notifications/emails/appointment.php:136
+#, php-format
+msgid "Appointment Updated: %1$s at %2$s"
+msgstr "Rendez-vous mis à jour : %1$s à %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:168
+#: includes/notifications/emails/appointment.php:203
+#, php-format
+msgid "Appointment Cancelled: %1$s at %2$s"
+msgstr "Rendez-vous annulé : %1$s à %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:235
+#: includes/notifications/emails/appointment.php:270
+#, php-format
+msgid "Appointment Confirmed: %1$s at %2$s"
+msgstr "Rendez-vous confirmé : %1$s à %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:303
+#: includes/notifications/emails/appointment.php:339
+#, php-format
+msgid "Appointment No-Show: %1$s at %2$s"
+msgstr "Absence au rendez-vous : %1$s à %2$s"
+
+#: src/Api/Endpoints/AppointmentsController.php:163
+msgid "Appointments fetched successfully"
+msgstr "Rendez-vous récupérés avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:180
+msgid "Upcoming appointments fetched successfully"
+msgstr "Prochains rendez-vous récupérés avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:217
+#: src/Api/Endpoints/AppointmentsController.php:265
+msgid "Appointment created successfully"
+msgstr "Rendez-vous créé avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:250
+msgid "Appointment"
+msgstr "Rendez-vous"
+
+#: src/Api/Endpoints/AppointmentsController.php:309
+msgid "Appointment updated successfully"
+msgstr "Rendez-vous mis à jour avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:334
+msgid "Appointment cancelled successfully"
+msgstr "Rendez-vous annulé avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:359
+msgid "Appointment deleted successfully"
+msgstr "Rendez-vous supprimé avec succès"
+
+#: src/Api/Endpoints/AppointmentsController.php:384
+msgid "Appointment confirmed successfully"
+msgstr "Rendez-vous confirmé avec succès"
+
+#: src/Api/Endpoints/AvailabilityController.php:82
+msgid "Month availability fetched successfully"
+msgstr "Disponibilité du mois récupérée avec succès"
+
+#: src/Api/Endpoints/AvailabilityController.php:108
+msgid "Invalid calendar data"
+msgstr "Données de calendrier non valides"
+
+#: src/Api/Endpoints/AvailabilityController.php:122
+msgid "Calendar availability fetched successfully"
+msgstr "Disponibilité du calendrier récupérée avec succès"
+
+#: src/Api/Endpoints/CustomersController.php:97
+msgid "Customers fetched successfully"
+msgstr "Clients récupérés avec succès"
+
+#: src/Api/Endpoints/CustomersController.php:130
+msgid "Customer created successfully"
+msgstr "Client créé avec succès"
+
+#: src/Api/Endpoints/CustomersController.php:164
+msgid "Customer updated successfully"
+msgstr "Client mis à jour avec succès"
+
+#: src/Api/Endpoints/CustomersController.php:183
+msgid "Customer deleted successfully"
+msgstr "Client supprimé avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:165
+msgid "Entities fetched successfully"
+msgstr "Ressources récupérées avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:193
+msgid "Entity tree fetched successfully"
+msgstr "Arborescence des ressources récupérée avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:229
+msgid "Entity fetched successfully"
+msgstr "Ressource récupérée avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:253
+msgid "Entity created successfully"
+msgstr "Ressource créée avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:279
+msgid "Entity updated successfully"
+msgstr "Ressource mise à jour avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:305
+msgid "Entity deleted successfully"
+msgstr "Ressource supprimée avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:324
+msgid "Entity children fetched successfully"
+msgstr "Sous-ressources récupérées avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:364
+msgid "Entity services fetched successfully"
+msgstr "Services de la ressource récupérés avec succès"
+
+#: src/Api/Endpoints/EntitiesController.php:400
+msgid "Entity services updated successfully"
+msgstr "Services de la ressource mis à jour avec succès"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:104
+msgid "Service categories fetched successfully"
+msgstr "Catégories de services récupérées avec succès"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:127
+#: src/Api/Endpoints/ServiceCategoriesController.php:171
+msgid "Category name is required"
+msgstr "Le nom de la catégorie est requis"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:142
+msgid "Service category created successfully"
+msgstr "Catégorie de service créée avec succès"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:186
+msgid "Service category updated successfully"
+msgstr "Catégorie de service mise à jour avec succès"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:216
+msgid "Service category deleted successfully"
+msgstr "Catégorie de service supprimée avec succès"
+
+#: src/Api/Endpoints/ServicesController.php:94
+msgid "Services fetched successfully"
+msgstr "Services récupérés avec succès"
+
+#: src/Api/Endpoints/ServicesController.php:125
+msgid "Service created successfully"
+msgstr "Service créé avec succès"
+
+#: src/Api/Endpoints/ServicesController.php:151
+msgid "Service updated successfully"
+msgstr "Service mis à jour avec succès"
+
+#: src/Api/Endpoints/ServicesController.php:176
+msgid "Service deleted successfully"
+msgstr "Service supprimé avec succès"
+
+#: src/Api/Endpoints/SettingsController.php:81
+msgid "Settings fetched successfully"
+msgstr "Réglages récupérés avec succès"
+
+#: src/Api/Endpoints/SettingsController.php:103
+msgid "Settings in category fetched successfully"
+msgstr "Réglages de la catégorie récupérés avec succès"
+
+#: src/Api/Endpoints/SettingsController.php:130
+msgid "Settings updated successfully"
+msgstr "Réglages mis à jour avec succès"
+
+#: src/Core/PostTypes.php:63
+msgid "Schedules"
+msgstr "Plannings"
+
+#: src/Core/PostTypes.php:116
+#: src/Core/PostTypes.php:118
+msgid "Service Categories"
+msgstr "Catégories de services"
+
+#: src/Core/PostTypes.php:119
+msgid "Service Category"
+msgstr "Catégorie de service"
+
+#: src/Core/PostTypes.php:120
+msgid "Add New Service Category"
+msgstr "Ajouter une nouvelle catégorie de service"
+
+#: src/Core/PostTypes.php:121
+msgid "New Service Category Name"
+msgstr "Nom de la nouvelle catégorie de service"
+
+#: src/Data/Model/Appointment.php:184
+msgid "Appointment is already cancelled"
+msgstr "Le rendez-vous est déjà annulé"
+
+#: src/Data/Model/Appointment.php:210
+msgid "Appointment is already confirmed"
+msgstr "Le rendez-vous est déjà confirmé"
+
+#: src/Data/Model/Appointment.php:236
+#: src/Data/Model/Appointment.php:311
+msgid "Appointment not found"
+msgstr "Rendez-vous introuvable"
+
+#: src/Data/Model/Appointment.php:243
+msgid "Appointment must be cancelled before deleting"
+msgstr "Le rendez-vous doit être annulé avant la suppression"
+
+#: src/Data/Model/Appointment.php:305
+msgid "Appointment ID is required"
+msgstr "L'identifiant du rendez-vous est requis"
+
+#: src/Data/Model/Appointment.php:315
+msgid "Post is not an appointment"
+msgstr "La publication n'est pas un rendez-vous"
+
+#: src/Data/Model/Customer.php:60
+msgid "When saving user, you have to provide user data array in constructor"
+msgstr "Lors de l'enregistrement de l'utilisateur, vous devez fournir le tableau de données utilisateur dans le constructeur"
+
+#: src/Data/Model/Customer.php:105
+msgid "When updating customer you have to initialize model with user object or user id"
+msgstr "Lors de la mise à jour du client, vous devez initialiser le modèle avec l'objet utilisateur ou l'identifiant utilisateur"
+
+#: src/Data/Model/Customer.php:158
+msgid "Could not delete customer"
+msgstr "Impossible de supprimer le client"
+
+#: src/Data/Model/Customer.php:213
+msgid "User ID is required"
+msgstr "L'identifiant utilisateur est requis"
+
+#: src/Data/Model/Customer.php:219
+msgid "User not found"
+msgstr "Utilisateur introuvable"
+
+#: src/Data/Model/Customer.php:223
+msgid "User is not a customer"
+msgstr "L'utilisateur n'est pas un client"
+
+#: src/Data/Model/Entity.php:71
+msgid "Entity value passed to constructor cannot be null. Expected array, int, string or WP_Post"
+msgstr "La valeur de la ressource passée au constructeur ne peut pas être null. Attendu : array, int, string ou WP_Post"
+
+#: src/Data/Model/Entity.php:76
+msgid "Entity value passed to constructor is invalid. Expected array, int, string or WP_Post"
+msgstr "La valeur de la ressource passée au constructeur n'est pas valide. Attendu : array, int, string ou WP_Post"
+
+#: src/Data/Model/Entity.php:139
+#: src/Data/Model/Entity.php:202
+msgid "Entity not found. Instantiate Entity class with an entity object"
+msgstr "Ressource introuvable. Instanciez la classe Entity avec un objet ressource"
+
+#: src/Data/Model/Entity.php:512
+msgid "Entity ID is required"
+msgstr "L'identifiant de la ressource est requis"
+
+#: src/Data/Model/Entity.php:518
+msgid "Entity not found"
+msgstr "Ressource introuvable"
+
+#: src/Data/Model/Entity.php:522
+msgid "Post is not an entity"
+msgstr "La publication n'est pas une ressource"
+
+#: src/Data/Model/Entity.php:537
+msgid "Entity name is required"
+msgstr "Le nom de la ressource est requis"
+
+#: src/Data/Model/Service.php:62
+msgid "Service value passed to a service model constructor cannot be null. Expected array, int, string or WP_Post but received null"
+msgstr "La valeur du service passée au constructeur du modèle de service ne peut pas être null. Attendu : array, int, string ou WP_Post, mais null reçu"
+
+#: src/Data/Model/Service.php:67
+msgid "Service value passed to a service model constructor is invalid. Expected array, int, string or WP_Post"
+msgstr "La valeur du service passée au constructeur du modèle de service n'est pas valide. Attendu : array, int, string ou WP_Post"
+
+#: src/Data/Model/Service.php:145
+#: src/Data/Model/Service.php:200
+msgid "Service not found. You have to instantiate Service class with a service object"
+msgstr "Service introuvable. Vous devez instancier la classe Service avec un objet service"
+
+#: src/Data/Model/Service.php:390
+msgid "Service ID is required"
+msgstr "L'identifiant du service est requis"
+
+#: src/Data/Model/Service.php:396
+msgid "Service not found"
+msgstr "Service introuvable"
+
+#: src/Data/Model/Service.php:400
+msgid "Post is not a service"
+msgstr "La publication n'est pas un service"
+
+#: src/Data/Model/Service.php:415
+msgid "Service name is required"
+msgstr "Le nom du service est requis"
+
+#: src/Data/Model/Service.php:419
+msgid "Service duration is required"
+msgstr "La durée du service est requise"
+
+#: src/Data/Model/Settings.php:141
+msgid "Invalid settings category"
+msgstr "Catégorie de réglages non valide"
+
+#: src/Data/Model/Settings.php:229
+msgid "Unknown error while saving settings"
+msgstr "Erreur inconnue lors de l'enregistrement des réglages"
+
+#: src/Notifications/Notifications.php:59
+msgid "A new appointment has been booked."
+msgstr "Un nouveau rendez-vous a été réservé."
+
+#: src/Notifications/Notifications.php:71
+msgid "An appointment has been updated."
+msgstr "Un rendez-vous a été mis à jour."
+
+#: src/Notifications/Notifications.php:83
+msgid "An appointment has been confirmed."
+msgstr "Un rendez-vous a été confirmé."
+
+#: src/Notifications/Notifications.php:94
+msgid "An appointment has been cancelled."
+msgstr "Un rendez-vous a été annulé."
+
+#: src/Notifications/Notifications.php:300
+msgid "Appointment ID"
+msgstr "Identifiant du rendez-vous"
+
+#: src/Notifications/Notifications.php:301
+msgid "Service"
+msgstr "Service"
+
+#: src/Notifications/Notifications.php:302
+msgid "Date & Time"
+msgstr "Date et heure"
+
+#: src/Notifications/Notifications.php:305
+msgid "Duration"
+msgstr "Durée"
+
+#: src/Notifications/Notifications.php:305
+msgid "minutes"
+msgstr "minutes"
+
+#: src/Notifications/Notifications.php:309
+msgid "Customer"
+msgstr "Client"
+
+#: src/Notifications/Notifications.php:312
+msgid "Status"
+msgstr "Statut"
+
+#: src/Utils/Availability.php:167
+msgid "Month is required"
+msgstr "Le mois est requis"
+
+#: src/Utils/Availability.php:171
+msgid "Year is required"
+msgstr "L'année est requise"
+
+#: src/Utils/Availability.php:175
+#: src/Utils/Availability.php:271
+msgid "Timezone is required"
+msgstr "Le fuseau horaire est requis"
+
+#: src/Utils/Availability.php:179
+msgid "Year must be numeric"
+msgstr "L'année doit être numérique"
+
+#: src/Utils/Availability.php:267
+msgid "Calendar is required"
+msgstr "Le calendrier est requis"
+
+#: assets/gutenberg/blocks/booking-flow/src/block.json
+msgctxt "block title"
+msgid "Booking Flow"
+msgstr "Formulaire de réservation"

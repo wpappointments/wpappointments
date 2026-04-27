@@ -1,0 +1,116 @@
+import { useState } from 'react';
+import { __experimentalInputControl as InputControl } from '@wordpress/components';
+import { select, useDispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import { SlideOut } from '@wpappointments/components';
+import { useSlideout } from '@wpappointments/data';
+import { store } from '~/backend/store/store';
+import { Customer } from '~/backend/types';
+import styles from './CustomerSelector.module.css';
+
+type CustomerSelectorProps = {
+	onCustomerSelect: (customer: Customer) => void;
+};
+
+export default function CustomerSelector({
+	onCustomerSelect,
+}: CustomerSelectorProps) {
+	const { closeCurrentSlideOut } = useSlideout();
+	const [searchValue, setSearchValue] = useState('');
+
+	const { customers } = useSelect(() => {
+		return select(store).getCustomers();
+	}, [searchValue]);
+
+	const filteredCustomers = customers.filter((customer) => {
+		if (searchValue === '') {
+			return true;
+		}
+
+		const search = searchValue.toLowerCase();
+		const name = customer.name.toLowerCase();
+		const email = customer?.email?.toLowerCase();
+		const phone = customer?.phone?.toLowerCase();
+
+		let match = false;
+
+		if (name.includes(search)) {
+			match = true;
+		}
+
+		if (email && email.includes(search)) {
+			match = true;
+		}
+
+		if (phone && phone.includes(search)) {
+			match = true;
+		}
+
+		return match;
+	});
+
+	const dispatch = useDispatch(store);
+
+	const selectCustomer = (id: number) => {
+		const selectedCustomer = customers.find(
+			(customer) => customer.id === id
+		);
+
+		if (selectedCustomer) {
+			onCustomerSelect(selectedCustomer);
+			dispatch.setSelectedCustomer(selectedCustomer);
+			closeCurrentSlideOut();
+		}
+	};
+
+	return (
+		<SlideOut
+			title={__('Select Customer', 'appointments-booking')}
+			id="select-customer"
+		>
+			<InputControl
+				label={__('Search for a customer', 'appointments-booking')}
+				placeholder={__(
+					'Search by name, email or phone number',
+					'appointments-booking'
+				)}
+				onChange={(value) => {
+					setSearchValue(value || '');
+				}}
+				value={searchValue}
+				size="__unstable-large"
+				id="search-customer"
+				type="text"
+				className={styles.input}
+			/>
+			{filteredCustomers && filteredCustomers.length > 0 && (
+				<>
+					<div className={styles.tableHeader}>
+						<span>{__('Name', 'appointments-booking')}</span>
+						<span>{__('Email', 'appointments-booking')}</span>
+						<span>{__('Phone', 'appointments-booking')}</span>
+					</div>
+					<div className={styles.customers}>
+						{filteredCustomers.map((customer) => (
+							<div
+								className={styles.customer}
+								key={customer.id}
+								onClick={() => {
+									if (!customer.id) {
+										return;
+									}
+
+									selectCustomer(customer.id);
+								}}
+							>
+								<span>{customer.name}</span>
+								<span>{customer.email}</span>
+								<span>{customer.phone}</span>
+							</div>
+						))}
+					</div>
+				</>
+			)}
+		</SlideOut>
+	);
+}

@@ -1,0 +1,657 @@
+# Copyright (C) 2026 WP Appointments
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Appointments Booking 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appointments-booking\n"
+"POT-Creation-Date: 2026-03-19T12:28:23+00:00\n"
+"PO-Revision-Date: 2026-03-21 12:00+0100\n"
+"Last-Translator: WPPoland <hello@wppoland.com>\n"
+"Language-Team: Polish <hello@wppoland.com>\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: appointments-booking\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: wpappointments.php includes/admin/menu.php:28 includes/gutenberg.php:57
+msgid "WP Appointments"
+msgstr "WP Appointments"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: wpappointments.php
+msgid "https://wpappointments.com"
+msgstr "https://wpappointments.com"
+
+#. Description of the plugin
+#: wpappointments.php
+msgid ""
+"Next-gen appointment scheduling for WordPress. Extensible, developer-"
+"friendly booking system with variant support."
+msgstr ""
+"Nowoczesny system rezerwacji wizyt dla WordPress. Rozszerzalny, przyjazny "
+"dla programistów system rezerwacji z obsługą wariantów."
+
+#: includes/admin/menu.php:29 src/Core/PostTypes.php:37
+msgid "Appointments"
+msgstr "Wizyty"
+
+#: includes/admin/menu.php:39 includes/admin/menu.php:40
+msgid "Calendar"
+msgstr "Kalendarz"
+
+#: includes/admin/menu.php:48 includes/admin/menu.php:49
+msgid "Customers"
+msgstr "Klienci"
+
+#: includes/admin/menu.php:57 includes/admin/menu.php:58
+#: src/Core/PostTypes.php:89
+msgid "Services"
+msgstr "Usługi"
+
+#: includes/admin/menu.php:66 includes/admin/menu.php:67
+#: src/Core/PostTypes.php:152
+msgid "Entities"
+msgstr "Zasoby"
+
+#: includes/admin/menu.php:75 includes/admin/menu.php:76
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: includes/admin/menu.php:84 includes/admin/menu.php:85
+msgid "Wizard"
+msgstr "Kreator"
+
+#: includes/admin/roles.php:21
+msgid "Customer (appointments)"
+msgstr "Klient (wizyty)"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:31
+#: includes/notifications/emails/appointment.php:66
+#, php-format
+msgid "Appointment Confirmation: %1$s at %2$s"
+msgstr "Potwierdzenie wizyty: %1$s o %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:100
+#: includes/notifications/emails/appointment.php:136
+#, php-format
+msgid "Appointment Updated: %1$s at %2$s"
+msgstr "Wizyta zaktualizowana: %1$s o %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:168
+#: includes/notifications/emails/appointment.php:203
+#, php-format
+msgid "Appointment Cancelled: %1$s at %2$s"
+msgstr "Wizyta anulowana: %1$s o %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:235
+#: includes/notifications/emails/appointment.php:270
+#, php-format
+msgid "Appointment Confirmed: %1$s at %2$s"
+msgstr "Wizyta potwierdzona: %1$s o %2$s"
+
+#. translators: %1$s: Date, %2$s: Time
+#: includes/notifications/emails/appointment.php:303
+#: includes/notifications/emails/appointment.php:339
+#, php-format
+msgid "Appointment No-Show: %1$s at %2$s"
+msgstr "Nieobecność na wizycie: %1$s o %2$s"
+
+#: src/Api/Endpoints/AppointmentsController.php:163
+msgid "Appointments fetched successfully"
+msgstr "Wizyty pobrane pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:180
+msgid "Upcoming appointments fetched successfully"
+msgstr "Nadchodzące wizyty pobrane pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:217
+#: src/Api/Endpoints/AppointmentsController.php:265
+msgid "Appointment created successfully"
+msgstr "Wizyta utworzona pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:250
+msgid "Appointment"
+msgstr "Wizyta"
+
+#: src/Api/Endpoints/AppointmentsController.php:309
+msgid "Appointment updated successfully"
+msgstr "Wizyta zaktualizowana pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:334
+msgid "Appointment cancelled successfully"
+msgstr "Wizyta anulowana pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:359
+msgid "Appointment deleted successfully"
+msgstr "Wizyta usunięta pomyślnie"
+
+#: src/Api/Endpoints/AppointmentsController.php:384
+msgid "Appointment confirmed successfully"
+msgstr "Wizyta potwierdzona pomyślnie"
+
+#: src/Api/Endpoints/AvailabilityController.php:82
+msgid "Month availability fetched successfully"
+msgstr "Dostępność miesiąca pobrana pomyślnie"
+
+#: src/Api/Endpoints/AvailabilityController.php:108
+msgid "Invalid calendar data"
+msgstr "Nieprawidłowe dane kalendarza"
+
+#: src/Api/Endpoints/AvailabilityController.php:122
+msgid "Calendar availability fetched successfully"
+msgstr "Dostępność kalendarza pobrana pomyślnie"
+
+#: src/Api/Endpoints/CustomersController.php:97
+msgid "Customers fetched successfully"
+msgstr "Klienci pobrani pomyślnie"
+
+#: src/Api/Endpoints/CustomersController.php:130
+msgid "Customer created successfully"
+msgstr "Klient utworzony pomyślnie"
+
+#: src/Api/Endpoints/CustomersController.php:164
+msgid "Customer updated successfully"
+msgstr "Klient zaktualizowany pomyślnie"
+
+#: src/Api/Endpoints/CustomersController.php:183
+msgid "Customer deleted successfully"
+msgstr "Klient usunięty pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:165
+msgid "Entities fetched successfully"
+msgstr "Zasoby pobrane pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:193
+msgid "Entity tree fetched successfully"
+msgstr "Drzewo zasobów pobrane pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:229
+msgid "Entity fetched successfully"
+msgstr "Zasób pobrany pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:253
+msgid "Entity created successfully"
+msgstr "Zasób utworzony pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:279
+msgid "Entity updated successfully"
+msgstr "Zasób zaktualizowany pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:305
+msgid "Entity deleted successfully"
+msgstr "Zasób usunięty pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:324
+msgid "Entity children fetched successfully"
+msgstr "Elementy podrzędne zasobu pobrane pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:364
+msgid "Entity services fetched successfully"
+msgstr "Usługi zasobu pobrane pomyślnie"
+
+#: src/Api/Endpoints/EntitiesController.php:400
+msgid "Entity services updated successfully"
+msgstr "Usługi zasobu zaktualizowane pomyślnie"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:104
+msgid "Service categories fetched successfully"
+msgstr "Kategorie usług pobrane pomyślnie"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:127
+#: src/Api/Endpoints/ServiceCategoriesController.php:171
+msgid "Category name is required"
+msgstr "Nazwa kategorii jest wymagana"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:142
+msgid "Service category created successfully"
+msgstr "Kategoria usług utworzona pomyślnie"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:186
+msgid "Service category updated successfully"
+msgstr "Kategoria usług zaktualizowana pomyślnie"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:216
+msgid "Service category deleted successfully"
+msgstr "Kategoria usług usunięta pomyślnie"
+
+#: src/Api/Endpoints/ServicesController.php:94
+msgid "Services fetched successfully"
+msgstr "Usługi pobrane pomyślnie"
+
+#: src/Api/Endpoints/ServicesController.php:125
+msgid "Service created successfully"
+msgstr "Usługa utworzona pomyślnie"
+
+#: src/Api/Endpoints/ServicesController.php:151
+msgid "Service updated successfully"
+msgstr "Usługa zaktualizowana pomyślnie"
+
+#: src/Api/Endpoints/ServicesController.php:176
+msgid "Service deleted successfully"
+msgstr "Usługa usunięta pomyślnie"
+
+#: src/Api/Endpoints/SettingsController.php:81
+msgid "Settings fetched successfully"
+msgstr "Ustawienia pobrane pomyślnie"
+
+#: src/Api/Endpoints/SettingsController.php:103
+msgid "Settings in category fetched successfully"
+msgstr "Ustawienia w kategorii pobrane pomyślnie"
+
+#: src/Api/Endpoints/SettingsController.php:130
+msgid "Settings updated successfully"
+msgstr "Ustawienia zaktualizowane pomyślnie"
+
+#: src/Core/PostTypes.php:63
+msgid "Schedules"
+msgstr "Harmonogramy"
+
+#: src/Core/PostTypes.php:116 src/Core/PostTypes.php:118
+msgid "Service Categories"
+msgstr "Kategorie usług"
+
+#: src/Core/PostTypes.php:119
+msgid "Service Category"
+msgstr "Kategoria usług"
+
+#: src/Core/PostTypes.php:120
+msgid "Add New Service Category"
+msgstr "Dodaj nową kategorię usług"
+
+#: src/Core/PostTypes.php:121
+msgid "New Service Category Name"
+msgstr "Nowa nazwa kategorii usług"
+
+#: src/Data/Model/Appointment.php:184
+msgid "Appointment is already cancelled"
+msgstr "Wizyta jest już anulowana"
+
+#: src/Data/Model/Appointment.php:210
+msgid "Appointment is already confirmed"
+msgstr "Wizyta jest już potwierdzona"
+
+#: src/Data/Model/Appointment.php:236 src/Data/Model/Appointment.php:311
+msgid "Appointment not found"
+msgstr "Nie znaleziono wizyty"
+
+#: src/Data/Model/Appointment.php:243
+msgid "Appointment must be cancelled before deleting"
+msgstr "Wizyta musi zostać anulowana przed usunięciem"
+
+#: src/Data/Model/Appointment.php:305
+msgid "Appointment ID is required"
+msgstr "Identyfikator wizyty jest wymagany"
+
+#: src/Data/Model/Appointment.php:315
+msgid "Post is not an appointment"
+msgstr "Wpis nie jest wizytą"
+
+#: src/Data/Model/Customer.php:60
+msgid "When saving user, you have to provide user data array in constructor"
+msgstr ""
+"Podczas zapisywania użytkownika należy podać tablicę danych użytkownika w "
+"konstruktorze"
+
+#: src/Data/Model/Customer.php:105
+msgid ""
+"When updating customer you have to initialize model with user object or user "
+"id"
+msgstr ""
+"Podczas aktualizacji klienta należy zainicjować model obiektem użytkownika "
+"lub identyfikatorem użytkownika"
+
+#: src/Data/Model/Customer.php:158
+msgid "Could not delete customer"
+msgstr "Nie udało się usunąć klienta"
+
+#: src/Data/Model/Customer.php:213
+msgid "User ID is required"
+msgstr "Identyfikator użytkownika jest wymagany"
+
+#: src/Data/Model/Customer.php:219
+msgid "User not found"
+msgstr "Nie znaleziono użytkownika"
+
+#: src/Data/Model/Customer.php:223
+msgid "User is not a customer"
+msgstr "Użytkownik nie jest klientem"
+
+#: src/Data/Model/Entity.php:71
+msgid ""
+"Entity value passed to constructor cannot be null. Expected array, int, "
+"string or WP_Post"
+msgstr ""
+"Wartość zasobu przekazana do konstruktora nie może być null. Oczekiwano "
+"array, int, string lub WP_Post"
+
+#: src/Data/Model/Entity.php:76
+msgid ""
+"Entity value passed to constructor is invalid. Expected array, int, string "
+"or WP_Post"
+msgstr ""
+"Wartość zasobu przekazana do konstruktora jest nieprawidłowa. Oczekiwano "
+"array, int, string lub WP_Post"
+
+#: src/Data/Model/Entity.php:139 src/Data/Model/Entity.php:202
+msgid "Entity not found. Instantiate Entity class with an entity object"
+msgstr "Nie znaleziono zasobu. Utwórz instancję klasy Entity z obiektem zasobu"
+
+#: src/Data/Model/Entity.php:512
+msgid "Entity ID is required"
+msgstr "Identyfikator zasobu jest wymagany"
+
+#: src/Data/Model/Entity.php:518
+msgid "Entity not found"
+msgstr "Nie znaleziono zasobu"
+
+#: src/Data/Model/Entity.php:522
+msgid "Post is not an entity"
+msgstr "Wpis nie jest zasobem"
+
+#: src/Data/Model/Entity.php:537
+msgid "Entity name is required"
+msgstr "Nazwa zasobu jest wymagana"
+
+#: src/Data/Model/Service.php:62
+msgid ""
+"Service value passed to a service model constructor cannot be null. Expected "
+"array, int, string or WP_Post but received null"
+msgstr ""
+"Wartość usługi przekazana do konstruktora modelu usługi nie może być null. "
+"Oczekiwano array, int, string lub WP_Post, ale otrzymano null"
+
+#: src/Data/Model/Service.php:67
+msgid ""
+"Service value passed to a service model constructor is invalid. Expected "
+"array, int, string or WP_Post"
+msgstr ""
+"Wartość usługi przekazana do konstruktora modelu usługi jest nieprawidłowa. "
+"Oczekiwano array, int, string lub WP_Post"
+
+#: src/Data/Model/Service.php:145 src/Data/Model/Service.php:200
+msgid ""
+"Service not found. You have to instantiate Service class with a service "
+"object"
+msgstr ""
+"Nie znaleziono usługi. Należy utworzyć instancję klasy Service z obiektem "
+"usługi"
+
+#: src/Data/Model/Service.php:390
+msgid "Service ID is required"
+msgstr "Identyfikator usługi jest wymagany"
+
+#: src/Data/Model/Service.php:396
+msgid "Service not found"
+msgstr "Nie znaleziono usługi"
+
+#: src/Data/Model/Service.php:400
+msgid "Post is not a service"
+msgstr "Wpis nie jest usługą"
+
+#: src/Data/Model/Service.php:415
+msgid "Service name is required"
+msgstr "Nazwa usługi jest wymagana"
+
+#: src/Data/Model/Service.php:419
+msgid "Service duration is required"
+msgstr "Czas trwania usługi jest wymagany"
+
+#: src/Data/Model/Settings.php:141
+msgid "Invalid settings category"
+msgstr "Nieprawidłowa kategoria ustawień"
+
+#: src/Data/Model/Settings.php:229
+msgid "Unknown error while saving settings"
+msgstr "Nieznany błąd podczas zapisywania ustawień"
+
+#: src/Notifications/Notifications.php:59
+msgid "A new appointment has been booked."
+msgstr "Nowa wizyta została zarezerwowana."
+
+#: src/Notifications/Notifications.php:71
+msgid "An appointment has been updated."
+msgstr "Wizyta została zaktualizowana."
+
+#: src/Notifications/Notifications.php:83
+msgid "An appointment has been confirmed."
+msgstr "Wizyta została potwierdzona."
+
+#: src/Notifications/Notifications.php:94
+msgid "An appointment has been cancelled."
+msgstr "Wizyta została anulowana."
+
+#: src/Notifications/Notifications.php:300
+msgid "Appointment ID"
+msgstr "Identyfikator wizyty"
+
+#: src/Notifications/Notifications.php:301
+msgid "Service"
+msgstr "Usługa"
+
+#: src/Notifications/Notifications.php:302
+msgid "Date & Time"
+msgstr "Data i godzina"
+
+#: src/Notifications/Notifications.php:305
+msgid "Duration"
+msgstr "Czas trwania"
+
+#: src/Notifications/Notifications.php:305
+msgid "minutes"
+msgstr "minuty"
+
+#: src/Notifications/Notifications.php:309
+msgid "Customer"
+msgstr "Klient"
+
+#: src/Notifications/Notifications.php:312
+msgid "Status"
+msgstr "Status"
+
+#: src/Utils/Availability.php:167
+msgid "Month is required"
+msgstr "Miesiąc jest wymagany"
+
+#: src/Utils/Availability.php:171
+msgid "Year is required"
+msgstr "Rok jest wymagany"
+
+#: src/Utils/Availability.php:175 src/Utils/Availability.php:271
+msgid "Timezone is required"
+msgstr "Strefa czasowa jest wymagana"
+
+#: src/Utils/Availability.php:179
+msgid "Year must be numeric"
+msgstr "Rok musi być liczbą"
+
+#: src/Utils/Availability.php:267
+msgid "Calendar is required"
+msgstr "Kalendarz jest wymagany"
+
+#: assets/gutenberg/blocks/booking-flow/src/block.json
+msgctxt "block title"
+msgid "Booking Flow"
+msgstr "Formularz rezerwacji"
+
+#~ msgid "Availability fetched successfully"
+#~ msgstr "Dostępność pobrana pomyślnie"
+
+#~ msgid "Entity availability fetched successfully"
+#~ msgstr "Dostępność zasobu pobrana pomyślnie"
+
+#~ msgid "Bookables fetched successfully"
+#~ msgstr "Zasoby rezerwacyjne pobrane pomyślnie"
+
+#~ msgid "Bookable name is required"
+#~ msgstr "Nazwa zasobu rezerwacyjnego jest wymagana"
+
+#~ msgid "Bookable created successfully"
+#~ msgstr "Zasób rezerwacyjny utworzony pomyślnie"
+
+#~ msgid "Bookable fetched successfully"
+#~ msgstr "Zasób rezerwacyjny pobrany pomyślnie"
+
+#~ msgid "Bookable updated successfully"
+#~ msgstr "Zasób rezerwacyjny zaktualizowany pomyślnie"
+
+#~ msgid "Bookable deleted successfully"
+#~ msgstr "Zasób rezerwacyjny usunięty pomyślnie"
+
+#~ msgid "Bookable types fetched successfully"
+#~ msgstr "Typy zasobów rezerwacyjnych pobrane pomyślnie"
+
+#~ msgid "Variants fetched successfully"
+#~ msgstr "Warianty pobrane pomyślnie"
+
+#~ msgid "Variant created successfully"
+#~ msgstr "Wariant utworzony pomyślnie"
+
+#~ msgid "Variants generated successfully"
+#~ msgstr "Warianty wygenerowane pomyślnie"
+
+#~ msgid "Variant does not belong to the specified bookable entity"
+#~ msgstr "Wariant nie należy do wskazanego zasobu rezerwacyjnego"
+
+#~ msgid "Variant fetched successfully"
+#~ msgstr "Wariant pobrany pomyślnie"
+
+#~ msgid "Variant updated successfully"
+#~ msgstr "Wariant zaktualizowany pomyślnie"
+
+#~ msgid "Variant deleted successfully"
+#~ msgstr "Wariant usunięty pomyślnie"
+
+#, php-format
+#~ msgid "Availability layer \"%s\" is already registered"
+#~ msgstr "Warstwa dostępności \"%s\" jest już zarejestrowana"
+
+#~ msgid "Availability layer type must be \"base\" or \"narrowing\""
+#~ msgstr "Typ warstwy dostępności musi być \"base\" lub \"narrowing\""
+
+#~ msgid "Availability layer must have a callable callback"
+#~ msgstr "Warstwa dostępności musi mieć wywoływalną funkcję zwrotną"
+
+#, php-format
+#~ msgid "Bookable type \"%s\" is already registered"
+#~ msgstr "Typ zasobu rezerwacyjnego \"%s\" jest już zarejestrowany"
+
+#, php-format
+#~ msgid "Bookable type handler class \"%s\" not found"
+#~ msgstr "Nie znaleziono klasy obsługi typu zasobu rezerwacyjnego \"%s\""
+
+#, php-format
+#~ msgid "Bookable type handler \"%s\" must extend AbstractBookableTypeHandler"
+#~ msgstr ""
+#~ "Klasa obsługi typu zasobu rezerwacyjnego \"%s\" musi rozszerzać "
+#~ "AbstractBookableTypeHandler"
+
+#~ msgid "Bookables"
+#~ msgstr "Zasoby rezerwacyjne"
+
+#~ msgid "Bookable Variants"
+#~ msgstr "Warianty zasobów rezerwacyjnych"
+
+#~ msgid "Post is not a bookable entity. Expected post_type wpa-bookable"
+#~ msgstr ""
+#~ "Wpis nie jest zasobem rezerwacyjnym. Oczekiwany post_type wpa-bookable"
+
+#~ msgid ""
+#~ "Bookable value passed to constructor cannot be null. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "Wartość zasobu rezerwacyjnego przekazana do konstruktora nie może być "
+#~ "null. Oczekiwano array, int, string lub WP_Post"
+
+#~ msgid ""
+#~ "Bookable value passed to constructor is invalid. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "Wartość zasobu rezerwacyjnego przekazana do konstruktora jest "
+#~ "nieprawidłowa. Oczekiwano array, int, string lub WP_Post"
+
+#~ msgid "This bookable entity is already persisted. Use update() instead"
+#~ msgstr ""
+#~ "Ten zasób rezerwacyjny jest już zapisany. Użyj update() zamiast tego"
+
+#~ msgid ""
+#~ "Bookable not found. Instantiate BookableEntity class with a bookable "
+#~ "object"
+#~ msgstr ""
+#~ "Nie znaleziono zasobu rezerwacyjnego. Utwórz instancję klasy "
+#~ "BookableEntity z obiektem zasobu"
+
+#~ msgid "Failed to update bookable entity"
+#~ msgstr "Nie udało się zaktualizować zasobu rezerwacyjnego"
+
+#~ msgid "Failed to delete bookable entity"
+#~ msgstr "Nie udało się usunąć zasobu rezerwacyjnego"
+
+#~ msgid "Bookable ID is required"
+#~ msgstr "Identyfikator zasobu rezerwacyjnego jest wymagany"
+
+#~ msgid "Bookable not found"
+#~ msgstr "Nie znaleziono zasobu rezerwacyjnego"
+
+#~ msgid "Post is not a bookable entity"
+#~ msgstr "Wpis nie jest zasobem rezerwacyjnym"
+
+#~ msgid ""
+#~ "Post is not a bookable variant. Expected post_type wpa-bookable-variant"
+#~ msgstr ""
+#~ "Wpis nie jest wariantem zasobu rezerwacyjnego. Oczekiwany post_type wpa-"
+#~ "bookable-variant"
+
+#~ msgid ""
+#~ "Variant value passed to constructor cannot be null. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "Wartość wariantu przekazana do konstruktora nie może być null. Oczekiwano "
+#~ "array, int, string lub WP_Post"
+
+#~ msgid ""
+#~ "Variant value passed to constructor is invalid. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "Wartość wariantu przekazana do konstruktora jest nieprawidłowa. "
+#~ "Oczekiwano array, int, string lub WP_Post"
+
+#~ msgid "Variant must have a parent bookable entity"
+#~ msgstr "Wariant musi mieć nadrzędny zasób rezerwacyjny"
+
+#~ msgid "Parent must be a valid bookable entity"
+#~ msgstr "Element nadrzędny musi być prawidłowym zasobem rezerwacyjnym"
+
+#~ msgid ""
+#~ "Variant not found. Instantiate BookableVariant class with a variant object"
+#~ msgstr ""
+#~ "Nie znaleziono wariantu. Utwórz instancję klasy BookableVariant z "
+#~ "obiektem wariantu"
+
+#~ msgid "Failed to update bookable variant"
+#~ msgstr "Nie udało się zaktualizować wariantu zasobu rezerwacyjnego"
+
+#~ msgid "Failed to delete bookable variant"
+#~ msgstr "Nie udało się usunąć wariantu zasobu rezerwacyjnego"
+
+#~ msgid "Invalid bookable entity for variant generation"
+#~ msgstr "Nieprawidłowy zasób rezerwacyjny do generowania wariantów"
+
+#~ msgid "Variant ID is required"
+#~ msgstr "Identyfikator wariantu jest wymagany"
+
+#~ msgid "Variant not found"
+#~ msgstr "Nie znaleziono wariantu"
+
+#~ msgid "Post is not a bookable variant"
+#~ msgstr "Wpis nie jest wariantem zasobu rezerwacyjnego"

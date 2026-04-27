@@ -90,7 +90,7 @@ export default function BookableDefaultForm({
 		const result: FormErrors = {};
 
 		if (!name.trim()) {
-			result.name = __('Name is required.', 'wpappointments');
+			result.name = __('Name is required.', 'appointments-booking');
 		}
 
 		for (const field of typeInfo.fields) {
@@ -110,7 +110,7 @@ export default function BookableDefaultForm({
 			) {
 				result[field.name] = sprintf(
 					/* translators: %s: field label */
-					__('%s is required.', 'wpappointments'),
+					__('%s is required.', 'appointments-booking'),
 					field.label
 				);
 				continue;
@@ -130,7 +130,10 @@ export default function BookableDefaultForm({
 				) {
 					result[field.name] = sprintf(
 						/* translators: 1: field label, 2: minimum value */
-						__('%1$s must be at least %2$s.', 'wpappointments'),
+						__(
+							'%1$s must be at least %2$s.',
+							'appointments-booking'
+						),
 						field.label,
 						String(field.validation.min)
 					);
@@ -142,7 +145,10 @@ export default function BookableDefaultForm({
 				) {
 					result[field.name] = sprintf(
 						/* translators: 1: field label, 2: maximum value */
-						__('%1$s must be at most %2$s.', 'wpappointments'),
+						__(
+							'%1$s must be at most %2$s.',
+							'appointments-booking'
+						),
 						field.label,
 						String(field.validation.max)
 					);
@@ -158,7 +164,7 @@ export default function BookableDefaultForm({
 						/* translators: 1: field label, 2: minimum length */
 						__(
 							'%1$s must be at least %2$s characters.',
-							'wpappointments'
+							'appointments-booking'
 						),
 						field.label,
 						String(field.validation.minLength)
@@ -173,7 +179,7 @@ export default function BookableDefaultForm({
 						/* translators: 1: field label, 2: maximum length */
 						__(
 							'%1$s must be at most %2$s characters.',
-							'wpappointments'
+							'appointments-booking'
 						),
 						field.label,
 						String(field.validation.maxLength)
@@ -216,7 +222,7 @@ export default function BookableDefaultForm({
 				{/* Core fields */}
 				<FormField>
 					<label className={formFieldStyles.fieldLabel}>
-						{__('Name', 'wpappointments')}*
+						{__('Name', 'appointments-booking')}*
 					</label>
 					<InputControl
 						value={name}
@@ -231,7 +237,7 @@ export default function BookableDefaultForm({
 
 				<FormField>
 					<label className={formFieldStyles.fieldLabel}>
-						{__('Description', 'wpappointments')}
+						{__('Description', 'appointments-booking')}
 					</label>
 					<TextareaControl
 						value={description}
@@ -242,7 +248,7 @@ export default function BookableDefaultForm({
 
 				<FormField>
 					<ToggleControl
-						label={__('Active', 'wpappointments')}
+						label={__('Active', 'appointments-booking')}
 						checked={active}
 						onChange={setActive}
 						__nextHasNoMarginBottom
@@ -275,8 +281,8 @@ export default function BookableDefaultForm({
 				}}
 			>
 				{isEdit
-					? __('Update', 'wpappointments')
-					: __('Create', 'wpappointments')}
+					? __('Update', 'appointments-booking')
+					: __('Create', 'appointments-booking')}
 			</Button>
 		</form>
 	);
@@ -348,7 +354,10 @@ function SelectField({ field, value, onChange, error }: FieldControlProps) {
 						: [
 								{
 									value: '',
-									label: __('— Select —', 'wpappointments'),
+									label: __(
+										'— Select —',
+										'appointments-booking'
+									),
 								},
 							]),
 					...(field.options ?? []),

@@ -1,0 +1,171 @@
+---
+import HelpLayout from '../layouts/HelpLayout.astro';
+import SidebarNav from '../components/SidebarNav.astro';
+
+const groups = [
+	{
+		title: 'Getting started',
+		items: [
+			{
+				q: 'What WordPress and PHP versions do I need?',
+				a: 'WordPress 6.4 or higher and PHP 8.2 or higher. The plugin is tested up to WordPress 6.9.',
+			},
+			{
+				q: 'Where do I configure the plugin after activation?',
+				a: 'Activating the plugin opens an onboarding wizard. After it finishes, all configuration lives under <strong>Appointments</strong> in the admin sidebar (Calendar, Customers, Services, Settings).',
+			},
+			{
+				q: 'How do customers book appointments?',
+				a: 'Add the <strong>Booking Flow</strong> Gutenberg block to any page or post. Customers pick a service, day, and time, then submit their details. Admin and customer notifications are sent automatically.',
+			},
+		],
+	},
+	{
+		title: 'Services and entities',
+		items: [
+			{
+				q: 'Can I create multiple services with different durations?',
+				a: 'Yes. Each service has its own duration, price, description, image, and category. Services also support variants — for example a "Massage" service with 30, 60, and 90-minute variants.',
+			},
+			{
+				q: 'What are bookable entities?',
+				a: 'Entities represent the bookable resource — a room, table, staff member, piece of equipment, or anything else with limited capacity. Entities can be nested and can inherit or override their parent\'s schedule.',
+			},
+			{
+				q: 'How does the booking flow handle multiple services?',
+				a: 'In v1 the <strong>Booking Flow</strong> block books against the site\'s default (core) bookable. Multi-service installs can pin a block to a specific bookable via the <code>entityId</code> block attribute and create one page per service. A unified service picker inside one booking flow is on the post-v1 roadmap (issue #330).',
+			},
+		],
+	},
+	{
+		title: 'Schedule and availability',
+		items: [
+			{
+				q: 'How do I set my opening hours?',
+				a: 'Go to <strong>Settings → Schedule</strong> and define hours per day of the week. The schedule applies to every entity by default; entities can override individual days.',
+			},
+			{
+				q: 'How do I block specific days (holidays, vacation)?',
+				a: 'Use <strong>Settings → Out of Office</strong> for one-off blocks, or <strong>Settings → Holidays</strong> to import country-specific holiday calendars (45 countries plus religious observance sets are available out of the box).',
+			},
+			{
+				q: 'Two services overlap at the same time — does booking one block the other?',
+				a: 'No. Slots are scoped per entity, so booking service A at 14:00 only blocks 14:00 for service A. Service B remains bookable at 14:00 unless they share an entity (regression check #425).',
+			},
+		],
+	},
+	{
+		title: 'Notifications',
+		items: [
+			{
+				q: 'Does the plugin send emails?',
+				a: 'Yes. Admin and customer emails fire on appointment creation, update, confirmation, and cancellation. Subjects and bodies are fully editable with merge tags like <code>{customer_name}</code>, <code>{service}</code>, <code>{date}</code>, <code>{time}</code>.',
+			},
+			{
+				q: 'Can I add CC/BCC recipients?',
+				a: 'Yes. Each notification supports comma-separated extra recipients in addition to the admin and customer addresses.',
+			},
+			{
+				q: 'My emails aren\'t arriving — what should I check?',
+				a: 'WordPress\'s <code>wp_mail()</code> uses your server\'s mail transport. If you don\'t see emails, install an SMTP plugin (WP Mail SMTP, FluentSMTP) and route through a transactional provider like SendGrid or Postmark.',
+			},
+		],
+	},
+	{
+		title: 'Customer flow',
+		items: [
+			{
+				q: 'Can customers cancel or reschedule themselves?',
+				a: 'Self-service cancellation and rescheduling are on the roadmap for a future release. Today admins can cancel, confirm, or reschedule from the admin calendar.',
+			},
+			{
+				q: 'Does the booking page work on mobile?',
+				a: 'Yes. The booking flow is responsive and uses touch-friendly slot selection.',
+			},
+			{
+				q: 'How does the plugin handle timezones?',
+				a: 'Times are stored in the site\'s WordPress timezone (<strong>Settings → General → Timezone</strong>). Customers see the same wall-clock times the admin does.',
+			},
+		],
+	},
+	{
+		title: 'Data and uninstall',
+		items: [
+			{
+				q: 'What happens to my data if I deactivate the plugin?',
+				a: 'Deactivation leaves all data intact (appointments, customers, settings). You can reactivate later and pick up where you left off.',
+			},
+			{
+				q: 'What about uninstalling?',
+				a: 'By default, uninstall keeps your data so re-installing restores everything. To wipe everything on uninstall, enable <strong>Delete data on uninstall</strong> in <strong>Settings → General</strong> before deleting the plugin.',
+			},
+			{
+				q: 'Is there a REST API for headless setups?',
+				a: 'Yes. The plugin exposes <code>/wp-json/wpappointments/v1/</code> endpoints for appointments, services, entities, customers, schedules, and settings.',
+			},
+		],
+	},
+	{
+		title: 'Premium and add-ons',
+		items: [
+			{
+				q: 'Where can I find premium add-ons?',
+				a: 'See the <a href="/help/premium/" class="text-text-link hover:underline">Premium</a> section for the current add-on catalog and installation instructions.',
+			},
+			{
+				q: 'Will premium add-ons keep working after a free-plugin update?',
+				a: 'Yes. Add-ons hook into stable extension points; the free plugin only changes those with a major version bump and a migration note.',
+			},
+		],
+	},
+	{
+		title: 'Translations and accessibility',
+		items: [
+			{
+				q: 'Is the plugin translation-ready?',
+				a: 'Yes. All user-facing strings use the <code>appointments-booking</code> text domain, and ready-made translations ship for 10 locales (Spanish, French, German, Italian, Polish, Portuguese-BR, Russian, Chinese-CN, Japanese, Dutch). New translations land via <a href="https://translate.wordpress.org/projects/wp-plugins/appointments-booking/" class="text-text-link hover:underline">translate.wordpress.org</a>.',
+			},
+			{
+				q: 'Does it work with any theme?',
+				a: 'Yes. The booking flow is a Gutenberg block, so it inherits the active theme\'s styling. It works with FSE themes and classic themes that support the block editor.',
+			},
+		],
+	},
+];
+---
+
+<HelpLayout
+	title="FAQ"
+	description="Common questions about WP Appointments — installation, services, scheduling, notifications, and more."
+	breadcrumbs={[{ label: 'FAQ', href: '/help/faq/' }]}
+>
+	<SidebarNav slot="sidebar" />
+
+	<header class="mb-12">
+		<h1 class="text-4xl font-bold tracking-tight">Frequently Asked Questions</h1>
+		<p class="mt-4 max-w-2xl text-lg text-text-secondary">
+			Quick answers to the questions we hear most often. If yours isn't here, the rest of the help center likely covers it in more depth.
+		</p>
+	</header>
+
+	<div class="space-y-12">
+		{
+			groups.map((group) => (
+				<section>
+					<h2 class="text-2xl font-semibold">{group.title}</h2>
+					<div class="mt-4 space-y-4">
+						{group.items.map((item) => (
+							<details class="group rounded-xl border border-border-weak p-5 open:border-border-subtle">
+								<summary class="cursor-pointer list-none font-medium text-text-primary group-open:text-text-primary">
+									<span class="mr-2 inline-block transition-transform group-open:rotate-90">›</span>
+									{item.q}
+								</summary>
+								<div class="mt-3 pl-5 text-sm text-text-secondary" set:html={item.a} />
+							</details>
+						))}
+					</div>
+				</section>
+			))
+		}
+	</div>
+</HelpLayout>

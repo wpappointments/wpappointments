@@ -31,17 +31,17 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock', 'plugins/wpappointments/composer.lock') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock', 'plugins/appointments-booking/composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install root Composer dependencies
               run: composer install --no-interaction --prefer-dist
 
             - name: Install plugin Composer dependencies
-              run: composer install --no-interaction --prefer-dist --working-dir=plugins/wpappointments
+              run: composer install --no-interaction --prefer-dist --working-dir=plugins/appointments-booking
 
             - name: Run PHPCS
-              run: ./vendor/bin/phpcs --standard=.phpcs.xml plugins/wpappointments tools
+              run: ./vendor/bin/phpcs --standard=.phpcs.xml plugins/appointments-booking tools
 
     lint-js:
         name: JS Lint & Type Check
@@ -62,7 +62,7 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Generate CSS type declarations
-              run: pnpm -C plugins/wpappointments css-types
+              run: pnpm -C plugins/appointments-booking css-types
 
             - name: Lint JS
               run: pnpm lint:js
@@ -113,7 +113,7 @@ jobs:
             - name: Create vendor directories
               run: |
                   mkdir -p vendor
-                  mkdir -p plugins/wpappointments/vendor
+                  mkdir -p plugins/appointments-booking/vendor
 
             - name: Start wp-env
               run: npx wp-env start || true
@@ -121,7 +121,7 @@ jobs:
             - name: Install Composer dependencies
               run: |
                   npx wp-env run cli --env-cwd=wp-content composer install
-                  npx wp-env run cli --env-cwd=wp-content/plugins/wpappointments composer install
+                  npx wp-env run cli --env-cwd=wp-content/plugins/appointments-booking composer install
 
             - name: Fix wp-env file permissions
               run: sudo chown -R $(id -u):$(id -g) ~/wp-env
@@ -161,7 +161,7 @@ jobs:
             - name: Install Composer dependencies (host)
               run: |
                   composer install --no-interaction --prefer-dist
-                  composer install --no-interaction --prefer-dist --working-dir=plugins/wpappointments
+                  composer install --no-interaction --prefer-dist --working-dir=plugins/appointments-booking
 
             - name: Build plugin assets
               run: pnpm build
@@ -177,8 +177,8 @@ jobs:
 
             - name: Install Playwright browsers
               run: npx playwright install chromium --with-deps
-              working-directory: plugins/wpappointments
+              working-directory: plugins/appointments-booking
 
             - name: Run E2E tests
               run: npx playwright test --project=chromium
-              working-directory: plugins/wpappointments
+              working-directory: plugins/appointments-booking

@@ -2,7 +2,7 @@ reviews:
   request_changes_workflow: true
   high_level_summary: true
   path_instructions:
-    - path: "plugins/wpappointments/src/**/*.php"
+    - path: "plugins/appointments-booking/src/**/*.php"
       instructions: |
         This is a WordPress plugin targeting wp.org directory submission. All PHP code MUST follow these security and compliance rules. Flag violations as blocking issues.
 
@@ -55,7 +55,7 @@ reviews:
         - Always check `current_user_can()` before privileged actions
         - Use specific capabilities (`wpa_manage_appointments`) over generic ones
 
-    - path: "plugins/wpappointments/assets/**/*.{ts,tsx}"
+    - path: "plugins/appointments-booking/assets/**/*.{ts,tsx}"
       instructions: |
         This is a WordPress plugin using React with TypeScript. Frontend conventions:
         - State management via `@wordpress/data` stores — not local React state for shared data
@@ -65,7 +65,7 @@ reviews:
         - Form handling with `DataForm` from `@wordpress/dataviews`; Valibot for API response validation
         - One exported component per file in packages/components
 
-    - path: "plugins/wpappointments/tests/**/*.php"
+    - path: "plugins/appointments-booking/tests/**/*.php"
       instructions: |
         Tests use Pest (PHPUnit wrapper) and run inside wp-env Docker container.
         - Test files must be suffixed with `Test.php`

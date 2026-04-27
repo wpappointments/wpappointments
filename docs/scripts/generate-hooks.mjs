@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const docsRoot = resolve(__dirname, '..');
-const pluginSrc = resolve(docsRoot, '..', 'plugins/wpappointments/src');
+const pluginSrc = resolve(docsRoot, '..', 'plugins/appointments-booking/src');
 const hooksDir = resolve(docsRoot, 'src/content/docs/developers/hooks');
 
 const ACTION_REGEX = /do_action\(\s*'([^']+)'/g;
