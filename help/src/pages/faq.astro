@@ -32,8 +32,8 @@ const groups = [
 				a: 'Entities represent the bookable resource — a room, table, staff member, piece of equipment, or anything else with limited capacity. Entities can be nested and can inherit or override their parent\'s schedule.',
 			},
 			{
-				q: 'Can I have a single-service install (no service picker)?',
-				a: 'Yes. If only one bookable exists, the booking flow skips the service step and goes straight to date and time selection.',
+				q: 'How does the booking flow handle multiple services?',
+				a: 'In v1 the <strong>Booking Flow</strong> block books against the site\'s default (core) bookable. Multi-service installs can pin a block to a specific bookable via the <code>entityId</code> block attribute and create one page per service. A unified service picker inside one booking flow is on the post-v1 roadmap (issue #330).',
 			},
 		],
 	},
