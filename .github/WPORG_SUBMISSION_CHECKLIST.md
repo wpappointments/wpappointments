@@ -76,6 +76,11 @@ Estimated time: 30–45 minutes.
 - [ ] Changelog entry for the current version exists in `readme.txt`.
 - [ ] `Stable tag:` in `readme.txt` matches `Version:` in `appointments-booking.php`.
 
+## Build the submission ZIP
+
+- [ ] Run `pnpm release:wporg`. Output: `plugins/appointments-booking/appointments-booking.zip`.
+- [ ] Unzip into a fresh WordPress install on a separate machine and re-run the smoke flow above. The ZIP must work without dev tooling.
+
 ---
 
 If anything on this list fails, fix it before submission. If something is ambiguous (e.g. reviewer requests something that contradicts this list), the reviewer's current policy wins — update this checklist after the review.
