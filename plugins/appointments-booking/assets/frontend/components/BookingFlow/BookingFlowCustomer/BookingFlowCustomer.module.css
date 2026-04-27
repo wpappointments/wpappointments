@@ -1,9 +1,11 @@
 .input {
 	width: 100%;
-	padding: 10px;
+	min-height: 44px;
+	padding: 10px 12px;
 	margin-bottom: 5px;
 	box-sizing: border-box;
 	border: 1px solid #878787;
 	border-radius: 5px;
+	/* 16px keeps iOS Safari from auto-zooming the form on focus. */
 	font-size: 16px;
 }
