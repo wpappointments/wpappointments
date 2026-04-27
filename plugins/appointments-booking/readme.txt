@@ -90,6 +90,22 @@ Yes. The booking flow is rendered via a Gutenberg block, which inherits your the
 
 Yes. All user-facing strings use the `appointments-booking` text domain and ready-made translations are bundled for 10 locales. Contributions are welcome via WordPress.org's translation platform.
 
+= Does the booking flow work on mobile? =
+
+Yes. The customer-facing booking flow is responsive and uses touch-friendly slot selection. It works with FSE themes and classic themes that support the block editor.
+
+= How are timezones handled? =
+
+Times are stored and displayed in the site's WordPress timezone (Settings → General → Timezone). Customers and admins see the same wall-clock times.
+
+= What happens to my data on uninstall? =
+
+By default, uninstall preserves your data so a re-install restores everything. To wipe everything, enable "Delete data on uninstall" in Settings → General before deleting the plugin.
+
+= Where can I find premium add-ons? =
+
+See the plugin's Help → Premium page after activation, or visit the documentation site for the current add-on catalog and installation instructions.
+
 == Screenshots ==
 
 1. Admin calendar showing upcoming appointments.
