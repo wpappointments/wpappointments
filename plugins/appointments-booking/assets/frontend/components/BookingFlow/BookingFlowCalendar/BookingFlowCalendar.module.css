@@ -322,6 +322,7 @@
 	gap: 8px;
 	padding: 10px 16px;
 	height: auto;
+	min-height: 44px;
 	font-size: 14px;
 	border-radius: 8px;
 	cursor: pointer;

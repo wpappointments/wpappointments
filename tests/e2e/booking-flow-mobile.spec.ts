@@ -26,11 +26,8 @@ async function waitForCalendar(page: Page) {
 
 const MOBILE_VIEWPORT = { width: 375, height: 812 };
 const TABLET_VIEWPORT = { width: 768, height: 1024 };
-// Time slot buttons currently render at 38px in the default theme; raising
-// this would force a CSS change. Keep the floor pragmatic for v1 — WCAG 2.5.5
-// (Target Size Level AAA) wants 44px, but v1 ships with the smaller buttons
-// documented in #332 and we tighten this once that issue ships.
-const TOUCH_TARGET_MIN = 36;
+// WCAG 2.5.5 Target Size (Level AAA) — 44×44 CSS pixels minimum.
+const TOUCH_TARGET_MIN = 44;
 
 test.describe('Booking flow — mobile (375px)', () => {
 	test.use({ viewport: MOBILE_VIEWPORT });
