@@ -41,10 +41,7 @@ test.describe('Booking flow — mobile (375px)', () => {
 		await waitForCalendar(page);
 	});
 
-	// TODO(#332): default-theme + booking flow block currently overflow at
-	// 375px (~78px scroll). Needs a CSS audit on .wpappointments-booking-flow
-	// and the calendar grid; tracked under #332 mobile pass.
-	test.skip('renders without horizontal scroll', async ({ page }) => {
+	test('renders without horizontal scroll', async ({ page }) => {
 		const { scrollWidth, clientWidth } = await page.evaluate(() => ({
 			scrollWidth: document.documentElement.scrollWidth,
 			clientWidth: document.documentElement.clientWidth,
@@ -142,8 +139,7 @@ test.describe('Booking flow — tablet (768px)', () => {
 		await waitForCalendar(page);
 	});
 
-	// TODO(#332): same overflow as mobile — needs theme/CSS pass.
-	test.skip('renders without horizontal scroll', async ({ page }) => {
+	test('renders without horizontal scroll', async ({ page }) => {
 		const { scrollWidth, clientWidth } = await page.evaluate(() => ({
 			scrollWidth: document.documentElement.scrollWidth,
 			clientWidth: document.documentElement.clientWidth,
