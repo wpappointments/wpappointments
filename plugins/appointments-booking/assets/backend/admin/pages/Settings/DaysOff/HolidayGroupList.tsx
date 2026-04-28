@@ -42,7 +42,11 @@ function buildRefOwnership(groups: HolidayGroup[]): RefOwnership {
 		if (!group.enabled) continue;
 
 		for (const holiday of group.holidays) {
-			if (holiday.ref && !ownership.has(holiday.ref)) {
+			// Only claim ownership when the holiday is actually enabled in
+			// this group. A disabled holiday shouldn't lock the same ref
+			// out of every later group — those rows should remain
+			// independently toggleable.
+			if (holiday.ref && holiday.enabled && !ownership.has(holiday.ref)) {
 				ownership.set(holiday.ref, {
 					groupId: group.id,
 					groupSource: group.source,
