@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import cn from 'obj-str';
 import BackButton from '../BackButton/BackButton';
@@ -24,6 +24,8 @@ export default function BookingFlowMultiStep() {
 	} = useBookingFlowContext();
 	const { alignment, hideProgressBar, hideStepTitles } = attributes;
 	const [currentStep, setCurrentStep] = useState(0);
+	const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+	const previousStepRef = useRef(0);
 
 	const activeStep = isEditor ? (editorStep ?? 0) : currentStep;
 
@@ -36,6 +38,17 @@ export default function BookingFlowMultiStep() {
 			setCurrentStep(2);
 		}
 	}, [formSuccess]);
+
+	// Focus the step heading when the step changes so screen readers
+	// announce the new step and keyboard users land at the start of the
+	// new content. Skip the first render and skip the editor preview
+	// (where the user is editing block attributes, not navigating).
+	useEffect(() => {
+		if (isEditor) return;
+		if (previousStepRef.current === activeStep) return;
+		previousStepRef.current = activeStep;
+		stepHeadingRef.current?.focus();
+	}, [activeStep, isEditor]);
 
 	const datetime = formData.datetime;
 
@@ -103,7 +116,7 @@ export default function BookingFlowMultiStep() {
 				<div>
 					{formError && <p className={styles.error}>{formError}</p>}
 					{!hideStepTitles && (
-						<h2>
+						<h2 ref={stepHeadingRef} tabIndex={-1}>
 							{__('Select date and time', 'appointments-booking')}
 						</h2>
 					)}
@@ -123,7 +136,7 @@ export default function BookingFlowMultiStep() {
 				>
 					{formError && <p className={styles.error}>{formError}</p>}
 					{!hideStepTitles && (
-						<h2>
+						<h2 ref={stepHeadingRef} tabIndex={-1}>
 							{__('Customer information', 'appointments-booking')}
 						</h2>
 					)}
