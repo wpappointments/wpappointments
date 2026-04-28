@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import apiFetch, { APIResponse } from '~/backend/utils/fetch';
+import type { SettingsState } from '~/backend/store/settings/settings.types';
 import { baseActions, FetchFromApiActionReturn } from '../actions';
 import { type State } from '../store';
-import type { SettingsState } from './settings.types';
 
 type Action = ReturnType<(typeof actions)[keyof typeof actions]>;
 

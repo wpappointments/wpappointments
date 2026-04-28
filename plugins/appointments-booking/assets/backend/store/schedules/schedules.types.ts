@@ -1,7 +1,7 @@
 import type {
 	DayOpeningHours,
 	OpeningHoursSlot,
-} from '../settings/settings.types';
+} from '~/backend/store/settings/settings.types';
 
 export type OverrideGroup = {
 	id: string;
