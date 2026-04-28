@@ -1,5 +1,5 @@
 import { Button } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { calendar } from '@wordpress/icons';
 import { FormFieldSet, SlideOut } from '@wpappointments/components';
@@ -45,7 +45,7 @@ export default function TimeSelector({
 		};
 	}, []);
 
-	const { coreEntityId } = useSelect(() => {
+	const { coreEntityId } = useSelect((select) => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 

@@ -9,7 +9,7 @@ import {
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { Button as WPButton, Tooltip } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import {
@@ -56,7 +56,7 @@ function getOrderedDays(startOfWeek: number = 1): Day[] {
 }
 
 function useOrderedDays(): Day[] {
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 
@@ -106,7 +106,7 @@ function formatTimeSummary(schedule: Schedule): string {
 }
 
 function useSiteTimezone(): string {
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 
@@ -210,7 +210,7 @@ function ScheduleEditor({
 	const timezoneOptions = useTimezoneOptions();
 
 	const orderedDays = useOrderedDays();
-	const timePickerPrecision = useSelect(() => {
+	const timePickerPrecision = useSelect((select) => {
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
 
@@ -520,7 +520,7 @@ function DangerZoneContent({
 export default function ScheduleSettings() {
 	const { openSlideOut } = useSlideout();
 
-	const schedules = useSelect(() => {
+	const schedules = useSelect((select) => {
 		return select(store).getSchedules();
 	}, []);
 

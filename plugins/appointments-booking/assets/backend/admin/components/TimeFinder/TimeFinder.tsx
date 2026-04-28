@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { Icon, arrowLeft, arrowRight } from '@wordpress/icons';
 import { ButtonGroup, SlideOut } from '@wpappointments/components';
@@ -40,7 +40,7 @@ export default function TimeFinder({
 
 	const dispatch = useDispatch(store);
 
-	const appointments = useSelect(() => {
+	const appointments = useSelect((select) => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 

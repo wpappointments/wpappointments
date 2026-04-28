@@ -1,5 +1,5 @@
 import { SelectControl } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { addMinutes, format } from 'date-fns';
 import { store } from '~/backend/store/store';
@@ -33,7 +33,7 @@ export default function ScheduleTimePicker({
 	minHour,
 	minMinute,
 }: Props) {
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 

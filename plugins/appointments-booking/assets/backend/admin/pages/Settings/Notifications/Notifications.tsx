@@ -9,7 +9,7 @@ import {
 	__experimentalInputControl as InputControl,
 	__experimentalText as Text,
 } from '@wordpress/components';
-import { useDispatch, useSelect, select } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
 	FormField,
@@ -437,7 +437,7 @@ export default function NotificationsSettings() {
 	const dispatch = useDispatch(store);
 	const { openSlideOut } = useSlideout();
 
-	const savedSettings = useSelect(() => {
+	const savedSettings = useSelect((select) => {
 		return select(store).getNotificationsSettings();
 	}, []);
 
@@ -563,7 +563,7 @@ function NotificationEditorWrapper({
 	const [local, setLocal] = useState<NotificationEvent>(initialValues);
 	const [saving, setSaving] = useState(false);
 
-	const savedSettings = useSelect(() => {
+	const savedSettings = useSelect((select) => {
 		return select(store).getNotificationsSettings();
 	}, []);
 

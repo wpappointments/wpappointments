@@ -1,6 +1,6 @@
 import { Button, Card, CardHeader } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { CardBody } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
@@ -72,7 +72,7 @@ function DashboardAppointments() {
 function UpcomingAppointments() {
 	const { openSlideOut } = useSlideout();
 
-	const appointments = useSelect(() => {
+	const appointments = useSelect((select) => {
 		return select(store).getUpcomingAppointments({
 			posts_per_page: 10,
 			status: ['confirmed', 'pending'],
@@ -109,7 +109,7 @@ function UpcomingAppointments() {
 }
 
 function DashboardStats() {
-	const settings = useSelect(() => {
+	const settings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 

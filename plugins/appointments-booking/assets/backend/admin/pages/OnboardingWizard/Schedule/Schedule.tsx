@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import type {
 	Day,
@@ -22,7 +22,7 @@ const DAYS_FROM_SUNDAY: Day[] = [
 ];
 
 function useOrderedDays(): Day[] {
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 
@@ -46,11 +46,11 @@ export default function ScheduleSettings({
 	const orderedDays = useOrderedDays();
 	const [formData, setFormData] = useState<ScheduleData>({});
 
-	const existingSchedules = useSelect(() => {
+	const existingSchedules = useSelect((select) => {
 		return select(store).getSchedules();
 	}, []);
 
-	const schedulesLoaded = useSelect(() => {
+	const schedulesLoaded = useSelect((select) => {
 		return select(store).getSchedulesLoaded();
 	}, []);
 
@@ -61,7 +61,7 @@ export default function ScheduleSettings({
 		}
 	}, [existingSchedules]);
 
-	const timePickerPrecision = useSelect(() => {
+	const timePickerPrecision = useSelect((select) => {
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
 

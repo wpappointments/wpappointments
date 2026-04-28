@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { cancelCircleFilled, check, edit, info, trash } from '@wordpress/icons';
 import { DataViews, TableFullEmpty } from '@wpappointments/components';
@@ -56,12 +56,15 @@ export default function AppointmentsTableFull() {
 		posts_per_page: 10,
 	});
 
-	const { appointments, totalItems, totalPages } = useSelect(() => {
-		return select(store).getAppointments({
-			...filters,
-			version: getSelector('getAppointments'),
-		});
-	}, [filters, getSelector('getAppointments')]);
+	const { appointments, totalItems, totalPages } = useSelect(
+		(select) => {
+			return select(store).getAppointments({
+				...filters,
+				version: getSelector('getAppointments'),
+			});
+		},
+		[filters, getSelector('getAppointments')]
+	);
 
 	const [view, setView] = useState<View>(defaultView);
 

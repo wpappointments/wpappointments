@@ -1,5 +1,5 @@
 import { Button, SelectControl } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
@@ -113,11 +113,14 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			mode?: 'create' | 'edit';
 		}) || {};
 
-	const currentAppointment = useSelect(() => {
-		return select(store).getAppointment(selectedAppointment as number);
-	}, [selectedAppointment]);
+	const currentAppointment = useSelect(
+		(select) => {
+			return select(store).getAppointment(selectedAppointment as number);
+		},
+		[selectedAppointment]
+	);
 
-	const selectedCustomer = useSelect(() => {
+	const selectedCustomer = useSelect((select) => {
 		return select(store).getSelectedCustomer();
 	}, []);
 
@@ -125,7 +128,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 		? formData.customer
 		: selectedCustomer;
 
-	const appointmentsSettings = useSelect(() => {
+	const appointmentsSettings = useSelect((select) => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 	const { defaultLength, coreEntityName, coreEntityId } =

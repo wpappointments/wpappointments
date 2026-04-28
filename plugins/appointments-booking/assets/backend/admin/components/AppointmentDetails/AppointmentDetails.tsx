@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Icon } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import { SlideOut } from '@wpappointments/components';
@@ -33,9 +33,12 @@ export default function AppointmentDetails() {
 	const { data } = currentSlideout || {};
 	const { selectedAppointment } = (data as any) || {};
 
-	const currentAppointment = useSelect(() => {
-		return select(store).getAppointment(selectedAppointment as number);
-	}, [selectedAppointment]);
+	const currentAppointment = useSelect(
+		(select) => {
+			return select(store).getAppointment(selectedAppointment as number);
+		},
+		[selectedAppointment]
+	);
 
 	if (!currentAppointment) {
 		return null;

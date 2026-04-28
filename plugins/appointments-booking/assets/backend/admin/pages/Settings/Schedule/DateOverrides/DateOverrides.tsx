@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, ToggleControl, Tooltip } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { plus, trash } from '@wordpress/icons';
 import { MultiDatePicker } from '@wpappointments/components';
@@ -12,7 +12,7 @@ import { store } from '~/backend/store/store';
 import styles from './DateOverrides.module.css';
 
 function useClockType(): '12' | '24' {
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 
@@ -77,7 +77,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 			: []
 	);
 
-	const generalSettings = useSelect(() => {
+	const generalSettings = useSelect((select) => {
 		return select(store).getGeneralSettings();
 	}, []);
 	const startOfWeekSetting = generalSettings?.startOfWeek ?? 1;
@@ -94,7 +94,7 @@ function OverrideEditor({ slideoutId, group, onSave }: OverrideEditorProps) {
 				]
 	);
 
-	const timePickerPrecision = useSelect(() => {
+	const timePickerPrecision = useSelect((select) => {
 		return select(store).getAppointmentsSettings()?.timePickerPrecision;
 	}, []);
 	const clockType = useClockType();

@@ -7,7 +7,7 @@ import {
 	CardHeader,
 } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
-import { useDispatch, useSelect, select } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
 	DataForm,
@@ -150,7 +150,7 @@ const form: Form = {
 export default function AppointmentsSettings() {
 	const dispatch = useDispatch(store);
 
-	const settings = useSelect(() => {
+	const settings = useSelect((select) => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 

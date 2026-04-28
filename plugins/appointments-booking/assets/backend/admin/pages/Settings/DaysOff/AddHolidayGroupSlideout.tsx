@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, TextControl } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { getGroupName } from '@wpappointments/holidays';
 import type { AvailableSet } from '~/backend/store/holidays/holidays.types';
@@ -12,7 +12,7 @@ export default function AddHolidayGroupSlideout() {
 	const [search, setSearch] = useState('');
 	const [addingId, setAddingId] = useState<string | null>(null);
 
-	const { countries, religious, groups } = useSelect(() => {
+	const { countries, religious, groups } = useSelect((select) => {
 		return {
 			countries: select(store).getAvailableCountries(),
 			religious: select(store).getAvailableReligious(),

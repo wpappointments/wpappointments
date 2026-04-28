@@ -7,7 +7,7 @@ import {
 	ToggleControl,
 	__experimentalText as Text,
 } from '@wordpress/components';
-import { useSelect, select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 import { CardBody } from '@wpappointments/components';
@@ -178,7 +178,7 @@ function HolidayGroupSection({
 export default function HolidayGroupList() {
 	const { openSlideOut } = useSlideout();
 
-	const groups = useSelect(() => {
+	const groups = useSelect((select) => {
 		return select(store).getHolidayGroups();
 	}, []);
 

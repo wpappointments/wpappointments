@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@wordpress/components';
-import { select, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { info, edit, trash } from '@wordpress/icons';
 import {
@@ -43,12 +43,15 @@ export default function CustomersTable() {
 		paged: 1,
 		number: 10,
 	});
-	const { customers, totalItems, totalPages } = useSelect(() => {
-		return select(store).getCustomers({
-			...filters,
-			version: getSelector('getCustomers'),
-		});
-	}, [filters, getSelector('getCustomers')]);
+	const { customers, totalItems, totalPages } = useSelect(
+		(select) => {
+			return select(store).getCustomers({
+				...filters,
+				version: getSelector('getCustomers'),
+			});
+		},
+		[filters, getSelector('getCustomers')]
+	);
 
 	const [view, setView] = useState<View>(defaultView);
 

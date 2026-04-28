@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { __experimentalInputControl as InputControl } from '@wordpress/components';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { SlideOut } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
@@ -18,9 +18,12 @@ export default function CustomerSelector({
 	const { closeCurrentSlideOut } = useSlideout();
 	const [searchValue, setSearchValue] = useState('');
 
-	const { customers } = useSelect(() => {
-		return select(store).getCustomers();
-	}, [searchValue]);
+	const { customers } = useSelect(
+		(select) => {
+			return select(store).getCustomers();
+		},
+		[searchValue]
+	);
 
 	const filteredCustomers = customers.filter((customer) => {
 		if (searchValue === '') {

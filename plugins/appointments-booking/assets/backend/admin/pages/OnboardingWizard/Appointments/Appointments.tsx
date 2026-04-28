@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@wordpress/components';
-import { useDispatch, useSelect, select } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
 	DataForm,
@@ -99,7 +99,7 @@ export default function AppointmentsSettings({
 	const dispatch = useDispatch(store);
 	const [error, setError] = useState<string | null>(null);
 
-	const settings = useSelect(() => {
+	const settings = useSelect((select) => {
 		return select(store).getAppointmentsSettings();
 	}, []);
 
