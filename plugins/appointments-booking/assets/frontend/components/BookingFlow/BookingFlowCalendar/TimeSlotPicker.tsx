@@ -108,7 +108,11 @@ export default function TimeSlotPicker({
 				))}
 			</div>
 			{datetime && (
-				<h5 className={styles.timeSlotHeader}>
+				<h5
+					className={styles.timeSlotHeader}
+					role="status"
+					aria-live="polite"
+				>
 					<span>{__('Selected time:', 'appointments-booking')}</span>{' '}
 					<strong>
 						{format(new Date(datetime), 'LLLL do')},{' '}

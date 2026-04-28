@@ -11,7 +11,7 @@ export default function BookingFlowConfirmation() {
 	const time = formatTime(new Date(dateTime));
 
 	return (
-		<div className={styles.alignLeft}>
+		<div className={styles.alignLeft} role="status" aria-live="polite">
 			<h2>
 				{__(
 					'Appointment created successfully!',

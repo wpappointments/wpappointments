@@ -197,4 +197,32 @@ test.describe('Booking flow — keyboard / a11y', () => {
 		const submit = page.getByRole('button', { name: 'Book' });
 		await expect(submit).toBeVisible();
 	});
+
+	test('day buttons announce day-of-week, date, and availability', async ({
+		page,
+	}) => {
+		// Move to next month so all weekday slots are populated.
+		await page
+			.locator('.wpappointments-booking-flow button[type="button"]')
+			.filter({ has: page.locator('svg') })
+			.last()
+			.click();
+
+		const dayButton = page
+			.locator(
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
+			)
+			.filter({ hasText: /^\d{1,2}$/ })
+			.first();
+		await dayButton.waitFor({ timeout: 15_000 });
+
+		const ariaLabel = await dayButton.getAttribute('aria-label');
+		expect(ariaLabel).not.toBeNull();
+		// Format: "Wednesday, March 12 — 5 of 8 slots available" (or similar).
+		// Assert the structural pieces rather than exact wording so locale +
+		// availability variations don't make the test brittle.
+		expect(ariaLabel!).toMatch(
+			/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), [A-Z][a-z]+ \d{1,2} — /
+		);
+	});
 });

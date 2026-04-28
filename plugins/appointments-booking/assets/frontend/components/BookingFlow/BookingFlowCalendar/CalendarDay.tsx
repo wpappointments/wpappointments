@@ -1,4 +1,5 @@
-import { addDays, addYears } from 'date-fns';
+import { __, _n, sprintf } from '@wordpress/i18n';
+import { addDays, addYears, format } from 'date-fns';
 import cn from 'obj-str';
 import styles from './BookingFlowCalendar.module.css';
 import type { DayCalendar, DayNotice } from '~/frontend/frontend';
@@ -53,6 +54,35 @@ export default function CalendarDay({
 				.join(', ')
 		: undefined;
 
+	// Screen-reader-friendly label: "Wednesday, March 12 — 5 of 8 slots available"
+	// or "Monday, March 11 — unavailable" / "… — has notice: vacation".
+	const dateLabel = format(date, 'EEEE, MMMM d');
+	let availabilityLabel: string;
+	if (hasNotices) {
+		availabilityLabel = sprintf(
+			/* translators: %s: comma-separated list of day notices (e.g. "Vacation"). */
+			__('has notice: %s', 'appointments-booking'),
+			noticeTitle ?? __('unavailable', 'appointments-booking')
+		);
+	} else if (!isInFutureRange) {
+		availabilityLabel = __('past date', 'appointments-booking');
+	} else if (!day.available || totalAvailable === 0) {
+		availabilityLabel = __('no slots available', 'appointments-booking');
+	} else {
+		availabilityLabel = sprintf(
+			/* translators: 1: number of available slots, 2: total number of slots */
+			_n(
+				'%1$d of %2$d slot available',
+				'%1$d of %2$d slots available',
+				totalAvailable,
+				'appointments-booking'
+			),
+			totalAvailable,
+			totalSlots
+		);
+	}
+	const ariaLabel = `${dateLabel} — ${availabilityLabel}`;
+
 	return (
 		<button
 			onClick={() => {
@@ -65,6 +95,8 @@ export default function CalendarDay({
 				onSelect();
 			}}
 			title={noticeTitle}
+			aria-label={ariaLabel}
+			aria-pressed={isSelected}
 			className={cn({
 				[styles.calendarDay]: true,
 				[styles.calendarDaySelected]: isSelected,
