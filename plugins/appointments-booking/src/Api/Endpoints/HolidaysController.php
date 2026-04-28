@@ -5,6 +5,13 @@
  * Endpoints for managing holiday groups: available sets, group CRUD,
  * and individual holiday listing with dates.
  *
+ * Pagination: holiday responses intentionally omit the standard
+ * totalItems/totalPages/postsPerPage/currentPage envelope. Holidays
+ * are bounded sets — at most ~50 groups and ~365 dates per year per
+ * group — and the UI renders all of them at once. Adding pagination
+ * here would force the client to issue extra round-trips for data
+ * that already fits in a single response.
+ *
  * @package WPAppointments
  * @since 0.6.0
  */
