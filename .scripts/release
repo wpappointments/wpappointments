@@ -3,13 +3,17 @@ set -euo pipefail
 
 cd "$(dirname "$0")/../plugins/appointments-booking"
 repo_root="$(cd ../.. && pwd)"
+dist_dir="$repo_root/dist"
+zip_path="$dist_dir/appointments-booking.zip"
 
 if [ -d vendor-temp ] && [ ! -d vendor ]; then
 	echo "Recovering vendor from vendor-temp (prior incomplete run)"
 	mv vendor-temp vendor
 fi
 
-rm -rf appointments-booking.zip appointments-booking
+mkdir -p "$dist_dir"
+rm -f "$zip_path"
+rm -rf appointments-booking
 
 version=$(grep -o "Version: *[0-9.]*" appointments-booking.php | awk '{print $2}')
 
@@ -33,8 +37,8 @@ mkdir appointments-booking
 
 rsync -a --exclude=appointments-booking --exclude-from=.zipignore . appointments-booking
 
-zip -qr appointments-booking.zip appointments-booking/* -x@.zipignore
+zip -qr "$zip_path" appointments-booking/* -x@.zipignore
 
 rm -rf appointments-booking
 
-echo "Release complete ✨ (appointments-booking.zip)"
+echo "Release complete ✨ ($zip_path)"

@@ -78,7 +78,7 @@ Estimated time: 30–45 minutes.
 
 ## Build the submission ZIP
 
-- [ ] Run `pnpm release:wporg`. Output: `plugins/appointments-booking/appointments-booking.zip`.
+- [ ] Run `pnpm release:wporg`. Output: `dist/appointments-booking.zip` (kept outside the plugin folder so Plugin Check doesn't trip on it).
 - [ ] Unzip into a fresh WordPress install on a separate machine and re-run the smoke flow above. The ZIP must work without dev tooling.
 
 ---
