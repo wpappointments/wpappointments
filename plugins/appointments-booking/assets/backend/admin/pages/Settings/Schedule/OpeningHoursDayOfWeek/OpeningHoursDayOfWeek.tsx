@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
 	Button,
 	CheckboxControl,
@@ -42,6 +42,12 @@ export default function OpeningHoursDayOfWeek({
 }: Props) {
 	const { enabled, allDay, slots } = dayData;
 	const { list } = slots || { list: [] };
+
+	// Stash slots when entering all-day so toggling back restores them.
+	// useRef instead of useState — we don't want a re-render when stashing,
+	// and the value only needs to live as long as the component is mounted
+	// (toggling off→on within a session is the supported flow).
+	const stashedSlotsRef = useRef<typeof list | null>(null);
 
 	const update = (partial: Partial<DayOpeningHours>) => {
 		onChange(day, { ...dayData, ...partial });
@@ -114,18 +120,19 @@ export default function OpeningHoursDayOfWeek({
 
 	const handleToggleAllDay = () => {
 		if (allDay) {
+			const restored = stashedSlotsRef.current ?? [
+				{
+					start: { hour: '09', minute: '00' },
+					end: { hour: '17', minute: '00' },
+				},
+			];
+			stashedSlotsRef.current = null;
 			update({
 				allDay: false,
-				slots: {
-					list: [
-						{
-							start: { hour: '09', minute: '00' },
-							end: { hour: '17', minute: '00' },
-						},
-					],
-				},
+				slots: { list: restored },
 			});
 		} else {
+			stashedSlotsRef.current = list;
 			update({
 				allDay: true,
 				slots: {
