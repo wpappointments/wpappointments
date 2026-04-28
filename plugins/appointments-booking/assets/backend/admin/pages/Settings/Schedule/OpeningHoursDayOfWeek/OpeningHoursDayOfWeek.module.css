@@ -1,4 +1,4 @@
-.day-row {
+.dayRow {
 	display: flex;
 	align-items: flex-start;
 	gap: 16px;
@@ -6,16 +6,16 @@
 	border-bottom: 1px solid #e5e5e5;
 }
 
-.day-row:last-child {
+.dayRow:last-child {
 	border-bottom: none;
 }
 
-.day-row .slots-column .slot-row :global(.components-select-control__input) {
+.dayRow .slotsColumn .slotRow :global(.components-select-control__input) {
 	height: 32px;
 	min-height: 32px;
 }
 
-.day-header {
+.dayHeader {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -24,75 +24,75 @@
 	text-transform: capitalize;
 }
 
-.day-header :global(.components-form-toggle) {
+.dayHeader :global(.components-form-toggle) {
 	flex-shrink: 0;
 }
 
-.day-name {
+.dayName {
 	font-size: 14px;
 	font-weight: 500;
 	color: #1e1e1e;
 	white-space: nowrap;
 }
 
-.slots-column {
+.slotsColumn {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 	flex: 1;
 }
 
-.slot-row {
+.slotRow {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	position: relative;
 }
 
-.slot-separator {
+.slotSeparator {
 	color: #757575;
 	font-size: 14px;
 }
 
-.slot-actions {
+.slotActions {
 	display: flex;
 	align-items: center;
 	gap: 6px;
 	margin-left: 4px;
 }
 
-.slot-actions :global(.components-button) {
+.slotActions :global(.components-button) {
 	min-width: 32px;
 	height: 32px;
 	padding: 0;
 	justify-content: center;
 }
 
-.slot-actions :global(.components-button svg) {
+.slotActions :global(.components-button svg) {
 	width: 20px;
 	height: 20px;
 }
 
-.slot-actions :global(.components-button.is-pressed) {
+.slotActions :global(.components-button.is-pressed) {
 	background: #e0e0e0;
 	color: #1e1e1e;
 }
 
-.slot-actions :global(.components-button.is-pressed:hover) {
+.slotActions :global(.components-button.is-pressed:hover) {
 	background: #d0d0d0;
 	color: #1e1e1e;
 }
 
 /* Copy popover */
-.copy-popover :global(.components-popover__content) {
+.copyPopover :global(.components-popover__content) {
 	padding: 0;
 }
 
-.copy-popover-content {
+.copyPopoverContent {
 	width: 220px;
 }
 
-.copy-popover-header {
+.copyPopoverHeader {
 	padding: 12px 16px 8px;
 	font-size: 11px;
 	font-weight: 600;
@@ -100,18 +100,18 @@
 	color: #757575;
 }
 
-.copy-popover-list {
+.copyPopoverList {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 	padding: 4px 16px 12px;
 }
 
-.copy-popover-list :global(.components-checkbox-control__label) {
+.copyPopoverList :global(.components-checkbox-control__label) {
 	font-size: 14px;
 }
 
-.copy-popover-footer {
+.copyPopoverFooter {
 	display: flex;
 	justify-content: flex-end;
 	gap: 8px;
@@ -120,11 +120,11 @@
 }
 
 /* Toggle label hidden (visually) */
-.day-header :global(.components-toggle-control) {
+.dayHeader :global(.components-toggle-control) {
 	margin-bottom: 0;
 }
 
-.day-header :global(.components-toggle-control__label) {
+.dayHeader :global(.components-toggle-control__label) {
 	position: absolute;
 	width: 1px;
 	height: 1px;
@@ -137,12 +137,12 @@
 }
 
 /* FormField wrapper margin removal inside day rows */
-.day-header :global(.FormField-module__field) {
+.dayHeader :global(.FormField-module__field) {
 	margin-bottom: 0;
 }
 
 /* Disabled state for time pickers when all-day is set */
-.time-pickers-disabled {
+.timePickersDisabled {
 	pointer-events: none;
 	opacity: 0.4;
 }
