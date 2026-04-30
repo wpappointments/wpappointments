@@ -1,0 +1,77 @@
+.stepsHeader {
+	display: flex;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+.stepsHeaderLabel {
+	flex: 1;
+	padding: 10px 2px;
+	cursor: not-allowed;
+	font-size: 16px;
+	background: none;
+	border: none;
+	font-family: inherit;
+	color: inherit;
+	text-align: left;
+}
+
+.stepsHeaderLabelCenter {
+	text-align: center;
+}
+
+.stepsHeaderLabel::before {
+	content: attr(data-step);
+	width: 25px;
+	height: 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid #41c611;
+	color: #41c611;
+	font-size: 10px;
+	font-weight: bold;
+	vertical-align: middle;
+	margin-right: 8px;
+}
+
+.stepsHeaderLabelActive {
+	font-weight: bold;
+}
+
+.stepsHeaderLabelActive::before {
+	background-color: #41c611;
+	color: white;
+}
+
+.stepsHeaderLabelClickable {
+	cursor: pointer;
+}
+
+.stepsHeaderLabelClickable:hover::before {
+	background-color: #41c611;
+	color: white;
+}
+
+.stepActions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 6px;
+	margin-top: 20px;
+}
+
+.backButton {
+	padding: 10px 20px;
+	border: 1px solid #e0e0e0;
+	border-radius: 5px;
+	background: white;
+	cursor: pointer;
+	font-size: 14px;
+	color: inherit;
+}
+
+.backButton:hover {
+	border-color: #999;
+}

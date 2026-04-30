@@ -24,7 +24,7 @@
 			"inputs": [
 				"packages/components/src/**",
 				"packages/data/src/**",
-				"plugins/wpappointments/src/**/*.php"
+				"plugins/appointments-booking/src/**/*.php"
 			]
 		},
 		"docs:dev": {

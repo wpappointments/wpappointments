@@ -1,0 +1,26 @@
+import type {
+	DayOpeningHours,
+	OpeningHoursSlot,
+} from '~/backend/store/settings/settings.types';
+
+export type OverrideGroup = {
+	id: string;
+	dates: string[];
+	type: 'custom' | 'closed';
+	slots: OpeningHoursSlot[];
+};
+
+export type Schedule = {
+	id: number;
+	name: string;
+	timezone: string;
+	active: boolean;
+	isDefault: boolean;
+	days: Record<string, DayOpeningHours>;
+	overrides: OverrideGroup[];
+};
+
+export type SchedulesState = {
+	schedules: Schedule[];
+	loaded: boolean;
+};

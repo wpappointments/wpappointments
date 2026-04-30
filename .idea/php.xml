@@ -10,20 +10,20 @@
   <component name="PHPCodeSnifferOptionsConfiguration">
     <option name="codingStandard" value="WordPress" />
     <option name="highlightLevel" value="WARNING" />
-    <option name="installedPaths" value="/var/www/html/wp-content/plugins/wpappointments/vendor/wp-coding-standards/wpcs" />
+    <option name="installedPaths" value="/var/www/html/wp-content/plugins/appointments-booking/vendor/wp-coding-standards/wpcs" />
     <option name="showSniffs" value="true" />
     <option name="useInstalledPaths" value="true" />
     <option name="transferred" value="true" />
   </component>
   <component name="PhpCSFixer">
     <phpcsfixer_settings>
-      <phpcs_fixer_by_interpreter interpreter_id="c4fe8d60-a58c-4c9f-a6b5-c6e07f3f8619" standards="PSR1;PSR2;Symfony;DoctrineAnnotation;PHP70Migration;PHP71Migration" tool_path="/Users/marcin/Sites/wpappointments/wpappointments:/var/www/html/wp-content/plugins/wpappointments/vendor/bin/phpc" timeout="30000" />
+      <phpcs_fixer_by_interpreter interpreter_id="c4fe8d60-a58c-4c9f-a6b5-c6e07f3f8619" standards="PSR1;PSR2;Symfony;DoctrineAnnotation;PHP70Migration;PHP71Migration" tool_path="/Users/marcin/Sites/wpappointments/wpappointments:/var/www/html/wp-content/plugins/appointments-booking/vendor/bin/phpc" timeout="30000" />
     </phpcsfixer_settings>
   </component>
   <component name="PhpCodeSniffer">
     <phpcs_settings>
       <PhpCSConfiguration beautifier_path="vendor/bin/phpcbf" standards="MySource;PEAR;PSR1;PSR12;PSR2;Squiz;WordPress;WordPress-Core;WordPress-Docs;WordPress-Extra;Zend" tool_path="vendor/bin/phpcs" />
-      <phpcs_by_interpreter interpreter_id="c4fe8d60-a58c-4c9f-a6b5-c6e07f3f8619" beautifier_path="/var/www/html/wp-content/plugins/wpappointments/vendor/bin/phpcbf" standards="MySource;PEAR;PSR1;PSR12;PSR2;Squiz;WordPress;WordPress-Core;WordPress-Docs;WordPress-Extra;Zend" tool_path="/var/www/html/wp-content/plugins/wpappointments/vendor/bin/phpcs" timeout="30000" />
+      <phpcs_by_interpreter interpreter_id="c4fe8d60-a58c-4c9f-a6b5-c6e07f3f8619" beautifier_path="/var/www/html/wp-content/plugins/appointments-booking/vendor/bin/phpcbf" standards="MySource;PEAR;PSR1;PSR12;PSR2;Squiz;WordPress;WordPress-Core;WordPress-Docs;WordPress-Extra;Zend" tool_path="/var/www/html/wp-content/plugins/appointments-booking/vendor/bin/phpcs" timeout="30000" />
     </phpcs_settings>
   </component>
   <component name="PhpExternalFormatter">

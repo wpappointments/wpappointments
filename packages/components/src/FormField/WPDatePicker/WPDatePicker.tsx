@@ -106,13 +106,13 @@ export default function WPDatePicker({
 				[styles.wrapper]: true,
 			})}
 			role="application"
-			aria-label={__('Calendar', 'wpappointments')}
+			aria-label={__('Calendar', 'appointments-booking')}
 		>
 			<div className={styles.navigator}>
 				<Button
 					icon={isRTL() ? arrowRight : arrowLeft}
 					variant="tertiary"
-					aria-label={__('View previous month', 'wpappointments')}
+					aria-label={__('View previous month', 'appointments-booking')}
 					onClick={() => {
 						viewPreviousMonth();
 						setFocusable(subMonths(focusable, 1));
@@ -130,7 +130,7 @@ export default function WPDatePicker({
 				<Button
 					icon={isRTL() ? arrowLeft : arrowRight}
 					variant="tertiary"
-					aria-label={__('View next month', 'wpappointments')}
+					aria-label={__('View next month', 'appointments-booking')}
 					onClick={() => {
 						viewNextMonth();
 						setFocusable(addMonths(focusable, 1));

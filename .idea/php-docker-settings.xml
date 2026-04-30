@@ -11,7 +11,7 @@
               <option name="volumeBindings">
                 <list>
                   <DockerVolumeBindingImpl>
-                    <option name="containerPath" value="/var/www/html/wp-content/plugins/wpappointments" />
+                    <option name="containerPath" value="/var/www/html/wp-content/plugins/appointments-booking" />
                     <option name="hostPath" value="$PROJECT_DIR$" />
                   </DockerVolumeBindingImpl>
                 </list>
