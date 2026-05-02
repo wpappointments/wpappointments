@@ -7,7 +7,7 @@
  * plugins/appointments-booking/assets/ for the wp.org submission.
  *
  * Run with:
- *   pnpm -C plugins/appointments-booking test:e2e -- tests/e2e/wporg-screenshots.spec.ts
+ *   pnpm -C plugins/appointments-booking test:e2e:wporg-screenshots
  *
  * Prereqs: seeded booking pages from global-setup; clean MailHog not needed.
  */

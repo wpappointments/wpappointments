@@ -4,10 +4,11 @@ const BASE_URL = 'http://localhost:8888';
 
 export default defineConfig({
 	testDir: '../../tests/e2e',
-	// wp.org listing screenshots are generated on demand via the dedicated
-	// `test:e2e:wporg-screenshots` script, which passes the file path directly.
-	// Excluded from the default run so regular CI doesn't produce listing PNGs.
-	testIgnore: ['**/wporg-screenshots.spec.ts'],
+	// wp.org listing screenshots are opt-in via WPORG_SCREENSHOTS=1.
+	// Default runs (CI, local dev) skip the file so regular E2E doesn't produce listing PNGs.
+	testIgnore: process.env.WPORG_SCREENSHOTS
+		? []
+		: ['**/wporg-screenshots.spec.ts'],
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,
