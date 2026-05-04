@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+
+# Build the wp.org submission ZIP for Appstip Booking.
+# Output: <repo>/dist/appstip-booking.zip
+
+cd "$(dirname "$0")/.."
+plugin_dir="$(pwd)"
+repo_root="$(cd ../.. && pwd)"
+dist_dir="$repo_root/dist"
+zip_path="$dist_dir/appstip-booking.zip"
+
+version=$(grep -o "Version: *[0-9.]*" appstip-booking.php | awk '{print $2}')
+
+echo "Releasing Appstip Booking $version"
+
+mkdir -p "$dist_dir"
+rm -f "$zip_path"
+rm -rf appstip-booking
+
+mkdir appstip-booking
+rsync -a --exclude=appstip-booking --exclude-from=.distignore . appstip-booking
+
+zip -qr "$zip_path" appstip-booking
+rm -rf appstip-booking
+
+echo "✓ ZIP built: $zip_path"
+ls -lh "$zip_path"

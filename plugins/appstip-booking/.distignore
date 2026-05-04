@@ -1,0 +1,18 @@
+# Files and directories excluded from the wp.org submission ZIP.
+.git/
+.github/
+.distignore
+.scripts/
+node_modules/
+tests/
+phpunit.xml
+phpcs.xml
+.editorconfig
+.gitignore
+.gitattributes
+.husky/
+.vscode/
+.idea/
+*.zip
+*.log
+.DS_Store

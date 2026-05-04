@@ -9,6 +9,7 @@
 		"wp-content/tools": "./tools",
 		"wp-content/vendor": "./vendor",
 		"wp-content/plugins/wpappointments": "./plugins/wpappointments",
+		"wp-content/plugins/appstip-booking": "./plugins/appstip-booking",
 		"wp-content/plugins/other-plugin": "./plugins/other-plugin",
 		"wp-content/plugins/demo-court-booking": "./tools/testing/demo-court-booking",
 		"wp-content/mu-plugins": "./.mu-plugins",
@@ -16,6 +17,7 @@
 	},
 	"plugins": [
 		"./plugins/wpappointments",
+		"./plugins/appstip-booking",
 		"./plugins/other-plugin",
 		"./tools/testing/demo-court-booking"
 	]
