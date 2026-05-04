@@ -140,7 +140,7 @@ export default function SlideOut({
 							<SlideoutHeaderActionsSlot />
 							<Button
 								icon={closeIcon}
-								label={__('Close', 'appointments-booking')}
+								label={__('Close', 'appstip-appointments')}
 								onClick={() => closeCurrentSlideOut(onClose)}
 							/>
 						</div>

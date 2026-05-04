@@ -73,14 +73,14 @@ export default function BookableSlideoutContent({
 				displayErrorToast(
 					__(
 						'Something went wrong while updating.',
-						'appointments-booking'
+						'appstip-appointments'
 					)
 				);
 				return;
 			}
 
 			displaySuccessToast(
-				__('Updated successfully.', 'appointments-booking')
+				__('Updated successfully.', 'appstip-appointments')
 			);
 		} else {
 			const result = await createBookable(payload);
@@ -89,14 +89,14 @@ export default function BookableSlideoutContent({
 				displayErrorToast(
 					__(
 						'Something went wrong while creating.',
-						'appointments-booking'
+						'appstip-appointments'
 					)
 				);
 				return;
 			}
 
 			displaySuccessToast(
-				__('Created successfully.', 'appointments-booking')
+				__('Created successfully.', 'appstip-appointments')
 			);
 		}
 
@@ -123,7 +123,7 @@ export default function BookableSlideoutContent({
 				<p>
 					{__(
 						'Could not load type information.',
-						'appointments-booking'
+						'appstip-appointments'
 					)}
 				</p>
 			</div>
