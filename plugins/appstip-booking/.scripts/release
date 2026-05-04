@@ -19,7 +19,7 @@ rm -f "$zip_path"
 rm -rf appstip-booking
 
 mkdir appstip-booking
-rsync -a --exclude=appstip-booking --exclude-from=.distignore . appstip-booking
+rsync -a --exclude=appstip-booking --exclude-from=.scripts/dist-ignore.txt . appstip-booking
 
 zip -qr "$zip_path" appstip-booking
 rm -rf appstip-booking

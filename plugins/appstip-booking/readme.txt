@@ -43,6 +43,12 @@ No. Everything runs on your WordPress instance — no external calls.
 
 Yes. The text domain is `appstip-booking` and translation files belong in the `languages` directory.
 
+== Screenshots ==
+
+1. Appointments admin list — manage your appointment records from a familiar WordPress screen.
+2. Editing a single appointment — the standard block editor with title and content.
+3. Settings page — set the default appointment duration.
+
 == Changelog ==
 
 = 0.1.0 =

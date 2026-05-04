@@ -1,8 +1,8 @@
 # Files and directories excluded from the wp.org submission ZIP.
 .git/
 .github/
-.distignore
 .scripts/
+.wordpress-org/
 node_modules/
 tests/
 phpunit.xml
