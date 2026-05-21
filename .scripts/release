@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-cd "$(dirname "$0")/../plugins/appointments-booking"
+cd "$(dirname "$0")/../plugins/appstip-appointments"
 repo_root="$(cd ../.. && pwd)"
 dist_dir="$repo_root/dist"
-zip_path="$dist_dir/appointments-booking.zip"
+zip_path="$dist_dir/appstip-appointments.zip"
 
 if [ -d vendor-temp ] && [ ! -d vendor ]; then
 	echo "Recovering vendor from vendor-temp (prior incomplete run)"
@@ -13,13 +13,13 @@ fi
 
 mkdir -p "$dist_dir"
 rm -f "$zip_path"
-rm -rf appointments-booking
+rm -rf appstip-appointments
 
-version=$(grep -o "Version: *[0-9.]*" appointments-booking.php | awk '{print $2}')
+version=$(grep -o "Version: *[0-9.]*" appstip-appointments.php | awk '{print $2}')
 
 echo "Releasing version $version"
 
-(cd "$repo_root" && pnpm build)
+(cd "$repo_root" && pnpm -C plugins/appstip-appointments build)
 
 restore_vendor() {
 	if [ -d vendor-temp ]; then
@@ -31,14 +31,14 @@ trap restore_vendor EXIT
 
 mv vendor vendor-temp
 
-(cd "$repo_root" && npx wp-env run cli --env-cwd=wp-content/plugins/appointments-booking composer install --no-dev --quiet)
+(cd "$repo_root" && npx wp-env run cli --env-cwd=wp-content/plugins/appstip-appointments composer install --no-dev --quiet)
 
-mkdir appointments-booking
+mkdir appstip-appointments
 
-rsync -a --exclude=appointments-booking --exclude-from=.zipignore . appointments-booking
+rsync -a --exclude=appstip-appointments --exclude-from=.zipignore . appstip-appointments
 
-zip -qr "$zip_path" appointments-booking/* -x@.zipignore
+zip -qr "$zip_path" appstip-appointments/* -x@.zipignore
 
-rm -rf appointments-booking
+rm -rf appstip-appointments
 
 echo "Release complete ✨ ($zip_path)"

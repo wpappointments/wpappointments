@@ -24,7 +24,7 @@
 			"inputs": [
 				"packages/components/src/**",
 				"packages/data/src/**",
-				"plugins/appointments-booking/src/**/*.php"
+				"plugins/appstip-appointments/src/**/*.php"
 			]
 		},
 		"docs:dev": {

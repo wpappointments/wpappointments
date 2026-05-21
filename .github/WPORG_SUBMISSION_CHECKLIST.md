@@ -70,15 +70,15 @@ Estimated time: 30–45 minutes.
 
 ## Final checks
 
-- [ ] All 5 wp.org listing screenshots captured (run the **WP.org listing screenshots** GitHub Action manually and download the `wporg-screenshots` artifact, or run `pnpm -C plugins/appointments-booking test:e2e:wporg-screenshots` locally). Save the PNGs to `plugins/appointments-booking/assets/` per `WPORG_LISTING.md`.
+- [ ] All 5 wp.org listing screenshots captured (run the **WP.org listing screenshots** GitHub Action manually and download the `wporg-screenshots` artifact, or run `pnpm -C plugins/appstip-appointments test:e2e:wporg-screenshots` locally). Save the PNGs to `plugins/appstip-appointments/assets/` per `WPORG_LISTING.md`.
 - [ ] Banner (772×250 and 1544×500) and icon (128×128 and 256×256) PNGs present.
 - [ ] `readme.txt` short description ≤ 150 chars and matches the listing blurb.
 - [ ] Changelog entry for the current version exists in `readme.txt`.
-- [ ] `Stable tag:` in `readme.txt` matches `Version:` in `appointments-booking.php`.
+- [ ] `Stable tag:` in `readme.txt` matches `Version:` in `appstip-appointments.php`.
 
 ## Build the submission ZIP
 
-- [ ] Run `pnpm release:wporg`. Output: `dist/appointments-booking.zip` (kept outside the plugin folder so Plugin Check doesn't trip on it).
+- [ ] Run `pnpm release:wporg`. Output: `dist/appstip-appointments.zip` (kept outside the plugin folder so Plugin Check doesn't trip on it).
 - [ ] Unzip into a fresh WordPress install on a separate machine and re-run the smoke flow above. The ZIP must work without dev tooling.
 
 ---

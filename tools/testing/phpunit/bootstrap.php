@@ -18,7 +18,7 @@ tests_add_filter(
 	function () {
 		$tests_dir  = __DIR__;
 		$plugin_dir = dirname( dirname( dirname( $tests_dir ) ) );
-		require $plugin_dir . '/plugins/appointments-booking/appointments-booking.php';
+		require $plugin_dir . '/plugins/appstip-appointments/appstip-appointments.php';
 	}
 );
 

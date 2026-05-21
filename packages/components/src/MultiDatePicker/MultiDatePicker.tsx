@@ -65,7 +65,7 @@ export default function MultiDatePicker({
 		<div
 			className={styles.wrapper}
 			role="application"
-			aria-label={__('Calendar', 'appointments-booking')}
+			aria-label={__('Calendar', 'appstip-appointments')}
 		>
 			<div className={styles.navigator}>
 				<Button
@@ -73,7 +73,7 @@ export default function MultiDatePicker({
 					variant="tertiary"
 					aria-label={__(
 						'View previous month',
-						'appointments-booking'
+						'appstip-appointments'
 					)}
 					onClick={() => {
 						viewPreviousMonth();
@@ -89,7 +89,7 @@ export default function MultiDatePicker({
 				<Button
 					icon={isRTL() ? arrowLeft : arrowRight}
 					variant="tertiary"
-					aria-label={__('View next month', 'appointments-booking')}
+					aria-label={__('View next month', 'appstip-appointments')}
 					onClick={() => {
 						viewNextMonth();
 						setFocusable(addMonths(focusable, 1));

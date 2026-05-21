@@ -4,10 +4,10 @@
  * Opt-in spec — not part of the normal CI run. Produces the five PNGs
  * referenced in readme.txt's Screenshots section. Output lands in
  * tests/e2e/results/wporg/ and can be copied into
- * plugins/appointments-booking/assets/ for the wp.org submission.
+ * plugins/appstip-appointments/assets/ for the wp.org submission.
  *
  * Run with:
- *   pnpm -C plugins/appointments-booking test:e2e:wporg-screenshots
+ *   pnpm -C plugins/appstip-appointments test:e2e:wporg-screenshots
  *
  * Prereqs: seeded booking pages from global-setup; clean MailHog not needed.
  */
@@ -74,12 +74,12 @@ test.describe('wp.org listing screenshots', () => {
 		const { bookingOneStepId } = getTestData();
 		await page.goto(`/?p=${bookingOneStepId}`);
 		await page
-			.locator('.wpappointments-booking-flow')
+			.locator('.wpappstip-appointments-flow')
 			.waitFor({ timeout: 15_000 });
 		// Wait for availability to load so the calendar has enabled day buttons
 		await page
 			.locator(
-				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
+				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
 			)
 			.first()
 			.waitFor({ timeout: 15_000 });
