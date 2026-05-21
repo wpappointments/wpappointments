@@ -71,23 +71,33 @@ export default function BookableSlideoutContent({
 
 			if (result.error) {
 				displayErrorToast(
-					__('Something went wrong while updating.', 'wpappointments')
+					__(
+						'Something went wrong while updating.',
+						'appstip-appointments'
+					)
 				);
 				return;
 			}
 
-			displaySuccessToast(__('Updated successfully.', 'wpappointments'));
+			displaySuccessToast(
+				__('Updated successfully.', 'appstip-appointments')
+			);
 		} else {
 			const result = await createBookable(payload);
 
 			if (result.error) {
 				displayErrorToast(
-					__('Something went wrong while creating.', 'wpappointments')
+					__(
+						'Something went wrong while creating.',
+						'appstip-appointments'
+					)
 				);
 				return;
 			}
 
-			displaySuccessToast(__('Created successfully.', 'wpappointments'));
+			displaySuccessToast(
+				__('Created successfully.', 'appstip-appointments')
+			);
 		}
 
 		closeSlideOut(slideoutId);
@@ -111,7 +121,10 @@ export default function BookableSlideoutContent({
 		return (
 			<div style={{ padding: '16px' }}>
 				<p>
-					{__('Could not load type information.', 'wpappointments')}
+					{__(
+						'Could not load type information.',
+						'appstip-appointments'
+					)}
 				</p>
 			</div>
 		);

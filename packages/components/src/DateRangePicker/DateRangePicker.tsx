@@ -113,13 +113,16 @@ export default function DateRangePicker({
 		<div
 			className={styles.wrapper}
 			role="application"
-			aria-label={__('Calendar', 'wpappointments')}
+			aria-label={__('Calendar', 'appstip-appointments')}
 		>
 			<div className={styles.navigator}>
 				<Button
 					icon={isRTL() ? arrowRight : arrowLeft}
 					variant="tertiary"
-					aria-label={__('View previous month', 'wpappointments')}
+					aria-label={__(
+						'View previous month',
+						'appstip-appointments'
+					)}
 					onClick={() => {
 						viewPreviousMonth();
 						setFocusable(subMonths(focusable, 1));
@@ -134,7 +137,7 @@ export default function DateRangePicker({
 				<Button
 					icon={isRTL() ? arrowLeft : arrowRight}
 					variant="tertiary"
-					aria-label={__('View next month', 'wpappointments')}
+					aria-label={__('View next month', 'appstip-appointments')}
 					onClick={() => {
 						viewNextMonth();
 						setFocusable(addMonths(focusable, 1));

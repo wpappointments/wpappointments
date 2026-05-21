@@ -12,11 +12,11 @@
 	},
 	"license": "GPL-2.0-or-later",
 	"devDependencies": {
-		"@types/react": "*"
+		"@types/react": "^18.0.0"
 	},
 	"peerDependencies": {
-		"@wordpress/api-fetch": "*",
-		"@wordpress/data": "*",
+		"@wordpress/api-fetch": "^6.48.0",
+		"@wordpress/data": "^9.21.0",
 		"react": "^18.0.0"
 	}
 }
