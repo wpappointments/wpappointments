@@ -42,7 +42,7 @@ add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\block_editor_data'
  * @return void
  */
 function block_editor_data() {
-	if ( ! wp_script_is( 'wpappstip-appointments-flow-editor-script', 'enqueued' ) ) {
+	if ( ! wp_script_is( 'appstip-appointments-flow-editor-script', 'enqueued' ) ) {
 		return;
 	}
 
@@ -68,7 +68,7 @@ function block_editor_data() {
 	);
 
 	wp_add_inline_script(
-		'wpappstip-appointments-flow-editor-script',
+		'appstip-appointments-flow-editor-script',
 		'window.wpappointments = Object.assign(window.wpappointments || {}, ' . $localize_data . ');',
 		'before'
 	);

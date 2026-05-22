@@ -34,7 +34,7 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\inject_frontend_config' );
 function inject_frontend_config() {
 	require_once PluginInfo::get_plugin_dir_path() . '/includes/utils/datetime.php';
 
-	$view_handle = 'wpappstip-appointments-flow-view-script';
+	$view_handle = 'appstip-appointments-flow-view-script';
 
 	if ( ! wp_script_is( $view_handle, 'registered' ) && ! wp_script_is( $view_handle, 'enqueued' ) ) {
 		return;
