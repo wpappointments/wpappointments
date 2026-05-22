@@ -13,7 +13,7 @@ if (!window.wpappointments.hooks) {
 }
 
 const bookingFlow = document.getElementsByClassName(
-	'appstip-appointments-flow'
+	'wpappointments-booking-flow'
 );
 
 for (const element of bookingFlow) {

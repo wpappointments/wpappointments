@@ -23,12 +23,12 @@ function getTestData(): {
 /** Wait for the booking flow calendar to finish loading. */
 async function waitForCalendar(page: Page) {
 	await page
-		.locator('.appstip-appointments-flow')
+		.locator('.wpappointments-booking-flow')
 		.waitFor({ timeout: 15_000 });
 	// Availability loading replaces skeleton with real day buttons
 	await page
 		.locator(
-			'.appstip-appointments-flow button[type="button"]:not([disabled])'
+			'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 		)
 		.first()
 		.waitFor({ timeout: 15_000 });
@@ -38,7 +38,7 @@ async function waitForCalendar(page: Page) {
 async function pickAvailableFutureDay(page: Page) {
 	// Navigate to next month to ensure all weekday slots are fully available
 	const nextButton = page
-		.locator('.appstip-appointments-flow button[type="button"]')
+		.locator('.wpappointments-booking-flow button[type="button"]')
 		.filter({ has: page.locator('svg') })
 		.last();
 	await nextButton.click();
@@ -46,7 +46,7 @@ async function pickAvailableFutureDay(page: Page) {
 	// Wait for availability to reload — day buttons with availability bars appear
 	const availableDay = page
 		.locator(
-			'.appstip-appointments-flow button[type="button"]:not([disabled])'
+			'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 		)
 		.filter({ hasText: /^\d{1,2}$/ })
 		.first();
@@ -248,7 +248,7 @@ test.describe('Calendar interaction', () => {
 
 		// Navigate forward — find the "next month" chevron button
 		const navButtons = page.locator(
-			'.appstip-appointments-flow button[type="button"]'
+			'.wpappointments-booking-flow button[type="button"]'
 		);
 		const nextButton = navButtons
 			.filter({ has: page.locator('svg') })
@@ -290,7 +290,7 @@ test.describe('Calendar interaction', () => {
 		page,
 	}) => {
 		const prevButton = page
-			.locator('.appstip-appointments-flow button[type="button"]')
+			.locator('.wpappointments-booking-flow button[type="button"]')
 			.filter({ has: page.locator('svg') })
 			.first();
 
