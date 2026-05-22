@@ -74,12 +74,12 @@ test.describe('wp.org listing screenshots', () => {
 		const { bookingOneStepId } = getTestData();
 		await page.goto(`/?p=${bookingOneStepId}`);
 		await page
-			.locator('.wpappstip-appointments-flow')
+			.locator('.wpappointments-booking-flow')
 			.waitFor({ timeout: 15_000 });
 		// Wait for availability to load so the calendar has enabled day buttons
 		await page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.first()
 			.waitFor({ timeout: 15_000 });

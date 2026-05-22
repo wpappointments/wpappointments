@@ -1,0 +1,3887 @@
+# Copyright (C) 2026 Appstip
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Appstip Appointments 0.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/appstip-"
+"appointments\n"
+"POT-Creation-Date: 2026-05-22T09:16:55+00:00\n"
+"PO-Revision-Date: 2026-03-21 00:00+0000\n"
+"Last-Translator: WPPoland <hello@wppoland.com>\n"
+"Language-Team: Japanese <hello@wppoland.com>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: appstip-appointments\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Plugin Name of the plugin
+#: appstip-appointments.php
+msgid "Appstip Appointments"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: appstip-appointments.php
+msgid "https://appstip.com"
+msgstr ""
+
+#. Description of the plugin
+#: appstip-appointments.php
+msgid ""
+"Next-gen appointment scheduling for WordPress. Extensible, developer-"
+"friendly booking system with variant support."
+msgstr ""
+"WordPress向け次世代予約スケジューリング。拡張可能で開発者に優しいバリアント対"
+"応の予約システムです。"
+
+#. Author of the plugin
+#: appstip-appointments.php
+msgid "Appstip"
+msgstr ""
+
+#: includes/admin/menu.php:27 includes/admin/menu.php:28
+#: src/Core/PostTypes.php:37 build/admin.tsx.js:12065
+msgid "Appointments"
+msgstr "予約"
+
+#: includes/admin/menu.php:38 includes/admin/menu.php:39
+#: build/admin.tsx.js:2108 build/admin.tsx.js:2506 build/admin.tsx.js:2837
+#: build/admin.tsx.js:7801 build/admin.tsx.js:10215
+#: build/booking-flow-block.tsx.js:487 build/index.tsx.js:1808
+#: build/index.tsx.js:2206 build/index.tsx.js:2537
+msgid "Calendar"
+msgstr "カレンダー"
+
+#: includes/admin/menu.php:47 includes/admin/menu.php:48
+#: build/admin.tsx.js:7931
+msgid "Customers"
+msgstr "顧客"
+
+#: includes/admin/menu.php:56 includes/admin/menu.php:57
+#: build/admin.tsx.js:12093
+msgid "Settings"
+msgstr "設定"
+
+#: includes/admin/menu.php:65 includes/admin/menu.php:66
+msgid "Wizard"
+msgstr "ウィザード"
+
+#: includes/admin/roles.php:21
+msgid "Customer (appointments)"
+msgstr "顧客（予約）"
+
+#: includes/class-booking-flow-widget.php:24
+msgid "WP Appointments Booking Flow"
+msgstr ""
+
+#: includes/class-booking-flow-widget.php:26
+msgid "Display the appointment booking flow."
+msgstr ""
+
+#: includes/gutenberg.php:98
+msgid "WP Appointments"
+msgstr "WP Appointments"
+
+#: includes/views/widget-form.php:21
+msgid "Title:"
+msgstr ""
+
+#: includes/views/widget-form.php:33
+msgid "Flow type:"
+msgstr ""
+
+#: includes/views/widget-form.php:41
+msgid "One Step"
+msgstr ""
+
+#: includes/views/widget-form.php:44
+msgid "Multi Step"
+msgstr ""
+
+#: includes/views/widget-form.php:50
+msgid "Alignment:"
+msgstr ""
+
+#: includes/views/widget-form.php:58
+msgid "Left"
+msgstr ""
+
+#: includes/views/widget-form.php:61
+msgid "Center"
+msgstr ""
+
+#: includes/views/widget-form.php:64
+msgid "Right"
+msgstr ""
+
+#: includes/views/widget-form.php:70
+msgid "Width:"
+msgstr ""
+
+#: includes/views/widget-form.php:78
+msgid "Narrow"
+msgstr ""
+
+#: includes/views/widget-form.php:81
+msgid "Full"
+msgstr ""
+
+#: includes/views/widget-form.php:94
+msgid "Trim unavailable slots"
+msgstr ""
+
+#: includes/views/widget-form.php:106
+msgid "Show time slots as buttons"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:168
+msgid "Appointments fetched successfully"
+msgstr "予約の取得に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:185
+msgid "Upcoming appointments fetched successfully"
+msgstr "今後の予約の取得に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:210
+#: src/Api/Endpoints/AppointmentsController.php:345
+msgid "Invalid appointment status"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:216
+#: src/Api/Endpoints/AppointmentsController.php:354
+msgid "Duration must be greater than zero"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:224
+#: src/Api/Endpoints/AppointmentsController.php:274
+#: src/Api/Endpoints/AppointmentsController.php:366
+msgid "Invalid date format"
+msgstr ""
+
+#: src/Api/Endpoints/AppointmentsController.php:249
+#: src/Api/Endpoints/AppointmentsController.php:316 build/admin.tsx.js:12166
+#: build/globals.tsx.js:1196
+msgid "Appointment created successfully"
+msgstr "予約の作成に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:306 src/Plugin.php:114
+#: build/admin.tsx.js:5116 build/admin.tsx.js:5478 build/admin.tsx.js:8118
+#: build/admin.tsx.js:9198
+msgid "Appointment"
+msgstr "予約"
+
+#: src/Api/Endpoints/AppointmentsController.php:401 build/admin.tsx.js:12197
+#: build/globals.tsx.js:1227
+msgid "Appointment updated successfully"
+msgstr "予約の更新に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:426 build/admin.tsx.js:12222
+#: build/globals.tsx.js:1252
+msgid "Appointment cancelled successfully"
+msgstr "予約のキャンセルに成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:451 build/admin.tsx.js:12247
+#: build/globals.tsx.js:1277
+msgid "Appointment deleted successfully"
+msgstr "予約の削除に成功しました"
+
+#: src/Api/Endpoints/AppointmentsController.php:476 build/admin.tsx.js:12272
+#: build/globals.tsx.js:1302
+msgid "Appointment confirmed successfully"
+msgstr "予約の確定に成功しました"
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:99
+msgid "Availability fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:136
+msgid "Entity availability fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:162
+msgid "Invalid timezone"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:168
+msgid "Calendar data is required"
+msgstr ""
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:176
+msgid "Invalid calendar data"
+msgstr "カレンダーデータが無効です"
+
+#: src/Api/Endpoints/BookableAvailabilityController.php:218
+#: src/Api/Endpoints/BookableAvailabilityController.php:420
+msgid "Calendar slots fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:118
+msgid "Bookables fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:135
+#: src/Data/Model/BookableEntity.php:435
+msgid "Bookable name is required"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:147
+msgid "Bookable created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:168
+msgid "Bookable fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:192
+msgid "Bookable updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookablesController.php:215
+msgid "Bookable deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/BookableTypesController.php:68
+msgid "Bookable types fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/CustomersController.php:97
+msgid "Customers fetched successfully"
+msgstr "顧客の取得に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:130 build/admin.tsx.js:12364
+msgid "Customer created successfully"
+msgstr "顧客の作成に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:164 build/admin.tsx.js:12398
+msgid "Customer updated successfully"
+msgstr "顧客の更新に成功しました"
+
+#: src/Api/Endpoints/CustomersController.php:187 build/admin.tsx.js:12422
+msgid "Customer deleted successfully"
+msgstr "顧客の削除に成功しました"
+
+#: src/Api/Endpoints/HolidaysController.php:119
+msgid "Available holiday sets fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:136
+msgid "Holiday groups fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:163
+msgid "Holiday group added successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:184
+msgid "Holiday group removed successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:210
+msgid "Holiday group updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:226
+msgid "Holiday updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:234
+msgid "No update data provided."
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:263
+#: src/Holidays/HolidayRegistry.php:172 src/Holidays/HolidayRegistry.php:207
+#: src/Holidays/HolidayRegistry.php:256
+msgid "Holiday group not found."
+msgstr ""
+
+#: src/Api/Endpoints/HolidaysController.php:286
+msgid "Group holidays fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:117
+msgid "OOO entries fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:141
+#: src/Data/Model/OutOfOffice.php:294
+msgid "Start date and end date are required"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:147
+#: src/Api/Endpoints/OutOfOfficeController.php:218
+msgid "Start date must be before end date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:159
+msgid "OOO entry created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:186
+msgid "OOO entry fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:230
+msgid "OOO entry updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:259
+msgid "OOO entry deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:278
+msgid "start_date and end_date are required"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:289
+msgid "start_date and end_date must be valid Y-m-d dates"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:295
+msgid "start_date must not be after end_date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:339
+msgid "Blocked dates fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:357
+msgid "You do not own this time off entry."
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:380
+msgid "start_date must be a valid Y-m-d date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:391
+msgid "end_date must be a valid Y-m-d date"
+msgstr ""
+
+#: src/Api/Endpoints/OutOfOfficeController.php:401
+msgid "reason must be one of the allowed values"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:117
+msgid "Schedules fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:134
+#: src/Data/Model/Schedule.php:168 src/Data/Model/Schedule.php:456
+msgid "Schedule name is required"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:153
+msgid "Schedule created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:174
+msgid "Schedule fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:198
+msgid "Schedule updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:222
+msgid "Schedule deleted successfully"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:247
+msgid "Cannot set an inactive schedule as default"
+msgstr ""
+
+#: src/Api/Endpoints/SchedulesController.php:254
+msgid "Default schedule updated"
+msgstr ""
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:104
+msgid "Service categories fetched successfully"
+msgstr "サービスカテゴリの取得に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:127
+#: src/Api/Endpoints/ServiceCategoriesController.php:171
+msgid "Category name is required"
+msgstr "カテゴリ名は必須です"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:142
+msgid "Service category created successfully"
+msgstr "サービスカテゴリの作成に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:186
+msgid "Service category updated successfully"
+msgstr "サービスカテゴリの更新に成功しました"
+
+#: src/Api/Endpoints/ServiceCategoriesController.php:216
+msgid "Service category deleted successfully"
+msgstr "サービスカテゴリの削除に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:81
+msgid "Settings fetched successfully"
+msgstr "設定の取得に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:103
+msgid "Settings in category fetched successfully"
+msgstr "カテゴリ内の設定の取得に成功しました"
+
+#: src/Api/Endpoints/SettingsController.php:130
+msgid "Settings updated successfully"
+msgstr "設定の更新に成功しました"
+
+#: src/Api/Endpoints/VariantsController.php:117
+msgid "Variants fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:143
+msgid "Variant created successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:172
+msgid "Variants generated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:198
+#: src/Api/Endpoints/VariantsController.php:232
+#: src/Api/Endpoints/VariantsController.php:271
+msgid "Variant does not belong to the specified bookable entity"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:205
+msgid "Variant fetched successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:245
+msgid "Variant updated successfully"
+msgstr ""
+
+#: src/Api/Endpoints/VariantsController.php:284
+msgid "Variant deleted successfully"
+msgstr ""
+
+#: src/Api/PublicEndpointGuard.php:83
+msgid "Invalid request."
+msgstr ""
+
+#: src/Api/PublicEndpointGuard.php:117
+msgid "Too many requests. Please try again shortly."
+msgstr ""
+
+#. translators: %s: layer slug
+#: src/Availability/AvailabilityLayerRegistry.php:42
+#, php-format
+msgid "Availability layer \"%s\" is already registered"
+msgstr ""
+
+#: src/Availability/AvailabilityLayerRegistry.php:51
+msgid "Availability layer type must be \"base\" or \"narrowing\""
+msgstr ""
+
+#: src/Availability/AvailabilityLayerRegistry.php:58
+msgid "Availability layer must have a callable callback"
+msgstr ""
+
+#. translators: %s: bookable type slug
+#: src/Bookable/BookableTypeRegistry.php:41
+#, php-format
+msgid "Bookable type \"%s\" is already registered"
+msgstr ""
+
+#. translators: %s: handler class name
+#: src/Bookable/BookableTypeRegistry.php:49
+#, php-format
+msgid "Bookable type handler class \"%s\" not found"
+msgstr ""
+
+#. translators: %s: handler class name
+#: src/Bookable/BookableTypeRegistry.php:57
+#, php-format
+msgid "Bookable type handler \"%s\" must extend AbstractBookableTypeHandler"
+msgstr ""
+
+#: src/Core/PostTypes.php:63 build/admin.tsx.js:11850
+msgid "Schedules"
+msgstr "スケジュール"
+
+#: src/Core/PostTypes.php:93
+msgid "Bookables"
+msgstr ""
+
+#: src/Core/PostTypes.php:132
+msgid "Bookable Variants"
+msgstr ""
+
+#: src/Core/PostTypes.php:168
+msgid "Out of Office"
+msgstr ""
+
+#: src/Data/Model/Appointment.php:188
+msgid "Appointment is already cancelled"
+msgstr "予約は既にキャンセルされています"
+
+#: src/Data/Model/Appointment.php:214
+msgid "Appointment is already confirmed"
+msgstr "予約は既に確定されています"
+
+#: src/Data/Model/Appointment.php:240 src/Data/Model/Appointment.php:315
+msgid "Appointment not found"
+msgstr "予約が見つかりません"
+
+#: src/Data/Model/Appointment.php:247
+msgid "Appointment must be cancelled before deleting"
+msgstr "削除する前に予約をキャンセルする必要があります"
+
+#: src/Data/Model/Appointment.php:309
+msgid "Appointment ID is required"
+msgstr "予約IDは必須です"
+
+#: src/Data/Model/Appointment.php:319
+msgid "Post is not an appointment"
+msgstr "投稿は予約ではありません"
+
+#: src/Data/Model/BookableEntity.php:66
+msgid "Post is not a bookable entity. Expected post_type wpa-bookable"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:78
+msgid ""
+"Bookable value passed to constructor cannot be null. Expected array, int, "
+"string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:83
+msgid ""
+"Bookable value passed to constructor is invalid. Expected array, int, string "
+"or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:101
+msgid "This bookable entity is already persisted. Use update() instead"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:171 src/Data/Model/BookableEntity.php:250
+msgid ""
+"Bookable not found. Instantiate BookableEntity class with a bookable object"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:214
+msgid "Failed to update bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:264
+msgid "Failed to delete bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:410
+msgid "Bookable ID is required"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:416
+msgid "Bookable not found"
+msgstr ""
+
+#: src/Data/Model/BookableEntity.php:420
+msgid "Post is not a bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:83
+msgid "Post is not a bookable variant. Expected post_type wpa-bookable-variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:95
+msgid ""
+"Variant value passed to constructor cannot be null. Expected array, int, "
+"string or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:100
+msgid ""
+"Variant value passed to constructor is invalid. Expected array, int, string "
+"or WP_Post"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:117
+msgid "Variant must have a parent bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:127
+msgid "Parent must be a valid bookable entity"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:196
+#: src/Data/Model/BookableVariant.php:254
+msgid ""
+"Variant not found. Instantiate BookableVariant class with a variant object"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:227
+msgid "Failed to update bookable variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:265
+msgid "Failed to delete bookable variant"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:534
+msgid "Invalid bookable entity for variant generation"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:866
+msgid "Variant ID is required"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:872
+msgid "Variant not found"
+msgstr ""
+
+#: src/Data/Model/BookableVariant.php:876
+msgid "Post is not a bookable variant"
+msgstr ""
+
+#: src/Data/Model/Customer.php:60
+msgid "When saving user, you have to provide user data array in constructor"
+msgstr ""
+"ユーザーを保存する際、コンストラクタにユーザーデータ配列を提供する必要があり"
+"ます"
+
+#: src/Data/Model/Customer.php:105
+msgid ""
+"When updating customer you have to initialize model with user object or user "
+"id"
+msgstr ""
+"顧客を更新する際、ユーザーオブジェクトまたはユーザーIDでモデルを初期化する必"
+"要があります"
+
+#: src/Data/Model/Customer.php:158
+msgid "Could not delete customer"
+msgstr "顧客を削除できませんでした"
+
+#: src/Data/Model/Customer.php:213
+msgid "User ID is required"
+msgstr "ユーザーIDは必須です"
+
+#: src/Data/Model/Customer.php:219
+msgid "User not found"
+msgstr "ユーザーが見つかりません"
+
+#: src/Data/Model/Customer.php:223
+msgid "User is not a customer"
+msgstr "ユーザーは顧客ではありません"
+
+#: src/Data/Model/OutOfOffice.php:60 src/Data/Model/OutOfOffice.php:326
+msgid "Post is not an OOO entry"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:72
+msgid "Invalid value passed to OutOfOffice constructor"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:90
+msgid "This OOO entry is already persisted. Use update() instead"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:145 src/Data/Model/OutOfOffice.php:196
+#: src/Data/Model/OutOfOffice.php:321
+msgid "OOO entry not found"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:206
+msgid "Failed to delete OOO entry"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:273
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:645
+#: build/booking-flow-block-view.tsx.js:666 build/frontend.tsx.js:666
+msgid "Time off"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:274 build/admin.tsx.js:9516
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:646
+#: build/booking-flow-block-view.tsx.js:667 build/frontend.tsx.js:667
+msgid "Vacation"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:275 build/admin.tsx.js:9517
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:647
+#: build/booking-flow-block-view.tsx.js:668 build/frontend.tsx.js:668
+msgid "Travel"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:276 build/admin.tsx.js:9518
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:648
+#: build/booking-flow-block-view.tsx.js:669 build/frontend.tsx.js:669
+msgid "Sick Leave"
+msgstr ""
+
+#: src/Data/Model/OutOfOffice.php:277 build/admin.tsx.js:9519
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:649
+#: build/booking-flow-block-view.tsx.js:670 build/frontend.tsx.js:670
+msgid "Holiday"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:54
+msgid "Post is not a schedule. Expected post_type wpa-schedule"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:66
+msgid "Schedule value passed to constructor cannot be null"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:71
+msgid ""
+"Schedule value passed to constructor is invalid. Expected array, int, string "
+"or WP_Post"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:89
+msgid "This schedule is already persisted. Use update() instead"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:159
+msgid "Schedule not found. Instantiate Schedule class with a schedule object"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:227 src/Data/Model/Schedule.php:437
+msgid "Schedule not found"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:239
+msgid "Cannot delete the default schedule"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:268
+msgid "Failed to delete schedule"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:431
+msgid "Schedule ID is required"
+msgstr ""
+
+#: src/Data/Model/Schedule.php:441
+msgid "Post is not a schedule"
+msgstr ""
+
+#: src/Data/Model/Settings.php:159
+msgid "Invalid settings category"
+msgstr "無効な設定カテゴリ"
+
+#: src/Data/Model/Settings.php:198
+msgid "Unknown error while saving settings"
+msgstr "設定の保存中に不明なエラーが発生しました"
+
+#: src/Holidays/HolidayRegistry.php:96
+msgid "Invalid holiday group type."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:106
+msgid "Holiday data file not found."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:116
+msgid "Source file type does not match requested type."
+msgstr ""
+
+#: src/Holidays/HolidayRegistry.php:128
+msgid "This holiday group is already added."
+msgstr ""
+
+#: src/Notifications/Notifications.php:51 build/admin.tsx.js:10327
+msgid "Appointment Created"
+msgstr ""
+
+#: src/Notifications/Notifications.php:52 build/admin.tsx.js:10328
+msgid "Sent when a new appointment is booked."
+msgstr ""
+
+#: src/Notifications/Notifications.php:53 build/admin.tsx.js:10329
+msgid "New appointment booked"
+msgstr ""
+
+#: src/Notifications/Notifications.php:54 build/admin.tsx.js:10330
+msgid "Your appointment has been booked"
+msgstr ""
+
+#: src/Notifications/Notifications.php:55 build/admin.tsx.js:10331
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"A new appointment has been booked with {customer_name}.\n"
+"\n"
+"Date: {date}\n"
+"Time: {time}\n"
+"Service: {service}\n"
+"Duration: {duration} minutes\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:56 build/admin.tsx.js:10342
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Thank you for booking an appointment with us.\n"
+"\n"
+"Date: {date}\n"
+"Time: {time}\n"
+"Service: {service}\n"
+"Duration: {duration} minutes\n"
+"\n"
+"If you need to reschedule, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:59 build/admin.tsx.js:10357
+msgid "Appointment Updated"
+msgstr ""
+
+#: src/Notifications/Notifications.php:60 build/admin.tsx.js:10358
+msgid "Sent when an existing appointment is modified."
+msgstr ""
+
+#: src/Notifications/Notifications.php:61 build/admin.tsx.js:10359
+msgid "Appointment updated"
+msgstr ""
+
+#: src/Notifications/Notifications.php:62 build/admin.tsx.js:10360
+msgid "Your appointment has been updated"
+msgstr ""
+
+#: src/Notifications/Notifications.php:63 build/admin.tsx.js:10361
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} has been updated.\n"
+"\n"
+"Previous: {previous_date} at {previous_time} ({previous_status})\n"
+"Updated: {date} at {time} ({status})\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:64 build/admin.tsx.js:10370
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment has been updated.\n"
+"\n"
+"Previous: {previous_date} at {previous_time}\n"
+"Updated: {date} at {time}\n"
+"Status: {status}\n"
+"\n"
+"If you have any questions, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:67 build/admin.tsx.js:10384
+msgid "Appointment Confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:68 build/admin.tsx.js:10385
+msgid "Sent when an appointment is confirmed."
+msgstr ""
+
+#: src/Notifications/Notifications.php:69 build/admin.tsx.js:10386
+msgid "Appointment confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:70 build/admin.tsx.js:10387
+msgid "Your appointment is confirmed"
+msgstr ""
+
+#: src/Notifications/Notifications.php:71 build/admin.tsx.js:10388
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} on {date} at {time} has been "
+"confirmed.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:72 build/admin.tsx.js:10394
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment on {date} at {time} is confirmed.\n"
+"\n"
+"If you need to make any changes, please contact us at {admin_email}.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:75 build/admin.tsx.js:10404
+msgid "Appointment Cancelled"
+msgstr ""
+
+#: src/Notifications/Notifications.php:76 build/admin.tsx.js:10405
+msgid "Sent when an appointment is cancelled."
+msgstr ""
+
+#: src/Notifications/Notifications.php:77 build/admin.tsx.js:10406
+msgid "Appointment cancelled"
+msgstr ""
+
+#: src/Notifications/Notifications.php:78 build/admin.tsx.js:10407
+msgid "Your appointment has been cancelled"
+msgstr ""
+
+#: src/Notifications/Notifications.php:79 build/admin.tsx.js:10408
+msgid ""
+"Dear {admin_first_name},\n"
+"\n"
+"The appointment with {customer_name} on {date} at {time} has been "
+"cancelled.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Notifications/Notifications.php:80 build/admin.tsx.js:10414
+msgid ""
+"Dear {customer_name},\n"
+"\n"
+"Your appointment on {date} at {time} has been cancelled.\n"
+"\n"
+"If this was a mistake, please contact us at {admin_email} to reschedule.\n"
+"\n"
+"Best regards,\n"
+"{admin_first_name} {admin_last_name}"
+msgstr ""
+
+#: src/Plugin.php:137 build/admin.tsx.js:8917 build/admin.tsx.js:8923
+#: build/admin.tsx.js:11569
+msgid "Default"
+msgstr ""
+
+#: build/admin.tsx.js:650 build/index.tsx.js:350
+msgid "Name is required."
+msgstr ""
+
+#. translators: %s: field label
+#: build/admin.tsx.js:661 build/index.tsx.js:361
+msgid "%s is required."
+msgstr ""
+
+#. translators: 1: field label, 2: minimum value
+#: build/admin.tsx.js:668 build/index.tsx.js:368
+msgid "%1$s must be at least %2$s."
+msgstr ""
+
+#. translators: 1: field label, 2: maximum value
+#: build/admin.tsx.js:672 build/index.tsx.js:372
+msgid "%1$s must be at most %2$s."
+msgstr ""
+
+#. translators: 1: field label, 2: minimum length
+#: build/admin.tsx.js:677 build/index.tsx.js:377
+msgid "%1$s must be at least %2$s characters."
+msgstr ""
+
+#. translators: 1: field label, 2: maximum length
+#: build/admin.tsx.js:681 build/index.tsx.js:381
+msgid "%1$s must be at most %2$s characters."
+msgstr ""
+
+#: build/admin.tsx.js:712 build/admin.tsx.js:1117 build/admin.tsx.js:6146
+#: build/admin.tsx.js:6355 build/admin.tsx.js:6530 build/admin.tsx.js:9104
+#: build/index.tsx.js:412 build/index.tsx.js:817
+msgid "Name"
+msgstr ""
+
+#: build/admin.tsx.js:723 build/index.tsx.js:423
+msgid "Description"
+msgstr ""
+
+#: build/admin.tsx.js:728 build/admin.tsx.js:1128 build/admin.tsx.js:10472
+#: build/admin.tsx.js:11571 build/index.tsx.js:428 build/index.tsx.js:828
+msgid "Active"
+msgstr ""
+
+#: build/admin.tsx.js:750 build/admin.tsx.js:6240 build/index.tsx.js:450
+msgid "Update"
+msgstr ""
+
+#: build/admin.tsx.js:750 build/admin.tsx.js:6240 build/index.tsx.js:450
+msgid "Create"
+msgstr ""
+
+#: build/admin.tsx.js:818 build/index.tsx.js:518
+msgid "— Select —"
+msgstr ""
+
+#. translators: %s: bookable type label
+#: build/admin.tsx.js:993 build/index.tsx.js:693
+msgid "Add New %s"
+msgstr ""
+
+#. translators: %s: bookable type label
+#: build/admin.tsx.js:995 build/index.tsx.js:695
+msgid "Edit %s"
+msgstr ""
+
+#: build/admin.tsx.js:1053 build/admin.tsx.js:10485 build/admin.tsx.js:10486
+#: build/index.tsx.js:753
+msgid "Edit"
+msgstr ""
+
+#: build/admin.tsx.js:1060 build/admin.tsx.js:2275 build/admin.tsx.js:6727
+#: build/index.tsx.js:760 build/index.tsx.js:1975
+msgid "Delete"
+msgstr ""
+
+#: build/admin.tsx.js:1067 build/index.tsx.js:767
+msgid "Delete Item"
+msgstr ""
+
+#: build/admin.tsx.js:1068 build/index.tsx.js:768
+msgid ""
+"Are you sure you want to delete this item? This action cannot be undone."
+msgstr ""
+
+#: build/admin.tsx.js:1082 build/index.tsx.js:782
+msgid "Add New"
+msgstr ""
+
+#: build/admin.tsx.js:1087 build/index.tsx.js:787
+msgid "No items found."
+msgstr ""
+
+#: build/admin.tsx.js:1120 build/admin.tsx.js:5126 build/admin.tsx.js:5527
+#: build/admin.tsx.js:5546 build/admin.tsx.js:5858 build/index.tsx.js:820
+msgid "Status"
+msgstr "ステータス"
+
+#: build/admin.tsx.js:1128 build/admin.tsx.js:10472 build/admin.tsx.js:11571
+#: build/admin.tsx.js:11813 build/index.tsx.js:828
+msgid "Inactive"
+msgstr ""
+
+#: build/admin.tsx.js:1149 build/index.tsx.js:849
+msgid "Yes"
+msgstr ""
+
+#: build/admin.tsx.js:1149 build/index.tsx.js:849
+msgid "No"
+msgstr ""
+
+#: build/admin.tsx.js:1228 build/index.tsx.js:928
+msgid "Something went wrong while updating."
+msgstr ""
+
+#: build/admin.tsx.js:1231 build/index.tsx.js:931
+msgid "Updated successfully."
+msgstr ""
+
+#: build/admin.tsx.js:1235 build/index.tsx.js:935
+msgid "Something went wrong while creating."
+msgstr ""
+
+#: build/admin.tsx.js:1238 build/index.tsx.js:938
+msgid "Created successfully."
+msgstr ""
+
+#: build/admin.tsx.js:1259 build/index.tsx.js:959
+msgid "Could not load type information."
+msgstr ""
+
+#: build/admin.tsx.js:2114 build/admin.tsx.js:2512 build/admin.tsx.js:2843
+#: build/index.tsx.js:1814 build/index.tsx.js:2212 build/index.tsx.js:2543
+msgid "View previous month"
+msgstr ""
+
+#: build/admin.tsx.js:2124 build/admin.tsx.js:2523 build/admin.tsx.js:2853
+#: build/index.tsx.js:1824 build/index.tsx.js:2223 build/index.tsx.js:2553
+msgid "View next month"
+msgstr ""
+
+#: build/admin.tsx.js:2271 build/admin.tsx.js:6679 build/admin.tsx.js:6723
+#: build/index.tsx.js:1971
+msgid "Go back"
+msgstr ""
+
+#: build/admin.tsx.js:3087 build/index.tsx.js:2787
+msgid "Close"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "15 Khordad Uprising"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Adwa Victory Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Afghanistan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Algeria"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "All Saints' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Angola"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Argentina"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Armed Forces Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Armistice Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Army Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Asalha Bucha Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ascension Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ash Wednesday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ashura"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Assumption of Mary"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Autumnal Equinox Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Baisakhi"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Bangladesh"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Bastille Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Battle of Angamos Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Battle of Boyacá Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Bengali New Year (Pohela Boishakh)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Benito Juárez's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Black Consciousness Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Boxing Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Brazil"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Buddha Jayanti"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Buddha's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Buddhist Lent (Khao Phansa)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Canada"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Canada Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Carnival (Monday)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Carnival Tuesday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Children's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "China"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Chinese New Year"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Chinese New Year (Day 2)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Chinese New Year (Day 3)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Christian Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Christmas Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Christmas Eve"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Chuseok (Harvest Festival)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Colombia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Columbus Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Coming of Age Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Commemoration of Atatürk"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Constitution Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Constitution Memorial Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Coronation Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Corpus Christi"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Culture Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Dasara / Dussehra"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Dashain (Vijaya Dashami)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Day of Defenders of Ukraine"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Day of Europe"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Day of Peace and National Reconciliation"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Day of Reconciliation"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Day of Remembrance for Truth and Justice"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Death of Imam Khomeini"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Declaration of Independence Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Deepavali"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Defender of the Fatherland Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Democracy Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Democracy and National Unity Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Democratic Republic of the Congo"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Diwali"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Dormition of the Theotokos"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Downfall of the Derg"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Dragon Boat Festival"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "EDSA Revolution Anniversary"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Early May Bank Holiday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Easter Monday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Easter Sunday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Egypt"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Adha"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Adha (Day 2)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Adha (Day 3)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Fitr"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Fitr (Day 2)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Eid al-Fitr (Day 3)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Emperor's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Epiphany"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ethiopia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ethiopian Christmas (Genna)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ethiopian Easter"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ethiopian Epiphany (Timkat)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ethiopian New Year"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Feast of Santa Rosa de Lima"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Federal Territory Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Finding of the True Cross (Meskel)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Flag Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Founders' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Founding Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "France"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Freedom Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Gandhi Jayanti"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ganesh Chaturthi"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "German Unity Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Germany"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ghana"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Good Friday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Green March Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Greenery Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Guru Nanak Jayanti"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hangul Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hanukkah"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hari Raya Haji (Eid al-Adha)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hari Raya Puasa (Eid al-Fitr)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Heritage Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Heroes' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hindu Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Holi"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Human Rights Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Hung Kings Temple Festival"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Immaculate Conception"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Independence Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Independence Movement Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "India"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Indonesia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "International Labour Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "International Women's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Iqbal Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Iran"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Iraq"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Islamic New Year"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Islamic Republic Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Isra and Mi'raj"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Italy"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Jamhuri Day (Independence Day)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Janmashtami (Krishna Jayanti)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Japan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Jewish Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Juneteenth"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Kenya"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "King's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Labor Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Labour Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Labour Thanksgiving Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Laylat al-Qadr (Night of Power)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Liberation Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Madaraka Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mahavira Jayanti"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Makar Sankranti"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Makha Bucha Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Malaysia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Malaysia Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Marine Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Martin Luther King Jr. Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Martyrs' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mashujaa Day (Heroes' Day)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "May Revolution Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Memorial Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Memory and Honour Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mexico"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mid-Autumn Festival"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Morocco"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mountain Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Mozambique"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Muslim (Islamic) Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Myanmar"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Myanmar New Year"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nane Nane Day (Farmers' Day)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Day (Day 2)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Day (Day 3)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Day (Hari Merdeka)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Day of Spain"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Foundation Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Heroes Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Heroes' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Sovereignty and Children's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Unity Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "National Women's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nature's Day (Sizdah Be-dar)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Navaratri (Sharad)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Navruz"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nepal"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nepali New Year (Nava Barsha)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "New Year's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "New Year's Eve"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nigeria"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ninoy Aquino Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nowruz (Day 2)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nowruz (Day 3)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nowruz (Day 4)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nowruz (Persian New Year)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nyepi (Balinese New Year)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Nyerere Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Oil Nationalization Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Ascension Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Christian Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Christmas"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Easter Monday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Easter Sunday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Good Friday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox New Year (Old New Year)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Palm Sunday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Orthodox Pentecost"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Our Lady of Aparecida"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Pakistan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Pakistan Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Palm Sunday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Pancasila Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Passover (Pesach)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Peace and Reconciliation Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Peasants' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Pentecost"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Peru"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Philippines"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Poland"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Presidents' Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Prithvi Jayanti & National Unity Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Prophet's Birthday (Mawlid al-Nabi)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Purim"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Quaid-e-Azam Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Queen's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Raksha Bandhan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ram Navami"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Remembrance Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Republic Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Respect for the Aged Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Reunification Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Revolution Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Revolution Day (December)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Rizal Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Rosh Hashanah (Jewish New Year)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Russia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Russia Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Saba Saba Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Saudi Arabia"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Second Day of Christmas"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Seollal (Lunar New Year)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Shab-e-Barat"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Sham El-Nessim"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Shavuot"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Showa Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Simchat Torah"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Simón Bolívar Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Sinai Liberation Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Songkran"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "South Africa"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "South Korea"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Spain"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Sports Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Spring Bank Holiday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Spring and Labour Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Start of Ramadan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Sudan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Sukkot"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Summer Bank Holiday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Tanzania"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Thailand"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Thaipusam"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Thanksgiving"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Theophany (Orthodox Epiphany)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Thingyan (Water Festival)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Throne Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Tihar (Diwali)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Tiradentes Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Tomb Sweeping Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Trinity Day (Whit Monday)"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Turkey"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Uganda"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Ukraine"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Unification Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Union Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "United Kingdom"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "United States"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Uzbekistan"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Venezuela"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Vernal Equinox Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Vesak Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Veterans Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Victoria Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Victory Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Victory in Europe Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Vietnam"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Whit Monday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Women's Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Yang di-Pertuan Agong's Birthday"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Yemen"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Yom Kippur"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Youth Day"
+msgstr ""
+
+#: build/admin.tsx.js:4646
+msgid "Youth and Sports Day"
+msgstr ""
+
+#: build/admin.tsx.js:5128 build/admin.tsx.js:5512 build/admin.tsx.js:5523
+msgid "Service"
+msgstr "サービス"
+
+#: build/admin.tsx.js:5155 build/admin.tsx.js:5477 build/admin.tsx.js:5679
+msgid "Edit Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5160
+msgid "Cancel Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5165
+msgid "Delete Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5173
+msgid "Confirm Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5417
+msgid "Please select a date and time."
+msgstr ""
+
+#: build/admin.tsx.js:5426
+msgid "Invalid date or time."
+msgstr ""
+
+#: build/admin.tsx.js:5447
+msgid "Something went wrong while submitting the form."
+msgstr ""
+
+#: build/admin.tsx.js:5477 build/admin.tsx.js:7813
+msgid "Create New Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5530 build/admin.tsx.js:6055 build/admin.tsx.js:8155
+#: build/admin.tsx.js:9258
+msgid "Pending"
+msgstr ""
+
+#: build/admin.tsx.js:5533 build/admin.tsx.js:6061 build/admin.tsx.js:8152
+#: build/admin.tsx.js:9255
+msgid "Confirmed"
+msgstr ""
+
+#: build/admin.tsx.js:5536
+msgid "Cancelled"
+msgstr ""
+
+#: build/admin.tsx.js:5539
+msgid "No Show"
+msgstr ""
+
+#: build/admin.tsx.js:5548 build/admin.tsx.js:10228
+msgid "Date and time"
+msgstr ""
+
+#: build/admin.tsx.js:5557
+msgid "No time selected"
+msgstr ""
+
+#: build/admin.tsx.js:5569 build/admin.tsx.js:7528
+msgid "Select time"
+msgstr ""
+
+#: build/admin.tsx.js:5585 build/admin.tsx.js:5625
+msgid "Change"
+msgstr ""
+
+#: build/admin.tsx.js:5587 build/admin.tsx.js:5822
+msgid "Customer"
+msgstr "顧客"
+
+#: build/admin.tsx.js:5596
+msgid "No customer selected"
+msgstr ""
+
+#: build/admin.tsx.js:5604
+msgid "Select customer"
+msgstr ""
+
+#: build/admin.tsx.js:5615
+msgid "New customer"
+msgstr ""
+
+#: build/admin.tsx.js:5629
+msgid "Clear"
+msgstr ""
+
+#: build/admin.tsx.js:5675
+msgid "Update Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5677
+msgid "Create Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5808 build/admin.tsx.js:6018
+msgid "You have no appointments yet"
+msgstr ""
+
+#: build/admin.tsx.js:5811 build/admin.tsx.js:8027
+msgid "New Appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5815
+msgid "Title"
+msgstr ""
+
+#: build/admin.tsx.js:5828 build/admin.tsx.js:7133
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:804
+#: build/booking-flow-block-view.tsx.js:825 build/frontend.tsx.js:825
+msgid "Date"
+msgstr ""
+
+#: build/admin.tsx.js:5838 build/admin.tsx.js:7135
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:804
+#: build/booking-flow-block-view.tsx.js:825 build/frontend.tsx.js:825
+msgid "Time"
+msgstr ""
+
+#: build/admin.tsx.js:5875
+msgid "View appointment details"
+msgstr ""
+
+#: build/admin.tsx.js:5882
+msgid "Edit appointment details"
+msgstr ""
+
+#: build/admin.tsx.js:5890 build/admin.tsx.js:6683
+msgid "Cancel appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5905
+msgid "Confirm appointment"
+msgstr ""
+
+#: build/admin.tsx.js:5913
+msgid "Delete appointment"
+msgstr ""
+
+#: build/admin.tsx.js:6070
+msgid "min"
+msgstr ""
+
+#: build/admin.tsx.js:6154 build/admin.tsx.js:6355 build/admin.tsx.js:6544
+#: build/admin.tsx.js:8472 build/admin.tsx.js:9970
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:860
+#: build/booking-flow-block-view.tsx.js:881 build/frontend.tsx.js:881
+msgid "Email"
+msgstr ""
+
+#: build/admin.tsx.js:6159 build/admin.tsx.js:6355 build/admin.tsx.js:6556
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:869
+#: build/booking-flow-block-view.tsx.js:890 build/frontend.tsx.js:890
+msgid "Phone"
+msgstr ""
+
+#: build/admin.tsx.js:6164
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:883
+#: build/booking-flow-block-view.tsx.js:904 build/frontend.tsx.js:904
+msgid "Create account"
+msgstr ""
+
+#: build/admin.tsx.js:6241
+msgid "New Customer"
+msgstr ""
+
+#: build/admin.tsx.js:6241
+msgid "Update Customer"
+msgstr ""
+
+#: build/admin.tsx.js:6340
+msgid "Select Customer"
+msgstr ""
+
+#: build/admin.tsx.js:6343
+msgid "Search for a customer"
+msgstr ""
+
+#: build/admin.tsx.js:6344
+msgid "Search by name, email or phone number"
+msgstr ""
+
+#: build/admin.tsx.js:6401
+msgid "Selected customer"
+msgstr ""
+
+#: build/admin.tsx.js:6407
+msgid "mail:"
+msgstr ""
+
+#: build/admin.tsx.js:6410
+msgid "phone:"
+msgstr ""
+
+#: build/admin.tsx.js:6523
+msgid "You have no customers yet"
+msgstr ""
+
+#: build/admin.tsx.js:6526 build/admin.tsx.js:7943
+msgid "Create New Customer"
+msgstr ""
+
+#: build/admin.tsx.js:6568
+msgid "Created"
+msgstr ""
+
+#: build/admin.tsx.js:6572
+msgid "Missing date information"
+msgstr ""
+
+#: build/admin.tsx.js:6580
+msgid "View customer details"
+msgstr ""
+
+#: build/admin.tsx.js:6587
+msgid "Edit customer details"
+msgstr ""
+
+#: build/admin.tsx.js:6594
+msgid "Delete customer"
+msgstr ""
+
+#: build/admin.tsx.js:6601
+msgid "Delete Customer"
+msgstr ""
+
+#: build/admin.tsx.js:6602
+msgid ""
+"Are you sure you want to delete this customer? This action cannot be undone."
+msgstr ""
+
+#: build/admin.tsx.js:6671
+msgid "Cancel appointment?"
+msgstr ""
+
+#: build/admin.tsx.js:6674
+msgid "This will cancel the appointment."
+msgstr ""
+
+#: build/admin.tsx.js:6715
+msgid "Delete appointment?"
+msgstr ""
+
+#: build/admin.tsx.js:6718
+msgid "This will permanently delete the appointment. It cannot be undone."
+msgstr ""
+
+#: build/admin.tsx.js:6904
+msgid "Loading..."
+msgstr ""
+
+#: build/admin.tsx.js:6955 build/admin.tsx.js:7468
+msgid "Find time"
+msgstr ""
+
+#: build/admin.tsx.js:6965
+msgid "All day"
+msgstr ""
+
+#: build/admin.tsx.js:6969
+msgid "Early Morning"
+msgstr ""
+
+#: build/admin.tsx.js:6973
+msgid "Morning"
+msgstr ""
+
+#: build/admin.tsx.js:6977
+msgid "Afternoon"
+msgstr ""
+
+#: build/admin.tsx.js:6981
+msgid "Evening"
+msgstr ""
+
+#: build/admin.tsx.js:7129
+msgid "Date and time summary"
+msgstr ""
+
+#: build/admin.tsx.js:7135
+msgid "%s to %s"
+msgstr ""
+
+#: build/admin.tsx.js:7137 build/admin.tsx.js:7273
+msgid "Duration"
+msgstr "所要時間"
+
+#: build/admin.tsx.js:7137
+msgid "minutes"
+msgstr "分"
+
+#: build/admin.tsx.js:7139
+msgid "Warning: Selected time is already booked or outside of working hours"
+msgstr ""
+
+#: build/admin.tsx.js:7248
+msgid "Start time"
+msgstr ""
+
+#: build/admin.tsx.js:7252 build/admin.tsx.js:7259 build/admin.tsx.js:11945
+msgid "Hour"
+msgstr ""
+
+#: build/admin.tsx.js:7263 build/admin.tsx.js:7270 build/admin.tsx.js:11954
+msgid "Minute"
+msgstr ""
+
+#: build/admin.tsx.js:7277 build/admin.tsx.js:9179
+msgid "Minutes"
+msgstr ""
+
+#: build/admin.tsx.js:7452
+msgid "Select Time"
+msgstr ""
+
+#: build/admin.tsx.js:7460
+msgid "Having trouble finding available time slot?"
+msgstr ""
+
+#: build/admin.tsx.js:7469
+msgid "Select day"
+msgstr ""
+
+#: build/admin.tsx.js:7528
+msgid "Select time anyway"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "January"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "February"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "March"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "April"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "May"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "June"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "July"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "August"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "September"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "October"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "November"
+msgstr ""
+
+#: build/admin.tsx.js:7676
+msgid "December"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11522 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Mon"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11523 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Tue"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11524 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Wed"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11525 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Thu"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11526 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Fri"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11527 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Sat"
+msgstr ""
+
+#: build/admin.tsx.js:7745 build/admin.tsx.js:11528 build/admin.tsx.js:14509
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:121
+#: build/booking-flow-block-view.tsx.js:142 build/frontend.tsx.js:142
+msgid "Sun"
+msgstr ""
+
+#: build/admin.tsx.js:7789
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:532
+#: build/booking-flow-block-view.tsx.js:553 build/frontend.tsx.js:553
+msgid "Previous month"
+msgstr ""
+
+#: build/admin.tsx.js:7794
+msgid "today"
+msgstr ""
+
+#: build/admin.tsx.js:7798
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:552
+#: build/booking-flow-block-view.tsx.js:573 build/frontend.tsx.js:573
+msgid "Next month"
+msgstr ""
+
+#: build/admin.tsx.js:7828 build/admin.tsx.js:7834
+msgid "Currently not available"
+msgstr ""
+
+#: build/admin.tsx.js:7829
+msgid "Day"
+msgstr ""
+
+#: build/admin.tsx.js:7835
+msgid "Week"
+msgstr ""
+
+#: build/admin.tsx.js:7838
+msgid "Month"
+msgstr ""
+
+#: build/admin.tsx.js:7886 build/admin.tsx.js:9469
+msgid "Add"
+msgstr ""
+
+#: build/admin.tsx.js:8001
+msgid "Dashboard"
+msgstr ""
+
+#: build/admin.tsx.js:8016
+msgid "All Appointments"
+msgstr ""
+
+#: build/admin.tsx.js:8044
+msgid "Upcoming Appointments"
+msgstr ""
+
+#: build/admin.tsx.js:8054
+msgid "No appointments in the next 24 hours"
+msgstr ""
+
+#: build/admin.tsx.js:8065
+msgid "Hello %s!"
+msgstr ""
+
+#: build/admin.tsx.js:8074
+msgid "Dashboard stats placeholder"
+msgstr ""
+
+#: build/admin.tsx.js:8117 build/admin.tsx.js:9197
+msgid "Service Name"
+msgstr ""
+
+#: build/admin.tsx.js:8119
+msgid "Don't worry. You can always change it later."
+msgstr ""
+
+#: build/admin.tsx.js:8127 build/admin.tsx.js:9203
+msgid "Default appointment length (in minutes)"
+msgstr ""
+
+#: build/admin.tsx.js:8136 build/admin.tsx.js:9211
+msgid "Time picker precision (in minutes)"
+msgstr ""
+
+#: build/admin.tsx.js:8137
+msgid ""
+"People will be able to book appointments every n minutes. For example if set "
+"to 30 minutes people can book 8:00, 8:30, 9:00 etc."
+msgstr ""
+
+#: build/admin.tsx.js:8146 build/admin.tsx.js:9252
+msgid "Default appointment status"
+msgstr ""
+
+#: build/admin.tsx.js:8147
+msgid ""
+"Default status for appointments created by your clients. You can change the "
+"status of each appointment individually. If Pending selected, you will have "
+"to confirm each appointment manually."
+msgstr ""
+
+#: build/admin.tsx.js:8213 build/admin.tsx.js:8382 build/admin.tsx.js:8538
+#: build/admin.tsx.js:9335 build/admin.tsx.js:10188 build/admin.tsx.js:10676
+msgid "Error saving settings"
+msgstr ""
+
+#: build/admin.tsx.js:8243 build/admin.tsx.js:8412 build/admin.tsx.js:8568
+#: build/admin.tsx.js:8958 build/admin.tsx.js:9135
+msgid "Continue"
+msgstr ""
+
+#: build/admin.tsx.js:8287 build/admin.tsx.js:9991
+msgid "Week starts on"
+msgstr ""
+
+#: build/admin.tsx.js:8292 build/admin.tsx.js:9996 build/admin.tsx.js:11125
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Sunday"
+msgstr ""
+
+#: build/admin.tsx.js:8295 build/admin.tsx.js:9999 build/admin.tsx.js:11119
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Monday"
+msgstr ""
+
+#: build/admin.tsx.js:8298 build/admin.tsx.js:10002 build/admin.tsx.js:11120
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Tuesday"
+msgstr ""
+
+#: build/admin.tsx.js:8301 build/admin.tsx.js:10005 build/admin.tsx.js:11121
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Wednesday"
+msgstr ""
+
+#: build/admin.tsx.js:8304 build/admin.tsx.js:10008 build/admin.tsx.js:11122
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Thursday"
+msgstr ""
+
+#: build/admin.tsx.js:8307 build/admin.tsx.js:10011 build/admin.tsx.js:11123
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Friday"
+msgstr ""
+
+#: build/admin.tsx.js:8310 build/admin.tsx.js:10014 build/admin.tsx.js:11124
+#: build/admin.tsx.js:14508
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:120
+#: build/booking-flow-block-view.tsx.js:141 build/frontend.tsx.js:141
+msgid "Saturday"
+msgstr ""
+
+#: build/admin.tsx.js:8316 build/admin.tsx.js:10126
+msgid "Clock type"
+msgstr ""
+
+#: build/admin.tsx.js:8321 build/admin.tsx.js:10131
+msgid "12 hours"
+msgstr ""
+
+#: build/admin.tsx.js:8324 build/admin.tsx.js:10134
+msgid "24 hours"
+msgstr ""
+
+#: build/admin.tsx.js:8454 build/admin.tsx.js:9960
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:842
+#: build/booking-flow-block-view.tsx.js:863 build/frontend.tsx.js:863
+msgid "First name"
+msgstr ""
+
+#: build/admin.tsx.js:8455
+msgid "Eg. John"
+msgstr ""
+
+#: build/admin.tsx.js:8463 build/admin.tsx.js:9965
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:851
+#: build/booking-flow-block-view.tsx.js:872 build/frontend.tsx.js:872
+msgid "Last name"
+msgstr ""
+
+#: build/admin.tsx.js:8464
+msgid "Eg. Doe"
+msgstr ""
+
+#: build/admin.tsx.js:8481 build/admin.tsx.js:9975
+msgid "Phone number"
+msgstr ""
+
+#: build/admin.tsx.js:8482
+msgid "Eg. +1992334211"
+msgstr ""
+
+#: build/admin.tsx.js:8634
+msgid "Skip guided setup"
+msgstr ""
+
+#: build/admin.tsx.js:8659
+msgid "Welcome to Appointments Booking by WP Appointments!"
+msgstr ""
+
+#: build/admin.tsx.js:8661
+msgid ""
+"It's great to have you here! We'll be guiding you through the setup process "
+"- first, answer a few questions to tailor your experience."
+msgstr ""
+
+#: build/admin.tsx.js:8673
+msgid "Set up appointments"
+msgstr ""
+
+#: build/admin.tsx.js:8682
+msgid "All set!"
+msgstr ""
+
+#: build/admin.tsx.js:8684
+msgid ""
+"You're good to go! You can now start accepting appointments on your website. "
+"You can always come back to the setup wizard to make changes."
+msgstr ""
+
+#: build/admin.tsx.js:8690
+msgid ""
+"When you are ready, you can insert a \"Booking Flow\" Gutenberg block on any "
+"of your pages."
+msgstr ""
+
+#: build/admin.tsx.js:8693
+msgid "Gutenberg block inserting visual guide"
+msgstr ""
+
+#: build/admin.tsx.js:8704
+msgid "Go to dashboard"
+msgstr ""
+
+#: build/admin.tsx.js:8717
+msgid "Tell us a bit about you"
+msgstr ""
+
+#: build/admin.tsx.js:8719
+msgid ""
+"We use this information in set up notifications and you can also display "
+"this on the site."
+msgstr ""
+
+#: build/admin.tsx.js:8736
+msgid "What appointments do you accept?"
+msgstr ""
+
+#: build/admin.tsx.js:8738
+msgid ""
+"In the free version you can set up to one appointment. Specify the length "
+"and tell us in which intervals people can book."
+msgstr ""
+
+#: build/admin.tsx.js:8755
+msgid "Tailor you calendar options"
+msgstr ""
+
+#: build/admin.tsx.js:8757
+msgid "You know what to do."
+msgstr ""
+
+#: build/admin.tsx.js:8774
+msgid "Setup you working hours"
+msgstr ""
+
+#: build/admin.tsx.js:8776
+msgid "You may specify one or many working hours periods for each week day."
+msgstr ""
+
+#: build/admin.tsx.js:8793
+msgid "Set up your services"
+msgstr ""
+
+#: build/admin.tsx.js:8795
+msgid ""
+"Add the services you offer. You can add as many as you need and manage them "
+"later from the Services page."
+msgstr ""
+
+#: build/admin.tsx.js:8930 build/admin.tsx.js:8933
+msgid "Error saving schedule"
+msgstr ""
+
+#: build/admin.tsx.js:8997
+msgid "Service name"
+msgstr ""
+
+#: build/admin.tsx.js:8998
+msgid "e.g. Consultation"
+msgstr ""
+
+#: build/admin.tsx.js:9006
+msgid "Duration (minutes)"
+msgstr ""
+
+#: build/admin.tsx.js:9074
+msgid "Add Service"
+msgstr ""
+
+#: build/admin.tsx.js:9108
+msgid "Duration (min)"
+msgstr ""
+
+#: build/admin.tsx.js:9112 build/admin.tsx.js:9120
+msgid "Remove"
+msgstr ""
+
+#: build/admin.tsx.js:9126
+msgid "No services added yet. Add your first service below."
+msgstr ""
+
+#: build/admin.tsx.js:9182
+msgid "Hours"
+msgstr ""
+
+#: build/admin.tsx.js:9185
+msgid "Days"
+msgstr ""
+
+#: build/admin.tsx.js:9188
+msgid "Weeks"
+msgstr ""
+
+#: build/admin.tsx.js:9191
+msgid "Months"
+msgstr ""
+
+#: build/admin.tsx.js:9220
+msgid "Minimum lead time"
+msgstr ""
+
+#: build/admin.tsx.js:9227
+msgid "Minimum lead time unit"
+msgstr ""
+
+#: build/admin.tsx.js:9236
+msgid "Maximum lead time"
+msgstr ""
+
+#: build/admin.tsx.js:9237
+msgid "Leave at 0 for no limit."
+msgstr ""
+
+#: build/admin.tsx.js:9244
+msgid "Maximum lead time unit"
+msgstr ""
+
+#: build/admin.tsx.js:9253
+msgid ""
+"Default status for appointments created by your clients. You can change the "
+"status of each appointment individually."
+msgstr ""
+
+#: build/admin.tsx.js:9349
+msgid "Appointments Settings"
+msgstr ""
+
+#: build/admin.tsx.js:9362 build/admin.tsx.js:9694 build/admin.tsx.js:10278
+#: build/admin.tsx.js:10701 build/admin.tsx.js:11749
+msgid "Save changes"
+msgstr ""
+
+#: build/admin.tsx.js:9427
+msgid "Religious holidays"
+msgstr ""
+
+#: build/admin.tsx.js:9436
+msgid "All available religious holidays have been added."
+msgstr ""
+
+#: build/admin.tsx.js:9440
+msgid "Country holidays"
+msgstr ""
+
+#: build/admin.tsx.js:9442
+msgid "Search countries…"
+msgstr ""
+
+#: build/admin.tsx.js:9455
+msgid "No matching countries found."
+msgstr ""
+
+#: build/admin.tsx.js:9455
+msgid "All available countries have been added."
+msgstr ""
+
+#: build/admin.tsx.js:9515
+msgid "Unspecified"
+msgstr ""
+
+#: build/admin.tsx.js:9586
+msgid "Reason"
+msgstr ""
+
+#: build/admin.tsx.js:9592
+msgid "Notes"
+msgstr ""
+
+#: build/admin.tsx.js:9597
+msgid "Show note in customer-facing calendar"
+msgstr ""
+
+#: build/admin.tsx.js:9618
+msgid "Please select a date range"
+msgstr ""
+
+#: build/admin.tsx.js:9653 build/admin.tsx.js:9659
+msgid "Delete time off"
+msgstr ""
+
+#: build/admin.tsx.js:9664
+msgid "select end date"
+msgstr ""
+
+#: build/admin.tsx.js:9664
+msgid "Select date range"
+msgstr ""
+
+#: build/admin.tsx.js:9694 build/admin.tsx.js:9713 build/admin.tsx.js:9736
+msgid "Add time off"
+msgstr ""
+
+#: build/admin.tsx.js:9721
+msgid "Your time off"
+msgstr ""
+
+#: build/admin.tsx.js:9733
+msgid "No time off scheduled."
+msgstr ""
+
+#: build/admin.tsx.js:9853
+msgid "Country"
+msgstr ""
+
+#: build/admin.tsx.js:9853
+msgid "Religious"
+msgstr ""
+
+#: build/admin.tsx.js:9866
+msgid "Remove holiday group"
+msgstr ""
+
+#: build/admin.tsx.js:9887 build/admin.tsx.js:9908
+msgid "Add holidays"
+msgstr ""
+
+#: build/admin.tsx.js:9895
+msgid "Holidays"
+msgstr ""
+
+#: build/admin.tsx.js:9901
+msgid ""
+"No holiday groups added. Add a country or religious holiday set to "
+"automatically block those dates."
+msgstr ""
+
+#: build/admin.tsx.js:9980
+msgid "Company name"
+msgstr ""
+
+#: build/admin.tsx.js:10033
+msgid "Date format"
+msgstr ""
+
+#: build/admin.tsx.js:10057
+msgid "Time format"
+msgstr ""
+
+#: build/admin.tsx.js:10141
+msgid "Use site default timezone"
+msgstr ""
+
+#: build/admin.tsx.js:10145 build/admin.tsx.js:11619
+msgid "Timezone"
+msgstr ""
+
+#: build/admin.tsx.js:10202
+msgid "Profile and company details"
+msgstr ""
+
+#: build/admin.tsx.js:10242
+msgid "Site default timezone is"
+msgstr ""
+
+#: build/admin.tsx.js:10242
+msgid "Choose either a city in the same timezone as you or a UTC"
+msgstr ""
+
+#: build/admin.tsx.js:10242
+msgid "Universal time is"
+msgstr ""
+
+#: build/admin.tsx.js:10242
+msgid "Local time is"
+msgstr ""
+
+#: build/admin.tsx.js:10256 build/admin.tsx.js:10270
+msgid "Preview: %s"
+msgstr ""
+
+#: build/admin.tsx.js:10256
+msgid "Default date format is derived from WordPress site settings"
+msgstr ""
+
+#: build/admin.tsx.js:10270
+msgid "Default time format is derived from WordPress site settings"
+msgstr ""
+
+#: build/admin.tsx.js:10274
+msgid "Documentation on date and time formatting."
+msgstr ""
+
+#: build/admin.tsx.js:10505
+msgid "Recipients"
+msgstr ""
+
+#: build/admin.tsx.js:10507
+msgid "Send to admin"
+msgstr ""
+
+#: build/admin.tsx.js:10512
+msgid "Send to customer"
+msgstr ""
+
+#: build/admin.tsx.js:10518
+msgid "Additional recipients (comma-separated)"
+msgstr ""
+
+#: build/admin.tsx.js:10521
+msgid "extra@example.com, other@example.com"
+msgstr ""
+
+#: build/admin.tsx.js:10524
+msgid "Admin email"
+msgstr ""
+
+#: build/admin.tsx.js:10527 build/admin.tsx.js:10544
+msgid "Subject"
+msgstr ""
+
+#: build/admin.tsx.js:10530 build/admin.tsx.js:10547
+msgid "Leave empty to use the default subject."
+msgstr ""
+
+#: build/admin.tsx.js:10534 build/admin.tsx.js:10551
+msgid "Body"
+msgstr ""
+
+#: build/admin.tsx.js:10535 build/admin.tsx.js:10552
+msgid "Leave empty to use the default template. Variables: "
+msgstr ""
+
+#: build/admin.tsx.js:10541
+msgid "Customer email"
+msgstr ""
+
+#: build/admin.tsx.js:10627
+msgid "Email Notifications"
+msgstr ""
+
+#: build/admin.tsx.js:10857
+msgid "Select dates"
+msgstr ""
+
+#: build/admin.tsx.js:10866
+msgid "Mark unavailable (all day)"
+msgstr ""
+
+#: build/admin.tsx.js:10871
+msgid "Custom hours"
+msgstr ""
+
+#: build/admin.tsx.js:10883 build/admin.tsx.js:10888
+msgid "Add time slot"
+msgstr ""
+
+#: build/admin.tsx.js:10890 build/admin.tsx.js:10896 build/admin.tsx.js:11350
+#: build/admin.tsx.js:11356
+msgid "Remove time slot"
+msgstr ""
+
+#: build/admin.tsx.js:10907
+msgid "Update override"
+msgstr ""
+
+#: build/admin.tsx.js:10907
+msgid "Add override"
+msgstr ""
+
+#: build/admin.tsx.js:11028
+msgid "Edit date override"
+msgstr ""
+
+#: build/admin.tsx.js:11028 build/admin.tsx.js:11043 build/admin.tsx.js:11048
+msgid "Add date override"
+msgstr ""
+
+#: build/admin.tsx.js:11042
+msgid "Date overrides"
+msgstr ""
+
+#: build/admin.tsx.js:11051
+msgid "No date overrides yet."
+msgstr ""
+
+#: build/admin.tsx.js:11071
+msgid "Unavailable"
+msgstr ""
+
+#: build/admin.tsx.js:11075 build/admin.tsx.js:11081
+msgid "Remove override"
+msgstr ""
+
+#: build/admin.tsx.js:11327 build/admin.tsx.js:11332
+msgid "Add new time slot"
+msgstr ""
+
+#: build/admin.tsx.js:11338 build/admin.tsx.js:11343
+msgid "Unset all day"
+msgstr ""
+
+#: build/admin.tsx.js:11338 build/admin.tsx.js:11343
+msgid "Set all day"
+msgstr ""
+
+#: build/admin.tsx.js:11396 build/admin.tsx.js:11401
+msgid "Copy times to"
+msgstr ""
+
+#: build/admin.tsx.js:11410
+msgid "COPY TIMES TO"
+msgstr ""
+
+#: build/admin.tsx.js:11414
+msgid "Select all"
+msgstr ""
+
+#: build/admin.tsx.js:11429
+msgid "Cancel"
+msgstr ""
+
+#: build/admin.tsx.js:11432
+msgid "Apply"
+msgstr ""
+
+#: build/admin.tsx.js:11516
+msgid "No working days"
+msgstr ""
+
+#: build/admin.tsx.js:11519
+msgid "Every day"
+msgstr ""
+
+#: build/admin.tsx.js:11612
+msgid "Schedule name"
+msgstr ""
+
+#: build/admin.tsx.js:11680
+msgid "Danger zone"
+msgstr ""
+
+#: build/admin.tsx.js:11689 build/admin.tsx.js:11694 build/admin.tsx.js:11791
+msgid "Delete schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11713
+msgid "Working hours"
+msgstr ""
+
+#: build/admin.tsx.js:11726
+msgid "Default schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11729
+msgid "Activate this schedule first to set it as default."
+msgstr ""
+
+#: build/admin.tsx.js:11749
+msgid "Create schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11773
+msgid ""
+"Deleting this schedule is permanent and cannot be undone. Any bookings "
+"currently using this schedule will lose their schedule assignment and become "
+"unavailable for booking."
+msgstr ""
+
+#: build/admin.tsx.js:11775
+msgid ""
+"If you wish to keep the bookings available, you can choose to reassign them "
+"to the default schedule."
+msgstr ""
+
+#: build/admin.tsx.js:11776
+msgid "Reassign all bookings using this schedule to the default schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11781
+msgid ""
+"All bookings using this schedule will be moved to the default schedule and "
+"will remain available for booking."
+msgstr ""
+
+#: build/admin.tsx.js:11781
+msgid ""
+"Bookings using this schedule will have no schedule assigned and will become "
+"unavailable for booking until a new schedule is assigned."
+msgstr ""
+
+#: build/admin.tsx.js:11792
+msgid "Delete Schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11793
+msgid ""
+"Are you sure? All bookings using this schedule will be reassigned to the "
+"default schedule."
+msgstr ""
+
+#: build/admin.tsx.js:11793
+msgid ""
+"Are you sure? Bookings using this schedule will become unavailable for "
+"booking."
+msgstr ""
+
+#: build/admin.tsx.js:11839
+msgid "New schedule"
+msgstr ""
+
+#: build/admin.tsx.js:11863
+msgid "No schedules yet. Create one to get started."
+msgstr ""
+
+#: build/admin.tsx.js:11866
+msgid "Add schedule"
+msgstr ""
+
+#: build/admin.tsx.js:12061 build/booking-flow-block.tsx.js:447
+msgid "General"
+msgstr ""
+
+#: build/admin.tsx.js:12069
+msgid "Schedule"
+msgstr ""
+
+#: build/admin.tsx.js:12073
+msgid "Days Off"
+msgstr ""
+
+#: build/admin.tsx.js:12077
+msgid "Notifications"
+msgstr ""
+
+#: build/admin.tsx.js:12193 build/globals.tsx.js:1223
+msgid "Cannot update appointment"
+msgstr ""
+
+#: build/admin.tsx.js:12218 build/globals.tsx.js:1248
+msgid "Cannot cancel appointment"
+msgstr ""
+
+#: build/admin.tsx.js:12243 build/globals.tsx.js:1273
+msgid "Cannot delete appointment"
+msgstr ""
+
+#: build/admin.tsx.js:12268 build/globals.tsx.js:1298
+msgid "Cannot confirm appointment"
+msgstr ""
+
+#: build/admin.tsx.js:12418
+msgid "Cannot delete customer"
+msgstr ""
+
+#: build/admin.tsx.js:14204 build/globals.tsx.js:1349
+msgid "Item ID is missing"
+msgstr ""
+
+#. translators: %s: time, eeee: day of week name
+#: build/admin.tsx.js:14473
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:85
+#: build/booking-flow-block-view.tsx.js:106 build/frontend.tsx.js:106
+msgid "'last' eeee 'at' %s"
+msgstr ""
+
+#. translators: %s: time
+#: build/admin.tsx.js:14475
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:87
+#: build/booking-flow-block-view.tsx.js:108 build/frontend.tsx.js:108
+msgid "'yesterday at' %s"
+msgstr ""
+
+#. translators: %s: time
+#: build/admin.tsx.js:14477
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:89
+#: build/booking-flow-block-view.tsx.js:110 build/frontend.tsx.js:110
+msgid "'today at' %s"
+msgstr ""
+
+#. translators: %s: time
+#: build/admin.tsx.js:14479
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:91
+#: build/booking-flow-block-view.tsx.js:112 build/frontend.tsx.js:112
+msgid "'tomorrow at' %s"
+msgstr ""
+
+#. translators: %s: time, eeee: day of week name
+#: build/admin.tsx.js:14481
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:93
+#: build/booking-flow-block-view.tsx.js:114 build/frontend.tsx.js:114
+msgid "eeee 'at' %s"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:180
+#: build/booking-flow-block-view.tsx.js:201 build/booking-flow-block.tsx.js:394
+#: build/frontend.tsx.js:201
+msgid "Back"
+msgstr ""
+
+#. translators: %s: comma-separated list of day notices (e.g. "Vacation").
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:408
+#: build/booking-flow-block-view.tsx.js:429 build/frontend.tsx.js:429
+msgid "has notice: %s"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:408
+#: build/booking-flow-block-view.tsx.js:429 build/frontend.tsx.js:429
+msgid "unavailable"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:410
+#: build/booking-flow-block-view.tsx.js:431 build/frontend.tsx.js:431
+msgid "past date"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:412
+#: build/booking-flow-block-view.tsx.js:433 build/frontend.tsx.js:433
+msgid "no slots available"
+msgstr ""
+
+#. translators: 1: number of available slots, 2: total number of slots
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:415
+#: build/booking-flow-block-view.tsx.js:436 build/frontend.tsx.js:436
+msgid "%1$d of %2$d slot available"
+msgid_plural "%1$d of %2$d slots available"
+msgstr[0] ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:740
+#: build/booking-flow-block-view.tsx.js:761 build/frontend.tsx.js:761
+msgid "Select a time slot for"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:766
+#: build/booking-flow-block-view.tsx.js:787 build/frontend.tsx.js:787
+msgid "Selected time:"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:804
+#: build/booking-flow-block-view.tsx.js:825 build/frontend.tsx.js:825
+msgid "Appointment created successfully!"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:804
+#: build/booking-flow-block-view.tsx.js:825 build/frontend.tsx.js:825
+msgid "Thank you for scheduling your appointment!"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:804
+#: build/booking-flow-block-view.tsx.js:825 build/frontend.tsx.js:825
+msgid "Details"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:887
+#: build/booking-flow-block-view.tsx.js:908 build/frontend.tsx.js:908
+msgid "Password (optional)"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:893
+#: build/booking-flow-block-view.tsx.js:914 build/frontend.tsx.js:914
+msgid "When left blank, password will be generated automatically"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:995
+#: build/booking-flow-block-view.tsx.js:1016 build/frontend.tsx.js:1016
+msgid "Select date"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1008
+#: build/booking-flow-block-view.tsx.js:1029 build/frontend.tsx.js:1029
+msgid "About you"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1014
+#: build/booking-flow-block-view.tsx.js:1035 build/frontend.tsx.js:1035
+msgid "Summary"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1019
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1093
+#: build/booking-flow-block-view.tsx.js:1040
+#: build/booking-flow-block-view.tsx.js:1114 build/frontend.tsx.js:1040
+#: build/frontend.tsx.js:1114
+msgid "Select date and time"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1031
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1093
+#: build/booking-flow-block-view.tsx.js:1052
+#: build/booking-flow-block-view.tsx.js:1114 build/frontend.tsx.js:1052
+#: build/frontend.tsx.js:1114
+msgid "Customer information"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1121
+#: build/booking-flow-block-view.tsx.js:1211
+#: build/booking-flow-block.tsx.js:403 build/frontend.tsx.js:1142
+msgid "Book"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1307
+#: build/booking-flow-block-view.tsx.js:1397 build/frontend.tsx.js:1328
+msgid "Please select a date and time"
+msgstr ""
+
+#: build/assets_frontend_context_BookingFlowContext_tsx.js:1332
+#: build/booking-flow-block-view.tsx.js:1422 build/frontend.tsx.js:1353
+msgid "Error creating appointment"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:436
+msgid "Loading booking flow…"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:449
+msgid "Flow type"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:462
+msgid "Hide step titles"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:463
+msgid "Hide all section headings from the booking flow"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:469
+msgid "Preview step"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:472
+msgid "1. Select date"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:475
+msgid "2. Customer info"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:480
+msgid "Hide progress bar"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:481
+msgid "Hide the step indicator at the top of the booking flow"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:489
+msgid "Trim time slots outside of working hours"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:490
+msgid ""
+"When showing the time picker, hide time slots that are not available for "
+"booking before and after opening hours"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:496
+msgid "Display available time slots as buttons"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:497
+msgid ""
+"Shows the available time slots as buttons. Recommended if you have a lot of "
+"traffic from mobile devices"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:503
+msgid "Inline time picker"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:504
+msgid ""
+"Display the calendar and time slots side by side instead of stacked "
+"vertically"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:510
+msgid "Alignment"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:519
+msgid "Align left"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:528
+msgid "Align center"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:537
+msgid "Align right"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:539
+msgid "Size"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:548
+msgid "Size narrow"
+msgstr ""
+
+#: build/booking-flow-block.tsx.js:557
+msgid "Size full width"
+msgstr ""
+
+#: assets/gutenberg/blocks/booking-flow/src/block.json
+msgctxt "block title"
+msgid "Booking Flow"
+msgstr "予約フォーム"
+
+#~ msgid "https://wpappointments.com"
+#~ msgstr "https://wpappointments.com"
+
+#~ msgid "Services"
+#~ msgstr "サービス"
+
+#~ msgid "Entities"
+#~ msgstr "リソース"
+
+#, php-format
+#~ msgid "Appointment Confirmation: %1$s at %2$s"
+#~ msgstr "予約確認: %1$s %2$s"
+
+#, php-format
+#~ msgid "Appointment Updated: %1$s at %2$s"
+#~ msgstr "予約更新: %1$s %2$s"
+
+#, php-format
+#~ msgid "Appointment Cancelled: %1$s at %2$s"
+#~ msgstr "予約キャンセル: %1$s %2$s"
+
+#, php-format
+#~ msgid "Appointment Confirmed: %1$s at %2$s"
+#~ msgstr "予約確定: %1$s %2$s"
+
+#, php-format
+#~ msgid "Appointment No-Show: %1$s at %2$s"
+#~ msgstr "予約の無断キャンセル: %1$s %2$s"
+
+#~ msgid "Month availability fetched successfully"
+#~ msgstr "月間の空き状況の取得に成功しました"
+
+#~ msgid "Calendar availability fetched successfully"
+#~ msgstr "カレンダーの空き状況の取得に成功しました"
+
+#~ msgid "Entities fetched successfully"
+#~ msgstr "リソースの取得に成功しました"
+
+#~ msgid "Entity tree fetched successfully"
+#~ msgstr "リソースツリーの取得に成功しました"
+
+#~ msgid "Entity fetched successfully"
+#~ msgstr "リソースの取得に成功しました"
+
+#~ msgid "Entity created successfully"
+#~ msgstr "リソースの作成に成功しました"
+
+#~ msgid "Entity updated successfully"
+#~ msgstr "リソースの更新に成功しました"
+
+#~ msgid "Entity deleted successfully"
+#~ msgstr "リソースの削除に成功しました"
+
+#~ msgid "Entity children fetched successfully"
+#~ msgstr "子リソースの取得に成功しました"
+
+#~ msgid "Entity services fetched successfully"
+#~ msgstr "リソースのサービスの取得に成功しました"
+
+#~ msgid "Entity services updated successfully"
+#~ msgstr "リソースのサービスの更新に成功しました"
+
+#~ msgid "Services fetched successfully"
+#~ msgstr "サービスの取得に成功しました"
+
+#~ msgid "Service created successfully"
+#~ msgstr "サービスの作成に成功しました"
+
+#~ msgid "Service updated successfully"
+#~ msgstr "サービスの更新に成功しました"
+
+#~ msgid "Service deleted successfully"
+#~ msgstr "サービスの削除に成功しました"
+
+#~ msgid "Service Categories"
+#~ msgstr "サービスカテゴリ"
+
+#~ msgid "Service Category"
+#~ msgstr "サービスカテゴリ"
+
+#~ msgid "Add New Service Category"
+#~ msgstr "新しいサービスカテゴリを追加"
+
+#~ msgid "New Service Category Name"
+#~ msgstr "新しいサービスカテゴリ名"
+
+#~ msgid ""
+#~ "Entity value passed to constructor cannot be null. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "コンストラクタに渡されたリソース値はnullにできません。array、int、stringま"
+#~ "たはWP_Postが必要です"
+
+#~ msgid ""
+#~ "Entity value passed to constructor is invalid. Expected array, int, "
+#~ "string or WP_Post"
+#~ msgstr ""
+#~ "コンストラクタに渡されたリソース値が無効です。array、int、stringまたは"
+#~ "WP_Postが必要です"
+
+#~ msgid "Entity not found. Instantiate Entity class with an entity object"
+#~ msgstr ""
+#~ "リソースが見つかりません。リソースオブジェクトでEntityクラスをインスタンス"
+#~ "化してください"
+
+#~ msgid "Entity ID is required"
+#~ msgstr "リソースIDは必須です"
+
+#~ msgid "Entity not found"
+#~ msgstr "リソースが見つかりません"
+
+#~ msgid "Post is not an entity"
+#~ msgstr "投稿はリソースではありません"
+
+#~ msgid "Entity name is required"
+#~ msgstr "リソース名は必須です"
+
+#~ msgid ""
+#~ "Service value passed to a service model constructor cannot be null. "
+#~ "Expected array, int, string or WP_Post but received null"
+#~ msgstr ""
+#~ "サービスモデルのコンストラクタに渡されたサービス値はnullにできません。"
+#~ "array、int、stringまたはWP_Postが必要ですが、nullを受け取りました"
+
+#~ msgid ""
+#~ "Service value passed to a service model constructor is invalid. Expected "
+#~ "array, int, string or WP_Post"
+#~ msgstr ""
+#~ "サービスモデルのコンストラクタに渡されたサービス値が無効です。array、int、"
+#~ "stringまたはWP_Postが必要です"
+
+#~ msgid ""
+#~ "Service not found. You have to instantiate Service class with a service "
+#~ "object"
+#~ msgstr ""
+#~ "サービスが見つかりません。サービスオブジェクトでServiceクラスをインスタン"
+#~ "ス化する必要があります"
+
+#~ msgid "Service ID is required"
+#~ msgstr "サービスIDは必須です"
+
+#~ msgid "Service not found"
+#~ msgstr "サービスが見つかりません"
+
+#~ msgid "Post is not a service"
+#~ msgstr "投稿はサービスではありません"
+
+#~ msgid "Service name is required"
+#~ msgstr "サービス名は必須です"
+
+#~ msgid "Service duration is required"
+#~ msgstr "サービスの所要時間は必須です"
+
+#~ msgid "A new appointment has been booked."
+#~ msgstr "新しい予約が入りました。"
+
+#~ msgid "An appointment has been updated."
+#~ msgstr "予約が更新されました。"
+
+#~ msgid "An appointment has been confirmed."
+#~ msgstr "予約が確定されました。"
+
+#~ msgid "An appointment has been cancelled."
+#~ msgstr "予約がキャンセルされました。"
+
+#~ msgid "Appointment ID"
+#~ msgstr "予約ID"
+
+#~ msgid "Date & Time"
+#~ msgstr "日時"
+
+#~ msgid "Month is required"
+#~ msgstr "月は必須です"
+
+#~ msgid "Year is required"
+#~ msgstr "年は必須です"
+
+#~ msgid "Timezone is required"
+#~ msgstr "タイムゾーンは必須です"
+
+#~ msgid "Year must be numeric"
+#~ msgstr "年は数値である必要があります"
+
+#~ msgid "Calendar is required"
+#~ msgstr "カレンダーは必須です"

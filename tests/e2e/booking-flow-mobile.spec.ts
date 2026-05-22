@@ -14,11 +14,11 @@ function getTestData(): {
 
 async function waitForCalendar(page: Page) {
 	await page
-		.locator('.wpappstip-appointments-flow')
+		.locator('.wpappointments-booking-flow')
 		.waitFor({ timeout: 15_000 });
 	await page
 		.locator(
-			'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+			'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 		)
 		.first()
 		.waitFor({ timeout: 15_000 });
@@ -49,7 +49,7 @@ test.describe('Booking flow — mobile (375px)', () => {
 	test('day buttons hit the touch-target floor', async ({ page }) => {
 		const dayButton = page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.filter({ hasText: /^\d{1,2}$/ })
 			.first();
@@ -61,13 +61,13 @@ test.describe('Booking flow — mobile (375px)', () => {
 	test('time slot buttons hit the touch-target floor', async ({ page }) => {
 		// Move forward to a clean week + pick a day
 		await page
-			.locator('.wpappstip-appointments-flow button[type="button"]')
+			.locator('.wpappointments-booking-flow button[type="button"]')
 			.filter({ has: page.locator('svg') })
 			.last()
 			.click();
 		const day = page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.filter({ hasText: /^\d{1,2}$/ })
 			.first();
@@ -94,14 +94,14 @@ test.describe('Booking flow — mobile (375px)', () => {
 	test('completes a booking on a mobile viewport', async ({ page }) => {
 		// Forward one month so all weekday slots are available
 		await page
-			.locator('.wpappstip-appointments-flow button[type="button"]')
+			.locator('.wpappointments-booking-flow button[type="button"]')
 			.filter({ has: page.locator('svg') })
 			.last()
 			.click();
 
 		const day = page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.filter({ hasText: /^\d{1,2}$/ })
 			.first();
@@ -155,13 +155,13 @@ test.describe('Booking flow — keyboard / a11y', () => {
 	});
 
 	test('day buttons are reachable by keyboard tab', async ({ page }) => {
-		// Tab into the calendar; first focusable element under .wpappstip-appointments-flow
+		// Tab into the calendar; first focusable element under .wpappointments-booking-flow
 		// should be a button. We don't assert a precise tab count (theme chrome
 		// adds a variable number of focusables before the block), only that an
 		// available day button can receive focus.
 		const dayButton = page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.filter({ hasText: /^\d{1,2}$/ })
 			.first();
@@ -203,14 +203,14 @@ test.describe('Booking flow — keyboard / a11y', () => {
 	}) => {
 		// Move to next month so all weekday slots are populated.
 		await page
-			.locator('.wpappstip-appointments-flow button[type="button"]')
+			.locator('.wpappointments-booking-flow button[type="button"]')
 			.filter({ has: page.locator('svg') })
 			.last()
 			.click();
 
 		const dayButton = page
 			.locator(
-				'.wpappstip-appointments-flow button[type="button"]:not([disabled])'
+				'.wpappointments-booking-flow button[type="button"]:not([disabled])'
 			)
 			.filter({ hasText: /^\d{1,2}$/ })
 			.first();

@@ -108,7 +108,7 @@ function render_html( $attributes ) {
 
 	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Required for the view script to decode attributes.
 	return sprintf(
-		"<div class='wpappstip-appointments-flow' data-attributes='%s'></div>",
+		"<div class='wpappointments-booking-flow' data-attributes='%s'></div>",
 		esc_attr( base64_encode( wp_json_encode( $attributes ) ) )
 	);
 }
@@ -126,7 +126,7 @@ function enqueue_frontend_assets() {
 	$plugin_dir  = PluginInfo::get_plugin_dir_path();
 	$plugin_url  = PluginInfo::get_plugin_dir_url();
 	$version     = PluginInfo::get_version();
-	$view_handle = 'wpappstip-appointments-flow-view';
+	$view_handle = 'wpappointments-booking-flow-view';
 
 	if ( wp_script_is( $view_handle, 'enqueued' ) ) {
 		return;
@@ -156,7 +156,7 @@ function enqueue_frontend_assets() {
 	);
 
 	wp_enqueue_style(
-		'wpappstip-appointments-flow-view-css',
+		'wpappointments-booking-flow-view-css',
 		$plugin_url . 'build/booking-flow-block-view.tsx.css',
 		array(),
 		$version
