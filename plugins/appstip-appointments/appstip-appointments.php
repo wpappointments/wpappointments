@@ -3,7 +3,7 @@
  * Plugin Name:       Appstip Appointments
  * Plugin URI:        https://appstip.com
  * Description:       Next-gen appointment scheduling for WordPress. Extensible, developer-friendly booking system with variant support.
- * Version:           0.2.0
+ * Version:           1.0.0
  * Requires at least: 6.5
  * Requires PHP:      8.2
  * Author:            Appstip
