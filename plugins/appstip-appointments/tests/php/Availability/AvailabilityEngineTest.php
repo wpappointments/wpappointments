@@ -995,3 +995,97 @@ test(
 		remove_filter( 'wpappointments_effective_availability', $callback, 10 );
 	}
 );
+
+test(
+	'AvailabilityEngine - extra_context is passed to layer callbacks',
+	function () {
+		$ids = create_entity_with_variant();
+
+		$received_context = null;
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'system',
+			0,
+			array(
+				'type'     => 'base',
+				'callback' => function ( $context ) use ( &$received_context ) {
+					$received_context = $context;
+					return weekday_schedule();
+				},
+			)
+		);
+
+		AvailabilityEngine::get_effective_availability(
+			$ids['variant_id'],
+			array(
+				'start' => '2026-06-01',
+				'end'   => '2026-06-30',
+			),
+			array( 'employee_id' => 42 )
+		);
+
+		expect( $received_context )->toBeArray();
+		expect( $received_context['employee_id'] )->toBe( 42 );
+		expect( $received_context['variant_id'] )->toBe( $ids['variant_id'] );
+		expect( $received_context['date_range']['start'] )->toBe( '2026-06-01' );
+	}
+);
+
+test(
+	'AvailabilityEngine - extra_context cannot override reserved keys',
+	function () {
+		$ids = create_entity_with_variant();
+
+		$received_context = null;
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'system',
+			0,
+			array(
+				'type'     => 'base',
+				'callback' => function ( $context ) use ( &$received_context ) {
+					$received_context = $context;
+					return weekday_schedule();
+				},
+			)
+		);
+
+		AvailabilityEngine::get_effective_availability(
+			$ids['variant_id'],
+			array( 'start' => '2026-06-01' ),
+			array(
+				'variant_id' => 99999,
+				'entity_id'  => 99999,
+				'date_range' => array( 'start' => 'WRONG' ),
+				'custom_key' => 'kept',
+			)
+		);
+
+		expect( $received_context['variant_id'] )->toBe( $ids['variant_id'] );
+		expect( $received_context['date_range']['start'] )->toBe( '2026-06-01' );
+		expect( $received_context['custom_key'] )->toBe( 'kept' );
+	}
+);
+
+test(
+	'AvailabilityEngine - extra_context defaults to empty array when omitted',
+	function () {
+		$ids = create_entity_with_variant();
+
+		AvailabilityLayerRegistry::get_instance()->register(
+			'system',
+			0,
+			array(
+				'type'     => 'base',
+				'callback' => function () {
+					return weekday_schedule();
+				},
+			)
+		);
+
+		$result = AvailabilityEngine::get_effective_availability( $ids['variant_id'] );
+
+		expect( $result )->toBeArray();
+		expect( $result['weekly']['monday'][0]['start'] )->toBe( '09:00' );
+	}
+);

@@ -342,16 +342,40 @@ class OutOfOfficeController extends Controller {
 	}
 
 	/**
-	 * Verify the current user owns the OOO entry
+	 * Verify the current user is authorised to manage the OOO entry
+	 *
+	 * By default only the user the entry belongs to passes. Addons (e.g. the
+	 * Employees Pro module's manager scope) can extend the allowed-user list
+	 * via the `wpappointments_ooo_allowed_user_ids` filter.
 	 *
 	 * @param int $entry_id OOO entry post ID.
 	 *
-	 * @return true|\WP_Error True on success, WP_Error if not the owner.
+	 * @return true|\WP_Error True on success, WP_Error if not authorised.
 	 */
 	private static function verify_entry_owner( $entry_id ) {
-		$owner_id = absint( get_post_meta( $entry_id, 'user_id', true ) );
+		$owner_id   = absint( get_post_meta( $entry_id, 'user_id', true ) );
+		$current_id = get_current_user_id();
 
-		if ( get_current_user_id() !== $owner_id ) {
+		/**
+		 * Filter the user IDs allowed to manage a given OOO entry.
+		 *
+		 * Defaults to just the entry's owner. Addons can append IDs to
+		 * authorise additional users (e.g. employees' direct manager).
+		 *
+		 * @since 0.3.0
+		 *
+		 * @param int[] $allowed_user_ids Defaults to [ $owner_id ].
+		 * @param int   $entry_id         OOO entry post ID.
+		 * @param int   $current_id       Current user's ID (already known to the caller).
+		 */
+		$allowed = apply_filters(
+			'wpappointments_ooo_allowed_user_ids',
+			array( $owner_id ),
+			$entry_id,
+			$current_id
+		);
+
+		if ( ! in_array( $current_id, array_map( 'absint', (array) $allowed ), true ) ) {
 			return new WP_Error(
 				'ooo_forbidden',
 				__( 'You do not own this time off entry.', 'appstip-appointments' ),

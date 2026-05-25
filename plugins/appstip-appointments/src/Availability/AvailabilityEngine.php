@@ -42,23 +42,33 @@ class AvailabilityEngine {
 	 * Walks through all registered availability layers to compute
 	 * the final effective availability for a given variant and date range.
 	 *
-	 * @param int   $variant_id Bookable variant post ID.
-	 * @param array $date_range Array with 'start' and 'end' date strings (Y-m-d).
+	 * Optional `$extra_context` lets callers pass additional keys that
+	 * registered layers may use (e.g. `employee_id` for the Employees Pro
+	 * module's per-employee narrowing layer). Core layers ignore unknown
+	 * keys, so the parameter is safe to extend.
+	 *
+	 * @param int   $variant_id    Bookable variant post ID.
+	 * @param array $date_range    Array with 'start' and 'end' date strings (Y-m-d).
+	 * @param array $extra_context Optional extra context merged into the layer context.
+	 *                              Reserved keys (variant_id, entity_id, date_range) cannot be overridden.
 	 *
 	 * @return array Availability data in standardized format.
 	 */
-	public static function get_effective_availability( $variant_id, $date_range = array() ) {
+	public static function get_effective_availability( $variant_id, $date_range = array(), $extra_context = array() ) {
 		$variant_post = get_post( $variant_id );
 
 		if ( ! $variant_post ) {
 			return self::empty_availability();
 		}
 
-		// Build context for layer callbacks.
-		$context = array(
-			'variant_id' => $variant_id,
-			'entity_id'  => $variant_post->post_parent,
-			'date_range' => $date_range,
+		// Build context for layer callbacks. Reserved keys win over caller-supplied extras.
+		$context = array_merge(
+			is_array( $extra_context ) ? $extra_context : array(),
+			array(
+				'variant_id' => $variant_id,
+				'entity_id'  => $variant_post->post_parent,
+				'date_range' => $date_range,
+			)
 		);
 
 		// Get all registered layers sorted by priority.
