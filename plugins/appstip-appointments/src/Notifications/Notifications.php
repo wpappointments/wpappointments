@@ -97,10 +97,96 @@ class Notifications extends Singleton {
 			 *
 			 * @param array $events Map of event key => definition.
 			 */
-			self::$events = apply_filters( 'wpappointments_notification_events', $events );
+			$filtered = apply_filters( 'wpappointments_notification_events', $events );
+
+			self::$events = self::sanitize_events( $filtered, $events );
 		}
 
 		return self::$events;
+	}
+
+	/**
+	 * Required keys on every event definition.
+	 *
+	 * @var string[]
+	 */
+	private const EVENT_KEYS = array(
+		'title',
+		'description',
+		'adminSubject',
+		'customerSubject',
+		'adminBody',
+		'customerBody',
+	);
+
+	/**
+	 * Validate the shape of an event registry returned by an addon filter.
+	 *
+	 * Malformed input cannot be cached as-is — downstream dispatch reads
+	 * nested keys directly and would fatal. Drop entries that don't fit
+	 * the contract; if the whole filter returns a non-array, fall back
+	 * to the core defaults.
+	 *
+	 * @param mixed $filtered Filter output (may be anything).
+	 * @param array $defaults Core event definitions to fall back to.
+	 *
+	 * @return array Validated event registry.
+	 */
+	private static function sanitize_events( $filtered, array $defaults ) {
+		if ( ! is_array( $filtered ) ) {
+			_doing_it_wrong(
+				'apply_filters( wpappointments_notification_events )',
+				esc_html__( 'Filter must return an array of event definitions; non-array value ignored.', 'appstip-appointments' ),
+				'0.3.0'
+			);
+			return $defaults;
+		}
+
+		$valid = array();
+
+		foreach ( $filtered as $key => $definition ) {
+			if ( ! is_string( $key ) || '' === $key ) {
+				continue;
+			}
+
+			if ( ! is_array( $definition ) ) {
+				_doing_it_wrong(
+					'apply_filters( wpappointments_notification_events )',
+					sprintf(
+						/* translators: %s: event key. */
+						esc_html__( 'Event "%s" must be an array; entry dropped.', 'appstip-appointments' ),
+						esc_html( $key )
+					),
+					'0.3.0'
+				);
+				continue;
+			}
+
+			$missing = array_diff( self::EVENT_KEYS, array_keys( $definition ) );
+
+			if ( ! empty( $missing ) ) {
+				_doing_it_wrong(
+					'apply_filters( wpappointments_notification_events )',
+					sprintf(
+						/* translators: 1: event key. 2: comma-separated missing keys. */
+						esc_html__( 'Event "%1$s" is missing required keys: %2$s. Entry dropped.', 'appstip-appointments' ),
+						esc_html( $key ),
+						esc_html( implode( ', ', $missing ) )
+					),
+					'0.3.0'
+				);
+				continue;
+			}
+
+			$valid[ $key ] = $definition;
+		}
+
+		// If the filter dropped every core event without registering any valid replacement, fall back.
+		if ( empty( $valid ) ) {
+			return $defaults;
+		}
+
+		return $valid;
 	}
 
 	/**

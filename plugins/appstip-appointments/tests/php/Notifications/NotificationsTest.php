@@ -80,3 +80,66 @@ test(
 		remove_filter( 'wpappointments_notification_events', $callback );
 	}
 );
+
+test(
+	'Notifications - filter returning a non-array falls back to core defaults',
+	function () {
+		$callback = function () {
+			return 'not an array';
+		};
+
+		add_filter( 'wpappointments_notification_events', $callback );
+
+		// _doing_it_wrong is expected; tell WP_UnitTestCase to capture it.
+		$this->setExpectedIncorrectUsage( 'apply_filters( wpappointments_notification_events )' );
+		$events = Notifications::get_events();
+
+		expect( $events )->toHaveKeys( array( 'created', 'updated', 'confirmed', 'cancelled' ) );
+
+		remove_filter( 'wpappointments_notification_events', $callback );
+	}
+);
+
+test(
+	'Notifications - filter returning a non-array entry drops that entry',
+	function () {
+		$callback = function ( $events ) {
+			$events['bogus'] = 'string instead of array';
+			return $events;
+		};
+
+		add_filter( 'wpappointments_notification_events', $callback );
+
+		$this->setExpectedIncorrectUsage( 'apply_filters( wpappointments_notification_events )' );
+		$events = Notifications::get_events();
+
+		expect( $events )->not->toHaveKey( 'bogus' );
+		expect( $events )->toHaveKey( 'created' );
+
+		remove_filter( 'wpappointments_notification_events', $callback );
+	}
+);
+
+test(
+	'Notifications - filter entry missing required keys is dropped',
+	function () {
+		$callback = function ( $events ) {
+			$events['partial'] = array(
+				'title'       => 'Partial',
+				'description' => 'Missing the body fields.',
+				// adminSubject, customerSubject, adminBody, customerBody all missing.
+			);
+			return $events;
+		};
+
+		add_filter( 'wpappointments_notification_events', $callback );
+
+		$this->setExpectedIncorrectUsage( 'apply_filters( wpappointments_notification_events )' );
+		$events = Notifications::get_events();
+
+		expect( $events )->not->toHaveKey( 'partial' );
+		expect( $events )->toHaveKey( 'created' );
+
+		remove_filter( 'wpappointments_notification_events', $callback );
+	}
+);
