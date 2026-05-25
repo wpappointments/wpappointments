@@ -42,11 +42,15 @@ class Notifications extends Singleton {
 	 *
 	 * Built lazily so __() runs after load_textdomain().
 	 *
+	 * Filterable via `wpappointments_notification_events` so addons can
+	 * register their own events (e.g. employee_assigned in the Employees
+	 * Pro module).
+	 *
 	 * @return array
 	 */
 	public static function get_events() {
 		if ( null === self::$events ) {
-			self::$events = array(
+			$events = array(
 				'created'   => array(
 					'title'           => __( 'Appointment Created', 'appstip-appointments' ),
 					'description'     => __( 'Sent when a new appointment is booked.', 'appstip-appointments' ),
@@ -80,6 +84,20 @@ class Notifications extends Singleton {
 					'customerBody'    => __( "Dear {customer_name},\n\nYour appointment on {date} at {time} has been cancelled.\n\nIf this was a mistake, please contact us at {admin_email} to reschedule.\n\nBest regards,\n{admin_first_name} {admin_last_name}", 'appstip-appointments' ),
 				),
 			);
+
+			/**
+			 * Filter the notification event definitions.
+			 *
+			 * Lets addons register their own notification events alongside
+			 * the core ones (created/updated/confirmed/cancelled). Each entry
+			 * must follow the same shape: title, description, adminSubject,
+			 * customerSubject, adminBody, customerBody.
+			 *
+			 * @since 0.3.0
+			 *
+			 * @param array $events Map of event key => definition.
+			 */
+			self::$events = apply_filters( 'wpappointments_notification_events', $events );
 		}
 
 		return self::$events;
