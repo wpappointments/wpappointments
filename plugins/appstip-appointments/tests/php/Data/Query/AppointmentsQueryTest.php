@@ -120,3 +120,51 @@ test(
 		expect( $only_999['appointments'] )->toHaveCount( 1 );
 	}
 );
+
+test(
+	'AppointmentsQuery::get_date_range_appointments exposes end_timestamp (explicit + fallback)',
+	function () {
+		$start = 2000000000;
+
+		$single = wp_insert_post(
+			array(
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+				'post_title'  => 'single',
+				'meta_input'  => array(
+					'status'    => 'confirmed',
+					'timestamp' => $start,
+					'duration'  => 30,
+				),
+			)
+		);
+
+		$multi_start = $start + 100;
+		$multi       = wp_insert_post(
+			array(
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+				'post_title'  => 'multi',
+				'meta_input'  => array(
+					'status'        => 'confirmed',
+					'timestamp'     => $multi_start,
+					'duration'      => 30,
+					'end_timestamp' => $multi_start + 3 * DAY_IN_SECONDS,
+				),
+			)
+		);
+
+		$results = AppointmentsQuery::get_date_range_appointments( $start - 10, $start + 200 );
+
+		$by_id = array();
+		foreach ( $results['appointments'] as $appointment ) {
+			$by_id[ $appointment['id'] ] = $appointment;
+		}
+
+		// Single-day falls back to start + duration*60.
+		expect( $by_id[ $single ]['endTimestamp'] )->toBe( $start + 30 * 60 );
+		// Multi-day honours the stored end_timestamp.
+		expect( $by_id[ $multi ]['endTimestamp'] )->toBe( $multi_start + 3 * DAY_IN_SECONDS );
+		expect( $by_id[ $multi ]['allDay'] )->toBeFalse();
+	}
+);

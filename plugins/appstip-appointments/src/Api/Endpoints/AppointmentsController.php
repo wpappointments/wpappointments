@@ -236,6 +236,31 @@ class AppointmentsController extends Controller {
 			$meta['entity_id'] = $entity_id;
 		}
 
+		$end_timestamp = self::parse_end_timestamp( $request, $date );
+
+		if ( is_wp_error( $end_timestamp ) ) {
+			return self::error( $end_timestamp );
+		}
+
+		if ( null !== $end_timestamp ) {
+			$meta['end_timestamp'] = $end_timestamp;
+		}
+
+		if ( rest_sanitize_boolean( $request->get_param( 'allDay' ) ) ) {
+			$meta['all_day'] = 1;
+		}
+
+		/**
+		 * Filter the appointment meta before it is persisted on create.
+		 *
+		 * Lets Pro addons attach their own meta (e.g. employee_id, location_id,
+		 * payment_status) to a new appointment without core knowing the keys.
+		 *
+		 * @param array           $meta    Meta key/value pairs to store.
+		 * @param WP_REST_Request $request The create request.
+		 */
+		$meta = apply_filters( 'wpappointments_appointment_meta', $meta, $request );
+
 		$appointment       = new Appointment(
 			array(
 				'title'    => $service,
@@ -251,6 +276,38 @@ class AppointmentsController extends Controller {
 				'appointment' => $saved_appointment->normalize( array( __CLASS__, 'normalize' ) ),
 			),
 		);
+	}
+
+	/**
+	 * Parse and validate an optional multi-day end timestamp from the request.
+	 *
+	 * When the booking spans multiple days the client sends `endDate`; the
+	 * resolved timestamp must be after the start. Returns null when no end date
+	 * was supplied (single-day appointment), or a WP_Error on invalid input.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @param int             $start   Start timestamp (unix).
+	 *
+	 * @return int|null|\WP_Error
+	 */
+	private static function parse_end_timestamp( WP_REST_Request $request, $start ) {
+		$end_date_raw = $request->get_param( 'endDate' );
+
+		if ( null === $end_date_raw ) {
+			return null;
+		}
+
+		$end_timestamp = rest_parse_date( get_gmt_from_date( sanitize_text_field( $end_date_raw ) ) );
+
+		if ( false === $end_timestamp ) {
+			return new \WP_Error( 'invalid_end_date', __( 'Invalid end date format', 'appstip-appointments' ), array( 'status' => 422 ) );
+		}
+
+		if ( $end_timestamp <= $start ) {
+			return new \WP_Error( 'invalid_end_date', __( 'End date must be after the start date', 'appstip-appointments' ), array( 'status' => 422 ) );
+		}
+
+		return $end_timestamp;
 	}
 
 	/**
@@ -300,6 +357,23 @@ class AppointmentsController extends Controller {
 		if ( $entity_id > 0 ) {
 			$meta['entity_id'] = $entity_id;
 		}
+
+		$end_timestamp = self::parse_end_timestamp( $request, $date );
+
+		if ( is_wp_error( $end_timestamp ) ) {
+			return self::error( $end_timestamp );
+		}
+
+		if ( null !== $end_timestamp ) {
+			$meta['end_timestamp'] = $end_timestamp;
+		}
+
+		if ( rest_sanitize_boolean( $request->get_param( 'allDay' ) ) ) {
+			$meta['all_day'] = 1;
+		}
+
+		/** This filter is documented in self::create_appointment(). */
+		$meta = apply_filters( 'wpappointments_appointment_meta', $meta, $request );
 
 		$appointment       = new Appointment(
 			array(
@@ -516,20 +590,27 @@ class AppointmentsController extends Controller {
 	public static function normalize( $appointment ) {
 		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
-		$timestamp   = get_post_meta( $appointment->ID, 'timestamp', true );
-		$status      = get_post_meta( $appointment->ID, 'status', true );
-		$duration    = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
-		$customer_id = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
-		$customer    = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
+		$timestamp     = get_post_meta( $appointment->ID, 'timestamp', true );
+		$status        = get_post_meta( $appointment->ID, 'status', true );
+		$duration      = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
+		$customer_id   = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
+		$customer      = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
+		$end_timestamp = get_post_meta( $appointment->ID, 'end_timestamp', true );
+
+		$end_timestamp = '' !== $end_timestamp
+		? (int) $end_timestamp
+		: (int) $timestamp + (int) $duration * 60;
 
 		return array(
-			'id'         => $appointment->ID,
-			'service'    => $appointment->post_title,
-			'status'     => $status,
-			'timestamp'  => (int) $timestamp,
-			'duration'   => (int) $duration,
-			'customerId' => (int) $customer_id,
-			'customer'   => maybe_unserialize( $customer ),
+			'id'           => $appointment->ID,
+			'service'      => $appointment->post_title,
+			'status'       => $status,
+			'timestamp'    => (int) $timestamp,
+			'endTimestamp' => $end_timestamp,
+			'allDay'       => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
+			'duration'     => (int) $duration,
+			'customerId'   => (int) $customer_id,
+			'customer'     => maybe_unserialize( $customer ),
 		);
 	}
 }
