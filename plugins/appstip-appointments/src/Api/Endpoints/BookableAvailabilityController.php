@@ -92,7 +92,8 @@ class BookableAvailabilityController extends Controller {
 			'end'   => sanitize_text_field( $request->get_param( 'end_date' ) ?? '' ),
 		);
 
-		$availability = AvailabilityEngine::get_effective_availability( $variant_id, $date_range );
+		$context      = self::get_availability_context( $request );
+		$availability = AvailabilityEngine::get_effective_availability( $variant_id, $date_range, $context );
 		$buffers      = self::get_effective_buffers( $variant_id );
 
 		return self::response(
@@ -119,12 +120,13 @@ class BookableAvailabilityController extends Controller {
 			'end'   => sanitize_text_field( $request->get_param( 'end_date' ) ?? '' ),
 		);
 
+		$context  = self::get_availability_context( $request );
 		$result   = BookableVariantQuery::by_entity( $entity_id );
 		$variants = array();
 
 		foreach ( $result['variants'] as $variant_post ) {
 			$model        = new BookableVariant( $variant_post );
-			$availability = AvailabilityEngine::get_effective_availability( $variant_post->ID, $date_range );
+			$availability = AvailabilityEngine::get_effective_availability( $variant_post->ID, $date_range, $context );
 
 			$variants[] = array(
 				'variant'      => $model->normalize(),
@@ -228,8 +230,9 @@ class BookableAvailabilityController extends Controller {
 			'end'   => $last_date->format( 'Y-m-d' ),
 		);
 
+		$context             = self::get_availability_context( $request );
 		$engine_availability = $variant_id
-		? AvailabilityEngine::get_effective_availability( $variant_id, $date_range )
+		? AvailabilityEngine::get_effective_availability( $variant_id, $date_range, $context )
 		: AvailabilityEngine::empty_availability();
 
 		// Settings for slot generation.
@@ -482,6 +485,28 @@ class BookableAvailabilityController extends Controller {
 		}
 
 		return $value * $multipliers[ $unit ];
+	}
+
+	/**
+	 * Build the extra availability context from a request
+	 *
+	 * Reads optional resource selectors (`employeeId`, `locationId`) that Pro
+	 * narrowing layers consume to restrict availability to a specific employee
+	 * or location. Core layers ignore unknown keys, so passing this context is
+	 * always safe. The `wpappointments_availability_context` filter lets addons
+	 * inject further context keys without additional core changes.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return array Context array (e.g. ['employee_id' => 5, 'location_id' => 0]).
+	 */
+	private static function get_availability_context( $request ) {
+		$context = array(
+			'employee_id' => absint( $request->get_param( 'employeeId' ) ?? 0 ),
+			'location_id' => absint( $request->get_param( 'locationId' ) ?? 0 ),
+		);
+
+		return apply_filters( 'wpappointments_availability_context', $context, $request );
 	}
 
 	/**

@@ -33,11 +33,13 @@ function register_availability_layer( $slug, $priority, $config ) {
  *
  * Walks through all registered layers to compute final availability.
  *
- * @param int   $variant_id Bookable variant post ID.
- * @param array $date_range Optional date range with 'start' and 'end' (Y-m-d).
+ * @param int   $variant_id    Bookable variant post ID.
+ * @param array $date_range    Optional date range with 'start' and 'end' (Y-m-d).
+ * @param array $extra_context Optional extra context merged into the layer context
+ *                             (e.g. `employee_id`, `location_id` for Pro narrowing layers).
  *
  * @return array Availability data in standardized format.
  */
-function get_effective_availability( $variant_id, $date_range = array() ) {
-	return AvailabilityEngine::get_effective_availability( $variant_id, $date_range );
+function get_effective_availability( $variant_id, $date_range = array(), $extra_context = array() ) {
+	return AvailabilityEngine::get_effective_availability( $variant_id, $date_range, $extra_context );
 }
