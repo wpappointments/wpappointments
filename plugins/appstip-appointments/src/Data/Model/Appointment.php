@@ -280,20 +280,29 @@ class Appointment {
 	public static function default_normalizer( $appointment ) {
 		$length = (int) get_option( 'wpappointments_appointments_defaultLength' );
 
-		$timestamp   = get_post_meta( $appointment->ID, 'timestamp', true );
-		$status      = get_post_meta( $appointment->ID, 'status', true );
-		$duration    = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
-		$customer_id = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
-		$customer    = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
+		$timestamp     = get_post_meta( $appointment->ID, 'timestamp', true );
+		$status        = get_post_meta( $appointment->ID, 'status', true );
+		$duration      = get_post_meta( $appointment->ID, 'duration', true ) ?? $length;
+		$customer_id   = get_post_meta( $appointment->ID, 'customer_id', true ) ?? 0;
+		$customer      = get_post_meta( $appointment->ID, 'customer', true ) ?? null;
+		$end_timestamp = get_post_meta( $appointment->ID, 'end_timestamp', true );
+
+		// Single-day appointments store no end_timestamp; fall back to
+		// start + duration so multi-day and single-day read uniformly.
+		$end_timestamp = '' !== $end_timestamp
+		? (int) $end_timestamp
+		: (int) $timestamp + (int) $duration * 60;
 
 		return array(
-			'id'          => $appointment->ID,
-			'service'     => $appointment->post_title,
-			'status'      => $status,
-			'timestamp'   => (int) $timestamp,
-			'duration'    => (int) $duration,
-			'customer_id' => (int) $customer_id,
-			'customer'    => maybe_unserialize( $customer ),
+			'id'            => $appointment->ID,
+			'service'       => $appointment->post_title,
+			'status'        => $status,
+			'timestamp'     => (int) $timestamp,
+			'end_timestamp' => $end_timestamp,
+			'all_day'       => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
+			'duration'      => (int) $duration,
+			'customer_id'   => (int) $customer_id,
+			'customer'      => maybe_unserialize( $customer ),
 		);
 	}
 

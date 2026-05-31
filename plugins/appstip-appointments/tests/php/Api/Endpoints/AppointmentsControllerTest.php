@@ -779,3 +779,100 @@ test(
 		expect( $results )->toBeError( 422, 'appointment_not_found' );
 	}
 );
+
+test(
+	'POST appointments - wpappointments_appointment_meta filter can inject meta',
+	function () {
+		wp_set_current_user( 1 );
+
+		$filter = function ( $meta ) {
+			$meta['employee_id'] = 42;
+			return $meta;
+		};
+		add_filter( 'wpappointments_appointment_meta', $filter );
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'       => time() + 3600,
+				'service'    => 'Service 1',
+				'duration'   => 60,
+				'customer'   => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId' => 1,
+				'status'     => 'confirmed',
+			)
+		);
+
+		remove_filter( 'wpappointments_appointment_meta', $filter );
+
+		$id = $results->get_data()['data']['appointment']['id'];
+
+		expect( (int) get_post_meta( $id, 'employee_id', true ) )->toBe( 42 );
+	}
+);
+
+test(
+	'POST appointments - endDate and allDay are persisted and normalized',
+	function () {
+		wp_set_current_user( 1 );
+
+		$start_ts = time() + 3600;
+		$end_ts   = $start_ts + 2 * DAY_IN_SECONDS;
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'       => gmdate( 'Y-m-d H:i:s', $start_ts ),
+				'endDate'    => gmdate( 'Y-m-d H:i:s', $end_ts ),
+				'allDay'     => true,
+				'service'    => 'Multi day',
+				'duration'   => 60,
+				'customer'   => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId' => 1,
+				'status'     => 'confirmed',
+			)
+		);
+
+		$appt = $results->get_data()['data']['appointment'];
+
+		expect( $appt['allDay'] )->toBeTrue();
+		expect( $appt['endTimestamp'] )->toBeGreaterThan( $appt['timestamp'] );
+	}
+);
+
+test(
+	'POST appointments - endDate before start is rejected',
+	function () {
+		wp_set_current_user( 1 );
+
+		$start_ts = time() + 3 * DAY_IN_SECONDS;
+		$end_ts   = $start_ts - DAY_IN_SECONDS;
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'       => gmdate( 'Y-m-d H:i:s', $start_ts ),
+				'endDate'    => gmdate( 'Y-m-d H:i:s', $end_ts ),
+				'service'    => 'Bad range',
+				'duration'   => 60,
+				'customer'   => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId' => 1,
+				'status'     => 'confirmed',
+			)
+		);
+
+		expect( $results )->toBeError( 422, 'invalid_end_date' );
+	}
+);

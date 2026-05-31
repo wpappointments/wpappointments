@@ -137,3 +137,71 @@ test(
 		expect( $captured->context['custom_key'] )->toBe( 'abc' );
 	}
 );
+
+test(
+	'calendar-slots passes context to the wpappointments_busy_periods filter',
+	function () {
+		$variant_id = create_availability_variant();
+		$entity_id  = get_post( $variant_id )->post_parent;
+
+		$captured = new \stdClass();
+
+		$filter = function ( $periods, $context ) use ( $captured ) {
+			$captured->context = $context;
+			return $periods;
+		};
+		add_filter( 'wpappointments_busy_periods', $filter, 10, 2 );
+
+		$this->do_rest_get_request(
+			"bookables/{$entity_id}/calendar-slots",
+			array(
+				'calendar'   => wp_json_encode( array( array( '2026-06-01' ) ) ),
+				'timezone'   => 'UTC',
+				'employeeId' => 5,
+			)
+		);
+
+		remove_filter( 'wpappointments_busy_periods', $filter, 10 );
+
+		expect( $captured->context['employee_id'] )->toBe( 5 );
+	}
+);
+
+test(
+	'wpappointments_busy_periods filter can block an otherwise-open slot',
+	function () {
+		$variant_id = create_availability_variant();
+		$entity_id  = get_post( $variant_id )->post_parent;
+
+		// Block the whole of 2026-06-01 via an injected busy period.
+		$filter = function ( $periods ) {
+			$start     = new \DateTime( '2026-06-01 00:00:00', new \DateTimeZone( 'UTC' ) );
+			$end       = new \DateTime( '2026-06-02 00:00:00', new \DateTimeZone( 'UTC' ) );
+			$periods[] = new \DatePeriod( $start, new \DateInterval( 'PT1440M' ), $end );
+			return $periods;
+		};
+		add_filter( 'wpappointments_busy_periods', $filter );
+
+		$response = $this->do_rest_get_request(
+			"bookables/{$entity_id}/calendar-slots",
+			array(
+				'calendar' => wp_json_encode( array( array( '2026-06-01' ) ) ),
+				'timezone' => 'UTC',
+			)
+		);
+
+		remove_filter( 'wpappointments_busy_periods', $filter );
+
+		$data  = $response->get_data();
+		$slots = $data['data']['availability'][0][0]['day'];
+
+		// Every slot that day overlaps the injected busy period -> not available.
+		$available = array_filter(
+			$slots,
+			function ( $s ) {
+				return true === $s['available'];
+			}
+		);
+		expect( $available )->toBeEmpty();
+	}
+);

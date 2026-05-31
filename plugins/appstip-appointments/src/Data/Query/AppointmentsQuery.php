@@ -234,9 +234,11 @@ class AppointmentsQuery {
 			$appointments[] = self::normalize(
 				$post->ID,
 				array(
-					'status'    => $meta['status'][0],
-					'timestamp' => $meta['timestamp'][0],
-					'duration'  => $meta['duration'][0],
+					'status'        => $meta['status'][0],
+					'timestamp'     => $meta['timestamp'][0],
+					'duration'      => $meta['duration'][0],
+					'end_timestamp' => $meta['end_timestamp'][0] ?? '',
+					'all_day'       => $meta['all_day'][0] ?? '',
 				)
 			);
 		}
@@ -265,14 +267,24 @@ class AppointmentsQuery {
 			$customer = maybe_unserialize( $customer );
 		}
 
+		// End timestamp falls back to start + duration when not explicitly
+		// stored (every legacy appointment), so consumers can treat single-day
+		// and multi-day / all-day appointments uniformly.
+		$end_meta      = $meta['end_timestamp'] ?? '';
+		$end_timestamp = '' !== $end_meta && null !== $end_meta
+		? (int) $end_meta
+		: (int) $timestamp + (int) $duration * 60;
+
 		return array(
-			'id'         => $post_id,
-			'service'    => get_the_title( $post_id ),
-			'timestamp'  => (int) $timestamp,
-			'status'     => $status,
-			'duration'   => (int) $duration,
-			'customerId' => (int) $customer_id,
-			'customer'   => $customer,
+			'id'           => $post_id,
+			'service'      => get_the_title( $post_id ),
+			'timestamp'    => (int) $timestamp,
+			'endTimestamp' => $end_timestamp,
+			'allDay'       => ! empty( $meta['all_day'] ),
+			'status'       => $status,
+			'duration'     => (int) $duration,
+			'customerId'   => (int) $customer_id,
+			'customer'     => $customer,
 		);
 	}
 

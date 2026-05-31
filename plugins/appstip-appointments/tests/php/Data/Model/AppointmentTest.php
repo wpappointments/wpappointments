@@ -734,3 +734,52 @@ test(
 		expect( get_option( 'wpappointments_appointment_deleted_hook_fired' ) )->toBeFalse();
 	}
 );
+
+// End timestamp / all-day normalization (CORE-A multi-day support).
+test(
+	'Appointment model - default_normalizer falls back end_timestamp to start + duration',
+	function () {
+		$id = wp_insert_post(
+			array(
+				'post_title'  => 'Single day',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp' => 1000000,
+					'duration'  => 60,
+					'status'    => 'confirmed',
+				),
+			)
+		);
+
+		$normalized = ( new Appointment( $id ) )->normalize();
+
+		expect( $normalized['end_timestamp'] )->toBe( 1000000 + 60 * 60 );
+		expect( $normalized['all_day'] )->toBeFalse();
+	}
+);
+
+test(
+	'Appointment model - default_normalizer honours explicit end_timestamp and all_day',
+	function () {
+		$id = wp_insert_post(
+			array(
+				'post_title'  => 'Multi day',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp'     => 1000000,
+					'duration'      => 60,
+					'status'        => 'confirmed',
+					'end_timestamp' => 1300000,
+					'all_day'       => 1,
+				),
+			)
+		);
+
+		$normalized = ( new Appointment( $id ) )->normalize();
+
+		expect( $normalized['end_timestamp'] )->toBe( 1300000 );
+		expect( $normalized['all_day'] )->toBeTrue();
+	}
+);

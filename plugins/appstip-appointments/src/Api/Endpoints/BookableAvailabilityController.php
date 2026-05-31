@@ -286,17 +286,39 @@ class BookableAvailabilityController extends Controller {
 		$appointment_periods = array();
 
 		foreach ( $appointments as $appointment ) {
+			$appt_start = (int) $appointment['timestamp'];
+			// Honour an explicit end timestamp (multi-day / all-day bookings);
+			// AppointmentsQuery falls back to start + duration for single-day.
+			$appt_end = isset( $appointment['endTimestamp'] )
+			? (int) $appointment['endTimestamp']
+			: $appt_start + (int) $appointment['duration'] * 60;
+
 			$start = new \DateTime();
-			$start->setTimestamp( $appointment['timestamp'] - $buffers['before'] * 60 );
+			$start->setTimestamp( $appt_start - $buffers['before'] * 60 );
 			$end = new \DateTime();
-			$end->setTimestamp( $appointment['timestamp'] + $appointment['duration'] * 60 + $buffers['after'] * 60 );
-			$total                 = $buffers['before'] + $appointment['duration'] + $buffers['after'];
+			$end->setTimestamp( $appt_end + $buffers['after'] * 60 );
+
+			$total_minutes         = max( 1, (int) round( ( $appt_end - $appt_start ) / 60 ) + $buffers['before'] + $buffers['after'] );
 			$appointment_periods[] = new \DatePeriod(
 				$start,
-				new \DateInterval( 'PT' . $total . 'M' ),
+				new \DateInterval( 'PT' . $total_minutes . 'M' ),
 				$end
 			);
 		}
+
+		/**
+		 * Filter the busy periods that block availability for this query.
+		 *
+		 * Pro addons (employees, locations) use this to add or replace the
+		 * conflict set with resource-scoped busy periods derived from the
+		 * availability context (e.g. employee_id, location_id), so booking a
+		 * specific employee only conflicts with that employee's appointments.
+		 *
+		 * @param \DatePeriod[] $appointment_periods Busy periods blocking slots.
+		 * @param array         $context             Availability context (employee_id, location_id, ...).
+		 * @param array         $date_range          Query date range (start/end Y-m-d).
+		 */
+		$appointment_periods = apply_filters( 'wpappointments_busy_periods', $appointment_periods, $context, $date_range );
 
 		// Generate slots for each day in the calendar.
 		$availability = array();
