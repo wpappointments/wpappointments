@@ -224,6 +224,124 @@ test(
 );
 
 test(
+	'POST wpappointments/v1/appointments - stores a valid rrule and exceptions',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		$exception = time() + 7 * DAY_IN_SECONDS;
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'                 => time() + 3600,
+				'service'              => 'Recurring service',
+				'duration'             => 60,
+				'customer'             => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId'           => 1,
+				'status'               => 'confirmed',
+				'rrule'                => 'FREQ=WEEKLY;COUNT=4',
+				'recurrenceExceptions' => array( $exception ),
+			)
+		);
+
+		$data = $results->get_data();
+
+		expect( $results )->toBeSuccess();
+		expect( $data['data']['appointment']['rrule'] )->toBe( 'FREQ=WEEKLY;COUNT=4' );
+		expect( $data['data']['appointment']['recurrenceExceptions'] )->toBe( array( $exception ) );
+	}
+);
+
+test(
+	'POST wpappointments/v1/appointments - rejects an invalid rrule',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'       => time() + 3600,
+				'service'    => 'Bad rule',
+				'duration'   => 60,
+				'customer'   => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId' => 1,
+				'status'     => 'confirmed',
+				'rrule'      => 'TOTALLY-NOT-AN-RRULE',
+			)
+		);
+
+		expect( $results )->toBeError( 422, 'invalid_rrule' );
+	}
+);
+
+test(
+	'POST wpappointments/v1/appointments - rejects a sub-daily recurrence frequency',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'       => time() + 3600,
+				'service'    => 'Abusive rule',
+				'duration'   => 60,
+				'customer'   => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId' => 1,
+				'status'     => 'confirmed',
+				'rrule'      => 'FREQ=MINUTELY;COUNT=100000',
+			)
+		);
+
+		expect( $results )->toBeError( 422, 'invalid_rrule' );
+	}
+);
+
+test(
+	'POST wpappointments/v1/appointments - rejects too many recurrence exceptions',
+	function () {
+		// Log in as admin.
+		wp_set_current_user( 1 );
+
+		$too_many = array_fill( 0, 1001, time() );
+
+		$results = $this->do_rest_post_request(
+			'appointments',
+			array(
+				'date'                 => time() + 3600,
+				'service'              => 'Too many exceptions',
+				'duration'             => 60,
+				'customer'             => array(
+					'name'  => 'John Doe',
+					'email' => 'john@example.com',
+					'phone' => '+1 (000) 000-0000',
+				),
+				'customerId'           => 1,
+				'status'               => 'confirmed',
+				'rrule'                => 'FREQ=WEEKLY;COUNT=4',
+				'recurrenceExceptions' => $too_many,
+			)
+		);
+
+		expect( $results )->toBeError( 422, 'too_many_exceptions' );
+	}
+);
+
+test(
 	'POST wpappointments/v1/appointments - status 200 - with created customer',
 	function () {
 		// Log in as admin.

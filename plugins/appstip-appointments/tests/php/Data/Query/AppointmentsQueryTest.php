@@ -168,3 +168,97 @@ test(
 		expect( $by_id[ $multi ]['allDay'] )->toBeFalse();
 	}
 );
+
+test(
+	'AppointmentsQuery::get_date_range_appointments expands a recurring master into occurrences',
+	function () {
+		$utc          = new \DateTimeZone( 'UTC' );
+		$master_start = ( new \DateTime( '2026-06-01 10:00:00', $utc ) )->getTimestamp();
+
+		$master_id = wp_insert_post(
+			array(
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+				'post_title'  => 'Weekly',
+				'meta_input'  => array(
+					'status'    => 'confirmed',
+					'timestamp' => $master_start,
+					'duration'  => 60,
+					'rrule'     => 'FREQ=WEEKLY;COUNT=4',
+				),
+			)
+		);
+
+		$range_start = $master_start - DAY_IN_SECONDS;
+		$range_end   = $master_start + 5 * 7 * DAY_IN_SECONDS;
+
+		$results = AppointmentsQuery::get_date_range_appointments( $range_start, $range_end );
+
+		// Master is not returned as a raw single row; only its 4 occurrences.
+		$occurrences = array_values(
+			array_filter(
+				$results['appointments'],
+				function ( $appointment ) use ( $master_id ) {
+					return $appointment['id'] === $master_id;
+				}
+			)
+		);
+
+		expect( $occurrences )->toHaveCount( 4 );
+
+		$starts = wp_list_pluck( $occurrences, 'timestamp' );
+		sort( $starts );
+
+		expect( $starts[0] )->toBe( $master_start );
+		expect( $starts[1] )->toBe( $master_start + 7 * DAY_IN_SECONDS );
+
+		// Each occurrence preserves the master duration.
+		foreach ( $occurrences as $occurrence ) {
+			expect( $occurrence['endTimestamp'] - $occurrence['timestamp'] )->toBe( 60 * 60 );
+		}
+	}
+);
+
+test(
+	'AppointmentsQuery::get_date_range_appointments honours recurrence_exceptions',
+	function () {
+		$utc          = new \DateTimeZone( 'UTC' );
+		$master_start = ( new \DateTime( '2026-06-01 10:00:00', $utc ) )->getTimestamp();
+		$dropped      = $master_start + 7 * DAY_IN_SECONDS;
+
+		$master_id = wp_insert_post(
+			array(
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+				'post_title'  => 'Weekly with gap',
+				'meta_input'  => array(
+					'status'                => 'confirmed',
+					'timestamp'             => $master_start,
+					'duration'              => 60,
+					'rrule'                 => 'FREQ=WEEKLY;COUNT=4',
+					'recurrence_exceptions' => array( $dropped ),
+				),
+			)
+		);
+
+		$results = AppointmentsQuery::get_date_range_appointments(
+			$master_start - DAY_IN_SECONDS,
+			$master_start + 5 * 7 * DAY_IN_SECONDS
+		);
+
+		$starts = wp_list_pluck(
+			array_values(
+				array_filter(
+					$results['appointments'],
+					function ( $appointment ) use ( $master_id ) {
+						return $appointment['id'] === $master_id;
+					}
+				)
+			),
+			'timestamp'
+		);
+
+		expect( $starts )->toHaveCount( 3 );
+		expect( $starts )->not->toContain( $dropped );
+	}
+);

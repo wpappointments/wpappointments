@@ -169,6 +169,114 @@ class Appointment {
 	}
 
 	/**
+	 * Detach a single occurrence from a recurring master.
+	 *
+	 * Edit-single semantics: materialise the given occurrence as a standalone
+	 * (non-recurring) child appointment that carries `recurrence_parent` and
+	 * `post_parent` pointing at the master, then EXDATE the master at the
+	 * original occurrence timestamp so the series no longer expands it.
+	 *
+	 * The child inherits the master's meta minus the recurrence keys, with its
+	 * own start (and matching end preserving the master's duration). Callers may
+	 * pass `$overrides` to change child meta (e.g. status, duration) and
+	 * `$new_timestamp` to also move the occurrence.
+	 *
+	 * @param int      $occurrence_timestamp Original occurrence start (unix UTC) to detach.
+	 * @param array    $overrides            Optional child meta overrides.
+	 * @param int|null $new_timestamp        Optional new start for the child (unix UTC).
+	 *
+	 * @return Appointment|\WP_Error The detached child appointment, or error.
+	 */
+	public function detach_occurrence( $occurrence_timestamp, $overrides = array(), $new_timestamp = null ) {
+		if ( is_wp_error( $this->appointment ) ) {
+			return $this->appointment;
+		}
+
+		$master_id    = $this->appointment->ID;
+		$master_rrule = get_post_meta( $master_id, 'rrule', true );
+
+		if ( '' === $master_rrule || null === $master_rrule ) {
+			return new \WP_Error(
+				'appointment_not_recurring',
+				__( 'Appointment is not recurring', 'appstip-appointments' )
+			);
+		}
+
+		$occurrence_timestamp = (int) $occurrence_timestamp;
+
+		// Idempotency guard: an already-EXDATEd occurrence has already been
+		// detached. Creating a second child would duplicate the appointment and
+		// break the dedup invariant, so refuse.
+		$existing_exceptions = get_post_meta( $master_id, 'recurrence_exceptions', true );
+		$existing_exceptions = is_array( $existing_exceptions ) ? array_map( 'intval', $existing_exceptions ) : array();
+
+		if ( in_array( $occurrence_timestamp, $existing_exceptions, true ) ) {
+			return new \WP_Error(
+				'occurrence_already_detached',
+				__( 'This occurrence has already been detached', 'appstip-appointments' )
+			);
+		}
+
+		$master_start = (int) get_post_meta( $master_id, 'timestamp', true );
+		$master_dur   = (int) get_post_meta( $master_id, 'duration', true );
+		$master_end   = get_post_meta( $master_id, 'end_timestamp', true );
+		$duration_sec = '' !== $master_end && null !== $master_end
+		? (int) $master_end - $master_start
+		: $master_dur * 60;
+
+		$child_start = null !== $new_timestamp ? (int) $new_timestamp : $occurrence_timestamp;
+
+		// Inherit master meta, dropping the recurrence-defining keys so the
+		// child is a plain one-off appointment.
+		$inherited  = get_post_meta( $master_id );
+		$child_meta = array();
+
+		foreach ( $inherited as $key => $values ) {
+			if ( in_array( $key, array( 'rrule', 'recurrence_exceptions', 'recurrence_parent' ), true ) ) {
+				continue;
+			}
+
+			$child_meta[ $key ] = maybe_unserialize( $values[0] );
+		}
+
+		$child_meta['timestamp']         = $child_start;
+		$child_meta['end_timestamp']     = $child_start + $duration_sec;
+		$child_meta['recurrence_parent'] = $master_id;
+
+		$child_meta = wp_parse_args( $overrides, $child_meta );
+
+		$child_id = wp_insert_post(
+			array(
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+				'post_title'  => $this->appointment->post_title,
+				'post_parent' => $master_id,
+				'meta_input'  => $child_meta,
+			),
+			true
+		);
+
+		if ( is_wp_error( $child_id ) ) {
+			return $child_id;
+		}
+
+		// EXDATE the master so the series stops expanding the original slot.
+		$exceptions = get_post_meta( $master_id, 'recurrence_exceptions', true );
+		$exceptions = is_array( $exceptions ) ? $exceptions : array();
+
+		if ( ! in_array( $occurrence_timestamp, array_map( 'intval', $exceptions ), true ) ) {
+			$exceptions[] = $occurrence_timestamp;
+			update_post_meta( $master_id, 'recurrence_exceptions', $exceptions );
+		}
+
+		$child = new self( get_post( $child_id ) );
+
+		do_action( 'wpappointments_appointment_occurrence_detached', $child->normalize(), $master_id, $occurrence_timestamp );
+
+		return $child;
+	}
+
+	/**
 	 * Cancel appointment
 	 *
 	 * @return array|\WP_Error
@@ -293,16 +401,23 @@ class Appointment {
 		? (int) $end_timestamp
 		: (int) $timestamp + (int) $duration * 60;
 
+		$rrule                 = get_post_meta( $appointment->ID, 'rrule', true );
+		$recurrence_exceptions = get_post_meta( $appointment->ID, 'recurrence_exceptions', true );
+		$recurrence_parent     = get_post_meta( $appointment->ID, 'recurrence_parent', true );
+
 		return array(
-			'id'            => $appointment->ID,
-			'service'       => $appointment->post_title,
-			'status'        => $status,
-			'timestamp'     => (int) $timestamp,
-			'end_timestamp' => $end_timestamp,
-			'all_day'       => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
-			'duration'      => (int) $duration,
-			'customer_id'   => (int) $customer_id,
-			'customer'      => maybe_unserialize( $customer ),
+			'id'                    => $appointment->ID,
+			'service'               => $appointment->post_title,
+			'status'                => $status,
+			'timestamp'             => (int) $timestamp,
+			'end_timestamp'         => $end_timestamp,
+			'all_day'               => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
+			'duration'              => (int) $duration,
+			'customer_id'           => (int) $customer_id,
+			'customer'              => maybe_unserialize( $customer ),
+			'rrule'                 => is_string( $rrule ) ? $rrule : '',
+			'recurrence_exceptions' => is_array( $recurrence_exceptions ) ? array_map( 'intval', $recurrence_exceptions ) : array(),
+			'recurrence_parent'     => $recurrence_parent ? (int) $recurrence_parent : 0,
 		);
 	}
 
