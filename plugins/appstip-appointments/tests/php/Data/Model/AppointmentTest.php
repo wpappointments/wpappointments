@@ -783,3 +783,161 @@ test(
 		expect( $normalized['all_day'] )->toBeTrue();
 	}
 );
+
+test(
+	'Appointment model - default_normalizer exposes recurrence fields',
+	function () {
+		$id = wp_insert_post(
+			array(
+				'post_title'  => 'Recurring',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp'             => 1000000,
+					'duration'              => 60,
+					'status'                => 'confirmed',
+					'rrule'                 => 'FREQ=WEEKLY;COUNT=4',
+					'recurrence_exceptions' => array( 1000000 ),
+				),
+			)
+		);
+
+		$normalized = ( new Appointment( $id ) )->normalize();
+
+		expect( $normalized['rrule'] )->toBe( 'FREQ=WEEKLY;COUNT=4' );
+		expect( $normalized['recurrence_exceptions'] )->toBe( array( 1000000 ) );
+		expect( $normalized['recurrence_parent'] )->toBe( 0 );
+	}
+);
+
+test(
+	'Appointment model - default_normalizer recurrence fields default empty when absent',
+	function () {
+		$id = wp_insert_post(
+			array(
+				'post_title'  => 'Plain',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp' => 1000000,
+					'duration'  => 60,
+					'status'    => 'confirmed',
+				),
+			)
+		);
+
+		$normalized = ( new Appointment( $id ) )->normalize();
+
+		expect( $normalized['rrule'] )->toBe( '' );
+		expect( $normalized['recurrence_exceptions'] )->toBe( array() );
+		expect( $normalized['recurrence_parent'] )->toBe( 0 );
+	}
+);
+
+test(
+	'Appointment model - detach_occurrence creates a detached child and EXDATEs the master',
+	function () {
+		$master_start = 1000000;
+		$duration     = 60;
+
+		$master_id = wp_insert_post(
+			array(
+				'post_title'  => 'Weekly standup',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp'   => $master_start,
+					'duration'    => $duration,
+					'status'      => 'confirmed',
+					'customer_id' => 7,
+					'rrule'       => 'FREQ=WEEKLY;COUNT=4',
+				),
+			)
+		);
+
+		// Detach the second occurrence (one week after the master start).
+		$occurrence_ts = $master_start + 7 * DAY_IN_SECONDS;
+
+		$child = ( new Appointment( $master_id ) )->detach_occurrence( $occurrence_ts );
+
+		expect( $child )->toBeInstanceOf( Appointment::class );
+
+		$child_data = $child->normalize();
+
+		// Child is a plain, non-recurring appointment linked back to the master.
+		expect( $child_data['rrule'] )->toBe( '' );
+		expect( $child_data['recurrence_parent'] )->toBe( $master_id );
+		expect( $child_data['timestamp'] )->toBe( $occurrence_ts );
+		expect( $child_data['end_timestamp'] )->toBe( $occurrence_ts + $duration * 60 );
+		expect( (int) $child->appointment->post_parent )->toBe( $master_id );
+
+		// Inherited meta carries over.
+		expect( $child_data['customer_id'] )->toBe( 7 );
+
+		// Master now EXDATEs the detached occurrence.
+		$master_after = ( new Appointment( $master_id ) )->normalize();
+		expect( $master_after['recurrence_exceptions'] )->toContain( $occurrence_ts );
+	}
+);
+
+test(
+	'Appointment model - detach_occurrence is idempotent - a second detach of the same occurrence errors',
+	function () {
+		$master_start = 1000000;
+
+		$master_id = wp_insert_post(
+			array(
+				'post_title'  => 'Weekly standup',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp'   => $master_start,
+					'duration'    => 60,
+					'status'      => 'confirmed',
+					'customer_id' => 7,
+					'rrule'       => 'FREQ=WEEKLY;COUNT=4',
+				),
+			)
+		);
+
+		$occurrence_ts = $master_start + 7 * DAY_IN_SECONDS;
+
+		$first = ( new Appointment( $master_id ) )->detach_occurrence( $occurrence_ts );
+		expect( $first )->toBeInstanceOf( Appointment::class );
+
+		// Detaching the same occurrence again must not create a second child.
+		$second = ( new Appointment( $master_id ) )->detach_occurrence( $occurrence_ts );
+		expect( $second )->toBeWPError( 'occurrence_already_detached' );
+
+		$children = get_children(
+			array(
+				'post_parent' => $master_id,
+				'post_type'   => 'wpa-appointment',
+				'post_status' => 'publish',
+			)
+		);
+		expect( count( $children ) )->toBe( 1 );
+	}
+);
+
+test(
+	'Appointment model - detach_occurrence on a non-recurring appointment errors',
+	function () {
+		$id = wp_insert_post(
+			array(
+				'post_title'  => 'One off',
+				'post_status' => 'publish',
+				'post_type'   => 'wpa-appointment',
+				'meta_input'  => array(
+					'timestamp' => 1000000,
+					'duration'  => 60,
+					'status'    => 'confirmed',
+				),
+			)
+		);
+
+		$result = ( new Appointment( $id ) )->detach_occurrence( 1000000 );
+
+		expect( $result )->toBeWPError( 'appointment_not_recurring' );
+	}
+);

@@ -18,11 +18,20 @@ use WPAppointments\Data\Query\AppointmentsQuery;
 use WP_Query;
 use WP_REST_Controller;
 use WPAppointments\Core\Capabilities;
+use WPAppointments\Recurrence\RecurrenceExpander;
+use RRule\RRule;
 
 /**
  * Appointment endpoint class
  */
 class AppointmentsController extends Controller {
+	/**
+	 * Maximum number of recurrence exceptions (EXDATEs) accepted per appointment.
+	 *
+	 * @var int
+	 */
+	const MAX_RECURRENCE_EXCEPTIONS = 1000;
+
 	/**
 	 * Register all routes
 	 *
@@ -250,6 +259,14 @@ class AppointmentsController extends Controller {
 			$meta['all_day'] = 1;
 		}
 
+		$recurrence = self::parse_recurrence( $request );
+
+		if ( is_wp_error( $recurrence ) ) {
+			return self::error( $recurrence );
+		}
+
+		$meta = array_merge( $meta, $recurrence );
+
 		/**
 		 * Filter the appointment meta before it is persisted on create.
 		 *
@@ -308,6 +325,61 @@ class AppointmentsController extends Controller {
 		}
 
 		return $end_timestamp;
+	}
+
+	/**
+	 * Parse and validate optional recurrence meta from the request.
+	 *
+	 * Returns the meta to merge: `rrule` (validated RRULE string) when the
+	 * request carries a non-empty `rrule`, and `recurrence_exceptions` (array
+	 * of unix timestamps) when `recurrenceExceptions` is supplied. When no
+	 * rrule is present the result is empty and the appointment behaves exactly
+	 * as a non-recurring one.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return array|\WP_Error
+	 */
+	private static function parse_recurrence( WP_REST_Request $request ) {
+		$rrule_raw = $request->get_param( 'rrule' );
+
+		if ( null === $rrule_raw || '' === trim( (string) $rrule_raw ) ) {
+			return array();
+		}
+
+		$rrule = sanitize_text_field( $rrule_raw );
+
+		// Reject sub-daily frequencies: appointments never recur by the
+		// second/minute, and such rules expand into huge occurrence sets that
+		// would exhaust CPU/memory on every calendar read.
+		if ( preg_match( '/FREQ\s*=\s*(SECONDLY|MINUTELY)/i', $rrule ) ) {
+			return new \WP_Error( 'invalid_rrule', __( 'Recurrence frequency is not allowed', 'appstip-appointments' ), array( 'status' => 422 ) );
+		}
+
+		// php-rrule has no validator; constructing throws on a malformed rule.
+		try {
+			new RRule( $rrule );
+		} catch ( \InvalidArgumentException $e ) {
+			return new \WP_Error( 'invalid_rrule', __( 'Invalid recurrence rule', 'appstip-appointments' ), array( 'status' => 422 ) );
+		}
+
+		$meta = array(
+			'rrule' => $rrule,
+		);
+
+		$exceptions_raw = $request->get_param( 'recurrenceExceptions' );
+
+		if ( is_array( $exceptions_raw ) ) {
+			// Bound the exception set so a single appointment cannot carry an
+			// unbounded list that turns expansion into an O(n^2) scan.
+			if ( count( $exceptions_raw ) > self::MAX_RECURRENCE_EXCEPTIONS ) {
+				return new \WP_Error( 'too_many_exceptions', __( 'Too many recurrence exceptions', 'appstip-appointments' ), array( 'status' => 422 ) );
+			}
+
+			$meta['recurrence_exceptions'] = array_values( array_map( 'absint', $exceptions_raw ) );
+		}
+
+		return $meta;
 	}
 
 	/**
@@ -371,6 +443,14 @@ class AppointmentsController extends Controller {
 		if ( rest_sanitize_boolean( $request->get_param( 'allDay' ) ) ) {
 			$meta['all_day'] = 1;
 		}
+
+		$recurrence = self::parse_recurrence( $request );
+
+		if ( is_wp_error( $recurrence ) ) {
+			return self::error( $recurrence );
+		}
+
+		$meta = array_merge( $meta, $recurrence );
 
 		/** This filter is documented in self::create_appointment(). */
 		$meta = apply_filters( 'wpappointments_appointment_meta', $meta, $request );
@@ -601,16 +681,23 @@ class AppointmentsController extends Controller {
 		? (int) $end_timestamp
 		: (int) $timestamp + (int) $duration * 60;
 
+		$rrule                 = get_post_meta( $appointment->ID, 'rrule', true );
+		$recurrence_exceptions = get_post_meta( $appointment->ID, 'recurrence_exceptions', true );
+		$recurrence_parent     = get_post_meta( $appointment->ID, 'recurrence_parent', true );
+
 		return array(
-			'id'           => $appointment->ID,
-			'service'      => $appointment->post_title,
-			'status'       => $status,
-			'timestamp'    => (int) $timestamp,
-			'endTimestamp' => $end_timestamp,
-			'allDay'       => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
-			'duration'     => (int) $duration,
-			'customerId'   => (int) $customer_id,
-			'customer'     => maybe_unserialize( $customer ),
+			'id'                   => $appointment->ID,
+			'service'              => $appointment->post_title,
+			'status'               => $status,
+			'timestamp'            => (int) $timestamp,
+			'endTimestamp'         => $end_timestamp,
+			'allDay'               => (bool) get_post_meta( $appointment->ID, 'all_day', true ),
+			'duration'             => (int) $duration,
+			'customerId'           => (int) $customer_id,
+			'customer'             => maybe_unserialize( $customer ),
+			'rrule'                => is_string( $rrule ) ? $rrule : '',
+			'recurrenceExceptions' => is_array( $recurrence_exceptions ) ? array_map( 'intval', $recurrence_exceptions ) : array(),
+			'recurrenceParent'     => $recurrence_parent ? (int) $recurrence_parent : 0,
 		);
 	}
 }

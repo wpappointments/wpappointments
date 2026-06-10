@@ -9,6 +9,7 @@
 namespace WPAppointments\Data\Query;
 
 use WP_Query;
+use WPAppointments\Recurrence\RecurrenceExpander;
 
 /**
  * Appointments query class
@@ -197,6 +198,12 @@ class AppointmentsQuery {
 				'value'   => $end_date,
 				'compare' => '<=',
 			),
+			// Recurring masters are expanded separately so their first
+			// occurrence is not also returned as a raw single appointment.
+			array(
+				'key'     => 'rrule',
+				'compare' => 'NOT EXISTS',
+			),
 		);
 
 		if ( $entity_id > 0 ) {
@@ -243,7 +250,121 @@ class AppointmentsQuery {
 			);
 		}
 
-		return self::paginated( $query, $appointments );
+		$appointments = array_merge(
+			$appointments,
+			self::expand_recurring_in_range( $start_date, $end_date, $entity_id )
+		);
+
+		// This method returns the full date-range set (posts_per_page = -1), so
+		// the item total must include expanded occurrences, not just the raw
+		// posts WP_Query counted.
+		return self::paginated( $query, $appointments, count( $appointments ) );
+	}
+
+	/**
+	 * Expand recurring masters into virtual occurrences overlapping a range.
+	 *
+	 * Masters store an RRULE plus EXDATE timestamps; their `timestamp` (DTSTART)
+	 * may sit before the requested range yet still produce occurrences inside
+	 * it, so they are queried independently of the date-range filter and
+	 * expanded via RecurrenceExpander. Each occurrence is returned as a
+	 * normalized appointment row sharing the master's id/service/customer, with
+	 * its own start/end timestamps. Returns an empty array when no masters
+	 * exist, keeping non-recurring installs free of any extra work.
+	 *
+	 * @param int $start_date Range start (unix UTC).
+	 * @param int $end_date   Range end (unix UTC).
+	 * @param int $entity_id  Optional bookable entity scope.
+	 *
+	 * @return array
+	 */
+	protected static function expand_recurring_in_range( $start_date, $end_date, $entity_id = 0 ) {
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'rrule',
+				'compare' => 'EXISTS',
+			),
+		);
+
+		if ( $entity_id > 0 ) {
+			$meta_query[] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'entity_id',
+					'value'   => $entity_id,
+					'compare' => '=',
+				),
+				array(
+					'key'     => 'entity_id',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+
+		$query = new \WP_Query(
+			array_merge(
+				self::DEFAULT_QUERY_PART,
+				array(
+					'posts_per_page' => - 1,
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bounded to recurring masters; expanded in-memory for the requested range.
+					'meta_query'     => $meta_query,
+				)
+			)
+		);
+
+		if ( empty( $query->posts ) ) {
+			return array();
+		}
+
+		$timezone = wp_timezone();
+
+		$occurrences = array();
+
+		foreach ( $query->posts as $post ) {
+			$meta  = get_post_meta( $post->ID );
+			$rrule = $meta['rrule'][0] ?? '';
+
+			if ( '' === $rrule ) {
+				continue;
+			}
+
+			$master_start = (int) ( $meta['timestamp'][0] ?? 0 );
+			$duration     = (int) ( $meta['duration'][0] ?? 0 );
+			$master_end   = isset( $meta['end_timestamp'][0] ) && '' !== $meta['end_timestamp'][0]
+			? (int) $meta['end_timestamp'][0]
+			: $master_start + $duration * 60;
+
+			$exceptions = isset( $meta['recurrence_exceptions'][0] )
+			? maybe_unserialize( $meta['recurrence_exceptions'][0] )
+			: array();
+			$exceptions = is_array( $exceptions ) ? $exceptions : array();
+
+			$expanded = RecurrenceExpander::expand_in_range(
+				$rrule,
+				$master_start,
+				$master_end,
+				(int) $start_date,
+				(int) $end_date,
+				$exceptions,
+				$timezone
+			);
+
+			foreach ( $expanded as $occurrence ) {
+				$occurrences[] = self::normalize(
+					$post->ID,
+					array(
+						'status'        => $meta['status'][0] ?? '',
+						'timestamp'     => $occurrence['start'],
+						'duration'      => $duration,
+						'end_timestamp' => $occurrence['end'],
+						'all_day'       => $meta['all_day'][0] ?? '',
+					)
+				);
+			}
+		}
+
+		return $occurrences;
 	}
 
 	/**
@@ -293,14 +414,18 @@ class AppointmentsQuery {
 	 *
 	 * @param WP_User_Query $query Query params.
 	 * @param array         $appointments Appointments array.
+	 * @param int|null      $total_override Explicit total item count. Use when
+	 *                                      $appointments includes rows not counted
+	 *                                      by the WP_Query (e.g. expanded recurring
+	 *                                      occurrences). Defaults to found_posts.
 	 *
 	 * @return object
 	 */
-	public static function paginated( $query, $appointments = array() ) {
+	public static function paginated( $query, $appointments = array(), $total_override = null ) {
 		$posts_per_page = (int) $query->get( 'posts_per_page' ) ?? 10;
 		$paged          = (int) $query->get( 'paged' ) ?? 1;
-		$total          = $query->found_posts;
-		$pages          = (int) ceil( $total / $posts_per_page );
+		$total          = null === $total_override ? $query->found_posts : (int) $total_override;
+		$pages          = $posts_per_page > 0 ? (int) ceil( $total / $posts_per_page ) : 1;
 
 		return array(
 			'appointments'   => $appointments,

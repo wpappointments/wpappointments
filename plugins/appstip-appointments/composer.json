@@ -1,6 +1,9 @@
 {
 	"name": "wpappointments/wpappointments",
 	"type": "wordpress-plugin",
+	"require": {
+		"rlanvin/php-rrule": "^2.5"
+	},
 	"autoload": {
 		"psr-4": {
 			"WPAppointments\\": "src/",
