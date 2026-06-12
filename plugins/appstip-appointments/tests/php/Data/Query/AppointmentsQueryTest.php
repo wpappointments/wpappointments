@@ -62,6 +62,58 @@ test(
 );
 
 test(
+	'AppointmentsQuery::all surfaces all_day and end_timestamp meta',
+	function () {
+		$start = time() + 3600;
+		$end   = $start + 2 * DAY_IN_SECONDS;
+
+		$this->create_appointment(
+			array(
+				'meta' => array(
+					'timestamp'     => $start,
+					'duration'      => 60,
+					'status'        => 'confirmed',
+					'end_timestamp' => $end,
+					'all_day'       => 1,
+				),
+			)
+		);
+
+		$results = AppointmentsQuery::all( array() );
+
+		expect( $results['appointments'] )->toHaveCount( 1 );
+		expect( $results['appointments'][0]['endTimestamp'] )->toBe( $end );
+		expect( $results['appointments'][0]['allDay'] )->toBeTrue();
+	}
+);
+
+test(
+	'AppointmentsQuery::upcoming surfaces all_day and end_timestamp meta',
+	function () {
+		$start = time() + 3600;
+		$end   = $start + 2 * DAY_IN_SECONDS;
+
+		$this->create_appointment(
+			array(
+				'meta' => array(
+					'timestamp'     => $start,
+					'duration'      => 60,
+					'status'        => 'confirmed',
+					'end_timestamp' => $end,
+					'all_day'       => 1,
+				),
+			)
+		);
+
+		$results = AppointmentsQuery::upcoming( array() );
+
+		expect( $results['appointments'] )->toHaveCount( 1 );
+		expect( $results['appointments'][0]['endTimestamp'] )->toBe( $end );
+		expect( $results['appointments'][0]['allDay'] )->toBeTrue();
+	}
+);
+
+test(
 	'AppointmentsQuery::get_date_range_appointments filters by entity_id',
 	function () {
 		$now   = time();

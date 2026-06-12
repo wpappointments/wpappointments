@@ -92,11 +92,13 @@ class AppointmentsQuery {
 			$appointments[] = self::normalize(
 				$post->ID,
 				array(
-					'status'      => get_post_meta( $post->ID, 'status', true ),
-					'timestamp'   => get_post_meta( $post->ID, 'timestamp', true ),
-					'customer_id' => get_post_meta( $post->ID, 'customer_id', true ),
-					'customer'    => get_post_meta( $post->ID, 'customer', true ),
-					'duration'    => get_post_meta( $post->ID, 'duration', true ),
+					'status'        => get_post_meta( $post->ID, 'status', true ),
+					'timestamp'     => get_post_meta( $post->ID, 'timestamp', true ),
+					'customer_id'   => get_post_meta( $post->ID, 'customer_id', true ),
+					'customer'      => get_post_meta( $post->ID, 'customer', true ),
+					'duration'      => get_post_meta( $post->ID, 'duration', true ),
+					'end_timestamp' => get_post_meta( $post->ID, 'end_timestamp', true ),
+					'all_day'       => get_post_meta( $post->ID, 'all_day', true ),
 				)
 			);
 		}
@@ -160,11 +162,13 @@ class AppointmentsQuery {
 			$appointments[] = self::normalize(
 				$post->ID,
 				array(
-					'status'      => $meta['status'][0],
-					'timestamp'   => $meta['timestamp'][0],
-					'customer_id' => $meta['customer_id'][0],
-					'customer'    => $meta['customer'][0],
-					'duration'    => $meta['duration'][0],
+					'status'        => $meta['status'][0],
+					'timestamp'     => $meta['timestamp'][0],
+					'customer_id'   => $meta['customer_id'][0],
+					'customer'      => $meta['customer'][0],
+					'duration'      => $meta['duration'][0],
+					'end_timestamp' => $meta['end_timestamp'][0] ?? '',
+					'all_day'       => $meta['all_day'][0] ?? '',
 				)
 			);
 		}

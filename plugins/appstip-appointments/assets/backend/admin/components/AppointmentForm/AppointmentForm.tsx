@@ -1,4 +1,4 @@
-import { Button, SelectControl } from '@wordpress/components';
+import { Button, SelectControl, ToggleControl } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -8,10 +8,11 @@ import {
 	formFieldStyles,
 	FormFieldSet,
 	SlideOut,
+	WPDatePicker,
 } from '@wpappointments/components';
 import { displayErrorToast } from '@wpappointments/data';
 import { useSlideout } from '@wpappointments/data';
-import { addMinutes } from 'date-fns';
+import { addMinutes, isBefore, startOfDay } from 'date-fns';
 import { safeParse } from 'valibot';
 import { APIResponse } from '~/backend/utils/fetch';
 import { formatTimeForPicker } from '~/backend/utils/format';
@@ -38,6 +39,8 @@ export type AppointmentFormFields = {
 	timeMinuteStart: string;
 	timeType: 'am' | 'pm';
 	duration: number;
+	allDay: boolean;
+	endDate: string;
 	customer: {
 		id: number;
 		name: string;
@@ -68,6 +71,8 @@ const defaultFormData: AppointmentFormFields = {
 	timeMinuteStart: '',
 	timeType: 'am',
 	duration: 0,
+	allDay: false,
+	endDate: '',
 	customer: {
 		id: 0,
 		name: '',
@@ -85,6 +90,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	const [formData, setFormData] =
 		useState<AppointmentFormFields>(defaultFormData);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [showEndDate, setShowEndDate] = useState(false);
 
 	const setField = <K extends keyof AppointmentFormFields>(
 		field: K,
@@ -163,6 +169,13 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			}
 
 			const date = new Date(currentAppointment.timestamp * 1000);
+			const endDate = currentAppointment.endTimestamp
+				? new Date(currentAppointment.endTimestamp * 1000)
+				: null;
+
+			// Reveal the end-date calendar when editing an appointment that
+			// already has an end date set.
+			setShowEndDate(!!endDate);
 
 			setFormData((prev) => ({
 				...prev,
@@ -173,6 +186,8 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				timeHourStart: formatTimeForPicker(date.getHours()),
 				timeMinuteStart: formatTimeForPicker(date.getMinutes()),
 				duration: currentAppointment.duration,
+				allDay: currentAppointment.allDay || false,
+				endDate: endDate ? endDate.toISOString() : '',
 				customer: {
 					...prev.customer,
 					name: currentAppointment.customer.name,
@@ -201,10 +216,16 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	const onSubmit = async () => {
 		if (isSubmitting) return;
 
+		if (!formData.date) {
+			displayErrorToast(
+				__('Please select a date.', 'appstip-appointments')
+			);
+			return;
+		}
+
 		if (
-			!formData.date ||
-			!formData.timeHourStart ||
-			!formData.timeMinuteStart
+			!formData.allDay &&
+			(!formData.timeHourStart || !formData.timeMinuteStart)
 		) {
 			displayErrorToast(
 				__('Please select a date and time.', 'appstip-appointments')
@@ -213,8 +234,14 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 		}
 
 		const date = new Date(formData.date);
-		date.setHours(parseInt(formData.timeHourStart, 10));
-		date.setMinutes(parseInt(formData.timeMinuteStart, 10));
+
+		if (formData.allDay) {
+			date.setHours(0);
+			date.setMinutes(0);
+		} else {
+			date.setHours(parseInt(formData.timeHourStart, 10));
+			date.setMinutes(parseInt(formData.timeMinuteStart, 10));
+		}
 		date.setSeconds(0);
 		date.setMilliseconds(0);
 
@@ -225,6 +252,48 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			return;
 		}
 
+		let endDateIso: string | undefined;
+
+		if (formData.endDate) {
+			const endDate = new Date(formData.endDate);
+
+			if (isNaN(endDate.getTime())) {
+				displayErrorToast(
+					__('Invalid end date.', 'appstip-appointments')
+				);
+				return;
+			}
+
+			if (isBefore(startOfDay(endDate), startOfDay(date))) {
+				displayErrorToast(
+					__(
+						'End date cannot be before the start date.',
+						'appstip-appointments'
+					)
+				);
+				return;
+			}
+
+			// Multi-day span end time: mirror the start time-of-day, or
+			// end-of-day for all-day appointments. Only send endDate when it
+			// resolves to a moment strictly after the start, matching the
+			// backend requirement for setting the end_timestamp meta.
+			if (formData.allDay) {
+				endDate.setHours(23);
+				endDate.setMinutes(59);
+				endDate.setSeconds(59);
+			} else {
+				endDate.setHours(parseInt(formData.timeHourStart, 10));
+				endDate.setMinutes(parseInt(formData.timeMinuteStart, 10));
+				endDate.setSeconds(0);
+			}
+			endDate.setMilliseconds(0);
+
+			if (endDate.getTime() > date.getTime()) {
+				endDateIso = endDate.toISOString();
+			}
+		}
+
 		const submitData = {
 			...formData,
 			service:
@@ -233,6 +302,11 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 				defaultEntityName.toLowerCase(),
 			date: date.toISOString(),
 			entityId: coreEntityId,
+			allDay: formData.allDay,
+			// Overwrite the raw local-only `endDate` field: send the computed
+			// ISO end date, or `undefined` (dropped by JSON serialization) when
+			// there is no valid multi-day end.
+			endDate: endDateIso,
 		};
 
 		setIsSubmitting(true);
@@ -434,56 +508,213 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 
 					<FormFieldSet
 						legend={__('Date and time', 'appstip-appointments')}
-						style={{
-							display: formData.datetime ? 'none' : 'block',
-						}}
 					>
-						<FormFieldSet horizontal horizontalCenter>
-							<span className={styles.noTimeLabel}>
-								{__('No time selected', 'appstip-appointments')}
-							</span>
-							<Button
-								variant="secondary"
-								size="small"
-								onClick={() => {
-									openSlideOut({
-										id: `select-time`,
-										data: {
-											defaultDate,
-											defaultDateToday,
-										},
-									});
-								}}
-							>
-								{__('Select time', 'appstip-appointments')}
-							</Button>
-						</FormFieldSet>
-					</FormFieldSet>
+						<ToggleControl
+							onChange={(value) => {
+								if (value) {
+									// Switching to all-day: seed the start day
+									// from any already-selected date/today so the
+									// appointment still has a date, and drop the
+									// clock time fields.
+									const startDay = new Date(
+										formData.date || defaultDateToday
+									);
+									setFormData((prev) => ({
+										...prev,
+										allDay: true,
+										date: startDay.toISOString(),
+										datetime: startDay.getTime().toString(),
+										timeHourStart: '',
+										timeMinuteStart: '',
+									}));
+								} else {
+									setField('allDay', false);
+								}
+							}}
+							checked={formData.allDay}
+							label={__('All day', 'appstip-appointments')}
+							__nextHasNoMarginBottom
+						/>
 
-					{formData.datetime && formData.date && (
-						<Summary
-							date={new Date(formData.date)}
-							timeHourStart={formData.timeHourStart}
-							timeMinuteStart={formData.timeMinuteStart}
-							timeHourEnd={timeHourEnd}
-							timeMinuteEnd={timeMinuteEnd}
-							duration={formData.duration}
-							showAvailabilityWarning={false}
-							headerActions={
-								<Button
-									size="small"
-									variant="secondary"
-									onClick={() => {
-										openSlideOut({
-											id: 'select-time',
-										});
+						{formData.allDay ? (
+							<FormFieldSet
+								legend={__('Start day', 'appstip-appointments')}
+								style={{ maxWidth: '300px' }}
+							>
+								<WPDatePicker
+									currentDate={
+										formData.date ||
+										defaultDateToday.toISOString()
+									}
+									onChange={(newDate) => {
+										if (newDate) {
+											const start = new Date(newDate);
+											setFormData((prev) => ({
+												...prev,
+												date: start.toISOString(),
+												datetime: start
+													.getTime()
+													.toString(),
+											}));
+										}
+									}}
+									startOfWeek={
+										window.wpappointments.date
+											.startOfWeek as
+											| 0
+											| 1
+											| 2
+											| 3
+											| 4
+											| 5
+											| 6
+									}
+									events={[]}
+								/>
+							</FormFieldSet>
+						) : (
+							<>
+								<FormFieldSet
+									horizontal
+									horizontalCenter
+									style={{
+										display: formData.datetime
+											? 'none'
+											: 'block',
 									}}
 								>
-									{__('Change', 'appstip-appointments')}
+									<span className={styles.noTimeLabel}>
+										{__(
+											'No time selected',
+											'appstip-appointments'
+										)}
+									</span>
+									<Button
+										variant="secondary"
+										size="small"
+										onClick={() => {
+											openSlideOut({
+												id: `select-time`,
+												data: {
+													defaultDate,
+													defaultDateToday,
+												},
+											});
+										}}
+									>
+										{__(
+											'Select time',
+											'appstip-appointments'
+										)}
+									</Button>
+								</FormFieldSet>
+
+								{formData.datetime && formData.date && (
+									<Summary
+										date={new Date(formData.date)}
+										timeHourStart={formData.timeHourStart}
+										timeMinuteStart={
+											formData.timeMinuteStart
+										}
+										timeHourEnd={timeHourEnd}
+										timeMinuteEnd={timeMinuteEnd}
+										duration={formData.duration}
+										showAvailabilityWarning={false}
+										headerActions={
+											<Button
+												size="small"
+												variant="secondary"
+												onClick={() => {
+													openSlideOut({
+														id: 'select-time',
+													});
+												}}
+											>
+												{__(
+													'Change',
+													'appstip-appointments'
+												)}
+											</Button>
+										}
+									/>
+								)}
+							</>
+						)}
+
+						<FormFieldSet
+							legend={__('End date', 'appstip-appointments')}
+							style={{ maxWidth: '300px' }}
+						>
+							<span className={styles.noTimeLabel}>
+								{__(
+									'Optional. Set to create a multi-day appointment.',
+									'appstip-appointments'
+								)}
+							</span>
+							{showEndDate || formData.endDate ? (
+								<>
+									<WPDatePicker
+										currentDate={
+											formData.endDate ||
+											formData.date ||
+											defaultDateToday.toISOString()
+										}
+										onChange={(newDate) => {
+											if (newDate) {
+												setField('endDate', newDate);
+											}
+										}}
+										isInvalidDate={(d) => {
+											if (!formData.date) {
+												return false;
+											}
+
+											return isBefore(
+												startOfDay(d),
+												startOfDay(
+													new Date(formData.date)
+												)
+											);
+										}}
+										startOfWeek={
+											window.wpappointments.date
+												.startOfWeek as
+												| 0
+												| 1
+												| 2
+												| 3
+												| 4
+												| 5
+												| 6
+										}
+										events={[]}
+									/>
+									<Button
+										size="small"
+										variant="tertiary"
+										isDestructive
+										onClick={() => {
+											setField('endDate', '');
+											setShowEndDate(false);
+										}}
+									>
+										{__(
+											'Clear end date',
+											'appstip-appointments'
+										)}
+									</Button>
+								</>
+							) : (
+								<Button
+									variant="secondary"
+									size="small"
+									onClick={() => setShowEndDate(true)}
+								>
+									{__('Add end date', 'appstip-appointments')}
 								</Button>
-							}
-						/>
-					)}
+							)}
+						</FormFieldSet>
+					</FormFieldSet>
 
 					<FormFieldSet
 						legend={__('Customer', 'appstip-appointments')}

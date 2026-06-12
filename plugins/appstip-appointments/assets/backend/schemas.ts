@@ -38,4 +38,6 @@ export const AppointmentSchema = object({
 	]),
 	customer: CustomerSchema,
 	customerId: optional(number()),
+	endTimestamp: optional(number()),
+	allDay: optional(boolean()),
 });
