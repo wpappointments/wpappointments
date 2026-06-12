@@ -6,6 +6,18 @@
 	font-weight: 500;
 }
 
+.badge {
+	display: inline-block;
+	margin-top: 4px;
+	margin-right: 4px;
+	padding: 2px 6px;
+	border-radius: 4px;
+	background-color: #e0e7ec;
+	color: #2e353b;
+	font-size: 11px;
+	font-weight: 500;
+}
+
 .pending {
 	background-color: #eaeaea;
 	color: #2e353b;

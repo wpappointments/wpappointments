@@ -6,7 +6,7 @@ import { cancelCircleFilled, check, edit, info, trash } from '@wordpress/icons';
 import { DataViews, TableFullEmpty } from '@wpappointments/components';
 import type { Action, Field, View } from '@wpappointments/components';
 import { useSlideout } from '@wpappointments/data';
-import { addMinutes, fromUnixTime } from 'date-fns';
+import { addMinutes, fromUnixTime, isSameDay } from 'date-fns';
 import cn from 'obj-str';
 import { userSiteTimezoneMatch } from '~/backend/utils/datetime';
 import { formatDate, formatTime } from '~/backend/utils/i18n';
@@ -33,6 +33,17 @@ const defaultView: View = {
 	fields: ['title', 'date', 'time', 'status'],
 	layout: {},
 };
+
+function isMultiDay(appointment: Appointment) {
+	if (!appointment.endTimestamp) {
+		return false;
+	}
+
+	return !isSameDay(
+		fromUnixTime(appointment.timestamp),
+		fromUnixTime(appointment.endTimestamp)
+	);
+}
 
 export default function AppointmentsTableFull() {
 	const { openSlideOut } = useSlideout({
@@ -125,6 +136,17 @@ export default function AppointmentsTableFull() {
 						<br />
 						{__('Customer', 'appstip-appointments')}:{' '}
 						<strong>{item.customer.name}</strong>
+						{(item.allDay || isMultiDay(item)) && <br />}
+						{item.allDay && (
+							<span className={styles.badge}>
+								{__('All day', 'appstip-appointments')}
+							</span>
+						)}
+						{isMultiDay(item) && (
+							<span className={styles.badge}>
+								{__('Multi-day', 'appstip-appointments')}
+							</span>
+						)}
 					</>
 				);
 			},

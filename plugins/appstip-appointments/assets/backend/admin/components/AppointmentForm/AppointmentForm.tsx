@@ -90,6 +90,7 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 	const [formData, setFormData] =
 		useState<AppointmentFormFields>(defaultFormData);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [showEndDate, setShowEndDate] = useState(false);
 
 	const setField = <K extends keyof AppointmentFormFields>(
 		field: K,
@@ -171,6 +172,10 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 			const endDate = currentAppointment.endTimestamp
 				? new Date(currentAppointment.endTimestamp * 1000)
 				: null;
+
+			// Reveal the end-date calendar when editing an appointment that
+			// already has an end date set.
+			setShowEndDate(!!endDate);
 
 			setFormData((prev) => ({
 				...prev,
@@ -646,50 +651,66 @@ export default function AppointmentForm({ defaultDate }: FormProps) {
 									'appstip-appointments'
 								)}
 							</span>
-							<WPDatePicker
-								currentDate={
-									formData.endDate ||
-									formData.date ||
-									defaultDateToday.toISOString()
-								}
-								onChange={(newDate) => {
-									if (newDate) {
-										setField('endDate', newDate);
-									}
-								}}
-								isInvalidDate={(d) => {
-									if (!formData.date) {
-										return false;
-									}
+							{showEndDate || formData.endDate ? (
+								<>
+									<WPDatePicker
+										currentDate={
+											formData.endDate ||
+											formData.date ||
+											defaultDateToday.toISOString()
+										}
+										onChange={(newDate) => {
+											if (newDate) {
+												setField('endDate', newDate);
+											}
+										}}
+										isInvalidDate={(d) => {
+											if (!formData.date) {
+												return false;
+											}
 
-									return isBefore(
-										startOfDay(d),
-										startOfDay(new Date(formData.date))
-									);
-								}}
-								startOfWeek={
-									window.wpappointments.date.startOfWeek as
-										| 0
-										| 1
-										| 2
-										| 3
-										| 4
-										| 5
-										| 6
-								}
-								events={[]}
-							/>
-							{formData.endDate && (
+											return isBefore(
+												startOfDay(d),
+												startOfDay(
+													new Date(formData.date)
+												)
+											);
+										}}
+										startOfWeek={
+											window.wpappointments.date
+												.startOfWeek as
+												| 0
+												| 1
+												| 2
+												| 3
+												| 4
+												| 5
+												| 6
+										}
+										events={[]}
+									/>
+									<Button
+										size="small"
+										variant="tertiary"
+										isDestructive
+										onClick={() => {
+											setField('endDate', '');
+											setShowEndDate(false);
+										}}
+									>
+										{__(
+											'Clear end date',
+											'appstip-appointments'
+										)}
+									</Button>
+								</>
+							) : (
 								<Button
+									variant="secondary"
 									size="small"
-									variant="tertiary"
-									isDestructive
-									onClick={() => setField('endDate', '')}
+									onClick={() => setShowEndDate(true)}
 								>
-									{__(
-										'Clear end date',
-										'appstip-appointments'
-									)}
+									{__('Add end date', 'appstip-appointments')}
 								</Button>
 							)}
 						</FormFieldSet>

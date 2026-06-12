@@ -98,6 +98,21 @@ function getCalendarMonth(
 	return days;
 }
 
+function isMultiDay(appointment: Appointment) {
+	if (!appointment.endTimestamp) {
+		return false;
+	}
+
+	const start = new Date(appointment.timestamp * 1000);
+	const end = new Date(appointment.endTimestamp * 1000);
+
+	return (
+		start.getFullYear() !== end.getFullYear() ||
+		start.getMonth() !== end.getMonth() ||
+		start.getDate() !== end.getDate()
+	);
+}
+
 function applyAppointmentsToCalendar(
 	calendar: ReturnType<typeof getCalendarMonth>,
 	appointments: Appointment[]
@@ -329,6 +344,30 @@ export default function Calendar() {
 												}}
 											>
 												{appointment.service}
+												{appointment.allDay && (
+													<span
+														className={
+															styles.eventBadge
+														}
+													>
+														{__(
+															'All day',
+															'appstip-appointments'
+														)}
+													</span>
+												)}
+												{isMultiDay(appointment) && (
+													<span
+														className={
+															styles.eventBadge
+														}
+													>
+														{__(
+															'Multi-day',
+															'appstip-appointments'
+														)}
+													</span>
+												)}
 												<span className="screen-reader-text">
 													{` (${appointment.status})`}
 												</span>
